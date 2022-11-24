@@ -1,0 +1,270 @@
+#columns
+#status	state	size	staffed	peasants	unemployed	profitability	profit_impact	infra	Planned
+#55	95	55	35	55	55	55	60	35	35
+#
+types map_list_panel_types {
+	### BUILD BUILDINGS
+	type build_building_map_list_panel = map_list_panel {
+		name = "build_building_map_list_panel"
+
+		blockoverride "headers" {
+			sort_button = {
+				align = center|nobaseline
+				tooltip = "BUILDING_MAP_LIST_PANEL_STATUS_HEADER_TOOLTIP"
+				size = { 55 20 }
+				onclick = "[MapListPanel.Sort('status')]"
+				button = {
+					texture = "gfx/interface/buttons/sort_button_icons/sort_icon_status.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #State
+			sort_button = {
+				align = center|nobaseline
+				text = "BUILDING_MAP_LIST_PANEL_STATE_HEADER"
+				tooltip = "BUILDING_MAP_LIST_PANEL_STATE_HEADER_TOOLTIP"
+				size = { 95 20 }
+				onclick = "[MapListPanel.Sort('state')]"
+			}
+
+            #Size
+			sort_button = {
+				align = center|nobaseline
+				tooltip = "BUILDING_LEVEL_HEADER_TOOLTIP"
+				size = { 55 20 }
+				onclick = "[MapListPanel.Sort('size')]"
+				button = {
+					texture = "gfx/interface/buttons/sort_button_icons/sort_icon_size.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Staffed
+			sort_button = {
+				align = center|nobaseline
+				#text = "Staffed"
+				tooltip = "BUILDING_MAP_LIST_PANEL_STAFFED_HEADER_TOOLTIP_EBML_MOD"
+				size = { 35 20 }
+				#onclick = "[MapListPanel.Sort('staffed')]"
+                button = {
+					texture = "gfx/interface/icons/generic_icons/employment_not_full.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Peasants
+			sort_button = {
+				align = center|nobaseline
+				#tooltip = "BUILDING_MAP_LIST_PANEL_PEASANTS_HEADER_TOOLTIP"
+				tooltip = "[GetPopType('peasants').GetNameNoIcon]"
+				size = { 55 20 }
+				onclick = "[MapListPanel.Sort('peasants')]"
+                button = {
+					texture = "gfx/interface/icons/pops_icons/peasants.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Unemployed
+			sort_button = {
+				align = center|nobaseline
+				tooltip = "UNEMPLOYED"
+				size = { 55 20 }
+				#onclick = "[MapListPanel.Sort('unemployed')]"
+                button = {
+					texture = "gfx/interface/icons/pops_icons/unemployed.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Profitability
+			sort_button = {
+				align = center|nobaseline
+				tooltip = "BUILDING_PROFITABILITY_HEADER_TOOLTIP"
+				size = { 55 20 }
+				onclick = "[MapListPanel.Sort('profitability')]"
+				button = {
+					texture = "gfx/interface/buttons/sort_button_icons/sort_icon_profitability.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Profit_impact
+			sort_button = {
+				align = center|nobaseline
+				text = "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_HEADER"
+				tooltip = "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP"
+				size = { 60 20 }
+				onclick = "[MapListPanel.Sort('profit_impact')]"
+			}
+
+            #Infrastructure
+			sort_button = {
+				align = center|nobaseline
+                #text = "Infrastructure balance" 
+				tooltip = "BUILDING_MAP_LIST_PANEL_INFRASTRUCTURE_HEADER_TOOLTIP_EBML_MOD"
+				size = { 35 20 }
+				#onclick = "[MapListPanel.Sort('infrastructure_balance')]"
+				button = {
+					texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
+					size = { 23 23 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+            #Construction queue
+			sort_button = {
+				align = center|nobaseline
+				#text = "Construction queue" 
+				tooltip = "BUILDING_MAP_LIST_PANEL_CONSTRUCTION_QUEUE_HEADER_TOOLTIP_EBML_MOD"
+				size = { 35 20 }
+				#onclick = "[MapListPanel.Sort('construction_queue')]"
+				button = {
+					texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+					size = { 25 25 }
+					parentanchor = center
+					alwaystransparent = yes
+				}
+			}
+
+		}
+
+		blockoverride "values" {
+            #State
+            textbox = {
+                margin = { 2 0 }
+                size = { 95 25 }
+                align = left|nobaseline
+                text = "[MapListOption.GetBuildingData.GetState.GetNameNoFormatting]"
+                parentanchor = vcenter
+                elide = right
+                fontsize_min = 12
+            }
+
+            #Size
+			textbox = {
+				datacontext = "[MapListOption.GetBuildingData.GetBuilding]"
+				margin = { 2 0 }
+				size = { 55 25 }
+				align = right|nobaseline
+				text = "[MapListOption.GetBuildingData.GetBuilding.GetExpansionLevelDesc]"
+				parentanchor = vcenter
+				elide = right
+				using = tooltip_above
+				alpha = "[TransparentIfFalse(GreaterThan_int32(MapListOption.GetBuildingData.GetBuilding.GetExpansionLevel, '(int32)0'))]"
+                fontsize_min = 10
+			}
+
+            #Staffed
+            textbox = {
+                datacontext = "[MapListOption.GetBuildingData.GetBuilding]"
+                margin = { 2 0 }
+                size = { 35 25 }
+                align = right|nobaseline
+                text = "[Building.GetEmploymentPercentage|%0]"
+                tooltip = "TOOLTIP_BUILDING_EMPLOYMENT_EBML_MOD"
+                parentanchor = vcenter
+                elide = right
+                alpha = "[TransparentIfFalse(GreaterThan_int32(Building.GetExpansionLevel, '(int32)0'))]"
+                fontsize_min = 10
+            }
+
+
+            #Peasants
+			textbox = {
+				margin = { 2 0 }
+				size = { 55 25 }
+				align = right|nobaseline
+				text = "[MapListOption.GetBuildingData.GetState.GetNumSubsistenceWorkingAdults|D]"
+				parentanchor = vcenter
+				elide = right
+                fontsize_min = 10
+			}
+
+            #Unemployed
+			textbox = {
+				margin = { 2 0 }
+				size = { 55 25 }
+				align = right|nobaseline
+				text = "[MapListOption.GetBuildingData.GetState.GetNumUnemployedWorkingAdults|D]"
+				parentanchor = vcenter
+				elide = right
+                fontsize_min = 10
+			}
+
+            #Profitability
+			textbox = {
+				margin = { 2 0 }
+				margin_right = 10
+				size = { 55 25 }
+				align = right|nobaseline
+				datacontext = "[MapListOption.GetBuildingData.GetBuilding]"
+				text = "#v @money![Building.GetBuildingType.GetExpansionProductivityImpact(Building.Self, Building.GetState)|+]#!"
+				tooltip = "[Building.GetBuildingType.GetExpansionProductivityImpactDesc(Building.Self, Building.GetState)]"
+				parentanchor = vcenter
+				elide = right
+                fontsize_min = 10
+			}
+
+            #Profit_impact
+			textbox = {
+				margin = { 2 0 }
+				margin_right = 10
+				size = { 60 25 }
+				align = right|nobaseline
+				datacontext = "[MapListOption.GetBuildingData.GetBuilding]"
+				text = "#v [Building.GetBuildingType.GetExpansionRevenueImpact(Building.Self, Building.GetState)|K+=]#!"
+				tooltip = "[Building.GetBuildingType.GetExpansionRevenueImpactDesc(Building.Self, Building.GetState)]"
+				parentanchor = vcenter
+				elide = right
+                fontsize_min = 10
+			}
+
+            #Infrastructure
+			textbox = {
+				datacontext = "[MapListOption.GetBuildingData.GetState]"
+				margin = { 2 0 }
+				size = { 35 25 }
+				align = right|nobaseline
+				text = "[State.GetInfrastructureBalance|0+=]"
+				tooltip = "STATE_INFRASTRUCTURE_DESC"
+				parentanchor = vcenter
+				elide = right
+                fontsize_min = 10
+			}
+
+            #Construction queue
+			widget = {
+				size = { 35 25 }
+				datacontext = "[MapListOption.GetBuildingData.GetState]"
+				visible = "[State.HasConstructionQueued]"
+				parentanchor = vcenter
+				textbox = {
+					margin = { 5 0 }
+					size = { 40 25 }
+					align = right|nobaseline
+					datacontext = "[State.AccessOwner]"
+					text = "[Add_int32(Country.GetNumBuildingsUnderConstructionInState(State.Self), Country.GetNumBuildingsInConstructionQueueInState(State.Self))]"
+					tooltip = "STATE_CONSTRUCTION"
+					parentanchor = vcenter
+					elide = right
+					fontsize_min = 10
+				}
+			}
+		}
+	}
+}
