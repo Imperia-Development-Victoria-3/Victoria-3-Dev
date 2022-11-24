@@ -1,0 +1,93 @@
+﻿on_law_checkpoint_success = {
+	effect = {
+		trigger_event = { id = french_flavor.8 days = 1 popup = yes }
+		trigger_event = { id = royalist_restauration.1 days = 1 popup = yes }
+		trigger_event = { id = royalist_restauration.2 days = 1 popup = yes }
+		trigger_event = { id = royalist_restauration.3 days = 1 popup = yes }
+	}
+}
+on_monthly_pulse_country = {
+	events = {
+		conquest_of_algeria.1
+	}
+}
+on_character_death = {
+	effect = {
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:FRA
+				owner = c:FRA
+				has_variable = is_orleanist
+				owner = { 
+					has_law = law_type:law_monarchy 
+					NOT = { any_scope_character = { is_heir = yes } }
+				}
+			}
+			owner = { create_random_orleanist_ruler = yes }
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:FRA
+				owner = c:FRA
+				has_variable = is_legitimist
+				owner = { 
+					has_law = law_type:law_monarchy 
+					NOT = { any_scope_character = { is_heir = yes } }
+				}
+			}
+			owner = { create_random_legitimist_ruler = yes }
+		}
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:FRA
+				owner = c:FRA
+				has_variable = is_bonapartist
+				owner = { 
+					has_law = law_type:law_monarchy 
+					NOT = { any_scope_character = { is_heir = yes } }
+				}
+			}
+			owner = { create_random_bonapartist_ruler = yes }
+		}
+	}
+}
+on_heir_born = {
+	effect = {
+		if = {
+			limit = {
+				exists = c:FRA
+				owner = c:FRA
+				owner = { 
+					ruler = { has_variable = is_orleanist }
+					has_law = law_type:law_monarchy 
+				}
+			}
+			owner = { create_random_orleanist_heir = yes }
+		}
+		if = {
+			limit = {
+				exists = c:FRA
+				owner = c:FRA
+				owner = { 
+					ruler = { has_variable = is_legitimist }
+					has_law = law_type:law_monarchy 
+				}
+			}
+			owner = { create_random_legitimist_heir = yes }
+		}
+		if = {
+			limit = {
+				exists = c:FRA
+				owner = c:FRA
+				owner = { 
+					ruler = { has_variable = is_bonapartist }
+					has_law = law_type:law_monarchy 
+				}
+			}
+			owner = { create_random_bonapartist_heir = yes }
+		}
+	}
+}

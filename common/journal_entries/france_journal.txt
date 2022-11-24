@@ -1,0 +1,367 @@
+je_fall_of_july_monarchy = {
+	
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	
+	immediate = {}
+	
+	timeout = 5111
+	
+	on_timeout = { trigger_event = { id = orleanist_flavor.1 popup = yes } }
+	
+	weight = 1000
+	
+	progressbar = no
+	
+	should_be_pinned_by_default = yes
+	
+	on_complete = {
+		custom_tooltip = je_fall_of_july_monarchy_end
+		hidden_effect = {
+			if = {
+				limit = {
+					has_law = law_type:law_presidential_republic
+				}
+				trigger_event = { id = orleanist_flavor.2 popup = yes }
+			}	
+			else_if = {
+				limit = {
+					year >= 1847 
+					AND = { 
+						ig:ig_intelligentsia = { 
+							is_in_government = yes
+							is_powerful = yes 
+						}	
+					}
+					NOT = { year > 1849 }
+				}
+				trigger_event = { id = orleanist_flavor.3 popup = yes }
+			}
+			else_if = {
+				limit = {
+					AND = {
+						is_player = no
+						year = 1848
+					}
+				}
+				trigger_event = { id = orleanist_flavor.3 popup = yes }
+			}
+		}
+	}	
+	
+	complete = {
+		exists = c:FRA	
+		c:FRA = ROOT
+		is_at_war = no
+		NOT = { any_interest_group = { is_insurrectionary = yes } }	
+		OR = { 
+			has_law = law_type:law_presidential_republic
+			custom_tooltip = {
+				text = je_fall_of_july_monarchy_goal.1
+				year >= 1847 
+				AND = { 
+					ig:ig_intelligentsia = { 
+						is_in_government = yes
+						is_powerful = yes 
+					}	
+				}
+				NOT = { year > 1849 }
+			}
+			hidden_trigger = {
+				AND = {
+	                is_player = no
+					year = 1848
+	            }
+            }	
+		}
+	}
+	
+	invalid = {
+		OR = {
+			any_scope_character = { is_ruler = yes NOT = { has_ideology = ideology_orleanist } }
+			has_law = law_type:law_universal_suffrage
+			AND = {
+				NOT = { has_law = law_type:law_monarchy }
+				NOT = { has_law = law_type:law_presidential_republic }
+			}
+		}
+	}
+}
+
+je_first_presidential_election = {
+	
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	
+	immediate = {
+		set_variable = {
+			name = first_election_timer
+			value = 0
+		}
+	}
+	
+	on_monthly_pulse = {
+		effect = {
+			change_variable = {
+				name = first_election_timer
+				add = 1
+			}
+		}
+	}
+
+	on_complete = {
+		trigger_event = { id = french_flavor.1 popup = yes }
+	}
+	
+	current_value = {
+		value = root.var:first_election_timer
+	}
+	
+	goal_add_value = {
+		value = 10
+	}
+
+	weight = 1000
+	
+	progressbar = yes
+
+	should_be_pinned_by_default = yes
+	
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	
+	invalid = {
+		NOT = { has_law = law_type:law_presidential_republic }
+	}
+}
+
+je_future_of_the_republic = {
+	
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	
+	immediate = {
+		set_variable = {
+			name = future_of_the_republic_timer
+			value = 0
+		}
+		random_scope_character = {
+			limit = {
+				has_variable = is_louis_napoleon
+			}
+			save_scope_as = louis_napoleon_leader
+		}
+	}
+	
+	on_monthly_pulse = {
+		effect = {
+			change_variable = {
+				name = future_of_the_republic_timer
+				add = 1
+			}
+		}
+	}
+	
+	timeout = 2191
+	
+	on_timeout = { trigger_event = { id = french_flavor.6 popup = yes } }
+	
+	weight = 1000
+	
+	progressbar = no
+	
+	should_be_pinned_by_default = yes
+	
+	on_complete = {
+		trigger_event = { id = french_flavor.2 popup = yes }
+	}	
+	
+	complete = {
+		exists = c:FRA	
+		c:FRA = ROOT
+		is_at_war = no
+		NOT = { any_interest_group = { is_insurrectionary = yes } }	
+		OR = { 
+			custom_tooltip = {
+				text = je_future_of_the_republic_goal.1
+				root.var:future_of_the_republic_timer >= 24				
+				AND = {
+					ig:ig_armed_forces = { 
+						is_in_government = yes
+						is_powerful = yes
+					}
+					ruler = {
+						has_variable = is_louis_napoleon
+					}
+					NOT = { root.var:future_of_the_republic_timer >= 49	}
+				}
+			}
+			custom_tooltip = {
+				text = je_future_of_the_republic_goal.2 
+				AND ={ 
+					ig:ig_intelligentsia = { 
+						is_marginal = yes
+					}
+					ig:ig_trade_unions = {
+						is_marginal = yes
+					}
+					ruler = {
+						has_variable = is_louis_napoleon
+					}
+				}
+			}	
+			hidden_trigger = {
+				AND = {
+	                is_player = no
+					root.var:future_of_the_republic_timer >= 24	
+					NOT = { root.var:future_of_the_republic_timer >= 49	}
+					ruler = {
+						has_variable = is_louis_napoleon
+					}
+	            }
+            }	
+		}
+	}
+	
+	invalid = {
+		OR = {
+			NOT = { has_law = law_type:law_presidential_republic }
+			NOT = { any_scope_character = { has_variable = is_louis_napoleon } }
+		}
+	}
+}
+
+je_creating_a_second_empire = {
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	
+	immediate = {
+		set_variable = {
+			name = preparation_timer
+			value = 0
+		}
+	}
+	
+	on_monthly_pulse = {
+		effect = {
+			change_variable = {
+				name = preparation_timer
+				add = 1
+			}
+		}
+	}
+	
+	on_complete = {
+		trigger_event = { id = french_flavor.4 popup = yes }
+	}
+	
+	current_value = {
+		value = root.var:preparation_timer
+	}
+	
+	goal_add_value = {
+		value = 12					
+	}
+	
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	
+	weight = 1000
+	
+	progressbar = yes
+	
+	should_be_pinned_by_default = yes
+	
+	invalid = {
+		OR = {
+			NOT = { has_law = law_type:law_presidential_republic }
+			any_scope_character = { is_ruler = yes NOT = { has_variable = is_louis_napoleon } }
+		}
+	}
+}
+
+je_fall_of_french_empire = {
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	
+	is_shown_when_inactive = {
+        exists = c:FRA
+        c:FRA = ROOT
+		ruler = { has_variable = is_bonapartist }
+		has_variable = french_empire_alsace_lorraine
+		has_law = law_type:law_monarchy
+		NOT = { owns_entire_state_region = STATE_ALSACE_LORRAINE }
+	}
+	
+	complete = {
+		has_law = law_type:law_monarchy
+		NOT = { owns_entire_state_region = STATE_ALSACE_LORRAINE }
+    }
+
+	immediate = {
+		trigger_event = { id = french_flavor.7 popup = yes }
+	}
+	
+	weight = 100
+
+	should_be_pinned_by_default = yes
+}
+
+je_french_conquest_of_algeria = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	on_monthly_pulse = {
+		random_events = {
+			10 = 0 
+			1 = conquest_of_algeria.2
+		}
+	}
+
+	complete = {
+		OR = {
+			AND = {
+				owns_entire_state_region = STATE_CONSTANTINE
+				owns_entire_state_region = STATE_TLEMCEN
+				NOT = { exists = c:ALD }
+			}
+			OR = {
+				c:FRA = {
+					has_diplomatic_pact = {
+						who = c:ALD
+						type = puppet
+					}
+				}
+				c:FRA = {
+					has_diplomatic_pact = {
+						who = c:ALD
+						type = dominion
+					}
+				}			}
+		}
+	}
+	
+	on_complete = {
+		remove_variable = conquest_of_algeria_stall
+		custom_tooltip = {
+			text = je_french_conquest_of_algeria_end
+			trigger_event = { id = conquest_of_algeria.3 popup = yes }
+		}
+	}
+	
+	invalid = {
+		OR = {
+			year >= 1848
+			has_law = law_type:law_no_colonial_affairs
+			NOT = { owns_entire_state_region = STATE_ALGIERS }
+		}
+	}
+	
+	weight = 200
+	
+	should_be_pinned_by_default = yes
+	
+	inheritable = no
+}
