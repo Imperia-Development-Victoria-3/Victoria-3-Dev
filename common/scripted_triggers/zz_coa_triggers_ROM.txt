@@ -1,0 +1,52 @@
+﻿#            | existing country | releasing a country | country formation |
+# |==========|==================|=====================|===================|
+# |root      | definition       | definition          | definition        |
+# |----------|------------------|---------------------|-------------------|
+# |target    | country          | N/A                 | N/A               |
+# |----------|------------------|---------------------|-------------------|
+# |initiator | N/A              | player              | player            |
+# |----------|------------------|---------------------|-------------------|
+# |actor     | country          | player              | player            |
+# |----------|------------------|---------------------|-------------------|
+# |          | country's        |                     | player's          |
+# |overlord  | direct overlord  | player              | direct overlord   |
+# |          | if it exists     |                     | if it exists      |
+# |----------|------------------|---------------------|-------------------|
+
+### scope is COUNTRY ###
+
+coa_def_turkish_ensign_trigger_protectorate = {
+	NOT = { has_game_rule = no_subject_flags }
+	exists = scope:actor
+	scope:actor = {
+		is_non_customs_union_subject = yes
+		exists = c:TUR
+		is_subject_of = c:TUR
+	}
+}
+
+# Borrowed from the war flags mod - hope it won't butcher compatibility!
+coa_def_war_flag_trigger = {
+	exists = scope:actor
+	scope:actor = {
+		is_at_war = yes
+	}
+}
+
+coa_def_war_flag_ottomans_trigger = {
+	exists = scope:actor
+	scope:actor = {
+		is_at_war = yes
+		exists = c:TUR
+		has_war_with = c:TUR
+	}
+}
+
+coa_def_united_principalities_flag_trigger = {
+	exists = c:MOL
+	c:MOL = {
+		is_non_customs_union_subject = yes
+		exists = c:WAL
+		is_subject_of = c:WAL
+	}
+}

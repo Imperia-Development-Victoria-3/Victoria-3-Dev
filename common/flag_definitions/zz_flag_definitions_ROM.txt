@@ -1,0 +1,80 @@
+﻿WAL = { # Wallachia
+    flag_definition = {
+        coa = WAL
+        allow_overlord_canton = yes
+        coa_with_overlord_canton = WAL_subject
+        subject_canton = WAL
+        priority = 1
+    }
+    flag_definition = {
+        # Canton with stars when ruled by the Ottoman Empire
+        coa = WAL_subject
+        subject_canton = WAL
+        priority = 2
+        trigger = {
+            coa_def_turkish_ensign_trigger_protectorate = yes		
+        }
+    }
+    flag_definition = {
+        # When Wallachia is at war
+        coa = WAL_warflag
+        subject_canton = ROM
+        priority = 5
+        trigger = {
+            coa_def_war_flag_trigger = yes		
+        }
+    }	
+    flag_definition = {
+        # When Wallachia is fighting the ottomans or in a civil war
+        coa = WAL_warflag_justice
+        subject_canton = ROM
+        priority = 10
+		allow_revolutionary_indicator = no
+        trigger = {
+            OR = {
+                coa_def_war_flag_ottomans_trigger = yes		
+                AND = {
+                    coa_def_secessionist_or_revolutionary_trigger = yes
+                    coa_def_turkish_ensign_trigger_protectorate = yes
+                }
+            }
+        }
+    }	
+    flag_definition = {
+        # When Wallachia puppets Moldavia (United Principalities of Moldavia and Wallachia) 
+        coa = ROM_united_principalities
+        subject_canton = ROM_united_principalities
+        priority = 4
+        trigger = {
+            coa_def_united_principalities_flag_trigger = yes		
+        }
+    }	
+}
+
+MOL = { # Moldavia
+	flag_definition = {
+		coa = MOL	
+		subject_canton = MOL
+		allow_overlord_canton = yes	
+		coa_with_overlord_canton = MOL_subject			
+		priority = 1
+	}
+	flag_definition = {
+		# Corner cantons with stars when ruled by the Ottoman Empire
+		coa = MOL_subject_TUR
+		subject_canton = MOL
+		priority = 2
+		trigger = { 
+			coa_def_turkish_ensign_trigger_protectorate = yes
+		}
+	}	
+	flag_definition = {
+		coa = MOL_communist
+		priority = 1500
+		trigger = { 
+            OR = {
+			    coa_def_communist_flag_trigger = yes
+            }
+		}
+	}	
+}

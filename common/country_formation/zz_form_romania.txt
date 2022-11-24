@@ -1,0 +1,30 @@
+ROM = {
+	use_culture_states = yes
+
+	required_states_fraction = 0.100 # Romania has 8 possible homeland states total
+
+	possible = {
+		OR = {
+			hidden_trigger = {
+				AND = {
+					is_player = no
+					game_date >= 1866
+				}
+			}
+
+			AND = {
+				has_technology_researched = nationalism
+
+				exists = c:WAL
+				exists = c:MOL
+				c:WAL = ROOT
+				c:MOL = {
+					is_subject_of = ROOT
+				}
+				has_variable = drafted_constitution
+			}
+		}		
+	}
+
+	ai_will_do = { always = yes }
+}
