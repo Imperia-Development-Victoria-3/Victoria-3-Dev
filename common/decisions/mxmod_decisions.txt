@@ -1,0 +1,214 @@
+monarch_selection_decision_iturbide = {
+    is_shown = {
+          NOT = { has_variable = monarch_selection_taken }
+          exists = c:MEX
+          this = c:MEX
+    }
+   possible = {
+      has_law = law_type:law_monarchy
+      game_date < 1866.12.11
+   }
+
+   when_taken = {
+
+          #Agustin Jeronimo de Iturbide
+          create_character = {
+              first_name = Agustin
+              last_name = de_Iturbide
+              ruler = yes
+              birth_date = 1807.9.30
+              interest_group = ig_devout
+              ideology = ideology_traditionalist
+              traits = { tactful }
+              on_created = { set_variable = is_married }
+          }    
+          create_character = {
+              first_name = Angel
+              last_name = de_Iturbide
+              noble = yes
+              heir = yes
+              birth_date = 1816.10.02
+              interest_group = ig_devout
+              ideology = ideology_traditionalist
+              traits = { meticulous }
+          }
+        hidden_effect = { 
+            set_variable = {
+                name = monarch_selection_taken
+                value = yes
+            }
+        }
+  }
+
+  ai_chance = {
+      base = 0
+  }
+}
+
+
+monarch_selection_decision_santa_anna = {
+    is_shown = {
+            NOT = { has_variable = monarch_selection_taken }
+            exists = c:MEX
+            this = c:MEX
+    }
+    possible = {
+        has_law = law_type:law_monarchy
+        game_date < 1876.06.21
+        hidden_trigger = {
+            c:MEX = {
+                any_scope_character = {
+                    has_variable = is_santa_anna
+                }
+            }
+        }
+    }
+
+    when_taken = {
+            hidden_effect = {
+                c:MEX = {
+                    random_scope_character = {
+                        limit = {
+                            has_variable = is_santa_anna
+                        }
+                        save_scope_as = santa_anna_scope
+                    }
+                    scope:santa_anna_scope = {
+                        kill_character = yes
+                    }
+                }
+            }
+            #Antonio Lopez de Santa Anna
+            create_character = {
+            first_name = Antonio
+            last_name = Lopez_de_Santa_Anna
+            ruler = yes
+            birth_date = 1794.2.21
+            dna = dna_antonio_lopez
+            interest_group = ig_armed_forces
+            ideology = ideology_jingoist_leader
+                traits = {
+                    ambitious
+                    firebrand
+                }
+            }
+            create_character = {
+                first_name = Manuel
+                last_name = Lopez_de_Santa_Anna
+                noble = yes
+                heir = yes
+                birth_date = 1836.05.24
+                traits = {
+                }
+            }
+
+            hidden_effect = { 
+                set_variable = {
+                    name = monarch_selection_taken
+                    value = yes
+                }
+            }
+        }
+
+    ai_chance = {
+        base = 0
+    }
+
+}
+
+monarch_selection_decision_maximillian = {
+    is_shown = {
+            NOT = { has_variable = monarch_selection_taken }
+            exists = c:MEX
+            this = c:MEX
+    }
+    possible = {
+        has_law = law_type:law_monarchy
+        game_date > 1852.7.6
+        game_date < 1902.7.6
+    }
+
+    when_taken = {
+            #Maximillian
+            create_character = {
+            first_name = Maximiliano
+            last_name = de_Habsburgo
+            culture = cu:south_german
+            ruler = yes
+            birth_date = 1832.7.6
+            interest_group = ig_petty_bourgeoisie
+            ideology = ideology_reformer
+            traits = { charismatic }
+            }
+
+            hidden_effect = { 
+                set_variable = {
+                    name = monarch_selection_taken
+                    value = yes
+                }
+            }
+        }
+    ai_chance = {
+        base = 100
+    }
+}
+
+
+monarch_selection_decision_bonaparte = {
+    is_shown = {
+            NOT = { has_variable = monarch_selection_taken }
+            exists = c:MEX
+            this = c:MEX
+    }
+    possible = {
+        has_law = law_type:law_monarchy
+        game_date < 1844.7.28
+    }
+
+    when_taken = {
+            #Jose Bonaparte
+            create_character = {
+            first_name = Jose
+            last_name = Bonaparte
+            culture = cu:french
+            ruler = yes
+            birth_date = 1768.1.7
+            interest_group = ig_intelligentsia
+            ideology = ideology_market_liberal
+            traits = {
+                persistent
+                alcoholic
+            }
+        }
+
+        create_character = {
+            first_name = Carlos
+            last_name = Bonaparte
+            culture = cu:french
+            noble = yes
+            heir = yes
+            birth_date = 1803.05.24
+            interest_group = ig_intelligentsia
+            ideology = ideology_social_democrat          
+            traits = {
+                innovative
+                meticulous
+            }
+        }        
+        hidden_effect = {
+            set_variable = {
+                name = monarch_selection_taken
+                value = yes
+            }
+        }
+    }
+
+    ai_chance = {
+        base = 0
+    }
+
+}
+
+
+
+
