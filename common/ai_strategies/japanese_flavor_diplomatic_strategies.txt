@@ -1,0 +1,326 @@
+﻿ai_strategy_japanese_flavor_diplomatic_phase_1 = {
+	icon = "gfx/interface/icons/ai_strategy_icons/armed_isolationism.dds"
+
+	type = diplomatic
+
+	wanted_army_ratio = 150000 # 1 barrack per 150k incorporated population
+	wanted_navy_ratio = 500000 # 1 naval base per 500k coastal incorporated population
+
+	undesirable_infamy_level = 1
+	unacceptable_infamy_level = 25
+
+	ideological_opinion_effect_mult = 0.75
+
+	wargoal_maneuvers_fraction = {
+		value = -0.1
+	}
+
+	diplomatic_play_neutrality = 50 # Added to base neutrality in diplomatic plays
+	diplomatic_play_boldness = 25 # Added to base boldness in diplomatic plays
+
+	# Added to value from default strategy
+	bravery = {
+		value = 0.25
+	}
+
+	# Added to value from default strategy
+	aggression = {
+		value = 0.25
+
+		if = {
+			limit = {
+				scope:target_country = { NOT = { is_country_type = unrecognized } }
+			}
+			add = 0.5
+
+			if = {
+				limit = { has_law = law_type:law_isolationism }
+				add = 1.5
+			}
+		}
+
+		# Less aggressive against countries we're just antagonistic against, rather than belligerent/domineering
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+			}
+			multiply = 0.1
+		}
+	}
+
+	building_group_weights = {
+		bg_army = 1.5
+	}
+
+	secret_goal_weights = {
+		conquer = 0.0
+		dominate = 0.0
+		protect = 0.0
+	}
+
+	wargoal_weights = {
+		conquer_state = 0.0
+		make_puppet = 0.0
+		make_dominion = 0.0
+		make_vassal = 0.0
+	}
+
+	possible = {
+		exists = c:JAP
+		this = c:JAP
+		has_law = law_type:law_monarchy
+		has_law = law_type:law_isolationism
+	}
+
+	weight = {
+		value = 10000
+	}
+}
+
+ai_strategy_japanese_flavor_diplomatic_phase_2 = {
+	icon = "gfx/interface/icons/ai_strategy_icons/maintain_power_balance.dds"
+
+	type = diplomatic
+
+	wanted_army_ratio = 200000 # 1 barrack per 200k incorporated population
+	wanted_navy_ratio = 400000 # 1 naval base per 400k coastal incorporated population
+
+	undesirable_infamy_level = 25
+	unacceptable_infamy_level = 50
+
+	ideological_opinion_effect_mult = 1.5
+
+	wargoal_maneuvers_fraction = {
+		value = -0.1
+	}
+
+	diplomatic_play_neutrality = 0 # Added to base neutrality in diplomatic plays
+	diplomatic_play_boldness = 25 # Added to base boldness in diplomatic plays
+
+	# Added to value from default strategy
+	bravery = {
+		value = 0.25
+	}
+
+	# Added to value from default strategy
+	aggression = {
+		value = 0.25
+
+		if = {
+			limit = {
+				scope:target_country = { NOT = { is_country_type = unrecognized } }
+			}
+			add = 0.5
+
+			if = {
+				limit = { has_technology_researched = nationalism }
+				add = 1.5
+			}
+		}
+
+		# Less aggressive against countries we're just antagonistic against, rather than belligerent/domineering
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+			}
+			multiply = 0.1
+		}
+	}
+
+	building_group_weights = {
+		bg_technology = 1.25
+	}
+
+	secret_goal_weights = {
+		protect = 1.5
+		dominate = 1.5
+		reconcile = 1.5
+	}
+
+	wargoal_weights = {
+		regime_change = 3.0
+		humiliation = 2.0
+		liberate_subject = 1.5
+		liberate_country = 1.5
+	}
+
+	possible = {
+		exists = c:JAP
+		this = c:JAP
+		has_law = law_type:law_monarchy
+		AND = {
+			NOT = { has_law = law_type:law_isolationism }
+			NOT = { has_variable = meiji_restoration_complete }
+		}
+	}
+
+	weight = {
+		value = 10000
+	}
+}
+
+ai_strategy_japanese_flavor_diplomatic_phase_3 = {
+	icon = "gfx/interface/icons/ai_strategy_icons/territorial_expansion.dds"
+
+	type = diplomatic
+
+	wanted_army_ratio = 150000 # 1 barrack per 150k incorporated population
+	wanted_navy_ratio = 400000 # 1 naval base per 400k coastal incorporated population
+
+	undesirable_infamy_level = 50
+	unacceptable_infamy_level = 100
+
+	ideological_opinion_effect_mult = 0.75
+
+	wargoal_maneuvers_fraction = {
+		value = 0.15
+	}
+
+	diplomatic_play_neutrality = 25 # Added to base neutrality in diplomatic plays
+	diplomatic_play_boldness = 25 # Added to base boldness in diplomatic plays
+
+	# Added to value from default strategy
+	bravery = {
+		value = 0.25
+	}
+
+	# Added to value from default strategy
+	aggression = {
+		value = 1
+
+		if = {
+			limit = {
+				NOT = { is_country_type = unrecognized }
+				scope:target_country = { is_country_type = unrecognized }
+			}
+			add = 2
+		}
+
+		# Less aggressive against countries we're just antagonistic against, rather than belligerent/domineering
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+			}
+			multiply = 0.25
+		}
+	}
+
+	building_group_weights = {
+		bg_army = 1.5
+	}
+
+	secret_goal_weights = {
+		protect = 0.5
+		conquer = 1.5
+	}
+
+	wargoal_weights = {
+		conquer_state = 1.5
+		return_state = 1.5
+	}
+
+	possible = {
+		exists = c:JAP
+		this = c:JAP
+		has_law = law_type:law_monarchy
+		AND = {
+			NOT = { has_law = law_type:law_isolationism }
+			has_variable = meiji_restoration_complete
+		}
+	}
+
+	weight = {
+		value = 10000
+	}
+}
+
+ai_strategy_japanese_flavor_diplomatic_fallback = {
+	icon = "gfx/interface/icons/ai_strategy_icons/maintain_power_balance.dds"
+
+	type = diplomatic
+
+	wanted_army_ratio = 200000 # 1 barrack per 200k incorporated population
+	wanted_navy_ratio = 400000 # 1 naval base per 400k coastal incorporated population
+
+	undesirable_infamy_level = 25
+	unacceptable_infamy_level = 50
+
+	ideological_opinion_effect_mult = 1.5
+
+	wargoal_maneuvers_fraction = {
+		value = -0.1
+	}
+
+	diplomatic_play_neutrality = 0 # Added to base neutrality in diplomatic plays
+	diplomatic_play_boldness = -25 # Added to base boldness in diplomatic plays
+
+	# Added to value from default strategy
+	bravery = {
+		value = -0.25
+	}
+
+	# Added to value from default strategy
+	aggression = {
+		value = 0.25
+
+		if = {
+			limit = { 
+				NOT = { is_country_type = unrecognized }
+				scope:target_country = { is_country_type = unrecognized } 
+			}
+			add = 0.5
+			
+			if = {
+				limit = { has_technology_researched = civilizing_mission }
+				add = 1.5
+			}			
+		}
+
+		# Less aggressive against countries we're just antagonistic against, rather than belligerent/domineering
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+			}
+			multiply = 0.1
+		}
+	}
+
+	building_group_weights = {
+		bg_technology = 1.25
+	}
+
+	secret_goal_weights = {
+		protect = 1.5
+		dominate = 1.5
+		reconcile = 1.5
+	}
+
+	wargoal_weights = {
+		regime_change = 3.0
+		humiliation = 2.0
+		liberate_subject = 1.5
+		liberate_country = 1.5
+	}
+
+	possible = {
+		exists = c:JAP
+		this = c:JAP
+		has_law = law_type:law_monarchy
+	}
+
+	weight = {
+		value = 100
+	}
+}
