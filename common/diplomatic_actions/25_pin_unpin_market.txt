@@ -1,0 +1,45 @@
+﻿pin_unpin_market = {
+	requires_approval = no
+	should_notify_third_parties = no
+	show_confirmation_box = no
+	show_effect_in_tooltip = yes
+
+	potential = {
+		is_ai = no
+		OR = {
+			scope:target_country = {
+				market = {
+					owner = scope:target_country
+				}
+			}
+			is_target_in_global_variable_list = {
+				name = markets
+				target = scope:target_country
+			}
+		}
+	}
+
+	accept_effect = {
+		if = {
+			limit = {
+				is_target_in_global_variable_list = {
+					name = markets
+					target = scope:target_country
+				}
+			}
+			remove_list_global_variable = {
+				name = markets
+				target = scope:target_country
+			}
+		}
+		else = {
+			add_to_global_variable_list = {
+				name = markets
+				target = scope:target_country
+			}
+		}
+		if = {
+			limit = { has_global_variable_list = markets } # for error suppression
+		}
+	}
+}
