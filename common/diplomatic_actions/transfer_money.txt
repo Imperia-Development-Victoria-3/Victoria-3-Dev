@@ -1,0 +1,32 @@
+﻿transfer_money = {
+	requires_approval = no
+	
+	potential = { }
+	
+	possible = {
+		NOT = {
+			is_country_type = decentralized
+			has_modifier = transferring_money
+		}
+		is_player = yes
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	accept_effect = {
+		trigger_event = { id = transfer_money.1 popup = yes }
+		hidden_effect = {
+			add_modifier = {
+				name = transferring_money
+				days = 0
+			}
+		}
+	}
+	
+	ai = {
+		will_propose = { 
+			always = no
+		}
+	}
+}
