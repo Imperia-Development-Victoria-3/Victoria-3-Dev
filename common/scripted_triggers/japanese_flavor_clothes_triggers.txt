@@ -1,0 +1,329 @@
+﻿# based on /common/scripted_triggers/00_clothes_triggers.txt
+
+japanese_westernized_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		OR = {
+			AND = {
+				japanese_flavor_era_2_trigger = yes
+				OR = {
+					ruler_clothes_trigger = yes
+					monarchy_clothes_trigger = yes
+					armed_forces_clothes_trigger = yes
+					military_clothes_trigger = yes
+				}
+			}
+			japanese_flavor_era_3_trigger = yes
+			japanese_flavor_era_4_trigger = yes
+			japanese_flavor_era_5_trigger = yes
+		}
+	}
+}
+
+japanese_westernized_common_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		is_female = no
+		OR = {
+			AND = {
+				japanese_flavor_era_2_trigger = yes
+				OR = {
+					ruler_clothes_trigger = yes
+					monarchy_clothes_trigger = yes
+					armed_forces_clothes_trigger = yes
+					military_clothes_trigger = yes
+				}
+			}
+			japanese_flavor_era_3_trigger = yes
+			japanese_flavor_era_4_trigger = yes
+			japanese_flavor_era_5_trigger = yes
+		}
+	}
+}
+
+japanese_westernized_clothes_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		OR = {
+			AND = {
+				japanese_flavor_era_2_trigger = yes
+				OR = {
+					soldier_clothes_pop_trigger = yes
+					officers_clothes_pop_trigger = yes
+				}
+			}
+			AND = {
+				japanese_flavor_era_3_trigger = yes
+				OR = {
+					upper_clothes_pop_trigger = yes
+					soldier_clothes_pop_trigger = yes
+					officers_clothes_pop_trigger = yes
+				}
+			}
+			AND = {
+				japanese_flavor_era_4_trigger = yes
+				OR = {
+					upper_clothes_pop_trigger = yes
+					soldier_clothes_pop_trigger = yes
+					officers_clothes_pop_trigger = yes
+				}
+			}
+			AND = {
+				japanese_flavor_era_5_trigger = yes
+				OR = {
+					middle_clothes_pop_trigger = yes
+					upper_clothes_pop_trigger = yes
+					soldier_clothes_pop_trigger = yes
+					officers_clothes_pop_trigger = yes
+				}
+			}
+		}
+	}
+}
+
+japanese_westernized_hairstyles_trigger = {
+	exists = scope:character
+	scope:character = {
+		OR = {
+			AND = {
+				japanese_flavor_era_2_trigger = yes
+				OR = {
+					ruler_clothes_trigger = yes
+					monarchy_clothes_trigger = yes
+					armed_forces_clothes_trigger = yes
+					military_clothes_trigger = yes
+				}
+			}
+			japanese_flavor_era_3_trigger = yes
+			japanese_flavor_era_4_trigger = yes
+			japanese_flavor_era_5_trigger = yes
+		}
+	}
+}
+
+japanese_westernized_hairstyles_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		OR = {
+			AND = {
+				japanese_flavor_era_2_trigger = yes
+				officers_clothes_pop_trigger = yes
+			}
+			japanese_flavor_era_3_trigger = yes
+			japanese_flavor_era_4_trigger = yes
+			japanese_flavor_era_5_trigger = yes
+		}
+	}
+}
+
+european_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		culture = {
+			OR = {
+				has_discrimination_trait = european_heritage
+				AND = {
+					japanese_westernized_clothes_trigger = yes
+					OR = {
+						this = cu:japanese
+						this = cu:ainu
+					}
+				}
+			}
+		}
+		NOT = {
+			AND = { # Albanian characters serving either the Ottomans or Egyptians should wear that country's clothing.
+				culture = cu:albanian
+				OR = {
+					owner = {
+						exists = c:TUR
+						c:TUR = this
+					}
+					owner = {
+						exists = c:EGY
+						c:EGY = this
+					}
+				}
+			}
+		}
+	}
+}
+
+european_clothes_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		culture = {
+			OR = {
+				has_discrimination_trait = european_heritage
+				AND = {
+					japanese_westernized_clothes_pop_trigger = yes
+					OR = {
+						this = cu:japanese
+						this = cu:ainu
+					}
+				}
+			}
+		}
+	}
+}
+
+european_hairstyles_trigger = {
+	exists = scope:character
+	scope:character = {
+		culture = {
+			OR = {
+				has_discrimination_trait = european_heritage
+				AND = {
+					japanese_westernized_hairstyles_trigger = yes
+					OR = {
+						this = cu:japanese
+						this = cu:ainu
+					}
+				}
+			}
+		}
+		NOT = {
+			AND = { # Albanian characters serving either the Ottomans or Egyptians should wear that country's clothing.
+				culture = cu:albanian
+				OR = {
+					owner = {
+						exists = c:TUR
+						c:TUR = this
+					}
+					owner = {
+						exists = c:EGY
+						c:EGY = this
+					}
+				}
+			}
+		}
+	}
+}
+
+european_hairstyles_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		culture = {
+			OR = {
+				has_discrimination_trait = european_heritage
+				AND = {
+					japanese_westernized_hairstyles_pop_trigger = yes
+					OR = {
+						this = cu:japanese
+						this = cu:ainu
+					}
+				}
+			}
+		}
+	}
+}
+
+japanese_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		AND = {
+			japanese_westernized_clothes_trigger = no
+			OR = {
+				culture = cu:japanese
+				culture = cu:ainu
+			}
+		}
+	}
+}
+
+japanese_common_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		AND = {
+			japanese_westernized_common_clothes_trigger = no
+			OR = {
+				AND = {
+					has_culture = cu:japanese
+					monarchy_clothes_trigger = no
+				}
+				has_culture = cu:ainu
+			}
+		}
+	}
+}
+
+japanese_clothes_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		AND = {
+			japanese_westernized_clothes_pop_trigger = no
+			OR = {
+				culture = cu:japanese
+				culture = cu:ainu
+			}
+		}
+	}
+}
+
+japanese_imperial_clothes_trigger = {
+	exists = scope:character
+	scope:character = {
+		AND = {
+			japanese_westernized_clothes_trigger = no
+			OR = {
+				is_ruler = yes
+				is_heir = yes
+			}
+		}
+		owner = {
+			has_law = law_type:law_monarchy
+		}
+		OR = {
+			AND = {
+				culture = {
+					has_discrimination_trait = yamato
+				}
+				OR = {
+					NOT = {
+						exists = c:JAP
+					}
+					AND = {
+						exists = c:JAP
+						NOT = { owner = c:JAP }
+					}
+				}
+			}
+			AND = {
+				exists = c:JAP
+				OWNER = {
+					this = c:JAP
+				}
+			}
+		}
+	}
+}
+
+yamato_clothes_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		AND = {
+			japanese_westernized_clothes_pop_trigger = no
+			culture = cu:japanese
+		}
+	}
+}
+
+yamato_hairstyles_trigger = {
+	exists = scope:character
+	scope:character = {
+		AND = {
+			japanese_westernized_hairstyles_trigger = no
+			culture = cu:japanese
+		}
+	}
+}
+
+yamato_hairstyles_pop_trigger = {
+	exists = scope:pop
+	scope:pop = {
+		AND = {
+			japanese_westernized_hairstyles_pop_trigger = no
+			culture = cu:japanese
+		}
+	}
+}
