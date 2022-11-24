@@ -1,0 +1,262 @@
+﻿ig_nationalists = {
+	color = hsv{ 14 0 0.30 }
+	texture = "gfx/interface/icons/ig_icons/ig_nationalism.dds"
+	
+	ideologies = {
+		ideology_reactionary
+		ideology_loyalist
+		ideology_patriotic
+	}
+	
+	enable = {
+		always = yes
+	}
+	
+	traits = {
+		ig_trait_patriotic_fervor
+		ig_trait_veteran_consultation
+		ig_trait_xenophobia
+	}	
+	
+	on_enable = {}
+	on_disable = {}
+	on_character_ig_membership = {}
+	
+	pop_potential = {
+		pop_has_primary_culture = yes
+		OR = {
+			is_pop_type = soldiers
+			is_pop_type = officers
+			is_pop_type = aristocrats
+			is_pop_type = laborers
+			is_pop_type = farmers
+			is_pop_type = machinists
+			is_pop_type = engineers
+			is_pop_type = shopkeepers
+			pop_is_discriminated = no
+		}		
+	}
+	
+	pop_weight = {
+		value = 0	
+		
+		add = {
+			desc = "POP_NOT_DISCRIMINATED"
+			if = {
+				limit = { 
+					pop_is_discriminated = no
+				}
+				value = 0
+			}
+		}		
+		
+		add = {
+			desc = "POP_SOLDIERS"
+			if = {
+				limit = { 
+					is_pop_type = soldiers
+				}
+				value = 50
+			}
+		}
+		
+		add = {
+			desc = "POP_ARISTOCRATS"
+			if = {
+				limit = { 
+					is_pop_type = aristocrats
+				}
+				value = 35
+			}
+		}		
+	
+		add = {
+			desc = "POP_OFFICERS"
+			if = {
+				limit = { 
+					is_pop_type = officers
+				}
+				value = 80
+			}
+		}
+
+		add = {
+			desc = "POP_BUREAUCRATS"
+			if = {
+				limit = { 
+					is_pop_type = bureaucrats
+				}
+				value = 35
+			}
+		}
+
+		add = {
+			desc = "POP_CAPITALISTS"
+			if = {
+				limit = { 
+					is_pop_type = capitalists
+				}
+				value = 25
+			}
+		}
+
+		add = {
+			desc = "POP_CLERKS"
+			if = {
+				limit = { 
+					is_pop_type = clerks
+				}
+				value = 35
+			}
+		}
+
+		add = {
+			desc = "POP_ENGINEERS"
+			if = {
+				limit = { 
+					is_pop_type = engineers
+				}
+				value = 25
+			}
+		}
+
+		add = {
+			desc = "POP_LABORERS"
+			if = {
+				limit = { 
+					is_pop_type = laborers
+				}
+				value = 35
+			}
+		}
+
+		add = {
+			desc = "POP_MACHINISTS"
+			if = {
+				limit = { 
+					is_pop_type = machinists
+				}
+				value = 35
+			}
+		}
+
+		add = {
+			desc = "POP_SHOPKEEPERS"
+			if = {
+				limit = { 
+					is_pop_type = shopkeepers
+				}
+				value = 25
+			}
+		}
+
+		add = {
+			desc = "POP_FARMERS"
+			if = {
+				limit = { 
+					is_pop_type = farmers
+				}
+				value = 35
+			}
+		}
+
+		add = {
+			desc = "RACIAL_SEGREGATION"
+			if = {
+				limit = {
+					owner = {
+						has_law = law_type:law_racial_segregation
+					}
+				}
+				value = 0
+			}
+		}
+
+		add = {
+			desc = "CULTURAL_EXCLUSION"
+			if = {
+				limit = {
+					owner = {
+						has_law = law_type:law_cultural_exclusion
+					}
+				}
+				value = 50
+			}
+		}
+
+		add = {
+			desc = "MULTICULTURAL"
+			if = {
+				limit = {
+					owner = {
+						has_law = law_type:law_multicultural
+					}
+				}
+				value = 100
+			}
+		}
+					
+		multiply = {
+			desc = "LEADER_POPULARITY"
+			scope:interest_group = {
+				leader = {
+					value = popularity
+					multiply = 0.0025
+					add = 1
+					max = 1.25
+					min = 0.75
+				}
+			}
+		}	
+		
+		multiply = {
+			desc = "NO_NATIONALISM"	
+			value = 1.0
+			
+			if = {
+				limit = { 
+					owner = {
+						NOT = { has_technology_researched = nationalism }
+					}
+				}
+				value = 0.05
+			}		
+		}	
+	}
+	
+	monarch_weight = {
+		value = 0.25
+	}
+	
+	commander_weight = {
+		value = 5.0
+	}
+	
+	noble_chance = {
+		value = 0.5
+	}
+	
+	female_commander_chance = {	
+		value = 0.0
+	}
+	
+	female_politician_chance = {
+		value = 0.0
+	}	
+	
+	# The chance that a commander belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular commander in the IG
+	commander_leader_chance = {
+		value = 0.75
+		if = {
+			limit = {
+				exists = scope:character
+			}
+			multiply = {
+				value = 1
+				add = scope:character.popularity
+				min = 0
+			}
+		}
+	}
+}
