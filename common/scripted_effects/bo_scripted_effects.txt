@@ -1,0 +1,455 @@
+﻿
+#scope:state
+bo_start_building_construction = {
+	set_global_variable = {
+		name = bo_payment_amount value = 0
+	}
+	if = {
+		limit = {scope:target_country = {has_modifier = best_order_modifiers_pay_120}}
+		scope:root_country = {change_relations = {country = scope:target_country value = {
+			value = 1 
+			if = {
+				limit = {scope:target_country = {
+					nor = {
+						is_subject_type = subject_type_dominion
+						is_subject_type = subject_type_protectorate
+						is_subject_type = subject_type_personal_union
+				}}}
+				add = 1
+			}
+			scope:best_order_chosen_state = {
+				multiply = var:bo_count_var
+			}
+			
+		}}}
+		
+	}
+	else_if = {limit = {scope:target_country = {has_modifier = best_order_modifiers_pay_100}}
+		scope:root_country = {
+			change_relations = {
+				country = scope:target_country value = {
+					value = 0 
+					if = {
+						limit = {scope:target_country = {
+							nor = {
+								is_subject_type = subject_type_dominion
+								is_subject_type = subject_type_protectorate
+								is_subject_type = subject_type_personal_union
+						}}}
+						add = 1
+					}
+					scope:best_order_chosen_state = {
+						multiply = var:bo_count_var
+					}
+				}
+			}
+		}
+	}
+	else_if = {limit = {scope:target_country = {has_modifier = best_order_modifiers_pay_50}}}
+	else = {
+		scope:root_country = {change_relations = {country = scope:target_country 
+		value = {
+			value = -1 
+			scope:best_order_chosen_state = {
+				multiply = var:bo_count_var
+			}}
+		}}
+	}
+	
+	while = {
+		limit = {
+			var:bo_count_var > 0
+		}
+
+		switch = {
+			trigger = var:bo_bt_var
+
+			67 = {bo_effect_construction_start = {bt = building_railway cost = construction_cost_high}}
+
+			611 = {bo_effect_construction_start = {bt = building_rye_farm cost = construction_cost_low}}
+			612 = {bo_effect_construction_start = {bt = building_wheat_farm cost = construction_cost_low}}
+			613 = {bo_effect_construction_start = {bt = building_rice_farm cost = construction_cost_low}}
+			614 = {bo_effect_construction_start = {bt = building_maize_farm cost = construction_cost_low}}
+			615 = {bo_effect_construction_start = {bt = building_millet_farm cost = construction_cost_low}}
+			616 = {bo_effect_construction_start = {bt = building_livestock_ranch cost = construction_cost_low}}
+
+			621 = {bo_effect_construction_start = {bt = building_coffee_plantation cost = construction_cost_low}}
+			622 = {bo_effect_construction_start = {bt = building_cotton_plantation cost = construction_cost_low}}
+			623 = {bo_effect_construction_start = {bt = building_silk_plantation cost = construction_cost_low}}
+			624 = {bo_effect_construction_start = {bt = building_dye_plantation cost = construction_cost_low}}
+			625 = {bo_effect_construction_start = {bt = building_opium_plantation cost = construction_cost_low}}
+			626 = {bo_effect_construction_start = {bt = building_tea_plantation cost = construction_cost_low}}
+			627 = {bo_effect_construction_start = {bt = building_tobacco_plantation cost = construction_cost_low}}
+			628 = {bo_effect_construction_start = {bt = building_sugar_plantation cost = construction_cost_low}}
+			629 = {bo_effect_construction_start = {bt = building_banana_plantation cost = construction_cost_low}}
+
+			631 = {bo_effect_construction_start = {bt = building_gold_mine cost = construction_cost_medium}}
+			632 = {bo_effect_construction_start = {bt = building_coal_mine cost = construction_cost_medium}}
+			633 = {bo_effect_construction_start = {bt = building_iron_mine cost = construction_cost_medium}}
+			634 = {bo_effect_construction_start = {bt = building_lead_mine cost = construction_cost_medium}}
+			635 = {bo_effect_construction_start = {bt = building_sulfur_mine cost = construction_cost_medium}}
+			636 = {bo_effect_construction_start = {bt = building_logging_camp cost = construction_cost_low}}
+			637 = {bo_effect_construction_start = {bt = building_rubber_plantation cost = construction_cost_low}}
+			638 = {bo_effect_construction_start = {bt = building_whaling_station cost = construction_cost_low}}
+			639 = {bo_effect_construction_start = {bt = building_fishing_wharf cost = construction_cost_low}}
+			6310 = {bo_effect_construction_start = {bt = building_oil_rig cost = construction_cost_medium}}
+
+			641 = {bo_effect_construction_start = {bt = building_food_industry cost = construction_cost_high}}
+			642 = {bo_effect_construction_start = {bt = building_textile_mills cost = construction_cost_high}}
+			643 = {bo_effect_construction_start = {bt = building_furniture_manufacturies cost = construction_cost_high}}
+			644 = {bo_effect_construction_start = {bt = building_glassworks cost = construction_cost_high}}
+			645 = {bo_effect_construction_start = {bt = building_tooling_workshops cost = construction_cost_high}}
+			646 = {bo_effect_construction_start = {bt = building_paper_mills cost = construction_cost_high}}
+			647 = {bo_effect_construction_start = {bt = building_shipyards cost = construction_cost_high}}
+			648 = {bo_effect_construction_start = {bt = building_arms_industry cost = construction_cost_very_high}}
+
+			651 = {bo_effect_construction_start = {bt = building_chemical_plants cost = construction_cost_high}}
+			652 = {bo_effect_construction_start = {bt = building_synthetics_plants cost = construction_cost_high}}
+			653 = {bo_effect_construction_start = {bt = building_steel_mills cost = construction_cost_high}}
+			654 = {bo_effect_construction_start = {bt = building_motor_industry cost = construction_cost_high}}
+			655 = {bo_effect_construction_start = {bt = building_war_machine_industry cost = construction_cost_very_high}}
+			656 = {bo_effect_construction_start = {bt = building_electrics_industry cost = construction_cost_very_high}}
+			657 = {bo_effect_construction_start = {bt = building_munition_plants cost = construction_cost_very_high}}
+
+			661 = {bo_effect_construction_start = {bt = building_barracks cost = construction_cost_very_low}}
+			662 = {bo_effect_construction_start = {bt = building_naval_base cost = construction_cost_very_low}}
+			663 = {bo_effect_construction_start = {bt = building_arts_academy cost = construction_cost_high}}
+			664 = {bo_effect_construction_start = {bt = building_power_plant cost = construction_cost_very_high}}
+			665 = {bo_effect_construction_start = {bt = building_port cost = construction_cost_medium}}
+			666 = {bo_effect_construction_start = {bt = building_government_administration cost = construction_cost_medium}}
+			667 = {bo_effect_construction_start = {bt = building_university cost = construction_cost_medium}}
+			668 = {bo_effect_construction_start = {bt = building_skyscraper cost = construction_cost_monument}}
+			669 = {bo_effect_construction_start = {bt = building_construction_sector cost = construction_cost_very_low}}
+
+
+		}
+
+		change_variable = {
+			name = bo_count_var
+			subtract = 1
+		}
+	}
+	remove_variable = bo_bt_var
+	remove_variable = bo_count_var
+	set_global_variable = {name = bo_transfer_amount_var value = bo_value_transfer_payment_amount}
+	if = {
+		limit = {owner = {
+			OR = {
+				has_modifier = best_order_modifiers_pay_50
+				has_modifier = best_order_modifiers_pay_100
+				has_modifier = best_order_modifiers_pay_120
+			} 
+		}}
+		
+		scope:target_country = {
+			bo_recieve_payment = yes
+		}
+		scope:root_country = {
+			bo_send_payment = yes
+		}
+	}
+	remove_global_variable = bo_transfer_amount_var
+	remove_global_variable = bo_payment_amount
+}
+
+#scope:state
+bo_check_arable_resources = {
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_rye_farm }}
+		set_variable = bo_can_building_rye_farm 
+	} 
+	else = {
+		start_building_construction = building_rye_farm
+		if = {
+			limit = {any_scope_building = { is_building_type = building_rye_farm }}
+			set_variable = bo_can_building_rye_farm
+			remove_building = building_rye_farm
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_wheat_farm }}
+		set_variable = bo_can_building_wheat_farm 
+	} 
+	else = {
+		start_building_construction = building_wheat_farm
+		if = {
+			limit = {any_scope_building = { is_building_type = building_wheat_farm }}
+			set_variable = bo_can_building_wheat_farm
+			remove_building = building_wheat_farm
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_rice_farm }}
+		set_variable = bo_can_building_rice_farm 
+	} 
+	else = {
+		start_building_construction = building_rice_farm
+		if = {
+			limit = {any_scope_building = { is_building_type = building_rice_farm }}
+			set_variable = bo_can_building_rice_farm
+			remove_building = building_rice_farm
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_maize_farm }}
+		set_variable = bo_can_building_maize_farm 
+	} 
+	else = {
+		start_building_construction = building_maize_farm
+		if = {
+			limit = {any_scope_building = { is_building_type = building_maize_farm }}
+			set_variable = bo_can_building_maize_farm
+			remove_building = building_maize_farm
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_millet_farm }}
+		set_variable = bo_can_building_millet_farm 
+	} 
+	else = {
+		start_building_construction = building_millet_farm
+		if = {
+			limit = {any_scope_building = { is_building_type = building_millet_farm }}
+			set_variable = bo_can_building_millet_farm
+			remove_building = building_millet_farm
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_livestock_ranch }}
+		set_variable = bo_can_building_livestock_ranch 
+	} 
+	else = {
+		start_building_construction = building_livestock_ranch
+		if = {
+			limit = {any_scope_building = { is_building_type = building_livestock_ranch }}
+			set_variable = bo_can_building_livestock_ranch
+			remove_building = building_livestock_ranch
+		} 
+	}
+	
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_coffee_plantation }}
+		set_variable = bo_can_building_coffee_plantation 
+	} 
+	else = {
+		start_building_construction = building_coffee_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_coffee_plantation }}
+			set_variable = bo_can_building_coffee_plantation
+			remove_building = building_coffee_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_cotton_plantation }}
+		set_variable = bo_can_building_cotton_plantation 
+	} 
+	else = {
+		start_building_construction = building_cotton_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_cotton_plantation }}
+			set_variable = bo_can_building_cotton_plantation
+			remove_building = building_cotton_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_silk_plantation }}
+		set_variable = bo_can_building_silk_plantation 
+	} 
+	else = {
+		start_building_construction = building_silk_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_silk_plantation }}
+			set_variable = bo_can_building_silk_plantation
+			remove_building = building_silk_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_dye_plantation }}
+		set_variable = bo_can_building_dye_plantation 
+	} 
+	else = {
+		start_building_construction = building_dye_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_dye_plantation }}
+			set_variable = bo_can_building_dye_plantation
+			remove_building = building_dye_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_opium_plantation }}
+		set_variable = bo_can_building_opium_plantation 
+	} 
+	else = {
+		start_building_construction = building_opium_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_opium_plantation }}
+			set_variable = bo_can_building_opium_plantation
+			remove_building = building_opium_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_tea_plantation }}
+		set_variable = bo_can_building_tea_plantation 
+	} 
+	else = {
+		start_building_construction = building_tea_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_tea_plantation }}
+			set_variable = bo_can_building_tea_plantation
+			remove_building = building_tea_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_tobacco_plantation }}
+		set_variable = bo_can_building_tobacco_plantation 
+	} 
+	else = {
+		start_building_construction = building_tobacco_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_tobacco_plantation }}
+			set_variable = bo_can_building_tobacco_plantation
+			remove_building = building_tobacco_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_sugar_plantation }}
+		set_variable = bo_can_building_sugar_plantation 
+	} 
+	else = {
+		start_building_construction = building_sugar_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_sugar_plantation }}
+			set_variable = bo_can_building_sugar_plantation
+			remove_building = building_sugar_plantation
+		} 
+	}
+
+	if = {
+		limit = {any_scope_building = { is_building_type = building_banana_plantation }}
+		set_variable = bo_can_building_banana_plantation 
+	} 
+	else = {
+		start_building_construction = building_banana_plantation
+		if = {
+			limit = {any_scope_building = { is_building_type = building_banana_plantation }}
+			set_variable = bo_can_building_banana_plantation
+			remove_building = building_banana_plantation
+		} 
+	}
+	set_variable = bo_ar_checked
+}
+
+#scope:country
+bo_normal_working_time = {
+	if = {
+		limit = {has_modifier = best_modifiers_2}
+		remove_modifier = best_modifiers_2
+	}
+	if = {
+		limit = {has_modifier = best_modifiers_3}
+		remove_modifier = best_modifiers_3
+	}
+	if = {
+		limit = {has_modifier = best_modifiers_4}
+		remove_modifier = best_modifiers_4
+	}
+}
+
+#scope:state
+bo_effect_construction_start = {
+	start_building_construction = $bt$
+
+	change_global_variable = {
+		name = bo_payment_amount
+		add = $cost$
+	}
+
+
+}
+
+#scope:target_country
+bo_recieve_payment = {
+	set_global_variable = {name = bo_recieve_payment_var value = global_var:bo_transfer_amount_var}
+	change_global_variable = {
+		name = bo_recieve_payment_var
+		divide = {value = scope:target_country.construction_queue_duration max = 100 min = 1}
+	}
+	add_modifier = {
+		name = bo_modifiers_transfer_recieve_1
+		days = bo_value_transfer_payment_days
+		multiplier = {
+			value = global_var:bo_recieve_payment_var 
+			divide = 1000 
+			floor = yes
+		}
+	}
+	change_global_variable = {
+		name = bo_recieve_payment_var
+		modulo = 1000
+	}
+	
+	add_treasury = {value = global_var:bo_recieve_payment_var multiply = {value = scope:target_country.construction_queue_duration max = 100}}
+	remove_global_variable = bo_recieve_payment_var
+}
+
+#scope:root
+bo_send_payment = {
+	set_variable = {name = bo_send_payment_var value = global_var:bo_transfer_amount_var}
+	change_variable = {
+		name = bo_send_payment_var
+		divide = {value = scope:target_country.construction_queue_duration max = 100 min = 1}
+	}
+	add_modifier = {
+		name = bo_modifiers_transfer_payment_1
+		days = bo_value_transfer_payment_days
+		multiplier = {
+			value = var:bo_send_payment_var 
+			divide = 1000 
+			floor = yes
+		}
+	}
+	change_variable = {
+		name = bo_send_payment_var
+		modulo = 1000
+		multiply = -1
+	}
+	
+	add_treasury = {value = var:bo_send_payment_var multiply = {value = scope:target_country.construction_queue_duration max = 100}}
+	remove_variable = bo_send_payment_var
+}
+
+#scope:country
+bo_no_payment_construction = {
+	if = {
+		limit = {
+			has_modifier = best_order_modifiers_pay_120
+		}
+		remove_modifier = best_order_modifiers_pay_120
+	}
+	else_if = {
+		limit = {
+			has_modifier = best_order_modifiers_pay_100
+		}
+		remove_modifier = best_order_modifiers_pay_100
+	}
+	else_if = {
+		limit = {
+			has_modifier = best_order_modifiers_pay_50
+		}
+		remove_modifier = best_order_modifiers_pay_50
+	}
+}
