@@ -1,0 +1,140 @@
+﻿je_the_forming_of_the_potchefstroom_winburg_republic = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+
+	complete = {
+		#exist = PTF
+	}
+	is_shown_when_inactive = {
+		#THIS = c:ORA
+	}
+	possible = {
+		#THIS = c:ORA
+	}
+	on_complete = {
+		trigger_event = {
+			id = south_america.1
+		}
+	}
+	should_be_pinned_by_default = yes
+}
+je_encourage_boer_migration_into_the_oranje_river_basin = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+
+	complete = {
+			OR = {
+				gdp > 200000
+				year > 1952
+			}
+	}
+	is_shown_when_inactive = {
+		THIS = c:ORA
+		NOT = {
+			owns_entire_state_region = STATE_VRYSTAAT
+		}
+	}
+	possible = {
+		THIS = c:ORA
+		NOT = {
+			owns_entire_state_region = STATE_VRYSTAAT
+		}
+	}
+	on_complete = {
+		custom_tooltip = {
+			text = form_oranje_vrystaat_2_tt
+		}
+		s:STATE_VRYSTAAT.region_state:BST = { set_state_owner = c:ORA }
+	}
+}
+je_the_forming_of_the_oranje_vrystaat = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+
+	complete = {
+			owns_entire_state_region = STATE_VRYSTAAT
+	}
+	is_shown_when_inactive = {
+		THIS = c:ORA
+	}
+	possible = {
+		THIS = c:ORA
+	}
+	on_complete = {
+		remove_modifier = adjunct_volksraad
+		custom_tooltip = {
+			text = form_oranje_vrystaat_tt
+		}
+	}
+	should_be_pinned_by_default = yes
+}
+je_climax_of_the_great_trek = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+
+	complete = {
+			OR = {
+				gdp > 80000
+				year > 1952
+				owns_entire_state_region = STATE_TRANSVAAL
+			}
+	}
+	is_shown_when_inactive = {
+		THIS = c:TRN
+	}
+	possible = {
+		THIS = c:TRN
+	}
+	on_complete = {
+		hidden_effect = {
+			s:STATE_ZAMBEZI.region_state:RWZ = { set_state_owner = c:MTB }
+		}
+		s:STATE_TRANSVAAL.region_state:MTB = { set_state_owner = c:TRN }
+		remove_modifier = adjunct_volksraad
+		custom_tooltip = {
+			text = form_south_african_republic_tt
+		}
+	}
+	should_be_pinned_by_default = yes
+}
+je_form_the_union_of_south_africa = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+
+	complete = {
+		c:SAF = {
+			owns_entire_state_region = STATE_VRYSTAAT
+			owns_entire_state_region = STATE_TRANSVAAL
+			owns_entire_state_region = STATE_NORTHERN_CAPE
+			owns_entire_state_region = STATE_ZULULAND
+		}
+	}
+	is_shown_when_inactive = {
+		THIS = c:SAF
+	}
+	possible = {
+		THIS = c:SAF
+		is_subject_of = c:GBR
+		is_subject_type = subject_type_puppet
+	}
+	on_complete = {
+		hidden_effect = {
+			c:SAF = {
+				make_independent = yes
+			}
+		}
+		c:GBR = {
+			create_diplomatic_pact = {
+				country = c:SAF
+				type = dominion
+			}
+		}
+		add_modifier = {
+			name = union_of_south_africa_modifier
+		}
+		custom_tooltip = {
+			text = south_african_union_tt
+		}
+	}
+	should_be_pinned_by_default = yes
+}
