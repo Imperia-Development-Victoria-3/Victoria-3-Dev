@@ -1,0 +1,380 @@
+﻿namespace = best_order
+
+# 已使用 7-9, 1000
+# 命令选择菜单
+best_order.1000 = {
+	type = country_event 
+	placement = root
+	
+
+	trigger = {
+		exists = scope:target_country
+	}
+	title = best_order_events.1000.t
+	desc = best_order_events.1000.d
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+	immediate = {
+		save_scope_as = root_country
+	}
+
+	# Construction
+	option = { 
+		trigger = {
+			scope:target_country = {
+				trigger_if = {
+					limit = {
+						or = {
+							is_subject_type = subject_type_dominion
+							is_subject_type = subject_type_protectorate
+							is_subject_type = subject_type_personal_union
+					}}
+					or = {
+							has_modifier = best_order_modifiers_pay_120
+							has_modifier = best_order_modifiers_pay_100
+						}
+				}
+			}
+			
+		}
+		name = choose.1
+		trigger_event = { id = best_order.4 popup = yes }
+	}
+	# ban industry
+	option = { 
+		trigger = {
+			scope:target_country = {
+				nor = {
+					is_subject_type = subject_type_dominion
+					is_subject_type = subject_type_protectorate
+					is_subject_type = subject_type_personal_union
+				}
+			}
+			
+		}
+		name = choose.2
+		trigger_event = { id = best_order.7 popup = yes }
+	}
+	# work time
+	option = {
+		trigger = {
+			scope:target_country = {
+				nor = {
+					is_subject_type = subject_type_dominion
+					is_subject_type = subject_type_protectorate
+					is_subject_type = subject_type_personal_union
+				}
+			}
+			
+		}
+		name = choose.3
+		trigger_event = { id = best_order.8 popup = yes }
+	}
+	# payment
+	option = {
+		name = choose.4
+		trigger_event = { id = best_order.9 popup = yes }
+	}
+	# fund transfer(wip)
+	option = { 
+		name = choose.5
+	}
+
+	option = { 
+		name = choose.6
+	}
+
+	option = {
+		default_option = yes
+		name = CANCEL
+	}
+}
+
+# 工业禁令 - Forbid factories
+best_order.7 = {
+	type = country_event  #禁止工业
+	placement = root
+	trigger = {
+		exists = scope:target_country
+	}
+	title = ban_fac.t
+	desc = ban_fac.t
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = best_modifiers_1}
+			}
+		}
+		name = ban_fac.1
+		scope:target_country = {
+			add_modifier = { name = best_modifiers_1 years = 6 }
+			add_radicals = { value = 0.5 }
+		}
+
+		change_relations = {
+			country = scope:target_country
+			value = -100
+		}
+	}
+
+	option = {
+		trigger = {
+			scope:target_country = {
+				has_modifier = best_modifiers_1
+			}
+		}
+		name = ban_fac.2
+		scope:target_country = {
+			remove_modifier = best_modifiers_1
+		}
+	}
+
+	option = {
+		default_option = yes
+		name = RETURN
+		trigger_event = { id = best_order.1000 popup = yes }
+	}
+}
+
+# 工作时间选择 - Select Work Time 
+best_order.8 = {
+	type = country_event
+	placement = root
+	
+	trigger = {
+		exists = scope:target_country
+	}
+	title = time_choose.t
+	desc = time_choose.t
+	
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+	
+	# 12小时
+	option = {
+		trigger = {
+			scope:target_country = {
+				OR = {
+					has_modifier = best_modifiers_2
+					has_modifier = best_modifiers_3
+					has_modifier = best_modifiers_4
+				}
+			}
+		}
+		name = time.1
+		scope:target_country = {
+			bo_normal_working_time = yes
+		}
+	}
+	# 14小时
+	option = { 
+		trigger = {
+			scope:target_country = {
+				NOT = {
+					has_modifier = best_modifiers_2
+				}
+			}
+		}
+		name = time.2
+		change_relations = {
+			country = scope:target_country
+			value = -20
+		}
+		scope:target_country = {
+			bo_normal_working_time = yes
+			add_modifier = {
+				name = best_modifiers_2
+				years = 6
+			}
+			add_radicals = { value = 0.1 }
+		}
+	}
+	# 16小时
+	option = { 
+		trigger = {
+			scope:target_country = {
+				NOT = {
+					has_modifier = best_modifiers_3
+				}
+			}
+		}
+		name = time.3
+		change_relations = {
+			country = scope:target_country
+			value = -40
+		}
+		scope:target_country = {
+			bo_normal_working_time = yes
+			add_modifier = {
+				name = best_modifiers_3
+				years = 6
+			}
+			add_radicals = { value = 0.2 }
+		}
+	}
+	# 18小时
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {
+					has_modifier = best_modifiers_4
+				}
+			}
+		}
+		name = time.4
+		change_relations = {
+			country = scope:target_country
+			value = -60
+		}
+		scope:target_country = {
+			bo_normal_working_time = yes
+			add_modifier = {
+				name = best_modifiers_4
+				years = 6
+			}
+			add_radicals = { value = 0.3 }
+		}
+	}
+
+	option = {
+		default_option = yes
+		name = RETURN
+		trigger_event = { id = best_order.1000 popup = yes }
+	}
+}
+
+# !!WIP!!宗主国支付建造(按照基础建造价格给予补贴) - Overlord Fund Construction 
+best_order.9 = {
+	type = country_event
+	placement = root
+
+	trigger = {
+		exists = scope:target_country
+	}
+
+	title = Overlord_Fund_Construction.t
+	desc = Overlord_Fund_Construction.d
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+	#120%
+	option = {
+		trigger = {
+			scope:target_country = {NOT = {has_modifier = best_order_modifiers_pay_120}}
+		}
+		name = bo.vme120
+		scope:target_country = {
+			bo_no_payment_construction = yes
+			add_modifier = best_order_modifiers_pay_120
+		}
+	}
+	#100%
+	option = {
+		trigger = {
+			scope:target_country = {NOT = {has_modifier = best_order_modifiers_pay_100}}
+		}
+		name = bo.vme100
+		scope:target_country = {
+			bo_no_payment_construction = yes
+			add_modifier = best_order_modifiers_pay_100
+		}
+	}
+	#50%
+	option = {
+		trigger = {
+			scope:target_country= {
+				not = {has_modifier = best_order_modifiers_pay_50}
+				nor = {
+					is_subject_type = subject_type_dominion
+					is_subject_type = subject_type_protectorate
+					is_subject_type = subject_type_personal_union
+				}
+			}
+			
+		}
+		name = bo.vme50
+		scope:target_country = {
+			bo_no_payment_construction = yes
+			add_modifier = best_order_modifiers_pay_50
+		}
+	}
+	#0%
+	option = {
+		name = bo.pay_nothing
+		scope:target_country = {
+			bo_no_payment_construction = yes
+		}
+	}
+	
+	option = {
+		default_option = yes
+		name = RETURN
+		trigger_event = { id = best_order.1000 popup = yes }
+	}
+}
+
+best_order.10 = {
+	type = country_event
+	placement = root
+
+	trigger = {
+		exists = scope:target_country
+	}
+
+	title = investment.t
+	desc = investment.d
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+	
+	option = {
+		default_option = yes
+		name = RETURN
+		trigger_event = { id = best_order.1000 popup = yes }
+	}
+}
