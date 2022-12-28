@@ -1,0 +1,1051 @@
+# COPY-PASTED FOR NOW
+@panel_width_minus_20 = 520			# used to be 450
+@panel_width_minus_10 = 530			# used to be 450
+@panel_width = 540  				# used to be 460
+@panel_width_half = 270				# used to be 230
+@panel_width_plus_10 = 550  		# used to be 470
+@panel_width_plus_14 = 554			# used to be 474
+@panel_width_plus_14_half = 277		# used to be 237
+@panel_width_plus_20 = 560			# used to be 480
+@panel_width_plus_30 = 570			# used to be 490
+@panel_width_plus_70 = 610			# used to be 530
+
+types MilitaryPanelCharacters {
+
+	### MOBILIZATION CONTROLS
+	type rank_icon = widget {
+		block "icon_size" {
+			size = { 34 34 }
+		}
+	
+		# Background 
+		#icon = {
+		#	size = { 100% 100% }
+		#	texture = "gfx/interface/backgrounds/round_button_bg.dds"
+		#}
+
+		# Rank
+		icon = {
+			size = { 75% 75% }
+			parentanchor = center
+			texture = "[Character.GetCommanderRank.GetTexture]"
+			datacontext = "[Character]"
+			datacontext = "[Character.GetCommanderRank]"
+			tooltipwidget = {
+				FancyTooltip_CommanderRank = {}
+			}
+		}
+	}
+
+	type morale_bar = white_progressbar_vertical {
+		size = { 6 24 }
+
+		blockoverride "values" {
+			min = 0
+			max = 1
+			block "morale_value" {
+			}
+		}
+		blockoverride "color" {
+			block "morale_color" {
+			}
+		}
+	}
+
+	type commander_order_button = container {
+		button_icon_round_action = {
+			block "button_size" {
+				size = { 40 40 }
+			}
+			tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+			enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
+			onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+
+			visible = "[Not( CommanderOrderType.HasMapInteraction )]"
+			clicksound = "[CommanderOrderType.GetClickSound]"
+
+			blockoverride "icon" {
+				texture = "[CommanderOrderType.GetTexture]"
+			}
+			blockoverride "icon_size" {
+				size = { 75% 75% }
+			}
+		}
+
+		button_icon_round_action = {
+			block "button_size" {
+				size = { 40 40 }
+			}
+			tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+			enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
+			onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+
+			visible = "[CommanderOrderType.HasMapInteraction]"
+
+			blockoverride "icon" {
+				texture = "[CommanderOrderType.GetTexture]"
+			}
+			blockoverride "icon_size" {
+				size = { 75% 75% }
+			}
+		}
+	}
+
+	### COMMANDER LIST
+	type commander_list = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+
+		flowcontainer = {
+			direction = vertical
+			spacing = 5
+			parentanchor = hcenter
+			
+			block "datamodel" {
+				datamodel = "[Country.AccessGenerals]"
+			}
+
+			item = {
+				container = {
+					military_panel_commander_entry = {}
+				}
+			}
+		}
+	}
+	
+	### COMMANDER LIST ITEM 
+	type military_panel_commander_entry = flowcontainer {
+		minimumsize = { @panel_width 90 }
+		parentanchor = hcenter
+		direction = horizontal
+		#using = entry_bg_fancy
+		spacing = 3
+		
+		
+		#Character.GetSupply
+		# General info box
+		
+		flowcontainer = {
+			minimumsize = { @panel_width -1 }
+			maximumsize = { @panel_width -1 }
+			direction = vertical
+			spacing = 5
+			margin_bottom = 7
+		
+			using = entry_bg_fancy
+			
+			
+			background = {
+				#visible = "[Character.IsMobilized]"
+				visible = "[Or(Character.IsMobilized, Character.IsAdmiral)]"
+				using = fade_right_entry_fancy_header_colored
+				color = "[Character.GetCountry.GetMapColor]"
+				alpha = 0.4
+				modify_texture = {
+					texture = "gfx/interface/masks/fade_vertical_bottom.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = alphamultiply
+					alpha = 0.3
+				}
+			}
+			# Name and info header
+			container = {
+				minimumsize = { @panel_width 35 }
+
+				background = {
+					using = fade_right_entry_fancy_header_colored
+					color = "[Character.GetCountry.GetMapColor]"
+					visible = "[Not(Character.IsMobilized)]"
+					#modify_texture = {
+					#	texture = "gfx/interface/masks/fade_horizontal_right.dds"
+					#	spriteType = Corneredstretched
+					#	spriteborder = { 0 0 }
+					#	blend_mode = alphamultiply
+					#}
+					#modify_texture = {
+					#	texture = "gfx/interface/masks/fade_vertical_bottom.dds"
+					#	spriteType = Corneredstretched
+					#	spriteborder = { 0 0 }
+					#	blend_mode = alphamultiply
+					#}
+					alpha = 0.1
+				}
+				background = {
+					using = dark_area
+					color = "[Character.GetCountry.GetMapColor]"
+					visible = "[Or(Character.IsMobilized, Character.IsAdmiral)]"
+					modify_texture = {
+						texture = "gfx/interface/masks/fade_horizontal_right.dds"
+						spriteType = Corneredstretched
+						spriteborder = { 0 0 }
+						blend_mode = alphamultiply
+					}
+					#modify_texture = {
+					#	texture = "gfx/interface/masks/fade_vertical_bottom.dds"
+					#	spriteType = Corneredstretched
+					#	spriteborder = { 0 0 }
+					#	blend_mode = alphamultiply
+					#}
+					alpha = 0.15
+				}
+				#background = {
+				#	visible = "[Character.IsAdmiral]"
+				#	using = fade_right_entry_fancy_header_colored
+				#	color = "[Character.GetCountry.GetMapColor]"
+				#	alpha = 0.1
+				#	
+				#}
+				widget = {
+					size = { 25 25 }
+					parentanchor = vcenter|top
+					position = { -5 -5 }
+					button_icon_round_toggle = {
+						name = "commander_pin_button"
+						using = check_button_sound
+						size = { 100% 100% }
+						parentanchor = center
+
+						blockoverride "icon_1" {
+							texture = "gfx/interface/outliner/unpinned_icon.dds"
+						}
+
+						blockoverride "view_1" {
+							visible = "[Not(Character.IsPinnedInOutliner)]"
+						}
+
+						blockoverride "tooltip_1" {
+							tooltip = "PIN"
+						}
+
+						blockoverride "icon_2" {
+							texture = "gfx/interface/outliner/pinned_icon.dds"
+						}
+
+						blockoverride "view_2" {
+							visible = "[Character.IsPinnedInOutliner]"
+						}
+
+						blockoverride "tooltip_2" {
+							tooltip = "UNPIN"
+						}
+
+						blockoverride "on_click" {
+							onclick = "[Character.TogglePinInOutliner]"
+						}
+						
+						blockoverride "wood_texture" {
+							texture = "gfx/interface/buttons/round_button_small_wood_action.dds"
+						}
+
+						blockoverride "frame_visible" {}
+					}
+				}
+				button_icon_round = {
+					datacontext = "[Character.AccessInterestGroup]"
+					visible = "[InterestGroup.IsValid]"
+					parentanchor = left|top
+					position = { -6 23 }
+					tooltip = "CHARACTER_INTEREST_GROUP"
+
+					blockoverride "size" {
+						size = { 25 25 }
+					}
+					blockoverride "icon_size" {
+						size = { 100% 100% }
+					}
+
+					block "onclick" {
+						onclick = "[InformationPanelBar.OpenInterestGroupPanel(InterestGroup.AccessSelf)]"
+						onrightclick = "[RightClickMenuManager.ShowForIG(InterestGroup.AccessSelf)]"
+					}
+
+					blockoverride "frame_visible" {}
+					blockoverride "icon" {
+						texture = "[InterestGroup.GetTexture]"
+					}			
+				}
+				flowcontainer = {
+					position = { 12 0 }
+					parentanchor = vcenter
+					spacing = 5
+
+					#tiny_flag = {
+					#	parentanchor = vcenter
+					#}
+					
+					rank_icon = {
+						blockoverride "icon_size" {
+							size = { 50 50 }
+						}
+					}
+					
+					button = {
+						onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+						size = { 335 40 }
+						parentanchor = vcenter
+						flowcontainer = {
+							direction = vertical
+							minimumsize = { 100 40 }
+							maximumsize = { 335 40 }
+							#position = { 0 -8 }
+							spacing = 0
+							
+							textbox = {
+								minimumsize = { 1 -1 }
+								maximumsize = { 335 -1 }
+								parentanchor = vcenter
+								#multiline = yes
+								autoresize = yes
+								text = "ANTY_GENERAL_ADMIRAL_NAME"
+								align = left|nobaseline
+								elide = right
+								#margin_top = 0
+								
+							}
+							textbox = {
+								visible = "[EqualTo_int32(Character.GetHomeHQ.GetReserveUnitsRaw, '(int32)0')]"
+								minimumsize = { 1 -1 }
+								maximumsize = { 310 -1 }
+								parentanchor = vcenter
+								#multiline = yes
+								autoresize = yes
+								text = "ANTY_DETAILUNDER_NAME"
+								align = left|nobaseline
+								elide = right
+								margin_left = 4
+								using = fontsize_medium
+							}
+							textbox = {
+								visible = "[NotEqualTo_int32(Character.GetHomeHQ.GetReserveUnitsRaw, '(int32)0')]"
+								minimumsize = { 1 -1 }
+								maximumsize = { 310 -1 }
+								parentanchor = vcenter
+								#multiline = yes
+								autoresize = yes
+								text = "ANTY_DETAILUNDER_NAME_WITHRESERVES"
+								align = left|nobaseline
+								elide = right
+								margin_left = 4
+								using = fontsize_medium
+							}
+						}
+					}
+						
+					
+					
+					#textbox = {
+					#	visible = yes#"[Character.HasShippingLane]"
+					#	parentanchor = vcenter
+					#	
+					#	elide = right
+					#	align = right|nobaseline
+					#	autoresize = yes
+					#	
+					#	text = "[Character.GetShippingLane.GetConvoyCostFormattedShort]"
+					#}
+				}
+				
+				# General status
+				#flowcontainer = {
+				#	position = { -34 0 }
+				#	parentanchor = right|vcenter
+				#
+				#	textbox = {
+				#		maximumsize = { 260 -1 }
+				#		multiline = yes
+				#		autoresize = yes
+				#		margin = { 0 3 }
+				#		text = "MILITARY_PANEL_COMMANDER_STATUS_FORMAT"
+				#		align = nobaseline
+				#		elide = right
+				#		margin_right = 5
+				#	}
+				#}
+				# Traits
+				flowcontainer = {
+					position = { -7 0 }
+					direction = vertical
+					#spacing = 5
+					margin = { 2 4 }
+					margin_top = 6
+					parentanchor = vcenter|right
+
+					dynamicgridbox = {
+						datamodel = "[Character.AccessTraits]"
+						flipdirection = yes
+						datamodel_wrap = 7
+						item = {
+							flowcontainer = {
+								
+								margin = { 0 0 }
+								
+								tooltipwidget = {
+									FancyTooltip_CharacterTrait = {}
+								}
+
+								icon = {
+									parentanchor = left|vcenter
+									size = { 31 42 }
+									texture = "[CharacterTrait.GetTexture]"
+									using = tooltip_above
+								}
+
+								#textbox = {
+								#	parentanchor = vcenter
+								#	text = "[CharacterTrait.GetNameNoFormatting]"
+								#	maximumsize = { 150 64 }
+								#	autoresize = yes
+								#	align = left|nobaseline
+								#	multiline = yes
+								#}
+							}
+						}
+					}
+				}
+				
+			}
+			flowcontainer = {
+				direction = horizontal
+				minimumsize = { 535 12 }
+				maximumsize = { 535 12 }
+				#Current Location Name etc
+				flowcontainer = {
+					direction = horizontal
+					
+					minimumsize = { 515 12 }
+					maximumsize = { 515 12 }
+					#background = {
+					#	using = dark_area
+					#	color = "[Character.GetCountry.GetMapColor]"
+					#	alpha = 0.9
+					#	
+					#}
+					
+					textbox = {
+						visible = "[And(Or(Not(Character.IsMobilized), And(Character.IsMobilized, Character.GetCommanderOrder.GetType.IsStandBy)), Not(Character.IsAdmiral))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 200 12 }
+						maximumsize = { 200 12 }
+						text = "[Character.AccessHomeHQ.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+					}
+					textbox = {
+						visible = "[And(And(Character.IsMobilized, Not(Character.GetCommanderOrder.GetType.IsStandBy)), Not(Character.HasNavalInvasionPlan))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_LAND_GENERAL_STANDARD_LOCATION"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+						
+					}
+					textbox = {
+						visible = "[And(And(And(Character.IsMobilized, Not(Character.GetCommanderOrder.GetType.IsStandBy)), Character.HasNavalInvasionPlan), Not(Character.IsInBattle))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVAL_INVASION_GENERAL_STATUS_WITHOUTDAYS"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+					}
+					textbox = {
+						visible = "[And(And(And(Character.IsMobilized, Not(Character.GetCommanderOrder.GetType.IsStandBy)), Character.HasNavalInvasionPlan), Character.IsInBattle)]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVAL_INVASION_GENERAL_IN_BATTLE"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+					}
+					#ONLY ADMIRAL
+					textbox = { 
+						visible = "[And(And(Character.IsAdmiral, Not(Character.HasNavalInvasionPlan)), Not(GreaterThan_int32(Character.GetOrderPreparationDaysLeft, '(int32)0')))]"
+						
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVY_GENERALORDER_WITHOUTDAYS"#"[Character.GetLocationFormatted]"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+					}
+					#ONLY ADMIRAL
+					textbox = {
+						visible = "[And(And(Character.IsAdmiral, Not(Character.HasNavalInvasionPlan)), GreaterThan_int32(Character.GetOrderPreparationDaysLeft, '(int32)0'))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVY_GENERALORDER"#"[Character.GetLocationFormatted]"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+					}
+					#ONLY ADMIRAL
+					textbox = {
+						visible = "[And(And(And(Character.IsAdmiral, Character.HasNavalInvasionPlan), Not(Character.IsInBattle)), GreaterThan_int32(Character.GetOrderPreparationDaysLeft, '(int32)0'))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVAL_INVASION_WAITING_FOR_ADMIRAL"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+						
+					}
+					#ONLY ADMIRAL
+					textbox = {
+						visible = "[And(And(And(Character.IsAdmiral, Character.HasNavalInvasionPlan), Not(Character.IsInBattle)), Not(GreaterThan_int32(Character.GetOrderPreparationDaysLeft, '(int32)0')))]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVAL_INVASION_ADMIRAL_WAITING_FOR_GENERAL_TO_LAND"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+						
+					}
+					#ONLY ADMIRAL
+					textbox = {
+						visible = "[And(And(Character.IsAdmiral, Character.HasNavalInvasionPlan), Character.IsInBattle)]"
+						#visible = "[Not(Character.IsMobilized)]"
+						minimumsize = { 520 12 }
+						maximumsize = { 520 12 }
+						text = "ANTY_NAVAL_INVASION_WAITING_FOR_ADMIRAL_IN_BATTLE"##"[Character.GetCommanderOrder.GetFrontTarget.GetName]"
+						align = left|nobaseline
+						elide = right
+						parentanchor = top|left
+						using = fontsize_medium
+						margin_left = 15
+						
+					}
+					
+					#text = "[Character.GetCommanderOrder.GetType.GetName] [Character.GetCommanderOrder.GetState.GetName] [Character.GetOrderPreparationDaysLeft]"
+					
+					#textbox = {
+					#	visible = "[And(Character.IsMobilized, Not(Character.GetCommanderOrder.GetType.IsStandBy))]"
+					#	#visible = "[Not(Character.IsMobilized)]"
+					#	minimumsize = { 300 12 }
+					#	maximumsize = { 300 12 }
+					#	text = "[Character.GetDaysToCompleteTravelFormatted] [Character.GetBattle.GetName]"
+					#	align = left|nobaseline
+					#	elide = right
+					#	parentanchor = top|left
+					#	using = fontsize_medium
+					#	margin_left = 15
+					#}
+					
+					#widget = { size = { 309 1 } }
+					# Zoom-to button
+					
+					
+				}
+				# Zoom-to button
+				button_icon_zoom = {
+					size = { 26 26 }
+					block "goto_properties" {
+						onclick = "[Character.ZoomToOrderTarget]"
+						tooltip = "ZOOM_TO_LOCATION"
+					}
+					parentanchor = right|vcenter
+					position = { 0 0 }
+				}
+			}
+			
+			# Portrait
+			container = {
+				minimumsize = { @panel_width_minus_20 40 }
+				maximumsize = { @panel_width_minus_20 40 }
+				parentanchor = hcenter
+				
+				
+				section_header_button = {
+					parentanchor = left|vcenter
+					size = { 70% 40 }
+					
+					visible = "[GreaterThan_int32(Character.GetNumCombatUnits, '(int32)0')]"
+					enabled = "[And( Not( Character.IsOffer ), Not(IsDataModelEmpty( Character.GetCombatUnits )))]"
+					
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle( Concatenate( 'combat_units_', Character.GetIDString ) )]"
+					}
+
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) ))]"
+					}
+
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) )]"
+					}
+
+					flowcontainer = {
+						parentanchor = left|vcenter
+						spacing = 6
+						margin_left = 40
+						
+						
+						# Morale
+						morale_bar = {
+							size = { 7 37 }
+							parentanchor = vcenter
+							tooltip = "COMMANDER_MORALE_TOOLTIP"
+							
+							blockoverride "morale_value" {
+								value = "[FixedPointToFloat( Character.GetMorale )]"
+							}
+							blockoverride "morale_color" {
+								color = "[GetMoraleColorVec( Character.GetMorale )]"
+							}
+						}
+						
+						## Supply
+						#morale_bar = {
+						#	size = { 7 38 }
+						#	parentanchor = vcenter
+						#	tooltip = "COMMANDER_MORALE_TOOLTIP"
+						#	
+						#	blockoverride "morale_value" {
+						#		value = "[FixedPointToFloat( Character.GetSupply )]"
+						#	}
+						#	blockoverride "morale_color" {
+						#		color = "[GetMoraleColorVec( Character.GetMorale )]"
+						#	}
+						#}
+						widget = { size = { 1 1 } }
+						# Units
+						textbox = {
+							minimumsize = { 90 38 }
+							maximumsize = { 150 40 }
+							visible = "[Character.IsMobilized]"
+							parentanchor = vcenter
+							#elide = right
+							align = left|nobaseline
+							
+							text = "MILITARY_PANEL_COMMANDER_UNITS"
+							using = fontsize_large
+							
+						}
+						textbox = {
+							minimumsize = { 90 38 }
+							maximumsize = { 150 40 }
+							visible = "[Not(Character.IsMobilized)]"
+							parentanchor = vcenter
+							#elide = right
+							align = left|nobaseline
+							
+							text = "MILITARY_PANEL_COMMANDER_UNITS_UNMOBILIZED"
+							using = fontsize_large
+						}
+						# Attrition
+						textbox = {
+							visible = "[And(NotEqualTo_CFixedPoint(Character.GetAttritionRaw,'(CFixedPoint)0'), Character.IsMobilized)]"
+							parentanchor = vcenter
+							margin_left = 20
+							margin_top = 5
+							autoresize = yes
+							align = nobaseline
+							text = "ANTY_MILITARY_PANEL_TROOP_ATTRITION_LEVEL"
+							tooltip = "[Character.GetAttritionDesc]"
+							using = fontsize_large
+						}
+
+						
+
+						
+					}
+					flowcontainer = {
+						parentanchor = right|vcenter
+						
+						spacing = 5
+						
+						textbox = {
+							visible = "[And(Character.IsFullyMobilized, Character.IsGeneral)]"
+							parentanchor = vcenter
+							elide = right
+							align = left|nobaseline
+							autoresize = yes
+							margin_top = 3
+							text = "MILITARY_PANEL_MOBILIZED"
+							tooltip = "GENERAL_IS_MOBILIZED_TOOLTIP"
+						}
+
+						textbox = {
+							visible = "[And(Character.IsMobilizing, Character.IsGeneral)]" 
+							parentanchor = vcenter
+							elide = right
+							align = left|nobaseline
+							autoresize = yes
+							margin_top = 3
+							text = "[Character.GetMobilizationPercentageFormatted]"
+							tooltip = "GENERAL_MOBILIZING_TOOLTIP"
+						}
+
+						textbox = {
+							visible = "[And(Not(Character.IsMobilized), Character.IsGeneral)]"
+							parentanchor = vcenter
+							elide = right
+							align = left|nobaseline
+							autoresize = yes
+							margin_top = 3
+							margin_right = 5
+							text = "GARRISONED_CONCEPT"
+						}
+					}
+
+					
+				}
+				# Mobilize this general button
+				flowcontainer = {
+					position = { 385 0 }
+					parentanchor = vcenter
+					spacing = 5
+					margin = { 2 2 }
+					visible = "[And(Character.IsGeneral, Not(Character.IsMobilized))]"
+					enabled = "[IsValid( Character.Mobilize )]"
+					
+					button = {
+						using = default_button_action
+						using = commander_mobilize_button_sound
+						size = { 115 40 }
+						
+						onclick = "[Execute( Character.Mobilize )]"
+						tooltip = "MOBILIZE_GENERAL_TOOLTIP"
+
+						mobilization_icon_big = {
+							visible = yes
+							parentanchor = left|vcenter
+							widgetanchor = center
+							size = { 40 40 }
+							position = { 8 0 }
+						}
+
+						textbox = {
+							parentanchor = center
+							text = "MOBILIZE_GENERAL"
+							autoresize = yes
+							align = nobaseline
+						}
+					}
+				} 
+
+				# General order buttons
+				dynamicgridbox = {
+					position = { 385 0 }
+					parentanchor = vcenter
+					visible = "[And(Character.IsGeneral, Character.IsMobilized)]"
+					enabled = "[Not(Character.HasNavalInvasionPlan)]"
+					datamodel = "[Character.AccessOrders]"
+					datamodel_wrap = 3
+					flipdirection = yes
+
+					item = {
+						flowcontainer = {
+							margin = { 2 2 }
+							widget = {
+								size = { 40 40 }
+								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+								using = tooltip_above
+								icon = {
+									using = rotate_glow_blue
+									parentanchor = center
+									size = { 65 65 }
+									visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+								}
+								commander_order_button = { }
+							}
+						}
+					}
+				}
+
+				# Admiral order buttons
+				dynamicgridbox = {
+					position = { 328 0 }
+					parentanchor = vcenter
+					layoutanchor = topright
+					visible = "[Character.IsAdmiral]"
+					datamodel = "[Character.AccessOrders]"
+					datamodel_wrap = 4
+					flipdirection = yes
+
+					item = {
+						flowcontainer = {
+							margin = { 2 2 }
+							widget = {
+								size = { 40 40 }
+								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+								using = tooltip_above
+								icon = {
+									using = rotate_glow_blue
+									parentanchor = center
+									size = { 65 65 }
+									visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+								}
+								commander_order_button = { }
+							}
+						}
+					}
+				}
+				
+
+				
+			}
+			
+			# BATTALIONS / WARSHIPS
+			
+
+			### MANPOWER PACKAGES
+			flowcontainer = {
+				parentanchor = hcenter
+				direction = vertical
+				minimumsize = { @panel_width_minus_10 -1 }
+				maximumsize = { @panel_width_minus_10 -1 }
+				margin = { 0 6 }
+
+				visible = "[And( GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) ), Not( Character.IsOffer ))]"
+
+				background = {
+					using = dark_area
+				}
+			
+				dynamicgridbox = {
+					datamodel = "[Character.AccessExpandedBuildingEntries]"
+					
+					datamodel_wrap = 1
+					flipdirection = yes
+					parentanchor = hcenter
+
+					item = {
+						flowcontainer = {
+							margin_bottom = 5
+
+							combat_unit_building = {
+								
+								blockoverride "datacontext" {
+									datacontext = "[MilitaryPanelBuildingEntry.GetBuilding]"
+								}
+
+								#TODO PRCAL-16920: Add toggles for building expand units
+								blockoverride "onclick" {
+									onclick = "[MilitaryPanelBuildingEntry.ToggleExpand]"
+								}
+								
+								blockoverride "onclick_showmore" {
+									visible = "[Not(MilitaryPanelBuildingEntry.IsExpanded)]"
+								}
+								
+								blockoverride "onclick_showless" {
+									visible = "[MilitaryPanelBuildingEntry.IsExpanded]"
+								}
+
+								blockoverride "combat_units_visible" {
+									visible = "[MilitaryPanelBuildingEntry.IsExpanded]"
+								}
+
+								blockoverride "units_datamodel" {
+									datamodel = "[Character.GetCombatUnitsFromBuilding(Building.Self)]"
+								}
+							}
+						}
+					}
+				}
+			}
+			#background = {
+			#	visible = "[Character.IsMobilized]"
+			#	texture = "gfx/interface/buttons/default_button_frame_fancy_big.dds"
+			#	spriteType = Corneredstretched
+			#	spriteborder = { 60 10 }
+			#	texture_density = 2
+			#}
+		}
+	}
+
+	type commander_entry_building = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		spacing = 10
+		margin_bottom = 15
+		
+		using = entry_bg_fancy
+
+		### Commander header
+		container = {
+			minimumsize = { @panel_width -1 }
+
+			background = {
+				using = fade_right_entry_fancy_header_colored
+				color = "[Character.GetCountry.GetMapColor]"
+			}
+
+			icon = {
+				visible = "[Character.IsBeingHighlighted]"
+				using = highlighted_square_selection
+			}
+
+			### Portrait and name
+			flowcontainer = {
+				margin_left = 5
+				parentanchor = left|vcenter
+				button = {
+					size = { 100% 100% }
+					onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+					onrightclick = "[RightClickMenuManager.ShowForCharacter(Character.AccessSelf)]"
+					onmousehierarchyenter = "[AccessHighlightManager.HighlightCharacter( Character.Self )]"
+					onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+				}
+
+				character_portrait_small = {
+					parentanchor = vcenter
+					using = tooltip_above
+					blockoverride "portrait_button" {
+						alwaystransparent = yes
+					}
+					blockoverride "is_selected" {
+						visible = "[Character.IsBeingHighlighted]"
+					}
+				}
+		
+				textbox = {
+					maximumsize = { 200 -1 }
+					parentanchor = vcenter
+					multiline = yes
+					autoresize = yes
+					text = "[Character.GetFullName]"
+					align = left|nobaseline
+					elide = right
+					margin_left = 5
+				}
+			}
+	
+			### Order and location
+			flowcontainer = {
+				parentanchor = right|vcenter
+				margin_right = 5
+
+				textbox = {
+					parentanchor = vcenter
+					align = right|nobaseline
+					maximumsize = { 260 -1 }
+					multiline = yes
+					autoresize = yes
+					margin = { 0 3 }
+					text = "MILITARY_PANEL_COMMANDER_STATUS_FORMAT"
+					#text = "#todo Status"
+					elide = right
+					margin_right = 5
+				}
+
+				widget = {
+					size = { 28 28 }
+					parentanchor = vcenter
+
+					button_icon_zoom = {
+						size = { 100% 100% }
+						blockoverride "goto_properties" {
+							#TODO PRCAL-16920: Goto location
+						}
+					}
+				}
+			}
+		}
+
+		# Holds "onclick_" blocks
+		section_header_button = {
+			parentanchor = hcenter
+			size = { 95% 38 }
+		
+			visible = "[GreaterThan_int32(Character.GetNumCombatUnits, '(int32)0')]"
+			
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle( Concatenate( 'combat_units_', Character.GetIDString ) )]"
+			}
+
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) ))]"
+			}
+
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) )]"
+			}
+
+			flowcontainer = {
+				parentanchor = vcenter
+				margin_left = 35
+				spacing = 10
+
+				textbox = {
+					visible = "[Character.IsMobilized]"
+					parentanchor = vcenter
+					elide = right
+					align = left|nobaseline
+					autoresize = yes
+
+					text = "MILITARY_PANEL_MOBILIZED"
+					tooltip = "GENERAL_IS_MOBILIZED_TOOLTIP"
+				}
+
+				textbox = {
+					visible = "[Not(Character.IsMobilized)]"
+					parentanchor = vcenter
+					elide = right
+					align = left|nobaseline
+					autoresize = yes
+
+					text = "GARRISONED"
+				}
+			}
+
+			flowcontainer = {
+				parentanchor = right|vcenter
+				spacing = 10
+
+				# Units
+				textbox = {
+					parentanchor = vcenter
+					elide = right
+					align = right|nobaseline
+					autoresize = yes
+					text = "BUILDING_PANEL_COMMANDER_UNITS"
+				}
+			}
+		}
+
+		flowcontainer = {
+			visible = "[And( GetVariableSystem.Exists( Concatenate( 'combat_units_', Character.GetIDString ) ), Building.GetBuildingType.RecruitsCombatUnits )]"
+			minimumsize = { 506 -1 }
+			maximumsize = { 506 -1 }
+			direction = vertical
+			parentanchor = hcenter 
+			margin = { 0 2 }
+
+			background = {
+				margin = { 4 0 }
+				margin_top = 10
+				using = dark_area
+			}
+
+			combat_unit_simple_grid = {
+				datamodel = "[Character.GetCombatUnitsFromBuilding(Building.Self)]"
+			}
+		}
+	}
+}
