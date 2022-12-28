@@ -64,22 +64,8 @@ types outliner_types {
 						alpha = 0.5
 					}
 				}
-				outliner_markets_short = {
-					blockoverride "visibility" {
-						visible = yes
-					}
-					#blockoverride "title_click" {
-					#	onclick = "[OutlinerEntry.TogglePinnedExpanded]"
-					#}
-					#blockoverride "list_visibility" {
-					#	visible = "[OutlinerEntry.IsPinnedExpanded]"
-					#}
-					#blockoverride "pinnable_expand_buttons" {
-					#	pinned_expand_buttons = {}
-					#}
-					#using = outliner_entry_animation
-				}
-				outliner_markets = {
+				
+				outliner_interest_groups = {
 					blockoverride "visibility" {
 						visible = "[OutlinerEntry.IsShownPinned]"
 					}
@@ -108,8 +94,10 @@ types outliner_types {
 						pinned_expand_buttons = {}
 					}
 					using = outliner_entry_animation
+					
+
 				}
-				outliner_interest_groups = {
+				outliner_markets = {
 					blockoverride "visibility" {
 						visible = "[OutlinerEntry.IsShownPinned]"
 					}
@@ -123,8 +111,22 @@ types outliner_types {
 						pinned_expand_buttons = {}
 					}
 					using = outliner_entry_animation
+
+					flowcontainer = {
+						visible = "[OutlinerEntry.IsPinnedExpanded]"
+						direction = vertical
+						parentanchor = right
+						allow_outside = yes
+
+						datamodel = "[GetGlobalList('markets')]"
+
+						item = {
+							market_item = {
+								datacontext = "[Scope.AccessCountry.AccessFirstMarket]"
+							}
+						}
+					}
 				}
-				
 				outliner_colonies = {
 					blockoverride "visibility" {
 						visible = "[OutlinerEntry.IsShownPinned]"
