@@ -1,0 +1,174 @@
+namespace = ff_construction_subsidies
+
+ff_forcing_strategy.1 = {
+	type = country_event
+	placement = scope:target_country
+
+	trigger = {
+		exists = scope:target_country
+	}
+	title = ff_forcing_strategy_event.1.t
+	desc = ff_forcing_strategy_event.1.d
+
+	event_image = {
+		video = "gfx/event_pictures/africa_diplomats_negotiating.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/leader_speaking_to_a_group_of_people"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 1
+	immediate = {
+		save_scope_as = root_country
+	}
+
+	# Agriculture
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = ff_agricultural_expansion_forced}
+			}
+		}
+		name = ff_forcing_strategy.agriculture
+
+		scope:target_country = {
+			hidden_effect = {
+				add_modifier = ff_agricultural_expansion_forced
+			}
+            set_strategy = ai_strategy_agricultural_expansion_forced
+        }
+
+        add_modifier = {
+			name = ff_forcing_strategy
+			years = 2
+		}
+
+		change_relations = {
+			country = scope:target_country
+			value = -20
+		}
+	}
+
+	# Plantation
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = ff_plantation_economy_forced}
+			}
+		}
+		name = ff_forcing_strategy.plantation
+
+		scope:target_country = {
+			hidden_effect = {
+				add_modifier = ff_plantation_economy_forced
+			}
+            set_strategy = ai_strategy_plantation_economy_forced
+        }
+		add_modifier = {
+			name = ff_forcing_strategy
+			years = 2
+		}
+		change_relations = {
+			country = scope:target_country
+			value = -20
+		}
+	}
+
+	# Resource
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = ff_resource_expansion_forced}
+			}
+		}
+		name = ff_forcing_strategy.resource
+
+		scope:target_country = {
+			hidden_effect = {
+				add_modifier = ff_resource_expansion_forced
+			}
+            set_strategy = ai_strategy_resource_expansion_forced
+        }
+		add_modifier = {
+			name = ff_forcing_strategy
+			years = 2
+		}
+
+		change_relations = {
+			country = scope:target_country
+			value = -10
+		}
+	}
+
+	# Industrial
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = ff_industrial_expansion_forced}
+			}
+		}
+		name = ff_forcing_strategy.industrial
+
+		scope:target_country = {
+			hidden_effect = {
+				add_modifier = ff_industrial_expansion_forced
+			}
+            set_strategy = ai_strategy_industrial_expansion_forced
+        }
+		add_modifier = {
+			name = ff_forcing_strategy
+			years = 2
+		}
+
+	}
+
+	# Placate
+	option = {
+		trigger = {
+			scope:target_country = {
+				NOT = {has_modifier = ff_placate_population_forced}
+			}
+		}
+		name = ff_forcing_strategy.placate
+
+		scope:target_country = {
+			hidden_effect = {
+				add_modifier = ff_placate_population_forced
+			}
+            set_strategy = ai_strategy_placate_population_forced
+        }
+		add_modifier = {
+			name = ff_forcing_strategy
+			years = 2
+		}
+
+	}
+
+	# Removing Forced Strategy
+	option = {
+		trigger = {
+			scope:target_country = {
+				OR = {
+					has_modifier = ff_agricultural_expansion_forced
+					has_modifier = ff_plantation_economy_forced
+					has_modifier = ff_resource_expansion_forced
+					has_modifier = ff_industrial_expansion_forced
+					has_modifier = ff_placate_population_forced
+				}
+			}
+		}
+		name = ff_forcing_strategy.remove
+		scope:target_country = {
+			ff_no_forced_strategy = yes
+		}
+	}
+
+	# Cancel
+	option = {
+		default_option = yes
+		name = CANCEL
+	}
+}
+

@@ -1,0 +1,107 @@
+﻿ff_construction_subsidies = {
+	requires_approval = no
+	should_notify_third_parties = no
+	show_effect_in_tooltip = yes
+
+	potential = {
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			not = { 
+				is_country_type = decentralized 
+			}
+			is_subject_of = ROOT
+		}
+		is_player = yes
+	}
+	
+	possible = {
+		scope:target_country = {
+			is_at_war = no
+			is_diplomatic_play_committed_participant = no
+			scope:target_country.relations:root >= relations_threshold:cordial
+
+			not = {
+				has_modifier = ff_construction_subside_receive
+			}
+		}
+	}
+	
+	accept_effect = {
+		add_modifier = {
+			name = ff_construction_subsides_give
+		}
+		scope:target_country = {
+			add_modifier = {
+				name = ff_construction_subsides_receive
+			}
+		}
+	}
+	pact = {
+		cost = 150
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		relations_progress_per_day = 1 # At 100, +1 relations
+		relations_improvement_max = 80
+
+		should_invalidate = {
+			has_war_with = scope:target_country
+
+		}
+		break_effect = {
+			change_relations = { country = scope:target_country value = -10 }
+			remove_modifier = ff_construction_subsides_give
+			scope:target_country = {
+				remove_modifier = ff_construction_subsides_receive
+			}
+		}
+	}
+	
+	ai = {
+		will_propose = { 
+			always = no
+		}
+	}
+}
+
+ff_forced_strategy = {
+	requires_approval = no
+	should_notify_third_parties = no
+	show_effect_in_tooltip = no
+	show_confirmation_box = no
+
+	potential = {
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			not = {
+				is_country_type = decentralized
+			}
+			is_subject_of = ROOT
+		}
+		is_player = yes
+	}
+
+	possible = {
+		scope:target_country = {
+			is_at_war = no
+			is_diplomatic_play_committed_participant = no
+			scope:target_country.relations:root >= relations_threshold:cordial
+
+			not = {
+				has_modifier = ff_agricultural_expansion_forced
+			}
+		}
+	}
+
+	accept_effect = {
+		trigger_event = { id = ff_forcing_strategy.1 popup = yes }
+		save_scope_as = scope_rootxx
+	}
+
+	ai = {
+		will_propose = {
+			always = no
+		}
+	}
+}
+
