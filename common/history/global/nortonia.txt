@@ -1,0 +1,319 @@
+GLOBAL = {
+	c:USA = {
+		set_variable = initalized_usa_var
+		 c:USA = {every_scope_state = { 
+				save_scope_as = state_clout_adjust_scope
+			if = {limit = { is_incorporated = yes}
+				scope:state_clout_adjust_scope = {set_variable = american_state_variable }
+					} 
+				}
+			}
+			###Southern State Mods
+		s:STATE_LOUISIANA.region_state:USA = {
+			add_modifier = deep_south_state_mod
+		}
+		s:STATE_MISSISSIPPI.region_state:USA = {
+			add_modifier = deep_south_state_mod
+		}
+		s:STATE_ALABAMA.region_state:USA = {
+			add_modifier = deep_south_state_mod
+		}
+		s:STATE_GEORGIA.region_state:USA = {
+			add_modifier = deep_south_state_mod
+		}
+		s:STATE_FLORIDA.region_state:USA = {
+			add_modifier = deep_south_state_mod
+			add_modifier = {
+			name = seminole_war_mod
+			months = 60
+			is_decaying = yes
+		}
+		}
+		s:STATE_SOUTH_CAROLINA.region_state:USA = {
+			add_modifier = deep_south_state_mod
+		}
+		s:STATE_NORTH_CAROLINA.region_state:USA = {
+			add_modifier = south_state_mod
+		}
+		s:STATE_TENNESSEE.region_state:USA = {
+			add_modifier = south_state_mod
+		}
+		s:STATE_VIRGINIA.region_state:USA = {
+			add_modifier = south_state_mod
+		}
+		s:STATE_ARKANSAS.region_state:USA = {
+			add_modifier = south_state_mod
+		}
+		s:STATE_WEST_VIRGINIA.region_state:USA = {
+			add_modifier = border_state_mod
+		}
+		s:STATE_MARYLAND.region_state:USA = {
+			add_modifier = border_state_mod
+		}
+		s:STATE_DELAWARE.region_state:USA = {
+			add_modifier = border_state_mod
+		}
+		s:STATE_KENTUCKY.region_state:USA = {
+			add_modifier = border_state_mod
+		}
+		s:STATE_MISSOURI.region_state:USA = {
+			add_modifier = border_state_mod
+		}
+		s:STATE_TEXAS.region_state:TEX = {
+			add_modifier = south_state_mod
+		}
+		trigger_event = {
+			id = nfm_misc.6
+			days = 0
+			popup = yes
+		}
+	}
+
+	c:EGY = {
+		activate_law = law_type:law_colonial_exploitation
+	}
+	c:DEI = {
+		activate_law = law_type:law_colonial_exploitation
+	}
+	c:WAS = {
+		activate_law = law_type:law_colonial_resettlement
+	}
+	c:NSW = {
+		activate_law = law_type:law_colonial_resettlement
+	}
+	c:TRN = {
+		activate_law = law_type:law_colonial_resettlement
+	}
+	c:ORA = {
+		activate_law = law_type:law_colonial_resettlement
+	}
+	c:PRG = {
+		activate_law = law_type:law_colonial_resettlement
+	}
+	every_country = {
+	   limit = { 
+	   		NOT ={
+	   			this = c:USA
+	   			#this = c:PRU
+	   		} 
+	   }
+	   activate_law = law_type:law_unitary
+	   #activate_law = law_type:law_purchased_officers
+	}
+
+	every_country = {
+	   limit = { 
+	   		NOR = {
+	   			this = c:USA
+	   			this = c:PRU
+	   		} 
+	   }
+	 #  activate_law = law_type:law_unitary
+	   activate_law = law_type:law_purchased_officers
+	}
+
+	every_country = {
+	   limit = { 
+	   		has_law = law_type:law_chiefdom
+	   	 }
+	   activate_law = law_type:law_regionalism
+	}
+
+	every_country = { #Unrecognzied Powers
+		
+	   limit = {  
+	   	is_country_type = unrecognized 
+	   	has_law = law_type:law_serfdom
+	   	NOT = {
+	   		this = c:JAP
+	   		this = c:CHI
+	   		this = c:KOR
+	   	}
+	   }
+	    ig:ig_landowners = {
+ 			remove_ideology = ideology_nfm_federalist
+ 			add_ideology = ideology_nfm_regionalist
+   		}
+	   activate_law = law_type:law_regionalism
+	}
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			has_law = law_type:law_chiefdom
+	   			has_law = law_type:law_monarchy
+	   			has_law = law_type:law_theocracy
+	   		}
+	   		NOT = {
+	   			this = c:GBR
+	   			this = c:PRU
+	   		}
+	   	 }
+	   activate_law = law_type:law_noble_officers
+	}
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			this = c:PRU
+	   		}
+	   	 }
+	   activate_law = law_type:law_professional_officers
+	}
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			this = c:BIC
+	   			this = c:UCA
+	   			this = c:BRZ
+	   			this = c:CHI
+	   		}
+	   	 }
+	   activate_law = law_type:law_cooperative_federalism
+	}
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			this = c:USA
+	   			this = c:SIC
+	   			this = c:TUR
+	   			this = c:EGY
+	   		}
+	   	 }
+	   activate_law = law_type:law_dual_federalism
+	}
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			this = c:JAP
+	   			this = c:ARG
+	   			this = c:SWI
+	   		}
+	   	 }
+	   activate_law = law_type:law_regionalism
+	}
+
+
+	every_country = {
+	   limit = { 
+	   		OR = {
+	   			this = c:MEX
+	   			this = c:CUB
+	   			this = c:UCA
+	   			this = c:CLM
+	   			this = c:VNZ
+	   			this = c:ECU
+	   			this = c:PEU
+	   			this = c:BOL
+	   			this = c:CHL
+	   			this = c:ARG
+	   			this = c:PRG
+	   			this = c:URU
+	   		}
+	   	 }
+	   ig:ig_landowners = {
+ 			set_interest_group_name = ig_hispanic_landowners
+ 			remove_ideology = ideology_nfm_federalist
+ 			add_ideology = ideology_nfm_centralist
+   		}
+   		ig:ig_intelligentsia = {
+   			remove_ideology = ideology_nfm_centralist
+ 			add_ideology = ideology_nfm_federalist
+   		}
+	}
+	c:AUS = {
+		ig:ig_landowners = {
+ 			remove_ideology = ideology_nfm_federalist
+   		}
+	}
+
+	c:JAP = {
+		annex = c:AIN
+		set_capital = STATE_KANTO
+		s:STATE_KYUSHU.region_state:JAP = {
+	#		add_modifier = satsuma_domain
+		}
+		s:STATE_CHUGOKU.region_state:JAP = {
+	#		add_modifier = chosu_domain
+		}
+		s:STATE_SHIKOKU.region_state:JAP = {
+	#		add_modifier = tosa_domain
+		}
+		s:STATE_KANSAI.region_state:JAP = {
+	#		add_modifier = tokugawa_domain
+		}
+		s:STATE_CHUBU.region_state:JAP = {
+	#		add_modifier = tokugawa_domain
+		}
+		s:STATE_KANTO.region_state:JAP = {
+	#		add_modifier = tokugawa_domain
+		}
+		s:STATE_TOHOKU.region_state:JAP = {
+	#		add_modifier = uesugi_domain
+		}
+		#Add Hokkaido One
+	}
+
+	c:CHI = { #Accurate tributaries
+		create_diplomatic_pact = {
+			country = c:BUR
+			type = tributary
+		}
+		create_diplomatic_pact = {
+			country = c:SIA
+			type = tributary
+		}
+		create_diplomatic_pact = {
+			country = c:DAI
+			type = tributary
+		}
+		create_diplomatic_pact = {
+			country = c:NEP
+			type = tributary
+		}
+		create_diplomatic_pact = {
+			country = c:SIK
+			type = tributary
+		}
+		create_diplomatic_pact = {
+			country = c:BHU
+			type = tributary
+		}
+	}
+
+	every_country = { #Caudismo
+	   limit = { 
+	   		any_interest_group = {
+  				has_ideology = ideology_caudillismo
+  			}
+	   	 }
+	  	remove_modifier = age_of_caudillos_modifier
+	  	add_modifier = age_of_caudillos_modifier
+	}
+
+}
+
+
+
+
+#	   ig:ig_armed_forces = {
+#		ig:ig_devout = {
+#		ig:ig_landowners = {
+#		ig:ig_rural_folk = {
+#		ig:ig_industrialists = {
+#		ig:ig_petty_bourgeoisie = {
+#		ig:ig_intelligentsia = {
+#		ig:ig_trade_unions = {
+#	   			country_is_in_europe = yes
+ # 				country_is_in_middle_east = yes
+  #				country_is_in_east_asia = yes
+  #				country_is_in_central_asia = yes
+  #				country_is_in_india = yes
+  #				country_is_in_southeast_asia = yes
+ 	#			country_is_in_africa = yes	
+ 	#			country_is_in_north_america = yes
+	#			country_is_in_central_america = yes
+	#			country_is_in_south_america = yes

@@ -1,0 +1,729 @@
+﻿namespace = mexican_american
+
+# An Offer for the West
+mexican_american.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.1.t
+	desc = mexican_american.1.d
+	flavor = mexican_american.1.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		c:MEX = {
+			save_scope_as = mexico_scope
+		}
+	}
+
+	option = {
+		name = mexican_american.1.a
+		ai_chance = {
+			base = 1
+		}
+		custom_tooltip = mexican_american.1.tt1 # 3 million over a year
+		c:MEX = {
+			trigger_event = {
+				id = mexican_american.2 
+				days = 0
+				popup = yes
+			}
+		}
+	}
+	option = { # perhaps another time
+		name = mexican_american.1.c
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+		remove_variable = usa_western_purchase_var
+	}
+}
+
+mexican_american.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.2.t
+	desc = mexican_american.2.d
+	flavor = mexican_american.2.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		c:MEX = {
+			save_scope_as = mexico_scope
+		}
+	}
+
+	option = {
+		name = mexican_american.2.a
+		default_option = no
+		add_modifier = {
+			name = mex_western_purchase_gold
+			months = 12
+			is_decaying = no
+		}
+		c:USA = {
+			trigger_event = { id = mexican_american.3 days = 0 popup = yes }
+		}
+		show_as_tooltip = {
+			s:STATE_CALIFORNIA.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_NEVADA.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_ARIZONA.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_NEW_MEXICO.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_TEXAS.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_TEXAS.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			s:STATE_COLORADO.region_state:MEX = {
+				set_state_owner = c:USA
+			}
+			change_relations = {
+				country = c:USA
+				value = 100
+			}
+		}
+		ai_chance = {
+		base = 0	
+			modifier = {
+				trigger = { owns_entire_state_region = STATE_TEXAS }
+				add = -1000
+			}	
+		modifier = {
+			trigger = { gold_reserves > 0 }
+			add = -10
+		}		
+		modifier = {
+			trigger = { 
+				gold_reserves < 0
+			}
+			add = 10
+		}
+		modifier = {
+			trigger = { 
+				ruler = {has_ideology = ideology_jingoist_leader}
+			}
+			add = -1000
+		}
+		modifier = {
+			trigger = { 
+				ruler = {has_ideology = ideology_pacifist}
+			}
+			add = 20
+		}
+		modifier = {
+			trigger = { 
+				c:USA= {relations:root >= relations_threshold:amicable}
+			}
+			add = 10
+		}
+	}
+	}
+	option = {
+		name = mexican_american.2.a
+		c:USA = {
+			trigger_event = { id = mexican_american.4  days = 0 popup = yes }
+			set_variable = usa_western_purchase_fail_var 
+		}
+		show_as_tooltip = {
+			change_relations = {
+				country = c:USA
+				value = -50
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				trigger = { 
+					c:USA= {relations:root <= relations_threshold:neutral}
+				}
+			add = 100
+		}
+
+		}
+	}
+}
+
+# The Successful Purchase
+mexican_american.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.3.t
+	desc = mexican_american.3.d
+	flavor = mexican_american.3.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		c:MEX = {
+			save_scope_as = mexico_scope
+		}
+	}
+
+	option = {
+		name = mexican_american.3.a
+		default_option = yes
+		add_modifier = {
+			name = usa_western_purchase_gold
+			months = 12
+			is_decaying = no
+		}
+		s:STATE_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEVADA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_UTAH.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_ARIZONA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_COLORADO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEW_MEXICO.region_state:MEX = {
+			set_state_owner = c:USA
+			
+		}
+		s:STATE_KANSAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_OKLAHOMA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_TEXAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		c:USA = {
+			trigger_event = { id = mexican_american.5 days = 0 popup = no }
+		}
+		set_variable = gasden_purchase_var
+	}
+}
+
+
+# The Failed Purchase
+mexican_american.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.4.t
+	desc = mexican_american.4.d
+	flavor = mexican_american.4.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		c:MEX = {
+			save_scope_as = mexico_scope
+		}
+	}
+}
+
+
+# The Successful Purchase
+mexican_american.5 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.5.t
+	desc = mexican_american.5.d
+	flavor = mexican_american.5.f
+    hidden = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		c:MEX = {
+			save_scope_as = mexico_scope
+		}
+		s:STATE_ARIZONA = {
+			set_owner_of_provinces = {
+				country = c:MEX
+				provinces = { x022AE2 x48A4E7 xC28CA0 x39AEE1 x44CC50 BB6368 x52AD57 xBF471B x8737CC xC96399 x8737CC x2392B7 xA8531A
+				xD331E1 x949C3F x1BDEB7 x8755F3 x77EF15 x1A06C1 xD08000 xBB6368 x67A8BE}
+			}
+		}
+		s:STATE_NEW_MEXICO = {
+			set_owner_of_provinces = {
+				country = c:MEX
+				provinces = { xC03080 xB566BA  xB6EC9A x46C455  }
+			}
+		}
+	}
+}
+
+
+mexican_american.6 = { #Treaty of G H
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.6.t
+	desc = mexican_american.6.d
+	flavor = mexican_american.6.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	trigger = {
+
+	}
+
+	immediate = {
+		c:MEX = {
+		leader = {
+			save_scope_as = mexico_leader
+    			}
+    	}
+    	c:USA = {
+    		set_variable = manifest_destiny_we_did_it_folks
+    		set_variable = {
+   				name = manifest_destiny_we_did_it_folks_cooldown
+  			months = 1
+   		}
+    	#if = { limit = { exists = c:COM }
+    	#	annex = c:COM
+    	#}
+    	#if = { limit = { exists = c:APC }
+    #		annex = c:APC
+   # 	}
+    #	if = { limit = { exists = c:NVJ }
+    #		annex = c:NVJ
+    #	}
+    #	if = { limit = { exists = c:UTE }
+    #		annex = c:UTE
+    #	}
+    #	if = { limit = { exists = c:ARP }
+    #		annex = c:ARP
+    #	}
+    	if = { limit = { 
+    		c:TEX = {
+    		is_player = no
+    		OR = {
+    			is_subject = no
+    			is_subject_of = c:USA
+    		}}
+    		exists = c:TEX
+    	}
+    		annex = c:TEX
+    	}
+    	if = { limit = { 
+    		c:CAL = {
+    		is_player = no
+    		OR = {
+    			is_subject = no
+    			is_subject_of = c:USA
+    		}}
+    		exists = c:CAL
+    	}
+    		annex = c:CAL
+    	}
+  	  }
+	}
+
+	option = {
+		name = mexican_american.6.a
+		default_option = yes
+		s:STATE_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEVADA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_UTAH.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_ARIZONA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_COLORADO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEW_MEXICO.region_state:MEX = {
+			set_state_owner = c:USA
+			
+		}
+		s:STATE_KANSAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_OKLAHOMA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_TEXAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_WYOMING.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		c:USA = {
+			trigger_event = { id = mexican_american.7 days = 0 popup = yes }
+		}
+		c:USA = {
+		remove_diplomatic_pact = {
+  				country = c:MEX
+   					type = dominion
+   			}
+   		}
+   		c:USA = {
+			trigger_event = { id = mexican_american.5 days = 0 popup = no }
+		}
+		ai_chance = {
+    			base = 20
+   		}
+	}
+
+	option = {
+		name = mexican_american.6.b
+		default_option = no
+		s:STATE_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEVADA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_UTAH.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_ARIZONA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_COLORADO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEW_MEXICO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_KANSAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_OKLAHOMA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_TEXAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_BAJA_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_CHIHUAHUA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_RIO_GRANDE.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_SONORA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_WYOMING.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		if = { limit = { 
+    		c:RIO = {
+    		is_player = no
+    		OR = {
+    			is_subject = no
+    			is_subject_of = c:USA
+    		}}
+    		exists = c:RIO
+    	}
+    		annex = c:RIO
+    	}
+		change_infamy = 40
+		c:USA = {
+			trigger_event = { id = mexican_american.7 days = 0 popup = yes }
+		}
+		c:USA = {
+		remove_diplomatic_pact = {
+  				country = c:MEX
+   					type = dominion
+   			}
+   		}
+   		ai_chance = {
+    			base = 5
+   		}
+   		set_variable = gasden_purchase_var
+	}
+	option = {
+		name = mexican_american.6.c
+		default_option = no
+		s:STATE_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEVADA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_UTAH.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_ARIZONA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_COLORADO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_NEW_MEXICO.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_KANSAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_OKLAHOMA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_TEXAS.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_BAJA_CALIFORNIA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_CHIHUAHUA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_RIO_GRANDE.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_SONORA.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		s:STATE_WYOMING.region_state:MEX = {
+			set_state_owner = c:USA
+		}
+		change_infamy = 80
+		c:USA = {
+			trigger_event = { id = mexican_american.7 days = 0 popup = yes }
+		}
+		ai_chance = {
+    			base = 1
+   		}
+   		set_variable = gasden_purchase_var
+	}
+}
+mexican_american.7 = { #Mexican Settlement
+	type = country_event
+	placement = ROOT
+
+	title = mexican_american.7.t
+	desc = mexican_american.7.d
+	flavor = mexican_american.7.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	trigger = {
+
+	}
+
+	immediate = {
+
+	}
+
+	option = { #No Settlement
+		name = mexican_american.7.a
+		default_option = no
+		c:USA = {
+			change_relations = { 
+				country = c:MEX
+				value = -10
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { #Modest Settlement
+		name = mexican_american.7.b
+		default_option = yes
+		ai_chance = {
+			base = 10
+		}
+		c:USA = {
+			change_relations = { 
+				country = c:MEX
+				value = 50
+			}
+			change_infamy = -60
+			add_modifier = {
+				name = small_mexican_ces_settlement_pay
+				months = 125
+			}
+		}
+		c:MEX = {
+			add_modifier = {
+				name = small_mexican_ces_settlement_recieve
+				months = 125
+			}
+		}
+		
+	}
+	option = { #Huge Settlement
+		name = mexican_american.7.c
+		default_option = no
+		c:USA = {
+			change_relations = { 
+				country = c:MEX
+				value = 100
+			}
+			change_infamy = -100
+			add_modifier = {
+				name = huge_mexican_ces_settlement_pay
+				months = 125
+			}
+		}
+		c:MEX = {
+			add_modifier = {
+				name = huge_mexican_ces_settlement_recieve
+				months = 125
+			}
+		}
+		ai_chance = {
+			base = 5
+		}
+		
+	}
+}
+
+
+
+# Dred Scott
+mexican_american.9 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_politicians_arguing.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/southamerica/slaves_night"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = mexican_american.9.t
+	desc = mexican_american.9.d
+	flavor = mexican_american.9.f
+
+	duration = 3
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		NOT = { c:USA = {has_law = law_type:law_slavery_banned }}
+		year >= 1856
+		NOT = { c:USA = {has_variable = dredd_scott_happened_var}}
+	}
+
+	immediate = {
+		set_variable = dredd_scott_happened_var
+	}
+
+
+	option = { #The Court Finds for Scott
+		name = mexican_american.9.a
+		add_modifier = {
+			name = dred_scott_for_scot_mod
+	}
+		c:USA = {add_radicals = {
+			value = 0.05
+			culture = cu:dixie
+		}}
+		c:USA = {add_radicals = {
+			value = 0.02
+			culture = cu:yankee
+		}}
+	}
+
+	option = { #The Court Finds for Sandford
+		name = mexican_american.9.b
+		default_option = yes
+		add_modifier = {
+			name = dred_scott_for_sand_mod
+		}
+		c:USA = {add_radicals = {
+			value = 0.02
+			culture = cu:dixie
+		}}
+		c:USA = {add_radicals = {
+			value = 0.05
+			culture = cu:yankee
+		}}
+	}
+}

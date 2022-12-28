@@ -1,0 +1,46 @@
+﻿namespace = acw_fsa_modded
+
+# ACW startup
+acw_fsa_modded.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_capitalists_meeting.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = acw_fsa_modded.1.t
+	desc = acw_fsa_modded.1.d
+	flavor = acw_fsa_modded.1.f
+
+	duration = 1
+
+	trigger = {
+	}
+
+	immediate = {
+		c:USA = {
+		any_scope_state = {
+			if ={ limit = { is_slave_state = yes}
+				set_state_owner = c:USA
+			}
+		}
+		}
+		c:FSA = {
+		any_scope_state = {
+			if ={ limit = { is_slave_state = no}
+				set_state_owner = c:FSA
+			}
+		}
+		}
+	}
+
+	option = {
+		name = acw_csa_modded.1.a
+		default_option = yes
+
+	}
+}

@@ -1,0 +1,72 @@
+usa_western_purchase = {
+	is_shown = {
+		exists = c:USA
+		exists = c:MEX
+		c:USA = ROOT
+		has_variable = manifested_destiny 
+		NOT = {
+			has_variable = usa_western_purchase_var
+		}
+		c:MEX = {
+			owns_entire_state_region = STATE_CALIFORNIA
+		}
+	}
+
+	possible = {
+		has_variable = manifested_destiny
+		in_default = no
+		taking_loans = no
+		is_diplomatic_play_committed_participant = no
+ 		is_at_war = no 
+	}
+
+	when_taken = {
+		set_variable = {
+			name = usa_western_purchase_var
+		}
+		trigger_event = {
+			id = mexican_american.1
+			days = 0
+			popup = yes
+		}
+	}
+
+	ai_chance = {
+		base = 0	
+		modifier = {
+			owns_entire_state_region = STATE_WASHINGTON
+			add = 10
+		}	
+		modifier = {
+			trigger = { gold_reserves > 3000000 }
+			add = 10
+		}		
+		modifier = {
+			trigger = { 
+				gold_reserves > 0
+				weekly_net_fixed_income > 100000
+			}
+			add = 10
+		}
+		modifier = {
+			OR = {
+				is_diplomatic_play_committed_participant = yes
+				is_at_war = yes
+			}
+			add = -1000
+		}
+		modifier = {
+			trigger = { 
+				ruler = {has_ideology = ideology_jingoist_leader}
+			}
+			add = -100
+		}
+		modifier = {
+			trigger = { 
+				ruler = {has_ideology = ideology_pacifist}
+			}
+			add = 100
+		}
+	}
+}
+	

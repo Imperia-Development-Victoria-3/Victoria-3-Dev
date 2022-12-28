@@ -1,0 +1,274 @@
+﻿namespace = mexican_nfm
+
+# Bear Flag Revolt
+mexican_nfm.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_nfm.1.t
+	desc = mexican_nfm.1.d
+	flavor = mexican_nfm.1.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	trigger = {
+		exists = c:MEX
+		c:MEX = ROOT
+		c:MEX = { has_war_with = c:USA }
+		c:MEX = { NOT = { has_variable = bear_flag_revolt_happened}}
+		c:MEX = { owns_entire_state_region = STATE_CALIFORNIA}
+	}
+
+	immediate = {
+		c:MEX = { set_variable = bear_flag_revolt_happened }
+		create_country = {
+				tag = CAL
+				origin = this
+				state = s:STATE_CALIFORNIA.region_state:MEX
+			}
+			s:STATE_CALIFORNIA = {
+			set_owner_of_provinces = {
+				country = c:MEX
+				provinces = {  x108080 x1116AA xDBCBC6 x2A91D8 xC4A8E9 x108000 xC1F518 x42B7D9 xC78CD3 xE97768 xE6440D x33EE3B x0425B3 x1C6782 xDAABF7 x370658 xFE6E88 x908000 xAF199E xC9F623 xB8F452 x56F5CB x5A4650 xD401D0 x307D50 xC54807 xB72458 x577D08 x9C28A4 xA65FC5 x25A37F xA24DA3 x607BA8 xBFE3A4 x1169B8 xF7DB50 x908080 x6B8E78 x7B005B x2F3B45 x76A57D x8CFB9B x8F1372 xA06435 x2099C1 x0898A3 x6CCFDB xCC07D4 x7A5DA6 xF49BCD x7E8E1A x61A555 x8D4E6D xFDC502 x500CAD xC5390E x032BE2 x2B1204 x914E48 x2CE673 x995E0F x5EAA35 xCBA1C9 x209FC3 x298876 x783D1D xDE208B xF6B075 xF16E88 x93A4C5 x1FE069 x161979 xCA5813 x864B45 xB881EE x0AE895 x441749 x519529 x6E6D40 xBD0F03 x2C84C4 x6F44CB x0AF8FD x7BCC6D x4C2D30 xD00000 xD507FA x5625EF x8CC57E x25842F x3117AA xB21AB9 x0E8D26 x2F8F36 xC2E1AA xFD4509 x508000 x2A2B04 xCD0B47 xEBF5A0 x8A35D2 xA45ACA x4AB8EE x2D1B0B x4160C1 }
+			} #NOT xE4FC42 x5EF8F5 xAB1AA2 x3F27C8 xD6A835
+		}
+		s:STATE_CALIFORNIA.region_state:CAL = {
+			create_building = {
+  				building = building_barracks
+ 				level = 2
+  			}
+		}
+		s:STATE_CALIFORNIA.region_state:CAL = {
+		   create_pop = {
+				pop_type = officers
+				culture = yankee
+				size = 200
+					}
+		 create_pop = {
+				pop_type = soldiers
+				culture = yankee
+				size = 2200
+					}
+		}
+
+		s:STATE_CALIFORNIA.region_state:MEX  = {
+		every_scope_pop = {
+							limit = {
+								OR = {
+									culture = cu:dixie
+									culture = cu:yankee
+								}	
+							}
+							move_pop = s:STATE_CALIFORNIA.region_state:CAL
+						}
+					}
+		c:CAL = {
+		activate_law = law_type:law_national_militia
+		activate_law = law_type:law_elected_bureaucrats 
+		activate_law = law_type:law_freedom_of_conscience
+		activate_law = law_type:law_racial_segregation
+		activate_law = law_type:law_no_colonial_affairs
+		activate_law = law_type:law_census_voting
+		activate_law = law_type:law_laissez_faire 
+		activate_law = law_type:law_private_schools
+		activate_law = law_type:law_protected_speech 
+		activate_law = law_type:law_presidential_republic
+		activate_law = law_type:law_no_home_affairs
+		activate_law = law_type:law_serfdom_banned
+		activate_law = law_no_migration_controls 
+		activate_law = law_local_police
+		activate_law = law_women_own_property 
+		activate_law = law_slavery_banned
+		activate_law = law_per_capita_based_taxation 
+		activate_law = law_free_trade
+		}
+
+		c:MEX = {
+		create_diplomatic_play = {
+			name = bear_flag_revolt_warname
+		
+			target_country = c:CAL
+			type = dp_annex_war
+			war = yes
+
+			add_war_goal = {
+				holder = c:CAL
+				type = conquer_state
+				target_state = s:STATE_CALIFORNIA.region_state:MEX
+			}
+			add_war_goal = {
+				holder = c:CAL
+				type = conquer_state
+				target_state = s:STATE_NEVADA.region_state:MEX
+			}
+	}}
+}
+	option = { # perhaps another time
+		name = mexican_nfm.1.a
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+		
+	}
+
+}
+mexican_nfm.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = mexican_nfm.2.t
+	desc = mexican_nfm.2.d
+	flavor = mexican_nfm.2.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	trigger = {
+		exists = c:MEX
+		c:MEX = ROOT
+		year >= 1838
+		exists = c:TEX
+		
+		NOT = {
+				OR = {
+				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_census_voting
+				}
+		}
+		NOT = { has_variable = rio_grande_revolt_var}
+	}
+	
+
+	immediate = {
+		set_variable = rio_grande_revolt_var
+		create_country = {
+				tag = RIO
+				origin = this
+				state = s:STATE_RIO_GRANDE.region_state:MEX
+			}
+			s:STATE_TEXAS = {
+			set_owner_of_provinces = {
+				country = c:RIO
+				provinces = { x3751A7 x24C127 x10CA7B x951736 x871357 xD08070 xB9118E xC9D330 x5D3843 x2DA551 x760779 x4E19F4 x6958D6 x6E8169 xBB8A78 x0E125F x90CE2B x860F5A x0D192D x6BB536 xA55E5C xB16A3C x8EBCC7 x94A617 x18F9D5 x03FDD9 xE222E2 xDB3E39 x27C614 xE3F481 x08F331 x3DAE0A xC7ED1C xFDD38C xD206BC x0030C0 xED08F5 xA3A810 x91A02C x7DCECB x6363AC xE99673 x607C83 xAAFB06 x2D8E7D x601A4F x0289AA x27D689 xC369DB x1DCED1 x1E9A0F}
+			} #NOT x212F2F x00A88F xDE7B44 x9632BE xB2484A
+		}
+		s:STATE_RIO_GRANDE.region_state:RIO = {
+			create_building = {
+  				building = building_barracks
+ 				level = 1
+  			}
+		}		
+		
+		c:RIO ={
+			set_variable = add_bravery_variable
+		}
+		c:RIO ={
+			add_modifier = {
+				name = rio_grande_revolt_mod
+				months = 12
+			}
+		}
+		s:STATE_RIO_GRANDE.region_state:RIO = {
+		   create_pop = {
+				pop_type = officers
+				culture = mexican
+				size = 500
+					}
+		 create_pop = {
+				pop_type = soldiers
+				culture = mexican
+				size = 10000
+					}
+		}
+		
+		c:RIO = {
+		activate_law = law_type:law_professional_army 
+		activate_law = law_type:law_elected_bureaucrats 
+		activate_law = law_type:law_racial_segregation
+		activate_law = law_type:law_no_colonial_affairs
+		activate_law = law_type:law_census_voting
+		activate_law = law_type:law_laissez_faire 
+		activate_law = law_type:law_protected_speech 
+		activate_law = law_type:law_presidential_republic
+		activate_law = law_type:law_no_home_affairs
+		activate_law = law_type:law_serfdom_banned
+		activate_law = law_no_migration_controls 
+		activate_law = law_local_police
+		activate_law = law_slavery_banned
+		activate_law = law_per_capita_based_taxation 
+		activate_law = law_free_trade
+		}
+
+
+		create_diplomatic_play = {
+			name = rio_grande_revolt_warname
+		
+			target_country = c:RIO
+			type = dp_annex_war
+			war = yes
+
+			add_war_goal = {
+				holder = c:RIO
+				target_country = c:MEX
+				type = regime_change
+			}
+	 }
+}
+	option = {
+		name = mexican_nfm.2.a
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+		
+	}
+
+}
+
+mexican_nfm.3 = { #setup evet
+	type = country_event
+	placement = ROOT
+hidden = yes
+
+
+	trigger = {
+		NOT = { has_variable = mexican_setup_variable}
+	}
+	
+
+	immediate = {
+		set_variable = mexican_setup_variable
+			s:STATE_TEXAS.region_state:MEX = {
+				create_building = {
+  				building = building_barracks
+ 				level = 2
+  			}
+			}
+		s:STATE_RIO_GRANDE.region_state:MEX = {
+			create_building = {
+  				building = building_barracks
+ 				level = 2
+  			}
+		}		
+		
+}
+
+}

@@ -1,0 +1,141 @@
+﻿je_secure_the_north_mexico = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	# note that if you change this, also update the decision
+	complete = {
+		owns_entire_state_region = STATE_CALIFORNIA
+		owns_entire_state_region = STATE_NEVADA
+		owns_entire_state_region = STATE_UTAH
+		owns_entire_state_region = STATE_TEXAS
+	}
+
+	on_complete = {
+	#	trigger_event = { id = manifest_destiny.1 }
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}
+je_caudillos_active = {
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	is_shown_when_inactive = {		
+		any_interest_group = {
+  			has_ideology = ideology_caudillismo
+  		}
+	}
+
+	possible = {
+		any_interest_group = {
+  			has_ideology = ideology_caudillismo
+  		}
+  		NOT = {
+  			has_law = law_type:law_census_suffrage
+  			has_law = law_type:law_universal_suffrage
+  			has_law = law_type:law_anarchy
+  			has_law = law_type:law_right_of_assembly
+  			has_law = law_type:law_protected_speech
+  		}
+  		NOT = {
+  			ruler = { has_variable = nfm_new_caudillo_var }
+  		}
+  		NOT = {
+  			ruler = { has_variable = nfm_new_caudillo_var }
+  			ruler = { has_variable = nfm_new_caudillo_timer }
+  		}
+	}
+
+	complete = {
+  	#	ruler = { has_variable = nfm_new_caudillo_var }
+  	#	NOT = {ruler = { has_variable = nfm_new_caudillo_timer }}
+	}
+
+	on_complete = {
+	#	remove_modifier = age_of_caudillos_modifier
+	#	add_modifier = nfm_established_caudillo_mod
+	}
+
+	fail = {
+	#	OR = {
+	#		has_law = law_type:law_census_voting
+  	#		has_law = law_type:law_universal_suffrage
+  	#		has_law = law_type:law_anarchy
+	#	}
+  	#	OR = {
+  	#		has_law = law_type:law_right_of_assembly
+  	#		has_law = law_type:law_protected_speech
+  	#	}
+	}
+
+	on_monthly_pulse = {
+		events = {
+			nfm_latin_america.1
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}
+
+je_caudillos_legacy = {
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	is_shown_when_inactive = {		
+		any_interest_group = {
+  			has_ideology = ideology_caudillismo
+  		}
+	}
+
+	possible = {
+		any_interest_group = {
+  			has_ideology = ideology_caudillismo
+  		}
+  		OR = {
+  			has_law = law_type:law_census_voting
+  			has_law = law_type:law_universal_suffrage
+  			has_law = law_type:law_anarchy
+  		}
+  		OR = {
+  			has_law = law_type:law_right_of_assembly
+  			has_law = law_type:law_protected_speech
+  		}
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_complete = {
+		
+	}
+
+	timeout = 3650
+
+	on_timeout = {
+		every_interest_group = {
+     			limit = {has_ideology = ideology_caudillismo}
+     			remove_ideology =ideology_caudillismo
+   			}
+   		remove_modifier = age_of_caudillos_modifier
+	}
+
+	fail = {
+		NOT  = {
+			OR = {
+  			has_law = law_type:law_census_voting
+  			has_law = law_type:law_universal_suffrage
+  			has_law = law_type:law_anarchy
+  			}
+  			OR = {
+  			has_law = law_type:law_right_of_assembly
+  			has_law = law_type:law_protected_speech
+  			}
+		}
+	}
+
+	on_monthly_pulse = {
+		
+	}
+
+	weight = 100
+	should_be_pinned_by_default = yes
+}

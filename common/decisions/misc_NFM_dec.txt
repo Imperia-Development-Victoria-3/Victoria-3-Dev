@@ -1,0 +1,295 @@
+﻿
+###GARABALDI
+employ_Garibaldi_dec= { ##victory
+
+	is_shown = {
+		NOT = { has_global_variable = garibaldi_dead_var }
+	#	OR = {
+	#	has_law = law_type:law_council_republic
+	#	has_law = law_type:law_parliamentary_republic 
+	#	has_law = law_type:law_presidential_republic
+	#}
+	#	has_law = law_type:law_slavery_banned
+	#	NOT = { has_law = law_type:law_autocracy}
+	}
+
+	possible = {
+		is_subject = no
+		NOT = {has_global_variable = garibaldi_busy_var }
+		NOT = {has_global_variable = garibaldi_dead_var }
+		NOT = { 
+			OR = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_oligarchy
+}
+		}
+		OR = {
+		has_law = law_type:law_council_republic
+		has_law = law_type:law_parliamentary_republic 
+		has_law = law_type:law_presidential_republic
+	}
+		OR = {
+			has_law = law_type:law_slavery_banned
+			root = c:PNI
+		}
+		any_country ={
+			has_war_with = ROOT
+			OR ={
+				OR ={
+					has_law = law_type:law_legacy_slavery
+					has_law = law_type:law_slave_trade
+					has_law = law_type:law_debt_slavery
+				}
+				OR ={
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+					has_law = law_type:law_autocracy 
+					has_law = law_type:law_oligarchy
+				}
+			}
+		}
+	}
+
+	when_taken = {
+			trigger_event = { id = nfm_misc.2 } 
+			set_global_variable = garibaldi_busy_var
+		}
+
+	ai_chance = {
+		base = 100
+	}
+}
+
+usa_house_gag = {
+
+	is_shown = {
+		exists = c:USA
+		root = c:USA
+		has_modifier = missouri_compromise
+		has_modifier = fake_modifier #hides
+	}
+
+	possible = { 
+			AND = {
+				has_modifier = missouri_compromise
+				has_government_clout >= 0.60
+				government_legitimacy >= 60
+				ruler = {has_ideology = ideology_slaver}
+				ig:ig_landowners = {is_in_government = no}
+			}
+		}
+
+	when_taken = {
+		add_modifier = usa_house_gag
+	}
+
+	ai_chance = {
+		base = 10
+	}
+}
+
+#initialize_centralization_dec = { 	##victory
+#	#	activate_law = law_type:law_totalitarian
+	#	activate_law = law_type:law_unitary
+	#	activate_law = law_type:law_federalism
+	#	activate_law = law_type:law_regionalism
+#	is_shown = {
+#		NOT = { has_variable = initalized_centralization_var }
+#	}
+
+#	possible = {
+#		NOT = { has_variable = initalized_centralization_var }
+#		year >= 1836.1.3
+#		year >= 1836.01.02
+#		year >= 4.1.1836
+#		year >= 06.01.1836
+#	}
+
+#	when_taken = {
+#		set_variable = initalized_centralization_var
+
+#			if = {
+#				limit = { 
+#					OR = {
+#						has_law = law_type:law_chiefdom
+#						ROOT = c:SWI
+#						ROOT = c:JAP
+#						ROOT = c:AFG
+#						ROOT = c:HBC
+#						ROOT = c:ORG
+#						ROOT = c:PNI
+#						ROOT = c:PRA
+#					}
+#				}
+#				activate_law = law_type:law_regionalism
+#			}
+#			if = {
+#				limit = {
+#					OR = {
+##						ROOT = c:BIC
+#						ROOT = c:ONT
+#						ROOT = c:QUE
+#						ROOT = c:UCA
+#						ROOT = c:ECU
+#						ROOT = c:CAN
+#						ROOT = c:ARG
+#						ROOT = c:AST
+#						ROOT = c:FSA
+#						ROOT = c:GCO
+#						ROOT = c:GER
+#						ROOT = c:KOR
+#						ROOT = c:SAF
+#						ROOT = c:SCA
+#						ROOT = c:DEI
+#						ROOT = c:PHI
+#					}
+#				 }
+#				activate_law = law_type:law_cooperative_federalism
+#			}
+#			if = {
+#				limit = {
+#					OR = {
+#						ROOT = c:USA
+#						ROOT = c:CSA
+#					}
+#				 }
+#				activate_law = law_type:law_dual_federalism
+#			}
+#			else = {
+#				activate_law = law_type:law_unitary
+#			}
+#			}
+#
+#	ai_chance = {
+#		base = 100
+#	}
+#}
+
+
+usa_repeal_house_gag = {
+
+	is_shown = {
+		exists = c:USA
+		root = c:USA
+		has_modifier = usa_house_gag
+	}
+
+	possible = { 
+			AND = {
+				has_modifier = usa_house_gag
+				has_government_clout >= 0.60
+				government_legitimacy >= 60
+				ruler = {has_ideology = ideology_abolitionist}
+				ig:ig_landowners = {is_in_government = no}
+			}
+		}
+
+	when_taken = {
+		remove_modifier = usa_house_gag
+	}
+
+	ai_chance = {
+		base = 10
+	}
+}
+
+csa_national_guard = {
+
+	is_shown = {
+		exists = c:CSA
+		root = c:CSA
+		NOT = { has_variable = csa_mob_var }
+	}
+
+	possible = { 
+			exists = c:CSA
+				root = c:CSA
+				NOT = { csa_mob_var }
+		}
+
+	when_taken = {
+		c:CSA = {activate_law = law_type:law_national_militia}
+		if = { limit = { c:USA = {has_law = law_type:law_national_guard}}
+			c:CSA = {activate_law = law_type:law_national_guard}
+		}
+			c:CSA = set_variable = csa_mob_var
+	}
+
+	ai_chance = {
+		base = 10
+	}
+}
+
+
+#Formable Memes
+canada_formation_gov_nfm = {
+
+	is_shown = {
+		exists = c:CAN
+		root = c:CAN
+		NOT = { has_variable = new_government_nfm }
+	}
+
+	possible = { 
+			exists = c:CAN
+			root = c:CAN
+			NOT = { has_variable = new_government }
+		}
+
+	when_taken = {
+		set_variable = new_government_nfm
+		c:CAN = {activate_law = law_type:law_cooperative_federalism}
+	}
+
+	ai_chance = {
+		base = 10
+	}
+}
+
+germany_formation_gov_nfm = {
+
+	is_shown = {
+		OR = {
+			AND = {
+				exists = c:NGF
+				root = c:NGF
+			}
+			AND = {
+				exists = c:GER
+				root = c:GER
+			}
+		}
+		
+		NOT = { has_variable = new_government_nfm }
+	}
+
+	is_shown = {
+		OR = {
+			AND = {
+				exists = c:NGF
+				root = c:NGF
+			}
+			AND = {
+				exists = c:GER
+				root = c:GER
+			}
+		}
+		
+		NOT = { has_variable = new_government_nfm }
+	}
+
+	when_taken = {
+		set_variable = new_government_nfm
+		c:CAN = {activate_law = law_type:law_cooperative_federalism}
+	}
+
+	ai_chance = {
+		base = 10
+	}
+}
+
+
+
+
+
+

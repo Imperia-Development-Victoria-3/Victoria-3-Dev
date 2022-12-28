@@ -1,0 +1,84 @@
+﻿
+ai_strategy_mexico_defend_the_north = {
+	icon = "gfx/interface/icons/ai_strategy_icons/territorial_expansion.dds"
+	
+	type = diplomatic
+	
+	wanted_army_ratio = 100000 # 1 barrack per 100k incorporated population
+	wanted_navy_ratio = 1000000 # 1 naval base per 1000k coastal incorporated population	
+	
+	undesirable_infamy_level = 50
+	unacceptable_infamy_level = 100
+	
+	ideological_opinion_effect_mult = 0.75
+	
+	wargoal_maneuvers_fraction = {
+		value = 0.15
+	}		
+	
+	diplomatic_play_neutrality = 25 # Added to base neutrality in diplomatic plays
+	diplomatic_play_boldness = 1000 # Added to base boldness in diplomatic plays		
+	
+	# Added to value from default strategy
+	bravery = {
+		value = 100	
+	}
+	
+	# Added to value from default strategy
+	aggression = {
+		value = 1
+		
+		if = {
+			limit = { 
+				NOT = { is_country_type = unrecognized }
+				scope:target_country = { is_country_type = unrecognized } 
+			}
+			add = 2
+		}	
+
+		# Less aggressive against countries we're just antagonistic against, rather than belligerent/domineering
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}					
+			}
+			multiply = 0.25
+		}			
+	}
+
+	building_group_weights = {
+		bg_army = 2
+	}
+	
+	secret_goal_weights = {
+		protect = 0.5
+		conquer = 0
+	}
+
+	wargoal_weights = {
+		conquer_state = 0
+		return_state = 1.5
+	}	
+		
+	possible = {
+		has_modifier = dummy_mod_lol_get_fucked
+		OR = { AND = {
+			exists = c:MEX
+			this = c:MEX
+			c:MEX = {owns_entire_state_region = STATE_CALIFORNIA}
+		}
+		AND = {
+			exists = c:RIO
+			this = c:RIO
+			c:RIO = {is_diplomatic_play_committed_participant = yes}
+		}
+		}
+		
+	}
+
+	weight = {
+		value = 1000
+	}
+}

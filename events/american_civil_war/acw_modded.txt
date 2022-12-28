@@ -1,0 +1,344 @@
+﻿namespace = acw_modded
+
+
+# Succesful Raid on Harpers Ferry
+acw_modded.1 = {
+	type = country_event
+
+	title = acw_modded.1.t
+	desc = acw_modded.1.d
+	flavor = acw_modded.1.f
+
+	event_image = {
+		video =  "gfx/event_pictures/southamerica_slave_chains.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+
+	is_popup = yes
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		NOT = { c:USA = {has_law = law_type:law_slavery_banned }}
+		year >= 1858
+		NOT = { c:USA = {has_variable = harpers_raid_happened_var}}
+	}
+
+	immediate = {
+		create_character = { #JOHN BROWN
+			first_name = John
+			last_name = Brown
+			culture = cu:yankee
+			interest_group = ig_rural_folk
+			ideology = ideology_abolitionist
+			birth_date = 1800.5.9
+			dna = dna_john_brown_beard
+			traits = {
+				brave
+				charismatic
+				wrathful
+				pious
+			}
+
+			on_created = {
+                set_variable = {
+                    name = is_john_brown #give the character a variable
+                }
+            }
+        }
+        create_character = { #BASEDMAN
+			first_name = Harriet
+			last_name = Tubman
+			culture = cu:afro_american
+			female = yes
+			interest_group = ig_devout
+			ideology = ideology_abolitionist
+			birth_date = 1822.3.10
+			dna = dna_harriet_tubman
+			traits = {
+				brave
+				pious
+				meticulous
+				persistent 
+			}
+			on_created = {
+                set_variable = {
+                    name = is_harriet_tubman #give the character a variable
+                }
+            }
+        }
+         random_scope_character = {
+            limit = { has_variable = is_john_brown } #use the variable to scope to that specific character
+            save_scope_as = character_to_display_john_brown #save the scope here
+		}
+        random_scope_character = {
+            limit = { has_variable = is_harriet_tubman } #use the variable to scope to that specific character
+            save_scope_as = character_to_display_is_harriet_tubman #save the scope here
+		}
+		set_variable = {
+			name = harpers_raid_happened_var
+		}
+	}
+
+	option = {
+		 name = acw_modded.2.a
+		s:STATE_WEST_VIRGINIA.region_state:USA  = {
+		every_scope_pop = {
+							limit = {
+								is_pop_type = slaves
+								culture = cu:afro_american
+							}
+							change_poptype = pop_type:laborers
+						}
+					}
+		s:STATE_WEST_VIRGINIA.region_state:USA  = {
+		every_scope_pop = {
+							limit = {
+								culture = cu:afro_american
+							}
+							move_pop = s:STATE_OHIO.region_state:USA
+						}
+					}
+		s:STATE_WEST_VIRGINIA.region_state:USA  = {
+				create_pop = {
+				pop_type = slaves
+				culture = afro_american
+				size = 3250
+					}
+					}
+
+				c:USA = {add_radicals = {
+ 			value = 0.50
+  			culture = cu:afro_american
+  			pop_type = slaves
+   			}	}
+
+   			c:USA = {add_radicals = {
+ 			value = 0.05
+  			culture = cu:yankee
+   			}	}
+			c:USA = {add_radicals = {
+ 			value = 0.15
+  			culture = cu:dixie
+   			}	}
+   			add_modifier = { 
+   				name = harpers_ferry_success_mod
+   			months = 120}
+	}
+}	
+
+acw_modded.2 = { #Failed raid on Harper's Ferry, capture
+
+	title = acw_modded.2.t
+	desc = acw_modded.2.d
+	flavor = acw_modded.2.f
+
+	event_image = {
+		video =  "gfx/event_pictures/unspecific_devastation.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+
+	is_popup = yes
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		NOT = { c:USA = {has_law = law_type:law_slavery_banned }}
+		year >= 1859
+		NOT = { c:USA = {has_variable = harpers_raid_happened_var}}
+	}
+
+	immediate = {
+		create_character = { #JOHN BROWN
+			first_name = John
+			last_name = Brown
+			culture = cu:yankee
+			interest_group = ig_rural_folk
+			ideology = ideology_abolitionist
+			birth_date = 1800.5.9
+			dna = dna_john_brown_beard
+			traits = {
+				brave
+				charismatic
+				wrathful
+				pious
+			}
+
+			on_created = {
+                set_variable = {
+                    name = is_john_brown #give the character a variable
+                }
+            }
+        }
+        random_scope_character = {
+            limit = { has_variable = is_john_brown } #use the variable to scope to that specific character
+            save_scope_as = character_to_display_john_brown #save the scope here
+        
+		}
+		set_variable = {
+			name = harpers_raid_happened_var
+		}
+	}
+
+	option = {
+
+		 name = acw_modded.2.a
+			c:USA = {add_radicals = {
+ 			value = 0.03
+  			culture = cu:yankee
+   			}	}
+			c:USA = {add_radicals = {
+ 			value = 0.05
+  			culture = cu:dixie
+   			}	}
+
+   			add_modifier = { 
+   				name = harpers_ferry_failure_mod
+   			months = 120}
+	}
+}
+
+acw_modded.3 = { #Failed raid on Harper's Ferry, catastrophic
+
+	title = acw_modded.3.t
+	desc = acw_modded.3.d
+	flavor = acw_modded.3.f
+	placement = scope:bleeding_kansas
+
+	event_image = {
+		video =  "gfx/event_pictures/unspecific_devastation.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+    left_icon = scope:character_to_display_john_brown
+
+	duration = 3
+
+	is_popup = yes
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		NOT = { c:USA = {has_law = law_type:law_slavery_banned }}
+		year >= 1859
+		NOT = { c:USA = {has_variable = harpers_raid_happened_var}}
+	}
+
+	immediate = {
+		create_character = { #JOHN BROWN
+			first_name = John
+			last_name = Brown
+			culture = cu:yankee
+			interest_group = ig_rural_folk
+			ideology = ideology_abolitionist
+			birth_date = 1800.5.9
+			dna = dna_john_brown_beard
+			traits = {
+				brave
+				charismatic
+				wrathful
+				pious
+			}
+			on_created = {
+                set_variable = {
+                    name = is_john_brown #give the character a variable
+                }
+            }
+        }
+        random_scope_character = {
+            limit = { has_variable = is_john_brown } #use the variable to scope to that specific character
+            save_scope_as = character_to_display_john_brown #save the scope here
+		}
+		set_variable = {
+			name = harpers_raid_happened_var
+		}
+	}
+
+	option = {
+		 name = acw_modded.3.a
+			c:USA = {add_radicals = {
+ 			value = 0.03
+  			culture = cu:dixie
+   			}	}
+   			add_modifier = { 
+   				name = harpers_ferry_disaster_mod
+   				months = 120
+   			}
+
+   			random_interest_group = {
+        	limit = {
+        		is_marginal = no
+        		leader = {
+        				has_ideology = ideology_abolitionist
+        		}
+        	}
+        	leader = {
+        		set_ideology = ideology_moderate
+        	}
+        }
+	}
+}
+
+acw_modded.4 = {
+	type = country_event
+
+	title = acw_modded.4.t
+	desc = acw_modded.4.d
+	flavor = acw_modded.4.f
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_american_civil_war.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/american_civil_war"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+
+	is_popup = yes
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		ruler = {
+     			has_ideology = ideology_abolitionist
+    		}
+		NOT = { c:USA = {has_law = law_type:law_slavery_banned }}
+		NOT = { has_variable = southern_election_panic_cooldown}
+
+	}
+
+	immediate = {
+		set_variable = {
+  			name = southern_election_panic_cooldown
+ 			months = 130
+  		}
+	}
+
+	option = {
+		 name = acw_modded.4.a
+		add_modifier = {
+				name = southern_election_panic_mod
+				months = 120
+				is_decaying = yes
+		}
+	}
+}	

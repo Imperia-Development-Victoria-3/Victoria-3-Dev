@@ -1,0 +1,127 @@
+﻿namespace = acw_csa_modded
+
+# ACW startup
+acw_csa_modded.1 = {
+	type = country_event
+
+	hidden = yes
+
+
+	duration = 0
+
+	trigger = {
+	}
+
+	immediate = {
+		c:USA = {
+			every_scope_state = {	
+				if = { 
+					limit = { has_modifier = deep_south_state_mod } 
+				set_state_owner = c:CSA	}
+				}
+			}
+		c:CSA = { 
+			every_scope_state = { 
+				if = {
+					limit = { NOT = { has_modifier = deep_south_state_mod } }
+				set_state_owner = c:USA
+				}
+			}
+		}
+		if = { 
+			limit = { 
+				c:USA = { ig:ig_rural_folk = {
+					ig_approval < 10
+				}}
+			}
+			c:USA = {
+				set_variable = south_state_rebels_var
+			}
+			c:USA = {
+				trigger_event = acw_csa_modded.2
+			}
+		}
+		}
+}
+
+acw_csa_modded.2 = {
+	type = country_event
+
+	hidden = yes
+
+
+	duration = 0
+
+	trigger = {
+	}
+
+	immediate = {
+		c:USA = {
+			every_scope_state = {	
+				if = { 
+					limit = { has_modifier = south_state_mod } 
+				set_state_owner = c:CSA	}
+				}
+			}
+		if = { 
+			limit = { 
+				c:USA = { ig:ig_rural_folk = {
+					ig_approval <= -10
+				}}
+			}
+			c:USA = {
+				set_variable = border_state_rebels_var
+			}
+			c:USA = {
+				trigger_event = acw_csa_modded.3
+			}
+		}
+		}
+}
+
+acw_csa_modded.3 = {
+	type = country_event
+
+	hidden = yes
+
+
+	duration = 0
+
+	trigger = {
+	}
+
+	immediate = {
+		c:USA = {
+			every_scope_state = {	
+				if = { 
+					limit = { has_modifier = border_state_mod } 
+				set_state_owner = c:CSA	}
+				}
+			}
+		}
+	
+}
+
+acw_csa_modded.10 = {
+	type = country_event
+
+	hidden = yes
+
+
+	duration = 0
+
+	trigger = {
+		exists = c:USA
+		c:USA = ROOT
+		NOT = { has_law = law_type:law_slavery_banned }
+	#	ig:ig_landowners = {
+	#		is_marginal = no
+	#		ig_approval < -19
+	#	}
+	}
+
+	immediate = {
+				c:USA = {trigger_event = acw_je_events.1}
+		}
+		
+}
