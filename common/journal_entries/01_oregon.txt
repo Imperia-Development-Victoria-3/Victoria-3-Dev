@@ -37,21 +37,39 @@
 	}
 
 	possible = {
-		c:USA = ROOT #has_interest_marker_in_region = region_pacific_coast
+		has_interest_marker_in_region = region_pacific_coast
 	}
 
 	complete = {
 		OR = {
 			AND = {
-				OR = {
 				custom_tooltip = {
 					text = oregon_tt
 					has_global_variable = oregon_trail_mapped
 				}
-				year >= 1846
-			}
+				has_state_in_state_region = STATE_MONTANA
+				s:STATE_MONTANA = {
+					NOT = {
+						any_scope_state = {
+							owner = {
+								country_rank = 0
+							}
+						}
+					}
+				}
+				
+				has_state_in_state_region = STATE_WYOMING
+				s:STATE_WYOMING = {
+					NOT = {
+						any_scope_state = {
+							owner = {
+								country_rank = 0
+							}
+						}
+					}
+				}
 				c:GBR = {
-					relations:ROOT >= relations_threshold:neutral
+					relations:ROOT >= relations_threshold:cordial
 				}
 			}
 			AND = {

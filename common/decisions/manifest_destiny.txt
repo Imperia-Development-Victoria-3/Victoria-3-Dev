@@ -4,31 +4,24 @@
 		exists = c:USA
 		root = c:USA
 		NOT = { has_variable = manifested_destiny }
-	}  
+	}
 
 	possible = {
 		has_technology_researched = nationalism
+		has_interest_marker_in_region = region_pacific_coast
 	}
 
 	when_taken = {
 		if = {
 			limit = {
-				OR = { 
-					AND = {
 				owns_entire_state_region = STATE_CALIFORNIA
 				owns_entire_state_region = STATE_NEVADA
 				owns_entire_state_region = STATE_UTAH
 				owns_entire_state_region = STATE_ARIZONA
 				owns_entire_state_region = STATE_NEW_MEXICO
-				OR = {
 				owns_entire_state_region = STATE_TEXAS
-				exists = c:RIO
 			}
-					}
-					has_variable = mexican_american_war_treaty
-				}
-			}
-		#	trigger_event = { id = manifest_destiny.1 }
+			trigger_event = { id = manifest_destiny.1 }
 		}
 		else = {
 			add_journal_entry = {
@@ -71,313 +64,182 @@
 			}
 			create_incident = {
 				country = c:MEX
-				value = 10
+				value = 20
 			}
 		}	
 		# Add Claims
+		s:STATE_CALIFORNIA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_NEVADA = {  
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_UTAH = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_ARIZONA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_NEW_MEXICO = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_OKLAHOMA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_MONTANA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_WYOMING = {  
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_COLORADO = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_NORTH_DAKOTA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_SOUTH_DAKOTA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_NEBRASKA = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_KANSAS = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
+		s:STATE_TEXAS = { 
+			if = {
+				limit = {
+					any_scope_state = {
+						NOT = {
+							owner = ROOT
+						}
+					}
+				}
+				add_claim = ROOT 
+			}
+		}
 		set_variable = manifested_destiny
 	}
 
 	ai_chance = {
-		base = 100
-	}
-}
-
-
-manifest_destiny_war = {
-
-	is_shown = {
-		exists = c:USA
-		root = c:USA
-		c:USA = {
-			has_variable = manifested_destiny
-		}
-		NOT = {
-			c:USA = { has_variable = mexican_american_war_started }
-		}
-	}
-
-	possible = {
-		exists = c:USA
-		root = c:USA
-		is_diplomatic_play_committed_participant = no
- 		is_at_war = no
-		c:USA = {
-			has_variable = manifested_destiny
-		}
-		NOT = {
-			c:USA = { has_variable = mexican_american_war_started }
-		}
-		OR = {
-			is_player = no
-			has_technology_researched = logistics
-		}	
-	}
-
-	when_taken = {
-		c:USA = {
-			set_variable = mexican_american_war_started
-		}
-		c:USA = { trigger_event = { id = manifest_destiny.5 } }
-			hidden_effect  = {
-				c:USA = { change_infamy = -50 }
-			}
-		}
-
-	ai_chance = {
-		base = -9
-
-		modifier = {
-			trigger = { year >= 1840 }
-			add = 5
-		}
-		modifier = {
-			trigger = { year >= 1843 }
-			add = 5
-		}	
-		modifier = {
-			trigger = { year >= 1845 }
-			add = 5
-		}		
-		modifier = {
-			trigger = { year >= 1846 }
-			add = 10
-		}
-		modifier = {
-			trigger = { year >= 1847 }
-			add = 10
-		}
-		
-		modifier = {
-			trigger = { owns_entire_state_region = STATE_WASHINGTON}
-			add = 10
-		}
-
-		modifier = {
-			trigger = { 
-				ruler = {has_ideology = ideology_jingoist_leader}
-			}
-			add = 100
-		}
-	#	modifier = {
-	#		trigger = { 
-	#			ruler = {has_ideology = ideology_pacifist}
-	#		}
-	#		add = -100
-	#	}
-	#	modifier = {
-	#		trigger = { 
-	#			c:USA= {relations:root >= relations_threshold:neutral}
-	#		}
-	#		add = -5
-	#	}
-	#	modifier = {
-	#		trigger = { 
-	#			c:USA= {relations:root >= relations_threshold:amicable}
-	#		}
-	#		add = -10
-	#	}
-
-	}
-}
-
-manifest_destiny_conquest = { ##victory
-
-	is_shown = {
-		exists = c:USA
-		root = c:USA
-		c:USA = {
-			has_variable = mexican_american_war_started
-			NOT = { has_variable = mexican_american_war_treaty }
-			OR = {
-			NOT = { has_variable = usa_western_purchase_var }
-				has_variable = usa_western_purchase_fail_var 
-			}
-		}
-	}
-
-	possible = {
-		exists = c:USA
-		root = c:USA
-		c:USA = {
-			has_variable = mexican_american_war_started
-			NOT = { has_variable = mexican_american_war_treaty }
-		}
-		c:USA = {
-			has_diplomatic_pact = {
-   					who = c:MEX
-   					type = dominion
-   				}
-		}
-	}
-
-	when_taken = {
-		c:USA = { set_variable = mexican_american_war_treaty }
-		c:USA = { trigger_event = { id = mexican_american.6 } }
-		set_variable = {
-				name = gasden_purchase_var
-				months = 36
-			}	
-		}
-
-	ai_chance = {
-		base = 100
-	}
-}
-
-
-manifest_destiny_rebuked = { ##victory
-
-	is_shown = {
-		exists = c:MEX
-		root = c:MEX
-		c:USA = {
-			has_variable = mexican_american_war_started
-			NOT = { has_variable = mexican_american_war_treaty }
-			NOT = { has_variable = mexican_american_war_treaty_loss }
-		}
-	}
-
-	possible = {
-		exists = c:MEX
-		root = c:MEX
-		is_diplomatic_play_committed_participant = no
- 		is_at_war = no
-		c:USA = {
-			has_variable = mexican_american_war_started
-			NOT = { has_variable = mexican_american_war_treaty }
-			NOT = { has_variable = mexican_american_war_treaty_loss }
-		}
-	NOT = {	c:USA = {
-			has_diplomatic_pact = {
-   					who = c:MEX
-   					type = dominion
-   				}
-		} }
-		NOT = {
-			exists = c:CAL
-		}
-	}
-
-	when_taken = {
-		if = { limit = { 
-    		c:CAL = {
-    		is_player = no
-    		OR = {
-    			is_subject = no
-    			is_subject_of = c:MEX
-    		}}
-    		exists = c:CAL
-    	}
-    	#	annex = c:CAL
-    	}
-		c:USA = { set_variable = mexican_american_war_treaty_loss }
-		c:MEX = { add_modifier = {
-			name = manifest_destiny_rebuked_mod
-			months = 250
-			is_decaying = yes }}
-
-		s:STATE_CALIFORNIA = { 
-			add_homeland = mexican
-		}
-		s:STATE_NEVADA = { 
-			add_homeland = mexican
-		}
-		s:STATE_UTAH = { 
-			add_homeland = mexican
-		}
-		s:STATE_ARIZONA = { 
-			add_homeland = mexican
-		}
-		}
-
-	ai_chance = {
-		base = 100
-	}
-}
-
-webster_ashburton_treaty_decis = { ##victory
-
-	is_shown = {
-		exists = c:USA
-		root = c:USA
-		NOT = {has_variable = webster_ashburton_treaty_var}
-	}
-
-	possible = {
-		exists = c:USA
-		root = c:USA
-		OR = {
-			AND = {
-			year >= 1842
-			c:GBR = {relations:root >= relations_threshold:neutral}
-			}
-			c:GBR = {relations:root >= relations_threshold:amicable}
-		}
-		NOT = {has_variable = webster_ashburton_treaty_var}
-	}
-
-	when_taken = {
-			c:GBR = { trigger_event = { id = manifest_destiny.6 } }
-			set_variable = webster_ashburton_treaty_var
-		}
-
-	ai_chance = {
-		base = 100
-	}
-}
-
-gasden_purchase_decis = { ##victory
-	is_shown = {
-		exists = c:USA
-		root = c:USA
-		has_variable = mexican_american_war_treaty
-		NOT = {has_variable = gasden_purchase_var_2}
-	}
-
-	possible = {
-		exists = c:USA
-		root = c:USA
-		has_variable = mexican_american_war_treaty
-		NOT = {has_variable = gasden_purchase_var}
-	}
-
-	when_taken = {
-			c:MEX = { trigger_event = { id = manifest_destiny.7 } }
-			set_variable = gasden_purchase_var
-			set_variable = gasden_purchase_var_2
-		}
-
-	ai_chance = {
-		base = 100
-	}
-}
-
-homestead_act_decis = { ##victory
-	is_shown = {
-		exists = c:USA
-		root = c:USA
-	}
-
-	possible = {
-		exists = c:USA
-		root = c:USA
-		has_technology_researched = civilizing_mission
-		ig:ig_landowners = {
-   				ig_clout <= 0.1
-    		} 
-		NOT = {has_variable = homestead_act_var}
-	}
-
-	when_taken = {
-			set_variable = homestead_act_var
-			add_modifier = {
-				name = homestead_act_mod
-				months = 1219
-				is_decaying = yes 
-		}
-
-	ai_chance = {
-		base = 100
+		base = 10
 	}
 }

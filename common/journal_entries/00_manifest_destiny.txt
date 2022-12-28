@@ -2,18 +2,12 @@
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	# note that if you change this, also update the decision
 	complete = {
-		OR = {
-			AND = {
-				owns_entire_state_region = STATE_CALIFORNIA
-				owns_entire_state_region = STATE_NEVADA
-				owns_entire_state_region = STATE_UTAH
-				owns_entire_state_region = STATE_TEXAS
-				owns_entire_state_region = STATE_ARIZONA
-				owns_entire_state_region = STATE_NEW_MEXICO
-			}
-			has_variable = manifest_destiny_we_did_it_folks
-		}
-			NOT = {has_variable = manifest_destiny_we_did_it_folks_cooldown}
+		owns_entire_state_region = STATE_CALIFORNIA
+		owns_entire_state_region = STATE_NEVADA
+		owns_entire_state_region = STATE_UTAH
+		owns_entire_state_region = STATE_ARIZONA
+		owns_entire_state_region = STATE_NEW_MEXICO
+		owns_entire_state_region = STATE_TEXAS
 	}
 
 	on_complete = {
@@ -28,14 +22,85 @@ je_manifest_destiny_frontier_wars = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	# note that if you change this, also update the decision
 	complete = {
-		owns_entire_state_region = STATE_MONTANA
-		owns_entire_state_region = STATE_WYOMING
-		owns_entire_state_region = STATE_COLORADO
-		owns_entire_state_region = STATE_NORTH_DAKOTA
-		owns_entire_state_region = STATE_SOUTH_DAKOTA
-		owns_entire_state_region = STATE_NEBRASKA
-		owns_entire_state_region = STATE_KANSAS
-	}
+		has_state_in_state_region = STATE_MONTANA
+		s:STATE_MONTANA = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_WYOMING
+		s:STATE_WYOMING = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_NEBRASKA
+		s:STATE_NEBRASKA = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_COLORADO
+		s:STATE_COLORADO = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+					NOT = {
+						owner = c:UTE
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_KANSAS
+		s:STATE_KANSAS = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+					NOT = {
+						owner = c:COM
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_NORTH_DAKOTA
+		s:STATE_NORTH_DAKOTA = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+				}
+			}
+		}
+		has_state_in_state_region = STATE_SOUTH_DAKOTA
+		s:STATE_SOUTH_DAKOTA = {
+			NOT = {
+				any_scope_state = {
+					owner = {
+						country_rank = 0
+					}
+				}
+			}
+		
+		}
+    }
+
 	
 	on_complete = {
 		trigger_event = { id = manifest_destiny.2 }

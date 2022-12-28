@@ -42,6 +42,47 @@ dual_monarchy.1 = {
 		cu:hungarian = {
 			save_scope_as = hungarian_culture
 		}
+
+		if = {
+			limit = {
+				has_variable = dual_monarchy_fail
+			}
+			random_scope_state = {
+			limit = {
+				state_region = { is_homeland = cu:hungarian }
+			}
+			save_scope_as = hun_spawn
+		    }
+
+			create_country = {
+				tag = HUN
+				origin = this
+				state = scope:hun_spawn
+			}
+			
+			every_scope_state = {
+				limit = {
+			
+						OR = {
+							state_region = {
+								is_homeland = cu:hungarian
+							}
+							state_region = s:STATE_SLAVONIA
+							state_region = s:STATE_CROATIA
+						} 
+					 
+				}
+				set_state_owner = c:HUN
+				set_state_type = incorporated
+			}
+
+			c:AUS = {
+            create_diplomatic_pact = {
+                    country = c:HUN
+                    type = personal_union
+            }
+        }
+		}
 	}
 
 	option = {
@@ -58,7 +99,6 @@ dual_monarchy.1 = {
 		}
 		ig:ig_landowners = {
 			remove_ideology = ideology_austrian_hegemony
-			add_ideology = ideology_nfm_federalist
 			hidden_effect = {
 				set_interest_group_name = ig_landowners
 			}
@@ -66,15 +106,13 @@ dual_monarchy.1 = {
 	}
 	option = { # accept compromise
 		name = dual_monarchy.1.b
-	#	trigger = {
-	#		has_variable = dual_monarchy_fail
-	#	}
+		trigger = {
+			has_variable = dual_monarchy_fail
+		}
 		custom_tooltip = austria_hungary_tt
 		add_primary_culture = cu:hungarian
-		activate_law = law_type:law_dual_federalism #NFM ADDED
 		ig:ig_landowners = {
 			remove_ideology = ideology_austrian_hegemony
-			add_ideology = ideology_nfm_federalist
 			hidden_effect = {
 				set_interest_group_name = ig_landowners
 			}
@@ -102,13 +140,27 @@ dual_monarchy.1 = {
 		# add radicals from discrimination
 		every_scope_state = {
 			limit = {
-				state_region = {
-					is_homeland = cu:hungarian
-				}
+					state_region = { is_homeland = cu:hungarian }
+
 			}
 			add_modifier = {
 				name = dual_monarchy_compromise_rejected
 				months = long_modifier_time
+			}
+		}
+
+		create_diplomatic_play = {
+		
+			target_state = s:STATE_CENTRAL_HUNGARY.region_state:HUN
+			
+			war = yes
+			
+			type = dp_annex_war
+
+			add_war_goal = {
+					holder = c:HUN
+					type = independence
+					target_state = s:STATE_AUSTRIA.region_state:AUS
 			}
 		}
 	}
