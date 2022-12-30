@@ -1,0 +1,62 @@
+#scope:country
+infamy_state_penalties_change_effect = {
+    switch = {
+        trigger = infamy
+
+        reputable = {
+            every_scope_state = {
+                limit = {
+                    OR = {
+                        has_modifier = modifier_infamy_infamous
+                        has_modifier = modifier_infamy_notorious
+                        has_modifier = modifier_infamy_pariah
+                    }
+                }
+                remove_modifier = modifier_infamy_infamous
+                remove_modifier = modifier_infamy_notorious
+                remove_modifier = modifier_infamy_pariah
+            }
+        }
+        infamous = {
+            every_scope_state = {
+                limit = {
+                    OR = {
+                        has_modifier = modifier_infamy_notorious
+                        has_modifier = modifier_infamy_pariah
+                    }
+                }
+                remove_modifier = modifier_infamy_notorious
+                remove_modifier = modifier_infamy_pariah
+                add_modifier = {
+                    name = modifier_infamy_infamous
+                }
+            }
+        }
+        notorious = {
+            every_scope_state = {
+                limit = {
+                    has_modifier = modifier_infamy_infamous
+                    has_modifier = modifier_infamy_pariah
+                }
+                remove_modifier = modifier_infamy_infamous
+                remove_modifier = modifier_infamy_pariah
+                add_modifier = {
+                    name = modifier_infamy_notorious
+                }
+            }
+        }
+        pariah = {
+            every_scope_state = {
+                limit = {
+                    has_modifier = modifier_infamy_infamous
+                    has_modifier = modifier_infamy_notorious
+                }
+                remove_modifier = modifier_infamy_infamous
+                remove_modifier = modifier_infamy_notorious
+                add_modifier = {
+                    name = modifier_infamy_pariah
+                }
+            }
+        }
+    }
+}

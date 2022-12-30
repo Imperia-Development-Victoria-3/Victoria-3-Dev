@@ -1,0 +1,118 @@
+namespace = infamy_rebalance
+
+infamy_rebalance.1 = {
+    type = country_event
+    hidden = yes
+
+    trigger = {
+        switch = {
+            trigger = infamy
+
+            reputable = {
+                any_state = {
+                    owner = ROOT
+                    OR = {
+                        has_modifier = modifier_infamy_infamous
+                        has_modifier = modifier_infamy_notorious
+                        has_modifier = modifier_infamy_pariah
+                    }
+                }
+            }
+            infamous = {
+                any_state = {
+                    owner = ROOT
+                    OR = {
+                        NOT = { has_modifier = modifier_infamy_infamous }
+                        has_modifier = modifier_infamy_notorious
+                        has_modifier = modifier_infamy_pariah
+                    }
+                }
+            }
+            notorious = {
+                any_state = {
+                    owner = ROOT
+                    OR = {
+                        has_modifier = modifier_infamy_infamous
+                        NOT = { has_modifier = modifier_infamy_notorious }
+                        has_modifier = modifier_infamy_pariah
+                    }
+                }
+            }
+            pariah = {
+                any_state = {
+                    owner = ROOT
+                    OR = {
+                        has_modifier = modifier_infamy_infamous
+                        has_modifier = modifier_infamy_notorious
+                        NOT = { has_modifier = modifier_infamy_pariah }
+                    }
+                }
+            }
+        }
+    }
+    immediate = {
+		#ROOT = {
+		#	infamy_state_penalties_change_effect = yes
+		#}
+		
+		switch = {
+			trigger = infamy
+
+			reputable = {
+				every_scope_state = {
+					limit = {
+						OR = {
+							has_modifier = modifier_infamy_infamous
+							has_modifier = modifier_infamy_notorious
+							has_modifier = modifier_infamy_pariah
+						}
+					}
+					remove_modifier = modifier_infamy_infamous
+					remove_modifier = modifier_infamy_notorious
+					remove_modifier = modifier_infamy_pariah
+				}
+			}
+			infamous = {
+				every_scope_state = {
+					limit = {
+						OR = {
+							has_modifier = modifier_infamy_notorious
+							has_modifier = modifier_infamy_pariah
+						}
+					}
+					remove_modifier = modifier_infamy_notorious
+					remove_modifier = modifier_infamy_pariah
+					add_modifier = {
+						name = modifier_infamy_infamous
+					}
+				}
+			}
+			notorious = {
+				every_scope_state = {
+					limit = {
+						has_modifier = modifier_infamy_infamous
+						has_modifier = modifier_infamy_pariah
+					}
+					remove_modifier = modifier_infamy_infamous
+					remove_modifier = modifier_infamy_pariah
+					add_modifier = {
+						name = modifier_infamy_notorious
+					}
+				}
+			}
+			pariah = {
+				every_scope_state = {
+					limit = {
+						has_modifier = modifier_infamy_infamous
+						has_modifier = modifier_infamy_notorious
+					}
+					remove_modifier = modifier_infamy_infamous
+					remove_modifier = modifier_infamy_notorious
+					add_modifier = {
+						name = modifier_infamy_pariah
+					}
+				}
+			}
+		}
+    }
+}
