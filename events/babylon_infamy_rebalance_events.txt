@@ -65,6 +65,7 @@ infamy_rebalance.1 = {
 		}
 	}
 	immediate = {
+		save_scope_as = pariah_scope
 		#name = infamy_rebalance.1.a
 		if = {
 			limit = {
@@ -95,13 +96,13 @@ infamy_rebalance.1 = {
 					AND = {
 						has_interest_marker_in_region = root.capital.region
 						NOT = {
-							this = root
+							this = scope:pariah_scope
 						}
 					}
 				}
 				add_journal_entry = {
 					type = je_pariah_neighbour
-					target = root
+					target = scope:pariah_scope
 				}
 			}
 		}
@@ -185,5 +186,70 @@ infamy_rebalance.3 = {
 	hidden = yes
 	immediate = {
 		change_infamy = -25
+	}
+}
+
+infamy_rebalance.4 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.4.t
+	desc = infamy_rebalance.4.d
+	flavor = infamy_rebalance.4.f
+	placement = scope:border_state
+	duration = 3
+	trigger = {
+		any_neighbouring_state = {
+			owner = {
+				infamy >= infamy_threshold:pariah
+			}
+		}
+	}
+	immediate = {
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = {
+						infamy >= infamy_threshold:pariah
+					}
+				}
+			}
+			save_scope_as = border_state
+			any_neighbouring_state = {
+				limit = {
+					owner = {
+						infamy >= infamy_threshold:pariah
+					}
+				}
+				owner = {
+					save_scope_as = pariah_neighbour
+				}
+			}
+		}
+	}
+	option = {
+		name = infamy_rebalance.4.a
+		scope:border_state = {
+			add_modifier = {
+				name = modifier_state_scared_of_pariah
+				months = short_modifier_time
+			}
+		}
+	}
+	option = {
+		name = infamy_rebalance.4.b
+		scope:border_state = {
+			add_modifier = {
+				name = modifier_state_angry_with_leader
+				months = short_modifier_time
+			}
+			add_radicals = {
+				value = 0.1
+			}
+		}
 	}
 }
