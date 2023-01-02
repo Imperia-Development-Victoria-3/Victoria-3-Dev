@@ -206,6 +206,9 @@ infamy_rebalance.4 = {
 		any_neighbouring_state = {
 			owner = {
 				infamy >= infamy_threshold:pariah
+				NOT = {
+					is_diplomatic_play_enemy_of = root
+				}
 			}
 		}
 	}
@@ -219,16 +222,18 @@ infamy_rebalance.4 = {
 				}
 			}
 			save_scope_as = border_state
-			any_neighbouring_state = {
-				limit = {
-					owner = {
-						infamy >= infamy_threshold:pariah
+		}
+		random_country = {
+			limit = {
+				infamy >= infamy_threshold:pariah
+				any_state = {
+					owner = PREV
+					any_neighbouring_state = {
+						owner = root
 					}
 				}
-				owner = {
-					save_scope_as = pariah_neighbour
-				}
 			}
+			save_scope_as = pariah_neighbour
 		}
 	}
 	option = {
@@ -248,7 +253,7 @@ infamy_rebalance.4 = {
 				months = short_modifier_time
 			}
 			add_radicals = {
-				value = 0.1
+				value = 0.15
 			}
 		}
 	}
