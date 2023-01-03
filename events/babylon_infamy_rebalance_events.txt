@@ -246,6 +246,7 @@ infamy_rebalance.4 = {
 			add_modifier = {
 				name = modifier_state_scared_of_pariah
 				months = short_modifier_time
+				is_decaying = yes
 			}
 		}
 		default_option = yes
@@ -259,6 +260,7 @@ infamy_rebalance.4 = {
 			add_modifier = {
 				name = modifier_state_angry_with_leader
 				months = short_modifier_time
+				is_decaying = yes
 			}
 			add_radicals = {
 				value = 0.15
@@ -284,11 +286,16 @@ infamy_rebalance.5 = {
 	flavor = infamy_rebalance.5.f
 	duration = 3
 	trigger = {
-		#you got interest in pariah
-		has_interest_marker_in_region = scope:pariah.capital.region
-		#you are at peace with pariah 
-		NOT = {
-			is_diplomatic_play_enemy_of = scope:pariah
+		any_country = {
+			infamy >= infamy_threshold:pariah
+			root = {
+				#you got interest in pariah
+				has_interest_marker_in_region = prev.capital.region
+				NOT = {
+					#you are at peace with pariah 
+					is_diplomatic_play_enemy_of = prev
+				}
+			}
 		}
 		#You are permitted aggressive diplomatic plays...
 		aggressive_diplomatic_plays_permitted = yes
@@ -309,6 +316,7 @@ infamy_rebalance.5 = {
 		add_modifier = {
 			name = appeasement_prestige_loss
 			months = short_modifier_time
+			is_decaying = yes
 		}
 		default_option = yes
 		ai_chance = {
@@ -320,13 +328,18 @@ infamy_rebalance.5 = {
 		#Invites all neighbours of the pariah to a coalition		
 		set_variable = pariah_coalition_leader
 		scope:pariah = {
-			every_neighbouring_state = {
-				owner = {
-					trigger_event = {
-						id = infamy_rebalance.6
-						days = 0
-						popup = yes
+			every_country = {
+				limit = {
+					has_strategic_adjacency = scope:pariah
+					aggressive_diplomatic_plays_permitted = yes
+					NOT = {
+						this = scope:pariah
 					}
+				}
+				trigger_event = {
+					id = infamy_rebalance.6
+					days = 0
+					popup = yes
 				}
 			}
 		}
@@ -341,7 +354,7 @@ infamy_rebalance.5 = {
 }
 
 infamy_rebalance.6 = {
-	#Invites countries to coalition
+	#Pariah neighbour gets invited to coalition
 	type = country_event
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
@@ -357,9 +370,7 @@ infamy_rebalance.6 = {
 		random_country = {
 			limit = {
 				infamy >= infamy_threshold:pariah
-				any_neighbouring_state = {
-					owner = root
-				}
+				has_strategic_adjacency = root
 			}
 			save_scope_as = pariah
 		}
@@ -375,6 +386,7 @@ infamy_rebalance.6 = {
 		add_modifier = {
 			name = appeasement_prestige_loss
 			months = short_modifier_time
+			is_decaying = yes
 		}
 		default_option = yes
 		ai_chance = {
@@ -392,6 +404,15 @@ infamy_rebalance.6 = {
 				ROOT
 			}
 		}
+		custom_tooltip = prematureExitWarningTT
+		set_variable = pariah_coalition_member
+		hidden_effect = {
+			#cleanup after 4 months
+			trigger_event = {
+				days = 120
+				id = infamy_rebalance.7
+			}
+		}
 		ai_chance = {
 			base = 75
 		}
@@ -403,5 +424,14 @@ infamy_rebalance.6 = {
 			}
 			remove_variable = pariah_coalition_leader
 		}
+	}
+}
+
+infamy_rebalance.7 = {
+	#cleanup coalition member variables
+	type = country_event
+	hidden = yes
+	immediate = {
+		remove_variable = pariah_coalition_member
 	}
 }
