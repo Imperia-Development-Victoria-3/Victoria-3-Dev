@@ -1,5 +1,6 @@
 namespace = infamy_rebalance
 infamy_rebalance.1 = {
+	#updates infamy modifiers in provinces
 	type = country_event
 	hidden = yes
 	trigger = {
@@ -192,6 +193,7 @@ infamy_rebalance.3 = {
 }
 
 infamy_rebalance.4 = {
+	#negative event for provinces bordering pariahs
 	type = country_event
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
@@ -246,6 +248,10 @@ infamy_rebalance.4 = {
 				months = short_modifier_time
 			}
 		}
+		default_option = yes
+		ai_chance = {
+			base = 50
+		}
 	}
 	option = {
 		name = infamy_rebalance.4.b
@@ -258,10 +264,14 @@ infamy_rebalance.4 = {
 				value = 0.15
 			}
 		}
+		ai_chance = {
+			base = 50
+		}
 	}
 }
 
 infamy_rebalance.5 = {
+	#Start of anti-pariah coalition
 	type = country_event
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
@@ -280,6 +290,8 @@ infamy_rebalance.5 = {
 		NOT = {
 			is_diplomatic_play_enemy_of = scope:pariah
 		}
+		#You are permitted aggressive diplomatic plays...
+		aggressive_diplomatic_plays_permitted = yes
 	}
 	immediate = {
 		random_country = {
@@ -298,12 +310,98 @@ infamy_rebalance.5 = {
 			name = appeasement_prestige_loss
 			months = short_modifier_time
 		}
+		default_option = yes
+		ai_chance = {
+			base = 50
+		}
 	}
 	option = {
 		name = infamy_rebalance.5.b
+		#Invites all neighbours of the pariah to a coalition		
+		set_variable = pariah_coalition_leader
+		scope:pariah = {
+			every_neighbouring_state = {
+				owner = {
+					trigger_event = {
+						id = infamy_rebalance.6
+						days = 0
+						popup = yes
+					}
+				}
+			}
+		}
 		create_diplomatic_play = {
 			target_country = scope:pariah
 			type = dp_contain_threat
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+infamy_rebalance.6 = {
+	#Invites countries to coalition
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.6.t
+	desc = infamy_rebalance.6.d
+	flavor = infamy_rebalance.6.f
+	duration = 1
+	immediate = {
+		random_country = {
+			limit = {
+				infamy >= infamy_threshold:pariah
+				any_neighbouring_state = {
+					owner = root
+				}
+			}
+			save_scope_as = pariah
+		}
+	}
+	trigger = {
+		NOT = {
+			has_variable = pariah_coalition_leader
+		}
+		aggressive_diplomatic_plays_permitted = yes
+	}
+	option = {
+		name = infamy_rebalance.5.a
+		add_modifier = {
+			name = appeasement_prestige_loss
+			months = short_modifier_time
+		}
+		default_option = yes
+		ai_chance = {
+			base = 25
+		}
+	}
+	option = {
+		name = infamy_rebalance.5.b
+		random_diplomatic_play = {
+			limit = {
+				target_is = scope:pariah
+				is_diplomatic_play_type = dp_contain_threat
+			}
+			add_initiator_backers = {
+				ROOT
+			}
+		}
+		ai_chance = {
+			base = 75
+		}
+	}
+	after = {
+		any_country = {
+			limit = {
+				has_variable = pariah_coalition_leader
+			}
+			remove_variable = pariah_coalition_leader
 		}
 	}
 }
