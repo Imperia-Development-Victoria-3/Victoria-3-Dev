@@ -383,6 +383,21 @@ guarantee_another_country = {
 	should_notify_third_parties = yes
 	potential = {
 		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		aggressive_diplomatic_plays_permitted = yes
+		scope:target_country = {
+			aggressive_diplomatic_plays_permitted = yes
+		}
+		NAND = {
+			scope:target_country = { is_non_customs_union_subject = yes }
+			scope:target_country = { is_subject_of = root }
+		}
+		NAND = {
+			is_non_customs_union_subject = yes
+			is_subject_of = scope:target_country
+		}	
 	}
 	possible = {
 		NOT = { has_war_with = scope:target_country }
