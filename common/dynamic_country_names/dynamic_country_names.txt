@@ -1,81 +1,71 @@
 ﻿### Try to keep tags in alphabetical order if it's not too far gone, please.
-
 ################################################################
 ## DEFAULT COUNTRY NAMES EXAMPLE CAN BE USED WITH ANY COUNTRY ##
 ################################################################
-
 # Uncomment when need a dynamic_country_name for any country
 DEFAULT = {
 	# ACW revolters
-#has_government_type = gov_princely_state_hindu
+	#has_government_type = gov_princely_state_hindu
 	#NFM
 	dynamic_country_name = {
 		name = NFM_dcn_default_monarchy
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 0
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				has_law = law_type:law_monarchy
 			}
 		}
 	}
-
-	dynamic_country_name = { ##Duchy
+	dynamic_country_name = {
+		##Duchy
 		name = NFM_dcn_default_monarchy_grand_duchy
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 1
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
-				has_law = law_type:law_monarchy	
-				OR = { 
+				#	is_subject = no
+				has_law = law_type:law_monarchy
+				OR = {
 					has_government_type = gov_absolute_grand_duchy
-					has_government_type = gov_grand_duchy 
+					has_government_type = gov_grand_duchy
 					has_government_type = gov_constitutional_grand_duchy
 				}
 			}
 		}
 	}
-
-	dynamic_country_name = { ##Duchy
+	dynamic_country_name = {
+		##Duchy
 		name = NFM_dcn_default_monarchy_duchy
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 1
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
-				has_law = law_type:law_monarchy	
-				OR = { 
+				#	is_subject = no
+				has_law = law_type:law_monarchy
+				OR = {
 					has_government_type = gov_absolute_duchy
-					has_government_type = gov_constitutional_duchy 
+					has_government_type = gov_constitutional_duchy
 					has_government_type = gov_duchy
 				}
 			}
 		}
 	}
-
-	dynamic_country_name = { ##Principality
+	dynamic_country_name = {
+		##Principality
 		name = NFM_dcn_default_monarchy_principality
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
-				has_law = law_type:law_monarchy	
-				OR = { 
+				#	is_subject = no
+				has_law = law_type:law_monarchy
+				OR = {
 					country_tier = principality
 					has_government_type = gov_absolute_principality
 					has_government_type = gov_principality
@@ -87,21 +77,19 @@ DEFAULT = {
 			}
 		}
 	}
-
-	dynamic_country_name = { ##Max Rank Kingdom States & Exceptions
+	dynamic_country_name = {
+		##Max Rank Kingdom States & Exceptions
 		name = NFM_dcn_default_monarchy_kingdom
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				OR = {
 					AND = {
 						has_law = law_type:law_monarchy
-						OR = { 
+						OR = {
 							country_tier = kingdom
 							this = c:FRA
 						}
@@ -112,40 +100,44 @@ DEFAULT = {
 			}
 		}
 	}
-	dynamic_country_name = { ##Empires
+	dynamic_country_name = {
+		##Empires
 		name = NFM_dcn_default_monarchy_empire
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 4
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				has_law = law_type:law_monarchy
 				OR = {
-					AND = { 
+					AND = {
 						country_tier = empire
-						NOT = { this = c:FRA }
+						NOT = {
+							this = c:FRA
+						}
 					}
 					this = c:BRZ
 					this = c:MEX
-					this = c:EIC
+					if = {
+						limit = {
+							exists = c:EIC
+						}
+						this = c:EIC
 					}
 				}
 			}
 		}
-
-		dynamic_country_name = { ##Empires
+	}
+	dynamic_country_name = {
+		##Empires
 		name = NFM_dcn_default_monarchy_empire_middle_east
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				has_law = law_type:law_monarchy
 				country_tier = empire
 				has_law = law_type:law_autocracy
@@ -159,17 +151,14 @@ DEFAULT = {
 					has_government_type = gov_khanate
 					has_government_type = gov_khedive
 					has_government_type = gov_absolute_principality_muslim
-					}
 				}
 			}
 		}
-
+	}
 	dynamic_country_name = {
 		name = NFM_dcn_middle_eastern_monarchy
 		adjective = NFM_dcn_middle_eastern_monarchy_adj
-		
 		priority = 3
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -189,18 +178,17 @@ DEFAULT = {
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_middle_eastern_monarchy_modern
 		adjective = NFM_dcn_middle_eastern_monarchy_modern_adj
-		
 		priority = 3
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
 				has_law = law_type:law_monarchy
-				NOT = { has_law = law_type:law_autocracy}
+				NOT = {
+					has_law = law_type:law_autocracy
+				}
 				OR = {
 					has_government_type = gov_sultanate
 					has_government_type = gov_hakimate
@@ -215,108 +203,92 @@ DEFAULT = {
 			}
 		}
 	}
-
-	dynamic_country_name = { ##Princely State
+	dynamic_country_name = {
+		##Princely State
 		name = NFM_dcn_default_monarchy_princely_state
-	#	adjective = NFM_dcn_default_monarchy_adj
-		
+		#	adjective = NFM_dcn_default_monarchy_adj
 		priority = 3
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
-				has_law = law_type:law_monarchy	
+				#	is_subject = no
+				has_law = law_type:law_monarchy
 				OR = {
 					has_government_type = gov_princely_state_hindu
 					has_government_type = gov_princely_state_muslim
 				}
-				
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 0
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
 				}
-				
 			}
 		}
 	}
-
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_united_states
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 1
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-		#		is_subject = no
+				#		is_subject = no
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
 				}
-					has_law = law_type:law_dual_federalism
+				has_law = law_type:law_dual_federalism
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_federal
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 1
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-		#		is_subject = no
+				#		is_subject = no
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
 				}
-					has_law = law_type:law_cooperative_federalism
+				has_law = law_type:law_cooperative_federalism
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_confederation
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 3
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-		#		is_subject = no
-					NOT = { is_country_type = unrecognized }
-					NOT = {has_law = law_type:law_chiefdom}
-					has_law = law_type:law_regionalism
+				#		is_subject = no
+				NOT = {
+					is_country_type = unrecognized
+				}
+				NOT = {
+					has_law = law_type:law_chiefdom
+				}
+				has_law = law_type:law_regionalism
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_dominion
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -327,31 +299,27 @@ DEFAULT = {
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_puppet
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
 				is_subject = yes
 				is_subject_type = subject_type_puppet
-				NOT = {has_government_type = gov_colonial_administration}
+				NOT = {
+					has_government_type = gov_colonial_administration
+				}
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
 				}
-				
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_puppet_colony
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -361,67 +329,64 @@ DEFAULT = {
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_republic_free_city
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 3
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-			#	is_subject = no
+				#	is_subject = no
 				country_tier = city_state
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
 				}
-				
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_theocracy
-	#	adjective = NFM_dcn_default_theocracy_adj
-		
+		#	adjective = NFM_dcn_default_theocracy_adj
 		priority = 0
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-					is_subject = no
-					has_law = law_type:law_theocracy
+				is_subject = no
+				has_law = law_type:law_theocracy
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_default_council_republic
-#		adjective = NFM_dcn_default_council_republic_adj
-		
+		#		adjective = NFM_dcn_default_council_republic_adj
 		priority = 0
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-					is_subject = no
-					has_law = law_type:law_council_republic
+				is_subject = no
+				has_law = law_type:law_council_republic
 			}
 		}
 	}
-
-	dynamic_country_name = { #NFM Crown Colonies
+	dynamic_country_name = {
+		#NFM Crown Colonies
 		name = NFM_dcn_default_crown_colony
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 6
-		
 		trigger = {
 			exists = scope:actor
-			NOT = { scope:actor = c:ORG}
-			NOT = { scope:actor = c:SAF}
+			if = {
+				limit = {
+					exists = c:ORG
+				}
+				NOT = {
+					scope:actor = c:ORG
+				}
+			}
+			NOT = {
+				scope:actor = c:SAF
+			}
 			scope:actor = {
 				is_subject = yes
 				OR = {
@@ -432,12 +397,11 @@ DEFAULT = {
 			}
 		}
 	}
-	dynamic_country_name = { #NFM Crown Colonies
+	dynamic_country_name = {
+		#NFM Crown Colonies
 		name = NFM_dcn_default_crown_colony_canada
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 7
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -453,39 +417,36 @@ DEFAULT = {
 					this = c:NBS
 					this = c:NVS
 					this = c:HBC
-				}	
+				}
 			}
 		}
 	}
-
-	dynamic_country_name = { #NFM Ottoman Vassals
+	dynamic_country_name = {
+		#NFM Ottoman Vassals
 		name = NFM_dcn_middle_eastern_monarchy_modern
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
 				OR = {
 					has_government_type = gov_bey
 					has_government_type = gov_vilayet
-					has_government_type  = gov_sharif
+					has_government_type = gov_sharif
 					has_government_type = gov_khedive
 				}
-				
 			}
 		}
 	}
-
-	dynamic_country_name = { #Tibet Puppet Names
+	dynamic_country_name = {
+		#Tibet Puppet Names
 		name = NFM_dcn_tibet_vassal_imperial_china
-	#	adjective = NFM_dcn_default_republic_adj
-		
+		#	adjective = NFM_dcn_default_republic_adj
 		priority = 10
-		
 		trigger = {
-			c:CHI = {has_law = law_type:law_monarchy}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+			}
 			scope:actor = {
 				is_subject = yes
 				is_subject_type = subject_type_vassal
@@ -493,45 +454,43 @@ DEFAULT = {
 			}
 		}
 	}
+}
 
-}#Default End
-
-SEQ = { # Indian Territory
+#Default End
+SEQ = {
+	# Indian Territory
 	dynamic_country_name = {
 		name = NFM_indian_territory
 		adjective = NFM_indian_territory_adj
-
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
-			scope:actor = { 
+			scope:actor = {
 				is_subject = yes
-				is_subject_type = subject_type_puppet }
+				is_subject_type = subject_type_puppet
+			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_sequoyah_nation
-
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
-			scope:actor = { 
+			scope:actor = {
 				is_subject = yes
-				is_subject_type = subject_type_dominion }
+				is_subject_type = subject_type_dominion
+			}
 		}
 	}
 }
 
-CLM = { # Colombia
+CLM = {
+	# Colombia
 	dynamic_country_name = {
 		name = NFM_dcn_colombia_granada
 		adjective = dyn_c_new_granada_adj
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
 			scope:actor = {
@@ -544,31 +503,29 @@ CLM = { # Colombia
 	}
 }
 
-PNI = { # Rio Grande Sul
+PNI = {
+	# Rio Grande Sul
 	dynamic_country_name = {
 		name = NFM_dcn_adjective_republic
-	#	adjective = dyn_c_new_granada_adj
-
+		#	adjective = dyn_c_new_granada_adj
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
 			scope:actor = {
-			#	has_law = law_type:law_type
+				#	has_law = law_type:law_type
 			}
 		}
 	}
 }
 
-BRZ = { # Brazil
+BRZ = {
+	# Brazil
 	dynamic_country_name = {
 		name = NFM_dcn_empire_of
-	#	adjective = dyn_c_new_granada_adj
-
+		#	adjective = dyn_c_new_granada_adj
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			scope:actor = {
 				has_law = law_type:law_monarchy
@@ -577,13 +534,12 @@ BRZ = { # Brazil
 	}
 }
 
-SER = { # Serbia Fix
+SER = {
+	# Serbia Fix
 	dynamic_country_name = {
 		name = NFM_dcn_default_monarchy_principality
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			scope:actor = {
 				is_subject = yes
@@ -593,14 +549,13 @@ SER = { # Serbia Fix
 	}
 }
 
-CHI = { # China
+CHI = {
+	# China
 	dynamic_country_name = {
 		name = NFM_dcn_china_monarchy
 		adjective = NFM_dcn_china_monarchy_adj
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -610,65 +565,67 @@ CHI = { # China
 	}
 }
 
-KOR = { # Korea NFM
-	dynamic_country_name = { # Joseon
+KOR = {
+	# Korea NFM
+	dynamic_country_name = {
+		# Joseon
 		name = NFM_dcn_korea_monarchy
 		adjective = NFM_dcn_korea_monarchy_adj
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { has_law = law_type:law_monarchy }
+			scope:actor = {
+				has_law = law_type:law_monarchy
+			}
 		}
 	}
-	 # Korea NFM
-	dynamic_country_name = { # Joseon
+	# Korea NFM
+	dynamic_country_name = {
+		# Joseon
 		name = NFM_dcn_korea_empire
 		adjective = NFM_dcn_korea_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 30
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				is_subject = no
-				has_law = law_type:law_monarchy }
-		}
-	}
-}
-
-JAP = { # Japan
-	dynamic_country_name = {
-		name = NFM_dcn_shogunate
-		adjective = NFM_dcn_shogunate_adj
-
-		is_main_tag_only = yes
-		priority = 20
-
-		trigger = {
-			exists = scope:actor
-			scope:actor = { 
 				has_law = law_type:law_monarchy
-				NOT = { has_variable = meiji_var }
 			}
 		}
 	}
 }
 
-NGF = { # North German Federation
+JAP = {
+	# Japan
+	dynamic_country_name = {
+		name = NFM_dcn_shogunate
+		adjective = NFM_dcn_shogunate_adj
+		is_main_tag_only = yes
+		priority = 20
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = meiji_var
+				}
+			}
+		}
+	}
+}
+
+NGF = {
+	# North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_ngf_unitary
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				OR = {
 					has_law = law_type:law_unitary
@@ -680,13 +637,11 @@ NGF = { # North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_ngf_federal
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				OR = {
 					has_law = law_type:law_cooperative_federalism
@@ -698,13 +653,11 @@ NGF = { # North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_ngf_confederation
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				has_law = law_type:law_regionalism
 			}
@@ -712,47 +665,42 @@ NGF = { # North German Federation
 	}
 }
 
-GER = { # North German Federation
+GER = {
+	# North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_ger_totalitarian
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
-					has_law = law_type:law_totalitarian
+			scope:actor = {
+				has_law = law_type:law_totalitarian
 			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_ger_hre
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				has_law = law_type:law_regionalism
 				has_law = law_type:law_traditionalism
-				}
 			}
 		}
+	}
 	dynamic_country_name = {
 		name = NFM_dcn_ger_confederation
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 19
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				has_law = law_type:law_regionalism
 			}
@@ -764,30 +712,27 @@ SOK = {
 	dynamic_country_name = {
 		name = NFM_dcn_sokoto_caliphate
 		#adjective = NFM_dcn_shogunate_adj
-
-	#	is_main_tag_only = yes
+		#	is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_government_type = gov_caliphate
 			}
 		}
 	}
 }
 
-SGF = { # North German Federation
+SGF = {
+	# North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_sgf_unitary
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				OR = {
 					has_law = law_type:law_unitary
@@ -799,13 +744,11 @@ SGF = { # North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_sgf_federal
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				OR = {
 					has_law = law_type:law_cooperative_federalism
@@ -817,13 +760,11 @@ SGF = { # North German Federation
 	dynamic_country_name = {
 		name = NFM_dcn_sgf_confederation
 		#adjective = NFM_dcn_shogunate_adj
-
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				has_law = law_type:law_regionalism
 			}
@@ -835,10 +776,8 @@ BOL = {
 	dynamic_country_name = {
 		name = dyn_c_peru_bolivia
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 3
-		
 		trigger = {
 			scope:actor = {
 				owns_entire_state_region = STATE_LA_PAZ
@@ -849,10 +788,8 @@ BOL = {
 	dynamic_country_name = {
 		name = NFM_dcn_peru_bolivia_republic
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 4
-		
 		trigger = {
 			scope:actor = {
 				OR = {
@@ -868,12 +805,10 @@ BOL = {
 	dynamic_country_name = {
 		name = NFM_dcn_peru_bolivia_federal_republic
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
-		scope:actor = {
+			scope:actor = {
 				OR = {
 					has_law = law_type:law_presidential_republic
 					has_law = law_type:law_parliamentary_republic
@@ -887,10 +822,8 @@ BOL = {
 	dynamic_country_name = {
 		name = NFM_dcn_peru_bolivia_united_states
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			scope:actor = {
 				OR = {
@@ -906,10 +839,8 @@ BOL = {
 	dynamic_country_name = {
 		name = NFM_dcn_peru_bolivia_confederation
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			scope:actor = {
 				OR = {
@@ -924,45 +855,44 @@ BOL = {
 	}
 }
 
-TUR = { # Turkey
+TUR = {
+	# Turkey
 	dynamic_country_name = {
 		name = NFM_ottomans
 		adjective = dyn_c_ottoman_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 		}
 	}
 }
 
-USA = { # United States of America
+USA = {
+	# United States of America
 	dynamic_country_name = {
 		name = dyn_c_united_states
-
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
-			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = {
+				coa_def_communist_flag_trigger = yes
+			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_america_unitary
 		adjective = NFM_dcn_america_unitary_adj
-
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			#coa_def_republic_flag_trigger = yes
 			#NOT = { coa_def_communist_flag_trigger = yes }
 			scope:actor = {
-				NOT = { exists = c:FSA }
+				NOT = {
+					exists = c:FSA
+				}
 				OR = {
 					has_law = law_type:law_totalitarian
 					has_law = law_type:law_unitary
@@ -970,85 +900,79 @@ USA = { # United States of America
 			}
 		}
 	}
-	
 	dynamic_country_name = {
 		name = dyn_c_united_senators
 		priority = 12
-		
 		trigger = {
 			exists = c:USA
-			c:USA = {			
+			c:USA = {
 				any_scope_state = {
-					state_region = { has_variable = district_of_columbia }
+					state_region = {
+						has_variable = district_of_columbia
+					}
 					count > 0
 				}
 				any_scope_state = {
-					state_region = { NOT = { has_variable = district_of_columbia } }
+					state_region = {
+						NOT = {
+							has_variable = district_of_columbia
+						}
+					}
 					count < 1
-				}			
-			}			
+				}
+			}
 		}
-	}	
-
+	}
 	dynamic_country_name = {
 		name = dyn_c_united_state
 		priority = 12
-		
 		trigger = {
 			exists = c:USA
-			c:USA = {		
+			c:USA = {
 				any_scope_state = {
-					state_region = { NOT = { has_variable = district_of_columbia } }
+					state_region = {
+						NOT = {
+							has_variable = district_of_columbia
+						}
+					}
 					count = 1
 				}
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_empire_america
 		adjective = NFM_dcn_empire_america_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_united_syndicates_of_america
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
-	}	
-
+	}
 	dynamic_country_name = {
 		name = dyn_c_united_synods_of_america
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			coa_def_theocracy_flag_trigger = yes
 		}
 	}
 }
 
-
 PHI = {
 	dynamic_country_name = {
 		name = NFM_dcn_spanish_philippines
-	#	adjective = NFM_dcn_spanish_philippines_adj
-		
+		#	adjective = NFM_dcn_spanish_philippines_adj
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:SPA
 			c:SPA = {
@@ -1061,33 +985,33 @@ PHI = {
 		}
 	}
 }
+
 HBC = {
-	dynamic_country_name = { #NFM
+	dynamic_country_name = {
+		#NFM
 		name = NFM_dcn_hudson_bay_company
 		adjective = NFM_dcn_hudson_bay_company_adj
-	#	is_main_tag_only = yes
+		#	is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 	
+			scope:actor = {
 				has_government_type = gov_chartered_company
 			}
 		}
 	}
 }
 
-
-BIC = { # British East India Company
-	dynamic_country_name = { #NFM
+BIC = {
+	# British East India Company
+	dynamic_country_name = {
+		#NFM
 		name = NFM_dcn_east_india_company
-
-	#	is_main_tag_only = yes
+		#	is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 	
+			scope:actor = {
 				has_law = law_type:law_presidential_republic
 				OR = {
 					has_law = law_type:law_autocracy
@@ -1096,14 +1020,11 @@ BIC = { # British East India Company
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_raj
 		adjective = NFM_dcn_raj_adj
-
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			scope:actor = {
 				is_subject = yes
@@ -1111,28 +1032,25 @@ BIC = { # British East India Company
 			}
 		}
 	}
-	dynamic_country_name = { #Idk look at later
+	dynamic_country_name = {
+		#Idk look at later
 		name = dyn_c_east_india
 		adjective = dyn_c_east_india_adj
-
 		is_main_tag_only = yes
 		priority = 0
-		
 		trigger = {
 			coa_def_independent_trigger = yes
 		}
 	}
 }
 
-
-DEI = { #East Indies
+DEI = {
+	#East Indies
 	dynamic_country_name = {
 		name = NFM_dcn_east_indies
 		adjective = NFM_dcn_east_indies_adj
-
 		#is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			scope:actor = {
 				is_subject = yes
@@ -1141,14 +1059,13 @@ DEI = { #East Indies
 	}
 }
 
-CAM = { # Cambodia
+CAM = {
+	# Cambodia
 	dynamic_country_name = {
 		name = NFM_dcn_cambodia_vietnamese
 		#adjective = dyn_c_khmer_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			#coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -1156,31 +1073,29 @@ CAM = { # Cambodia
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_khmer_empire
 		adjective = dyn_c_khmer_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
-				NOT = { is_country_type = unrecognized }
+				NOT = {
+					is_country_type = unrecognized
+				}
 			}
 		}
 	}
 }
 
-BUR = { # Burmese Empire
-	dynamic_country_name = { 
+BUR = {
+	# Burmese Empire
+	dynamic_country_name = {
 		name = NFM_dcn_burmese_empire
 		adjective = NFM_dcn_burmese_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1192,124 +1107,128 @@ BUR = { # Burmese Empire
 	}
 }
 
-GBR = { # Great Britain of United Kingdom
+GBR = {
+	# Great Britain of United Kingdom
 	dynamic_country_name = {
-		name = NFM_dcn_uk_default #Great Britian & Ireland
-		
+		name = NFM_dcn_uk_default		#Great Britian & Ireland
 		is_main_tag_only = yes
 		priority = 10
-		
-		trigger = { 
-	#		NOT = { exists = c:SCO } #Scotland
-		#	NOT = { exists = c:WLS } #Wales
-#			NOT = { exists = c:IRE } #Ireland
-			scope:actor = { has_law = law_type:law_monarchy }
+		trigger = {
+			#		NOT = { exists = c:SCO } #Scotland
+			#	NOT = { exists = c:WLS } #Wales
+			#			NOT = { exists = c:IRE } #Ireland
+			scope:actor = {
+				has_law = law_type:law_monarchy
+			}
 		}
 	}
-#	dynamic_country_name = {
-#		name = NFM_dcn_uk_default_scoxit #England & Ireland
-		
-#		is_main_tag_only = yes
-#		priority = 2
-		
-#		trigger = { 
-#			exists = c:SCO
-		#	NOT = { exists = c:WLS } #Wales
-#			NOT = { exists = c:IRE } #Ireland
-#			scope:actor = { has_law = law_type:law_monarchy }
-#		}
-#	}
+	#	dynamic_country_name = {
+	#		name = NFM_dcn_uk_default_scoxit #England & Ireland
+	#		is_main_tag_only = yes
+	#		priority = 2
+	#		trigger = { 
+	#			exists = c:SCO
+	#	NOT = { exists = c:WLS } #Wales
+	#			NOT = { exists = c:IRE } #Ireland
+	#			scope:actor = { has_law = law_type:law_monarchy }
+	#		}
+	#	}
 	#dynamic_country_name = {
 	#	name = NFM_dcn_uk_default_ira_lets_go #Great Britian 
-		
 	#	is_main_tag_only = yes
 	#	priority = 2
 	#	
 	#	trigger = { 
 	#		NOT = { exists = c:SCO }
-		#	NOT = { exists = c:WLS } #Wales
+	#	NOT = { exists = c:WLS } #Wales
 	#		NOT = { exists = c:IRE } #Ireland
 	#		scope:actor = { has_law = law_type:law_monarchy }
 	#	}
 	#}
 	dynamic_country_name = {
-		name = NFM_dcn_uk_default_england #England
-		
+		name = NFM_dcn_uk_default_england		#England
 		is_main_tag_only = yes
 		priority = 11
-		
-		trigger = { 
-			 exists = c:SCO 
-		#	NOT = { exists = c:WLS } 
-			 exists = c:IRE 
-			scope:actor = { has_law = law_type:law_monarchy }
+		trigger = {
+			exists = c:SCO
+			#	NOT = { exists = c:WLS } 
+			exists = c:IRE
+			scope:actor = {
+				has_law = law_type:law_monarchy
+			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_british_republic
-		
 		is_main_tag_only = yes
 		priority = 3
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
-			scope:actor = { NOT = { capital = { state_region = s:STATE_LANCASHIRE } } }
+			scope:actor = {
+				NOT = {
+					capital = {
+						state_region = s:STATE_LANCASHIRE
+					}
+				}
+			}
 		}
-	}	
+	}
 	dynamic_country_name = {
 		name = dyn_c_british_commonwealth
 		adjective = dyn_c_british_commonwealth_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_dictatorship_flag_trigger = yes
 		}
-	}	
+	}
 	dynamic_country_name = {
 		name = dyn_c_greater_manchester
 		adjective = dyn_c_greater_manchester_adj
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			exists = scope:actor
-			NOT = { has_game_rule = plausible_formable_nations }
-			scope:actor = { 
-				NOT = { has_law = law_type:law_council_republic }
+			NOT = {
+				has_game_rule = plausible_formable_nations
+			}
+			scope:actor = {
+				NOT = {
+					has_law = law_type:law_council_republic
+				}
 				exists = capital
-				capital = { state_region = s:STATE_LANCASHIRE } 
+				capital = {
+					state_region = s:STATE_LANCASHIRE
+				}
 			}
 		}
-	}	
+	}
 	dynamic_country_name = {
 		name = dyn_c_mancunian_commune
 		adjective = dyn_c_mancunian_commune_adj
 		is_main_tag_only = yes
 		priority = 20
-
 		trigger = {
 			coa_def_communist_flag_trigger = yes
-			scope:actor = { 
+			scope:actor = {
 				exists = capital
-				capital = { state_region = s:STATE_LANCASHIRE } 
+				capital = {
+					state_region = s:STATE_LANCASHIRE
+				}
 			}
 		}
 	}
 }
 
-NET = { # Netherlands
+NET = {
+	# Netherlands
 	dynamic_country_name = {
 		name = NFM_dcn_netherlands_united_monarchy
-		
 		is_main_tag_only = yes
 		priority = 15
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 				owns_entire_state_region = STATE_FLANDERS
 				owns_entire_state_region = STATE_WALLONIA
@@ -1318,29 +1237,25 @@ NET = { # Netherlands
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_united_netherlands_monarchy
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
 			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_united_provinces
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				OR = {
 					has_law = law_type:law_presidential_republic
-					has_law = law_type:law_parliamentary_republic	
+					has_law = law_type:law_parliamentary_republic
 				}
 			}
 		}
@@ -1348,98 +1263,88 @@ NET = { # Netherlands
 	dynamic_country_name = {
 		name = NFM_dcn_batavian_republic
 		adjective = NFM_dcn_batavian_republic_adj
-		
 		is_main_tag_only = yes
 		priority = 12
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_unitary
 				OR = {
 					has_law = law_type:law_presidential_republic
-					has_law = law_type:law_parliamentary_republic	
+					has_law = law_type:law_parliamentary_republic
 				}
 			}
 		}
 	}
 }
 
-AUS = { # Austria
+AUS = {
+	# Austria
 	dynamic_country_name = {
 		name = NFM_dcn_austria_hungary_unitary
 		adjective = dyn_c_austria-hungary_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_unitary
 				has_law = law_type:law_monarchy
-				country_has_primary_culture = cu:hungarian 
+				country_has_primary_culture = cu:hungarian
 			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_austria_hungary_federal
 		adjective = dyn_c_austria-hungary_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
-				country_has_primary_culture = cu:hungarian 
+				country_has_primary_culture = cu:hungarian
 			}
-			
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_austria_hungary_regionalism
 		adjective = dyn_c_austria-hungary_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { 
+			scope:actor = {
 				has_law = law_type:law_monarchy
-				has_law = law_type:law_regionalism 
+				has_law = law_type:law_regionalism
 			}
 		}
 	}
 }
 
-
-POR = { #Portugal & Brazil
+POR = {
+	#Portugal & Brazil
 	dynamic_country_name = {
 		name = NFM_dcn_portugal_united_kingdom
 		adjective = NFM_dcn_portugal_united_kingdom_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
 				owns_entire_state_region = STATE_RIO_DE_JANEIRO
 				owns_entire_state_region = STATE_SAO_PAULO
 			}
-			NOT = { exists = c:BRZ }
+			NOT = {
+				exists = c:BRZ
+			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_portugal_united_kingdom_empire
 		adjective = NFM_dcn_portugal_united_kingdom_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -1447,36 +1352,37 @@ POR = { #Portugal & Brazil
 				owns_entire_state_region = STATE_SAO_PAULO
 				country_rank >= rank_value:great_power
 			}
-			NOT = { exists = c:BRZ }
+			NOT = {
+				exists = c:BRZ
+			}
 		}
 	}
 }
 
-SPA = { #United Iberia
+SPA = {
+	#United Iberia
 	dynamic_country_name = {
 		name = NFM_dcn_iberia_union
 		adjective = NFM_dcn_iberia_union_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
-		#	coa_def_monarchy_flag_trigger = yes
+			#	coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
 				owns_entire_state_region = STATE_ALENTEJO
 				owns_entire_state_region = STATE_ESTREMADURA
 				owns_entire_state_region = STATE_BEIRA
 			}
-			NOT = { exists = c:POR }
+			NOT = {
+				exists = c:POR
+			}
 		}
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_iberia_union
 		adjective = NFM_dcn_iberia_union_adj
-		
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -1484,17 +1390,18 @@ SPA = { #United Iberia
 				owns_entire_state_region = STATE_SAO_PAULO
 				country_rank >= rank_value:great_power
 			}
-			NOT = { exists = c:POR }
+			NOT = {
+				exists = c:POR
+			}
 		}
 	}
 }
 
-
-CSA = { # Confederate States of America
+CSA = {
+	# Confederate States of America
 	dynamic_country_name = {
 		name = NFM_dcn_csa_default
 		priority = 20
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1510,12 +1417,10 @@ CSA = { # Confederate States of America
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = NFM_dcn_csa_monarchy
 		adjective = NFM_dcn_csa_monarchy_adj
 		priority = 20
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1525,35 +1430,31 @@ CSA = { # Confederate States of America
 	}
 }
 
-
 #NFM END
-
-
 SWE = {
 	dynamic_country_name = {
 		name = dyn_c_gotland_revolt
 		adjective = dyn_c_gotland_revolt_adj
-		
 		is_revolutionary = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {			
-				capital = { state_region = s:STATE_GOTLAND }
+			scope:actor = {
+				capital = {
+					state_region = s:STATE_GOTLAND
+				}
 			}
 		}
 	}
 }
 
-ACE = { # Sumatra
+ACE = {
+	# Sumatra
 	dynamic_country_name = {
 		name = dyn_c_sumatra
 		adjective = dyn_c_sumatra_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1565,14 +1466,13 @@ ACE = { # Sumatra
 	}
 }
 
-PER = { # Iran Persia
+PER = {
+	# Iran Persia
 	dynamic_country_name = {
 		name = NFM_dcn_sublime_iran
-	#	adjective = dyn_c_new_granada_adj
-
+		#	adjective = dyn_c_new_granada_adj
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			scope:actor = {
 				has_law = law_type:law_monarchy
@@ -1582,11 +1482,9 @@ PER = { # Iran Persia
 	}
 	dynamic_country_name = {
 		name = NFM_dcn_imperial_iran
-	#	adjective = dyn_c_new_granada_adj
-
+		#	adjective = dyn_c_new_granada_adj
 		is_main_tag_only = yes
 		priority = 9
-		
 		trigger = {
 			scope:actor = {
 				has_law = law_type:law_monarchy
@@ -1595,12 +1493,12 @@ PER = { # Iran Persia
 	}
 }
 
-AFS = { #African Free State
+AFS = {
+	#African Free State
 	dynamic_country_name = {
 		name = dyn_c_congo_free_state
 		adjective = dyn_c_congo_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1611,12 +1509,10 @@ AFS = { #African Free State
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_oranje_free_state
 		adjective = dyn_c_oranje_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1627,13 +1523,10 @@ AFS = { #African Free State
 			}
 		}
 	}
-
-
 	dynamic_country_name = {
 		name = dyn_c_zambezi_free_state
 		adjective = dyn_c_zambezi_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1644,12 +1537,10 @@ AFS = { #African Free State
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_nile_free_state
 		adjective = dyn_c_nile_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1660,12 +1551,10 @@ AFS = { #African Free State
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_niger_free_state
 		adjective = dyn_c_niger_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1676,12 +1565,10 @@ AFS = { #African Free State
 			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_sahara_free_state
 		adjective = dyn_c_sahara_free_state_adj
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				any_state = {
@@ -1692,76 +1579,68 @@ AFS = { #African Free State
 			}
 		}
 	}
-		
 }
 
-AZB = { # Azerbaijan
+AZB = {
+	# Azerbaijan
 	dynamic_country_name = {
 		name = dyn_c_baku_commune
 		adjective = dyn_c_baku_commune_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_independent_trigger = yes
 			coa_def_communist_flag_trigger = yes
 			owns_entire_state_region = STATE_AZERBAIJAN
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_centrocaspian_dictatorship
 		adjective = dyn_c_centrocaspian_dictatorship_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_dictatorship_flag_trigger = yes
-			
 			coa_def_british_ensign_trigger = yes
 		}
 	}
 }
 
-BAV = { # Bavaria
+BAV = {
+	# Bavaria
 	dynamic_country_name = {
 		name = dyn_c_bavarian_raterepublic
-		
-		is_main_tag_only = no # good name for a communist revolution
+		is_main_tag_only = no		# good name for a communist revolution
 		priority = 2
-		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
 	}
 }
 
-BEL = { # Belgium
+BEL = {
+	# Belgium
 	dynamic_country_name = {
 		name = dyn_c_united_belgian_states
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
-			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = {
+				coa_def_communist_flag_trigger = yes
+			}
 		}
-	}	
+	}
 }
 
-
-
-BLG = { # Bulungan
-	dynamic_country_name = { # Kalimantan
+BLG = {
+	# Bulungan
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1773,14 +1652,14 @@ BLG = { # Bulungan
 	}
 }
 
-BNJ = { # Banjar
-	dynamic_country_name = { # Kalimantan
+BNJ = {
+	# Banjar
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1792,30 +1671,25 @@ BNJ = { # Banjar
 	}
 }
 
-
-BRE = { # Bremen
+BRE = {
+	# Bremen
 	dynamic_country_name = {
 		name = dyn_c_bremener_raterepublic
-		
-		is_main_tag_only = no # good name for a communist revolution
+		is_main_tag_only = no		# good name for a communist revolution
 		priority = 2
-		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
 	}
 }
 
-
-
-MAD = { # Madagascar
+MAD = {
+	# Madagascar
 	dynamic_country_name = {
 		name = dyn_c_merina_kingdom
 		adjective = dyn_c_merina_kingdom_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -1825,14 +1699,13 @@ MAD = { # Madagascar
 	}
 }
 
-CHC = { # Chechnya
+CHC = {
+	# Chechnya
 	dynamic_country_name = {
 		name = dyn_c_chechnya_imamate
 		adjective = dyn_c_chechnya_imamate_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_theocracy_flag_trigger = yes
 		}
@@ -1870,7 +1743,6 @@ CHC = { # Chechnya
 #	}
 #	dynamic_country_name = {
 #		name = dyn_c_peoples_republic_of_china
-		
 #		is_main_tag_only = yes
 #		priority = 2
 #		
@@ -1879,33 +1751,31 @@ CHC = { # Chechnya
 #		}
 #	}
 #}#
-
-
-COM = { # Comanche
+COM = {
+	# Comanche
 	dynamic_country_name = {
 		name = dyn_c_comancheria
 		adjective = dyn_c_comancheria_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				NOT = { is_country_type = decentralized } # if Comanche is recognized, then they get a more formal name
+				NOT = {
+					is_country_type = decentralized
+				}
+				# if Comanche is recognized, then they get a more formal name
 			}
 		}
 	}
 }
 
-
-FIN = { # Finland
+FIN = {
+	# Finland
 	dynamic_country_name = {
 		name = dyn_c_grand_duchy_of_finland
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:RUS
 			c:RUS = {
@@ -1919,28 +1789,26 @@ FIN = { # Finland
 	}
 }
 
-HAI = { # Haiti
+HAI = {
+	# Haiti
 	dynamic_country_name = {
 		name = dyn_c_saint-domingue
 		adjective = dyn_c_saint-domingue_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_french_ensign_trigger = yes
 		}
-	}	
+	}
 }
 
-HAN = { # Hannover
+HAN = {
+	# Hannover
 	dynamic_country_name = {
 		name = dyn_c_hanover
 		adjective = dyn_c_hanover_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -1954,16 +1822,13 @@ HAN = { # Hannover
 	}
 }
 
-
-
-HOL = { # Holstein
+HOL = {
+	# Holstein
 	dynamic_country_name = {
 		name = dyn_c_schleswig_holstein
 		adjective = dyn_c_schleswig_holstein_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -1973,31 +1838,32 @@ HOL = { # Holstein
 	}
 }
 
-HRO = { # Herero
+HRO = {
+	# Herero
 	dynamic_country_name = {
 		name = dyn_c_hereroland
 		adjective = dyn_c_hereroland_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				NOT = { is_country_type = decentralized } # if Herero is recognized, then they get a more formal name
+				NOT = {
+					is_country_type = decentralized
+				}
+				# if Herero is recognized, then they get a more formal name
 			}
 		}
 	}
 }
 
-IDN = { # Majapahit
+IDN = {
+	# Majapahit
 	dynamic_country_name = {
 		name = dyn_c_majapahit
 		adjective = dyn_c_majapahit_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2008,14 +1874,12 @@ IDN = { # Majapahit
 			}
 		}
 	}
-
-	dynamic_country_name = { # Srivijaya
-		name = dyn_c_srivijaya 
+	dynamic_country_name = {
+		# Srivijaya
+		name = dyn_c_srivijaya
 		adjective = dyn_c_srivijaya_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2031,18 +1895,22 @@ IDN = { # Majapahit
 	}
 }
 
-ITA = { # Italy
-	dynamic_country_name = { # Papal Italy
+ITA = {
+	# Italy
+	dynamic_country_name = {
+		# Papal Italy
 		name = dyn_c_papal_italy
 		adjective = dyn_c_papal_italy_adj
-		
 		is_main_tag_only = yes
 		priority = 5
-		
 		trigger = {
 			exists = scope:actor
-			scope:actor = { has_law = law_type:law_theocracy }
-			NOT = { exists = c:PAP }
+			scope:actor = {
+				has_law = law_type:law_theocracy
+			}
+			NOT = {
+				exists = c:PAP
+			}
 		}
 	}
 }
@@ -2064,15 +1932,13 @@ ITA = { # Italy
 #		}
 #	}
 #}
-
-JMB = { # Jambi
+JMB = {
+	# Jambi
 	dynamic_country_name = {
 		name = dyn_c_sumatra
 		adjective = dyn_c_sumatra_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2084,14 +1950,14 @@ JMB = { # Jambi
 	}
 }
 
-KTI = { # Kutai
-	dynamic_country_name = { # Kalimantan
+KTI = {
+	# Kutai
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2117,15 +1983,14 @@ KTI = { # Kutai
 #		}
 #	}
 #}
-
-LAN = { # Lanfang
-	dynamic_country_name = { # Bo-Ni
+LAN = {
+	# Lanfang
+	dynamic_country_name = {
+		# Bo-Ni
 		name = dyn_c_boni
 		adjective = dyn_c_boni_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2137,14 +2002,13 @@ LAN = { # Lanfang
 	}
 }
 
-LAT = { # Latvia
+LAT = {
+	# Latvia
 	dynamic_country_name = {
 		name = dyn_c_courland
 		adjective = dyn_c_courland_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			coa_def_german_ensign_trigger = yes
@@ -2152,38 +2016,33 @@ LAT = { # Latvia
 	}
 }
 
-MEX = { # Mexico
+MEX = {
+	# Mexico
 	dynamic_country_name = {
 		name = dyn_c_mexican_empire
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_new_spain
 		adjective = dyn_c_new_spain_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_spanish_ensign_trigger = yes
 		}
 	}
 }
 
-MKT = { # Miskito
+MKT = {
+	# Miskito
 	dynamic_country_name = {
 		name = dyn_c_miskito_kingdom
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			coa_def_british_ensign_trigger = no
@@ -2192,10 +2051,8 @@ MKT = { # Miskito
 	dynamic_country_name = {
 		name = dyn_c_mosquito_kingdom
 		adjective = dyn_c_mosquito_kingdom_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			coa_def_british_ensign_trigger = yes
@@ -2207,50 +2064,43 @@ MGL = {
 	dynamic_country_name = {
 		name = dyn_c_great_mongolian_state
 		adjective = dyn_c_great_mongolian_state_adj
-
 		is_main_tag_only = yes
 		priority = 2
-
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_mongolian_peoples_republic
 		adjective = dyn_c_mongolian_peoples_republic_adj
 		is_main_tag_only = yes
 		priority = 2
-
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
 	}
 }
 
-
-MOL = { # Moldavia
+MOL = {
+	# Moldavia
 	dynamic_country_name = {
 		name = dyn_c_moldova
 		adjective = dyn_c_moldova_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = no
 		}
 	}
 }
 
-NEJ = { # Nejd
+NEJ = {
+	# Nejd
 	dynamic_country_name = {
 		name = dyn_c_saudi_arabia
 		adjective = dyn_c_saudi_arabia_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -2260,14 +2110,13 @@ NEJ = { # Nejd
 	}
 }
 
-ONT = { # Ontario
+ONT = {
+	# Ontario
 	dynamic_country_name = {
 		name = NFM_dyn_c_upper_canada
 		adjective = dyn_c_upper_canada_adj
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -2281,28 +2130,26 @@ ONT = { # Ontario
 	}
 }
 
-ORA = { # Oranje
+ORA = {
+	# Oranje
 	dynamic_country_name = {
 		name = dyn_c_orange_river_sovereignty
 		adjective = dyn_c_orange_river_sovereignty_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_british_ensign_trigger = yes
 		}
 	}
 }
 
-ORG = { # Oregon
+ORG = {
+	# Oregon
 	dynamic_country_name = {
 		name = dyn_c_columbia
 		adjective = dyn_c_columbia_adj
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			exists = scope:actor
 			OR = {
@@ -2333,11 +2180,9 @@ ORG = { # Oregon
 	}
 	dynamic_country_name = {
 		name = dyn_c_columbia_district
-		adjective = dyn_c_columbia_adj # no need for a different adjective from the above entry
-		
+		adjective = dyn_c_columbia_adj		# no need for a different adjective from the above entry
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -2351,14 +2196,13 @@ ORG = { # Oregon
 	}
 }
 
-PAN = { # Punjab
+PAN = {
+	# Punjab
 	dynamic_country_name = {
 		name = dyn_c_sikh_empire
 		adjective = dyn_c_sikh_empire_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor = {
@@ -2368,25 +2212,21 @@ PAN = { # Punjab
 	}
 }
 
-PAP = { # Papal State, but the base name is technically Rome
+PAP = {
+	# Papal State, but the base name is technically Rome
 	dynamic_country_name = {
 		name = dyn_c_papal_states
 		adjective = dyn_c_papal_states_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_theocracy_flag_trigger = yes
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_roman_republic
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
 		}
@@ -2397,10 +2237,8 @@ PEU = {
 	dynamic_country_name = {
 		name = dyn_c_peru_bolivia
 		adjective = dyn_c_peru_bolivia_adj
-		
 		is_main_tag_only = yes
 		priority = 3
-		
 		trigger = {
 			scope:actor = {
 				owns_entire_state_region = STATE_LA_PAZ
@@ -2410,16 +2248,14 @@ PEU = {
 	}
 }
 
-
-
-PON = { # Pontianak
-	dynamic_country_name = { # Kalimantan
+PON = {
+	# Pontianak
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2431,16 +2267,13 @@ PON = { # Pontianak
 	}
 }
 
-
-
-QUE = { # Quebec
+QUE = {
+	# Quebec
 	dynamic_country_name = {
 		name = NFM_dyn_c_lower_canada
 		adjective = dyn_c_lower_canada_adj
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -2454,28 +2287,26 @@ QUE = { # Quebec
 	}
 }
 
-RUS = { # Russia
+RUS = {
+	# Russia
 	dynamic_country_name = {
 		name = dyn_c_soviet_union
 		adjective = dyn_c_soviet_union_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
-	}	
+	}
 }
 
-SAF = { # South Africa
+SAF = {
+	# South Africa
 	dynamic_country_name = {
 		name = dyn_c_south_africa
 		adjective = dyn_c_south_africa_adj
-
 		is_main_tag_only = yes
 		priority = 10
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -2489,14 +2320,13 @@ SAF = { # South Africa
 	}
 }
 
-SAK = { # Siak
+SAK = {
+	# Siak
 	dynamic_country_name = {
 		name = dyn_c_sumatra
 		adjective = dyn_c_sumatra_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2508,14 +2338,13 @@ SAK = { # Siak
 	}
 }
 
-SCH = { # Schleswig
+SCH = {
+	# Schleswig
 	dynamic_country_name = {
 		name = dyn_c_schleswig_holstein
 		adjective = dyn_c_schleswig_holstein_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2525,49 +2354,48 @@ SCH = { # Schleswig
 	}
 }
 
-
-
-SIC = { # Two Sicilies
+SIC = {
+	# Two Sicilies
 	dynamic_country_name = {
 		name = dyn_c_sicily
 		adjective = dyn_c_sicily_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
 				owns_entire_state_region = STATE_SICILY
-				NOT = { owns_entire_state_region = STATE_CAMPANIA }
+				NOT = {
+					owns_entire_state_region = STATE_CAMPANIA
+				}
 			}
 		}
 	}
 	dynamic_country_name = {
 		name = dyn_c_naples
 		adjective = dyn_c_naples_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				NOT = { owns_entire_state_region = STATE_SICILY }
+				NOT = {
+					owns_entire_state_region = STATE_SICILY
+				}
 				owns_entire_state_region = STATE_CAMPANIA
 			}
 		}
 	}
 }
 
-SMB = { # Sambas
-	dynamic_country_name = { # Kalimantan
+SMB = {
+	# Sambas
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2579,14 +2407,13 @@ SMB = { # Sambas
 	}
 }
 
-SRK = { # Surakarta
+SRK = {
+	# Surakarta
 	dynamic_country_name = {
 		name = dyn_c_mataram
 		adjective = dyn_c_mataram_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2596,14 +2423,14 @@ SRK = { # Surakarta
 	}
 }
 
-STG = { # Sintang
-	dynamic_country_name = { # Kalimantan
+STG = {
+	# Sintang
+	dynamic_country_name = {
+		# Kalimantan
 		name = dyn_c_kalimantan
 		adjective = dyn_c_kalimantan_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2615,14 +2442,13 @@ STG = { # Sintang
 	}
 }
 
-TAS = { # Tasmania
+TAS = {
+	# Tasmania
 	dynamic_country_name = {
 		name = dyn_c_van_diemans_land
 		adjective = dyn_c_van_diemans_land_adj
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = c:GBR
 			c:GBR = {
@@ -2636,31 +2462,32 @@ TAS = { # Tasmania
 	}
 }
 
-TRN = { # Transvaal
+TRN = {
+	# Transvaal
 	dynamic_country_name = {
 		name = dyn_c_transvaal_colony
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_british_ensign_trigger = yes
 		}
 	}
 }
 
-TSW = { # Tswana
+TSW = {
+	# Tswana
 	dynamic_country_name = {
 		name = dyn_c_botswana
 		adjective = dyn_c_botswana_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				NOT = { is_country_type = decentralized } # if Tswana is recognized, then they get a more formal name
+				NOT = {
+					is_country_type = decentralized
+				}
+				# if Tswana is recognized, then they get a more formal name
 			}
 			coa_def_british_ensign_trigger = no
 		}
@@ -2668,52 +2495,49 @@ TSW = { # Tswana
 	dynamic_country_name = {
 		name = dyn_c_bechuanaland
 		adjective = dyn_c_bechuanaland_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_british_ensign_trigger = yes
 		}
 	}
 }
 
-TUN = { # Tunis
+TUN = {
+	# Tunis
 	dynamic_country_name = {
 		name = dyn_c_tunisia
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
-			NOT = { coa_def_monarchy_flag_trigger = yes }
+			NOT = {
+				coa_def_monarchy_flag_trigger = yes
+			}
 		}
 	}
 }
 
-TUS = { # Tuscany
+TUS = {
+	# Tuscany
 	dynamic_country_name = {
 		name = dyn_c_etruria
 		adjective = dyn_c_etruria_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			coa_def_french_ensign_trigger = yes
 		}
-	}	
+	}
 }
 
-UKR = { # Ukraine
+UKR = {
+	# Ukraine
 	dynamic_country_name = {
 		name = dyn_c_free_territory
 		adjective = dyn_c_free_territory_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2725,27 +2549,24 @@ UKR = { # Ukraine
 }
 
 SUD = {
-	dynamic_country_name = { # Mahist State
+	dynamic_country_name = {
+		# Mahist State
 		name = dyn_c_mahdist_state
 		adjective = dyn_c_mahdist_state_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				has_law = law_type:law_theocracy
 			}
 		}
 	}
-
-	dynamic_country_name = { # Funj
+	dynamic_country_name = {
+		# Funj
 		name = dyn_c_funj_state
 		adjective = dyn_c_funj_state_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			scope:actor = {
 				has_law = law_type:law_monarchy
@@ -2754,28 +2575,30 @@ SUD = {
 	}
 }
 
-LKT = { # Lakota
+LKT = {
+	# Lakota
 	dynamic_country_name = {
 		name = dyn_c_oceti_sakowin
 		adjective = dyn_c_oceti_sakowin_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
-			NOT = { exists = c:DKT } # Lakota will be considered the united Seven Council Fires if Dakota are not independent
+			NOT = {
+				exists = c:DKT
+			}
+			# Lakota will be considered the united Seven Council Fires if Dakota are not independent
 		}
 	}
 }
 
-SCA = { # Scandinavia
-	dynamic_country_name = { # Danish Scandinavia
+SCA = {
+	# Scandinavia
+	dynamic_country_name = {
+		# Danish Scandinavia
 		name = dyn_c_scandinavia_kalmar_union
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2786,13 +2609,11 @@ SCA = { # Scandinavia
 			}
 		}
 	}
-
-	dynamic_country_name = { # Finnish Scandinavia, somehow
+	dynamic_country_name = {
+		# Finnish Scandinavia, somehow
 		name = dyn_c_scandinavia_fennoscandia
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2805,14 +2626,13 @@ SCA = { # Scandinavia
 	}
 }
 
-YOG = { # Yogyakarta
+YOG = {
+	# Yogyakarta
 	dynamic_country_name = {
 		name = dyn_c_mataram
 		adjective = dyn_c_mataram_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2822,14 +2642,14 @@ YOG = { # Yogyakarta
 	}
 }
 
-ZAI = { # Azal (Zaidi State)
-	dynamic_country_name = { # Zaidi
+ZAI = {
+	# Azal (Zaidi State)
+	dynamic_country_name = {
+		# Zaidi
 		name = dyn_c_qasimid_state
 		adjective = dyn_c_qasimid_state_adj
-		
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
@@ -2842,48 +2662,40 @@ ZAI = { # Azal (Zaidi State)
 	}
 }
 
-LOU = { # Louisiana
+LOU = {
+	# Louisiana
 	dynamic_country_name = {
 		name = dyn_c_louisiana
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
-			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = {
+				coa_def_communist_flag_trigger = yes
+			}
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_new_france
 		adjective = dyn_c_new_france_adj
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 		}
 	}
-
 	dynamic_country_name = {
 		name = dyn_c_louisiana_commune
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
 		}
-	}	
-
+	}
 	dynamic_country_name = {
 		name = dyn_c_archbishopric_of_st_louis
-		
 		is_main_tag_only = yes
 		priority = 20
-		
 		trigger = {
 			coa_def_theocracy_flag_trigger = yes
 		}
@@ -2894,18 +2706,17 @@ WLS = {
 	dynamic_country_name = {
 		name = dyn_c_welsh_patagonia
 		adjective = dyn_c_welsh_patagonia_adj
-
 		is_main_tag_only = yes
 		priority = 2
-		
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				capital = { state_region = s:STATE_PATAGONIA }
+				capital = {
+					state_region = s:STATE_PATAGONIA
+				}
 			}
 		}
 	}
 }
 
-
-	##NFM END
+##NFM END
