@@ -6,7 +6,6 @@ get_recognized = {
 	possible = {
 		is_at_war = no
 		is_allied = yes
-		#country_rank >= rank_value:great_power
 		NOT = {
 			has_war_with = scope:target_country
 		}
@@ -14,11 +13,12 @@ get_recognized = {
 			text = DIPLO_ACTION_RELATIONS_FRIENDLY
 			scope:target_country.relations:root >= relations_threshold:friendly
 		}
-        NOT = {
-            scope:target_country = {
-                is_country_type = unrecognized
-            }
-        }
+		scope:target_country = {
+			country_rank >= rank_value:major_power
+		}
+		scope:target_country = {
+			is_country_type = recognized
+		}
 		potential = {
 			is_country_type = unrecognized
 		}
