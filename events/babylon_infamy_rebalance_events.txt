@@ -249,6 +249,26 @@ infamy_rebalance.4 = {
 				is_decaying = yes
 			}
 		}
+		custom_tooltip = {
+			text = everyCountrySharingCulturalTraitRelationsTT
+			every_country = {
+				limit = {
+					any_primary_culture = {
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+					NOT = {
+						this = root
+					}
+					NOT = {
+						this = scope:pariah_neighbour
+					}
+				}
+				change_relations = {
+					country = root
+					value = 30
+				}
+			}
+		}
 		default_option = yes
 		ai_chance = {
 			base = 50
@@ -327,22 +347,39 @@ infamy_rebalance.5 = {
 		name = infamy_rebalance.5.b
 		#Invites all neighbours of the pariah to a coalition		
 		set_variable = pariah_coalition_leader
-		scope:pariah = {
-			every_country = {
-				limit = {
-					has_strategic_adjacency = scope:pariah
-					aggressive_diplomatic_plays_permitted = yes
-					NOT = {
-						this = scope:pariah
-					}
+		# scope:pariah = {
+		every_country = {
+			limit = {
+				aggressive_diplomatic_plays_permitted = yes
+				NOT = {
+					this = scope:pariah
 				}
-				trigger_event = {
-					id = infamy_rebalance.6
-					days = 0
-					popup = yes
-				}
+				country_rank >= rank_value:great_power
+			}
+			trigger_event = {
+				id = infamy_rebalance.6
+				days = 0
+				popup = yes
 			}
 		}
+		every_country = {
+			limit = {
+				has_strategic_adjacency = scope:pariah
+				aggressive_diplomatic_plays_permitted = yes
+				NOT = {
+					this = scope:pariah
+				}
+				NOT = {
+					country_rank >= rank_value:great_power
+				}
+			}
+			trigger_event = {
+				id = infamy_rebalance.6
+				days = 0
+				popup = yes
+			}
+		}
+		# }
 		create_diplomatic_play = {
 			target_country = scope:pariah
 			type = dp_contain_threat
@@ -501,13 +538,13 @@ infamy_rebalance.8 = {
 				set_ideology = ideology_jingoist_leader
 			}
 		}
-		random_scope_state = {
+		every_scope_state = {
 			limit = {
 				owner = root
 				is_incorporated = yes
 			}
 			add_loyalists = {
-				value = very_large_radicals
+				value = medium_radicals				#5%
 			}
 		}
 		default_option = yes
@@ -518,7 +555,9 @@ infamy_rebalance.8 = {
 	option = {
 		#external bonus
 		name = infamy_rebalance.8.b
+		change_infamy = -15
 		random_country = {
+			#Gives relationship with coalition leader
 			limit = {
 				is_diplomatic_play_initiator = yes
 				is_diplomatic_play_enemy_of = scope:pariah
@@ -532,6 +571,7 @@ infamy_rebalance.8 = {
 			}
 		}
 		every_diplomatic_play = {
+			#Gives relations with the rest
 			limit = {
 				has_play_goal = contain_threat
 				is_war = yes
@@ -585,6 +625,9 @@ infamy_rebalance.9 = {
 		name = infamy_rebalance.9.a
 		random_interest_group = {
 			limit = {
+				NOT = {
+					this = ig:ig_armed_forces
+				}
 				leader = {
 					has_ideology = ideology_jingoist_leader
 				}
@@ -599,7 +642,7 @@ infamy_rebalance.9 = {
 				is_incorporated = yes
 			}
 			add_radicals = {
-				value = very_large_radicals
+				value = very_large_radicals				#20%
 			}
 		}
 		default_option = yes
