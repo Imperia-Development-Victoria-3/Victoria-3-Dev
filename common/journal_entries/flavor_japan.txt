@@ -14,23 +14,28 @@
 		}
 	}
 	fail = {
-		OR = {
-			c:AIN = {
-				is_subject = yes
-				NOT = {
-					is_subject_of = c:JAP
-				}
+		trigger_if = {
+			limit = {
+				exists = c:AIN
 			}
-			NOT = {
+			OR = {
 				c:AIN = {
-					any_scope_state = {
-						state_region = s:STATE_HOKKAIDO
+					is_subject = yes
+					NOT = {
+						is_subject_of = c:JAP
+					}
+				}
+				NOT = {
+					c:AIN = {
+						any_scope_state = {
+							state_region = s:STATE_HOKKAIDO
+						}
 					}
 				}
 			}
-		}
-		c:AIN = {
-			country_rank > rank_value:minor_power
+			c:AIN = {
+				country_rank > rank_value:minor_power
+			}
 		}
 	}
 	on_complete = {
@@ -174,7 +179,8 @@ je_meiji_diplomacy = {
 		}
 		trigger_event = {
 			id = journal_flavor_japan.1
-		}		# Iwakura Mission
+		}
+		# Iwakura Mission
 	}
 	on_monthly_pulse = {
 		random_events = {
