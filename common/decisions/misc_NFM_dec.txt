@@ -31,14 +31,26 @@ employ_Garibaldi_dec = {
 			has_law = law_type:law_council_republic
 			has_law = law_type:law_parliamentary_republic
 			has_law = law_type:law_presidential_republic
+			trigger_if = {
+				limit = {
+					exists = c:SAR
+					c:SAR = {
+						country_has_voting_franchise = yes
+						NOT = {
+							has_law = law_type:law_landed_voting
+						}
+					}
+				}
+				this = c:SAR
+			}
 		}
 		OR = {
 			has_law = law_type:law_slavery_banned
 			trigger_if = {
 				limit = {
 					exists = c:PNI
-				 }
-				 root = c:PNI
+				}
+				root = c:PNI
 			}
 		}
 		any_country = {
