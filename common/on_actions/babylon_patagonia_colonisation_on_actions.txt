@@ -1,0 +1,36 @@
+#Root = state
+#Owner = coloniser
+on_colony_created = {
+	effect = {
+		if = {
+			#If state is in South America, and an existing country has a claim on state, and the current owner of said state does NOT have a claim on it...
+			limit = {
+				state_is_in_south_america = yes
+				any_country = {
+					has_claim = root
+					exists = yes
+				}
+				owner = {
+					NOT = {
+						has_claim = root
+					}
+				}
+			}
+			save_scope_as = patagonia_claim
+			owner = {
+				save_scope_as = patagonia_coloniser
+			}
+			every_country = {
+				limit = {
+					has_claim = scope:patagonia_claim
+					exists = yes
+				}
+				save_scope_as = patagonia_claimer
+				trigger_event = {
+					id = babylon_patagonia.1
+					days = 7
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,93 @@
+namespace = babylon_patagonia
+babylon_patagonia.1 = {
+	#Event for claimer asking if they want to press 'charges'
+	type = country_event
+	placement = root
+	title = babylon_patagonia.1.t
+	desc = babylon_patagonia.1.d
+	flavor = babylon_patagonia.1.f
+	duration = 3
+	trigger = {
+		NOT = {
+			is_target_in_variable_list = {
+				name = allows_colonisation
+				target = scope:patagonia_coloniser
+			}
+		}
+	}
+	event_image = {
+		video = "gfx/event_pictures/unspecific_fire.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	immediate = {
+	}
+	option = {
+		#Ask coloniser to give state back
+		name = babylon_patagonia.1.a
+		scope:patagonia_coloniser = {
+			trigger_event = {
+				id = babylon_patagonia.2
+				days = 14
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		#Drop it
+		name = babylon_patagonia.1.b
+		add_to_variable_list = {
+			name = allows_colonisation
+			target = scope:patagonia_coloniser
+		}
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_patagonia.2 = {
+	#Event for coloniser asking if they want to give back state
+	type = country_event
+	placement = root
+	title = babylon_patagonia.2.t
+	desc = babylon_patagonia.2.d
+	flavor = babylon_patagonia.2.f
+	duration = 3
+	trigger = {
+	}
+	event_image = {
+		video = "gfx/event_pictures/unspecific_fire.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	immediate = {
+	}
+	option = {
+		#We will give it back
+		name = babylon_patagonia.2.a
+		scope:patagonia_claim = {
+			set_state_owner = scope:patagonia_claimer
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		#lol no - incident
+		name = babylon_patagonia.2.b
+		create_incident = {
+			country = scope:patagonia_claimer
+			value = 5
+		}
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
