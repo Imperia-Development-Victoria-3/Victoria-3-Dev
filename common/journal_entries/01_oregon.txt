@@ -35,38 +35,43 @@
 			}
 		}
 	}
-
 	possible = {
 		has_interest_marker_in_region = region_pacific_coast
 	}
-
 	complete = {
 		OR = {
 			AND = {
-				custom_tooltip = {
-					text = oregon_tt
-					has_global_variable = oregon_trail_mapped
-				}
-				has_state_in_state_region = STATE_MONTANA
-				s:STATE_MONTANA = {
-					NOT = {
-						any_scope_state = {
-							owner = {
-								country_rank = 0
+				OR = {
+					custom_tooltip = {
+						text = oregon_tt
+						has_global_variable = oregon_trail_mapped
+					}
+					AND = {
+						custom_tooltip = {
+							text = no_natives_left_oregon_tt
+							has_state_in_state_region = STATE_MONTANA
+							s:STATE_MONTANA = {
+								NOT = {
+									any_scope_state = {
+										owner = {
+											country_rank = 0
+										}
+									}
+								}
+							}
+							has_state_in_state_region = STATE_WYOMING
+							s:STATE_WYOMING = {
+								NOT = {
+									any_scope_state = {
+										owner = {
+											country_rank = 0
+										}
+									}
+								}
 							}
 						}
 					}
-				}
-				
-				has_state_in_state_region = STATE_WYOMING
-				s:STATE_WYOMING = {
-					NOT = {
-						any_scope_state = {
-							owner = {
-								country_rank = 0
-							}
-						}
-					}
+					has_state_in_state_region = STATE_TEXAS
 				}
 				c:GBR = {
 					relations:ROOT >= relations_threshold:cordial
@@ -79,7 +84,6 @@
 			}
 		}
 	}
-
 	on_complete = {
 		if = {
 			limit = {
@@ -114,7 +118,11 @@
 					}
 				}
 			}
-			c:GBR = { trigger_event = { id = oregon.2 } }
+			c:GBR = {
+				trigger_event = {
+					id = oregon.2
+				}
+			}
 		}
 		else = {
 			s:STATE_IDAHO = {
@@ -132,13 +140,11 @@
 			}
 		}
 	}
-
 	weight = 100
 }
 
 je_conquer_oregon = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
 	complete = {
 		c:USA = {
 			owns_entire_state_region = STATE_WASHINGTON
@@ -146,8 +152,6 @@ je_conquer_oregon = {
 			owns_entire_state_region = STATE_OREGON
 		}
 	}
-
 	weight = 100
-
 	inheritable = no
 }
