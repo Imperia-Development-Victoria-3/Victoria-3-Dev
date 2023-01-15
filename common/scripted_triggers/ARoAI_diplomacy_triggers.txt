@@ -1,0 +1,67 @@
+﻿dp_is_any_german_minor = {
+	OR = {
+		country_has_primary_culture = cu:north_german
+		country_has_primary_culture = cu:south_german
+	}
+	country_rank < rank_value:major_power
+	NAND = {
+		exists = c:LUX
+		this = c:LUX
+	}
+}
+
+dp_is_north_german_minor = {
+	country_has_primary_culture = cu:north_german
+	country_rank < rank_value:major_power
+	NAND = {
+		exists = c:LUX
+		this = c:LUX
+	}
+}
+
+dp_is_south_german_minor = {
+	country_has_primary_culture = cu:south_german
+	country_rank < rank_value:major_power
+}
+
+dp_can_be_in_customs_union = {
+	NOR = {
+		is_country_type = decentralized 
+		has_law = law_type:law_isolationism
+	}
+	$senior$ = {
+		NOR = { 
+			is_country_type = decentralized 
+			has_law = law_type:law_isolationism
+		}
+	}
+	
+	is_non_customs_union_subject = no
+	is_junior_in_customs_union = no
+	has_diplomatic_relevance = $senior$
+	is_revolutionary = no
+	$senior$ = {
+		is_revolutionary = no
+	}
+	
+	OR = {
+		AND = {
+			market = { has_port = yes }
+			$senior$.market = { has_port = yes }
+		}
+		market = {
+			any_scope_country = {
+				is_adjacent = $senior$
+			}
+		}
+	}
+}
+
+dp_is_or_can_be_in_customs_union = {
+	OR = {
+		market = {
+			owner = $senior$
+		}
+		dp_can_be_in_customs_union = { senior = $senior$ }
+	}
+}

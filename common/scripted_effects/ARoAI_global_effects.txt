@@ -1,0 +1,173 @@
+﻿# requires csr_input variable, which is the number to take square root value
+# produces csr_output variable that must be cleared later
+gb_calculate_square_root = {
+	if = {
+		limit = {
+			NOT = {
+				has_variable = csr_root
+			}
+		}
+		set_variable = {
+			name = csr_root
+			value = 0.1
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				var:csr_input <= 0
+				var:csr_root <= 0
+			}
+		}
+		set_variable = {
+			name = csr_output
+			value = 0
+		}
+	}
+	else = {
+		set_variable = {
+			name = csr_square
+			value = var:csr_root
+		}
+		change_variable = {
+			name = csr_square
+			multiply = var:csr_root
+		}
+		set_variable = {
+			name = csr_delta
+			value = var:csr_square
+		}
+		change_variable = {
+			name = csr_delta
+			subtract = var:csr_input
+		}
+		while = {
+			limit = {
+				var:csr_delta < 0
+				var:csr_root < 100
+			}
+			change_variable = {
+				name = csr_root
+				add = 0.1
+			}
+			set_variable = {
+				name = csr_square
+				value = var:csr_root
+			}
+			change_variable = {
+				name = csr_square
+				multiply = var:csr_root
+			}
+			set_variable = {
+				name = csr_delta
+				value = var:csr_square
+			}
+			change_variable = {
+				name = csr_delta
+				subtract = var:csr_input
+			}
+		}
+		set_variable = {
+			name = csr_output
+			value = var:csr_root
+		}
+	}
+	remove_variable = csr_input
+	remove_variable = csr_root
+	remove_variable = csr_square
+	remove_variable = csr_delta
+}
+
+gb_calculate_precise_square_root = {
+	if = {
+		limit = {
+			NOT = {
+				has_variable = csr_root
+			}
+		}
+		set_variable = {
+			name = csr_root
+			value = 0.01
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				var:csr_input <= 0
+				var:csr_root <= 0
+			}
+		}
+		set_variable = {
+			name = csr_output
+			value = 0
+		}
+	}
+	else = {
+		set_variable = {
+			name = csr_square
+			value = var:csr_root
+		}
+		change_variable = {
+			name = csr_square
+			multiply = var:csr_root
+		}
+		set_variable = {
+			name = csr_delta
+			value = var:csr_square
+		}
+		change_variable = {
+			name = csr_delta
+			subtract = var:csr_input
+		}
+		while = {
+			limit = {
+				var:csr_delta < 0
+				var:csr_root < 10
+			}
+			change_variable = {
+				name = csr_root
+				add = 0.01
+			}
+			set_variable = {
+				name = csr_square
+				value = var:csr_root
+			}
+			change_variable = {
+				name = csr_square
+				multiply = var:csr_root
+			}
+			set_variable = {
+				name = csr_delta
+				value = var:csr_square
+			}
+			change_variable = {
+				name = csr_delta
+				subtract = var:csr_input
+			}
+		}
+		set_variable = {
+			name = csr_output
+			value = var:csr_root
+		}
+	}
+	remove_variable = csr_input
+	remove_variable = csr_root
+	remove_variable = csr_square
+	remove_variable = csr_delta
+}
+
+gb_renew_modifier = {
+	remove_modifier = $name$
+	add_modifier = {
+		name = $name$
+		days = $days$
+	}
+}
+
+gb_renew_variable = {
+	remove_variable = $name$
+	set_variable = {
+		name = $name$
+		days = $days$
+	}
+}

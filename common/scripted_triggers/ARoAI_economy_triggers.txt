@@ -1,0 +1,5592 @@
+﻿
+### ENTRY REQUIREMENTS FOR MAJOR PARTS OF THE SCRIPT
+
+# Requirements of the script as a whole and specifically for collecting population and budget data
+
+ec_country_allowed = {
+	is_country_alive = yes
+	NOT = { is_country_type = decentralized }
+}
+
+# Requirements for downsizing government funded buildings which is mostly a budget balancing thing
+
+ec_downsizing_allowed = {
+	has_variable = ec_country_budget_surplus
+	has_variable = ec_incorporated_population
+	has_revolution = no
+	is_revolutionary = no
+	is_player = no
+}
+
+# Requirements for constructing both special and standard buildings
+
+ec_building_allowed = {
+	has_variable = ec_country_budget_surplus
+	has_variable = ec_incorporated_population
+	has_revolution = no
+	is_revolutionary = no
+	ec_building_type_array_is_correct = yes
+	ec_corruption_in_priority_arrays = no
+	OR = {
+		ec_regular_building = yes
+		ec_critical_building = yes
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+		}
+	}
+}
+
+ec_regular_building = {
+	OR = {
+		is_player = yes
+		scaled_debt < 0.45
+		ec_has_no_construction_sectors = yes
+	}
+}
+
+ec_critical_building = {
+	scaled_debt >= 0.45
+	OR = {
+		AND = {
+			ec_critical_government_administration = yes
+			ec_consider_building_government_administration = yes
+		}
+		AND = {
+			ec_critical_port = yes
+			ec_consider_building_port = yes
+		}
+	}
+}
+
+ec_has_no_construction_sectors = {
+	OR = {
+		AND = {
+			has_variable = ec_construction_sector_count
+			var:ec_construction_sector_count <= 0
+		}
+		AND = {
+			NOT = {
+				has_variable = ec_construction_sector_count
+			}
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_construction_sector
+					level > 0
+				}
+			}
+		}
+	}
+}
+
+# Are there any free construction points?
+
+ec_has_free_construction_points = {
+	OR = {
+		var:ec_free_construction_points > 0
+		ec_critical_building = yes
+	}
+}
+
+### BUDGET HEALTH LEVEL
+
+ec_in_default = {
+	scaled_debt >= 0.975
+	ec_country_budget_surplus < 0
+}
+
+ec_budget_health = {
+	OR = {
+		AND = {
+			$level$ = -3
+			OR = {
+				scaled_debt < 0.750
+				AND = {
+					ec_country_budget_surplus >= ec_5_percent_surplus
+					scaled_debt < 0.875
+				}
+				ec_country_budget_surplus >= ec_10_percent_surplus
+			}
+		}
+		AND = {
+			$level$ = -2
+			OR = {
+				scaled_debt < 0.500
+				AND = {
+					ec_country_budget_surplus >= ec_5_percent_surplus
+					scaled_debt < 0.625
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_10_percent_surplus
+					scaled_debt < 0.750
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_15_percent_surplus
+					scaled_debt < 0.875
+				}
+				ec_country_budget_surplus >= ec_20_percent_surplus
+			}
+		}
+		AND = {
+			$level$ = -1
+			OR = {
+				scaled_debt < 0.250
+				AND = {
+					ec_country_budget_surplus >= ec_5_percent_surplus
+					scaled_debt < 0.375
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_10_percent_surplus
+					scaled_debt < 0.500
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_15_percent_surplus
+					scaled_debt < 0.625
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_20_percent_surplus
+					scaled_debt < 0.750
+				}
+			}
+		}
+		AND = {
+			$level$ = 0
+			OR = {
+				AND = {
+					ec_country_budget_surplus >= 0
+					scaled_debt <= 0
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_5_percent_surplus
+					scaled_debt < 0.125
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_10_percent_surplus
+					scaled_debt < 0.250
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_15_percent_surplus
+					scaled_debt < 0.375
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_20_percent_surplus
+					scaled_debt < 0.500
+				}
+				ec_weeks_of_reserves >= 208
+			}
+			NOT = {
+				ec_country_budget_surplus <= ec_15_percent_deficit
+			}
+		}
+		AND = {
+			$level$ = 1
+			OR = {
+				AND = {
+					ec_country_budget_surplus >= ec_30_percent_surplus
+					scaled_debt < 0.250
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_25_percent_surplus
+					scaled_debt < 0.125
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_20_percent_surplus
+					scaled_debt <= 0
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_15_percent_surplus
+					ec_gold_reserves_percent >= 0.25
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_10_percent_surplus
+					ec_gold_reserves_percent >= 0.50
+				}
+				AND = {
+					ec_country_budget_surplus >= ec_5_percent_surplus
+					ec_gold_reserves_percent >= 0.75
+				}
+				AND = {
+					ec_country_budget_surplus >= 0
+					ec_gold_reserves_percent >= 1.00
+				}
+			}
+		}
+	}
+}
+
+ec_government_wages_are_very_low = {
+	modifier:country_government_wages_mult < -0.25
+}
+
+ec_government_wages_are_low = {
+	modifier:country_government_wages_mult < -0.10
+	modifier:country_government_wages_mult >= -0.25
+}
+
+ec_government_wages_are_medium = {
+	modifier:country_government_wages_mult >= -0.10
+	modifier:country_government_wages_mult <= 0.10
+}
+
+ec_government_wages_are_high = {
+	modifier:country_government_wages_mult > 0.10
+	modifier:country_government_wages_mult <= 0.25
+}
+
+ec_government_wages_are_very_high = {
+	modifier:country_government_wages_mult > 0.25
+}
+
+ec_military_wages_are_very_low = {
+	modifier:country_military_wages_mult < -0.25
+}
+
+ec_military_wages_are_low = {
+	modifier:country_military_wages_mult < -0.10
+	modifier:country_military_wages_mult >= -0.25
+}
+
+ec_military_wages_are_medium = {
+	modifier:country_military_wages_mult >= -0.10
+	modifier:country_military_wages_mult <= 0.10
+}
+
+ec_military_wages_are_high = {
+	modifier:country_military_wages_mult > 0.10
+	modifier:country_military_wages_mult <= 0.25
+}
+
+ec_military_wages_are_very_high = {
+	modifier:country_military_wages_mult > 0.25
+}
+
+### IS IT ALLOWED TO CUT BUDGET WAGES
+
+ec_can_cut_government_wages = {
+	AND = {
+		OR = {
+			NOT = {
+				exists = ig:ig_intelligentsia
+			}
+			AND = {
+				exists = ig:ig_intelligentsia
+				ig:ig_intelligentsia = {
+					OR = {
+						root = {
+							NOT = {
+								ec_budget_health = {
+									level = -2
+								}
+							}
+						}
+						AND = {
+							is_in_government = yes
+							ig_approval > -3
+						}
+						AND = {
+							is_in_government = no
+							ig_approval > -8
+						}
+						is_marginal = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = {
+				exists = ig:ig_petty_bourgeoisie
+			}
+			AND = {
+				exists = ig:ig_petty_bourgeoisie
+				ig:ig_petty_bourgeoisie = {
+					OR = {
+						root = {
+							NOT = {
+								ec_budget_health = {
+									level = -2
+								}
+							}
+						}
+						AND = {
+							is_in_government = yes
+							ig_approval > -3
+						}
+						AND = {
+							is_in_government = no
+							ig_approval > -8
+						}
+						is_marginal = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_can_cut_military_wages = {
+	ec_is_using_military_forces = no
+	OR = {
+		NOT = {
+			exists = ig:ig_armed_forces
+		}
+		AND = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = {
+				OR = {
+					root = {
+						NOT = {
+							ec_budget_health = {
+								level = -2
+							}
+						}
+					}
+					AND = {
+						is_in_government = yes
+						ig_approval > -3
+					}
+					AND = {
+						is_in_government = no
+						ig_approval > -8
+					}
+					is_marginal = yes
+				}
+			}
+		}
+	}
+}
+
+ec_is_using_military_forces = {
+	OR = {
+		is_at_war = yes
+		is_diplomatic_play_committed_participant = yes
+		any_scope_general = {
+			is_mobilized = yes
+		}
+		any_scope_admiral = {
+			is_mobilized = yes
+		}
+	}
+}
+
+ec_wartime_spending = {
+	OR = {
+		has_variable = ec_wartime_spending
+		ec_is_using_military_forces = yes
+	}
+}
+
+ec_has_enough_workforce = {
+	ec_available_workforce >= ec_required_workforce
+	OR = {
+		ec_available_workforce >= ec_sufficient_workforce
+		NOT = {
+			any_scope_building = {
+				is_under_construction = yes
+			}
+		}
+	}
+}
+
+### DOWNSIZING GOVERNMENT BUILDINGS ON STATE LEVEL
+
+# Government administration
+
+ec_downsize_government_administration = {
+	var:ec_government_administration_level > 0
+	var:ec_government_administration_level <= ec_government_administration_downsizing_threshold
+	OR = {
+		root = {
+			OR = {
+				AND = {
+					ec_government_administration_costs_value >= ec_government_administration_costs_ceiling
+					bureaucracy >= ec_bureaucracy_excess
+				}
+				bureaucracy >= ec_bureaucracy_ceiling
+			}
+		}
+		any_scope_building = {
+			is_building_type = building_government_administration
+			prev.ec_tax_capacity_load_value >= ec_tax_capacity_from_government_administration
+		}
+	}
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_government_administration_level > 0
+				OR = {
+					root = {
+						OR = {
+							AND = {
+								ec_government_administration_costs_value >= ec_government_administration_costs_ceiling
+								bureaucracy >= ec_bureaucracy_excess
+							}
+							bureaucracy >= ec_bureaucracy_ceiling
+						}
+					}
+					any_scope_building = {
+						is_building_type = building_government_administration
+						prev.ec_tax_capacity_load_value >= ec_tax_capacity_from_government_administration
+					}
+				}
+				var:ec_government_administration_level < ec_current_government_administration_level
+			}
+		}
+	}
+}
+
+# Construction sector
+
+ec_downsize_construction_sector = {
+	var:ec_construction_sector_level > 0
+	OR = {
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -1
+				}
+			}
+			ec_wartime_spending = no
+		}
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -3
+				}
+			}
+		}
+		var:ec_construction_sector_level <= ec_construction_sector_downsizing_threshold
+	}
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_construction_sector_level > 0
+				var:ec_construction_sector_level < ec_current_construction_sector_level
+			}
+		}
+	}
+}
+
+# University
+
+ec_downsize_university = {
+	var:ec_university_level > 0
+	OR = {
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -2
+				}
+			}
+			ec_wartime_spending = no
+		}
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -3
+				}
+			}
+		}
+		var:ec_university_level <= ec_university_downsizing_threshold
+	}
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_university_level > 0
+				var:ec_university_level < ec_current_university_level
+			}
+		}
+	}
+}
+
+# Port
+
+ec_downsize_port = {
+	var:ec_port_level > 0
+	OR = {
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -2
+				}
+			}
+			ec_wartime_spending = no
+		}
+		root = {
+			NOT = {
+				ec_budget_health = {
+					level = -3
+				}
+			}
+		}
+		var:ec_port_level <= ec_port_downsizing_threshold
+	}
+	OR = {
+		root = {
+			NOR = {
+				AND = {
+					has_variable_list = ec_coastline_of_outer_lands
+					variable_list_size = {
+						name = ec_coastline_of_outer_lands
+						value > 0
+					}
+				}
+				any_country = {
+					market.owner = root
+					any_scope_state = {
+						is_coastal = yes
+					}
+				}
+			}
+		}
+		root = {
+			is_target_in_variable_list = {
+				name = ec_coastline_of_market_capital
+				target = prev
+			}
+			any_in_list = {
+				variable = ec_coastline_of_market_capital
+				count > 1
+				has_building = building_port
+			}
+		}
+		root = {
+			is_target_in_variable_list = {
+				name = ec_safe_to_remove_ports_in_outer_lands
+				target = prev
+			}
+		}
+	}
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_port_level > 0
+				OR = {
+					root = {
+						NOR = {
+							AND = {
+								has_variable_list = ec_coastline_of_outer_lands
+								variable_list_size = {
+									name = ec_coastline_of_outer_lands
+									value > 0
+								}
+							}
+							any_country = {
+								market.owner = root
+								any_scope_state = {
+									is_coastal = yes
+								}
+							}
+						}
+					}
+					root = {
+						is_target_in_variable_list = {
+							name = ec_coastline_of_market_capital
+							target = prev
+						}
+						any_in_list = {
+							variable = ec_coastline_of_market_capital
+							count > 1
+							has_building = building_port
+						}
+					}
+					root = {
+						is_target_in_variable_list = {
+							name = ec_safe_to_remove_ports_in_outer_lands
+							target = prev
+						}
+					}
+				}
+				var:ec_port_level < ec_current_port_level
+			}
+		}
+	}
+}
+
+# Barracks
+
+ec_downsize_barracks = {
+	var:ec_barracks_level > 0
+	var:ec_barracks_level <= ec_barracks_downsizing_threshold
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_barracks_level > 0
+				var:ec_barracks_level < ec_current_barracks_level
+			}
+		}
+	}
+}
+
+# Naval base
+
+ec_downsize_naval_base = {
+	var:ec_naval_base_level > 0
+	var:ec_naval_base_level <= ec_naval_base_downsizing_threshold
+	save_temporary_scope_as = ec_current_state
+	NOT = {
+		root = {
+			any_scope_state = {
+				var:ec_naval_base_level > 0
+				var:ec_naval_base_level < ec_current_naval_base_level
+			}
+		}
+	}
+}
+
+### COMMON BUILDING LEVEL TRIGGERS
+
+# Is profitable right now and (hopefully) in a near future
+
+ec_building_is_profitable = {
+	weekly_profit >= 0
+	cash_reserves_ratio >= 0.25
+}
+
+# Building is larger than it should be
+
+ec_building_is_excessive = {
+	level >= 5
+	occupancy >= 0.25
+}
+
+# Building is almost empty and thus unneeded
+
+ec_building_is_abandoned = {
+	is_under_construction = no
+	level > 0
+	occupancy < 0.25
+	#weekly_profit >= 0
+	#cash_reserves_ratio < 0.25
+}
+
+### CAN BUILD = IS THERE A POSSIBILITY OF CONSTRUCTING THIS BUILDING IN OUR COUNTRY
+
+ec_consider_building = {
+	OR = {
+		ec_regular_building = yes
+		AND = {
+			$critical$ = 1
+			ec_critical_government_administration = yes
+		}
+		AND = {
+			$critical$ = 5
+			ec_critical_port = yes
+		}
+	}
+	OR = {
+		$shortage$ = 0
+		ec_no_building_shortage_on_country_level = { building = $building$ }
+	}
+	OR = {
+		$profitability$ = 0
+		ec_building_is_profitable_on_country_level = { building = $building$ }
+	}
+}
+
+ec_no_building_shortage_on_country_level = {
+	OR = {
+		NOT = {
+			any_scope_state = {
+				market_access >= 1
+				any_scope_building = {
+					is_building_type = $building$
+					level > 0
+				}
+			}
+		}
+		any_scope_state = {
+			filter = {
+				market_access >= 1
+				any_scope_building = {
+					is_building_type = $building$
+					level > 0
+				}
+			}
+			percent >= 0.90
+			any_scope_building = {
+				is_building_type = $building$
+				building_has_goods_shortage = no
+			}
+		}
+	}
+}
+
+ec_building_is_profitable_on_country_level = {
+	OR = {
+		NOT = {
+			any_scope_state = {
+				market_access >= 1
+				any_scope_building = {
+					is_building_type = $building$
+					level > 0
+				}
+			}
+		}
+		any_scope_state = {
+			filter = {
+				market_access >= 1
+				any_scope_building = {
+					is_building_type = $building$
+					level > 0
+				}
+			}
+			percent >= 0.50
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_is_profitable = yes
+			}
+		}
+	}
+}
+
+### IS THERE AT LEAST ONE HOMELAND CULTURE IN THE STATE THAT IS NOT DISCRIMINATED?
+
+ec_has_non_discriminated_homelanders = {
+	state_region = {
+		save_temporary_scope_as = state_region
+		prev = {
+			any_scope_culture = {
+				NOT = {
+					culture_is_discriminated_in = root
+				}
+				scope:state_region = {
+					is_homeland = prev
+				}
+			}
+		}
+	}
+}
+
+### SHOULD BUILD = ARE WE BUILDING THIS CONSIDERING MARKET STATE AND EVERYTHING ELSE?
+
+# Checking if there's shortage of the good in the country
+
+ec_no_good_shortage_on_country_level = {
+	exists = market
+	market = {
+		$market_good$ = {
+			market_goods_buy_orders > 0
+			NOR = {
+				market_goods_has_goods_shortage = yes
+				ec_demand_divided_by_supply >= ec_requirements_value_1
+			}
+		}
+	}
+}
+
+# Priority levels of exact requirements
+
+ec_requirements_exact_0 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand > ec_requirements_value_8
+		}
+	}
+}
+
+ec_requirements_exact_1 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_1
+		}
+	}
+}
+
+ec_requirements_exact_2 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_1
+			ec_demand_divided_by_supply >= ec_requirements_value_2
+		}
+	}
+}
+
+ec_requirements_exact_3 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_2
+			ec_demand_divided_by_supply >= ec_requirements_value_3
+		}
+	}
+}
+
+ec_requirements_exact_4 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_3
+			ec_demand_divided_by_supply >= ec_requirements_value_4
+		}
+	}
+}
+
+ec_requirements_exact_5 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_4
+			ec_demand_divided_by_supply >= ec_requirements_value_5
+		}
+	}
+}
+
+ec_requirements_exact_6 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_5
+			ec_demand_divided_by_supply >= ec_requirements_value_6
+		}
+	}
+}
+
+ec_requirements_exact_7 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_6
+			ec_demand_divided_by_supply >= ec_requirements_value_7
+		}
+	}
+}
+
+ec_requirements_exact_8 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_7
+			ec_demand_divided_by_supply >= ec_requirements_value_8
+		}
+	}
+}
+
+ec_requirements_exact_9 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_8
+			ec_demand_divided_by_supply >= ec_requirements_value_9
+		}
+	}
+}
+
+ec_requirements_exact_10 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_9
+			ec_demand_divided_by_supply >= ec_requirements_value_10
+		}
+	}
+}
+
+ec_requirements_exact_11 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply < ec_requirements_value_10
+			ec_demand_divided_by_supply >= ec_requirements_value_11
+		}
+	}
+}
+
+ec_requirements_exact_12 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand > ec_requirements_value_11
+			ec_supply_divided_by_demand <= ec_requirements_value_10
+		}
+	}
+}
+
+ec_requirements_exact_13 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand > ec_requirements_value_10
+			ec_supply_divided_by_demand <= ec_requirements_value_9
+		}
+	}
+}
+
+ec_requirements_exact = {
+	exists = market
+	market = {
+		$market_good$ = {
+			market_goods_buy_orders > 0
+		}
+	}
+	OR = {
+		AND = {
+			$offset$ = 0
+			OR = {
+				AND = {
+					$priority$ = 0
+					ec_requirements_exact_0 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_exact_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_exact_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_exact_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_exact_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_exact_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_exact_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_exact_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_exact_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_exact_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_exact_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_exact_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					always = no
+				}
+				AND = {
+					$priority$ = 13
+					always = no
+				}
+				AND = {
+					$priority$ = 14
+					ec_requirements_exact_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 15
+					always = no
+				}
+				AND = {
+					$priority$ = 16
+					ec_requirements_exact_13 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 17
+					always = no
+				}
+				AND = {
+					$priority$ = 18
+					always = no
+				}
+			}
+		}
+		AND = {
+			$offset$ = 1
+			OR = {
+				AND = {
+					$priority$ = 0
+					ec_requirements_exact_0 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 1
+					always = no
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_exact_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_exact_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_exact_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_exact_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_exact_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_exact_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_exact_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_exact_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_exact_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_exact_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					ec_requirements_exact_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 13
+					always = no
+				}
+				AND = {
+					$priority$ = 14
+					ec_requirements_exact_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 15
+					always = no
+				}
+				AND = {
+					$priority$ = 16
+					ec_requirements_exact_13 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 17
+					always = no
+				}
+				AND = {
+					$priority$ = 18
+					always = no
+				}
+			}
+		}
+		AND = {
+			$offset$ = 2
+			OR = {
+				AND = {
+					$priority$ = 0
+					ec_requirements_exact_0 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 1
+					always = no
+				}
+				AND = {
+					$priority$ = 2
+					always = no
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_exact_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_exact_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_exact_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_exact_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_exact_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_exact_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_exact_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_exact_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_exact_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					ec_requirements_exact_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 13
+					ec_requirements_exact_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 14
+					always = no
+				}
+				AND = {
+					$priority$ = 15
+					ec_requirements_exact_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 16
+					always = no
+				}
+				AND = {
+					$priority$ = 17
+					ec_requirements_exact_13 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 18
+					always = no
+				}
+			}
+		}
+		AND = {
+			$offset$ = 3
+			OR = {
+				AND = {
+					$priority$ = 0
+					ec_requirements_exact_0 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 1
+					always = no
+				}
+				AND = {
+					$priority$ = 2
+					always = no
+				}
+				AND = {
+					$priority$ = 3
+					always = no
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_exact_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_exact_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_exact_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_exact_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_exact_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_exact_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_exact_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_exact_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					ec_requirements_exact_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 13
+					ec_requirements_exact_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 14
+					ec_requirements_exact_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 15
+					ec_requirements_exact_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 16
+					always = no
+				}
+				AND = {
+					$priority$ = 17
+					ec_requirements_exact_13 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 18
+					always = no
+				}
+			}
+		}
+		AND = {
+			$offset$ = 4
+			OR = {
+				AND = {
+					$priority$ = 0
+					ec_requirements_exact_0 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 1
+					always = no
+				}
+				AND = {
+					$priority$ = 2
+					always = no
+				}
+				AND = {
+					$priority$ = 3
+					always = no
+				}
+				AND = {
+					$priority$ = 4
+					always = no
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_exact_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_exact_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_exact_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_exact_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_exact_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_exact_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_exact_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					ec_requirements_exact_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 13
+					ec_requirements_exact_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 14
+					ec_requirements_exact_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 15
+					ec_requirements_exact_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 16
+					ec_requirements_exact_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 17
+					always = no
+				}
+				AND = {
+					$priority$ = 18
+					ec_requirements_exact_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+	}
+}
+
+# Priority levels of floor requirements
+
+ec_requirements_floor_1 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_1
+		}
+	}
+}
+
+ec_requirements_floor_2 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_2
+		}
+	}
+}
+
+ec_requirements_floor_3 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_3
+		}
+	}
+}
+
+ec_requirements_floor_4 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_4
+		}
+	}
+}
+
+ec_requirements_floor_5 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_5
+		}
+	}
+}
+
+ec_requirements_floor_6 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_6
+		}
+	}
+}
+
+ec_requirements_floor_7 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_7
+		}
+	}
+}
+
+ec_requirements_floor_8 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_8
+		}
+	}
+}
+
+ec_requirements_floor_9 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_9
+		}
+	}
+}
+
+ec_requirements_floor_10 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_10
+		}
+	}
+}
+
+ec_requirements_floor_11 = {
+	market = {
+		$market_good$ = {
+			ec_demand_divided_by_supply >= ec_requirements_value_11
+		}
+	}
+}
+
+ec_requirements_floor_12 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand < ec_requirements_value_10
+		}
+	}
+}
+
+ec_requirements_floor_13 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand < ec_requirements_value_9
+		}
+	}
+}
+
+ec_requirements_floor_14 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand < ec_requirements_value_8
+		}
+	}
+}
+
+ec_requirements_floor_15 = {
+	market = {
+		$market_good$ = {
+			ec_supply_divided_by_demand < ec_requirements_value_7
+		}
+	}
+}
+
+ec_requirements_floor = {
+	exists = market
+	market = {
+		$market_good$ = {
+			market_goods_buy_orders > 0
+		}
+	}
+	OR = {
+		AND = {
+			$offset$ = -4
+			OR = {
+				AND = {
+					$priority$ = 0
+					always = yes
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_floor_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_floor_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_floor_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_floor_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_floor_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_floor_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_floor_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_floor_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ >= 9
+					ec_requirements_floor_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+		AND = {
+			$offset$ = -3
+			OR = {
+				AND = {
+					$priority$ = 0
+					always = yes
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_floor_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_floor_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_floor_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_floor_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_floor_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_floor_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_floor_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_floor_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_floor_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ >= 10
+					ec_requirements_floor_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+		AND = {
+			$offset$ = -2
+			OR = {
+				AND = {
+					$priority$ = 0
+					always = yes
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_floor_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_floor_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_floor_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_floor_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_floor_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_floor_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_floor_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_floor_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_floor_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_floor_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ >= 11
+					ec_requirements_floor_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+		AND = {
+			$offset$ = -1
+			OR = {
+				AND = {
+					$priority$ = 0
+					always = yes
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_floor_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_floor_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_floor_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_floor_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_floor_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_floor_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_floor_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_floor_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_floor_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_floor_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_floor_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ >= 12
+					ec_requirements_floor_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+		AND = {
+			$offset$ = 0
+			OR = {
+				AND = {
+					$priority$ = 0
+					always = yes
+				}
+				AND = {
+					$priority$ = 1
+					ec_requirements_floor_1 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 2
+					ec_requirements_floor_2 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 3
+					ec_requirements_floor_3 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 4
+					ec_requirements_floor_4 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 5
+					ec_requirements_floor_5 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 6
+					ec_requirements_floor_6 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 7
+					ec_requirements_floor_7 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 8
+					ec_requirements_floor_8 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 9
+					ec_requirements_floor_9 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 10
+					ec_requirements_floor_10 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 11
+					ec_requirements_floor_11 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ = 12
+					ec_requirements_floor_12 = { market_good = $market_good$ }
+				}
+				AND = {
+					$priority$ >= 13
+					ec_requirements_floor_13 = { market_good = $market_good$ }
+				}
+			}
+		}
+	}
+}
+
+### CONDITIONS FOR THE BUILDING TO BE WORTHY OF AN EXPANSION
+
+ec_building_can_be_expanded = {
+	is_under_construction = no
+	OR = {
+		level <= 0
+		AND = {
+			level >= 1
+			occupancy >= ec_sufficient_occupancy
+			OR = {
+				$shortage$ = 0
+				AND = {
+					$shortage$ = 1
+					building_has_goods_shortage = no
+				}
+			}
+			OR = {
+				$profitability$ = 0
+				AND = {
+					$profitability$ = 1
+					ec_building_is_profitable = yes
+				}
+			}
+		}
+	}
+}
+
+### IS POSSIBLE = STATE SUITS BASIC REQUIREMENTS FOR THE BUILDING TO BE CONSTRUCTED [used mainly in allocate]
+
+# conditions: 0 = new and expanding, 1 = only new, 2 = only expanding
+
+# Government buildings
+
+ec_sanction_building_government = {
+	OR = {
+		AND = {
+			$conditions$ = 0
+			OR = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = $building$
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+				any_scope_building = {
+					is_building_type = $building$
+					ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 1
+			NOT = {
+				any_scope_building = {
+					is_building_type = $building$
+					OR = {
+						level > 0
+						is_under_construction = yes
+					}
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 2
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+			}
+		}
+	}
+}
+
+# Infrastructure buildings
+
+ec_sanction_building_infrastructure = {
+	OR = {
+		AND = {
+			$conditions$ = 0
+			OR = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = $building$
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+				any_scope_building = {
+					is_building_type = $building$
+					ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 1
+			NOT = {
+				any_scope_building = {
+					is_building_type = $building$
+					OR = {
+						level > 0
+						is_under_construction = yes
+					}
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 2
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+			}
+		}
+	}
+}
+
+# Resource buildings
+
+ec_sanction_resource = {
+	state_region = {
+		remaining_undepleted = {
+			type = $resource$
+			amount > 0
+		}
+	}
+	OR = {
+		AND = {
+			$conditions$ = 0
+			OR = {
+				AND = {
+					NOT = {
+						any_scope_building = {
+							is_building_type = $building$
+							OR = {
+								level > 0
+								is_under_construction = yes
+							}
+						}
+					}
+					has_potential_resource = $resource$
+				}
+				any_scope_building = {
+					is_building_type = $building$
+					ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 1
+			NOT = {
+				any_scope_building = {
+					is_building_type = $building$
+					OR = {
+						level > 0
+						is_under_construction = yes
+					}
+				}
+			}
+			has_potential_resource = $resource$
+		}
+		AND = {
+			$conditions$ = 2
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+			}
+		}
+	}
+}
+
+# Arable buildings
+
+ec_sanction_arable = {
+	free_arable_land > 0
+	OR = {
+		free_arable_land > root.ec_building_limit_5_1
+		NOT = {
+			any_scope_building = {
+				OR = {
+					is_building_type = building_wheat_farm
+					is_building_type = building_rye_farm
+					is_building_type = building_rice_farm
+					is_building_type = building_maize_farm
+					is_building_type = building_millet_farm
+					is_building_type = building_livestock_ranch
+					is_building_type = building_cotton_plantation
+					is_building_type = building_dye_plantation
+					is_building_type = building_silk_plantation
+					is_building_type = building_banana_plantation
+					is_building_type = building_sugar_plantation
+					is_building_type = building_tea_plantation
+					is_building_type = building_coffee_plantation
+					is_building_type = building_tobacco_plantation
+					is_building_type = building_opium_plantation
+				}
+				is_under_construction = yes
+			}
+		}
+	}
+	OR = {
+		always = yes
+		has_potential_resource = $resource$
+	}
+	OR = {
+		AND = {
+			$conditions$ = 0
+			OR = {
+				AND = {
+					NOT = {
+						any_scope_building = {
+							is_building_type = $building$
+							OR = {
+								level > 0
+								is_under_construction = yes
+							}
+						}
+					}
+					ec_check_arable_resource = { cipher = $cipher$ }
+				}
+				any_scope_building = {
+					is_building_type = $building$
+					ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 1
+			NOT = {
+				any_scope_building = {
+					is_building_type = $building$
+					OR = {
+						level > 0
+						is_under_construction = yes
+					}
+				}
+			}
+			ec_check_arable_resource = { cipher = $cipher$ }
+		}
+		AND = {
+			$conditions$ = 2
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+			}
+		}
+	}
+}
+
+ec_check_arable_resource = {
+	OR = {
+		AND = {
+			$cipher$ < 10
+			var:ecaar6 = $cipher$
+		}
+		AND = {
+			$cipher$ < 100
+			OR = {
+				var:ecaar5 = $cipher$
+				var:ecaar5 >= 30
+			}
+		}
+		AND = {
+			$cipher$ < 1000
+			OR = {
+				var:ecaar4 = $cipher$
+				var:ecaar4 >= 300
+			}
+		}
+		AND = {
+			$cipher$ < 10000
+			OR = {
+				var:ecaar3 = $cipher$
+				var:ecaar3 >= 3000
+			}
+		}
+		AND = {
+			$cipher$ < 100000
+			OR = {
+				var:ecaar2 = $cipher$
+				var:ecaar2 >= 30000
+			}
+		}
+		AND = {
+			$cipher$ < 1000000
+			OR = {
+				var:ecaar1 = $cipher$
+				var:ecaar1 >= 300000
+			}
+		}
+	}
+}
+
+# Industry buildings
+
+ec_sanction_industry = {
+	OR = {
+		AND = {
+			$conditions$ = 0
+			OR = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = $building$
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+				any_scope_building = {
+					is_building_type = $building$
+					ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 1
+			NOT = {
+				any_scope_building = {
+					is_building_type = $building$
+					OR = {
+						level > 0
+						is_under_construction = yes
+					}
+				}
+			}
+		}
+		AND = {
+			$conditions$ = 2
+			any_scope_building = {
+				is_building_type = $building$
+				ec_building_can_be_expanded = { shortage = $shortage$ profitability = $profitability$ }
+			}
+		}
+	}
+}
+
+### ALLOCATE = CHECKS HOW MUCH SHOULD WE PRIORITIZE THE STATE
+
+# Resource buildings – priorities based on resource importance
+
+ec_allocate_resource = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			OR = {
+				$good$ = g:rubber
+				$good$ = g:oil
+				$good$ = g:coal
+				$good$ = g:iron
+				$good$ = g:sulfur
+				$good$ = g:gold
+				NOR = {
+					has_potential_resource = bg_rubber
+					has_potential_resource = bg_oil_extraction
+					has_potential_resource = bg_coal_mining
+					has_potential_resource = bg_iron_mining
+					has_potential_resource = bg_sulfur_mining
+					has_potential_resource = bg_gold_mining
+				}
+			}
+		}
+		AND = {
+			$priority$ = 2
+			NOR = {
+				$good$ = g:rubber
+				$good$ = g:oil
+				$good$ = g:coal
+				$good$ = g:iron
+				$good$ = g:sulfur
+				$good$ = g:gold
+			}
+			OR = {
+				has_potential_resource = bg_rubber
+				has_potential_resource = bg_oil_extraction
+				has_potential_resource = bg_coal_mining
+				has_potential_resource = bg_iron_mining
+				has_potential_resource = bg_sulfur_mining
+				has_potential_resource = bg_gold_mining
+			}
+		}
+	}
+}
+
+# Arable buildings – priorities based on resource importance
+
+ec_allocate_arable = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			OR = {
+				$good$ = g:tea
+				$good$ = g:coffee
+				$good$ = g:dye
+				$good$ = g:tobacco
+				$good$ = g:opium
+				$good$ = g:sugar
+				$good$ = g:silk
+				NOR = {
+					ec_check_arable_resource = { cipher = 100 } # dye
+					ec_check_arable_resource = { cipher = 200 } # silk
+					ec_check_arable_resource = { cipher = 2000 } # sugar
+					ec_check_arable_resource = { cipher = 10000 } # tea
+					ec_check_arable_resource = { cipher = 20000 } # coffee
+					ec_check_arable_resource = { cipher = 100000 } # tobacco
+					ec_check_arable_resource = { cipher = 200000 } # opium
+				}
+			}
+		}
+		AND = {
+			$priority$ = 2
+			NOR = {
+				$good$ = g:tea
+				$good$ = g:coffee
+				$good$ = g:dye
+				$good$ = g:tobacco
+				$good$ = g:opium
+				$good$ = g:sugar
+				$good$ = g:silk
+			}
+			OR = {
+				ec_check_arable_resource = { cipher = 100 } # dye
+				ec_check_arable_resource = { cipher = 200 } # silk
+				ec_check_arable_resource = { cipher = 2000 } # sugar
+				ec_check_arable_resource = { cipher = 10000 } # tea
+				ec_check_arable_resource = { cipher = 20000 } # coffee
+				ec_check_arable_resource = { cipher = 100000 } # tobacco
+				ec_check_arable_resource = { cipher = 200000 } # opium
+			}
+		}
+	}
+}
+
+# State priorities for buildings that are not tied to suitable states
+
+ec_check_if_state_is_suitable = {
+	root = {
+		OR = {
+			AND = {
+				$criteria$ = 1
+				OR = {
+					AND = {
+						has_variable_list = ec_suitable_states_1
+						variable_list_size = { name = ec_suitable_states_1 value > 0 }
+						is_target_in_variable_list = { name = ec_suitable_states_1 target = prev }
+					}
+					AND = {
+						NAND = {
+							has_variable_list = ec_suitable_states_1
+							variable_list_size = { name = ec_suitable_states_1 value > 0 }
+						}
+						OR = {
+							AND = {
+								has_variable_list = ec_suitable_states_2
+								variable_list_size = { name = ec_suitable_states_2 value > 0 }
+								is_target_in_variable_list = { name = ec_suitable_states_2 target = prev }
+							}
+							AND = {
+								NAND = {
+									has_variable_list = ec_suitable_states_2
+									variable_list_size = { name = ec_suitable_states_2 value > 0 }
+								}
+								OR = {
+									AND = {
+										has_variable_list = ec_suitable_states_3
+										variable_list_size = { name = ec_suitable_states_3 value > 0 }
+										is_target_in_variable_list = { name = ec_suitable_states_3 target = prev }
+									}
+									AND = {
+										NAND = {
+											has_variable_list = ec_suitable_states_3
+											variable_list_size = { name = ec_suitable_states_3 value > 0 }
+										}
+										OR = {
+											AND = {
+												has_variable_list = ec_suitable_states_4
+												variable_list_size = { name = ec_suitable_states_4 value > 0 }
+												is_target_in_variable_list = { name = ec_suitable_states_4 target = prev }
+											}
+											NAND = {
+												has_variable_list = ec_suitable_states_4
+												variable_list_size = { name = ec_suitable_states_4 value > 0 }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				$criteria$ = 2
+				has_variable_list = ec_suitable_states_1
+				variable_list_size = { name = ec_suitable_states_1 value > 0 }
+				is_target_in_variable_list = { name = ec_suitable_states_1 target = prev }
+			}
+		}
+	}
+}
+
+####################################################################################################
+################## BUILDING TRIGGERS
+####################################################################################################
+
+### GOVERNMENT ADMINISTRATION
+
+ec_consider_building_government_administration = {
+	NOT = {
+		has_variable = ec_government_administration_cooldown
+	}
+	has_technology_researched = tech_bureaucracy
+	ec_consider_building = {
+		building = building_government_administration
+		critical = 1
+		shortage = 0
+		profitability = 0
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_government_administration
+			}
+		}
+	}
+}
+
+ec_critical_government_administration = {
+	bureaucracy < ec_bureaucracy_1
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_government_administration
+			is_under_construction = yes
+		}
+	}
+}
+
+ec_evaluate_building_government_administration = {
+	OR = {
+		$priority$ = 1
+		AND = {
+			$priority$ >= 2
+			$priority$ <= 5
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+				AND = {
+					ec_wartime_spending = no
+					OR = {
+						ec_budget_health = {
+							level = -1
+						}
+						OR = {
+							tax_level = very_low
+							tax_level = low
+							tax_level = medium
+						}
+					}
+				}
+			}
+			ec_government_administration_costs_value < ec_government_administration_costs_excess
+			ec_government_administration_costs_expected < ec_government_administration_costs_ceiling
+			bureaucracy < ec_bureaucracy_excess
+		}
+		AND = {
+			$priority$ >= 6
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+			}
+			ec_government_administration_costs_value < ec_government_administration_costs_target
+			ec_government_administration_costs_expected < ec_government_administration_costs_excess
+			bureaucracy < ec_bureaucracy_target
+		}
+	}
+	OR = {
+		AND = {
+			$priority$ = 1
+			bureaucracy < ec_bureaucracy_1
+		}
+		AND = {
+			$priority$ = 2
+			any_scope_state = {
+				ec_sanction_building_government_administration = yes
+				ec_tax_capacity_load_percent < ec_tax_capacity_2
+			}
+		}
+		AND = {
+			$priority$ = 3
+			any_scope_state = {
+				ec_sanction_building_government_administration = yes
+				ec_tax_capacity_load_percent < ec_tax_capacity_3
+			}
+		}
+		AND = {
+			$priority$ = 4
+			any_scope_state = {
+				ec_sanction_building_government_administration = yes
+				ec_tax_capacity_load_percent < ec_tax_capacity_4
+			}
+		}
+		AND = {
+			$priority$ = 5
+			OR = {
+				bureaucracy < ec_bureaucracy_5
+				any_scope_state = {
+					ec_sanction_building_government_administration = yes
+					ec_tax_capacity_load_percent < ec_tax_capacity_5
+				}
+			}
+		}
+		AND = {
+			$priority$ = 6
+			OR = {
+				bureaucracy < ec_bureaucracy_6
+				any_scope_state = {
+					ec_sanction_building_government_administration = yes
+					ec_tax_capacity_load_percent < ec_tax_capacity_6
+				}
+			}
+		}
+		AND = {
+			$priority$ = 7
+			OR = {
+				bureaucracy < ec_bureaucracy_7
+				any_scope_state = {
+					ec_sanction_building_government_administration = yes
+					ec_tax_capacity_load_percent < ec_tax_capacity_7
+				}
+			}
+		}
+		AND = {
+			$priority$ = 8
+			bureaucracy < ec_bureaucracy_8
+		}
+		AND = {
+			$priority$ = 9
+			bureaucracy < ec_bureaucracy_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_government_administration = {
+	ec_sanction_building_government = {
+		building = building_government_administration
+		conditions = 0
+		shortage = 0
+		profitability = 0
+	}
+}
+
+ec_allocate_building_government_administration = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			is_incorporated = yes
+			ec_tax_capacity_load_percent < ec_tax_capacity_7
+			save_temporary_scope_as = ec_current_state
+			owner = {
+				any_scope_state = {
+					ec_taxes_lost_due_to_tax_capacity > scope:ec_current_state.ec_taxes_lost_due_to_tax_capacity
+					percent < 0.10
+				}
+			}
+		}
+		AND = {
+			$priority$ = 2
+			is_incorporated = yes
+			ec_tax_capacity_load_percent < ec_tax_capacity_7
+			save_temporary_scope_as = ec_current_state
+			owner = {
+				any_scope_state = {
+					ec_taxes_lost_due_to_tax_capacity > scope:ec_current_state.ec_taxes_lost_due_to_tax_capacity
+					percent < 0.25
+				}
+			}
+		}
+		AND = {
+			$priority$ = 3
+			is_incorporated = yes
+			ec_tax_capacity_load_percent < ec_tax_capacity_7
+			save_temporary_scope_as = ec_current_state
+			owner = {
+				any_scope_state = {
+					ec_taxes_lost_due_to_tax_capacity > scope:ec_current_state.ec_taxes_lost_due_to_tax_capacity
+					percent >= 0.25
+				}
+			}
+		}
+		AND = {
+			$priority$ = 4
+			OR = {
+				is_incorporated = no
+				ec_tax_capacity_load_percent >= ec_tax_capacity_7
+			}
+		}
+	}
+}
+
+### CONSTRUCTION SECTOR
+
+ec_consider_building_construction_sector = {
+	NOT = {
+		has_variable = ec_construction_sector_cooldown
+	}
+	has_technology_researched = urbanization
+	ec_consider_building = {
+		building = building_construction_sector
+		critical = 0
+		shortage = 1
+		profitability = 0
+	}
+	ec_construction_sector_costs_value < ec_construction_sector_costs_target
+	ec_construction_sector_costs_expected < ec_construction_sector_costs_excess
+	OR = {
+		ec_budget_health = {
+			level = 0
+		}
+		OR = {
+			tax_level = very_low
+			tax_level = low
+		}
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_construction_sector
+			}
+		}
+	}
+}
+
+ec_evaluate_building_construction_sector = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			ec_construction_points_current < ec_construction_points_1
+		}
+		AND = {
+			$priority$ = 2
+			ec_construction_points_current < ec_construction_points_2
+		}
+		AND = {
+			$priority$ = 3
+			ec_construction_points_current < ec_construction_points_3
+		}
+		AND = {
+			$priority$ = 4
+			ec_construction_points_current < ec_construction_points_4
+		}
+		AND = {
+			$priority$ = 5
+			ec_construction_points_current < ec_construction_points_5
+		}
+		AND = {
+			$priority$ = 6
+			ec_construction_points_current < ec_construction_points_6
+		}
+		AND = {
+			$priority$ = 7
+			ec_construction_points_current < ec_construction_points_7
+		}
+		AND = {
+			$priority$ = 8
+			ec_construction_points_current < ec_construction_points_8
+		}
+		AND = {
+			$priority$ = 9
+			ec_construction_points_current < ec_construction_points_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_construction_sector = {
+	var:ec_construction_sector_level < ec_state_construction_sector_limit
+	ec_sanction_building_government = {
+		building = building_construction_sector 
+		conditions = 0
+		shortage = 1
+		profitability = 0
+	}
+}
+
+ec_allocate_building_construction_sector = {
+	$priority$ = 1
+}
+
+### UNIVERSITY
+
+ec_consider_building_university = {
+	NOT = {
+		has_variable = ec_university_cooldown
+	}
+	has_technology_researched = academia
+	ec_consider_building = {
+		building = building_university
+		critical = 0
+		shortage = 1
+		profitability = 0
+	}
+	OR = {
+		AND = {
+			ec_innovation_current < ec_innovation_target
+			ec_university_count < ec_university_target
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+				AND = {
+					ec_wartime_spending = no
+					OR = {
+						ec_budget_health = {
+							level = -1
+						}
+						OR = {
+							tax_level = very_low
+							tax_level = low
+							tax_level = medium
+						}
+					}
+				}
+			}
+			ec_university_costs_value < ec_university_costs_excess
+			ec_university_costs_expected < ec_university_costs_ceiling
+		}
+		AND = {
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+			}
+			ec_university_costs_value < ec_university_costs_target
+			ec_university_costs_expected < ec_university_costs_excess
+		}
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_university
+			}
+		}
+	}
+}
+
+ec_evaluate_building_university = {
+	OR = {
+		AND = {
+			$priority$ <= 3
+			always = no
+		}
+		AND = {
+			$priority$ = 4
+			OR = {
+				ec_innovation_current < ec_innovation_4
+				ec_university_count < ec_university_4
+			}
+			ec_innovation_current < ec_innovation_7
+			ec_university_count < ec_university_7
+		}
+		AND = {
+			$priority$ = 5
+			OR = {
+				ec_innovation_current < ec_innovation_5
+				ec_university_count < ec_university_5
+			}
+			ec_innovation_current < ec_innovation_7
+			ec_university_count < ec_university_7
+		}
+		AND = {
+			$priority$ = 6
+			OR = {
+				ec_innovation_current < ec_innovation_6
+				ec_university_count < ec_university_6
+			}
+			ec_innovation_current < ec_innovation_7
+			ec_university_count < ec_university_7
+		}
+		AND = {
+			$priority$ = 7
+			ec_innovation_current < ec_innovation_7
+			ec_university_count < ec_university_7
+		}
+		AND = {
+			$priority$ = 8
+			ec_innovation_current < ec_innovation_8
+			ec_university_count < ec_university_8
+		}
+		AND = {
+			$priority$ = 9
+			ec_innovation_current < ec_innovation_9
+			ec_university_count < ec_university_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_university = {
+	ec_sanction_building_government = {
+		building = building_university 
+		conditions = 0
+		shortage = 1
+		profitability = 0
+	}
+}
+
+ec_allocate_building_university = {
+	$priority$ = 1
+}
+
+### RAILWAY
+
+ec_consider_building_railway = {
+	has_technology_researched = railways
+	ec_budget_health = {
+		level = -2
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_railway
+			}
+		}
+	}
+}
+
+ec_evaluate_building_railway = {
+	OR = {
+		AND = {
+			OR = {
+				$priority$ = 1
+				$priority$ = 5
+			}
+			ec_consider_building = {
+				building = building_railway
+				critical = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+		AND = {
+			OR = {
+				$priority$ = 9
+				$priority$ = 16
+			}
+			ec_consider_building = {
+				building = building_railway
+				critical = 0
+				shortage = 1
+				profitability = 1
+			}
+		}
+	}
+	OR = {
+		AND = {
+			$priority$ = 1
+			any_scope_state = {
+				ec_sanction_building_railway = yes
+				ec_allocate_building_railway = {
+					priority = 4
+				}
+			}
+		}
+		AND = {
+			$priority$ >= 2
+			$priority$ <= 4
+			always = no
+		}
+		AND = {
+			$priority$ = 5
+			any_scope_state = {
+				ec_sanction_building_railway = yes
+				ec_allocate_building_railway = {
+					priority = 5
+				}
+			}
+		}
+		AND = {
+			$priority$ >= 6
+			$priority$ <= 8
+			always = no
+		}
+		AND = {
+			$priority$ = 9
+			ec_requirements_floor = {
+				market_good = mg:transportation
+				priority = 5
+				offset = 0
+			}
+		}
+		AND = {
+			$priority$ >= 10
+			$priority$ <= 15
+			always = no
+		}
+		AND = {
+			$priority$ = 16
+			ec_requirements_floor = {
+				market_good = mg:transportation
+				priority = 9
+				offset = 0
+			}
+		}
+		AND = {
+			$priority$ >= 17
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_railway = {
+	ec_sanction_building_infrastructure = {
+		building = building_railway 
+		conditions = 0
+		shortage = 1
+		profitability = 0
+	}
+}
+
+ec_allocate_building_railway = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			ec_infrastructure_load_percent < ec_infrastructure_1
+		}
+		AND = {
+			$priority$ = 2
+			ec_infrastructure_load_percent < ec_infrastructure_2
+		}
+		AND = {
+			$priority$ = 3
+			ec_infrastructure_load_percent < ec_infrastructure_3
+		}
+		AND = {
+			$priority$ = 4
+			ec_infrastructure_load_percent < ec_infrastructure_4
+		}
+		AND = {
+			$priority$ = 5
+			ec_infrastructure_load_percent < ec_infrastructure_5
+		}
+		AND = {
+			$priority$ = 6
+			ec_infrastructure_load_percent >= ec_infrastructure_5
+			ec_infrastructure_load_percent < ec_infrastructure_6
+			root = {
+				var:ecpb4 >= 9
+			}
+		}
+		AND = {
+			$priority$ = 7
+			ec_infrastructure_load_percent >= ec_infrastructure_6
+			ec_infrastructure_load_percent < ec_infrastructure_7
+			root = {
+				var:ecpb4 >= 16
+			}
+		}
+	}
+}
+
+### PORT
+
+ec_consider_building_port = {
+	NOT = {
+		has_variable = ec_port_cooldown
+	}
+	has_technology_researched = navigation
+	any_scope_state = {
+		is_coastal = yes
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_port
+			}
+		}
+	}
+}
+
+ec_critical_port = {
+	OR = {
+		AND = {
+			has_variable_list = ec_coastline_of_market_capital
+			variable_list_size = {
+				name = ec_coastline_of_market_capital
+				value > 0
+			}
+			NOT = {
+				any_in_list = {
+					variable = ec_coastline_of_market_capital
+					any_scope_building = {
+						is_building_type = building_port
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+			}
+			OR = {
+				AND = {
+					has_variable_list = ec_coastline_of_outer_lands
+					variable_list_size = {
+						name = ec_coastline_of_outer_lands
+						value > 0
+					}
+				}
+				any_country = {
+					market.owner = root
+					any_scope_state = {
+						is_coastal = yes
+					}
+				}
+			}
+		}
+		AND = {
+			NAND = {
+				has_variable_list = ec_coastline_of_market_capital
+				variable_list_size = {
+					name = ec_coastline_of_market_capital
+					value > 0
+				}
+			}
+			any_scope_state = {
+				ec_sanction_building_port = yes
+				is_isolated_from_market = yes
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_port
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_evaluate_building_port = {
+	OR = {
+		$priority$ <= 2
+		AND = {
+			$priority$ = 3
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+				AND = {
+					ec_wartime_spending = no
+					OR = {
+						ec_budget_health = {
+							level = -1
+						}
+						OR = {
+							tax_level = very_low
+							tax_level = low
+							tax_level = medium
+						}
+					}
+				}
+			}
+			ec_port_costs_value < ec_port_costs_excess
+			ec_port_costs_expected < ec_port_costs_ceiling
+			ec_convoys_current < ec_convoys_excess
+		}
+		AND = {
+			$priority$ >= 4
+			OR = {
+				ec_budget_health = {
+					level = 0
+				}
+				OR = {
+					tax_level = very_low
+					tax_level = low
+				}
+			}
+			ec_port_costs_value < ec_port_costs_target
+			ec_port_costs_expected < ec_port_costs_excess
+			ec_convoys_current < ec_convoys_target
+		}
+	}
+	OR = {
+		AND = {
+			$priority$ <= 1
+			ec_consider_building = {
+				building = building_port
+				critical = 5
+				shortage = 0
+				profitability = 0
+			}
+		}
+		AND = {
+			$priority$ <= 2
+			ec_consider_building = {
+				building = building_port
+				critical = 0
+				shortage = 0
+				profitability = 0
+			}
+		}
+		AND = {
+			$priority$ >= 3
+			ec_consider_building = {
+				building = building_port
+				critical = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+	}
+	OR = {
+		AND = {
+			$priority$ = 1
+			OR = {
+				AND = {
+					has_variable_list = ec_coastline_of_market_capital
+					variable_list_size = {
+						name = ec_coastline_of_market_capital
+						value > 0
+					}
+					NOT = {
+						any_in_list = {
+							variable = ec_coastline_of_market_capital
+							any_scope_building = {
+								is_building_type = building_port
+								OR = {
+									level > 0
+									is_under_construction = yes
+								}
+							}
+						}
+					}
+					OR = {
+						AND = {
+							has_variable_list = ec_coastline_of_outer_lands
+							variable_list_size = {
+								name = ec_coastline_of_outer_lands
+								value > 0
+							}
+						}
+						any_country = {
+							market.owner = root
+							any_scope_state = {
+								is_coastal = yes
+							}
+						}
+					}
+				}
+				AND = {
+					NAND = {
+						has_variable_list = ec_coastline_of_market_capital
+						variable_list_size = {
+							name = ec_coastline_of_market_capital
+							value > 0
+						}
+					}
+					any_scope_state = {
+						ec_sanction_building_port = yes
+						is_isolated_from_market = yes
+						NOT = {
+							any_scope_building = {
+								is_building_type = building_port
+								OR = {
+									level > 0
+									is_under_construction = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			$priority$ = 2
+			has_variable_list = ec_coastline_of_market_capital
+			variable_list_size = {
+				name = ec_coastline_of_market_capital
+				value > 0
+			}
+			any_scope_state = {
+				ec_sanction_building_port = yes
+				is_isolated_from_market = yes
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_port
+						OR = {
+							level > 0
+							is_under_construction = yes
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			$priority$ = 3
+			any_country = {
+				exists = market
+				market = {
+					exists = owner
+					owner = root
+				}
+				any_scope_state = {
+					is_coastal = yes
+					infrastructure >= infrastructure_usage
+					market_access < 1
+					any_scope_building = {
+						is_building_type = building_port
+						level > 0
+					}
+				}
+			}
+		}
+		AND = {
+			$priority$ = 4
+			OR = {
+				any_scope_state = {
+					ec_sanction_building_port = yes
+					ec_infrastructure_load_percent < ec_infrastructure_5
+					ec_sanction_building_infrastructure = {
+						building = building_port
+						conditions = 0
+						shortage = 1
+						profitability = 0
+					}
+				}
+				ec_convoys_current < ec_convoys_4
+			}
+		}
+		AND = {
+			$priority$ = 5
+			ec_convoys_current < ec_convoys_5
+		}
+		AND = {
+			$priority$ = 6
+			ec_convoys_current < ec_convoys_6
+		}
+		AND = {
+			$priority$ = 7
+			ec_convoys_current < ec_convoys_7
+		}
+		AND = {
+			$priority$ = 8
+			ec_convoys_current < ec_convoys_8
+		}
+		AND = {
+			$priority$ = 9
+			ec_convoys_current < ec_convoys_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_port = {
+	is_coastal = yes
+	var:ec_port_level < ec_state_port_limit
+}
+
+ec_allocate_building_port = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			root = {
+				var:ecpb5 = 1
+				is_target_in_variable_list = {
+					name = ec_coastline_of_market_capital
+					target = prev
+				}
+			}
+		}
+		AND = {
+			$priority$ = 2
+			is_isolated_from_market = yes
+			ec_sanction_building_infrastructure = {
+				building = building_port
+				conditions = 1
+				shortage = 0
+				profitability = 0
+			}
+		}
+		AND = {
+			$priority$ = 3
+			root = {
+				var:ecpb5 >= 3
+			}
+			ec_infrastructure_load_percent < ec_infrastructure_5
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_port
+					level > 0
+					has_active_production_method = pm_anchorage
+				}
+			}
+			ec_sanction_building_infrastructure = {
+				building = building_port 
+				conditions = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+		AND = {
+			$priority$ = 4
+			root = {
+				var:ecpb5 >= 3
+			}
+			ec_infrastructure_load_percent >= ec_infrastructure_5
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_port
+					level > 0
+					has_active_production_method = pm_anchorage
+				}
+			}
+			ec_sanction_building_infrastructure = {
+				building = building_port 
+				conditions = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+	}
+}
+
+### BARRACKS
+
+ec_consider_building_barracks = {
+	NOT = {
+		has_variable = ec_barracks_cooldown
+	}
+	has_technology_researched = standing_army
+	OR = {
+		ec_budget_health = {
+			level = -1
+		}
+		OR = {
+			tax_level = very_low
+			tax_level = low
+			tax_level = medium
+		}
+	}
+	OR = {
+		AND = {
+			var:ec_barracks_count < ec_battalion_paucity
+			ec_consider_building = {
+				building = building_barracks
+				critical = 0
+				shortage = 0
+				profitability = 0
+			}
+		}
+		AND = {
+			var:ec_barracks_count >= ec_battalion_paucity
+			ec_consider_building = {
+				building = building_barracks
+				critical = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+	}
+	OR = {
+		var:ec_barracks_count < ec_battalion_floor
+		AND = {
+			ec_barracks_costs_value < ec_barracks_costs_target
+			ec_barracks_costs_expected < ec_barracks_costs_excess
+		}
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_barracks
+			}
+		}
+	}
+}
+
+ec_evaluate_building_barracks = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			var:ec_barracks_count < ec_battalion_1
+		}
+		AND = {
+			$priority$ = 2
+			var:ec_barracks_count < ec_battalion_2
+		}
+		AND = {
+			$priority$ = 3
+			var:ec_barracks_count < ec_battalion_3
+		}
+		AND = {
+			$priority$ = 4
+			var:ec_barracks_count < ec_battalion_4
+		}
+		AND = {
+			$priority$ = 5
+			var:ec_barracks_count < ec_battalion_5
+		}
+		AND = {
+			$priority$ = 6
+			var:ec_barracks_count < ec_battalion_6
+		}
+		AND = {
+			$priority$ = 7
+			var:ec_barracks_count < ec_battalion_7
+		}
+		AND = {
+			$priority$ = 8
+			var:ec_barracks_count < ec_battalion_8
+		}
+		AND = {
+			$priority$ = 9
+			var:ec_barracks_count < ec_battalion_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_barracks = {
+	var:ec_barracks_level < ec_state_barracks_limit
+	ec_sanction_building_infrastructure = {
+		building = building_barracks
+		conditions = 0
+		shortage = 1
+		profitability = 0
+	}
+}
+
+ec_allocate_building_barracks = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			ec_has_non_discriminated_homelanders = yes
+		}
+		AND = {
+			$priority$ = 2
+			ec_has_non_discriminated_homelanders = no
+		}
+	}
+}
+
+### NAVAL BASE
+
+ec_consider_building_naval_base = {
+	NOT = {
+		has_variable = ec_naval_base_cooldown
+	}
+	has_technology_researched = admiralty
+	OR = {
+		ec_budget_health = {
+			level = -1
+		}
+		OR = {
+			tax_level = very_low
+			tax_level = low
+			tax_level = medium
+		}
+	}
+	OR = {
+		AND = {
+			var:ec_barracks_count < ec_flotilla_paucity
+			ec_consider_building = {
+				building = building_naval_base
+				critical = 0
+				shortage = 0
+				profitability = 0
+			}
+		}
+		AND = {
+			var:ec_barracks_count >= ec_flotilla_paucity
+			ec_consider_building = {
+				building = building_naval_base
+				critical = 0
+				shortage = 1
+				profitability = 0
+			}
+		}
+	}
+	any_scope_state = {
+		is_coastal = yes
+	}
+	OR = {
+		navy_size < ec_flotilla_floor
+		AND = {
+			ec_naval_base_costs_value < ec_naval_base_costs_target
+			ec_naval_base_costs_expected < ec_naval_base_costs_excess
+		}
+	}
+	OR = {
+		is_player = no
+		AND = {
+			has_game_rule = ec_allow_autobuild
+			has_variable = ec_autobuild
+			NOT = {
+				has_variable = ec_autobuild_naval_base
+			}
+		}
+	}
+}
+
+ec_evaluate_building_naval_base = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			navy_size < ec_flotilla_1
+		}
+		AND = {
+			$priority$ = 2
+			navy_size < ec_flotilla_2
+		}
+		AND = {
+			$priority$ = 3
+			navy_size < ec_flotilla_3
+		}
+		AND = {
+			$priority$ = 4
+			navy_size < ec_flotilla_4
+		}
+		AND = {
+			$priority$ = 5
+			navy_size < ec_flotilla_5
+		}
+		AND = {
+			$priority$ = 6
+			navy_size < ec_flotilla_6
+		}
+		AND = {
+			$priority$ = 7
+			navy_size < ec_flotilla_7
+		}
+		AND = {
+			$priority$ = 8
+			navy_size < ec_flotilla_8
+		}
+		AND = {
+			$priority$ = 9
+			navy_size < ec_flotilla_9
+		}
+		AND = {
+			$priority$ >= 10
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_naval_base = {
+	is_coastal = yes
+	var:ec_naval_base_level < ec_state_naval_base_limit
+	ec_sanction_building_infrastructure = {
+		building = building_naval_base
+		conditions = 0
+		shortage = 1
+		profitability = 0
+	}
+}
+
+ec_allocate_building_naval_base = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			ec_has_non_discriminated_homelanders = yes
+		}
+		AND = {
+			$priority$ = 2
+			ec_has_non_discriminated_homelanders = no
+		}
+	}
+}
+
+### LOGGING CAMP
+
+ec_consider_building_logging_camp = {
+	ec_consider_building = {
+		building = building_logging_camp
+		critical = 0
+		shortage = 0
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_logging_camp = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:wood
+			priority = $priority$
+			offset = ec_resource_priority_1_exact_offset
+		}
+		ec_requirements_exact = {
+			market_good = mg:hardwood
+			priority = $priority$
+			offset = ec_resource_priority_3_exact_offset
+		}
+	}
+}
+
+ec_sanction_building_logging_camp = {
+	ec_sanction_resource = {
+		building = building_logging_camp
+		resource = bg_logging
+		conditions = 0
+		shortage = 0
+		profitability = 1
+	}
+}
+
+ec_allocate_building_logging_camp = {
+	ec_allocate_resource = {
+		good = g:wood
+		priority = $priority$
+	}
+}
+
+### FISHING WHARF
+
+ec_consider_building_fishing_wharf = {
+	ec_consider_building = {
+		building = building_fishing_wharf
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_fishing_wharf = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:fish
+			priority = $priority$
+			offset = ec_resource_priority_4_exact_offset
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:grain
+				priority = $priority$
+				offset = ec_arable_priority_2_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:fish
+				priority = $priority$
+				offset = ec_arable_priority_2_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_fishing_wharf = {
+	ec_sanction_resource = {
+		building = building_fishing_wharf
+		resource = bg_fishing
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_fishing_wharf = {
+	ec_allocate_resource = {
+		good = g:fish 
+		priority = $priority$
+	}
+}
+
+### WHALING STATION
+
+ec_consider_building_whaling_station = {
+	has_technology_researched = navigation
+	ec_consider_building = {
+		building = building_whaling_station
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_whaling_station = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:oil
+			priority = $priority$
+			offset = ec_resource_priority_1_exact_offset
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:meat
+				priority = $priority$
+				offset = ec_resource_priority_4_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:oil
+				priority = $priority$
+				offset = ec_resource_priority_4_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_whaling_station = {
+	ec_sanction_resource = {
+		building = building_whaling_station
+		resource = bg_whaling
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_whaling_station = {
+	ec_allocate_resource = {
+		good = g:oil
+		priority = $priority$
+	}
+}
+
+### COAL MINE
+
+ec_consider_building_coal_mine = {
+	has_technology_researched = shaft_mining
+	ec_consider_building = {
+		building = building_coal_mine
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_coal_mine = {
+	ec_requirements_exact = {
+		market_good = mg:coal
+		priority = $priority$
+		offset = ec_resource_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_coal_mine = {
+	ec_sanction_resource = {
+		building = building_coal_mine
+		resource = bg_coal_mining
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_coal_mine = {
+	ec_allocate_resource = {
+		good = g:coal
+		priority = $priority$
+	}
+}
+
+### IRON MINE
+
+ec_consider_building_iron_mine = {
+	has_technology_researched = shaft_mining
+	ec_consider_building = {
+		building = building_iron_mine
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_iron_mine = {
+	ec_requirements_exact = {
+		market_good = mg:iron
+		priority = $priority$
+		offset = ec_resource_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_iron_mine = {
+	ec_sanction_resource = {
+		building = building_iron_mine
+		resource = bg_iron_mining
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_iron_mine = {
+	ec_allocate_resource = {
+		good = g:iron
+		priority = $priority$
+	}
+}
+
+### LEAD MINE
+
+ec_consider_building_lead_mine = {
+	has_technology_researched = shaft_mining
+	ec_consider_building = {
+		building = building_lead_mine
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_lead_mine = {
+	ec_requirements_exact = {
+		market_good = mg:lead
+		priority = $priority$
+		offset = ec_resource_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_lead_mine = {
+	ec_sanction_resource = {
+		building = building_lead_mine
+		resource = bg_lead_mining
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_lead_mine = {
+	ec_allocate_resource = {
+		good = g:lead
+		priority = $priority$
+	}
+}
+
+### SULFUR MINE
+
+ec_consider_building_sulfur_mine = {
+	has_technology_researched = shaft_mining
+	ec_consider_building = {
+		building = building_sulfur_mine
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_sulfur_mine = {
+	ec_requirements_exact = {
+		market_good = mg:sulfur
+		priority = $priority$
+		offset = ec_resource_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_sulfur_mine = {
+	ec_sanction_resource = {
+		building = building_sulfur_mine
+		resource = bg_sulfur_mining
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_sulfur_mine = {
+	ec_allocate_resource = {
+		good = g:sulfur
+		priority = $priority$
+	}
+}
+
+### GOLD MINE
+
+ec_consider_building_gold_mine = {
+	has_technology_researched = shaft_mining
+	ec_consider_building = {
+		building = building_gold_mine
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_gold_mine = {
+	OR = {
+		AND = {
+			$priority$ <= 4
+			always = no
+		}
+		AND = {
+			$priority$ = 5
+			always = yes
+		}
+		AND = {
+			$priority$ >= 6
+			always = no
+		}
+	}
+}
+
+ec_sanction_building_gold_mine = {
+	ec_sanction_resource = {
+		building = building_gold_mine
+		resource = bg_gold_mining
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_gold_mine = {
+	ec_allocate_resource = {
+		good = g:gold
+		priority = $priority$
+	}
+}
+
+### RUBBER PLANTATION
+
+ec_consider_building_rubber_plantation = {
+	has_technology_researched = rubber_mastication
+	ec_consider_building = {
+		building = building_rubber_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_rubber_plantation = {
+	ec_requirements_exact = {
+		market_good = mg:rubber
+		priority = $priority$
+		offset = ec_resource_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_rubber_plantation = {
+	ec_sanction_resource = {
+		building = building_rubber_plantation
+		resource = bg_rubber
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_rubber_plantation = {
+	ec_allocate_resource = {
+		good = g:rubber
+		priority = $priority$
+	}
+}
+
+### OIL RIG
+
+ec_consider_building_oil_rig = {
+	has_technology_researched = pumpjacks
+	ec_consider_building = {
+		building = building_oil_rig
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_oil_rig = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			any_scope_state = {
+				has_potential_resource = bg_oil_extraction
+			}
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_oil_rig
+				}
+			}
+		}
+		ec_requirements_exact = {
+			market_good = mg:oil
+			priority = $priority$
+			offset = ec_resource_priority_1_exact_offset
+		}
+	}
+}
+
+ec_sanction_building_oil_rig = {
+	ec_sanction_resource = {
+		building = building_oil_rig
+		resource = bg_oil_extraction
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_oil_rig = {
+	ec_allocate_resource = {
+		good = g:oil
+		priority = $priority$
+	}
+}
+
+### WHEAT FARM
+
+ec_consider_building_wheat_farm = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_wheat_farm
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_wheat_farm = {
+	ec_requirements_exact = {
+		market_good = mg:grain
+		priority = $priority$
+		offset = ec_arable_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_wheat_farm = {
+	ec_sanction_arable = {
+		building = building_wheat_farm
+		resource = bg_wheat_farms
+		cipher = 1
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_wheat_farm = {
+	ec_allocate_arable = {
+		good = g:grain
+		priority = $priority$
+	}
+}
+
+### RYE FARM
+
+ec_consider_building_rye_farm = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_rye_farm
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_rye_farm = {
+	ec_requirements_exact = {
+		market_good = mg:grain
+		priority = $priority$
+		offset = ec_arable_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_rye_farm = {
+	ec_sanction_arable = {
+		building = building_rye_farm
+		resource = bg_rye_farms
+		cipher = 2
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_rye_farm = {
+	ec_allocate_arable = {
+		good = g:grain
+		priority = $priority$
+	}
+}
+
+### RICE FARM
+
+ec_consider_building_rice_farm = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_rice_farm
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_rice_farm = {
+	ec_requirements_exact = {
+		market_good = mg:grain
+		priority = $priority$
+		offset = ec_arable_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_rice_farm = {
+	ec_sanction_arable = {
+		building = building_rice_farm
+		resource = bg_rice_farms
+		cipher = 3
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_rice_farm = {
+	ec_allocate_arable = {
+		good = g:grain
+		priority = $priority$
+	}
+}
+
+### MAIZE FARM
+
+ec_consider_building_maize_farm = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_maize_farm
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_maize_farm = {
+	ec_requirements_exact = {
+		market_good = mg:grain
+		priority = $priority$
+		offset = ec_arable_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_maize_farm = {
+	ec_sanction_arable = {
+		building = building_maize_farm
+		resource = bg_maize_farms
+		cipher = 4
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_maize_farm = {
+	ec_allocate_arable = {
+		good = g:grain
+		priority = $priority$
+	}
+}
+
+### MILLET FARM
+
+ec_consider_building_millet_farm = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_millet_farm
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_millet_farm = {
+	ec_requirements_exact = {
+		market_good = mg:grain
+		priority = $priority$
+		offset = ec_arable_priority_2_exact_offset
+	}
+}
+
+ec_sanction_building_millet_farm = {
+	ec_sanction_arable = {
+		building = building_millet_farm
+		resource = bg_millet_farms
+		cipher = 5
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_millet_farm = {
+	ec_allocate_arable = {
+		good = g:grain
+		priority = $priority$
+	}
+}
+
+### LIVESTOCK RANCH
+
+ec_consider_building_livestock_ranch = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_livestock_ranch
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_livestock_ranch = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:fabric
+			priority = $priority$
+			offset = ec_arable_priority_1_exact_offset
+		}
+		OR = {
+			ec_requirements_exact = {
+				market_good = mg:meat
+				priority = $priority$
+				offset = ec_arable_priority_4_exact_offset
+			}
+			AND = {
+				ec_requirements_exact = {
+					market_good = mg:grain
+					priority = $priority$
+					offset = ec_arable_priority_2_exact_offset
+				}
+				ec_requirements_floor = {
+					market_good = mg:meat
+					priority = $priority$
+					offset = ec_arable_priority_2_floor_offset
+				}
+			}
+		}
+	}
+}
+
+ec_sanction_building_livestock_ranch = {
+	ec_sanction_arable = {
+		building = building_livestock_ranch
+		resource = bg_livestock_ranches
+		cipher = 10
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_livestock_ranch = {
+	ec_allocate_arable = {
+		good = g:fabric
+		priority = $priority$
+	}
+}
+
+### COTTON PLANTATION
+
+ec_consider_building_cotton_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_cotton_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_cotton_plantation = {
+	ec_requirements_exact = {
+		market_good = mg:fabric
+		priority = $priority$
+		offset = ec_arable_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_cotton_plantation = {
+	ec_sanction_arable = {
+		building = building_cotton_plantation
+		resource = bg_cotton_plantations
+		cipher = 20
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_cotton_plantation = {
+	ec_allocate_arable = {
+		good = g:fabric
+		priority = $priority$
+	}
+}
+
+### DYE PLANTATION
+
+ec_consider_building_dye_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_dye_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_dye_plantation = {
+	ec_requirements_exact = {
+		market_good = mg:dye
+		priority = $priority$
+		offset = ec_arable_priority_3_exact_offset
+	}
+}
+
+ec_sanction_building_dye_plantation = {
+	ec_sanction_arable = {
+		building = building_dye_plantation
+		resource = bg_dye_plantations
+		cipher = 100
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_dye_plantation = {
+	ec_allocate_arable = {
+		good = g:dye
+		priority = $priority$
+	}
+}
+
+### SILK PLANTATION
+
+ec_consider_building_silk_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_silk_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_silk_plantation = {
+	ec_requirements_exact = {
+		market_good = mg:silk
+		priority = $priority$
+		offset = ec_arable_priority_5_exact_offset
+	}
+}
+
+ec_sanction_building_silk_plantation = {
+	ec_sanction_arable = {
+		building = building_silk_plantation
+		resource = bg_silk_plantations
+		cipher = 200
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_silk_plantation = {
+	ec_allocate_arable = {
+		good = g:silk
+		priority = $priority$
+	}
+}
+
+### BANANA PLANTATION
+
+ec_consider_building_banana_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_banana_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_banana_plantation = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:fruit
+			priority = $priority$
+			offset = ec_arable_priority_4_exact_offset
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:grain
+				priority = $priority$
+				offset = ec_arable_priority_2_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:fruit
+				priority = $priority$
+				offset = ec_arable_priority_2_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_banana_plantation = {
+	ec_sanction_arable = {
+		building = building_banana_plantation
+		resource = bg_banana_plantations
+		cipher = 1000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_banana_plantation = {
+	ec_allocate_arable = {
+		good = g:fruit
+		priority = $priority$
+	}
+}
+
+### SUGAR PLANTATION
+
+ec_consider_building_sugar_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_sugar_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_sugar_plantation = {
+	ec_requirements_exact = {
+		market_good = mg:sugar
+		priority = $priority$
+		offset = ec_arable_priority_4_exact_offset
+	}
+}
+
+ec_sanction_building_sugar_plantation = {
+	ec_sanction_arable = {
+		building = building_sugar_plantation
+		resource = bg_sugar_plantations
+		cipher = 2000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_sugar_plantation = {
+	ec_allocate_arable = {
+		good = g:sugar
+		priority = $priority$
+	}
+}
+
+### TEA PLANTATION
+
+ec_consider_building_tea_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_tea_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_tea_plantation = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:tea
+			priority = $priority$
+			offset = ec_arable_priority_5_exact_offset
+		}
+		AND = {
+			OR = {
+				ec_requirements_exact = {
+					market_good = mg:coffee
+					priority = $priority$
+					offset = ec_arable_priority_5_exact_offset
+				}
+				ec_requirements_exact = {
+					market_good = mg:wine
+					priority = $priority$
+					offset = ec_arable_priority_5_exact_offset
+				}
+			}
+			ec_requirements_floor = {
+				market_good = mg:tea
+				priority = $priority$
+				offset = ec_arable_priority_5_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_tea_plantation = {
+	ec_sanction_arable = {
+		building = building_tea_plantation
+		resource = bg_tea_plantations
+		cipher = 10000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_tea_plantation = {
+	ec_allocate_arable = {
+		good = g:tea
+		priority = $priority$
+	}
+}
+
+### COFFEE PLANTATION
+
+ec_consider_building_coffee_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_coffee_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_coffee_plantation = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:coffee
+			priority = $priority$
+			offset = ec_arable_priority_5_exact_offset
+		}
+		AND = {
+			OR = {
+				ec_requirements_exact = {
+					market_good = mg:tea
+					priority = $priority$
+					offset = ec_arable_priority_5_exact_offset
+				}
+				ec_requirements_exact = {
+					market_good = mg:wine
+					priority = $priority$
+					offset = ec_arable_priority_5_exact_offset
+				}
+			}
+			ec_requirements_floor = {
+				market_good = mg:coffee
+				priority = $priority$
+				offset = ec_arable_priority_5_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_coffee_plantation = {
+	ec_sanction_arable = {
+		building = building_coffee_plantation
+		resource = bg_coffee_plantations
+		cipher = 20000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_coffee_plantation = {
+	ec_allocate_arable = {
+		good = g:coffee
+		priority = $priority$
+	}
+}
+
+### TOBACCO PLANTATION
+
+ec_consider_building_tobacco_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_tobacco_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_tobacco_plantation = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:tobacco
+			priority = $priority$
+			offset = ec_arable_priority_4_exact_offset
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:liquor
+				priority = $priority$
+				offset = ec_industry_priority_4_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:tobacco
+				priority = $priority$
+				offset = ec_industry_priority_4_floor_offset
+			}
+		}
+		AND = {
+			NOT = {
+				is_banning_goods = g:opium
+			}
+			ec_requirements_exact = {
+				market_good = mg:opium
+				priority = $priority$
+				offset = ec_arable_priority_4_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:tobacco
+				priority = $priority$
+				offset = ec_arable_priority_4_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_tobacco_plantation = {
+	ec_sanction_arable = {
+		building = building_tobacco_plantation
+		resource = bg_tobacco_plantations
+		cipher = 100000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_tobacco_plantation = {
+	ec_allocate_arable = {
+		good = g:tobacco
+		priority = $priority$
+	}
+}
+
+### OPIUM PLANTATION
+
+ec_consider_building_opium_plantation = {
+	has_technology_researched = enclosure
+	ec_consider_building = {
+		building = building_opium_plantation
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+	NOT = {
+		is_banning_goods = g:opium
+	}
+}
+
+ec_evaluate_building_opium_plantation = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:opium
+			priority = $priority$
+			offset = ec_arable_priority_3_exact_offset
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:liquor
+				priority = $priority$
+				offset = ec_industry_priority_4_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:opium
+				priority = $priority$
+				offset = ec_industry_priority_4_floor_offset
+			}
+		}
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:tobacco
+				priority = $priority$
+				offset = ec_arable_priority_4_exact_offset
+			}
+			ec_requirements_floor = {
+				market_good = mg:opium
+				priority = $priority$
+				offset = ec_arable_priority_4_floor_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_opium_plantation = {
+	ec_sanction_arable = {
+		building = building_opium_plantation
+		resource = bg_opium_plantations
+		cipher = 200000
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_opium_plantation = {
+	ec_allocate_arable = {
+		good = g:opium
+		priority = $priority$
+	}
+}
+
+### FOOD INDUSTRY
+
+ec_consider_building_food_industry = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_food_industry
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_food_industry = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:groceries
+			priority = $priority$
+			offset = ec_industry_priority_4_exact_offset
+		}
+		AND = {
+			has_technology_researched = distillation
+			OR = {
+				ec_requirements_exact = {
+					market_good = mg:liquor
+					priority = $priority$
+					offset = ec_industry_priority_4_exact_offset
+				}
+				AND = {
+					OR = {
+						ec_requirements_exact = {
+							market_good = mg:tobacco
+							priority = $priority$
+							offset = ec_arable_priority_4_exact_offset
+						}
+						AND = {
+							NOT = {
+								is_banning_goods = g:opium
+							}
+							ec_requirements_exact = {
+								market_good = mg:opium
+								priority = $priority$
+								offset = ec_arable_priority_4_exact_offset
+							}
+						}
+					}
+					ec_requirements_floor = {
+						market_good = mg:liquor
+						priority = $priority$
+						offset = ec_arable_priority_4_floor_offset
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_sanction_building_food_industry = {
+	ec_sanction_industry = {
+		building = building_food_industry
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_food_industry = {
+	$priority$ = 1
+}
+
+### ARTS ACADEMY
+
+ec_consider_building_arts_academy = {
+	has_technology_researched = romanticism
+	ec_consider_building = {
+		building = building_arts_academy
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_arts_academy = {
+	ec_requirements_exact = {
+		market_good = mg:fine_art
+		priority = $priority$
+		offset = ec_industry_priority_5_exact_offset
+	}
+}
+
+ec_sanction_building_arts_academy = {
+	ec_sanction_industry = {
+		building = building_arts_academy
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_arts_academy = {
+	$priority$ = 1
+}
+
+### TEXTILE MILLS
+
+ec_consider_building_textile_mills = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_textile_mills
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_textile_mills = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:clothes
+			priority = $priority$
+			offset = ec_industry_priority_3_exact_offset
+		}
+		ec_requirements_exact = {
+			market_good = mg:luxury_clothes
+			priority = $priority$
+			offset = ec_industry_priority_5_exact_offset
+		}
+	}
+}
+
+ec_sanction_building_textile_mills = {
+	ec_sanction_industry = {
+		building = building_textile_mills
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_textile_mills = {
+	$priority$ = 1
+}
+
+### FURNITURE MANUFACTURIES
+
+ec_consider_building_furniture_manufacturies = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_furniture_manufacturies
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_furniture_manufacturies = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:furniture
+			priority = $priority$
+			offset = ec_industry_priority_3_exact_offset
+		}
+		ec_requirements_exact = {
+			market_good = mg:luxury_furniture
+			priority = $priority$
+			offset = ec_industry_priority_5_exact_offset
+		}
+	}
+}
+
+ec_sanction_building_furniture_manufacturies = {
+	ec_sanction_industry = {
+		building = building_furniture_manufacturies
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_furniture_manufacturies = {
+	$priority$ = 1
+}
+
+### GLASSWORKS
+
+ec_consider_building_glassworks = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_glassworks
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_glassworks = {
+	ec_requirements_exact = {
+		market_good = mg:glass
+		priority = $priority$
+		offset = ec_industry_priority_3_exact_offset
+	}
+}
+
+ec_sanction_building_glassworks = {
+	ec_sanction_industry = {
+		building = building_glassworks
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_glassworks = {
+	$priority$ = 1
+}
+
+### TOOLING WORKSHOPS
+
+ec_consider_building_tooling_workshops = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_tooling_workshops
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_tooling_workshops = {
+	ec_requirements_exact = {
+		market_good = mg:tools
+		priority = $priority$
+		offset = ec_industry_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_tooling_workshops = {
+	ec_sanction_industry = {
+		building = building_tooling_workshops
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_tooling_workshops = {
+	$priority$ = 1
+}
+
+### PAPER MILLS
+
+ec_consider_building_paper_mills = {
+	has_technology_researched = manufacturies
+	ec_consider_building = {
+		building = building_paper_mills
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_paper_mills = {
+	ec_requirements_exact = {
+		market_good = mg:paper
+		priority = $priority$
+		offset = ec_industry_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_paper_mills = {
+	ec_sanction_industry = {
+		building = building_paper_mills 
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_paper_mills = {
+	$priority$ = 1
+}
+
+### CHEMICAL PLANTS
+
+ec_consider_building_chemical_plants = {
+	has_technology_researched = intensive_agriculture
+	ec_consider_building = {
+		building = building_chemical_plants
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_chemical_plants = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:fertilizer
+			priority = $priority$
+			offset = ec_industry_priority_2_exact_offset
+		}
+		ec_requirements_exact = {
+			market_good = mg:explosives
+			priority = $priority$
+			offset = ec_industry_priority_3_exact_offset
+		}
+	}
+}
+
+ec_sanction_building_chemical_plants = {
+	ec_sanction_industry = {
+		building = building_chemical_plants
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_chemical_plants = {
+	$priority$ = 1
+}
+
+### SYNTHETICS PLANTS
+
+ec_consider_building_synthetics_plants = {
+	has_technology_researched = aniline
+	ec_consider_building = {
+		building = building_synthetics_plants
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_synthetics_plants = {
+	ec_requirements_exact = {
+		market_good = mg:dye
+		priority = $priority$
+		offset = ec_industry_priority_3_exact_offset
+	}
+}
+
+ec_sanction_building_synthetics_plants = {
+	ec_sanction_industry = {
+		building = building_synthetics_plants
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_synthetics_plants = {
+	$priority$ = 1
+}
+
+### STEEL MILLS
+
+ec_consider_building_steel_mills = {
+	has_technology_researched = steelworking
+	ec_consider_building = {
+		building = building_steel_mills
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_steel_mills = {
+	ec_requirements_exact = {
+		market_good = mg:steel
+		priority = $priority$
+		offset = ec_industry_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_steel_mills = {
+	ec_sanction_industry = {
+		building = building_steel_mills
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_steel_mills = {
+	$priority$ = 1
+}
+
+### MOTOR INDUSTRY
+
+ec_consider_building_motor_industry = {
+	has_technology_researched = atmospheric_engine
+	ec_consider_building = {
+		building = building_motor_industry
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_motor_industry = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:engines
+			priority = $priority$
+			offset = ec_industry_priority_1_exact_offset
+		}
+		AND = {
+			has_technology_researched = combustion_engine
+			ec_requirements_exact = {
+				market_good = mg:automobiles
+				priority = $priority$
+				offset = ec_industry_priority_4_exact_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_motor_industry = {
+	ec_sanction_industry = {
+		building = building_motor_industry
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_motor_industry = {
+	$priority$ = 1
+}
+
+### POWER PLANT
+
+ec_consider_building_power_plant = {
+	has_technology_researched = electrical_generation
+	ec_consider_building = {
+		building = building_power_plant
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_power_plant = {
+	ec_requirements_exact = {
+		market_good = mg:electricity
+		priority = $priority$
+		offset = ec_industry_priority_1_exact_offset
+	}
+}
+
+ec_sanction_building_power_plant = {
+	ec_sanction_industry = {
+		building = building_power_plant
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_power_plant = {
+	$priority$ = 1
+}
+
+### SHIPYARDS
+
+ec_consider_building_shipyards = {
+	has_technology_researched = navigation
+	any_scope_state = {
+		is_coastal = yes
+	}
+	ec_consider_building = {
+		building = building_shipyards
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_shipyards = {
+	OR = {
+		AND = {
+			OR = {
+				ec_requirements_exact = {
+					market_good = mg:clippers
+					priority = $priority$
+					offset = ec_industry_priority_3_exact_offset
+				}
+				AND = {
+					ec_requirements_exact = {
+						market_good = mg:manowars
+						priority = $priority$
+						offset = ec_industry_priority_3_exact_offset
+					}
+					OR = {
+						ec_is_using_military_forces = no
+						ec_requirements_floor = {
+							market_good = mg:manowars
+							priority = ec_floor_when_using_military_forces
+							offset = 0
+						}
+					}
+				}
+			}
+			OR = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_shipyards
+					}
+				}
+				any_scope_building = {
+					is_building_type = building_shipyards
+					OR = {
+						has_active_production_method = pm_basic_shipbuilding
+						has_active_production_method = pm_complex_shipbuilding
+					}
+				}
+			}
+		}
+		AND = {
+			OR = {
+				ec_requirements_exact = {
+					market_good = mg:steamers
+					priority = $priority$
+					offset = ec_industry_priority_3_exact_offset
+				}
+				AND = {
+					ec_requirements_exact = {
+						market_good = mg:ironclads
+						priority = $priority$
+						offset = ec_industry_priority_3_exact_offset
+					}
+					OR = {
+						ec_is_using_military_forces = no
+						ec_requirements_floor = {
+							market_good = mg:ironclads
+							priority = ec_floor_when_using_military_forces
+							offset = 0
+						}
+					}
+				}
+			}
+			OR = {
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_shipyards
+					}
+				}
+				any_scope_building = {
+					is_building_type = building_shipyards
+					OR = {
+						has_active_production_method = pm_metal_shipbuilding
+						has_active_production_method = pm_arc_welding_shipbuilding
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_sanction_building_shipyards = {
+	is_coastal = yes
+	ec_sanction_industry = {
+		building = building_shipyards
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_shipyards = {
+	$priority$ = 1
+}
+
+### ARMS INDUSTRY
+
+ec_consider_building_arms_industry = {
+	has_technology_researched = gunsmithing
+	ec_consider_building = {
+		building = building_arms_industry
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_arms_industry = {
+	OR = {
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:small_arms
+				priority = $priority$
+				offset = ec_industry_priority_3_exact_offset
+			}
+			OR = {
+				ec_is_using_military_forces = no
+				ec_requirements_floor = {
+					market_good = mg:small_arms
+					priority = ec_floor_when_using_military_forces
+					offset = 0
+				}
+			}
+		}
+		AND = {
+			has_technology_researched = artillery
+			ec_requirements_exact = {
+				market_good = mg:artillery
+				priority = $priority$
+				offset = ec_industry_priority_3_exact_offset
+			}
+			OR = {
+				ec_is_using_military_forces = no
+				ec_requirements_floor = {
+					market_good = mg:artillery
+					priority = ec_floor_when_using_military_forces
+					offset = 0
+				}
+			}
+		}
+	}
+}
+
+ec_sanction_building_arms_industry = {
+	ec_sanction_industry = {
+		building = building_arms_industry
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_arms_industry = {
+	$priority$ = 1
+}
+
+### MUNITION PLANTS
+
+ec_consider_building_munition_plants = {
+	has_technology_researched = percussion_cap
+	ec_consider_building = {
+		building = building_munition_plants
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_munition_plants = {
+	ec_requirements_exact = {
+		market_good = mg:ammunition
+		priority = $priority$
+		offset = ec_industry_priority_3_exact_offset
+	}
+	OR = {
+		ec_is_using_military_forces = no
+		ec_requirements_floor = {
+			market_good = mg:ammunition
+			priority = ec_floor_when_using_military_forces
+			offset = 0
+		}
+	}
+}
+
+ec_sanction_building_munition_plants = {
+	ec_sanction_industry = {
+		building = building_munition_plants 
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_munition_plants = {
+	$priority$ = 1
+}
+
+### ELECTRICS INDUSTRY
+
+ec_consider_building_electrics_industry = {
+	has_technology_researched = telephone
+	ec_consider_building = {
+		building = building_electrics_industry
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_electrics_industry = {
+	OR = {
+		ec_requirements_exact = {
+			market_good = mg:telephones
+			priority = $priority$
+			offset = ec_industry_priority_3_exact_offset
+		}
+		AND = {
+			has_technology_researched = radio
+			ec_requirements_exact = {
+				market_good = mg:radios
+				priority = $priority$
+				offset = ec_industry_priority_3_exact_offset
+			}
+		}
+	}
+}
+
+ec_sanction_building_electrics_industry = {
+	ec_sanction_industry = {
+		building = building_electrics_industry
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_electrics_industry = {
+	$priority$ = 1
+}
+
+### WAR MACHINE INDUSTRY
+
+ec_consider_building_war_machine_industry = {
+	has_technology_researched = military_aviation
+	ec_consider_building = {
+		building = building_war_machine_industry
+		critical = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_evaluate_building_war_machine_industry = {
+	OR = {
+		AND = {
+			ec_requirements_exact = {
+				market_good = mg:aeroplanes
+				priority = $priority$
+				offset = ec_industry_priority_3_exact_offset
+			}
+			OR = {
+				ec_is_using_military_forces = no
+				ec_requirements_floor = {
+					market_good = mg:aeroplanes
+					priority = ec_floor_when_using_military_forces
+					offset = 0
+				}
+			}
+		}
+		AND = {
+			has_technology_researched = mobile_armor
+			ec_requirements_exact = {
+				market_good = mg:tanks
+				priority = $priority$
+				offset = ec_industry_priority_3_exact_offset
+			}
+			OR = {
+				ec_is_using_military_forces = no
+				ec_requirements_floor = {
+					market_good = mg:tanks
+					priority = ec_floor_when_using_military_forces
+					offset = 0
+				}
+			}
+		}
+	}
+}
+
+ec_sanction_building_war_machine_industry = {
+	ec_sanction_industry = {
+		building = building_war_machine_industry
+		conditions = 0
+		shortage = 1
+		profitability = 1
+	}
+}
+
+ec_allocate_building_war_machine_industry = {
+	$priority$ = 1
+}
+
+### BUILDING SCRIPT
+
+ec_check_if_counter_is_within_limit = {
+	OR = {
+		AND = {
+			$priority$ = 1
+			var:eccb$counter$ < ec_building_limit_$factor$_1
+		}
+		AND = {
+			$priority$ = 2
+			var:eccb$counter$ < ec_building_limit_$factor$_2
+		}
+		AND = {
+			$priority$ = 3
+			var:eccb$counter$ < ec_building_limit_$factor$_3
+		}
+		AND = {
+			$priority$ = 4
+			var:eccb$counter$ < ec_building_limit_$factor$_4
+		}
+		AND = {
+			$priority$ = 5
+			var:eccb$counter$ < ec_building_limit_$factor$_5
+		}
+		AND = {
+			$priority$ = 6
+			var:eccb$counter$ < ec_building_limit_$factor$_6
+		}
+		AND = {
+			$priority$ = 7
+			var:eccb$counter$ < ec_building_limit_$factor$_7
+		}
+		AND = {
+			$priority$ = 8
+			var:eccb$counter$ < ec_building_limit_$factor$_8
+		}
+		AND = {
+			$priority$ = 9
+			var:eccb$counter$ < ec_building_limit_$factor$_9
+		}
+		AND = {
+			$priority$ = 10
+			var:eccb$counter$ < ec_building_limit_$factor$_10
+		}
+		AND = {
+			$priority$ >= 11
+			var:eccb$counter$ < ec_building_limit_$factor$_11
+		}
+	}
+}
+
+### EXTERNALLY GENERATED TRIGGERS
+
+ec_building_type_array_is_correct = {
+	has_global_variable_list = ecbta
+	NOT = {
+		any_in_global_list = {
+			variable = ecbta
+			save_temporary_scope_as = ec_current_type
+			any_in_global_list = {
+				variable = ecbta
+				NOT = {
+					this = scope:ec_current_type
+				}
+				OR = {
+					NOT = {
+						has_variable = ecbtn
+					}
+					var:ecbtn = ec_current_ecbtn
+				}
+			}
+		}
+	}
+	ec_check_building_type_in_array = { number = 1 priority = 1 counter = 1 arable = 0 }
+	ec_check_building_type_in_array = { number = 2 priority = 2 counter = 2 arable = 0 }
+	ec_check_building_type_in_array = { number = 3 priority = 9 counter = 3 arable = 0 }
+	ec_check_building_type_in_array = { number = 4 priority = 3 counter = 4 arable = 0 }
+	ec_check_building_type_in_array = { number = 5 priority = 3 counter = 5 arable = 0 }
+	ec_check_building_type_in_array = { number = 6 priority = 9 counter = 6 arable = 0 }
+	ec_check_building_type_in_array = { number = 7 priority = 9 counter = 7 arable = 0 }
+	ec_check_building_type_in_array = { number = 8 priority = 5 counter = 8 arable = 0 }
+	ec_check_building_type_in_array = { number = 9 priority = 13 counter = 9 arable = 0 }
+	ec_check_building_type_in_array = { number = 10 priority = 5 counter = 10 arable = 0 }
+	ec_check_building_type_in_array = { number = 11 priority = 5 counter = 11 arable = 0 }
+	ec_check_building_type_in_array = { number = 12 priority = 5 counter = 12 arable = 0 }
+	ec_check_building_type_in_array = { number = 13 priority = 6 counter = 13 arable = 0 }
+	ec_check_building_type_in_array = { number = 14 priority = 5 counter = 14 arable = 0 }
+	ec_check_building_type_in_array = { number = 15 priority = 11 counter = 15 arable = 0 }
+	ec_check_building_type_in_array = { number = 16 priority = 6 counter = 16 arable = 0 }
+	ec_check_building_type_in_array = { number = 17 priority = 4 counter = 17 arable = 0 }
+	ec_check_building_type_in_array = { number = 18 priority = 10 counter = 18 arable = 1 }
+	ec_check_building_type_in_array = { number = 19 priority = 10 counter = 18 arable = 1 }
+	ec_check_building_type_in_array = { number = 20 priority = 10 counter = 18 arable = 1 }
+	ec_check_building_type_in_array = { number = 21 priority = 10 counter = 18 arable = 1 }
+	ec_check_building_type_in_array = { number = 22 priority = 10 counter = 18 arable = 1 }
+	ec_check_building_type_in_array = { number = 23 priority = 5 counter = 23 arable = 1 }
+	ec_check_building_type_in_array = { number = 24 priority = 5 counter = 23 arable = 1 }
+	ec_check_building_type_in_array = { number = 25 priority = 11 counter = 25 arable = 1 }
+	ec_check_building_type_in_array = { number = 26 priority = 11 counter = 26 arable = 1 }
+	ec_check_building_type_in_array = { number = 27 priority = 13 counter = 27 arable = 1 }
+	ec_check_building_type_in_array = { number = 28 priority = 13 counter = 28 arable = 1 }
+	ec_check_building_type_in_array = { number = 29 priority = 15 counter = 29 arable = 1 }
+	ec_check_building_type_in_array = { number = 30 priority = 15 counter = 30 arable = 1 }
+	ec_check_building_type_in_array = { number = 31 priority = 14 counter = 31 arable = 1 }
+	ec_check_building_type_in_array = { number = 32 priority = 11 counter = 32 arable = 1 }
+	ec_check_building_type_in_array = { number = 33 priority = 14 counter = 33 arable = 0 }
+	ec_check_building_type_in_array = { number = 34 priority = 15 counter = 34 arable = 0 }
+	ec_check_building_type_in_array = { number = 35 priority = 12 counter = 35 arable = 0 }
+	ec_check_building_type_in_array = { number = 36 priority = 12 counter = 36 arable = 0 }
+	ec_check_building_type_in_array = { number = 37 priority = 7 counter = 37 arable = 0 }
+	ec_check_building_type_in_array = { number = 38 priority = 4 counter = 38 arable = 0 }
+	ec_check_building_type_in_array = { number = 39 priority = 6 counter = 39 arable = 0 }
+	ec_check_building_type_in_array = { number = 40 priority = 6 counter = 25 arable = 0 }
+	ec_check_building_type_in_array = { number = 41 priority = 12 counter = 41 arable = 0 }
+	ec_check_building_type_in_array = { number = 42 priority = 6 counter = 42 arable = 0 }
+	ec_check_building_type_in_array = { number = 43 priority = 7 counter = 43 arable = 0 }
+	ec_check_building_type_in_array = { number = 44 priority = 4 counter = 44 arable = 0 }
+	ec_check_building_type_in_array = { number = 45 priority = 8 counter = 45 arable = 0 }
+	ec_check_building_type_in_array = { number = 46 priority = 7 counter = 46 arable = 0 }
+	ec_check_building_type_in_array = { number = 47 priority = 7 counter = 47 arable = 0 }
+	ec_check_building_type_in_array = { number = 48 priority = 8 counter = 48 arable = 0 }
+	ec_check_building_type_in_array = { number = 49 priority = 8 counter = 49 arable = 0 }
+	cp_building_type_array_is_correct = yes
+}
+
+ec_check_building_type_in_array = {
+	any_in_global_list = {
+		variable = ecbta
+		has_variable = ecbtn
+		var:ecbtn = $number$
+		has_variable = ecbtp
+		var:ecbtp = $priority$
+		has_variable = ecbtc
+		var:ecbtc = $counter$
+		has_variable = ecbta
+		var:ecbta = $arable$
+	}
+}
+
+ec_corruption_in_priority_arrays = {
+	OR = {
+		AND = { has_variable_list = ecpa1 variable_list_size = { name = ecpa1 value > 0 } any_in_list = { variable = ecpa1 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa2 variable_list_size = { name = ecpa2 value > 0 } any_in_list = { variable = ecpa2 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa3 variable_list_size = { name = ecpa3 value > 0 } any_in_list = { variable = ecpa3 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa4 variable_list_size = { name = ecpa4 value > 0 } any_in_list = { variable = ecpa4 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa5 variable_list_size = { name = ecpa5 value > 0 } any_in_list = { variable = ecpa5 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa6 variable_list_size = { name = ecpa6 value > 0 } any_in_list = { variable = ecpa6 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa7 variable_list_size = { name = ecpa7 value > 0 } any_in_list = { variable = ecpa7 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa8 variable_list_size = { name = ecpa8 value > 0 } any_in_list = { variable = ecpa8 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa9 variable_list_size = { name = ecpa9 value > 0 } any_in_list = { variable = ecpa9 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa10 variable_list_size = { name = ecpa10 value > 0 } any_in_list = { variable = ecpa10 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa11 variable_list_size = { name = ecpa11 value > 0 } any_in_list = { variable = ecpa11 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa12 variable_list_size = { name = ecpa12 value > 0 } any_in_list = { variable = ecpa12 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa13 variable_list_size = { name = ecpa13 value > 0 } any_in_list = { variable = ecpa13 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa14 variable_list_size = { name = ecpa14 value > 0 } any_in_list = { variable = ecpa14 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa15 variable_list_size = { name = ecpa15 value > 0 } any_in_list = { variable = ecpa15 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa16 variable_list_size = { name = ecpa16 value > 0 } any_in_list = { variable = ecpa16 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa17 variable_list_size = { name = ecpa17 value > 0 } any_in_list = { variable = ecpa17 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+		AND = { has_variable_list = ecpa18 variable_list_size = { name = ecpa18 value > 0 } any_in_list = { variable = ecpa18 NOT = { is_target_in_global_variable_list = { name = ecbta target = this } } } }
+	}
+}
+
+ec_number_is_under_construction = {
+	OR = {
+		trigger_if = { limit = { $number$ = 1 } ec_building_is_under_construction = { building = building_government_administration } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 2 } ec_building_is_under_construction = { building = building_construction_sector } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 3 } ec_building_is_under_construction = { building = building_university } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 4 } ec_building_is_under_construction = { building = building_railway } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 5 } ec_building_is_under_construction = { building = building_port } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 6 } ec_building_is_under_construction = { building = building_barracks } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 7 } ec_building_is_under_construction = { building = building_naval_base } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 8 } ec_building_is_under_construction = { building = building_logging_camp } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 9 } ec_building_is_under_construction = { building = building_fishing_wharf } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 10 } ec_building_is_under_construction = { building = building_whaling_station } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 11 } ec_building_is_under_construction = { building = building_coal_mine } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 12 } ec_building_is_under_construction = { building = building_iron_mine } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 13 } ec_building_is_under_construction = { building = building_lead_mine } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 14 } ec_building_is_under_construction = { building = building_sulfur_mine } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 15 } ec_building_is_under_construction = { building = building_gold_mine } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 16 } ec_building_is_under_construction = { building = building_rubber_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 17 } ec_building_is_under_construction = { building = building_oil_rig } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 18 } ec_building_is_under_construction = { building = building_wheat_farm } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 19 } ec_building_is_under_construction = { building = building_rye_farm } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 20 } ec_building_is_under_construction = { building = building_rice_farm } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 21 } ec_building_is_under_construction = { building = building_maize_farm } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 22 } ec_building_is_under_construction = { building = building_millet_farm } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 23 } ec_building_is_under_construction = { building = building_livestock_ranch } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 24 } ec_building_is_under_construction = { building = building_cotton_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 25 } ec_building_is_under_construction = { building = building_dye_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 26 } ec_building_is_under_construction = { building = building_silk_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 27 } ec_building_is_under_construction = { building = building_banana_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 28 } ec_building_is_under_construction = { building = building_sugar_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 29 } ec_building_is_under_construction = { building = building_tea_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 30 } ec_building_is_under_construction = { building = building_coffee_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 31 } ec_building_is_under_construction = { building = building_tobacco_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 32 } ec_building_is_under_construction = { building = building_opium_plantation } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 33 } ec_building_is_under_construction = { building = building_food_industry } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 34 } ec_building_is_under_construction = { building = building_arts_academy } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 35 } ec_building_is_under_construction = { building = building_textile_mills } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 36 } ec_building_is_under_construction = { building = building_furniture_manufacturies } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 37 } ec_building_is_under_construction = { building = building_glassworks } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 38 } ec_building_is_under_construction = { building = building_tooling_workshops } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 39 } ec_building_is_under_construction = { building = building_paper_mills } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 40 } ec_building_is_under_construction = { building = building_chemical_plants } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 41 } ec_building_is_under_construction = { building = building_synthetics_plants } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 42 } ec_building_is_under_construction = { building = building_steel_mills } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 43 } ec_building_is_under_construction = { building = building_motor_industry } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 44 } ec_building_is_under_construction = { building = building_power_plant } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 45 } ec_building_is_under_construction = { building = building_shipyards } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 46 } ec_building_is_under_construction = { building = building_arms_industry } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 47 } ec_building_is_under_construction = { building = building_munition_plants } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 48 } ec_building_is_under_construction = { building = building_electrics_industry } } trigger_else = { always = no }
+		trigger_if = { limit = { $number$ = 49 } ec_building_is_under_construction = { building = building_war_machine_industry } } trigger_else = { always = no }
+		cp_number_is_under_construction = { number = $number$ }
+	}
+}
+
+ec_building_is_under_construction = {
+	root = {
+		any_scope_state = {
+			OR = {
+				scope:ec_counter_building.var:ecbta = 0
+				free_arable_land > 0
+			}
+			any_scope_building = {
+				is_building_type = $building$
+				is_under_construction = yes
+			}
+		}
+	}
+}

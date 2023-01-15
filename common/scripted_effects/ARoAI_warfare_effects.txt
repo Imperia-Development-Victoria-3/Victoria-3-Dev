@@ -1,0 +1,326 @@
+﻿wf_end_stalemate_war_with_white_peace = {
+	wf_remove_war_from_stalemate_lists = yes
+	save_scope_as = wf_war_to_white_peace
+	every_country = {
+		limit = {
+			scope:wf_war_to_white_peace = {
+				is_war_participant = prev
+			}
+		}
+		root = {
+			add_to_variable_list = {
+				name = wf_war_participants
+				target = prev
+			}
+		}
+	}
+	every_diplomatic_play = {
+		limit = {
+			OR = {
+				AND = {
+					OR = {
+						initiator = root
+						any_scope_initiator_ally = {
+							this = root
+						}
+					}
+					OR = {
+						target = scope:wf_enemy_warleader
+						any_scope_target_ally = {
+							this = scope:wf_enemy_warleader
+						}
+					}
+				}
+				AND = {
+					OR = {
+						initiator = scope:wf_enemy_warleader
+						any_scope_initiator_ally = {
+							this = scope:wf_enemy_warleader
+						}
+					}
+					OR = {
+						target = root
+						any_scope_target_ally = {
+							this = root
+						}
+					}
+				}
+			}
+		}
+		save_scope_as = wf_linked_diplomatic_play
+		root = {
+			set_variable = wf_white_peace_allowed
+			every_in_list = {
+				variable = wf_war_participants
+				if = {
+					limit = {
+						save_temporary_scope_as = wf_war_participant
+						NOT = {
+							scope:wf_linked_diplomatic_play = {
+								wf_is_committed_play_participant = {
+									country = scope:wf_war_participant
+								}
+							}
+						}
+					}
+					root = {
+						remove_variable = wf_white_peace_allowed
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_variable = wf_white_peace_allowed
+				}
+				if = {
+					limit = {
+						is_secessionist = yes
+					}
+					scope:wf_linked_diplomatic_play = {
+						resolve_play_for = root
+					}
+				}
+				else_if = {
+					limit = {
+						scope:wf_enemy_warleader = {
+							is_secessionist = yes
+						}
+					}
+					scope:wf_linked_diplomatic_play = {
+						resolve_play_for = scope:wf_enemy_warleader
+					}
+				}
+				else_if = {
+					limit = {
+						OR = {
+							is_revolutionary = yes
+							scope:wf_enemy_warleader = {
+								is_revolutionary = yes
+							}
+						}
+					}
+					if = {
+						limit = {
+							total_population > scope:wf_enemy_warleader.total_population
+						}
+						scope:wf_linked_diplomatic_play = {
+							resolve_play_for = root
+						}
+					}
+					else = {
+						scope:wf_linked_diplomatic_play = {
+							resolve_play_for = scope:wf_enemy_warleader
+						}
+					}
+				}
+				else = {
+					scope:wf_linked_diplomatic_play = {
+						end_play = yes
+					}
+				}
+			}
+			remove_variable = wf_white_peace_allowed
+		}
+	}
+	clear_saved_scope = wf_war_to_white_peace
+	clear_saved_scope = wf_linked_diplomatic_play
+	root = {
+		clear_variable_list = wf_war_participants
+	}
+}
+
+wf_remove_war_from_stalemate_lists = {
+	if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_1
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_1
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_2
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_2
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_3
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_3
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_4
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_4
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_5
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_5
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_6
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_6
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_7
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_7
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_8
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_8
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_9
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_9
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_10
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_10
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_11
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_11
+				target = prev
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			root = {
+				is_target_in_variable_list = {
+					name = wf_stalemates_12
+					target = prev
+				}
+			}
+		}
+		root = {
+			remove_list_variable = {
+				name = wf_stalemates_12
+				target = prev
+			}
+		}
+	}
+}
+
