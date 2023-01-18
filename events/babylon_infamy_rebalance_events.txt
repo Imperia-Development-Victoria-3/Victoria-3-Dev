@@ -179,7 +179,7 @@ infamy_rebalance.2 = {
 	type = country_event
 	hidden = yes
 	immediate = {
-		change_infamy = 25
+		change_infamy = 200
 	}
 }
 
@@ -311,10 +311,6 @@ infamy_rebalance.5 = {
 		NOT = {
 			has_modifier = modifier_international_pariah
 		}
-		save_temporary_scope_value_as = {
-			name = mult_var
-			value = 1.8
-		}
 		any_country = {
 			infamy >= root.pariah_infamy_SCOPE_VALUE_MULT_VAR_trigger
 			has_modifier = modifier_international_pariah
@@ -327,7 +323,6 @@ infamy_rebalance.5 = {
 			NOT = {
 				has_truce_with = root
 			}
-			save_temporary_scope_as = pariah_temp_scope
 		}
 		OR = {
 			country_rank = rank_value:great_power
@@ -343,12 +338,29 @@ infamy_rebalance.5 = {
 				}
 			}
 		}
-		#You are permitted aggressive diplomatic plays...
 		aggressive_diplomatic_plays_permitted = yes
 	}
 	immediate = {
-		scope:target_country = {
-			save_scope_as = pariah_scope
+		save_scope_as = root_scope #For tooltip down the line... stupid, yes.
+		save_temporary_scope_value_as = {
+			name = mult_var
+			value = 1.8
+		}
+		random_country = {
+			limit = {
+				infamy >= root.pariah_infamy_SCOPE_VALUE_MULT_VAR_trigger
+				has_modifier = modifier_international_pariah
+				NOT = {
+					has_diplomatic_pact = {
+						who = root
+						type = alliance
+					}
+				}
+				NOT = {
+					has_truce_with = root
+				}
+			}
+			save_scope_as = pariah
 		}
 	}
 	option = {
@@ -365,47 +377,18 @@ infamy_rebalance.5 = {
 	}
 	option = {
 		name = infamy_rebalance.5.b
-		#Invites all neighbours of the pariah to a coalition		
-		set_variable = pariah_coalition_leader
-		# scope:pariah = {
-		every_country = {
-			limit = {
-				aggressive_diplomatic_plays_permitted = yes
-				NOT = {
-					this = scope:pariah
-				}
-				NOT = {
-					this = root
-				}
-				country_rank >= rank_value:great_power
-			}
-			trigger_event = {
-				id = infamy_rebalance.6
-				days = 0
-				popup = yes
-			}
-		}
-		every_country = {
-			limit = {
-				has_strategic_adjacency = scope:pariah
-				aggressive_diplomatic_plays_permitted = yes
-				NOT = {
-					this = scope:pariah
-				}
-				NOT = {
-					country_rank >= rank_value:great_power
-				}
-			}
-			trigger_event = {
-				id = infamy_rebalance.6
-				days = 0
-				popup = yes
-			}
-		}
-		# }
 		create_diplomatic_play = {
 			target_country = scope:pariah
 			type = dp_contain_threat
+		}
+		custom_tooltip = {
+			text = send_pariah_ultimatum_TT
+			scope:pariah = {
+				trigger_event = {
+					id = infamy_rebalance.15
+					popup = yes
+				}
+			}
 		}
 		ai_chance = {
 			base = 50
@@ -434,12 +417,6 @@ infamy_rebalance.6 = {
 			}
 			save_scope_as = pariah
 		}
-	}
-	trigger = {
-		NOT = {
-			has_variable = pariah_coalition_leader
-		}
-		aggressive_diplomatic_plays_permitted = yes
 	}
 	option = {
 		name = infamy_rebalance.5.a
@@ -475,14 +452,6 @@ infamy_rebalance.6 = {
 		}
 		ai_chance = {
 			base = 75
-		}
-	}
-	after = {
-		any_country = {
-			limit = {
-				has_variable = pariah_coalition_leader
-			}
-			remove_variable = pariah_coalition_leader
 		}
 	}
 }
@@ -711,7 +680,7 @@ infamy_rebalance.10 = {
 	#Economic Sanctions for pariah
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+		video = "gfx/event_pictures/unspecific_factory_closed.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
@@ -756,7 +725,7 @@ infamy_rebalance.11 = {
 	#Price of Infamy
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+		video = "gfx/event_pictures/unspecific_politicians_arguing.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
@@ -799,7 +768,7 @@ infamy_rebalance.12 = {
 	#International isolation
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+		video = "gfx/event_pictures/unspecific_politicians_arguing.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
@@ -897,7 +866,7 @@ infamy_rebalance.13 = {
 	#on_country_released_as_independent = meaning you get an infamy reduction as if you annexed the territory
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
@@ -926,7 +895,7 @@ infamy_rebalance.14 = {
 	#on_country_released_as_own_subject = meaning you get an infamy reduction as if you subjugated the territory little more than half the annex reduction)
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
@@ -947,6 +916,135 @@ infamy_rebalance.14 = {
 		name = infamy_rebalance.14.a
 		show_as_tooltip = {
 			change_infamy = var:infamy_reduction
+		}
+	}
+}
+
+infamy_rebalance.15 = {
+	#Ultimatum for pariah
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.15.t
+	desc = infamy_rebalance.15.d
+	flavor = infamy_rebalance.15.f
+	duration = 1
+	immediate = {
+		random_diplomatic_play = {
+			limit = {
+				target_is = root
+				has_play_goal = contain_threat
+			}
+			initiator = {
+				save_scope_as = initiator_scope
+			}
+			save_scope_as = diplo_play_scope
+		}
+		save_scope_as = root_scope		#used in tooltip... yes I know
+	}
+	option = {
+		name = infamy_rebalance.15.a		#Refuse
+		default_option = yes
+		hidden_effect = {
+			every_country = {
+				limit = {
+					country_rank >= rank_value:major_power
+					NOR = {
+						this = scope:initiator_scope
+						has_diplomatic_pact = {
+							who = root
+							type = alliance
+						}
+						is_subject_of = root
+					}
+				}
+				change_relations = {
+					country = root
+					value = -200
+				}
+				change_relations = {
+					country = scope:initiator_scope
+					value = 200
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				aggressive_diplomatic_plays_permitted = yes
+				NOT = {
+					this = root
+				}
+				NOT = {
+					this = scope:initiator_scope
+				}
+				country_rank >= rank_value:great_power
+			}
+			trigger_event = {
+				id = infamy_rebalance.6
+				days = 0
+				popup = yes
+			}
+		}
+		custom_tooltip = {
+			text = pariah_coalition_minor_powers_invitation_TT
+			every_country = {
+				limit = {
+					has_strategic_adjacency = root
+					aggressive_diplomatic_plays_permitted = yes
+					NOT = {
+						this = root
+					}
+					country_rank < rank_value:great_power
+				}
+				trigger_event = {
+					id = infamy_rebalance.6
+					days = 0
+					popup = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = infamy_rebalance.15.b		#Agree
+		scope:diplo_play_scope = {
+			resolve_play_for = scope:initiator_scope
+			end_play = yes
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_strategic_adjacency = root
+					NOT = {
+						is_country_type = unrecognized
+					}
+				}
+				create_truce = {
+					country = root
+					months = 120
+				}
+			}
+			every_country = {
+				limit = {
+					has_strategic_adjacency = root
+					NOT = {
+						is_country_type = unrecognized
+					}
+				}
+				create_diplomatic_pact = {
+					country = root
+					type = minor_war_reparations
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
 		}
 	}
 }
