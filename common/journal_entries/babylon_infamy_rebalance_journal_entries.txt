@@ -1,0 +1,130 @@
+je_pariah_neighbour = {
+	#A Wolf amongst Sheep
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	possible = {
+		any_country = {
+			AND = {
+				NOT = {
+					this = root
+				}
+				infamy >= infamy_threshold:pariah
+			}
+		}
+	}
+	is_shown_when_inactive = {
+		any_country = {
+			AND = {
+				NOT = {
+					this = root
+				}
+				infamy >= infamy_threshold:notorious
+			}
+		}
+	}
+	immediate = {
+		add_modifier = {
+			name = modifier_pariah_neighbour
+		}
+		random_country = {
+			limit = {
+				NOT = {
+					this = root
+				}
+				infamy >= infamy_threshold:pariah
+			}
+			save_scope_as = target
+		}
+	}
+	complete = {
+		trigger_if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				infamy < infamy_threshold:pariah
+			}
+		}
+	}
+	on_complete = {
+		remove_modifier = modifier_pariah_neighbour
+	}
+	on_monthly_pulse = {
+		random_events = {
+			9 = 0
+			1 = infamy_rebalance.4			#penalty for states bordering pariah
+			1 = infamy_rebalance.5			#start of coalition
+			1 = infamy_rebalance.8			#wartime event for coalition member
+		}
+	}
+	fail = {
+	}
+	invalid = {
+		trigger_if = {
+			limit = {
+				exists = scope:target
+			}
+			NOT = {
+				has_strategic_adjacency = scope:target
+			}
+		}
+	}
+	on_invalid = {
+		remove_modifier = modifier_pariah_neighbour
+	}
+	progressbar = no
+	should_be_pinned_by_default = yes
+}
+
+je_is_pariah = {
+	#International Pariah
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	possible = {
+		infamy >= infamy_threshold:pariah
+	}
+	is_shown_when_inactive = {
+		infamy >= infamy_threshold:notorious
+	}
+	immediate = {
+	}
+	complete = {
+		infamy < infamy_threshold:pariah
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_modifier = modifier_international_pariah
+			}
+			remove_modifier = modifier_international_pariah
+		}
+		if = {
+			limit = {
+				has_modifier = modifier_pariah_economic_sanctions
+			}
+			remove_modifier = modifier_pariah_economic_sanctions
+		}
+		if = {
+			limit = {
+				has_modifier = modifier_pariah_international_isolation
+			}
+			remove_modifier = modifier_pariah_international_isolation
+		}
+	}
+	on_monthly_pulse = {
+		events = {
+			infamy_rebalance.10			#Economic sanctions
+			infamy_rebalance.11			#Price of infamy
+			infamy_rebalance.12			#International Isolation
+		}
+		random_events = {
+			#Fires the pariah wartime event roughly once every 4 months. 
+			3 = 0
+			1 = infamy_rebalance.9			#wartime event for pariah
+		}
+	}
+	fail = {
+	}
+	invalid = {
+	}
+	progressbar = no
+	should_be_pinned_by_default = yes
+}
