@@ -1,17 +1,13 @@
 ﻿namespace = acw_je_events
-
 # ACW startup
 acw_je_events.1 = {
 	type = country_event
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_capitalists_meeting.bk2"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
-
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-
 	title = {
 		first_valid = {
 			triggered_desc = {
@@ -60,65 +56,69 @@ acw_je_events.1 = {
 			}
 		}
 	}
-
 	duration = 3
-
 	trigger = {
 	}
-
 	immediate = {
-					remove_modifier = missouri_compromise
-					remove_modifier = mexican_cession_compromise
-					remove_modifier = mexican_cession_proviso
-					remove_modifier = mexican_cession_pop_sov
-					remove_modifier = dred_scott_for_scot_mod
-					remove_modifier = dred_scott_for_sand_mod
-					remove_modifier = harpers_ferry_success_mod
-					remove_modifier = harpers_ferry_failure_mod
-					remove_modifier = harpers_ferry_disaster_mod
-					remove_modifier = southern_election_panic_mod
+		remove_modifier = missouri_compromise
+		remove_modifier = mexican_cession_compromise
+		remove_modifier = mexican_cession_proviso
+		remove_modifier = mexican_cession_pop_sov
+		remove_modifier = dred_scott_for_scot_mod
+		remove_modifier = dred_scott_for_sand_mod
+		remove_modifier = harpers_ferry_success_mod
+		remove_modifier = harpers_ferry_failure_mod
+		remove_modifier = harpers_ferry_disaster_mod
+		remove_modifier = southern_election_panic_mod
 		if = {
 			limit = {
 				has_variable = csa_will_spawn_var
 			}
 			random_country = {
-				limit = {	
+				limit = {
 					is_revolutionary = yes
 					country_definition = root.country_definition
 				}
 				change_tag = CSA
 				save_scope_as = csa_scope
 			}
-			u:USA = {trigger_event = { 
-				id = acw_csa_modded.1
-				days = 3
-				}}
-			u:CSA = {trigger_event = {
-			 id = acw_csa_modded.2
-			 	days = 3
-		}}
-			random_diplomatic_play = {
-			limit = {
-				any_scope_play_involved = {
-					this = scope:csa_scope
+			u:USA = {
+				trigger_event = {
+					id = acw_csa_modded.1
+					days = 3
 				}
 			}
-			add_war_goal = {
-				holder = initiator
-				type = secession
+			u:CSA = {
+				trigger_event = {
+					id = acw_csa_modded.2
+					days = 3
+				}
 			}
-			remove_war_goal = {
-				who = initiator
-				war_goal = annex_country
+			random_diplomatic_play = {
+				limit = {
+					any_scope_play_involved = {
+						this = scope:csa_scope
+					}
+				}
+				add_war_goal = {
+					holder = initiator
+					type = secession
+				}
+				remove_war_goal = {
+					who = initiator
+					war_goal = annex_country
+				}
 			}
 		}
-		}
-		if = { limit = { any_country = {
-				is_revolutionary = yes
-				country_definition = root.country_definition
-				}}
+		if = {
+			limit = {
+				any_country = {
+					is_revolutionary = yes
+					country_definition = root.country_definition
+				}
+			}
 			random_country = {
-				limit = {	
+				limit = {
 					is_revolutionary = yes
 					country_definition = root.country_definition
 				}
@@ -126,103 +126,107 @@ acw_je_events.1 = {
 				save_scope_as = fsa_scope
 				if = {
 					limit = {
-						NOT = { has_law = law_type:law_slavery_banned }
+						NOT = {
+							has_law = law_type:law_slavery_banned
+						}
 					}
 					activate_law = law_type:law_slavery_banned
 				}
 			}
-				random_diplomatic_play = {
-			limit = {
-				any_scope_play_involved = {
-					OR = {
-						this = scope:csa_scope
-						this = scope:fsa_scope
+			random_diplomatic_play = {
+				limit = {
+					any_scope_play_involved = {
+						OR = {
+							this = scope:csa_scope
+							this = scope:fsa_scope
+						}
 					}
 				}
-			}
-			add_war_goal = {
-				holder = initiator
-				type = secession
-			}
-			remove_war_goal = {
-				who = initiator
-				war_goal = annex_country
+				add_war_goal = {
+					holder = initiator
+					type = secession
+				}
+				remove_war_goal = {
+					who = initiator
+					war_goal = annex_country
+				}
 			}
 		}
-			}
-			else = {
-				if = {
-					limit = { any_country = {
-				is_revolutionary = no
-				country_definition = root.country_definition
-				}}
-					create_country = {
-						tag = CSA
-						origin = this
-						state = s:STATE_SOUTH_CAROLINA.region_state:USA
+		else = {
+			if = {
+				limit = {
+					any_country = {
+						is_revolutionary = no
+						country_definition = root.country_definition
+					}
 				}
+				create_country = {
+					tag = CSA
+					origin = this
+					state = s:STATE_SOUTH_CAROLINA.region_state:USA
 				}
-				
-				
-				set_variable = csa_will_spawn_var
-				c:USA = {trigger_event = { 
-				id = acw_csa_modded.1
-				days = 3
-				}}
-			c:CSA = {trigger_event = {
-			 id = acw_csa_modded.2
-			 	days = 3
 			}
+			set_variable = csa_will_spawn_var
+			c:USA = {
+				trigger_event = {
+					id = acw_csa_modded.1
+					days = 3
+				}
+			}
+			c:CSA = {
+				trigger_event = {
+					id = acw_csa_modded.2
+					days = 3
+				}
 			}
 			create_diplomatic_play = {
-			name = american_civil_war_name
-		
-			target_country = c:CSA
-			type = dp_annex_war
-			war = yes
-
-		#	add_war_goal = {
-			#	holder = c:CSA
-			#	type = independence
-			#}
-			add_war_goal = {
-    				holder = c:CSA
-    				type = conquer_state
-   					target_state = s:STATE_MISSOURI.region_state:USA
-   			}
-			add_war_goal = {
-    				holder = c:CSA
-    				type = conquer_state
-   					target_state = s:STATE_KENTUCKY.region_state:USA
-   			}
-			add_war_goal = {
-    				holder = c:CSA
-    				type = conquer_state
-   					target_state = s:STATE_WEST_VIRGINIA.region_state:USA
-   			}
-		}
+				name = american_civil_war_name
+				target_country = c:CSA
+				type = dp_annex_war
+				war = yes
+				#	add_war_goal = {
+				#	holder = c:CSA
+				#	type = independence
+				#}
+				add_war_goal = {
+					holder = c:CSA
+					type = conquer_state
+					target_state = s:STATE_MISSOURI.region_state:USA
+				}
+				add_war_goal = {
+					holder = c:CSA
+					type = conquer_state
+					target_state = s:STATE_KENTUCKY.region_state:USA
+				}
+				add_war_goal = {
+					holder = c:CSA
+					type = conquer_state
+					target_state = s:STATE_WEST_VIRGINIA.region_state:USA
+				}
+			}
 		}
 		set_global_variable = {
 			name = american_civil_war
 			value = yes
 		}
-		
 	}
-
 	option = {
 		name = acw_je_events.1.a
 		default_option = yes
-
 		set_variable = union_side_acw
 		if = {
-			limit = { exists = c:CSA }
+			limit = {
+				exists = c:CSA
+			}
 			add_journal_entry = {
 				type = je_acw_war
 				target = scope:csa_scope
 			}
 		}
 		else_if = {
-			limit = { exists = c:FSA }
+			limit = {
+				exists = c:FSA
+			}
 			add_journal_entry = {
 				type = je_acw_war
 				target = scope:fsa_scope
@@ -231,20 +235,24 @@ acw_je_events.1 = {
 	}
 	option = {
 		name = acw_je_events.1.b
-
-		trigger = { is_player = yes }
-
+		trigger = {
+			is_player = yes
+		}
 		set_variable = union_side_acw
 		if = {
-			limit = { exists = c:CSA }
+			limit = {
+				exists = c:CSA
+			}
 			add_journal_entry = {
 				type = je_acw_war
 				target = scope:csa_scope
 			}
-			play_as = scope:csa_scope	
+			play_as = scope:csa_scope
 		}
 		else_if = {
-			limit = { exists = c:FSA }
+			limit = {
+				exists = c:FSA
+			}
 			add_journal_entry = {
 				type = je_acw_war
 				target = scope:fsa_scope
@@ -260,22 +268,16 @@ acw_je_events.2 = {
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_capitalists_meeting.bk2"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
-
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-
 	title = acw_je_events.2.t
 	desc = acw_je_events.2.d
 	flavor = acw_je_events.2.f
-
 	duration = 3
-
 	trigger = {
 		# triggered by je_acw_war completion
 	}
-
 	immediate = {
 		set_variable = {
 			name = reconstruction_var
@@ -295,17 +297,21 @@ acw_je_events.2 = {
 					OR = {
 						AND = {
 							has_modifier = border_state_mod
-							c:USA = { has_variable = border_state_rebels_var }
+							c:USA = {
+								has_variable = border_state_rebels_var
+							}
 						}
 						AND = {
 							has_modifier = south_state_mod
-							c:USA = { has_variable = south_state_rebels_var }
+							c:USA = {
+								has_variable = south_state_rebels_var
+							}
 						}
-							has_modifier = deep_south_state_mod
+						has_modifier = deep_south_state_mod
 					}
 					state_region = {
 						is_homeland = cu:dixie
-					#	NOT = { is_homeland = cu:yankee }
+						#	NOT = { is_homeland = cu:yankee }
 					}
 				}
 				set_state_type = unincorporated
@@ -318,10 +324,12 @@ acw_je_events.2 = {
 		else = {
 			every_scope_state = {
 				limit = {
-				#	is_incorporated = yes
+					#	is_incorporated = yes
 					state_region = {
 						is_homeland = cu:yankee
-						NOT = { is_homeland = cu:dixie }
+						NOT = {
+							is_homeland = cu:dixie
+						}
 					}
 				}
 				set_state_type = unincorporated
@@ -332,15 +340,14 @@ acw_je_events.2 = {
 			}
 		}
 	}
-
 	option = {
 		name = acw_je_events.1.a
-		
 		add_journal_entry = {
 			type = je_acw_reconstruction
 		}
-		
-		add_journal_entry = { type = je_acw_reincorporate }		
+		add_journal_entry = {
+			type = je_acw_reincorporate
+		}
 		if = {
 			limit = {
 				has_law = law_type:law_slavery_banned
@@ -367,28 +374,20 @@ acw_je_events.3 = {
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_capitalists_meeting.bk2"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
-
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-
 	title = acw_je_events.3.t
 	desc = acw_je_events.3.d
 	flavor = acw_je_events.3.f
-
 	duration = 3
-
 	trigger = {
 		# triggered by je_acw_war completion
 	}
-
 	immediate = {
 	}
-
 	option = {
 		name = acw_je_events.3.a
-		
 		if = {
 			limit = {
 				has_variable = acw_gain_african_american
@@ -413,49 +412,49 @@ acw_je_events.4 = {
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_capitalists_meeting.bk2"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
-
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-
 	title = acw_je_events.4.t
 	desc = acw_je_events.4.d
 	flavor = acw_je_events.4.f
-
 	duration = 3
-
 	trigger = {
 		# triggered on je_acw_war pulse
 		exists = c:CSA
 		exists = c:USA
-		NOT = { has_law = law_type:law_slavery_banned }
+		NOT = {
+			has_law = law_type:law_slavery_banned
+		}
 		any_diplomatic_play = {
 			AND = {
-				any_scope_play_involved = { this = c:CSA }
-				any_scope_play_involved = { this = c:USA }
+				any_scope_play_involved = {
+					this = c:CSA
+				}
+				any_scope_play_involved = {
+					this = c:USA
+				}
 			}
 		}
-		NOT = { exists = c:FSA } # fringe sanity check
-		NOT = { 
+		NOT = {
+			exists = c:FSA
+		}		# fringe sanity check
+		NOT = {
 			any_interest_group = {
-				has_modifier = delayed_emancipation 
+				has_modifier = delayed_emancipation
 			}
 		}
 		has_variable = union_side_acw
 	}
-
 	immediate = {
 		law_type:law_slavery_banned = {
-			save_scope_as = abolition_law # use in loc with SCOPE.sLawType etc
+			save_scope_as = abolition_law			# use in loc with SCOPE.sLawType etc
 		}
 	}
-
 	option = {
-		name = acw_je_events.4.a # We shall save the Union!
+		name = acw_je_events.4.a		# We shall save the Union!
 		default_option = yes
 		activate_law = law_type:law_slavery_banned
-
 		every_interest_group = {
 			limit = {
 				law_stance = {
@@ -464,15 +463,13 @@ acw_je_events.4 = {
 				}
 			}
 			add_modifier = {
-				name = enacted_emancipation # +1 opinion
+				name = enacted_emancipation				# +1 opinion
 				months = normal_modifier_time
 			}
 		}
 	}
-
 	option = {
-		name = acw_je_events.4.b # Pass on immediate emancipation 
-
+		name = acw_je_events.4.b		# Pass on immediate emancipation 
 		every_interest_group = {
 			limit = {
 				law_stance = {
@@ -481,7 +478,7 @@ acw_je_events.4 = {
 				}
 			}
 			add_modifier = {
-				name = delayed_emancipation # -3 opinion [everybody hated that]
+				name = delayed_emancipation				# -3 opinion [everybody hated that]
 				months = normal_modifier_time
 			}
 		}
