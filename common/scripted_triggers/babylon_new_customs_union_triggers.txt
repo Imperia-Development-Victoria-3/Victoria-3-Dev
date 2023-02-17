@@ -1,0 +1,32 @@
+#should be called in whoever is calling the diplo action. 
+babylon_new_customs_union_valid_without_diplo_play = {
+	#Either... 
+	#Is both North German
+	#Is both same culture and has nationalism
+	#Same culture group and has pan-nationalism
+	#To go on without a diplo play
+	OR = {
+		AND = {
+			country_has_primary_culture = cu:north_german
+			scope:target_country = cu:north_german
+		}
+		AND = {
+			has_technology_researched = nationalism
+			any_primary_culture = {
+				is_primary_culture_of = scope:target_country
+			}
+			scope:target_country = {
+				has_technology_researched = nationalism
+			}
+		}
+		AND = {
+			has_technology_researched = pan-nationalism
+			any_primary_culture = {
+				shares_heritage_and_other_trait_with_any_primary_culture = scope:target_country
+			}
+			scope:target_country = {
+				has_technology_researched = pan-nationalism
+			}
+		}
+	}
+}

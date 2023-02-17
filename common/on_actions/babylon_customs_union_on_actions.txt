@@ -1,0 +1,112 @@
+# Root = Diplomatic Play
+on_diplo_play_back_down = {
+	effect = {
+		if = {
+			#If somebody backs down while nobody has joined.. 
+			#Or its the overlord that backs down
+			limit = {
+				is_diplomatic_play_type = dp_customs_union
+				initiator = {
+					has_variable_list = babylon_new_customs_union_overlord
+				}
+				OR = {
+					target = {
+						has_variable_list = babylon_new_customs_union_applicant
+					}
+					initiator_is = scope:actor
+				}
+			}
+			initiator = {
+				save_scope_as = overlord_scope
+				clear_variable_list = babylon_new_customs_union_overlord
+			}
+			random_scope_play_involved = {
+				limit = {
+					has_variable_list = babylon_new_customs_union_applicant
+				}
+				remove_diplomatic_pact = {
+					country = scope:overlord_scope
+					type = customs_union
+				}
+				save_scope_as = applicant_scope
+				clear_variable_list = babylon_new_customs_union_applicant
+				set_variable = {
+					name = babylon_new_customs_union_applicant_denied
+					value = 1
+					days = 1826					#5 years
+				}
+			}
+			random_scope_play_involved = {
+				limit = {
+					has_variable = babylon_new_customs_union_objector
+				}
+				remove_variable = babylon_new_customs_union_objector
+				save_scope_as = objector_scope
+			}
+			#Ends play to prevent war goals from firing
+			end_play = yes
+			#creates truces to simulate the ending of a play... 
+			scope:overlord_scope = {
+				create_truce = {
+					country = scope:applicant_scope
+					months = 60
+				}
+				create_truce = {
+					country = scope:objector_scope
+					months = 60
+				}
+			}
+		}
+	}
+}
+
+# Root = Diplomatic Play
+on_diplo_play_join_side = {
+	effect = {
+		if = {
+			limit = {
+				is_diplomatic_play_type = dp_customs_union
+				any_scope_target_ally = {
+					#If theres no objectors on targets side
+					#Means it only fires once.. Hopefully
+					NOT = {
+						has_variable = babylon_new_customs_union_objector
+					}
+				}
+			}
+			random_scope_target_ally = {
+				#Looks for an ally of the applicant, that is not the applicant and is not the (set) objector
+				limit = {
+					NOR = {
+						has_variable_list = babylon_new_customs_union_applicant
+						has_variable = babylon_new_customs_union_objector
+					}
+				}
+				#.. And sets the ally as the new objector
+				set_variable = babylon_new_customs_union_objector
+				save_scope_as = objector_scope
+			}
+			initiator = {
+				save_scope_as = overlord_scope
+			}
+			target = {
+				save_scope_as = applicant_scope
+			}
+			end_play = yes
+			scope:objector_scope = {
+				create_diplomatic_play = {
+					type = dp_liberate_subject
+					target_country = scope:applicant_scope
+					add_target_backers = {
+						scope:overlord_scope
+					}
+					add_war_goal = {
+						holder = scope:objector_scope
+						type = humiliation
+						target_country = scope:overlord_scope
+					}
+				}
+			}
+		}
+	}
+}
