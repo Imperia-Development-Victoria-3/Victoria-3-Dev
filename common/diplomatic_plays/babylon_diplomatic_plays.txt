@@ -48,20 +48,21 @@ dp_customs_union = {
 	}
 	on_weekly_pulse = {
 		#Ensures this diplo play never reaches war directly
-		random_country = {
-			limit = {
-				has_variable_list = babylon_new_customs_union_overlord
+		#Should be diplo play scope
+		if = {
+			limit = { 
+				escalation >= 80
 			}
-			trigger_event = babylon_new_customs_union.1
+			initiator = {
+				clear_variable_list = babylon_new_customs_union_applicant
+			}
+			target = {
+				clear_variable_list = babylon_new_customs_union_overlord
+			}
+			end_play = yes
 		}
 	}
 	on_war_begins = {
-		random_country = {
-			limit = {
-				has_variable_list = babylon_new_customs_union_overlord
-			}
-			trigger_event = babylon_new_customs_union.1
-		}
 	}
 	on_war_end = {
 	}
