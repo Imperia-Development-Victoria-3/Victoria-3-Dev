@@ -39,6 +39,17 @@ on_diplo_play_back_down = {
 				}
 			}
 		}
+		if = {
+			#If someone backs down while 2nd part is active
+			limit = { 
+				target = {
+					has_variable = babylon_new_customs_union_objector
+				}
+			}
+			target = {
+				remove_variable = babylon_new_customs_union_objector
+			}
+		}
 	}
 }
 
@@ -48,7 +59,7 @@ on_diplo_play_join_side = {
 		if = {
 			limit = {
 				is_diplomatic_play_type = dp_customs_union
-				any_scope_target_ally = {
+				target = {
 					#If theres no objectors on targets side
 					#Means it only fires once.. Hopefully
 					NOT = {
@@ -61,11 +72,18 @@ on_diplo_play_join_side = {
 				limit = {
 					NOR = {
 						has_variable_list = babylon_new_customs_union_applicant
-						has_variable = babylon_new_customs_union_objector
+						root.target = {
+							var:babylon_new_customs_union_objector = prev
+						}
 					}
 				}
-				#.. And sets the ally as the new objector
-				set_variable = babylon_new_customs_union_objector
+				#.. And sets the ally as the new objector, in the applicant
+				root.target = {
+					set_variable = {
+						name = babylon_new_customs_union_objector
+						value = prev
+					}
+				}
 				save_scope_as = objector_scope
 			}
 			initiator = {
