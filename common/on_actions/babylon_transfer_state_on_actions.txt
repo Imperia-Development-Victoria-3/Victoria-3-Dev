@@ -1,37 +1,35 @@
 ﻿on_diplo_play_start = {
 	effect = {
-		this = {
-			if = {
-				limit = {
-					is_diplomatic_play_type = dp_transfer_liberate_subject
+		if = {
+			limit = {
+				is_diplomatic_play_type = dp_transfer_liberate_subject
+			}
+			# Add previous backers on both sides to this diplo play, as we can't do this when we create the play
+			root.target = {
+				every_in_list = {
+					variable = objectors
+					root = { add_initiator_backers = {prev} }
 				}
-				# Add previous backers on both sides to this diplo play, as we can't do this when we create the play
-				root.target = {
-					every_in_list = {
-						variable = objectors
-						root = { add_initiator_backers = {prev} }
-					}
 
-					every_in_list = {
-						variable = supporters
-						root = { add_target_backers = {prev} }
-					}
-
-					if = {
-						limit = {
-							has_variable_list = objectors
-						}
-						clear_variable_list = objectors
-					}
-
-					if = {
-						limit = {
-							has_variable_list = supporters
-						}
-						clear_variable_list = supporters
-					}
-					
+				every_in_list = {
+					variable = supporters
+					root = { add_target_backers = {prev} }
 				}
+
+				if = {
+					limit = {
+						has_variable_list = objectors
+					}
+					clear_variable_list = objectors
+				}
+
+				if = {
+					limit = {
+						has_variable_list = supporters
+					}
+					clear_variable_list = supporters
+				}
+				
 			}
 		}
 	}
