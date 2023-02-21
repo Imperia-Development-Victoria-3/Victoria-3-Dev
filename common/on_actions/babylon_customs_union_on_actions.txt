@@ -12,7 +12,10 @@ on_diplo_play_back_down = {
 			}
 			initiator = {
 				save_scope_as = overlord_scope
-				clear_variable_list = babylon_new_customs_union_overlord
+				remove_list_variable = {
+					name = babylon_new_customs_union_overlord
+					target = root.target
+				}
 			}
 			target = {
 				remove_diplomatic_pact = {
@@ -27,8 +30,13 @@ on_diplo_play_back_down = {
 					days = 1826					#5 years
 				}
 			}
-			#Ends play to prevent war goals from firing
-			end_play = yes
+			#Removes the humiliation since end_play = yes doesnt work (in current 1.2.1 beta?)
+			scope:actor = {
+				trigger_event = {
+					id = babylon_new_customs_union.4
+					days = 1
+				}
+			}
 			#creates truces to simulate the ending of a play... 
 			scope:overlord_scope = {
 				create_truce = {
@@ -56,9 +64,12 @@ on_diplo_play_back_down = {
 				#Clear a variable from the applicant (that points at overlord)
 				remove_variable = babylon_new_customs_union_applicant
 			}
-			#Clear another variable [list], from the overlord
+			#remove applicant from overlords list
 			scope:overlord_scope = {
-				clear_variable_list = babylon_new_customs_union_overlord
+				remove_list_variable = {
+					name = babylon_new_customs_union_overlord
+					target = root.target
+				}
 			}
 			if = {
 				limit = {
