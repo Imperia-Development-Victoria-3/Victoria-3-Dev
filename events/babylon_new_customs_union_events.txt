@@ -4,12 +4,12 @@ babylon_new_customs_union.2 = {
 	hidden = yes
 	type = country_event
 	trigger = {
-		has_variable_list = babylon_new_customs_union_applicant
+		has_variable = babylon_new_customs_union_applicant
 	}
 	immediate = {
 		save_scope_as = applicant_scope
-		every_in_list = {
-			variable = babylon_new_customs_union_applicant
+		var:babylon_new_customs_union_applicant = {
+			#This var points at the overlord (in the applicant)
 			save_scope_as = overlord_scope
 		}
 		if = {
@@ -31,7 +31,7 @@ babylon_new_customs_union.2 = {
 				days = 1826				#5 years
 			}
 		}
-		clear_variable_list = babylon_new_customs_union_applicant
+		remove_variable = babylon_new_customs_union_applicant
 		scope:overlord_scope = {
 			clear_variable_list = babylon_new_customs_union_overlord
 		}
@@ -44,9 +44,13 @@ babylon_new_customs_union.3 = {
 	hidden = yes
 	type = country_event
 	immediate = {
+		#get applicant which lies in this variable
 		every_in_list = {
-			#Checks its varaible list to find the applicant, then saves it in scope
 			variable = babylon_new_customs_union_overlord
+			limit = {
+				#Since an overlord can have multiple applicants, only get the applicant that is NOT the target in a diplomatic play
+				is_diplomatic_play_target = no
+			}
 			save_scope_as = applicant_scope
 		}
 		create_diplomatic_play = {

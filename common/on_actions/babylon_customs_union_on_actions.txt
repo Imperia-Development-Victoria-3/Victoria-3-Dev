@@ -20,7 +20,7 @@ on_diplo_play_back_down = {
 					type = customs_union
 				}
 				save_scope_as = applicant_scope
-				clear_variable_list = babylon_new_customs_union_applicant
+				remove_variable = babylon_new_customs_union_applicant
 				set_variable = {
 					name = babylon_new_customs_union_applicant_denied
 					value = 1
@@ -44,44 +44,41 @@ on_diplo_play_back_down = {
 				is_diplomatic_play_type = dp_liberate_subject
 				#And the target is an applicant
 				target = {
-					has_variable_list = babylon_new_customs_union_applicant
+					has_variable = babylon_new_customs_union_applicant
 				}
 				#Assume its the 2nd stage of dp_customs_union
-				#Then check if the backdowner (lol) is the target/applicant
-				target_is = scope:actor
 			}
-			#Get the customs union overlord
-			#In a =(&/%)! stupid way
-			random_country = {
-				limit = {
-					#Check if random country is an overlord
-					has_variable_list = babylon_new_customs_union_overlord
-					#Of the applicant...
-					is_target_in_variable_list = {
-						name = babylon_new_customs_union_overlord
-						target = scope:actor
-					}
-				}
-				save_scope_as = overlord_scope
-			}
-			#Remove customs union
 			target = {
-				remove_diplomatic_pact = {
-					country = scope:overlord_scope
-					type = customs_union
+				#Get the customs union overlord (from the applicant var that points at overlord)
+				var:babylon_new_customs_union_applicant = {
+					save_scope_as = overlord_scope
 				}
-				#Clear a variable
-				clear_variable_list = babylon_new_customs_union_applicant
-				#Add a 5 year cooldown to adding the applicant to a customs union
-				set_variable = {
-					name = babylon_new_customs_union_applicant_denied
-					value = 1
-					days = 1826					#5 years
-				}
+				#Clear a variable from the applicant (that points at overlord)
+				remove_variable = babylon_new_customs_union_applicant
 			}
-			#Clear another variable
+			#Clear another variable [list], from the overlord
 			scope:overlord_scope = {
 				clear_variable_list = babylon_new_customs_union_overlord
+			}
+			if = {
+				limit = {
+					#Check if the backdowner (lol) is the target/applicant
+					target_is = scope:actor
+				}
+				#If it is...
+				#Remove customs union
+				target = {
+					remove_diplomatic_pact = {
+						country = scope:overlord_scope
+						type = customs_union
+					}
+					#Add a 5 year cooldown to adding the applicant to a customs union
+					set_variable = {
+						name = babylon_new_customs_union_applicant_denied
+						value = 1
+						days = 1826						#5 years
+					}
+				}
 			}
 		}
 	}
@@ -144,21 +141,23 @@ on_diplo_play_start = {
 				is_diplomatic_play_type = dp_liberate_subject
 				#And target is an applicant
 				target = {
-					has_variable_list = babylon_new_customs_union_applicant
+					has_variable = babylon_new_customs_union_applicant
 				}
 			}
-			#Iterate through overlords backers
-			ordered_in_list = {
-				variable = custom_union_overlord_backers
-				#And add them to the new play
-				root = {
-					add_target_backers = {
-						prev
+			#Iterate through overlords backers (located in target, AKA applicant..)
+			target = {
+				every_in_list = {
+					variable = custom_union_overlord_backers
+					#And add them to the new play
+					root = {
+						add_target_backers = {
+							prev
+						}
 					}
 				}
+				#Then get rid of the list
+				clear_variable_list = custom_union_overlord_backers
 			}
-			#Then get rid of the list
-			clear_variable_list = custom_union_overlord_backers
 		}
 	}
 }
