@@ -820,13 +820,15 @@ right_click_menu = {
 					}
 
 					right_click_menu_item = {
-						enabled = "[IsValid( MapInteractions.AccessMapInteractionCharacter.GetNavalInvasionCommand( Character.Self, State.Self ) )]"
+						datacontext = "[GetScriptedGui('reserve_state')]"
+						enabled = "[And(IsValid( MapInteractions.AccessMapInteractionCharacter.GetNavalInvasionCommand( Character.Self, State.Self ) ), Not(EqualTo_string('yes', State.GetCustom('is_naval_invasion'))))]"
 
 						blockoverride "properties" {
 							tooltip = "NAVAL_INVASION_RIGHT_CLICK_MENU_TOOLTIP"
 							onclick = "[Execute( MapInteractions.AccessMapInteractionCharacter.GetNavalInvasionCommand( Character.Self, State.Self ) )]"
 							onclick = "[MapInteractions.ShowMapInteractionNotification]"
 							onclick = "[MapListPanelManager.ResetActiveMapInteraction]"
+							onclick = "[GetScriptedGui('reserve_state').Execute( GuiScope.AddScope('saved_gdp', MakeScopeValue(State.GetCountry.GetGDP)).AddScope('state_pop_poor', MakeScopeValue(State.GetNumberOfPopsPoor)).AddScope('state_pop_middle', MakeScopeValue(State.GetNumberOfPopsMiddle)).AddScope('state_pop_rich', MakeScopeValue(State.GetNumberOfPopsRich)).End )]"
 						}
 
 						blockoverride "sound" {
