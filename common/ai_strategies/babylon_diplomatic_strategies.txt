@@ -3,27 +3,42 @@
 	
 	type = diplomatic
 	
-	wanted_army_ratio = 150000 # 1 barrack per 150k incorporated population
-	wanted_navy_ratio = 500000 # 1 naval base per 500k coastal incorporated population
+	wanted_army_ratio = {
+		value = 150000
+	}
 	
-	undesirable_infamy_level = 1
-	unacceptable_infamy_level = 25	
+	wanted_navy_ratio = {
+		value = 500000
+	}
 	
-	ideological_opinion_effect_mult = 0.75
+	undesirable_infamy_level = {
+		value = 1
+	}
+	
+	unacceptable_infamy_level = {
+		value = 25
+	}
+	
+	ideological_opinion_effect_mult = {
+		value = 0.75
+	}
 	
 	wargoal_maneuvers_fraction = {
 		value = -0.1
 	}		
 	
-	diplomatic_play_neutrality = 150 # Added to base neutrality in diplomatic plays
-	diplomatic_play_boldness = 50 # Added to base boldness in diplomatic plays		
+	diplomatic_play_neutrality = {
+		value = 50
+	}
 	
-	# Added to value from default strategy
-	bravery = {
+	diplomatic_play_boldness = {
+		value = 150
+	}
+	
+	recklessness = {
 		value = -0.5
 	}
 	
-	# Added to value from default strategy
 	aggression = {
 		value = 0
 	}
@@ -46,10 +61,35 @@
 	}	
 	
 	possible = {
-		always = no
+		NOT = { country_rank = rank_value:great_power }
 	}
 	
 	weight = {
-		value = 0
+		value = 10
+		
+		if = {
+			limit = { is_country_type = unrecognized }
+			add = 50
+		}
+		
+		if = {
+			limit = { has_law = law_type:law_national_militia }
+			add = 50
+		}
+
+		if = {
+			limit = { has_law = law_type:law_isolationism }
+			add = 100
+		}	
+
+		if = {
+			limit = { country_rank = rank_value:great_power }
+			multiply = 0.1
+		}			
+		
+		if = {
+			limit = { country_rank = rank_value:major_power }
+			multiply = 0.5
+		}			
 	}
 }
