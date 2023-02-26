@@ -1,0 +1,37 @@
+namespace = first_inventions_events
+first_inventions_events.aviation = {
+	#Airplanes discovered by X
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_airplane.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/airplane"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = first_inventions_events.aviation.t
+	desc = first_inventions_events.aviation.d
+	flavor = first_inventions_events.aviation.f
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_modifier = military_aviation_invented_country
+			}
+			save_scope_as = inventor_scope
+		}
+	}
+	option = {
+		trigger = {
+			can_research = military_aviation
+		}
+		name = first_inventions_events.default.close
+	}
+	option = {
+		trigger = {
+			NOT = {
+				can_research = military_aviation
+			}
+		}
+		name = first_inventions_events.default.far_off
+	}
+}
