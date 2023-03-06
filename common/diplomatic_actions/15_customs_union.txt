@@ -578,6 +578,35 @@
 					value = -50
 				}
 			}
+
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_INCOMPATIBLE_ECONOMIC_SYSTEMS"
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								scope:actor = {
+									NOT = {
+										has_law = law_type:law_council_republic
+									}	
+								}
+								scope:target_country = { has_law = law_type:law_council_republic }	
+							}
+							AND = {
+								scope:actor = {
+									has_law = law_type:law_council_republic	
+								}
+								scope:target_country = {
+									NOT = {
+										has_law = law_type:law_council_republic	
+									}
+								}	
+							}
+						}
+					}
+					value = -150
+				} 
+			}
 		}
 		will_break = {
 			is_junior_in_customs_union = yes
@@ -597,6 +626,14 @@
 				has_attitude = {
 					who = scope:target_country
 					attitude = rebellious
+				}
+				AND = {
+					NOT = {
+						has_law = law_type:law_council_republic
+					}
+					scope:target_country = {
+						has_law = law_type:law_council_republic	
+					}	
 				}
 			}
 		}
