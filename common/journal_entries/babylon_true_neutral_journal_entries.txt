@@ -1,0 +1,50 @@
+je_babylon_true_neutral_status = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	complete = {
+		#Complete when everyone has signed the treaty
+		var:true_neutral_current_signers_var = var:true_neutral_required_signers_var
+	}
+	on_complete = {
+		activate_law = law_type:law_true_neutrality
+	}
+	fail = {
+		is_at_war = yes
+	}
+	on_fail = {
+		remove_variable = true_neutral_current_signers_var
+		remove_variable = true_neutral_required_signers_var
+		every_country = {
+			limit = {
+				any_in_list = {
+					variable = true_neutral_applicants_consideration
+					this = root
+				}
+			}
+			remove_list_variable = {
+				name = true_neutral_applicants_consideration
+				target = root
+			}
+		}
+	}
+	invalid = {
+		NOT = {
+			has_law = law_type:law_neutral
+		}
+	}
+	on_invalid = {
+		remove_variable = true_neutral_current_signers_var
+		remove_variable = true_neutral_required_signers_var
+		every_country = {
+			limit = {
+				any_in_list = {
+					variable = true_neutral_applicants_consideration
+					this = root
+				}
+			}
+			remove_list_variable = {
+				name = true_neutral_applicants_consideration
+				target = root
+			}
+		}
+	}
+}
