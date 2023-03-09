@@ -148,6 +148,57 @@ on_diplo_play_start = {
 	effect = {
 		if = {
 			limit = {
+				is_diplomatic_play_type = dp_transfer_liberate_subject
+			}
+			# Add previous backers on both sides to this diplo play, as we can't do this when we create the play
+			root.target = {
+				every_in_list = {
+					variable = objectors
+					root = {
+						add_initiator_backers = {
+							prev
+						}
+					}
+				}
+				every_in_list = {
+					variable = supporters
+					root = {
+						add_target_backers = {
+							prev
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_variable_list = objectors
+					}
+					clear_variable_list = objectors
+				}
+				if = {
+					limit = {
+						has_variable_list = supporters
+					}
+					clear_variable_list = supporters
+				}
+			}
+		}
+		if = {
+			limit = {
+				#If a true neutral country is the target...
+				target = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			#Fire an event for the attacker after 1 days (for [pdx-spaghetti-code] reasons)
+			initiator = {
+				trigger_event = {
+					id = babylon_neutrality_events.1
+					days = 1
+				}
+			}
+		}
+		if = {
+			limit = {
 				#Is liberate subject
 				is_diplomatic_play_type = dp_liberate_subject
 				#And target is an applicant
@@ -170,23 +221,69 @@ on_diplo_play_start = {
 				clear_variable_list = custom_union_overlord_backers
 			}
 		}
+	}
+}
+
+on_monthly_pulse_country = {
+	#updates provinces each month
+	events = {
+		infamy_rebalance.1
+	}
+}
+
+# Root = Diplomatic Play
+on_diplo_play_war_start = {
+	effect = {
 		if = {
 			limit = {
-				#If a true neutral country is the target...
-				target = {
-					has_law = law_type:law_true_neutrality
-				}
+				has_play_goal = contain_threat
 			}
-			#Fire an event for the attacker after 1 days (for [pdx-spaghetti-code] reasons)
-			initiator = {
-				trigger_event = {
-					id = babylon_neutrality_events.1
-					days = 1
+			every_country = {
+				limit = {
+					has_variable = pariah_coalition_member
+					has_strategic_adjacency = root.target
+					NOT = {
+						is_diplomatic_play_enemy_of = root.target
+					}
+				}
+				add_modifier = {
+					name = scared_of_pariah_prestige_loss
+					months = normal_modifier_time
+					is_decaying = yes
 				}
 			}
 		}
-		initiator = {
-			change_infamy = 200
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_independent = {
+	effect = {
+		if = {
+			limit = {
+				is_diplomatic_play_committed_participant = no
+			}
+			trigger_event = {
+				id = infamy_rebalance.13
+				popup = yes
+			}
+		}
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_own_subject = {
+	effect = {
+		if = {
+			limit = {
+				is_diplomatic_play_committed_participant = no
+			}
+			trigger_event = {
+				id = infamy_rebalance.14
+				popup = yes
+			}
 		}
 	}
 }
