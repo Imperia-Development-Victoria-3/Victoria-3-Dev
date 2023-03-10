@@ -1,9 +1,31 @@
-je_babylon_true_neutral_status = {
+﻿je_babylon_true_neutral_status = {
 	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
 	complete = {
 		#Complete when everyone has signed the treaty
-		var:true_neutral_current_signers_var = var:true_neutral_required_signers_var
+		OR = {
+			scope:journal_entry = {
+				is_goal_complete = yes
+			}
+			any_in_list = {
+				count = all
+				variable = true_neutral_applicant_signee_list
+				NOT = {
+					is_target_in_variable_list = {
+						name = true_neutral_applicants_consideration
+						target = root
+					}
+				}
+				custom_tooltip = true_neutral_x_needs_to_sign_tt
+			}
+		}
 	}
+	current_value = {
+		value = var:true_neutral_current_signers_var
+	}
+	goal_add_value = {
+		add = var:true_neutral_required_signers_var
+	}
+	progressbar = yes
 	on_complete = {
 		activate_law = law_type:law_true_neutrality
 	}
@@ -13,6 +35,7 @@ je_babylon_true_neutral_status = {
 	on_fail = {
 		remove_variable = true_neutral_current_signers_var
 		remove_variable = true_neutral_required_signers_var
+		clear_variable_list = true_neutral_applicant_signee_list
 		every_country = {
 			limit = {
 				any_in_list = {
@@ -34,6 +57,7 @@ je_babylon_true_neutral_status = {
 	on_invalid = {
 		remove_variable = true_neutral_current_signers_var
 		remove_variable = true_neutral_required_signers_var
+		clear_variable_list = true_neutral_applicant_signee_list
 		every_country = {
 			limit = {
 				any_in_list = {
@@ -47,4 +71,6 @@ je_babylon_true_neutral_status = {
 			}
 		}
 	}
+	weight = 800
+	should_be_pinned_by_default = yes
 }

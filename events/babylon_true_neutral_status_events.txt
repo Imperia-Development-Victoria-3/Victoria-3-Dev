@@ -1,4 +1,4 @@
-namespace = babylon_true_neutral_status
+﻿namespace = babylon_true_neutral_status
 babylon_true_neutral_status.1 = {
 	#For broadcasting to necessary countries (GPs and neighbours) that X wants to become true neutral
 	#root = GP/neighbour
@@ -77,7 +77,25 @@ babylon_true_neutral_status.2 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 	title = babylon_true_neutral_status.2.t
-	desc = babylon_true_neutral_status.2.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = babylon_true_neutral_status.2.d.plural
+				trigger = {
+					variable_list_size = {
+						name = true_neutral_applicants_consideration
+						value >= 2
+					}
+				}
+			}
+			triggered_desc = {
+				desc = babylon_true_neutral_status.2.d.single
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
 	flavor = babylon_true_neutral_status.2.f
 	duration = 3
 	immediate = {
@@ -91,7 +109,7 @@ babylon_true_neutral_status.2 = {
 			save_scope_as = true_neutral_applicant_a
 		}
 		if = {
-			limit = { 
+			limit = {
 				variable_list_size = {
 					name = true_neutral_applicants_consideration
 					value >= 2
@@ -108,7 +126,7 @@ babylon_true_neutral_status.2 = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				variable_list_size = {
 					name = true_neutral_applicants_consideration
 					value >= 3
@@ -126,7 +144,7 @@ babylon_true_neutral_status.2 = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				variable_list_size = {
 					name = true_neutral_applicants_consideration
 					value >= 4
@@ -147,12 +165,14 @@ babylon_true_neutral_status.2 = {
 	}
 	option = {
 		name = babylon_true_neutral_status.2.a
+		#Change the current signers variable of the applicant, bringing them 1 step closer to True Neutrality
 		scope:true_neutral_applicant_a = {
 			change_variable = {
 				name = true_neutral_current_signers_var
 				add = 1
 			}
 		}
+		#Then remove them from the GP/neighbours list of consideration
 		remove_list_variable = {
 			name = true_neutral_applicants_consideration
 			target = scope:true_neutral_applicant_a
@@ -164,8 +184,9 @@ babylon_true_neutral_status.2 = {
 	option = {
 		name = babylon_true_neutral_status.2.b
 		trigger = {
-			scope:true_neutral_applicant_b = {
-				exists = yes
+			variable_list_size = {
+				name = true_neutral_applicants_consideration
+				value >= 2
 			}
 		}
 		scope:true_neutral_applicant_b = {
@@ -185,8 +206,9 @@ babylon_true_neutral_status.2 = {
 	option = {
 		name = babylon_true_neutral_status.2.c
 		trigger = {
-			scope:true_neutral_applicant_c = {
-				exists = yes
+			variable_list_size = {
+				name = true_neutral_applicants_consideration
+				value >= 3
 			}
 		}
 		scope:true_neutral_applicant_c = {
@@ -206,8 +228,9 @@ babylon_true_neutral_status.2 = {
 	option = {
 		name = babylon_true_neutral_status.2.d
 		trigger = {
-			scope:true_neutral_applicant_d = {
-				exists = yes
+			variable_list_size = {
+				name = true_neutral_applicants_consideration
+				value >= 4
 			}
 		}
 		scope:true_neutral_applicant_d = {
@@ -230,5 +253,6 @@ babylon_true_neutral_status.2 = {
 		ai_chance = {
 			base = 0
 		}
+		default_option = yes
 	}
 }

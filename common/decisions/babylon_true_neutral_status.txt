@@ -1,4 +1,4 @@
-ask_for_true_neutral_status = {
+﻿ask_for_true_neutral_status = {
 	is_shown = {
 		has_law = law_type:law_neutral
 		NOT = {
@@ -42,10 +42,14 @@ ask_for_true_neutral_status = {
 				days = 3
 			}
 			#Add a required signer to the true neutral applicant
-			scope:true_neutral_applicant = {
+			root = {
 				change_variable = {
 					name = true_neutral_required_signers_var
 					add = 1
+				}
+				add_to_variable_list = {
+					name = true_neutral_applicant_signee_list
+					target = prev
 				}
 			}
 		}
@@ -61,18 +65,25 @@ ask_for_true_neutral_status = {
 consider_true_neutral_status = {
 	is_shown = {
 		#Show this decision if theres any applicants for true neutral status
-		variable_list_size = {
-			name = true_neutral_applicants_consideration
-			value >= 1
-		}
+		has_variable_list = true_neutral_applicants_consideration
 	}
 	possible = {
+		hidden_trigger = {
+			variable_list_size = {
+				name = true_neutral_applicants_consideration
+				value >= 1
+			}
+		}
 		is_at_war = no
 	}
 	when_taken = {
-		trigger_event = babylon_true_neutral_status.2
+		trigger_event = { 
+			id = babylon_true_neutral_status.2
+			popup = yes
+		}
 	}
 	ai_chance = {
 		base = 1
+		
 	}
 }
