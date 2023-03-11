@@ -1,0 +1,144 @@
+﻿traditionalist_commander = {
+	type = skill
+	texture = "gfx/interface/icons/character_trait_icons/traditionalist_commander.dds"
+
+	command_modifier = {
+		character_morale_cap_add = 5
+		character_command_limit_combat_unit_regular_add = 5
+	}
+	
+	# Reminder: this would only come into effect if this Commander is or becomes a Ruler
+	country_modifier = {
+		country_prestige_mult = 0.05
+	}
+
+	possible = {
+		NOR = {
+			has_trait = popular_commander
+			has_trait = celebrity_commander
+		}
+		interest_group = {
+			OR = {
+				is_interest_group_type = ig_devout
+				is_interest_group_type = ig_landowners
+				is_interest_group_type = ig_armed_forces
+				is_powerful = yes
+			}
+		}
+	}
+	
+	weight = {
+		value = 10
+		if = {
+			limit = {
+				interest_group = {
+					OR = {
+						is_interest_group_type = ig_devout
+						is_interest_group_type = ig_landowners
+						is_interest_group_type = ig_armed_forces
+					}
+				}
+			}
+			multiply = 2
+		}
+	}
+	
+	replace = {
+	}
+	
+	value = 1
+}
+celebrity_commander = {
+	type = skill
+	texture = "gfx/interface/icons/character_trait_icons/celebrity_commander.dds"
+	
+	character_modifier = {
+		character_morale_cap_add = 5
+		character_command_limit_combat_unit_regular_add = 7.5
+		unit_morale_recovery_mult = 0.02
+
+		character_popularity_add = 25	# More popularity for being popular is intentional
+	}
+
+	# Reminder: this would only come into effect if this Commander is or becomes a Ruler
+	country_modifier = {
+		country_prestige_mult = 0.15
+	}
+
+	# Reminder: this would only come into effect if this Commander is or becomes an Interest Group Leader
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.05
+	}
+	
+	possible = {
+		has_trait = popular_commander
+		popularity > 30
+	}
+	
+	weight = {
+		value = 10
+		add = popularity
+	}
+	
+	replace = {
+		popular_commander
+	}
+	
+	value = 3
+}
+popular_commander = {
+	type = skill
+	texture = "gfx/interface/icons/character_trait_icons/popular_commander.dds"
+
+	character_modifier = {
+		character_morale_cap_add = 5
+		unit_morale_recovery_mult = 0.02
+		character_command_limit_combat_unit_regular_add = 10
+	}
+
+	# Reminder: this would only come into effect if this Commander is or becomes a Ruler
+	country_modifier = {
+		country_prestige_mult = 0.10
+	}
+
+	# Reminder: this would only come into effect if this Commander is or becomes an Interest Group Leader
+	interest_group_modifier = {
+		interest_group_pol_str_mult = 0.02
+	}
+	
+	possible = {
+		OR = {
+			popularity > 10
+			AND = {
+				has_trait = traditionalist_commander
+				popularity > 0
+			}
+		}
+		NOT = {
+			has_trait = celebrity_commander
+		}
+	}
+	
+	weight = {
+		value = 10
+		if = {
+			limit = {
+				interest_group = {
+					OR = {
+						is_interest_group_type = ig_devout
+						is_interest_group_type = ig_landowners
+						is_interest_group_type = ig_armed_forces
+					}
+				}
+			}
+			multiply = 2
+			add = popularity
+		}
+	}
+	
+	replace = {
+		traditionalist_commander
+	}
+	
+	value = 2
+}
