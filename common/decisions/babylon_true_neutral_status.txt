@@ -11,14 +11,25 @@
 		#Cant be in a war
 		is_at_war = no
 		#Cant have ANY rivals
+		any_rival_country = {
+			count = 0
+		}
+		#Has to be below major power
+		country_rank < rank_value:major_power
+		#Cant be unrecognised
 		NOT = {
-			any_rival_country = {
-				exists = yes
-			}
+			is_country_type = unrecognized
+		}
+		#Cant have overlords or subjects, or be part of a market
+		any_overlord_or_above = {
+			count = 0
+		}
+		any_subject_or_below = {
+			count = 0
 		}
 	}
 	when_taken = {
-		#Initialise the current signers
+		#Initialise the (amount of) current signers var
 		set_variable = {
 			name = true_neutral_current_signers_var
 			value = 0
@@ -35,6 +46,10 @@
 					country_rank >= rank_value:great_power
 					is_adjacent = root
 				}
+				NOR = {
+					is_country_type = unrecognized
+					is_country_type = decentralized
+				}
 			}
 			#give them an event that notifies them
 			trigger_event = {
@@ -48,20 +63,23 @@
 					add = 1
 				}
 				add_to_variable_list = {
-					name = true_neutral_applicant_signee_list_unsigned
+					name = true_neutral_applicant_signee_list
 					target = prev
 				}
 			}
 		}
-		add_journal_entry = {
-			type = je_babylon_true_neutral_status
+		custom_tooltip = {
+			text = add_journal_neutrality_treaty_tt
+			add_journal_entry = {
+				type = je_babylon_true_neutral_status
+			}
 		}
-
 	}
 	ai_chance = {
 		base = 0
 	}
 }
+
 consider_true_neutral_status = {
 	is_shown = {
 		#Show this decision if theres any applicants for true neutral status
@@ -77,13 +95,12 @@ consider_true_neutral_status = {
 		is_at_war = no
 	}
 	when_taken = {
-		trigger_event = { 
+		trigger_event = {
 			id = babylon_true_neutral_status.2
 			popup = yes
 		}
 	}
 	ai_chance = {
 		base = 1
-		
 	}
 }

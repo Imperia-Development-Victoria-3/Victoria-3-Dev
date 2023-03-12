@@ -1,282 +1,436 @@
 ﻿je_babylon_true_neutral_status = {
 	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	on_weekly_pulse = {
+		effect = {
+			every_in_list = {
+				variable = true_neutral_applicant_signee_list
+				if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_1
+						}
+					}
+					save_scope_as = unsigned_country_1
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_2
+						}
+					}
+					save_scope_as = unsigned_country_2
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_3
+						}
+					}
+					save_scope_as = unsigned_country_3
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_4
+						}
+					}
+					save_scope_as = unsigned_country_4
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_5
+						}
+					}
+					save_scope_as = unsigned_country_5
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_6
+						}
+					}
+					save_scope_as = unsigned_country_6
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_7
+						}
+					}
+					save_scope_as = unsigned_country_7
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_8
+						}
+					}
+					save_scope_as = unsigned_country_8
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_9
+						}
+					}
+					save_scope_as = unsigned_country_9
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							exists = scope:unsigned_country_10
+						}
+					}
+					save_scope_as = unsigned_country_10
+				}
+			}
+		}
+	}
 	complete = {
 		#Complete when everyone has signed the treaty
 		scope:journal_entry = {
 			is_goal_complete = yes
 		}
-		# Start of brute force
-		any_country = {
-			filter = {
-				root = {
-					is_target_in_variable_list = {
-						name = true_neutral_applicant_signee_list_unsigned
-						target = prev
-					}
-				}
-			}
-			custom_tooltip = {
-				text = true_neutral_x_needs_to_sign_tt
-				NOT = {
-					has_variable_list = true_neutral_applicants_consideration
-				}
-			}
-			save_temporary_scope_as = unsigned_country_1
+		# Start of brute force mk2 for UX purposes
+		scope:unsigned_country_1 = {
+			custom_tooltip = true_neutral_x_needs_to_sign_tt
+		}
+		scope:unsigned_country_2 = {
+			custom_tooltip = true_neutral_x_needs_to_sign_tt
 		}
 		trigger_if = {
 			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 2
+				scope:unsigned_country_1 = {
+					exists = yes
 				}
 			}
-			any_country = {
-				filter = {
-					root = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-					}
-				}
-				custom_tooltip = {
-					text = true_neutral_x_needs_to_sign_tt
-					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_2
+			scope:unsigned_country_1 = {
+				custom_tooltip = true_neutral_x_needs_to_sign_tt
 			}
 		}
 		trigger_if = {
 			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 3
-				}
+				exists = scope:unsigned_country_2
 			}
-			any_country = {
-				filter = {
-					root = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-						this = scope:unsigned_country_2
-					}
-				}
+			scope:unsigned_country_2 = {
 				custom_tooltip = {
 					text = true_neutral_x_needs_to_sign_tt
 					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_3
-			}
-		}
-		trigger_if = {
-			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 4
-				}
-			}
-			any_country = {
-				filter = {
-					root = {
 						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-						this = scope:unsigned_country_2
-						this = scope:unsigned_country_3
-					}
-				}
-				custom_tooltip = {
-					text = true_neutral_x_needs_to_sign_tt
-					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_4
-			}
-		}
-		trigger_if = {
-			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 5
-				}
-			}
-			any_country = {
-				filter = {
-					root = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-						this = scope:unsigned_country_2
-						this = scope:unsigned_country_3
-						this = scope:unsigned_country_4
-					}
-				}
-				custom_tooltip = {
-					text = true_neutral_x_needs_to_sign_tt
-					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_5
-			}
-		}
-		trigger_if = {
-			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 6
-				}
-			}
-			any_country = {
-				filter = {
-					root = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-						this = scope:unsigned_country_2
-						this = scope:unsigned_country_3
-						this = scope:unsigned_country_4
-						this = scope:unsigned_country_5
-					}
-				}
-				custom_tooltip = {
-					text = true_neutral_x_needs_to_sign_tt
-					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_6
-			}
-		}
-		trigger_if = {
-			limit = {
-				variable_list_size = {
-					name = true_neutral_applicant_signee_list_unsigned
-					value >= 7
-				}
-			}
-			any_country = {
-				filter = {
-					root = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
-						}
-					}
-					NOR = {
-						this = scope:unsigned_country_1
-						this = scope:unsigned_country_2
-						this = scope:unsigned_country_3
-						this = scope:unsigned_country_4
-						this = scope:unsigned_country_5
-						this = scope:unsigned_country_6
-					}
-				}
-				custom_tooltip = {
-					text = true_neutral_x_needs_to_sign_tt
-					NOT = {
-						has_variable_list = true_neutral_applicants_consideration
-					}
-				}
-				save_temporary_scope_as = unsigned_country_7
-			}
-		}
-		#End of brute force
-		any_country = {
-			count = 0
-			filter = {
-				root = {
-					is_target_in_variable_list = {
-						name = true_neutral_applicant_signee_list_unsigned
-						target = prev
-					}
-				}
-			}
-			custom_tooltip = {
-				text = true_neutral_x_needs_to_sign_tt
-				root = {
-					is_target_in_variable_list = {
-						name = true_neutral_applicant_signee_list_unsigned
-						target = prev
-					}
-				}
-			}
-		}
-		any_country = {
-			count = all
-			filter = {
-				root = {
-					OR = {
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_signed
-							target = prev
-						}
-						is_target_in_variable_list = {
-							name = true_neutral_applicant_signee_list_unsigned
-							target = prev
+							name = true_neutral_applicants_consideration
+							target = root
 						}
 					}
 				}
 			}
-			custom_tooltip = {
-				text = true_neutral_x_have_signed_tt
-				root = {
-					is_target_in_variable_list = {
-						name = true_neutral_applicant_signee_list_signed
-						target = prev
-					}
-				}
-			}
 		}
-		# hidden_trigger = {
+		#End of brute force mk2
+		# Start of brute force for UX purposes
+		# any_country = {
+		# 	filter = {
+		# 		root = {
+		# 			is_target_in_variable_list = {
+		# 				name = true_neutral_applicant_signee_list
+		# 				target = prev
+		# 			}
+		# 		}
+		# 	}
+		# 	custom_tooltip = {
+		# 		text = true_neutral_x_needs_to_sign_tt
+		# 		always = no
+		# 	}
+		# 	save_temporary_scope_as = unsigned_country_1
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 2
+		# 		}
+		# 	}
 		# 	any_country = {
-		# 		count = all
 		# 		filter = {
 		# 			root = {
 		# 				is_target_in_variable_list = {
-		# 					name = true_neutral_applicant_signee_list_unsigned
+		# 					name = true_neutral_applicant_signee_list
 		# 					target = prev
 		# 				}
 		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 			}
 		# 		}
-		# 		add_to_temporary_list = temp_unsigned
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_2
 		# 	}
 		# }
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
-		# show_unsigned_trigger = yes
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 3
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_3
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 4
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_4
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 5
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_5
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 6
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 				this = scope:unsigned_country_5
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_6
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 7
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 				this = scope:unsigned_country_5
+		# 				this = scope:unsigned_country_6
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_7
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 8
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 				this = scope:unsigned_country_5
+		# 				this = scope:unsigned_country_6
+		# 				this = scope:unsigned_country_7
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_8
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 9
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 				this = scope:unsigned_country_5
+		# 				this = scope:unsigned_country_6
+		# 				this = scope:unsigned_country_7
+		# 				this = scope:unsigned_country_8
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_9
+		# 	}
+		# }
+		# trigger_if = {
+		# 	limit = {
+		# 		variable_list_size = {
+		# 			name = true_neutral_applicant_signee_list
+		# 			value >= 10
+		# 		}
+		# 	}
+		# 	any_country = {
+		# 		filter = {
+		# 			root = {
+		# 				is_target_in_variable_list = {
+		# 					name = true_neutral_applicant_signee_list
+		# 					target = prev
+		# 				}
+		# 			}
+		# 			NOR = {
+		# 				this = scope:unsigned_country_1
+		# 				this = scope:unsigned_country_2
+		# 				this = scope:unsigned_country_3
+		# 				this = scope:unsigned_country_4
+		# 				this = scope:unsigned_country_5
+		# 				this = scope:unsigned_country_6
+		# 				this = scope:unsigned_country_7
+		# 				this = scope:unsigned_country_8
+		# 				this = scope:unsigned_country_9
+		# 			}
+		# 		}
+		# 		custom_tooltip = {
+		# 			text = true_neutral_x_needs_to_sign_tt
+		# 			NOT = {
+		# 				has_variable_list = true_neutral_applicants_consideration
+		# 			}
+		# 		}
+		# 		save_temporary_scope_as = unsigned_country_10
+		# 	}
+		# }
+		#End of brute force
 	}
 	current_value = {
 		value = var:true_neutral_current_signers_var
@@ -294,8 +448,7 @@
 	on_fail = {
 		remove_variable = true_neutral_current_signers_var
 		remove_variable = true_neutral_required_signers_var
-		clear_variable_list = true_neutral_applicant_signee_list_signed
-		clear_variable_list = true_neutral_applicant_signee_list_unsigned
+		clear_variable_list = true_neutral_applicant_signee_list
 		every_country = {
 			limit = {
 				any_in_list = {
@@ -317,8 +470,7 @@
 	on_invalid = {
 		remove_variable = true_neutral_current_signers_var
 		remove_variable = true_neutral_required_signers_var
-		clear_variable_list = true_neutral_applicant_signee_list_signed
-		clear_variable_list = true_neutral_applicant_signee_list_unsigned
+		clear_variable_list = true_neutral_applicant_signee_list
 		every_country = {
 			limit = {
 				any_in_list = {
