@@ -3,203 +3,25 @@
 on_babylon_acquired_technology = {
 	effect = {
 		if = {
-			limit = {
-				has_technology_researched = military_aviation
-				NOT = {
-					has_global_variable = military_aviation_invented_global
-				}
-			}
-			set_global_variable = military_aviation_invented_global
-			add_modifier = {
-				name = military_aviation_invented_country
-			}
-			#Inventor event for aviation already in vanilla
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
+			limit = { 
+				#if the tech is broadcastable
+				scope:technology = {
+					OR = {
+						this = military_aviation
+						this = combustion_engine
+						this = telephone
+						this = electrical_generation
+						this = radio
+						this = dreadnought
+						this = mobile_armor
+						this = pumpjacks
 					}
 				}
-				#delay event by 1 day. Because PDX.
-				trigger_event = {
-					id = first_inventions_events.aviation
-					popup = yes
-					days = 1
-				}
 			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = combustion_engine
-				NOT = {
-					has_global_variable = automobiles_invented_global
-				}
-			}
-			set_global_variable = automobiles_invented_global
-			add_modifier = {
-				name = automobiles_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.automobiles
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.automobiles
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = telephone
-				NOT = {
-					has_global_variable = telephones_invented_global
-				}
-			}
-			set_global_variable = telephones_invented_global
-			add_modifier = {
-				name = telephones_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.telephones
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.telephones
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = electrical_generation
-				NOT = {
-					has_global_variable = electricity_invented_global
-				}
-			}
-			set_global_variable = electricity_invented_global
-			add_modifier = {
-				name = electricity_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.electricity
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.electricity
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = radio
-				NOT = {
-					has_global_variable = radio_invented_global
-				}
-			}
-			set_global_variable = radio_invented_global
-			add_modifier = {
-				name = radio_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.radio
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.radio
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = dreadnought
-				NOT = {
-					has_global_variable = dreadnought_invented_global
-				}
-			}
-			set_global_variable = dreadnought_invented_global
-			add_modifier = {
-				name = dreadnought_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.dreadnought
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.dreadnought
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = mobile_armor
-				NOT = {
-					has_global_variable = mobile_armor_invented_global
-				}
-			}
-			set_global_variable = mobile_armor_invented_global
-			add_modifier = {
-				name = mobile_armor_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.tanks
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.tanks
-					popup = yes
-					days = 1
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_technology_researched = pumpjacks
-				NOT = {
-					has_global_variable = pumpjacks_invented_global
-				}
-			}
-			set_global_variable = pumpjacks_invented_global
-			add_modifier = {
-				name = pumpjacks_invented_country
-			}
-			trigger_event = first_inventions_events.inventor.pumpjacks
-			every_country = {
-				limit = {
-					NOT = {
-						this = root
-					}
-				}
-				trigger_event = {
-					id = first_inventions_events.pumpjacks
-					popup = yes
-					days = 1
+			#Then broadcast the tech
+			scope:technology = {
+				babylon_aquire_TECH_and_broadcast ={
+					TECH = this
 				}
 			}
 		}

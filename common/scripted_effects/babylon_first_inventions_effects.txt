@@ -1,0 +1,37 @@
+babylon_aquire_TECH_and_broadcast = {
+	if = {
+		limit = {
+			has_technology_researched = $TECH$
+			NOT = {
+				has_global_variable = $TECH$_invented_global
+			}
+		}
+		set_global_variable = $TECH$_invented_global
+		add_modifier = {
+			name = $TECH$_invented_country
+		}
+		#Inventor event for aviation already in vanilla
+		if = {
+			limit = {
+				#change to NOR and include more lines if more techs don't need inventor events in the future
+				NOT = {
+					$TECH$ = military_aviation
+				}
+			}
+			trigger_event = first_inventions_events.$TECH$_inventor
+		}
+		every_country = {
+			limit = {
+				NOT = {
+					this = root
+				}
+			}
+			#delay event by 1 day. Because PDX.
+			trigger_event = {
+				id = first_inventions_events.$TECH
+				popup = yes
+				days = 1
+			}
+		}
+	}
+}
