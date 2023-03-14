@@ -39,9 +39,6 @@ signal_flags = {
 			add = 0.5
 		}
 	}
-	production_method_groups = {
-		pm_signal_flags
-	}
 }
 signal_lamps = {
 	# New PM Group For Naval, adds the 2nd one
@@ -66,9 +63,6 @@ signal_lamps = {
 			limit = { navy_size >= 30 }
 			add = 0.5
 		}
-	}
-	production_method_groups = {
-		pm_signal_lamps
 	}
 }
 radio_communication = {
@@ -96,10 +90,6 @@ radio_communication = {
 			add = 0.5
 		}
 	}
-
-	production_method_groups = {
-		pm_radio_communication
-	}
 }
 
 heliographs = {
@@ -126,9 +116,6 @@ heliographs = {
 			add = 0.5
 		}
 	}
-	production_method_groups = {
-		pm_heliographs
-	}
 }
 age_of_sail = {
 	# New PM Group For Naval, adds the OG's
@@ -141,7 +128,7 @@ age_of_sail = {
 	}
 	
 	modifier = {
-		
+			state_building_naval_command_max_level_add = 1
 
     }
 	
@@ -157,10 +144,6 @@ age_of_sail = {
 			limit = { navy_size >= 100}
 			add = 1
 		}
-	}
-	production_method_groups = {
-		pm_sails
-		pm_oars
 	}
 }
 propellers = {
@@ -176,7 +159,7 @@ propellers = {
 	}
 	
 	modifier = {
-		
+			
 
     }
 	
@@ -193,11 +176,68 @@ propellers = {
 			add = 1
 		}
 	}
-	production_method_groups = {
-		pm_propellers
+}
+explosive_armaments = {
+	# New PM Group For Naval, adds the OG's
+	era = era_2
+	texture = "gfx/interface/icons/invention_icons/watertube_boiler.dds"
+	category = military    
+
+	unlocking_technologies = {
+		age_of_sail
+		broadsides
+
+	}
+	
+	modifier = {
+			
+
+    }
+	
+	ai_weight = {
+		value = 0.5
+		
+		# Important for naval powers
+		if = {
+			limit = { navy_size >= 30 }
+			add = 0.5
+		}
+		if = {
+			limit = { navy_size >= 100}
+			add = 1
+		}
 	}
 }
+explosive_armaments = {
+	# New PM Group For Naval, adds the OG's
+	era = era_2
+	texture = "gfx/interface/icons/invention_icons/watertube_boiler.dds"
+	category = military    
 
+	unlocking_technologies = {
+		age_of_sail
+
+	}
+	
+	modifier = {
+			
+
+    }
+	
+	ai_weight = {
+		value = 0.5
+		
+		# Important for naval powers
+		if = {
+			limit = { navy_size >= 30 }
+			add = 0.5
+		}
+		if = {
+			limit = { navy_size >= 100}
+			add = 1
+		}
+	}
+}
 paddle_steamer = {
 	era = era_1
 	texture = "gfx/interface/icons/invention_icons/paddle_steamer.dds"
@@ -286,6 +326,33 @@ dreadnought = {
 		ironclad_tech
 		sea_lane_strategies
 		oil_turbines
+	}
+	
+	ai_weight = {
+		value = 1
+		
+		# Important for naval powers
+		if = {
+			limit = { navy_size >= 20 }
+			add = 0.5
+		}			
+	}
+}
+broadsides = {
+	# Unlocks Dreadnoughts PM in Naval Bases
+	era = era_1
+	texture = "gfx/interface/icons/invention_icons/dreadnought.dds"
+	category = military
+	
+	modifier = {
+		# increased coal consumption
+		# increased offense and defense?
+		
+		# prestige bonus? Or a prestige bonus to overall naval size. Could apply this to mahanian_thought instead.
+	}
+	
+	unlocking_technologies = {
+		navigation
 	}
 	
 	ai_weight = {
