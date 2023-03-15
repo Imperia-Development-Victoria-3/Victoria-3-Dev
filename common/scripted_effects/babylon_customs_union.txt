@@ -1,0 +1,44 @@
+﻿# Actual multiplication where the whole current minting is taken
+# Btw $$ variables are literals, they just copy text, not actual values. Meaning if you say DIVISOR = variable_1 then it will put in variable_1 in the code and then compile, not get the value of variable_1 and put it there. So if variable_1 is not available anymore it will error.
+weekly_country_multiply_minting = {
+	$COUNTRY$ = {
+		if = {
+			limit = {
+				has_variable = customs_mint_add_var
+			}
+			set_local_variable = {
+				name = tmp_total_add_var
+				value = {
+					add = modifier:country_minting_add
+					subtract = var:customs_mint_add_var
+				}
+			}
+		}
+		else = {
+			set_local_variable = {
+				name = tmp_total_add_var
+				value = modifier:country_minting_add
+			}
+		}
+
+		set_variable = {
+			name = customs_mint_add_var
+			value = {
+				add = local_var:tmp_total_add_var
+				divide = {
+					add = 1
+					divide = $DIVISOR$
+				}
+				subtract = local_var:tmp_total_add_var
+			}
+		}
+
+		add_modifier = { 
+			name = modifier_customs_union_minting
+			multiplier = scope:target_country.var:customs_mint_add_var
+			days = 7
+		}
+	}
+}
+
+
