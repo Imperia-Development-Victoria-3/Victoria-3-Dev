@@ -1,0 +1,45 @@
+﻿namespace = babylon_neutrality_events
+babylon_neutrality_events.1 = {
+	#Gives a diplomatic incident for an attacker of true neutral countries worth a decently big amount of infamy
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/vandalized_storefront"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = babylon_neutrality_events.1.t
+	desc = babylon_neutrality_events.1.d
+	flavor = babylon_neutrality_events.1.f
+	duration = 3
+	immediate = {
+		random_diplomatic_play = {
+			#Finds a diplomatic play where root is the initiator and the target is true neutral while its not a war yet. 
+			#Should be the one that triggered this unless someone went bananas
+			limit = {
+				initiator_is = root
+				target = {
+					has_law = law_type:law_true_neutrality
+				}
+				is_war = no
+			}
+			target = {
+				save_scope_as = neutral_country
+			}
+		}
+		create_incident = {
+			country = scope:neutral_country
+			value = 50
+		}
+	}
+	option = {
+		name = babylon_neutrality_events.1.a
+		custom_tooltip = following_has_happened_tt
+		show_as_tooltip = {
+			create_incident = {
+				country = scope:neutral_country
+				value = 50
+			}
+		}
+	}
+}

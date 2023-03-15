@@ -1,0 +1,83 @@
+# This is executed last among all history
+GLOBAL = {
+    #Starts going through every country
+    every_country = {
+        #Lets do something for single countries first.
+        #We start with an if, but the majority will be else_if
+        #More on that in a second
+        if = {
+            #If this particular country it found is Switzerland...
+            limit = {
+                exists = c:SWI
+                this = c:SWI
+            }
+            #Give them true neutrality
+            activate_law = law_type:law_true_neutrality
+        }
+        else_if = {
+            #Notice the else_if, this is neccesary so conflicting laws dont get activated
+            #if we just keep on trucking with else_if the first true 'limit' will be the law that is activated
+            #Anyways...
+            #If its Prussia..
+            limit = {
+                exists = c:PRU
+                this = c:PRU
+            }
+            #Give them expansionism.
+            activate_law = law_type:law_expansionism
+            #Expansionism is already the default law, but we're including it anyways so Prussia doesnt get Imperialism later
+        }
+        else_if = {
+            limit = {
+                #First foray into limits that can encompass multiple countries, this is where things get interesting!
+                #Decentralized (colonisable) countries are still countries, and have laws.
+                is_country_type = decentralized
+            }
+            #Give them armed neutrality, just to get them out of the way
+            activate_law = law_type:law_armed_neutrality
+        }
+        else_if = {
+            limit = { 
+                #Here we grab a vanilla scripted trigger
+                #Scripted triggers are triggers we can define ourselves, allowing us to make long, complicated and reusable triggers
+                country_is_in_europe = yes
+            }
+            #And then we start branching within the else_if
+            #Yep, thats possible
+            if = {
+                limit = { 
+                    #We check if any state in the 'scope' (the country we're visiting today) is coastal
+                    any_scope_state = {
+                        is_coastal = yes
+                    }
+                }
+                #If it is, we'll give them imperialism
+                activate_law = law_type:law_imperialism
+                #Prussia is coastal, but since Prussia came before Europe expansionism has higher priority
+            }
+            else = {
+                #Else its land locked.
+                #So this is a landlocked nation in europe, give them expansionism
+                activate_law = law_type:law_expansionism
+            }
+        }
+        #And exit the europe section.
+        #Do a new else_if, we're out of Europe, and could be anywhere
+        else_if = {
+            limit = {
+                #New trigger form.
+                #This time we do it for cultures
+                any_primary_culture = {
+                    #We check for east asian culture nations here
+                    has_discrimination_trait = east_asian_heritage
+                }
+            }
+            #And grant them anti-imperialism
+            activate_law = law_type:law_anti_imperialist
+        }
+        #Lastly, we do an else to blanket activate_law on ANY country we've missed.
+        else = {
+            activate_law = law_type:law_neutral
+        }
+    }
+}
