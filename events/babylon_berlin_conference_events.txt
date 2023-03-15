@@ -1,0 +1,55 @@
+namespace = babylon_berlin_conference
+babylon_berlin_conference.1 = {
+	type = country_event
+	title = babylon_berlin_conference.1.t
+	desc = babylon_berlin_conference.1.d
+	flavor = babylon_berlin_conference.1.f
+	event_image = {
+		video = "gfx/event_pictures/africa_desert_expedition.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/africa/desert_expedition"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	trigger = {
+		any_country = {
+			#There must be 3 (or more) countries
+			count >= 3
+			filter = {
+				#Of great power status
+				country_rank >= country_value:great_power
+				#With a colonial agenda
+				NOT = {
+					has_law = law_type:law_no_colonial_affairs
+				}
+				#That has researched malaria prevention
+				has_technology_researched = malaria_prevention
+			}
+		}
+        #The conference cannot be progressing
+		NOT = {
+			has_global_variable = babylon_berlin_conference_in_progress
+		}
+	}
+	immediate = {
+		every_country = {
+            #Find every country that fits the trigger criteria...
+			limit = {
+				#Of great power status
+				country_rank >= country_value:great_power
+				#With a colonial agenda
+				NOT = {
+					has_law = law_type:law_no_colonial_affairs
+				}
+				#That has researched malaria prevention
+				has_technology_researched = malaria_prevention
+			}
+            root = {
+                add_to_local_variable_list = {
+                    name = babylon_berlin_conference_stage_1_participants
+                    target = prev
+                }
+            }
+		}
+	}
+}
