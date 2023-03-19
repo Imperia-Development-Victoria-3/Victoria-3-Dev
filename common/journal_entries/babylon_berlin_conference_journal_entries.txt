@@ -1,0 +1,216 @@
+﻿je_babylon_berlin_conference_stage_1 = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	immediate = {
+		set_variable = {
+			name = berlin_conference_stage_1_vote
+			value = 0			#To indicate no vote yet
+		}
+	}
+	complete = {
+		OR = {
+			#All invitees should agree
+			any_country = {
+				count = all
+				filter = {
+					has_journal_entry = je_babylon_berlin_conference_stage_1
+					has_variable = berlin_conference_stage_1_vote
+				}
+				custom_tooltip = {
+					text = babylon_berlin_conference_stage_1_euro_gps_only_tt
+					var:berlin_conference_stage_1_vote = 1					#Europe GPs only
+				}
+			}
+			any_country = {
+				count = all
+				filter = {
+					has_journal_entry = je_babylon_berlin_conference_stage_1
+					has_variable = berlin_conference_stage_1_vote
+				}
+				custom_tooltip = {
+					text = babylon_berlin_conference_stage_1_euro_mps_only_tt
+					var:berlin_conference_stage_1_vote = 2					#Europe Major Powers only
+				}
+			}
+			any_country = {
+				count = all
+				filter = {
+					has_journal_entry = je_babylon_berlin_conference_stage_1
+					has_variable = berlin_conference_stage_1_vote
+				}
+				custom_tooltip = {
+					text = babylon_berlin_conference_stage_1_west_gps_only_tt
+					var:berlin_conference_stage_1_vote = 3					#Western hemisphere GPs only
+				}
+			}
+			any_country = {
+				count = all
+				filter = {
+					has_journal_entry = je_babylon_berlin_conference_stage_1
+					has_variable = berlin_conference_stage_1_vote
+				}
+				custom_tooltip = {
+					text = babylon_berlin_conference_stage_1_all_gps_tt
+					var:berlin_conference_stage_1_vote = 4					#Every GP
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			#Fires only once, in the proposers journal entry
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+				has_variable = berlin_conference_stage_1_vote
+			}
+			if = {
+				limit = {
+					var:berlin_conference_stage_1_vote = 1
+				}
+				#Invite euro gps to stage 2
+				every_country = {
+					limit = {
+						country_is_in_europe = yes
+						country_rank >= rank_value:great_power
+					}
+					babylon_berlin_invite_member = yes
+				}
+			}
+			if = {
+				limit = {
+					var:berlin_conference_stage_1_vote = 2
+				}
+				#Invite euro mps to stage 2
+				every_country = {
+					limit = {
+						country_is_in_europe = yes
+						country_rank >= rank_value:major_power
+					}
+					babylon_berlin_invite_member = yes
+				}
+			}
+			if = {
+				limit = {
+					#Western GPs only
+					var:berlin_conference_stage_1_vote = 3
+				}
+				#Invite western gps to stage 2
+				every_country = {
+					limit = {
+						OR = {
+							country_is_in_europe = yes
+							country_is_in_north_america = yes
+							country_is_in_central_america = yes
+							country_is_in_south_america = yes
+						}
+						country_rank >= rank_value:great_power
+					}
+					babylon_berlin_invite_member = yes
+				}
+			}
+			if = {
+				limit = {
+					#Every GP 
+					var:berlin_conference_stage_1_vote = 4
+				}
+				#Invite every gp to stage 2
+				every_country = {
+					limit = {
+						country_rank >= rank_value:great_power
+					}
+					babylon_berlin_invite_member = yes
+				}
+			}
+			#After the if's, meaning this get fired no matter what
+			#But only once, in the proposer
+			#Initialise global gdp
+			set_global_variable = {
+				name = berlin_conference_total_gdp
+				value = 0
+			}
+			#Start counting
+			every_country = {
+				limit = {
+					has_journal_entry = je_babylon_berlin_conference_stage_2
+				}
+				change_global_variable = {
+					name = berlin_conference_total_gdp
+					add = gdp
+				}
+			}
+			#Give points to each invitee
+			#This needs to be after, since global_gdp of invitees is used
+			every_country = {
+				limit = {
+					has_journal_entry = je_babylon_berlin_conference_stage_2
+				}
+				babylon_berlin_conference_calculate_points = yes
+			}
+			#Cleanup - for proposer only
+			remove_global_variable = berlin_conference_total_gdp
+		}
+		#More cleanup
+		#This is for everyone who voted
+		remove_variable = berlin_conference_stage_1_vote
+	}
+	on_timeout = {
+		remove_variable = berlin_conference_stage_1_vote
+		remove_variable = babylon_berlin_conference_proposer
+		remove_global_variable = babylon_berlin_conference_in_progress
+		set_global_variable = babylon_berlin_conference_finished
+		trigger_event = {
+			id = babylon_berlin_conference.5
+			days = 0
+			popup = yes
+		}
+	}
+	timeout = 356
+	weight = 800
+	should_be_pinned_by_default = yes
+}
+
+je_babylon_berlin_conference_stage_2 = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	immediate = {
+		initialise_every_state = yes
+		#Is used in the congo free state sub-round
+		set_variable = berlin_conference_participant
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			#add effect to randomly distribute points
+			# Fired after a few days since points are technically first given *after* the journal entry is added
+			trigger_event = {
+				id = babylon_berlin_conference.10
+				days = 2
+				popup = yes
+			}
+		}
+	}
+	on_timeout = {
+		if = {
+			#Should only fire once
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			hidden_effect = {
+				trigger_event = {
+					# Finish event
+					id = babylon_berlin_conference.11
+					days = 1
+				}
+			}
+		}
+		# And for every participant
+		hidden_effect = {
+			trigger_event = {
+				# Cleanup event
+				id = babylon_berlin_conference.9
+				days = 7
+			}
+		}
+	}
+	timeout = 356
+	weight = 800
+	should_be_pinned_by_default = yes
+}

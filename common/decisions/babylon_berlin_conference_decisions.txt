@@ -1,0 +1,93 @@
+﻿babylon_berlin_conference_stage_1_vote = {
+	is_shown = {
+		has_journal_entry = je_babylon_berlin_conference_stage_1
+	}
+	possible = {
+		always = yes
+	}
+	when_taken = {
+		trigger_event = {
+			id = babylon_berlin_conference.3
+			days = 0
+			popup = yes
+		}
+	}
+	ai_chance = {
+		base = 0
+		modifier = {
+			add = 500
+			trigger = {
+				NOR = {
+					AND = {
+						var:berlin_conference_stage_1_vote = 1
+						any_country = {
+							percent > 0.5
+							filter = {
+								has_journal_entry = je_babylon_berlin_conference_stage_1
+							}
+							var:berlin_conference_stage_1_vote = 1							#Europe GPs only
+						}
+					}
+					AND = {
+						var:berlin_conference_stage_1_vote = 2
+						any_country = {
+							percent > 0.5
+							filter = {
+								has_journal_entry = je_babylon_berlin_conference_stage_1
+							}
+							var:berlin_conference_stage_1_vote = 2							#Europe GPs only
+						}
+					}
+					AND = {
+						var:berlin_conference_stage_1_vote = 3
+						any_country = {
+							percent > 0.5
+							filter = {
+								has_journal_entry = je_babylon_berlin_conference_stage_1
+							}
+							var:berlin_conference_stage_1_vote = 3							#Europe GPs only
+						}
+					}
+					AND = {
+						var:berlin_conference_stage_1_vote = 4
+						any_country = {
+							percent > 0.5
+							filter = {
+								has_journal_entry = je_babylon_berlin_conference_stage_1
+							}
+							var:berlin_conference_stage_1_vote = 4							#Europe GPs only
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+babylon_berlin_conference_stage_2_point_distribution = {
+	is_shown = {
+		has_journal_entry = je_babylon_berlin_conference_stage_2
+	}
+	possible = {
+		NOT = {
+			has_variable = babylon_berlin_point_distribution_open
+		}
+	}
+	when_taken = {
+		trigger_event = {
+			id = babylon_berlin_conference.6
+			days = 0
+			popup = yes
+		}
+	}
+	ai_chance = {
+		base = 0
+		#If more than 0 points remain, fire this event (AI only)
+		modifier = {
+			add = 100
+			trigger = {
+				var:babylon_berlin_conference_points_remaining > 0
+			}
+		}
+	}
+}

@@ -1,19 +1,27 @@
-namespace = babylon_berlin_conference
+﻿namespace = babylon_berlin_conference
 babylon_berlin_conference.1 = {
 	type = country_event
 	title = babylon_berlin_conference.1.t
 	desc = babylon_berlin_conference.1.d
 	flavor = babylon_berlin_conference.1.f
 	event_image = {
-		video = "gfx/event_pictures/africa_desert_expedition.bk2"
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	on_opened_soundeffect = "event:/SFX/Events/africa/desert_expedition"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
 	trigger = {
+		#root is great power status
+		country_rank >= country_value:great_power
+		#With a colonial agenda
+		NOT = {
+			has_law = law_type:law_no_colonial_affairs
+		}
+		#That has researched malaria prevention
+		has_technology_researched = malaria_prevention
+		#There must be 3 (or more) countries
 		any_country = {
-			#There must be 3 (or more) countries
 			count >= 3
 			filter = {
 				#Of great power status
@@ -26,14 +34,22 @@ babylon_berlin_conference.1 = {
 				has_technology_researched = malaria_prevention
 			}
 		}
-        #The conference cannot be progressing
-		NOT = {
+		# In Europe, just so they're not locked out later! European great powers are always invited to the Berlin Conference!
+		country_is_in_europe = yes
+		#The conference cannot be progressing or finished
+		NOR = {
 			has_global_variable = babylon_berlin_conference_in_progress
+			has_global_variable = babylon_berlin_conference_finished
 		}
 	}
 	immediate = {
+		set_global_variable = babylon_berlin_conference_in_progress
+		set_variable = babylon_berlin_conference_proposer
+	}
+	option = {
+		name = babylon_berlin_conference.1.a
 		every_country = {
-            #Find every country that fits the trigger criteria...
+			#Find every country that fits the trigger criteria...
 			limit = {
 				#Of great power status
 				country_rank >= country_value:great_power
@@ -43,13 +59,808 @@ babylon_berlin_conference.1 = {
 				}
 				#That has researched malaria prevention
 				has_technology_researched = malaria_prevention
+				#But not ourselves, naturally
+				NOT = {
+					this = root
+				}
 			}
-            root = {
-                add_to_local_variable_list = {
-                    name = babylon_berlin_conference_stage_1_participants
-                    target = prev
-                }
-            }
+			trigger_event = {
+				id = babylon_berlin_conference.2
+				days = 0
+				popup = yes
+			}
+			hidden_effect = {
+				add_journal_entry = {
+					type = je_babylon_berlin_conference_stage_1
+				}
+			}
 		}
+		add_journal_entry = {
+			type = je_babylon_berlin_conference_stage_1
+		}
+	}
+}
+
+babylon_berlin_conference.2 = {
+	#Broadcast that stage 1 is starting
+	#targets colonial GPs
+	type = country_event
+	title = babylon_berlin_conference.2.t
+	desc = babylon_berlin_conference.2.d
+	flavor = babylon_berlin_conference.2.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			save_scope_as = berlin_conference_proposer
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.2.a
+	}
+}
+
+babylon_berlin_conference.3 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.3.t
+	desc = babylon_berlin_conference.3.desc
+	flavor = babylon_berlin_conference.3.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	option = {
+		#Euro GPs only
+		name = babylon_berlin_conference.3.a
+		trigger = {
+			NOT = {
+				var:berlin_conference_stage_1_vote = 1
+			}
+		}
+		set_variable = {
+			name = berlin_conference_stage_1_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 1
+			#Dont pick this if you're not in Europe
+			modifier = {
+				subtract = 100
+				trigger = {
+					country_is_in_europe = no
+				}
+			}
+		}
+	}
+	option = {
+		#Euro MPs only
+		name = babylon_berlin_conference.3.b
+		trigger = {
+			NOT = {
+				var:berlin_conference_stage_1_vote = 2
+			}
+		}
+		set_variable = {
+			name = berlin_conference_stage_1_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				#European voters want this
+				add = 5
+				trigger = {
+					country_is_in_europe = yes
+				}
+			}
+			#Dont pick this if you're not in Europe
+			modifier = {
+				subtract = 100
+				trigger = {
+					country_is_in_europe = no
+				}
+			}
+		}
+	}
+	#Western GPs only
+	option = {
+		name = babylon_berlin_conference.3.c
+		trigger = {
+			NOT = {
+				var:berlin_conference_stage_1_vote = 3
+			}
+		}
+		set_variable = {
+			name = berlin_conference_stage_1_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				add = 5
+				trigger = {
+					OR = {
+						country_is_in_north_america = yes
+						country_is_in_central_america = yes
+						country_is_in_south_america = yes
+					}
+				}
+			}
+			modifier = {
+				#Dont pick this if you're not in the western hemisphere
+				subtract = 100
+				trigger = {
+					AND = {
+						country_is_in_north_america = no
+						country_is_in_central_america = no
+						country_is_in_europe = no
+						country_is_in_south_america = no
+					}
+				}
+			}
+		}
+	}
+	#All GPs
+	option = {
+		name = babylon_berlin_conference.3.d
+		trigger = {
+			NOT = {
+				var:berlin_conference_stage_1_vote = 4
+			}
+		}
+		set_variable = {
+			name = berlin_conference_stage_1_vote
+			value = 4
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.4 = {
+	#Stage 2 begins
+	type = country_event
+	title = babylon_berlin_conference.4.t
+	desc = babylon_berlin_conference.4.d
+	flavor = babylon_berlin_conference.4.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	option = {
+		name = babylon_berlin_conference.4.a
+	}
+}
+
+babylon_berlin_conference.5 = {
+	#Berlin conference failed
+	type = country_event
+	title = babylon_berlin_conference.5.t
+	desc = babylon_berlin_conference.5.d
+	flavor = babylon_berlin_conference.5.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	option = {
+		name = babylon_berlin_conference.5.a
+	}
+}
+
+babylon_berlin_conference.6 = {
+	#Give points main menu
+	#Select a strategic region
+	type = country_event
+	title = babylon_berlin_conference.6.t
+	desc = babylon_berlin_conference.6.d
+	flavor = babylon_berlin_conference.6.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		#Make sure multiple instances cant open
+		set_variable = babylon_berlin_point_distribution_open
+		#is removed in the exit
+	}
+	option = {
+		name = region_nile_basin
+		set_variable = {
+			name = babylon_strategic_region
+			value = 1
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_ethiopia
+		set_variable = {
+			name = babylon_strategic_region
+			value = 2
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_north_africa
+		set_variable = {
+			name = babylon_strategic_region
+			value = 3
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_senegal
+		set_variable = {
+			name = babylon_strategic_region
+			value = 4
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_niger
+		set_variable = {
+			name = babylon_strategic_region
+			value = 5
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_congo
+		set_variable = {
+			name = babylon_strategic_region
+			value = 6
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_southern_africa
+		set_variable = {
+			name = babylon_strategic_region
+			value = 7
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = region_zanj
+		set_variable = {
+			name = babylon_strategic_region
+			value = 8
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.6.exit
+		set_variable = {
+			name = babylon_strategic_region
+			value = 0
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				# Get out of there...
+				add = 1000
+				#If 0 or less (???) points remain
+				trigger = {
+					var:babylon_berlin_conference_points_remaining <= 0
+				}
+			}
+		}
+		#Make sure multiple instances cant open
+		remove_variable = babylon_berlin_point_distribution_open
+		default_option = yes
+	}
+	after = {
+		if = {
+			limit = {
+				var:babylon_strategic_region != 0
+				has_journal_entry = je_babylon_berlin_conference_stage_2
+			}
+			trigger_event = {
+				id = babylon_berlin_conference.7
+				days = 0
+				popup = yes
+			}
+		}
+	}
+}
+
+babylon_berlin_conference.7 = {
+	#Give points strategic region menu
+	#Select a region state
+	type = country_event
+	title = babylon_berlin_conference.7.t
+	desc = babylon_berlin_conference.7.desc
+	flavor = babylon_berlin_conference.7.flavor
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	option = {
+		name = babylon_berlin_conference.7.a
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 1
+			}
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 1
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.b
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 2
+			}
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 2
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.c
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 3
+			}
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 3
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.d
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 4
+			}
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 4
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.e
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 5
+			}
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 5
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.f
+		set_variable = {
+			name = babylon_region_state
+			value = 6
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 6
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.g
+		set_variable = {
+			name = babylon_region_state
+			value = 7
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 7
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.h
+		set_variable = {
+			name = babylon_region_state
+			value = 8
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 8
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.i
+		set_variable = {
+			name = babylon_region_state
+			value = 9
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 9
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.j
+		set_variable = {
+			name = babylon_region_state
+			value = 10
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 10
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.k
+		set_variable = {
+			name = babylon_region_state
+			value = 11
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 11
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.l
+		set_variable = {
+			name = babylon_region_state
+			value = 12
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 12
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.m
+		set_variable = {
+			name = babylon_region_state
+			value = 13
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 13
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.7.n
+		set_variable = {
+			name = babylon_region_state
+			value = 14
+		}
+		trigger = {
+			babylon_berlin_conference_can_colonise_STATE_REGION = {
+				REGION = var:babylon_strategic_region
+				STATE = 14
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	##### BACK OPTION #####
+	option = {
+		name = babylon_berlin_conference.7.back
+		set_variable = {
+			name = babylon_strategic_region
+			value = 0
+		}
+		set_variable = {
+			name = babylon_region_state
+			value = 0
+		}
+		trigger_event = {
+			id = babylon_berlin_conference.6
+			days = 0
+			popup = yes
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				# Get out of there...
+				add = 1000
+				#If 0 or less (???) points remain
+				trigger = {
+					var:babylon_berlin_conference_points_remaining <= 0
+				}
+			}
+		}
+		default_option = yes
+	}
+	after = {
+		if = {
+			limit = {
+				var:babylon_region_state != 0
+				has_journal_entry = je_babylon_berlin_conference_stage_2
+			}
+			trigger_event = {
+				id = babylon_berlin_conference.8
+				days = 0
+				popup = yes
+			}
+		}
+	}
+}
+
+babylon_berlin_conference.8 = {
+	#Administer points
+	type = country_event
+	title = babylon_berlin_conference.8.t
+	desc = babylon_berlin_conference.8.d
+	flavor = babylon_berlin_conference.8.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	option = {
+		name = "Remove 5 Points"
+		trigger = {
+			trigger_at_least_POINTS_in_STATE_REGION = {
+				POINTS = 5
+				STATE = var:babylon_region_state
+				REGION = var:babylon_strategic_region
+			}
+		}
+		ai_chance = {
+			base = 0
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = -5
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+	}
+	option = {
+		name = "Remove 2 Points"
+		trigger = {
+			trigger_at_least_POINTS_in_STATE_REGION = {
+				POINTS = 2
+				STATE = var:babylon_region_state
+				REGION = var:babylon_strategic_region
+			}
+		}
+		ai_chance = {
+			base = 0
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = -2
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+	}
+	option = {
+		name = "Remove 1 Point"
+		trigger = {
+			trigger_at_least_POINTS_in_STATE_REGION = {
+				POINTS = 1
+				STATE = var:babylon_region_state
+				REGION = var:babylon_strategic_region
+			}
+		}
+		ai_chance = {
+			base = 0
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = -1
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+	}
+	option = {
+		name = "Add 1 Point"
+		trigger = {
+			var:babylon_berlin_conference_points_remaining > 0.5
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = 1
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = "Add 2 Points"
+		trigger = {
+			var:babylon_berlin_conference_points_remaining > 1.5
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = 2
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = "Add 5 Points"
+		trigger = {
+			var:babylon_berlin_conference_points_remaining > 4.5
+		}
+		ai_chance = {
+			base = 0
+		}
+		change_POINTS_in_STATE_in_REGION = {
+			POINTS = 5
+			STATE = var:babylon_region_state
+			REGION = var:babylon_strategic_region
+		}
+	}
+	##### BACK OPTION #####
+	option = {
+		name = babylon_berlin_conference.7.back
+		set_variable = {
+			name = babylon_region_state
+			value = 0
+		}
+		trigger_event = {
+			id = babylon_berlin_conference.7
+			days = 0
+			popup = yes
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				# Get out of there...
+				add = 1000
+				#If 0 or less (???) points remain
+				trigger = {
+					var:babylon_berlin_conference_points_remaining <= 0
+				}
+			}
+		}
+		default_option = yes
+	}
+	after = {
+		if = {
+			limit = {
+				var:babylon_region_state != 0
+			}
+			trigger_event = {
+				id = babylon_berlin_conference.8
+				days = 0
+				popup = yes
+			}
+		}
+	}
+}
+
+babylon_berlin_conference.9 = {
+	# hidden cleanup of round 2 variables
+	# scope is a random round 2 participant, fired 7 days after phase 2 ends
+	type = country_event
+	hidden = yes
+	immediate = {
+		# TODO
+		# Enter effect for removing every congo-point-in-state var here
+		# Remove strategic region / state selector var here
+	}
+}
+
+babylon_berlin_conference.10 = {
+	# hidden distribution of points for ai
+	type = country_event
+	hidden = yes
+	immediate = {
+		berlin_conference_distribute_points_for_ai = yes
+	}
+}
+
+babylon_berlin_conference.11 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		berlin_conference_stage_2_finished_effect = yes
 	}
 }
