@@ -9,6 +9,9 @@
 	unlocking_technologies = {
 		democracy
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
 
 egalitarianism = {
@@ -27,6 +30,25 @@ egalitarianism = {
 	unlocking_technologies = {
 		democracy
 	}
+	ai_weight = {
+		value = 1
+		if = {
+			limit = {
+				has_strategy = ai_strategy_progressive_agenda
+			}
+			add = 2
+		}
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_conservative_agenda
+					has_strategy = ai_strategy_reactionary_agenda
+					has_strategy = ai_strategy_maintain_mandate_of_heaven
+				}
+			}
+			add = -0.5
+		}
+	}
 }
 
 international_trade = {
@@ -41,6 +63,9 @@ international_trade = {
 	unlocking_technologies = {
 		tech_bureaucracy
 	}
+	ai_weight = {
+		value = 3		# Very important in general
+	}
 }
 
 camera = {
@@ -54,6 +79,9 @@ camera = {
 	}
 	unlocking_technologies = {
 		realism
+	}
+	ai_weight = {
+		value = 1
 	}
 }
 
@@ -71,6 +99,9 @@ tech_bureaucracy = {
 	unlocking_technologies = {
 		urbanization
 	}
+	ai_weight = {
+		value = 3		# Very important in general
+	}
 }
 
 international_relations = {
@@ -84,6 +115,9 @@ international_relations = {
 	unlocking_technologies = {
 		tech_bureaucracy
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
 
 postal_savings = {
@@ -96,6 +130,9 @@ postal_savings = {
 	}
 	unlocking_technologies = {
 		stock_exchange
+	}
+	ai_weight = {
+		value = 1
 	}
 }
 
@@ -112,6 +149,9 @@ mutual_funds = {
 	unlocking_technologies = {
 		central_banking
 		postal_savings
+	}
+	ai_weight = {
+		value = 1
 	}
 }
 
@@ -130,6 +170,9 @@ international_exchange_standards = {
 	unlocking_technologies = {
 		mutual_funds
 	}
+	ai_weight = {
+		value = 1
+	}
 }
 
 multilateral_alliances = {
@@ -144,23 +187,14 @@ multilateral_alliances = {
 	unlocking_technologies = {
 		pan-nationalism
 	}
-}
-
-human_rights = {
-	# Unlocks Worker Protections - Labor Rights Law
-	# Unlocks Protected Speech - Freedom of Speech Law
-	# Unlocks Compulsory Schooling - Children's Rights Laws
-	# Unlocks Old Age Pensions - Social Security Laws
-	# Should presumably unlock a lot of Laws in the Human Rights category of Laws
-	era = era_3
-	texture = "gfx/interface/icons/invention_icons/human_rights.dds"
-	category = society
-	modifier = {
-		country_institution_social_security_max_investment_add = 1
-		country_institution_multiculturalism_max_investment_add = 1
-	}
-	unlocking_technologies = {
-		egalitarianism
+	ai_weight = {
+		value = 1
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			add = 2
+		}
 	}
 }
 
@@ -174,6 +208,25 @@ feminism = {
 	}
 	unlocking_technologies = {
 		human_rights
+	}
+	ai_weight = {
+		value = 1
+		if = {
+			limit = {
+				has_strategy = ai_strategy_egalitarian_agenda
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_conservative_agenda
+					has_strategy = ai_strategy_reactionary_agenda
+					has_strategy = ai_strategy_maintain_mandate_of_heaven
+				}
+			}
+			add = -0.5
+		}
 	}
 }
 
@@ -190,6 +243,9 @@ empiricism = {
 	unlocking_technologies = {
 		academia
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
 
 academia = {
@@ -203,66 +259,58 @@ academia = {
 	unlocking_technologies = {
 		rationalism
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
 
-tech_multiculturalism = {
-	era = era_5
-	texture = "gfx/interface/icons/invention_icons/rationalism.dds"
-	category = society
-	modifier = {
-		country_institution_multiculturalism_max_investment_add = 1
-	}
-	unlocking_technologies = {
-		feminism
-		psychoanalysis
-	}
-}
 stock_exchange = {
 	era = era_1
 	texture = "gfx/interface/icons/invention_icons/stock_exchanges.dds"
-	category = society	
-	
+	category = society
 	modifier = {
 		country_trade_route_cost_mult = -0.25
 		country_trade_route_competitiveness_mult = 0.25
 	}
-	
 	unlocking_technologies = {
 		international_trade
 	}
-	modifier {
-		state_capitalists_investment_pool_efficiency_mult = 0.1 
+	modifier = {
+		state_capitalists_investment_pool_efficiency_mult = 0.1
 		state_aristocrats_investment_pool_efficiency_mult = 0.05
-
+	}
+	ai_weight = {
+		value = 1
 	}
 }
+
 macroeconomics = {
 	# #todo#! Does nothing at the moment
 	era = era_5
 	texture = "gfx/interface/icons/invention_icons/macroeconomics.dds"
 	category = society
-	
 	modifier = {
 		country_trade_route_quantity_mult = 0.5
 		country_trade_route_competitiveness_mult = 0.25
 	}
-	
 	unlocking_technologies = {
 		international_exchange_standards
 	}
-	modifier {
+	modifier = {
 		state_capitalists_investment_pool_efficiency_mult = 0.5
 		state_shopkeepers_investment_pool_efficiency_mult = 0.2
 		state_farmers_investment_pool_efficiency_mult = 0.05
-
+	}
+	ai_weight = {
+		value = 1
 	}
 }
+
 elevator = {
 	# Unlocks Arcades PM in Urban Center
 	era = era_4
 	texture = "gfx/interface/icons/invention_icons/elevator.dds"
 	category = society
-	
 	modifier = {
 		state_infrastructure_from_population_add = 1
 		state_infrastructure_from_population_max_add = 20
@@ -270,17 +318,19 @@ elevator = {
 		market_land_trade_capacity_add = 10
 		state_construction_mult = 0.05
 		building_urban_center_throughput_mult = 0.05
-	}	
-	
+	}
 	unlocking_technologies = {
 		steel_frame_buildings
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
+
 paved_roads = {
 	era = era_5
 	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
 	category = society
-	
 	modifier = {
 		state_infrastructure_from_population_add = 1
 		state_infrastructure_from_population_max_add = 20
@@ -292,60 +342,68 @@ paved_roads = {
 		building_urban_center_throughput_mult = 0.15
 		building_motor_industry_throughput_mult = 0.05
 	}
-	
-	unlocking_technologies = {	
+	unlocking_technologies = {
 		elevator
 	}
+	ai_weight = {
+		value = 2		# Important for those nice-looking roads!
+	}
 }
+
 central_planning = {
 	# Unlocks Command Economy - Economic System Law
 	# Unlocks Vertical Filing Cabinets PM in Government Administrations
 	era = era_4
 	texture = "gfx/interface/icons/invention_icons/central_planning.dds"
 	category = society
-	
 	modifier = {
 		state_tax_capacity_add = 25
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 		country_authority_add = 50
 	}
-	
 	unlocking_technologies = {
 		identification_documents
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
+
 central_archives = {
 	# Unlocks Secret Police - Internal Security Law
 	# Unlocks Horizontal Drawer Cabinets PM for Government Administration
 	era = era_2
 	texture = "gfx/interface/icons/invention_icons/central_archives.dds"
 	category = society
-	
 	modifier = {
 		state_tax_capacity_add = 25
 		country_institution_home_affairs_max_investment_add = 1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 	}
-	
 	unlocking_technologies = {
 		centralization
 	}
+	ai_weight = {
+		value = 1.5		# Important in general
+	}
 }
+
 identification_documents = {
 	# Unlocks Identification Documents PM in Government Administrations
 	# Unlocks Closed Borders Law in Migration
 	era = era_3
 	texture = "gfx/interface/icons/invention_icons/identification_documents.dds"
 	category = society
-
 	modifier = {
 		state_tax_capacity_add = 25
 		country_institution_home_affairs_max_investment_add = 1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 	}
-	
 	unlocking_technologies = {
 		central_archives
+	}
+	ai_weight = {
+		value = 1
 	}
 }
 
@@ -355,84 +413,118 @@ mass_surveillance = {
 	era = era_5
 	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
 	category = society
-	
 	modifier = {
 		state_tax_capacity_add = 25
 		state_turmoil_effects_mult = -0.05
 		state_radicals_from_sol_change_mult = -0.03
 	}
-	
 	unlocking_technologies = {
 		central_planning
 	}
+	ai_weight = {
+		value = 1
+	}
 }
+
 pan-nationalism = {
 	# Permits for the formation of a number of pan-nationalist countries
 	# Permits the Unify Germany and Unify Italy Diplomatic Plays
 	era = era_3
 	texture = "gfx/interface/icons/invention_icons/pan_nationalism.dds"
 	category = society
-	
 	modifier = {
 		country_authority_mult = 0.1
 		country_authority_add = 50
 	}
-	
 	unlocking_technologies = {
 		nationalism
 	}
+	ai_weight = {
+		value = 2		# Important in general
+		# Extra-important for major unifications
+		if = {
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+					country_has_primary_culture = cu:north_italian
+					country_has_primary_culture = cu:south_italian
+				}
+			}
+			add = 2
+		}
+	}
 }
+
 nationalism = {
 	# Unlocks the Immigration Controls Law in Migration
 	# New leaders may spawn with the Ethno-Nationalist Ideology
 	era = era_2
 	texture = "gfx/interface/icons/invention_icons/nationalism.dds"
 	category = society
-	
 	modifier = {
 		country_authority_mult = 0.1
 		country_authority_add = 50
 	}
-	
 	unlocking_technologies = {
 		mass_communication
 		international_relations
 	}
+	ai_weight = {
+		value = 2		# Important in general
+		# Extra-important for major unifications
+		if = {
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+					country_has_primary_culture = cu:north_italian
+					country_has_primary_culture = cu:south_italian
+				}
+			}
+			add = 2
+		}
+	}
 }
+
 organized_sports = {
 	era = era_2
 	texture = "gfx/interface/icons/invention_icons/organized_sports.dds"
 	category = society
-	
 	modifier = {
 		country_prestige_mult = 0.1
 		country_influence_mult = 0.05
 		country_infamy_decay_mult = 0.05
 	}
-	
 	unlocking_technologies = {
 		nationalism
 	}
+	ai_weight = {
+		value = 1
+	}
 }
+
 mass_propaganda = {
 	# Unlocks Better Radios PM in Electrics Industries
 	# New leaders may spawn with the Fascist Ideology
 	era = era_5
 	texture = "gfx/interface/icons/invention_icons/mass_propaganda.dds"
 	category = society
-	
 	modifier = {
 		country_authority_mult = 0.1
 		state_expected_sol_from_literacy = 1
 		state_radicals_from_sol_change_mult = -0.05
 		country_war_exhaustion_casualties_mult = -0.15
 	}
-	
 	unlocking_technologies = {
 		political_agitation
 		film
 	}
+	ai_weight = {
+		value = 1
+	}
 }
+
 colonization = {
 	# Unlocks Colonial Resettlement, Colonial Exploitation - Colonial Affairs Laws
 	# Unlocks various expedition decisions
@@ -440,60 +532,75 @@ colonization = {
 	era = era_1
 	texture = "gfx/interface/icons/invention_icons/colonization.dds"
 	category = society
-
 	modifier = {
 		country_institution_colonial_affairs_max_investment_add = 2
 		country_diplomatic_play_maneuvers_add = 10
-
-	}	
-	
+	}
 	unlocking_technologies = {
 		international_relations
 	}
+	ai_weight = {
+		value = 1
+	}
 }
+
 civilizing_mission = {
 	# Unlocks Panama Canal survey expedition decision
 	# Unlocks the Panama Canal
-
 	era = era_3
 	texture = "gfx/interface/icons/invention_icons/civilizing_mission.dds"
 	category = society
-
 	modifier = {
 		country_institution_colonial_affairs_max_investment_add = 1
 		country_diplomatic_play_maneuvers_add = 15
 	}
-	
 	unlocking_technologies = {
 		quinine
 		nationalism
 	}
+	ai_weight = {
+		value = 1
+		# Important for colonizers
+		if = {
+			limit = {
+				navy_size >= 25
+				is_country_type = recognized
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				has_strategy = ai_strategy_colonial_expansion
+			}
+			add = 1
+		}
+	}
 }
-evolutionary_biology = {
 
+evolutionary_biology = {
 	era = era_3
 	texture = "gfx/interface/icons/invention_icons/academia.dds"
 	category = society
-
 	modifier = {
-		
 	}
-	
 	unlocking_technologies = {
 		dialectics
 	}
+	ai_weight = {
+		value = 1
+	}
 }
-scientific_method = {
 
+scientific_method = {
 	era = era_4
 	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
 	category = society
-
 	modifier = {
-		
 	}
-	
 	unlocking_technologies = {
 		evolutionary_biology
+	}
+	ai_weight = {
+		value = 1
 	}
 }
