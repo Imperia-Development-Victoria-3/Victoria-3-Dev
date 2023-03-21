@@ -28,7 +28,7 @@
 				}
 				custom_tooltip = {
 					text = babylon_berlin_conference_stage_1_euro_mps_only_tt
-					var:berlin_conference_stage_1_vote = 2					#Europe Major Powers only
+					var:berlin_conference_stage_1_vote = 2					#Europe Major Powers only + those with african possessions
 				}
 			}
 			any_country = {
@@ -79,11 +79,31 @@
 				limit = {
 					var:berlin_conference_stage_1_vote = 2
 				}
-				#Invite euro mps to stage 2
+				#Invite euro mps + those with possessions to stage 2
 				every_country = {
 					limit = {
-						country_is_in_europe = yes
-						country_rank >= rank_value:major_power
+						country_is_in_africa = no
+						is_subject = no
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+						OR = {
+							AND = {
+								country_is_in_europe = yes
+								country_rank >= rank_value:major_power
+							}
+							OR = {
+								any_scope_state = {
+									state_in_africa = yes
+								}
+								any_subject_or_below = {
+									any_scope_state = {
+										state_in_africa = yes
+									}
+								}
+							}
+						}
 					}
 					babylon_berlin_invite_member = yes
 				}
@@ -144,6 +164,7 @@
 					has_journal_entry = je_babylon_berlin_conference_stage_2
 				}
 				babylon_berlin_conference_calculate_points = yes
+				babylon_berlin_conference_give_ai_strategic_objectives = yes
 			}
 			#Cleanup - for proposer only
 			remove_global_variable = berlin_conference_total_gdp
@@ -174,20 +195,19 @@ je_babylon_berlin_conference_stage_2 = {
 		initialise_every_state = yes
 		#Is used in the congo free state sub-round
 		set_variable = berlin_conference_participant
+	}
+	on_timeout = {
 		if = {
+			#add effect to randomly distribute points
+			# Only for AIs, fired at the end of the journal so countries can adapt to changes on the ground better
 			limit = {
 				is_ai = yes
 			}
-			#add effect to randomly distribute points
-			# Fired after a few days since points are technically first given *after* the journal entry is added
 			trigger_event = {
 				id = babylon_berlin_conference.10
-				days = 2
-				popup = yes
+				days = 0
 			}
 		}
-	}
-	on_timeout = {
 		if = {
 			#Should only fire once
 			limit = {
@@ -213,4 +233,1254 @@ je_babylon_berlin_conference_stage_2 = {
 	timeout = 356
 	weight = 800
 	should_be_pinned_by_default = yes
+}
+
+je_babylon_egyptian_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = egypt_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_1
+			}
+			save_scope_as = egyptian_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_2
+			}
+			save_scope_as = egyptian_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_3
+			}
+			save_scope_as = egyptian_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:NFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:NFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_egyptian_free_state_owner
+					has_variable = egypt_free_state_vote
+				}
+				hidden_trigger = {
+					var:egypt_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_egypt_free_state_1_tt
+					subject = scope:egyptian_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_egyptian_free_state_owner
+					has_variable = egypt_free_state_vote
+				}
+				hidden_trigger = {
+					var:egypt_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_egypt_free_state_2_tt
+					subject = scope:egyptian_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_egyptian_free_state_owner
+					has_variable = egypt_free_state_vote
+				}
+				hidden_trigger = {
+					var:egypt_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_egypt_free_state_3_tt
+					subject = scope:egyptian_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_egyptian_free_state_owner
+							has_variable = egypt_free_state_vote
+						}
+						hidden_trigger = {
+							var:egypt_free_state_vote = 1
+						}
+					}
+				}
+				scope:egyptian_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:NFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_egyptian_free_state_owner
+							has_variable = egypt_free_state_vote
+						}
+						hidden_trigger = {
+							var:egypt_free_state_vote = 2
+						}
+					}
+				}
+				scope:egyptian_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:NFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_egyptian_free_state_owner
+							has_variable = egypt_free_state_vote
+						}
+						hidden_trigger = {
+							var:egypt_free_state_vote = 3
+						}
+					}
+				}
+				scope:egyptian_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:NFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = egypt_free_state_vote
+	}
+}
+
+je_babylon_ethiopia_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = ethiopia_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_1
+			}
+			save_scope_as = ethiopia_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_2
+			}
+			save_scope_as = ethiopia_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_3
+			}
+			save_scope_as = ethiopia_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:EFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:EFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_ethiopia_free_state_owner
+					has_variable = ethiopia_free_state_vote
+				}
+				hidden_trigger = {
+					var:ethiopia_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_ethiopia_free_state_1_tt
+					subject = scope:ethiopia_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_ethiopia_free_state_owner
+					has_variable = ethiopia_free_state_vote
+				}
+				hidden_trigger = {
+					var:ethiopia_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_ethiopia_free_state_2_tt
+					subject = scope:ethiopia_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_ethiopia_free_state_owner
+					has_variable = ethiopia_free_state_vote
+				}
+				hidden_trigger = {
+					var:ethiopia_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_ethiopia_free_state_3_tt
+					subject = scope:ethiopia_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_ethiopia_free_state_owner
+							has_variable = ethiopia_free_state_vote
+						}
+						hidden_trigger = {
+							var:ethiopia_free_state_vote = 1
+						}
+					}
+				}
+				scope:ethiopia_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:EFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_ethiopia_free_state_owner
+							has_variable = ethiopia_free_state_vote
+						}
+						hidden_trigger = {
+							var:ethiopia_free_state_vote = 2
+						}
+					}
+				}
+				scope:ethiopia_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:EFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_ethiopia_free_state_owner
+							has_variable = ethiopia_free_state_vote
+						}
+						hidden_trigger = {
+							var:ethiopia_free_state_vote = 3
+						}
+					}
+				}
+				scope:ethiopia_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:EFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = ethiopia_free_state_vote
+	}
+}
+
+je_babylon_maghreb_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = maghreb_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_1
+			}
+			save_scope_as = maghreb_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_2
+			}
+			save_scope_as = maghreb_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_3
+			}
+			save_scope_as = maghreb_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:MFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:MFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_maghreb_free_state_owner
+					has_variable = maghreb_free_state_vote
+				}
+				hidden_trigger = {
+					var:maghreb_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_maghreb_free_state_1_tt
+					subject = scope:maghreb_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_maghreb_free_state_owner
+					has_variable = maghreb_free_state_vote
+				}
+				hidden_trigger = {
+					var:maghreb_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_maghreb_free_state_2_tt
+					subject = scope:maghreb_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_maghreb_free_state_owner
+					has_variable = maghreb_free_state_vote
+				}
+				hidden_trigger = {
+					var:maghreb_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_maghreb_free_state_3_tt
+					subject = scope:maghreb_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_maghreb_free_state_owner
+							has_variable = maghreb_free_state_vote
+						}
+						hidden_trigger = {
+							var:maghreb_free_state_vote = 1
+						}
+					}
+				}
+				scope:maghreb_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:MFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_maghreb_free_state_owner
+							has_variable = maghreb_free_state_vote
+						}
+						hidden_trigger = {
+							var:maghreb_free_state_vote = 2
+						}
+					}
+				}
+				scope:maghreb_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:MFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_maghreb_free_state_owner
+							has_variable = maghreb_free_state_vote
+						}
+						hidden_trigger = {
+							var:maghreb_free_state_vote = 3
+						}
+					}
+				}
+				scope:maghreb_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:MFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = maghreb_free_state_vote
+	}
+}
+
+je_babylon_senegal_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = senegal_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_1
+			}
+			save_scope_as = senegal_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_2
+			}
+			save_scope_as = senegal_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_3
+			}
+			save_scope_as = senegal_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:SFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:SFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_senegal_free_state_owner
+					has_variable = senegal_free_state_vote
+				}
+				hidden_trigger = {
+					var:senegal_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_senegal_free_state_1_tt
+					subject = scope:senegal_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_senegal_free_state_owner
+					has_variable = senegal_free_state_vote
+				}
+				hidden_trigger = {
+					var:senegal_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_senegal_free_state_2_tt
+					subject = scope:senegal_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_senegal_free_state_owner
+					has_variable = senegal_free_state_vote
+				}
+				hidden_trigger = {
+					var:senegal_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_senegal_free_state_3_tt
+					subject = scope:senegal_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_senegal_free_state_owner
+							has_variable = senegal_free_state_vote
+						}
+						hidden_trigger = {
+							var:senegal_free_state_vote = 1
+						}
+					}
+				}
+				scope:senegal_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:SFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_senegal_free_state_owner
+							has_variable = senegal_free_state_vote
+						}
+						hidden_trigger = {
+							var:senegal_free_state_vote = 2
+						}
+					}
+				}
+				scope:senegal_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:SFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_senegal_free_state_owner
+							has_variable = senegal_free_state_vote
+						}
+						hidden_trigger = {
+							var:senegal_free_state_vote = 3
+						}
+					}
+				}
+				scope:senegal_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:SFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = senegal_free_state_vote
+	}
+}
+
+je_babylon_niger_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = niger_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_1
+			}
+			save_scope_as = niger_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_2
+			}
+			save_scope_as = niger_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_3
+			}
+			save_scope_as = niger_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:IFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:IFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_niger_free_state_owner
+					has_variable = niger_free_state_vote
+				}
+				hidden_trigger = {
+					var:niger_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_niger_free_state_1_tt
+					subject = scope:niger_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_niger_free_state_owner
+					has_variable = niger_free_state_vote
+				}
+				hidden_trigger = {
+					var:niger_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_niger_free_state_2_tt
+					subject = scope:niger_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_niger_free_state_owner
+					has_variable = niger_free_state_vote
+				}
+				hidden_trigger = {
+					var:niger_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_niger_free_state_3_tt
+					subject = scope:niger_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = niger_free_state_vote
+						}
+						hidden_trigger = {
+							var:niger_free_state_vote = 1
+						}
+					}
+				}
+				scope:niger_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:IFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = niger_free_state_vote
+						}
+						hidden_trigger = {
+							var:niger_free_state_vote = 2
+						}
+					}
+				}
+				scope:niger_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:IFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = niger_free_state_vote
+						}
+						hidden_trigger = {
+							var:niger_free_state_vote = 3
+						}
+					}
+				}
+				scope:niger_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:IFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = niger_free_state_vote
+	}
+}
+
+je_babylon_congo_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = congo_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_1
+			}
+			save_scope_as = congo_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_2
+			}
+			save_scope_as = congo_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_3
+			}
+			save_scope_as = congo_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:CFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:CFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_congo_free_state_owner
+					has_variable = congo_free_state_vote
+				}
+				hidden_trigger = {
+					var:congo_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_congo_free_state_1_tt
+					subject = scope:congo_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_congo_free_state_owner
+					has_variable = congo_free_state_vote
+				}
+				hidden_trigger = {
+					var:congo_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_congo_free_state_2_tt
+					subject = scope:congo_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_congo_free_state_owner
+					has_variable = congo_free_state_vote
+				}
+				hidden_trigger = {
+					var:congo_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_congo_free_state_3_tt
+					subject = scope:congo_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = congo_free_state_vote
+						}
+						hidden_trigger = {
+							var:congo_free_state_vote = 1
+						}
+					}
+				}
+				scope:congo_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:CFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = congo_free_state_vote
+						}
+						hidden_trigger = {
+							var:congo_free_state_vote = 2
+						}
+					}
+				}
+				scope:congo_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:CFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = congo_free_state_vote
+						}
+						hidden_trigger = {
+							var:congo_free_state_vote = 3
+						}
+					}
+				}
+				scope:congo_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:CFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = congo_free_state_vote
+	}
+}
+
+je_babylon_south_africa_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = south_africa_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_1
+			}
+			save_scope_as = south_africa_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_2
+			}
+			save_scope_as = south_africa_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_3
+			}
+			save_scope_as = south_africa_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:OFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:OFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_south_africa_free_state_owner
+					has_variable = south_africa_free_state_vote
+				}
+				hidden_trigger = {
+					var:south_africa_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_south_africa_free_state_1_tt
+					subject = scope:south_africa_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_south_africa_free_state_owner
+					has_variable = south_africa_free_state_vote
+				}
+				hidden_trigger = {
+					var:south_africa_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_south_africa_free_state_2_tt
+					subject = scope:south_africa_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_south_africa_free_state_owner
+					has_variable = south_africa_free_state_vote
+				}
+				hidden_trigger = {
+					var:south_africa_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_south_africa_free_state_3_tt
+					subject = scope:south_africa_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_south_africa_free_state_owner
+							has_variable = south_africa_free_state_vote
+						}
+						hidden_trigger = {
+							var:south_africa_free_state_vote = 1
+						}
+					}
+				}
+				scope:south_africa_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:OFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_south_africa_free_state_owner
+							has_variable = south_africa_free_state_vote
+						}
+						hidden_trigger = {
+							var:south_africa_free_state_vote = 2
+						}
+					}
+				}
+				scope:south_africa_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:OFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_south_africa_free_state_owner
+							has_variable = south_africa_free_state_vote
+						}
+						hidden_trigger = {
+							var:south_africa_free_state_vote = 3
+						}
+					}
+				}
+				scope:south_africa_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:OFS
+						type = personal_union
+					}
+				}
+			}
+		}
+		remove_variable = south_africa_free_state_vote
+	}
+}
+
+je_babylon_zanj_free_state_owner = {
+	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	#Should be called in everyone with the berlin_conference_participant variable
+	immediate = {
+		set_variable = {
+			name = zanj_free_state_vote
+			value = 0
+		}
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_1
+			}
+			save_scope_as = zanj_free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_2
+			}
+			save_scope_as = zanj_free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_3
+			}
+			save_scope_as = zanj_free_state_candidate_3
+		}
+	}
+	complete = {
+		OR = {
+			hidden_trigger = {
+				c:ZFS = {
+					is_subject = yes
+				}
+			}
+			hidden_trigger = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+		}
+		OR = {
+			c:ZFS = {
+				is_subject = yes
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_zanj_free_state_owner
+					has_variable = zanj_free_state_vote
+				}
+				hidden_trigger = {
+					var:zanj_free_state_vote = 1
+				}
+				custom_tooltip = {
+					text = voting_for_zanj_free_state_1_tt
+					subject = scope:zanj_free_state_candidate_1
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_zanj_free_state_owner
+					has_variable = zanj_free_state_vote
+				}
+				hidden_trigger = {
+					var:zanj_free_state_vote = 2
+				}
+				custom_tooltip = {
+					text = voting_for_zanj_free_state_2_tt
+					subject = scope:zanj_free_state_candidate_2
+				}
+			}
+			any_country = {
+				percent > 0.55
+				filter = {
+					has_journal_entry = je_babylon_zanj_free_state_owner
+					has_variable = zanj_free_state_vote
+				}
+				hidden_trigger = {
+					var:zanj_free_state_vote = 3
+				}
+				custom_tooltip = {
+					text = voting_for_zanj_free_state_3_tt
+					subject = scope:zanj_free_state_candidate_3
+				}
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = zanj_free_state_vote
+						}
+						hidden_trigger = {
+							var:zanj_free_state_vote = 1
+						}
+					}
+				}
+				scope:zanj_free_state_candidate_1 = {
+					create_diplomatic_pact = {
+						country = c:ZFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = zanj_free_state_vote
+						}
+						hidden_trigger = {
+							var:zanj_free_state_vote = 2
+						}
+					}
+				}
+				scope:zanj_free_state_candidate_2 = {
+					create_diplomatic_pact = {
+						country = c:ZFS
+						type = personal_union
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						percent > 0.55
+						filter = {
+							has_journal_entry = je_babylon_niger_free_state_owner
+							has_variable = zanj_free_state_vote
+						}
+						hidden_trigger = {
+							var:zanj_free_state_vote = 3
+						}
+					}
+				}
+				scope:zanj_free_state_candidate_3 = {
+					create_diplomatic_pact = {
+						country = c:ZFS
+						type = personal_union
+					}
+				}
+			}
+			c:ZFS = {
+			}
+		}
+		remove_variable = zanj_free_state_vote
+	}
 }

@@ -145,7 +145,8 @@ babylon_berlin_conference.3 = {
 		}
 	}
 	option = {
-		#Euro MPs only
+		# Euro MPs + those with holdings only
+		# Historical
 		name = babylon_berlin_conference.3.b
 		trigger = {
 			NOT = {
@@ -157,19 +158,38 @@ babylon_berlin_conference.3 = {
 			value = 2
 		}
 		ai_chance = {
-			base = 1
+			# Historical, got higher base chance
+			base = 5
 			modifier = {
-				#European voters want this
+				#European voters (and those with (in)direct holdings in Africa) want this
 				add = 5
 				trigger = {
-					country_is_in_europe = yes
+					OR = {
+						country_is_in_europe = yes
+						any_scope_state = {
+							state_in_africa = yes
+						}
+						any_subject_or_below = {
+							any_scope_state = {
+								state_in_africa = yes
+							}
+						}
+					}
 				}
 			}
-			#Dont pick this if you're not in Europe
+			#Dont pick this if you're not in Europe and you dont have any (in)direct holdings in Africa
 			modifier = {
 				add = -100
 				trigger = {
 					country_is_in_europe = no
+					any_scope_state = {
+						state_in_africa = no
+					}
+					any_subject_or_below = {
+						any_scope_state = {
+							state_in_africa = no
+						}
+					}
 				}
 			}
 		}
@@ -902,5 +922,1421 @@ babylon_berlin_conference.11 = {
 	hidden = yes
 	immediate = {
 		berlin_conference_stage_2_finished_effect = yes
+	}
+}
+
+babylon_berlin_conference.12 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.12.t
+	desc = babylon_berlin_conference.12.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = senegal_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:senegal_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = senegal_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:senegal_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = senegal_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:senegal_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = senegal_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.13 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.13.t
+	desc = babylon_berlin_conference.13.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = egyptian_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:egypt_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = egypt_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:egypt_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = egypt_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:egypt_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = egypt_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.14 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.14.t
+	desc = babylon_berlin_conference.14.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = ethiopia_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:ethiopia_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = ethiopia_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:ethiopia_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = ethiopia_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:ethiopia_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = ethiopia_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.15 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.15.t
+	desc = babylon_berlin_conference.15.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = maghreb_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:maghreb_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = maghreb_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:maghreb_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = maghreb_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:maghreb_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = maghreb_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.16 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.16.t
+	desc = babylon_berlin_conference.16.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = niger_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:niger_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = niger_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:niger_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = niger_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:niger_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = niger_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.17 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.17.t
+	desc = babylon_berlin_conference.17.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = congo_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:congo_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = congo_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:congo_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = congo_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:congo_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = congo_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.18 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.18.t
+	desc = babylon_berlin_conference.18.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = south_africa_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:south_africa_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = south_africa_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:south_africa_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = south_africa_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:south_africa_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = south_africa_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+babylon_berlin_conference.19 = {
+	#Decision-fired event for selecting a vote on who to invite to the Congo Conference
+	type = country_event
+	title = babylon_berlin_conference.18.t
+	desc = babylon_berlin_conference.18.d
+	flavor = babylon_berlin_conference.12.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_1
+			}
+			save_scope_as = free_state_candidate_1
+		}
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_2
+			}
+			save_scope_as = free_state_candidate_2
+		}
+		random_country = {
+			limit = {
+				has_variable = zanj_free_state_candidate_3
+			}
+			save_scope_as = free_state_candidate_3
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.a
+		trigger = {
+			NOT = {
+				var:zanj_free_state_vote = 1
+			}
+		}
+		set_variable = {
+			name = zanj_free_state_vote
+			value = 1
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_1)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.b
+		trigger = {
+			NOT = {
+				var:zanj_free_state_vote = 2
+			}
+		}
+		set_variable = {
+			name = zanj_free_state_vote
+			value = 2
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_2)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.12.c
+		trigger = {
+			NOT = {
+				var:zanj_free_state_vote = 3
+			}
+		}
+		set_variable = {
+			name = zanj_free_state_vote
+			value = 3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:cordial
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:amicable
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" >= relations_threshold:friendly
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:cold
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					"relations(scope:free_state_candidate_3)" <= relations_threshold:poor
+				}
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = babylon_berlin_conference.3.nvm
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
 	}
 }

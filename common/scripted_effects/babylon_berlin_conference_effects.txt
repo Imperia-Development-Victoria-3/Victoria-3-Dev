@@ -1,4 +1,7 @@
-﻿babylon_berlin_invite_member = {
+﻿### Avast, ye modders
+### Here be krakens
+### Be warned, turn away!
+babylon_berlin_invite_member = {
 	add_journal_entry = {
 		type = je_babylon_berlin_conference_stage_2
 	}
@@ -2405,7 +2408,6 @@ calculate_claims_in_REGION_STATE_VAR = {
 					has_variable = $VAR$
 					var:$VAR$ = global_var:$VAR$_highscore
 					var:$VAR$ != 0
-					debug_log_details = yes
 				}
 				#Subtract the highscorers points from the cutoff
 				change_global_variable = {
@@ -2430,16 +2432,13 @@ calculate_claims_in_REGION_STATE_VAR = {
 		# Out of the while loop
 		if = {
 			limit = {
-				OR = {
-					#If theres more than 3 claims granted
-					global_var:$VAR$_claims_granted > 3
-					# ... Or 0 claims granted
-					global_var:$VAR$_claims_granted = 0
-				}
+				#If theres more than 3 claims granted
+				global_var:$VAR$_claims_granted > 3
 			}
 			#Start the super special Congo Free State round!
 			congo_free_state_round_in_state_VAR = {
-				VAR = $VAR$
+				REGION = $REGION$
+				STATE = $STATE$
 			}
 		}
 		# Set the state var for every country to 0
@@ -2452,6 +2451,22 @@ calculate_claims_in_REGION_STATE_VAR = {
 			set_variable = {
 				name = $VAR$
 				value = 0
+			}
+		}
+		if = {
+			# If nobody managed to reach the state, give it to its free state
+			# Still in the check for wether this was claimable
+			limit = {
+				OR = {
+					NOT = {
+						has_global_variable = $VAR$_claims_granted
+					}
+					global_var:$VAR$_claims_granted = 0
+				}
+			}
+			congo_free_state_round_in_state_VAR = {
+				REGION = $REGION$
+				STATE = $STATE$
 			}
 		}
 	}
@@ -3332,6 +3347,7 @@ berlin_conference_stage_2_finished_effect = {
 	congo_free_state_dish_out_provinces_between_rounds = yes
 	berlin_conference_stage_2_finished_effect_round_3 = yes
 	congo_free_state_dish_out_provinces_between_rounds = yes
+	berlin_conference_stage_3_start_effect = yes
 }
 
 berlin_conference_stage_2_finished_effect_round_1 = {
@@ -3924,7 +3940,8 @@ congo_free_state_round_in_state_VAR = {
 	### Egypt
 	if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_1
+			$REGION$ = 1
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EGYPTIAN_DESERT
@@ -3932,7 +3949,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_2
+			$REGION$ = 1
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_MIDDLE_EGYPT
@@ -3940,7 +3958,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_3
+			$REGION$ = 1
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_UPPER_EGYPT
@@ -3948,7 +3967,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_4
+			$REGION$ = 1
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LOWER_EGYPT
@@ -3956,7 +3976,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_5
+			$REGION$ = 1
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SINAI
@@ -3964,7 +3985,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_6
+			$REGION$ = 1
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_DONGOLA
@@ -3972,7 +3994,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_7
+			$REGION$ = 1
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_DARFUR
@@ -3980,7 +4003,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_8
+			$REGION$ = 1
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_KORDOFAN
@@ -3988,7 +4012,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_9
+			$REGION$ = 1
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EQUATORIA
@@ -3996,7 +4021,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_10
+			$REGION$ = 1
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_BLUE_NILE
@@ -4004,7 +4030,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_1_11
+			$REGION$ = 1
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_MATRUH
@@ -4014,7 +4041,8 @@ congo_free_state_round_in_state_VAR = {
 	### Ethiopia
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_2_1
+			$REGION$ = 2
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ERITREA
@@ -4022,7 +4050,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_2_2
+			$REGION$ = 2
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_GONDER
@@ -4030,7 +4059,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_2_3
+			$REGION$ = 2
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_AMHARA
@@ -4038,7 +4068,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_2_4
+			$REGION$ = 2
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_OROMIA
@@ -4046,7 +4077,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_2_5
+			$REGION$ = 2
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SOMALILAND
@@ -4056,7 +4088,8 @@ congo_free_state_round_in_state_VAR = {
 	### North Africa
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_1
+			$REGION$ = 3
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_WEST_SAHARA
@@ -4064,7 +4097,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_2
+			$REGION$ = 3
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SAHARA
@@ -4072,7 +4106,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_3
+			$REGION$ = 3
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EAST_SAHARA
@@ -4080,7 +4115,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_4
+			$REGION$ = 3
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_MARRAKECH
@@ -4088,7 +4124,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_5
+			$REGION$ = 3
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_FEZ
@@ -4096,7 +4133,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_6
+			$REGION$ = 3
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_AL_RIF
@@ -4104,7 +4142,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_7
+			$REGION$ = 3
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_INNER_MOROCCO
@@ -4112,7 +4151,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_8
+			$REGION$ = 3
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TLEMCEN
@@ -4120,7 +4160,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_9
+			$REGION$ = 3
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ALGIERS
@@ -4128,7 +4169,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_10
+			$REGION$ = 3
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_CONSTANTINE
@@ -4136,7 +4178,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_11
+			$REGION$ = 3
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TUNISIA
@@ -4144,7 +4187,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_12
+			$REGION$ = 3
+			$STATE$ = 12
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LIBYA
@@ -4152,7 +4196,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_13
+			$REGION$ = 3
+			$STATE$ = 13
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LIBYAN_DESERT
@@ -4160,7 +4205,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_3_14
+			$REGION$ = 3
+			$STATE$ = 14
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TRIPOLI
@@ -4170,7 +4216,8 @@ congo_free_state_round_in_state_VAR = {
 	### Senegal
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_1
+			$REGION$ = 4
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_GAMBIA
@@ -4178,7 +4225,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_2
+			$REGION$ = 4
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SENEGAL
@@ -4186,7 +4234,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_3
+			$REGION$ = 4
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_GUINEA
@@ -4194,7 +4243,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_4
+			$REGION$ = 4
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SIERRA_LEONE
@@ -4202,7 +4252,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_5
+			$REGION$ = 4
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LIBERIA
@@ -4210,7 +4261,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_6
+			$REGION$ = 4
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_WINDWARD_COAST
@@ -4218,7 +4270,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_7
+			$REGION$ = 4
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_IVORY_COAST
@@ -4226,7 +4279,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_8
+			$REGION$ = 4
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_GHANA
@@ -4234,7 +4288,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_9
+			$REGION$ = 4
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_VOLTA
@@ -4242,7 +4297,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_10
+			$REGION$ = 4
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_WESTERN_MALI
@@ -4250,7 +4306,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_11
+			$REGION$ = 4
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EASTERN_MALI
@@ -4258,7 +4315,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_12
+			$REGION$ = 4
+			$STATE$ = 12
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_MAURITANIA
@@ -4266,7 +4324,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_13
+			$REGION$ = 4
+			$STATE$ = 13
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TIMBUKTU
@@ -4274,7 +4333,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_4_14
+			$REGION$ = 4
+			$STATE$ = 14
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_INNER_MAURITANIA
@@ -4284,7 +4344,8 @@ congo_free_state_round_in_state_VAR = {
 	### Niger
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_1
+			$REGION$ = 5
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NIGERIA
@@ -4292,7 +4353,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_2
+			$REGION$ = 5
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NIGER_DELTA
@@ -4300,7 +4362,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_3
+			$REGION$ = 5
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_YORUBA_STATES
@@ -4308,7 +4371,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_4
+			$REGION$ = 5
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_OUTER_HAUSALAND
@@ -4316,7 +4380,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_5
+			$REGION$ = 5
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_HAUSALAND
@@ -4324,7 +4389,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_6
+			$REGION$ = 5
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EAST_HAUSALAND
@@ -4332,7 +4398,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_7
+			$REGION$ = 5
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_BORNU
@@ -4340,7 +4407,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_8
+			$REGION$ = 5
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_BENIN
@@ -4348,7 +4416,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_9
+			$REGION$ = 5
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TOGO
@@ -4356,7 +4425,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_10
+			$REGION$ = 5
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_DAHOMEY
@@ -4364,7 +4434,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_11
+			$REGION$ = 5
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NIGER
@@ -4372,7 +4443,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_12
+			$REGION$ = 5
+			$STATE$ = 12
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_CHAD
@@ -4380,7 +4452,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_13
+			$REGION$ = 5
+			$STATE$ = 13
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NORTH_CAMEROON
@@ -4388,7 +4461,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_5_14
+			$REGION$ = 5
+			$STATE$ = 14
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_WADDAI
@@ -4398,7 +4472,8 @@ congo_free_state_round_in_state_VAR = {
 	### Congo
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_1
+			$REGION$ = 6
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_BAS_CONGO
@@ -4406,7 +4481,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_2
+			$REGION$ = 6
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_CONGO
@@ -4414,7 +4490,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_3
+			$REGION$ = 6
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_KASAI
@@ -4422,7 +4499,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_4
+			$REGION$ = 6
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EQUATEUR
@@ -4430,7 +4508,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_5
+			$REGION$ = 6
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_CONGO_ORIENTALE
@@ -4438,7 +4517,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_6
+			$REGION$ = 6
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_UBANGI_SHARI
@@ -4446,7 +4526,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_7
+			$REGION$ = 6
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NORTH_ANGOLA
@@ -4454,7 +4535,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_8
+			$REGION$ = 6
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EAST_ANGOLA
@@ -4462,7 +4544,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_9
+			$REGION$ = 6
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SOUTH_ANGOLA
@@ -4470,7 +4553,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_10
+			$REGION$ = 6
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ZAMBIA
@@ -4478,7 +4562,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_11
+			$REGION$ = 6
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_GABON
@@ -4486,7 +4571,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_12
+			$REGION$ = 6
+			$STATE$ = 12
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SOUTH_CAMEROON
@@ -4494,7 +4580,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_6_13
+			$REGION$ = 6
+			$STATE$ = 13
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_KATANGA
@@ -4504,7 +4591,8 @@ congo_free_state_round_in_state_VAR = {
 	### SouthAfrica
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_1
+			$REGION$ = 7
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NAMAQUALAND
@@ -4512,7 +4600,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_2
+			$REGION$ = 7
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_BOTSWANA
@@ -4520,7 +4609,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_3
+			$REGION$ = 7
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NORTHERN_CAPE
@@ -4528,7 +4618,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_4
+			$REGION$ = 7
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_CAPE_COLONY
@@ -4536,7 +4627,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_5
+			$REGION$ = 7
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_EASTERN_CAPE
@@ -4544,7 +4636,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_6
+			$REGION$ = 7
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_VRYSTAAT
@@ -4552,7 +4645,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_7
+			$REGION$ = 7
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TRANSVAAL
@@ -4560,7 +4654,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_8
+			$REGION$ = 7
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ZULULAND
@@ -4568,7 +4663,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_9
+			$REGION$ = 7
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_HEREROLAND
@@ -4576,7 +4672,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_10
+			$REGION$ = 7
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LOURENCO_MARQUES
@@ -4584,7 +4681,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_7_11
+			$REGION$ = 7
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ZAMBEZI
@@ -4594,7 +4692,8 @@ congo_free_state_round_in_state_VAR = {
 	### Zanj
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_1
+			$REGION$ = 8
+			$STATE$ = 1
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ZANZIBAR
@@ -4602,7 +4701,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_2
+			$REGION$ = 8
+			$STATE$ = 2
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_LINDI
@@ -4610,7 +4710,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_3
+			$REGION$ = 8
+			$STATE$ = 3
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_MOCAMBIQUE
@@ -4618,7 +4719,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_4
+			$REGION$ = 8
+			$STATE$ = 4
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_TANGANYIKA
@@ -4626,7 +4728,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_5
+			$REGION$ = 8
+			$STATE$ = 5
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_SOUTH_MADAGASCAR
@@ -4634,7 +4737,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_6
+			$REGION$ = 8
+			$STATE$ = 6
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_NORTH_MADAGASCAR
@@ -4642,7 +4746,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_7
+			$REGION$ = 8
+			$STATE$ = 7
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_INDIAN_OCEAN_TERRITORY
@@ -4650,7 +4755,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_8
+			$REGION$ = 8
+			$STATE$ = 8
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_KAZEMBE
@@ -4658,7 +4764,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_9
+			$REGION$ = 8
+			$STATE$ = 9
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_ZAMBEZIA
@@ -4666,7 +4773,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_10
+			$REGION$ = 8
+			$STATE$ = 10
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_KENYA
@@ -4674,7 +4782,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_11
+			$REGION$ = 8
+			$STATE$ = 11
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_RIFT_VALLEY
@@ -4682,7 +4791,8 @@ congo_free_state_round_in_state_VAR = {
 	}
 	else_if = {
 		limit = {
-			$VAR$ = babylon_berlin_conference_points_in_8_12
+			$REGION$ = 8
+			$STATE$ = 12
 		}
 		congo_free_state_round_in_STATE_subroutine = {
 			STATE = s:STATE_UGANDA
@@ -4730,18 +4840,9 @@ congo_free_state_round_in_STATE_subroutine = {
 		}
 		else = {
 			# Else add the state to a list to be referenced later
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_NFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_NFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4772,18 +4873,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_EFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_EFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4814,18 +4906,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_MFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_MFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4856,18 +4939,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_SFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_SFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4898,18 +4972,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_IFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_IFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4940,18 +5005,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_CFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_CFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -4982,18 +5038,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_OFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_OFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -5024,18 +5071,9 @@ congo_free_state_round_in_STATE_subroutine = {
 			}
 		}
 		else = {
-			$STATE$ = {
-				every_scope_state = {
-					limit = {
-						owner = {
-							has_variable = berlin_conference_participant
-						}
-					}
-					add_to_global_variable_list = {
-						name = babylon_add_to_ZFS_states
-						target = this
-					}
-				}
+			add_to_global_variable_list = {
+				name = babylon_add_to_ZFS_states
+				target = $STATE$
 			}
 		}
 	}
@@ -5063,6 +5101,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5081,6 +5125,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
 						}
 						add = 25
 					}
@@ -5105,6 +5155,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5126,6 +5182,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5144,6 +5206,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
 						}
 						add = 25
 					}
@@ -5173,6 +5241,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_2
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5196,6 +5270,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_2
 						}
 						add = 25
 					}
@@ -5225,6 +5305,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_2
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5248,6 +5334,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_5
 						}
 						add = 25
 					}
@@ -5277,6 +5369,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_2
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 1
@@ -5294,6 +5392,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_1
 						}
 						add = 25
 					}
@@ -5327,6 +5431,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_4
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 2
@@ -5350,6 +5460,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_3
+						}
+						add = 25
 					}
 				}
 				#Nobody got this province - independent Ethiopia
@@ -5378,6 +5494,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_3
+						}
+						add = 25
+					}
 				}
 				#Nobody got this province - independent Ethiopia
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -5404,6 +5526,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_3
+						}
+						add = 25
 					}
 				}
 				#Nobody got this province - independent Ethiopia
@@ -5440,6 +5568,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_4
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 2
@@ -5464,6 +5598,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_24
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -5495,6 +5635,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_26
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5513,6 +5659,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_26
 						}
 						add = 25
 					}
@@ -5541,6 +5693,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_27
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5565,6 +5723,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_27
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -5591,6 +5755,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_27
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5616,6 +5786,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_27
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5634,6 +5810,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_28
 						}
 						add = 25
 					}
@@ -5658,6 +5840,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_28
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5676,6 +5864,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_28
 						}
 						add = 25
 					}
@@ -5709,6 +5903,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_28
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5730,6 +5930,12 @@ berlin_conference_distribute_points_for_ai = {
 								country_has_primary_culture = cu:north_italian
 								country_has_primary_culture = cu:south_italian
 							}
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_29
 						}
 						add = 25
 					}
@@ -5758,6 +5964,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_29
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 3
@@ -5779,6 +5991,12 @@ berlin_conference_distribute_points_for_ai = {
 								country_has_primary_culture = cu:north_italian
 								country_has_primary_culture = cu:south_italian
 							}
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_29
 						}
 						add = 25
 					}
@@ -5812,6 +6030,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_23
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -5830,6 +6054,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_23
 						}
 						add = 25
 					}
@@ -5854,6 +6084,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_23
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -5874,6 +6110,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:GBR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_22
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -5899,6 +6141,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_22
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -5917,6 +6165,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_21
 						}
 						add = 25
 					}
@@ -5941,6 +6195,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_21
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -5962,6 +6222,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_20
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -5980,6 +6246,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_21
 						}
 						add = 25
 					}
@@ -6004,6 +6276,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_23
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -6022,6 +6300,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_21
 						}
 						add = 25
 					}
@@ -6046,6 +6330,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_24
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -6067,6 +6357,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_25
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 4
@@ -6085,6 +6381,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_24
 						}
 						add = 25
 					}
@@ -6113,6 +6415,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6137,6 +6445,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6158,6 +6472,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6176,6 +6496,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_19
 						}
 						add = 25
 					}
@@ -6200,6 +6526,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6220,6 +6552,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:GBR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6242,6 +6580,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6262,6 +6606,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:GBR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_18
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6287,6 +6637,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_20
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6305,6 +6661,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_19
 						}
 						add = 25
 					}
@@ -6329,6 +6691,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_25
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6347,6 +6715,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_17
 						}
 						add = 25
 					}
@@ -6380,6 +6754,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_16
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 5
@@ -6407,6 +6787,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:FRA
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_17
 						}
 						add = 25
 					}
@@ -6434,6 +6820,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_15
+						}
+						add = 25
 					}
 				}
 				#Congo Free State
@@ -6467,6 +6859,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_15
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 6
@@ -6492,6 +6890,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_14
+						}
+						add = 25
+					}
 				}
 				# Congo
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6513,6 +6917,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:FRA
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_14
+						}
+						add = 25
 					}
 				}
 				# Congo
@@ -6540,6 +6950,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_14
+						}
+						add = 25
+					}
 				}
 				# Congo
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6566,6 +6982,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_17
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 6
@@ -6584,6 +7006,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:POR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_12
 						}
 						add = 25
 					}
@@ -6608,6 +7036,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 25
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_12
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 6
@@ -6626,6 +7060,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:POR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_12
 						}
 						add = 25
 					}
@@ -6655,6 +7095,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:POR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_13
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6686,6 +7132,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:SPA
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_15
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6720,6 +7172,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_16
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 6
@@ -6744,6 +7202,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_14
+						}
+						add = 25
 					}
 				}
 				# Congo
@@ -6771,6 +7235,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_11
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6789,6 +7259,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:GBR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_13
 						}
 						add = 25
 					}
@@ -6819,6 +7295,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_10
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6845,6 +7327,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:NET
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_10
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6873,6 +7361,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_10
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6899,6 +7393,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:NET
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_9
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -6927,6 +7427,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_9
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6954,6 +7460,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_9
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6979,6 +7491,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_11
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 7
@@ -6997,6 +7515,12 @@ berlin_conference_distribute_points_for_ai = {
 					if = {
 						limit = {
 							this = c:POR
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_8
 						}
 						add = 25
 					}
@@ -7026,6 +7550,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:POR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_13
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7057,6 +7587,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_6
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7087,6 +7623,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_6
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7113,6 +7655,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:POR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_8
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7144,6 +7692,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_6
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7167,6 +7721,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_7
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7192,6 +7752,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_7
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7213,6 +7779,12 @@ berlin_conference_distribute_points_for_ai = {
 								this = c:GBR
 								this = c:FRA
 							}
+						}
+						add = 25
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_7
 						}
 						add = 25
 					}
@@ -7246,6 +7818,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_13
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7272,6 +7850,12 @@ berlin_conference_distribute_points_for_ai = {
 							this = c:POR
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_8
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7303,6 +7887,12 @@ berlin_conference_distribute_points_for_ai = {
 						}
 						add = 5
 					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_5
+						}
+						add = 25
+					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 					REGION = 8
@@ -7332,6 +7922,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_5
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7362,6 +7958,12 @@ berlin_conference_distribute_points_for_ai = {
 							}
 						}
 						add = 5
+					}
+					if = {
+						limit = {
+							has_variable = babylon_berlin_conference_ai_strategic_objective_5
+						}
+						add = 25
 					}
 				}
 				berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
@@ -7438,45 +8040,998 @@ berlin_conference_distribute_points_for_ai_subroutine_REGION_STATE = {
 }
 
 congo_free_state_dish_out_provinces_between_rounds = {
-	#Goess through the lists
+	#Goes through the lists
 	every_in_global_list = {
 		variable = babylon_add_to_NFS_states
-		set_state_owner = c:NFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:NFS
+		}
+		add_claim = c:NFS
+		add_modifier = {
+			name = promised_to_NFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_NFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_EFS_states
-		set_state_owner = c:EFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:EFS
+		}
+		add_claim = c:EFS
+		add_modifier = {
+			name = promised_to_EFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_EFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_MFS_states
-		set_state_owner = c:MFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:MFS
+		}
+		add_claim = c:MFS
+		add_modifier = {
+			name = promised_to_MFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_MFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_SFS_states
-		set_state_owner = c:SFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:SFS
+		}
+		add_claim = c:SFS
+		add_modifier = {
+			name = promised_to_SFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_SFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_IFS_states
-		set_state_owner = c:IFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:IFS
+		}
+		add_claim = c:IFS
+		add_modifier = {
+			name = promised_to_IFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_IFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_CFS_states
-		set_state_owner = c:CFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:CFS
+		}
+		add_claim = c:CFS
+		add_modifier = {
+			name = promised_to_CFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_CFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_OFS_states
-		set_state_owner = c:OFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:OFS
+		}
+		add_claim = c:OFS
+		add_modifier = {
+			name = promised_to_OFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_OFS_states
 	every_in_global_list = {
 		variable = babylon_add_to_ZFS_states
-		set_state_owner = c:ZFS
+		any_scope_state = {
+			limit = {
+				owner = {
+					has_variable = berlin_conference_participant
+				}
+			}
+			set_state_owner = c:ZFS
+		}
+		add_claim = c:ZFS
+		add_modifier = {
+			name = promised_to_ZFS_modifier
+		}
 	}
 	clear_global_variable_list = babylon_add_to_ZFS_states
+}
+
+babylon_berlin_conference_give_ai_strategic_objectives = {
+	set_variable = {
+		name = babylon_berlin_conference_give_ai_strategic_objective_points
+		value = var:babylon_berlin_conference_points_remaining
+	}
+	while = {
+		# Runs this once for every 25 points ROOT have
+		limit = {
+			var:babylon_berlin_conference_give_ai_strategic_objective_points > 0
+		}
+		random_list = {
+			10 = {
+				# Egypt proper
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_1
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_1
+			}
+			10 = {
+				# Sudan
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_2
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_2
+			}
+			5 = {
+				# Ethiopia proper
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_3
+					}
+					# Should have a coastline to reach this; nobody took this historically (Ehtiopia)
+					has_variable = babylon_berlin_conference_ai_strategic_objective_4
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_3
+			}
+			10 = {
+				# Somaliland / Eritrea
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_4
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GBR
+								country_has_primary_culture = cu:north_italian
+								country_has_primary_culture = cu:south_italian
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_4
+			}
+			10 = {
+				# Kenya / Uganda
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_5
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_5
+			}
+			10 = {
+				# Tanzania / german east african possessions
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_6
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GER
+								country_has_primary_culture = cu:north_german
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_6
+			}
+			10 = {
+				# Madagascar and Islands
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_7
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_7
+			}
+			5 = {
+				# Mocambique
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_8
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:POR
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_8
+			}
+			5 = {
+				# Boer Republics
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_9
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_9
+			}
+			5 = {
+				# Cape Colony
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_10
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_10
+			}
+			10 = {
+				# German Southern possessions
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_11
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GER
+								country_has_primary_culture = cu:north_german
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_11
+			}
+			5 = {
+				# Angola
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_12
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:POR
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_12
+			}
+			10 = {
+				# Botswana / Zimbabwe / Zambia
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_13
+					}
+					# Inland
+					OR = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_8
+						has_variable = babylon_berlin_conference_ai_strategic_objective_12
+						has_variable = babylon_berlin_conference_ai_strategic_objective_10
+						has_variable = babylon_berlin_conference_ai_strategic_objective_9
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GBR
+								#Portugal wanted the Pink Map
+								this = c:POR
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_13
+			}
+			5 = {
+				# Congo Free State
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_14
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_14
+			}
+			10 = {
+				# Gabon
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_15
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_15
+			}
+			10 = {
+				# Cameroon
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_16
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GER
+								country_has_primary_culture = cu:north_german
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_16
+			}
+			10 = {
+				# Chad / CAR
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_17
+					}
+					# Inland
+					OR = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_2
+						has_variable = babylon_berlin_conference_ai_strategic_objective_16
+						has_variable = babylon_berlin_conference_ai_strategic_objective_8
+						has_variable = babylon_berlin_conference_ai_strategic_objective_25
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_17
+			}
+			10 = {
+				# Nigeria
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_18
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_18
+			}
+			10 = {
+				# Benin / parts of Southern Niger
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_19
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_19
+			}
+			10 = {
+				# Ghana
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_20
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:GER
+								country_has_primary_culture = cu:north_german
+								this = c:GBR
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_20
+			}
+			10 = {
+				# Ghana
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_21
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_21
+			}
+			5 = {
+				# Liberia and Sierra Leone
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_22
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:GBR
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_22
+			}
+			10 = {
+				# Guinea / Senegal
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_23
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_23
+			}
+			10 = {
+				# West Sahara
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_24
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								this = c:FRA
+								this = c:SPA
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_24
+			}
+			10 = {
+				# Mali / Niger
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_25
+					}
+					# Inland
+					OR = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_26
+						has_variable = babylon_berlin_conference_ai_strategic_objective_29
+						has_variable = babylon_berlin_conference_ai_strategic_objective_19
+						has_variable = babylon_berlin_conference_ai_strategic_objective_21
+						has_variable = babylon_berlin_conference_ai_strategic_objective_24
+						has_variable = babylon_berlin_conference_ai_strategic_objective_17
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_25
+			}
+			10 = {
+				# Algerian Desert
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_26
+					}
+					OR = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_28
+						has_variable = babylon_berlin_conference_ai_strategic_objective_27
+						has_variable = babylon_berlin_conference_ai_strategic_objective_29
+						has_variable = babylon_berlin_conference_ai_strategic_objective_24
+						has_variable = babylon_berlin_conference_ai_strategic_objective_25
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_26
+			}
+			10 = {
+				# Morocco
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_27
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_27
+			}
+			5 = {
+				# Algeria / Tunis
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_28
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							this = c:FRA
+						}
+						add = 25
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_28
+			}
+			10 = {
+				# Libya
+				trigger = {
+					NOT = {
+						has_variable = babylon_berlin_conference_ai_strategic_objective_29
+					}
+				}
+				modifier = {
+					if = {
+						limit = {
+							OR = {
+								country_has_primary_culture = cu:north_italian
+								country_has_primary_culture = cu:south_italian
+							}
+						}
+						add = 10
+					}
+				}
+				set_variable = babylon_berlin_conference_ai_strategic_objective_29
+			}
+		}
+		# Exit the random list
+		# Change the objective points by 25
+		change_variable = {
+			name = babylon_berlin_conference_give_ai_strategic_objective_points
+			subtract = 25
+		}
+	}
+}
+
+berlin_conference_stage_3_start_effect = {
+	# Should be fired once, in the proposer preferably
+	if = {
+		limit = {
+			exists = c:NFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = egyptian_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = egyptian_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = egyptian_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_egyptian_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:EFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = ethiopia_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = ethiopia_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = ethiopia_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_ethiopia_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:MFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = maghreb_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = maghreb_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = maghreb_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_maghreb_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:SFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = senegal_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = senegal_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = senegal_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_senegal_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:IFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = niger_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = niger_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = niger_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_niger_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:CFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = congo_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = congo_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = congo_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_congo_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:OFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = south_africa_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = south_africa_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = south_africa_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_south_africa_free_state_owner
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = c:ZFS
+		}
+		if = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			# Fire only once
+			# Gives 3 random candidate countries a variable each, that the participants use to give themselves scopes pointing at the candidates
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = zanj_free_state_candidate_1
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = zanj_free_state_candidate_2
+			}
+			random_country = {
+				limit = {
+					congo_free_state_COUNTRY_is_possible_overlord = yes
+				}
+				set_variable = zanj_free_state_candidate_3
+			}
+		}
+		every_country = {
+			limit = {
+				has_variable = berlin_conference_participant
+			}
+			add_journal_entry = {
+				type = je_babylon_zanj_free_state_owner
+			}
+		}
+	}
 }
