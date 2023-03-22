@@ -1,47 +1,10 @@
 ﻿reserve_state = {
 	saved_scopes = { 
-		saved_gdp
-		state_pop_poor
-		state_pop_middle
-		state_pop_rich
+		invaded_state
 	} 
 	
     effect = {
-        set_local_variable = {
-			name = upper_gdp
-			value = {
-				add = scope:saved_gdp
-				add = 1
-			}
-		}
-		set_local_variable = {
-			name = lower_gdp
-			value = {
-				add = scope:saved_gdp
-				subtract = 1
-			}
-		}
-
-		set_local_variable = {
-			name = state_population
-			value = {
-				add = scope:state_pop_poor
-				add = scope:state_pop_middle
-				add = scope:state_pop_rich
-			}
-		}
-		random_country = {
-			limit = {
-				gdp >= local_var:lower_gdp
-				gdp <= local_var:upper_gdp
-			}
-
-			random_scope_state = {
-				limit = {
-					state_population =  local_var:state_population
-				}
-				save_scope_as = invaded_state
-			}
+		scope:invaded_state.owner = {
 			every_scope_state = {
 				limit = {
 					this.region = scope:invaded_state.region
@@ -52,10 +15,7 @@
 					days = 50
 				}
 			}
-        }
-
-        remove_local_variable = upper_gdp
-        remove_local_variable = lower_gdp
+		}
     }
 }
 
