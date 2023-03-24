@@ -1,0 +1,409 @@
+﻿# Root = Country
+on_monthly_pulse_country = {
+	events = {
+		communism.8 # Red Army
+		peoples_springtime.1
+		low_countries_events.3
+		low_countries_events.4
+		opium_wars.1
+		native_resettlement.1
+		meiji.13
+		bic_breakup.1
+		treaty_of_villafranca.1
+		italy_1848.1
+		italy_1848.3
+		italy_1848.6
+		italy_1848.7
+		italy_1848.18
+		italy_1848.19
+		italy_1848.20
+		italy_1848.22
+		italy_1848.23
+		italy_1848.24
+		italy_1848.27
+		italy_1848.30
+		italy_1848.31
+		italy_1848.32
+		italy_1848.35
+		italy_flavor.1
+		italy_flavor.2
+		exp_thousand.7
+		exp_thousand.8
+		exp_thousand.103
+		exp_thousand.107
+		exp_thousand.108
+		france_event.2
+		france_event.6
+		france_event.7
+		france_event.8
+		france_event.9
+		france_event.13
+		france_event.16
+		france_event.17
+	}
+	# Election Events
+	random_events = {
+		50 = 0
+		1 = election_liberal_events.1
+		1 = election_liberal_events.2
+		1 = election_liberal_events.3
+		1 = election_liberal_events.4
+		1 = election_conservative_events.1
+		1 = election_conservative_events.2
+		1 = election_conservative_events.3
+		1 = election_conservative_events.4
+		1 = election_moderate_events.1
+		1 = election_moderate_events.2
+		1 = election_contextual_events.1
+		1 = election_contextual_events.2
+		1 = election_contextual_events.3
+		1 = election_contextual_events.4
+		1 = election_contextual_events.5
+		1 = election_contextual_events.6
+		1 = election_contextual_events.7
+		1 = election_contextual_events.8
+		1 = election_neutral.1
+		1 = election_neutral.2
+		1 = election_neutral.3
+		1 = election_neutral.4
+		1 = election_neutral.5
+		1 = election_neutral.6
+		1 = election_neutral.7
+		1 = election_neutral.8
+		1 = election_other_parties_events.1
+		1 = election_other_parties_events.2
+		1 = election_other_parties_events.3
+		1 = election_other_parties_events.4
+		1 = election_other_parties_events.5
+		1 = ig_leaders.3
+	}
+	random_events = {
+		5 = france_event.1
+		7 = france_event.14
+	}
+	effect = {
+		if = {
+			limit = {
+				THIS = c:FRA
+				c:FRA ?= {
+					has_modifier = modifier_haitian_independence_payments
+				}
+				NOT = { exists = c:HAI }
+			}
+			c:FRA = { remove_modifier = modifier_haitian_independence_payments }
+		}
+	}
+}
+
+on_weekly_pulse = {
+	events = {
+	}
+}
+
+on_weekly_pulse = {
+	events = {
+		exp_thousand.103
+		exp_thousand.107
+	}
+}
+
+# Root = Colony state
+on_colony_created = {
+	effect = {
+		owner = {
+			if = {
+				limit = {
+					has_journal_entry = je_tutorial_colonize_state
+				}
+				root = {
+					set_variable = {
+						name = tut_colony_target
+					}
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					owner = c:RUS
+					OR = {
+						c:RUS = {
+							has_state_in_state_region = STATE_SAKHALIN 
+						}
+						c:RUS = {
+							has_state_in_state_region = STATE_HOKKAIDO 
+						}
+					}
+					NOT = {
+						has_global_variable = japanese_response
+					}
+				}
+				set_global_variable = japanese_response
+				c:JAP = {
+					create_diplomatic_play = {
+						name = testname
+						war = yes
+						type = dp_annex_war
+						
+						target_state = s:STATE_HOKKAIDO.region_state:AIN
+					}
+				}
+			}
+		}
+	}
+}
+
+# Root = country
+on_native_uprising = {
+	effect = {
+		post_notification = native_uprising_notification
+		
+		every_country = {
+			limit = {
+				is_country_type = decentralized
+				is_diplomatic_play_enemy_of = root
+				NOT = { has_war_with = root }
+			}
+			save_scope_as = native_nation
+		}
+		every_diplomatic_play = {
+			limit = {
+				any_scope_play_involved = {
+					this = scope:native_nation
+				}
+			}
+			end_play = yes
+		}
+		create_diplomatic_play = {
+			target_country = scope:native_nation
+			war = yes
+			type = dp_native_uprising
+		}
+	}
+}
+
+# Root = Country
+on_capitulation = {
+	effect = {
+		if = {
+			limit = {
+				is_country_type = decentralized
+			}
+			every_country = {
+				limit = {
+					has_truce_with = root
+				}
+				set_tension = { 
+					country = root 
+					value = 0 
+				}
+				end_truce = {
+					country = root
+				}
+			}
+		}
+	}
+}
+
+# Root = Character
+on_character_creation = {
+}
+
+# Root = Character
+on_character_death = {
+	effect = {
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:HAW
+				owner = c:HAW
+				owner = {
+					has_law = law_type:law_monarchy
+					NOT = { has_variable = death_of_kamehameha }
+					NOT = { has_global_variable = gp_hawaii_interest }
+				}
+			}
+			owner = {
+				trigger_event = hawaii_events.1
+			}
+		}
+		
+		if = {
+			limit = {
+				has_variable = expedition_leader_var
+			}
+			owner = {
+				trigger_event = expedition_events.110
+			}
+		}
+
+		##Vice President, if exists, replaces dead President in Presidential Republics
+		#if = {
+		#	limit = {
+		#		is_ruler = yes
+		#		owner = {
+		#			has_law = law_type:law_presidential_republic
+		#			has_variable = vice_president
+		#		}
+		#	}
+		#	owner = {
+		#		remove_variable = vice_president
+		#		every_scope_character = {
+		#			limit = { has_variable = vice_president_trigger }
+		#			remove_variable = vice_president_trigger
+		#			save_scope_as = former_vice_president
+		#		}
+		#		create_character = {
+		#			first_name = scope:former_vice_president
+		#			last_name = scope:former_vice_president
+		#			ruler = yes
+		#			culture = scope:former_vice_president
+		#			religion = scope:former_vice_president
+		#			interest_group = scope:former_vice_president
+		#			ideology = scope:former_vice_president
+		#			birth_date = scope:former_vice_president
+		#			traits = scope:former_vice_president
+		#			on_created = {
+		#				set_variable = vice_president_trigger
+		#				owner = {
+		#					set_variable = {
+		#						name = vice_president
+		#						value = PREV
+		#					}
+		#				}
+		#			}
+		#		}
+		#		create_character = {
+		#			on_created = {
+		#				set_variable = vice_president_trigger
+		#				owner = {
+		#					set_variable = {
+		#						name = vice_president
+		#						value = PREV
+		#					}
+		#				}
+		#			}
+		#		}
+		#	}
+		#}
+
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:FRA
+				owner = c:FRA
+				owner = {
+					has_law = law_type:law_monarchy
+					has_variable = napoleon3_on_death
+				}
+			}
+			owner = {
+				remove_variable = napoleon3
+				remove_variable = napoleon3_elected
+				trigger_event = france_event.22
+			}
+		}
+
+		#Succession to the Crown Act 1707, Parliament dissolved on Monarch death
+		if = {
+			limit = {
+				is_ruler = yes
+				exists = c:GBR
+				owner = c:GBR
+				owner = {
+					has_law = law_type:law_monarchy
+					country_has_voting_franchise = yes
+				}
+			}
+			owner = {
+				call_election = {
+					months = 1
+				}
+			}
+		}
+	}
+}
+
+#BROKEN, USE BELOW ELECTION ON ACTIONS
+# Root = Country
+on_election_campaign_start = {
+	effect = {
+		debug_log = "Election Campaign Started"
+	}
+}
+
+#BROKEN, USE BELOW ELECTION ON ACTIONS
+# Root = Country
+on_election_campaign_end = {
+	effect = {
+		debug_log = "Election Campaign Ended"
+	}
+}
+
+on_election_started = {
+	trigger = { in_election_campaign = yes }
+	effect = { 
+		set_variable = election_onging
+	}
+}
+
+on_election_ended = {
+	trigger = {
+		in_election_campaign = no
+		has_variable = election_onging
+	}
+	effect = {
+		remove_variable = election_onging
+		
+		#Septennial Act 1715, 7 year maximum unless Parliament dissolved or Monarch dies
+		if = {
+			limit = {
+				exists = c:GBR
+				this = c:GBR
+				c:GBR = {
+					has_law = law_type:law_monarchy
+					country_has_voting_franchise = yes
+				}
+			}
+			call_election = {
+				months = 84
+			}
+		}
+	}
+}
+
+# Root owner Country of the Law
+# executed when the law is activated for any reason. It's usually because it
+# has been enacted, but script can activate laws directly without going through
+# the enactment process. Normally, it's immediately preceded by
+# on_law_enactment_ended, but if a law is directly set by script, thus
+# bypassing the enactment process, this will execute while
+# on_law_enactment_ended will not
+#
+# NOTE: unlike the other on_law_<something> on-actions, at the point in time
+# when this is triggered the law that was enacted is no longer considered being
+# enacted. Therefore using the `currently_enacting_law` link will return the
+# null law
+on_law_activated = {
+	effect = {
+		#if = {
+		#	limit = {
+		#		AND = {
+		#			has_law = law_type:law_monarchy
+		#			country_has_voting_franchise = yes
+		#		}
+		#	}
+		#	create_character = {
+		#		on_created = {
+		#			set_variable = prime_minister_trigger
+		#			owner = {
+		#				set_variable = {
+		#					name = prime_minister
+		#					value = PREV
+		#				}
+		#			}
+		#		}
+		#	}
+		#}
+	}
+}

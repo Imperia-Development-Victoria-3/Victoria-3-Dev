@@ -1,0 +1,402 @@
+﻿dp_taiping_rebellion = {
+	war_goal = annex_country
+	mirror_war_goal = yes
+	add_infamy_for_starting_initiator_wargoals = no
+	allow_negotiated_peace = no
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}
+	
+	possible = {
+		exists = c:TPG
+		scope:target_country = {
+			this = c:TPG
+		}
+	}
+	
+	additional_involvement_trigger = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+
+		scope:target_country = {
+			capital = {
+				region = {
+					save_temporary_scope_as = target_capital_region
+				}
+			}
+		}
+		
+		OR = {
+			has_interest_marker_in_region = scope:target_capital_region
+			is_home_country_for = scope:target_country
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_unify_china = {
+	war_goal = annex_country
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		OR = {
+			has_government_type = gov_warlord_state
+			can_form_nation = CHI
+			has_variable = chinese_central_government
+		}
+	}
+	
+	possible = {
+		NOT = { exists = c:CHI }
+		NOT = { is_country_type = decentralized }
+		is_subject = no
+		OR = {
+			has_government_type = gov_warlord_state
+			can_form_nation = CHI
+			has_variable = chinese_central_government
+		}
+		
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			aggressive_diplomatic_plays_permitted = yes
+			OR = {
+				has_government_type = gov_warlord_state
+				can_form_nation = CHI
+				
+			has_variable = chinese_central_government
+			}
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_independence = {
+	requires_interest_marker = no
+
+	war_goal = independence
+
+	texture = "gfx/interface/icons/war_goals/independence.dds"
+
+	possible = {
+		NOT = { is_country_type = decentralized }
+		NOT = { is_subject_type = subject_type_chartered_company }
+	}
+	
+	on_weekly_pulse = {}
+
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_liberate_subject = {
+	war_goal = liberate_subject
+
+	texture = "gfx/interface/icons/war_goals/liberate_subject.dds"
+
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }	
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			is_subject = yes
+			NOT = { is_subject_type = subject_type_chartered_company }
+			NOT = { is_subject_type = subject_type_confederation }
+			NOT = { is_subject_of = root }
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_OVERLORD_RELATIONS_CORDIAL_OR_GREATER_NOT
+			scope:target_country.overlord.relations:root < relations_threshold:cordial
+		}	
+	}
+
+	on_weekly_pulse = {}
+
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_transfer_subject = {
+	war_goal = transfer_subject
+	
+	texture = "gfx/interface/icons/war_goals/transfer_subject.dds"
+	
+	possible = {	
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }	
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			is_subject = yes
+			NOT = { is_subject_of = root }
+			NOT = { is_subject_type = subject_type_personal_union }
+			NOT = { is_subject_type = subject_type_real_union }
+			NOT = { is_subject_type = subject_type_dependency }
+			NOT = { is_subject_type = subject_type_confederation }
+		}	
+		custom_tooltip = {
+			text = DIPLO_ACTION_OVERLORD_RELATIONS_CORDIAL_OR_GREATER_NOT
+			scope:target_country.overlord.relations:root < relations_threshold:cordial
+		}				
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_dissolve_company = {
+	war_goal = liberate_subject
+
+	texture = "gfx/interface/icons/war_goals/dissolve_company.dds"
+
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		country_rank = rank_value:great_power
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			is_subject = yes
+			is_subject_type = subject_type_chartered_company
+			NOT = { is_subject_of = root }
+		}
+	}
+
+	on_weekly_pulse = {}
+
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_leadership_ethiopia = {
+	war_goal = unification_leadership
+	
+	requires_interest_marker = no
+	mirror_war_goal = yes
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}	
+	
+	possible = {
+		NOT = { is_country_type = decentralized }
+		is_subject = no 
+		can_form_nation = ETH
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			aggressive_diplomatic_plays_permitted = yes
+			can_form_nation = ETH
+		}	
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_leadership_india= {
+	war_goal = unification_leadership
+	
+	requires_interest_marker = no
+	mirror_war_goal = yes
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}	
+	
+	possible = {
+		NOT = { is_country_type = decentralized }
+		has_technology_researched = pan-nationalism
+		is_subject = no
+		can_form_nation = BHT
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			aggressive_diplomatic_plays_permitted = yes
+			can_form_nation = BHT
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_unify_ethiopia = {
+	war_goal = unification
+	
+	requires_interest_marker = no
+	blocked_by_diplomatic_status = no
+	
+	texture = "gfx/interface/icons/war_goals/unification.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}
+	
+	possible = {
+		NOT = { exists = c:ETH }
+		NOT = { is_country_type = decentralized }
+		is_subject = no
+		custom_tooltip = {
+			text = ETH_tt
+			can_form_nation = ETH
+		}
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			aggressive_diplomatic_plays_permitted = yes
+			custom_tooltip = {
+				text = ETH_tt
+				can_form_nation = ETH
+			}
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_unify_india = {
+	war_goal = unification
+	
+	requires_interest_marker = no
+	blocked_by_diplomatic_status = no
+	
+	texture = "gfx/interface/icons/war_goals/unification.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}
+	  
+	possible = {
+		NOT = { exists = c:BHT }
+		NOT = { is_country_type = decentralized }
+		OR = {
+			custom_tooltip = {
+			text = india_unification_criteria
+				OR = {
+					NOT = { exists = c:BIC }
+					NOT = {
+						AND = {
+							exists = c:BIC
+							c:BIC = {
+								any_scope_state = {
+									state_region = {
+										state_is_in_india = yes
+									}
+								}
+							}
+						}
+					}
+				}   
+			}
+		}
+		has_technology_researched = pan-nationalism
+		is_subject = no 
+		custom_tooltip = {
+			text = BHT_tt
+			can_form_nation = BHT
+		}
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			aggressive_diplomatic_plays_permitted = yes
+			custom_tooltip = {
+				text = BHT_tt
+				can_form_nation = BHT
+			}
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+	
+	on_war_end = {}
+}
+
+dp_algerian_conquest = {
+	war_goal = annex_country
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		AND = {
+			exists = c:FRA
+			c:FRA = ROOT
+			any_country = {
+				AND = {
+					OR = {
+						country_has_primary_culture = cu:berber
+						country_has_primary_culture = cu:maghrebi
+					}
+					capital = {
+						OR = {
+							state_region = s:STATE_ALGIERS
+							state_region = s:STATE_TLEMCEN
+							state_region = s:STATE_CONSTANTINE
+							state_region = s:STATE_GHARDAIA
+						}	
+					}
+					is_country_type = unrecognized
+				}
+			}
+		}
+	}
+	
+	possible = {
+		is_subject = no
+
+		scope:target_country = {
+			is_country_type = unrecognized
+			aggressive_diplomatic_plays_permitted = yes
+			OR = {
+				country_has_primary_culture = cu:berber
+				country_has_primary_culture = cu:maghrebi
+			}
+			capital = {
+				OR = {
+					state_region = s:STATE_ALGIERS
+					state_region = s:STATE_TLEMCEN
+					state_region = s:STATE_CONSTANTINE
+					state_region = s:STATE_GHARDAIA
+				}	
+			}
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
