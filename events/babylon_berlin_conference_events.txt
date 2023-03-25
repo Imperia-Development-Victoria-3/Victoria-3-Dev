@@ -11,21 +11,32 @@ babylon_berlin_conference.1 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			save_scope_as = berlin_conference_proposer
+		}
+	}
 	trigger = {
 		#root is great power status
-		country_rank >= country_value:great_power
+		country_rank >= rank_value:great_power
 		#With a colonial agenda
 		NOT = {
 			has_law = law_type:law_no_colonial_affairs
 		}
 		#That has researched malaria prevention
 		has_technology_researched = malaria_prevention
-		#There must be 3 (or more) countries
-		any_country = {
-			count >= 3
-			filter = {
+		# In Europe, just so they're not locked out later! European great powers are always invited to the Berlin Conference!
+		country_is_in_europe = yes
+		# weighted_calc_true_if doesnt seem to work in an event trigger connection, soo...
+		# Either there's 3 valid great powers, 2 great powers and 2 valid european minors, or 1 great power and 4 euro minors
+		OR = {
+			any_country = {
+				count >= 3
 				#Of great power status
-				country_rank >= country_value:great_power
+				country_rank >= rank_value:great_power
 				#With a colonial agenda
 				NOT = {
 					has_law = law_type:law_no_colonial_affairs
@@ -33,9 +44,57 @@ babylon_berlin_conference.1 = {
 				#That has researched malaria prevention
 				has_technology_researched = malaria_prevention
 			}
+			AND = {
+				any_country = {
+					count >= 2
+					#Of great power status
+					country_rank >= rank_value:great_power
+					#With a colonial agenda
+					NOT = {
+						has_law = law_type:law_no_colonial_affairs
+					}
+					#That has researched malaria prevention
+					has_technology_researched = malaria_prevention
+				}
+				any_country = {
+					count >= 2
+					# european powers (not gps)
+					country_rank < rank_value:great_power
+					country_is_in_europe = yes
+					#With a colonial agenda
+					NOT = {
+						has_law = law_type:law_no_colonial_affairs
+					}
+					#That has researched malaria prevention
+					has_technology_researched = malaria_prevention
+				}
+			}
+			AND = {
+				any_country = {
+					count >= 1
+					#Of great power status
+					country_rank >= rank_value:great_power
+					#With a colonial agenda
+					NOT = {
+						has_law = law_type:law_no_colonial_affairs
+					}
+					#That has researched malaria prevention
+					has_technology_researched = malaria_prevention
+				}
+				any_country = {
+					count >= 4
+					# european powers
+					country_rank < rank_value:great_power
+					country_is_in_europe = yes
+					#With a colonial agenda
+					NOT = {
+						has_law = law_type:law_no_colonial_affairs
+					}
+					#That has researched malaria prevention
+					has_technology_researched = malaria_prevention
+				}
+			}
 		}
-		# In Europe, just so they're not locked out later! European great powers are always invited to the Berlin Conference!
-		country_is_in_europe = yes
 		#The conference cannot be progressing or finished
 		NOR = {
 			has_global_variable = babylon_berlin_conference_in_progress
@@ -45,6 +104,9 @@ babylon_berlin_conference.1 = {
 	immediate = {
 		set_global_variable = babylon_berlin_conference_in_progress
 		set_variable = babylon_berlin_conference_proposer
+		capital = {
+			save_scope_as = proposer_capital_scope
+		}
 	}
 	option = {
 		name = babylon_berlin_conference.1.a
@@ -52,7 +114,10 @@ babylon_berlin_conference.1 = {
 			#Find every country that fits the trigger criteria...
 			limit = {
 				#Of great power status
-				country_rank >= country_value:great_power
+				OR = {
+					country_rank >= rank_value:great_power
+					country_is_in_europe = yes
+				}
 				#With a colonial agenda
 				NOT = {
 					has_law = law_type:law_no_colonial_affairs
@@ -75,8 +140,10 @@ babylon_berlin_conference.1 = {
 				}
 			}
 		}
-		add_journal_entry = {
-			type = je_babylon_berlin_conference_stage_1
+		hidden_effect = {
+			add_journal_entry = {
+				type = je_babylon_berlin_conference_stage_1
+			}
 		}
 	}
 }
@@ -121,6 +188,16 @@ babylon_berlin_conference.3 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
+	}
 	option = {
 		#Euro GPs only
 		name = babylon_berlin_conference.3.a
@@ -270,6 +347,16 @@ babylon_berlin_conference.4 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
+	}
 	option = {
 		name = babylon_berlin_conference.4.a
 	}
@@ -288,6 +375,16 @@ babylon_berlin_conference.5 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
+	}
 	option = {
 		name = babylon_berlin_conference.5.a
 	}
@@ -307,6 +404,14 @@ babylon_berlin_conference.6 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
 	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
 		#Make sure multiple instances cant open
 		set_variable = babylon_berlin_point_distribution_open
 		#is removed in the exit
@@ -480,10 +585,20 @@ babylon_berlin_conference.7 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
+	}
 	option = {
 		name = babylon_berlin_conference.7.a
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 1
 			}
@@ -499,7 +614,7 @@ babylon_berlin_conference.7 = {
 	option = {
 		name = babylon_berlin_conference.7.b
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 2
 			}
@@ -515,7 +630,7 @@ babylon_berlin_conference.7 = {
 	option = {
 		name = babylon_berlin_conference.7.c
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 3
 			}
@@ -531,7 +646,7 @@ babylon_berlin_conference.7 = {
 	option = {
 		name = babylon_berlin_conference.7.d
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 4
 			}
@@ -547,7 +662,7 @@ babylon_berlin_conference.7 = {
 	option = {
 		name = babylon_berlin_conference.7.e
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 5
 			}
@@ -567,7 +682,7 @@ babylon_berlin_conference.7 = {
 			value = 6
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 6
 			}
@@ -583,7 +698,7 @@ babylon_berlin_conference.7 = {
 			value = 7
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 7
 			}
@@ -599,7 +714,7 @@ babylon_berlin_conference.7 = {
 			value = 8
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 8
 			}
@@ -615,7 +730,7 @@ babylon_berlin_conference.7 = {
 			value = 9
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 9
 			}
@@ -631,7 +746,7 @@ babylon_berlin_conference.7 = {
 			value = 10
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 10
 			}
@@ -647,7 +762,7 @@ babylon_berlin_conference.7 = {
 			value = 11
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 11
 			}
@@ -663,7 +778,7 @@ babylon_berlin_conference.7 = {
 			value = 12
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 12
 			}
@@ -679,7 +794,7 @@ babylon_berlin_conference.7 = {
 			value = 13
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 13
 			}
@@ -695,7 +810,7 @@ babylon_berlin_conference.7 = {
 			value = 14
 		}
 		trigger = {
-			babylon_berlin_conference_can_colonise_STATE_REGION = {
+			babylon_berlin_conference_can_country_colonise_STATE_REGION = {
 				REGION = var:babylon_strategic_region
 				STATE = 14
 			}
@@ -760,6 +875,16 @@ babylon_berlin_conference.8 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
+	}
 	option = {
 		name = "Remove 5 Points"
 		trigger = {
@@ -909,6 +1034,7 @@ babylon_berlin_conference.9 = {
 
 babylon_berlin_conference.10 = {
 	# hidden distribution of points for ai
+	# fired for every participant
 	type = country_event
 	hidden = yes
 	immediate = {
@@ -921,7 +1047,12 @@ babylon_berlin_conference.11 = {
 	type = country_event
 	hidden = yes
 	immediate = {
-		berlin_conference_stage_2_finished_effect = yes
+		berlin_conference_stage_2_finished_effect_round_1 = yes
+		trigger_event = {
+			#Dish out free states
+			id = babylon_berlin_conference.20
+			days = 2
+		}
 	}
 }
 
@@ -2338,5 +2469,121 @@ babylon_berlin_conference.19 = {
 		ai_chance = {
 			base = 0
 		}
+	}
+}
+
+babylon_berlin_conference.20 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		#fired from babylon_berlin_conference.11
+		congo_free_state_dish_out_provinces_between_rounds = yes
+		trigger_event = {
+			# Go to round 2 of stage 2
+			id = babylon_berlin_conference.21
+			days = 2
+		}
+	}
+}
+
+babylon_berlin_conference.21 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		berlin_conference_stage_2_finished_effect_round_2 = yes
+		trigger_event = {
+			# Go to dish out free states
+			id = babylon_berlin_conference.22
+			days = 2
+		}
+	}
+}
+
+babylon_berlin_conference.22 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		congo_free_state_dish_out_provinces_between_rounds = yes
+		trigger_event = {
+			# Go to dish out free states
+			id = babylon_berlin_conference.23
+			days = 2
+		}
+	}
+}
+
+babylon_berlin_conference.23 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		berlin_conference_stage_2_finished_effect_round_3 = yes
+		trigger_event = {
+			# Go final dish out
+			id = babylon_berlin_conference.24
+			days = 2
+		}
+	}
+}
+
+babylon_berlin_conference.24 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		congo_free_state_dish_out_provinces_between_rounds = yes
+		trigger_event = {
+			# Go start the free state journals
+			id = babylon_berlin_conference.25
+			days = 2
+		}
+	}
+}
+
+babylon_berlin_conference.25 = {
+	# hidden claim granting
+	type = country_event
+	hidden = yes
+	immediate = {
+		berlin_conference_stage_3_start_effect = yes
+	}
+}
+
+babylon_berlin_conference.26 = {
+	# hidden claim granting
+	type = country_event
+	option = {
+		name = "add to list"
+		every_state = {
+			limit = {
+				state_is_in_africa = yes
+				NOR = {
+					any_country = {
+						has_variable = berlin_conference_participant
+						has_claim = prev
+					}
+					# nor any "promised to free state" modifiers
+					has_modifier = promised_to_NFS_modifier
+					has_modifier = promised_to_EFS_modifier
+					has_modifier = promised_to_MFS_modifier
+					has_modifier = promised_to_SFS_modifier
+					has_modifier = promised_to_IFS_modifier
+					has_modifier = promised_to_CFS_modifier
+					has_modifier = promised_to_OFS_modifier
+					has_modifier = promised_to_ZFS_modifier
+				}
+			}
+			add_to_global_variable_list = {
+				name = error_states
+				target = this
+			}
+		}
+	}
+	option = {
+		name = "clear list"
+		clear_global_variable_list = error_states
 	}
 }

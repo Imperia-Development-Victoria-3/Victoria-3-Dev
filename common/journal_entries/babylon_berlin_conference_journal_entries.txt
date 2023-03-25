@@ -5,6 +5,14 @@
 			name = berlin_conference_stage_1_vote
 			value = 0			#To indicate no vote yet
 		}
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
 	}
 	complete = {
 		OR = {
@@ -207,10 +215,18 @@ je_babylon_berlin_conference_stage_2 = {
 		initialise_every_state = yes
 		#Is used in the congo free state sub-round
 		set_variable = berlin_conference_participant
+		random_country = {
+			limit = {
+				has_variable = babylon_berlin_conference_proposer
+			}
+			capital = {
+				save_scope_as = proposer_capital_scope
+			}
+		}
 	}
 	on_timeout = {
 		if = {
-			#add effect to randomly distribute points
+			# randomly distribute points
 			# Only for AIs, fired at the end of the journal so countries can adapt to changes on the ground better
 			limit = {
 				is_ai = yes
@@ -229,7 +245,7 @@ je_babylon_berlin_conference_stage_2 = {
 				trigger_event = {
 					# Finish event
 					id = babylon_berlin_conference.11
-					days = 1
+					days = 2
 				}
 			}
 		}

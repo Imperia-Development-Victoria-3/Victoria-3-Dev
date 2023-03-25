@@ -334,7 +334,10 @@
 	}
 }
 
-babylon_berlin_conference_can_colonise_STATE_REGION = {
+babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+	this = {
+		save_temporary_scope_as = country_scope
+	}
 	#First check which strategic region we're in
 	switch = {
 		trigger = $REGION$
@@ -350,35 +353,42 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_MIDDLE_EGYPT
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MATRUH
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_UPPER_EGYPT
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_DONGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_1_2 > 0						#Middle Egypt
-						var:babylon_berlin_conference_points_in_1_3 > 0						#Upper Egypt
-						var:babylon_berlin_conference_points_in_1_6 > 0						#Dongola
-						var:babylon_berlin_conference_points_in_1_11 > 0						#Matruh
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_1_2 > 0								#Middle Egypt
+								var:babylon_berlin_conference_points_in_1_3 > 0								#Upper Egypt
+								var:babylon_berlin_conference_points_in_1_6 > 0								#Dongola
+								var:babylon_berlin_conference_points_in_1_11 > 0								#Matruh
+							}
+						}
 					}
 					# And if its not civilised
 					any_state = {
@@ -474,11 +484,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DONGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_1_6 > 0						#Dongola
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_1_6 > 0							#Dongola
+						}
 					}
 					any_state = {
 						state_region = s:STATE_DARFUR
@@ -498,11 +513,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DONGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_1_6 > 0						#Dongola
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_1_6 > 0							#Dongola
+						}
 					}
 					any_state = {
 						state_region = s:STATE_KORDOFAN
@@ -521,51 +541,58 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DARFUR
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_KORDOFAN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_BLUE_NILE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_AMHARA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_RIFT_VALLEY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_UBANGI_SHARI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_1_7 > 0						#Darfur
-						var:babylon_berlin_conference_points_in_1_8 > 0						#Kordofan
-						var:babylon_berlin_conference_points_in_1_10 > 0						#BlueNile
-						var:babylon_berlin_conference_points_in_2_3 > 0						#Amhara
-						var:babylon_berlin_conference_points_in_6_6 > 0						#Ubangi-Shari
-						var:babylon_berlin_conference_points_in_8_11 > 0						#RiftValley
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_1_7 > 0								#Darfur
+								var:babylon_berlin_conference_points_in_1_8 > 0								#Kordofan
+								var:babylon_berlin_conference_points_in_1_10 > 0								#BlueNile
+								var:babylon_berlin_conference_points_in_2_3 > 0								#Amhara
+								var:babylon_berlin_conference_points_in_6_6 > 0								#Ubangi-Shari
+								var:babylon_berlin_conference_points_in_8_11 > 0								#RiftValley
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EQUATORIA
@@ -584,19 +611,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DONGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_ERITREA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_1_6 > 0						#Dongola
-						var:babylon_berlin_conference_points_in_2_1 > 0						#Eritrea
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_1_6 > 0								#Dongola
+								var:babylon_berlin_conference_points_in_2_1 > 0								#Eritrea
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_BLUE_NILE
@@ -648,11 +682,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ERITREA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_2_1 > 0						#Eritrea
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_2_1 > 0							#Eritrea
+						}
 					}
 					any_state = {
 						state_region = s:STATE_GONDER
@@ -671,19 +710,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_SOMALILAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_KENYA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_2_5 > 0						#Somaliland
-						var:babylon_berlin_conference_points_in_8_10 > 0						#Kenya
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_2_5 > 0								#Somaliland
+								var:babylon_berlin_conference_points_in_8_10 > 0								#Kenya
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_AMHARA
@@ -702,19 +748,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_SOMALILAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_ERITREA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_2_1 > 0						#Eritrea
-						var:babylon_berlin_conference_points_in_2_5 > 0						#Somaliland
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_2_1 > 0								#Eritrea
+								var:babylon_berlin_conference_points_in_2_5 > 0								#Somaliland
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_OROMIA
@@ -769,27 +822,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_WEST_SAHARA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_INNER_MOROCCO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_TLEMCEN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_1 > 0						#WestSahara
-						var:babylon_berlin_conference_points_in_3_7 > 0						#InnerMorroco
-						var:babylon_berlin_conference_points_in_3_8 > 0						#Tlemcen
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_1 > 0								#WestSahara
+								var:babylon_berlin_conference_points_in_3_7 > 0								#InnerMorroco
+								var:babylon_berlin_conference_points_in_3_8 > 0								#Tlemcen
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_SAHARA
@@ -808,19 +868,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TUNISIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_TRIPOLI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_11 > 0						#Tunis
-						var:babylon_berlin_conference_points_in_3_14 > 0						#InnerMorroco
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_11 > 0								#Tunis
+								var:babylon_berlin_conference_points_in_3_14 > 0								#InnerMorroco
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EAST_SAHARA
@@ -923,27 +990,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TLEMCEN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_TUNISIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_ALGIERS
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_8 > 0						#Tlemcen
-						var:babylon_berlin_conference_points_in_3_11 > 0						#Tunis
-						var:babylon_berlin_conference_points_in_3_9 > 0						#Algiers
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_8 > 0								#Tlemcen
+								var:babylon_berlin_conference_points_in_3_11 > 0								#Tunis
+								var:babylon_berlin_conference_points_in_3_9 > 0								#Algiers
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_CONSTANTINE
@@ -990,27 +1064,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TRIPOLI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_LIBYA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MATRUH
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_14 > 0						#Tripoli
-						var:babylon_berlin_conference_points_in_3_12 > 0						#Libya
-						var:babylon_berlin_conference_points_in_1_11 > 0						#Matruh
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_14 > 0								#Tripoli
+								var:babylon_berlin_conference_points_in_3_12 > 0								#Libya
+								var:babylon_berlin_conference_points_in_1_11 > 0								#Matruh
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_LIBYAN_DESERT
@@ -1160,35 +1241,42 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_IVORY_COAST
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_GHANA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_TOGO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_DAHOMEY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_4_7 > 0						#IvoryCoast
-						var:babylon_berlin_conference_points_in_4_8 > 0						#Ghana
-						var:babylon_berlin_conference_points_in_5_9 > 0						#Togo
-						var:babylon_berlin_conference_points_in_5_10 > 0						#Dahomey
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_4_7 > 0								#IvoryCoast
+								var:babylon_berlin_conference_points_in_4_8 > 0								#Ghana
+								var:babylon_berlin_conference_points_in_5_9 > 0								#Togo
+								var:babylon_berlin_conference_points_in_5_10 > 0								#Dahomey
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_VOLTA
@@ -1207,27 +1295,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_MAURITANIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_GAMBIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_GUINEA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_4_12 > 0						#Mauritania
-						var:babylon_berlin_conference_points_in_4_1 > 0						#Gambia
-						var:babylon_berlin_conference_points_in_4_3 > 0						#Guinea
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_4_12 > 0								#Mauritania
+								var:babylon_berlin_conference_points_in_4_1 > 0								#Gambia
+								var:babylon_berlin_conference_points_in_4_3 > 0								#Guinea
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_WESTERN_MALI
@@ -1246,19 +1341,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_WINDWARD_COAST
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_IVORY_COAST
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_4_6 > 0						#Windward
-						var:babylon_berlin_conference_points_in_4_7 > 0						#Ivory
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_4_6 > 0								#Windward
+								var:babylon_berlin_conference_points_in_4_7 > 0								#Ivory
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EASTERN_MALI
@@ -1291,59 +1393,66 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_SAHARA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_EAST_SAHARA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NIGER
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_OUTER_HAUSALAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_VOLTA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_EASTERN_MALI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MAURITANIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_2 > 0						#Sahara
-						var:babylon_berlin_conference_points_in_3_3 > 0						#East Sahara
-						var:babylon_berlin_conference_points_in_5_1 > 0						#Niger
-						var:babylon_berlin_conference_points_in_5_4 > 0						#Outer Hausaland
-						var:babylon_berlin_conference_points_in_4_9 > 0						#Volta
-						var:babylon_berlin_conference_points_in_4_11 > 0						#Eastern Mali
-						var:babylon_berlin_conference_points_in_4_12 > 0						#Mauritania
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_2 > 0								#Sahara
+								var:babylon_berlin_conference_points_in_3_3 > 0								#East Sahara
+								var:babylon_berlin_conference_points_in_5_1 > 0								#Niger
+								var:babylon_berlin_conference_points_in_5_4 > 0								#Outer Hausaland
+								var:babylon_berlin_conference_points_in_4_9 > 0								#Volta
+								var:babylon_berlin_conference_points_in_4_11 > 0								#Eastern Mali
+								var:babylon_berlin_conference_points_in_4_12 > 0								#Mauritania
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EASTERN_MALI
@@ -1361,19 +1470,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_WEST_SAHARA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MAURITANIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_1 > 0						#West Sahara
-						var:babylon_berlin_conference_points_in_4_12 > 0						#Mauritania
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_3_1 > 0								#West Sahara
+								var:babylon_berlin_conference_points_in_4_12 > 0								#Mauritania
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_INNER_MAURITANIA
@@ -1397,11 +1513,18 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_BENIN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_8 > 0						#benin
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_5_8 > 0								#benin
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_INNER_MAURITANIA
@@ -1448,11 +1571,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DAHOMEY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_10 > 0						#Dahomey
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_5_10 > 0							#Dahomey
+						}
 					}
 					any_state = {
 						state_region = s:STATE_OUTER_HAUSALAND
@@ -1471,27 +1599,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_DAHOMEY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_YORUBA_STATES
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_BENIN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_10 > 0						#Dahomey
-						var:babylon_berlin_conference_points_in_5_3 > 0						#Yoruba
-						var:babylon_berlin_conference_points_in_5_8 > 0						#Benin
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_5_10 > 0								#Dahomey
+								var:babylon_berlin_conference_points_in_5_3 > 0								#Yoruba
+								var:babylon_berlin_conference_points_in_5_8 > 0								#Benin
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_OUTER_HAUSALAND
@@ -1510,11 +1645,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_BENIN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_8 > 0						#Benin
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_5_8 > 0							#Benin
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EAST_HAUSALAND
@@ -1533,27 +1673,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_EAST_HAUSALAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_OUTER_HAUSALAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NIGER
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_6 > 0						#east Hausa
-						var:babylon_berlin_conference_points_in_5_4 > 0						#Outer Hausa
-						var:babylon_berlin_conference_points_in_5_1 > 0						#Niger
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_5_6 > 0								#east Hausa
+								var:babylon_berlin_conference_points_in_5_4 > 0								#Outer Hausa
+								var:babylon_berlin_conference_points_in_5_1 > 0								#Niger
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_BORNU
@@ -1614,11 +1761,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TRIPOLI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_14 > 0						#Tripoli
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_3_14 > 0							#Tripoli
+						}
 					}
 					any_state = {
 						state_region = s:STATE_NIGER
@@ -1637,11 +1789,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TRIPOLI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_3_14 > 0						#Tripoli
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_3_14 > 0							#Tripoli
+						}
 					}
 					any_state = {
 						state_region = s:STATE_CHAD
@@ -1660,27 +1817,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_SOUTH_CAMEROON
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NIGER_DELTA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_BENIN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_12 > 0						#SouthCameroon
-						var:babylon_berlin_conference_points_in_5_2 > 0						#NigerDelta
-						var:babylon_berlin_conference_points_in_5_8 > 0						#Benin
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_6_12 > 0								#SouthCameroon
+								var:babylon_berlin_conference_points_in_5_2 > 0								#NigerDelta
+								var:babylon_berlin_conference_points_in_5_8 > 0								#Benin
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_NORTH_CAMEROON
@@ -1699,35 +1863,42 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_NORTH_CAMEROON
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_UBANGI_SHARI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_BENIN
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_CHAD
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_5_13 > 0						#STATE_NORTH_CAMEROON
-						var:babylon_berlin_conference_points_in_6_6 > 0						#UbangiShari
-						var:babylon_berlin_conference_points_in_5_8 > 0						#Benin
-						var:babylon_berlin_conference_points_in_5_12 > 0						#Chad
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_5_13 > 0								#STATE_NORTH_CAMEROON
+								var:babylon_berlin_conference_points_in_6_6 > 0								#UbangiShari
+								var:babylon_berlin_conference_points_in_5_8 > 0								#Benin
+								var:babylon_berlin_conference_points_in_5_12 > 0								#Chad
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_WADDAI
@@ -1779,11 +1950,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_BAS_CONGO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_1 > 0						#STATE_BAS_CONGO
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_6_1 > 0							#STATE_BAS_CONGO
+						}
 					}
 					any_state = {
 						state_region = s:STATE_KASAI
@@ -1802,11 +1978,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_CONGO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_2 > 0						#CONGO
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_6_2 > 0							#CONGO
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EQUATEUR
@@ -1825,11 +2006,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_EQUATEUR
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_4 > 0						#Equateur
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_6_4 > 0							#Equateur
+						}
 					}
 					any_state = {
 						state_region = s:STATE_CONGO_ORIENTALE
@@ -1848,19 +2034,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_CONGO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_SOUTH_CAMEROON
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_2 > 0						#CONGO
-						var:babylon_berlin_conference_points_in_6_12 > 0						#Equateur
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_6_2 > 0								#CONGO
+								var:babylon_berlin_conference_points_in_6_12 > 0								#Equateur
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_UBANGI_SHARI
@@ -1893,27 +2086,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_SOUTH_ANGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NORTH_ANGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_BAS_CONGO
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_6_9 > 0						#STATE_SOUTH_ANGOLA
-						var:babylon_berlin_conference_points_in_6_7 > 0						#STATE_NORTH_ANGOLA
-						var:babylon_berlin_conference_points_in_6_1 > 0						#STATE_BAS_CONGO
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_6_9 > 0								#STATE_SOUTH_ANGOLA
+								var:babylon_berlin_conference_points_in_6_7 > 0								#STATE_NORTH_ANGOLA
+								var:babylon_berlin_conference_points_in_6_1 > 0								#STATE_BAS_CONGO
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_EAST_ANGOLA
@@ -1946,11 +2146,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZAMBEZIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_9 > 0						#STATE_ZAMBEZIA
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_8_9 > 0							#STATE_ZAMBEZIA
+						}
 					}
 					any_state = {
 						state_region = s:STATE_ZAMBIA
@@ -1997,35 +2202,42 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_KAZEMBE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_ZAMBIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_EAST_ANGOLA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_KASAI
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_8 > 0						#STATE_KAZEMBE
-						var:babylon_berlin_conference_points_in_6_10 > 0						#STATE_ZAMBIA
-						var:babylon_berlin_conference_points_in_6_8 > 0						#STATE_EAST_ANGOLA
-						var:babylon_berlin_conference_points_in_6_3 > 0						#STATE_KASAI
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_8 > 0								#STATE_KAZEMBE
+								var:babylon_berlin_conference_points_in_6_10 > 0								#STATE_ZAMBIA
+								var:babylon_berlin_conference_points_in_6_8 > 0								#STATE_EAST_ANGOLA
+								var:babylon_berlin_conference_points_in_6_3 > 0								#STATE_KASAI
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_KATANGA
@@ -2063,19 +2275,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_HEREROLAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NAMAQUALAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_7_9 > 0						#STATE_HEREROLAND
-						var:babylon_berlin_conference_points_in_7_1 > 0						#STATE_NAMAQUALAND
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_7_9 > 0								#STATE_HEREROLAND
+								var:babylon_berlin_conference_points_in_7_1 > 0								#STATE_NAMAQUALAND
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_BOTSWANA
@@ -2094,27 +2313,34 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_CAPE_COLONY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_NAMAQUALAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_EASTERN_CAPE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_7_4 > 0						#STATE_CAPE_COLONY
-						var:babylon_berlin_conference_points_in_7_1 > 0						#STATE_NAMAQUALAND 
-						var:babylon_berlin_conference_points_in_7_5 > 0						#STATE_EASTERN_CAPE
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_7_4 > 0								#STATE_CAPE_COLONY
+								var:babylon_berlin_conference_points_in_7_1 > 0								#STATE_NAMAQUALAND 
+								var:babylon_berlin_conference_points_in_7_5 > 0								#STATE_EASTERN_CAPE
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_NORTHERN_CAPE
@@ -2161,19 +2387,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZULULAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_EASTERN_CAPE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_7_8 > 0						#STATE_ZULULAND
-						var:babylon_berlin_conference_points_in_7_5 > 0						#STATE_EASTERN_CAPE
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_7_8 > 0								#STATE_ZULULAND
+								var:babylon_berlin_conference_points_in_7_5 > 0								#STATE_EASTERN_CAPE
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_VRYSTAAT
@@ -2192,19 +2425,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZULULAND
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_LOURENCO_MARQUES
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_7_8 > 0						#STATE_ZULULAND
-						var:babylon_berlin_conference_points_in_7_10 > 0						#STATE_LOURENCO_MARQUES
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_7_8 > 0								#STATE_ZULULAND
+								var:babylon_berlin_conference_points_in_7_10 > 0								#STATE_LOURENCO_MARQUES
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_TRANSVAAL
@@ -2265,19 +2505,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZAMBEZIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_LOURENCO_MARQUES
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_9 > 0						#STATE_ZAMBEZIA
-						var:babylon_berlin_conference_points_in_7_10 > 0						#STATE_LOURENCO_MARQUES
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_9 > 0								#STATE_ZAMBEZIA
+								var:babylon_berlin_conference_points_in_7_10 > 0								#STATE_LOURENCO_MARQUES
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_ZAMBEZI
@@ -2315,19 +2562,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZANZIBAR
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MOCAMBIQUE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_1 > 0						#STATE_ZANZIBAR
-						var:babylon_berlin_conference_points_in_8_3 > 0						#STATE_MOCAMBIQUE
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_1 > 0								#STATE_ZANZIBAR
+								var:babylon_berlin_conference_points_in_8_3 > 0								#STATE_MOCAMBIQUE
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_LINDI
@@ -2360,11 +2614,16 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZANZIBAR
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_1 > 0						#STATE_ZANZIBAR
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							var:babylon_berlin_conference_points_in_8_1 > 0							#STATE_ZANZIBAR
+						}
 					}
 					any_state = {
 						state_region = s:STATE_TANGANYIKA
@@ -2425,19 +2684,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_ZAMBEZIA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_MOCAMBIQUE
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_9 > 0						#STATE_ZAMBEZIA
-						var:babylon_berlin_conference_points_in_8_3 > 0						#STATE_ZAMBEZIA
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_9 > 0								#STATE_ZAMBEZIA
+								var:babylon_berlin_conference_points_in_8_3 > 0								#STATE_ZAMBEZIA
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_KAZEMBE
@@ -2484,19 +2750,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_KENYA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_ZANZIBAR
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_10 > 0						#STATE_KENYA
-						var:babylon_berlin_conference_points_in_8_1 > 0						#STATE_ZANZIBAR
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_10 > 0								#STATE_KENYA
+								var:babylon_berlin_conference_points_in_8_1 > 0								#STATE_ZANZIBAR
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_RIFT_VALLEY
@@ -2515,19 +2788,26 @@ babylon_berlin_conference_can_colonise_STATE_REGION = {
 						any_state = {
 							state_region = s:STATE_TANGANYIKA
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
 						any_state = {
 							state_region = s:STATE_RIFT_VALLEY
 							OR = {
-								has_claim_by = root
-								owner = root
+								has_claim_by = scope:country_scope
+								owner = scope:country_scope
 							}
 						}
-						var:babylon_berlin_conference_points_in_8_4 > 0						#STATE_TANGANYIKA
-						var:babylon_berlin_conference_points_in_8_11 > 0						#STATE_RIFT_VALLEY
+						trigger_if = {
+							limit = {
+								has_variable = berlin_conference_participant
+							}
+							OR = {
+								var:babylon_berlin_conference_points_in_8_4 > 0								#STATE_TANGANYIKA
+								var:babylon_berlin_conference_points_in_8_11 > 0								#STATE_RIFT_VALLEY
+							}
+						}
 					}
 					any_state = {
 						state_region = s:STATE_UGANDA
@@ -2590,5 +2870,808 @@ congo_free_state_COUNTRY_is_possible_overlord = {
 		has_variable = zanj_free_state_candidate_1
 		has_variable = zanj_free_state_candidate_2
 		has_variable = zanj_free_state_candidate_3
+	}
+}
+
+babylon_berlin_conference_country_owns_part_of_STATE_REGION = {
+	this = {
+		save_temporary_scope_as = country_scope
+	}
+	switch = {
+		trigger = $REGION$
+		1 = {
+			# Nile
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_EGYPTIAN_DESERT
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_MIDDLE_EGYPT
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_UPPER_EGYPT
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_LOWER_EGYPT
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_SINAI
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_DONGOLA
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_DARFUR
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_KORDOFAN
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_EQUATORIA
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_BLUE_NILE
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_MATRUH
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		2 = {
+			# Ethiopia
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_ERITREA
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_GONDER
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_AMHARA
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_OROMIA
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_SOMALILAND
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		3 = {
+			# North Africa
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_WEST_SAHARA
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_SAHARA
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_EAST_SAHARA
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_MARRAKECH
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_FEZ
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_AL_RIF
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_INNER_MOROCCO
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_TLEMCEN
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_ALGIERS
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_CONSTANTINE
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_TUNISIA
+						owner = scope:country_scope
+					}
+				}
+				12 = {
+					any_state = {
+						state_region = s:STATE_LIBYA
+						owner = scope:country_scope
+					}
+				}
+				13 = {
+					any_state = {
+						state_region = s:STATE_LIBYAN_DESERT
+						owner = scope:country_scope
+					}
+				}
+				14 = {
+					any_state = {
+						state_region = s:STATE_TRIPOLI
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		4 = {
+			# Senegal
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_GAMBIA
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_SENEGAL
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_GUINEA
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_SIERRA_LEONE
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_LIBERIA
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_WINDWARD_COAST
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_IVORY_COAST
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_GHANA
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_VOLTA
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_WESTERN_MALI
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_EASTERN_MALI
+						owner = scope:country_scope
+					}
+				}
+				12 = {
+					any_state = {
+						state_region = s:STATE_MAURITANIA
+						owner = scope:country_scope
+					}
+				}
+				13 = {
+					any_state = {
+						state_region = s:STATE_TIMBUKTU
+						owner = scope:country_scope
+					}
+				}
+				14 = {
+					any_state = {
+						state_region = s:STATE_INNER_MAURITANIA
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		5 = {
+			# Niger
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_NIGERIA
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_NIGER_DELTA
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_YORUBA_STATES
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_OUTER_HAUSALAND
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_HAUSALAND
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_EAST_HAUSALAND
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_BORNU
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_BENIN
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_TOGO
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_DAHOMEY
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_NIGER
+						owner = scope:country_scope
+					}
+				}
+				12 = {
+					any_state = {
+						state_region = s:STATE_CHAD
+						owner = scope:country_scope
+					}
+				}
+				13 = {
+					any_state = {
+						state_region = s:STATE_NORTH_CAMEROON
+						owner = scope:country_scope
+					}
+				}
+				14 = {
+					any_state = {
+						state_region = s:STATE_WADDAI
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		6 = {
+			# Congo
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_BAS_CONGO
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_CONGO
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_KASAI
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_EQUATEUR
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_CONGO_ORIENTALE
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_UBANGI_SHARI
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_NORTH_ANGOLA
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_EAST_ANGOLA
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_SOUTH_ANGOLA
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_ZAMBIA
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_GABON
+						owner = scope:country_scope
+					}
+				}
+				12 = {
+					any_state = {
+						state_region = s:STATE_SOUTH_CAMEROON
+						owner = scope:country_scope
+					}
+				}
+				13 = {
+					any_state = {
+						state_region = s:STATE_KATANGA
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		7 = {
+			# South Africa
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_NAMAQUALAND
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_BOTSWANA
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_NORTHERN_CAPE
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_CAPE_COLONY
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_EASTERN_CAPE
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_VRYSTAAT
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_TRANSVAAL
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_ZULULAND
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_HEREROLAND
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_LOURENCO_MARQUES
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_ZAMBEZI
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+		8 = {
+			# Zanj
+			switch = {
+				trigger = $STATE$
+				1 = {
+					any_state = {
+						state_region = s:STATE_ZANZIBAR
+						owner = scope:country_scope
+					}
+				}
+				2 = {
+					any_state = {
+						state_region = s:STATE_LINDI
+						owner = scope:country_scope
+					}
+				}
+				3 = {
+					any_state = {
+						state_region = s:STATE_MOCAMBIQUE
+						owner = scope:country_scope
+					}
+				}
+				4 = {
+					any_state = {
+						state_region = s:STATE_TANGANYIKA
+						owner = scope:country_scope
+					}
+				}
+				5 = {
+					any_state = {
+						state_region = s:STATE_SOUTH_MADAGASCAR
+						owner = scope:country_scope
+					}
+				}
+				6 = {
+					any_state = {
+						state_region = s:STATE_NORTH_MADAGASCAR
+						owner = scope:country_scope
+					}
+				}
+				7 = {
+					any_state = {
+						state_region = s:STATE_INDIAN_OCEAN_TERRITORY
+						owner = scope:country_scope
+					}
+				}
+				8 = {
+					any_state = {
+						state_region = s:STATE_KAZEMBE
+						owner = scope:country_scope
+					}
+				}
+				9 = {
+					any_state = {
+						state_region = s:STATE_ZAMBEZIA
+						owner = scope:country_scope
+					}
+				}
+				10 = {
+					any_state = {
+						state_region = s:STATE_KENYA
+						owner = scope:country_scope
+					}
+				}
+				11 = {
+					any_state = {
+						state_region = s:STATE_RIFT_VALLEY
+						owner = scope:country_scope
+					}
+				}
+				12 = {
+					any_state = {
+						state_region = s:STATE_UGANDA
+						owner = scope:country_scope
+					}
+				}
+			}
+		}
+	}
+}
+
+babylon_berlin_conference_country_can_colonise_ring_2 = {
+	OR = {
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 1
+			STATE = 1
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 1
+			STATE = 7
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 1
+			STATE = 8
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 1
+			STATE = 10
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 2
+			STATE = 2
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 2
+			STATE = 3
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 2
+			STATE = 4
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 3
+			STATE = 2
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 3
+			STATE = 3
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 3
+			STATE = 10
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 3
+			STATE = 13
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 4
+			STATE = 9
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 4
+			STATE = 10
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 4
+			STATE = 11
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 4
+			STATE = 14
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 1
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 4
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 5
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 6
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 7
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 11
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 12
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 13
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 14
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 3
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 4
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 8
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 10
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 7
+			STATE = 2
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 7
+			STATE = 3
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 7
+			STATE = 6
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 7
+			STATE = 7
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 7
+			STATE = 11
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 8
+			STATE = 2
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 8
+			STATE = 4
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 8
+			STATE = 8
+		}
+	}
+}
+
+babylon_berlin_conference_country_can_colonise_ring_3 = {
+	OR = {
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 1
+			STATE = 9
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 4
+			STATE = 13
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 7
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 5
+			STATE = 14
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 5
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 6
+			STATE = 13
+		}
+		babylon_berlin_conference_can_country_colonise_STATE_REGION = {
+			REGION = 8
+			STATE = 12
+		}
 	}
 }
