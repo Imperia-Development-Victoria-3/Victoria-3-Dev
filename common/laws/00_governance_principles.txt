@@ -2,7 +2,6 @@
 # icon = graphical icon shown in-game
 # modifier = {} modifier on country for having adopted this law
 
-
 law_chiefdom = {
 	group = lawgroup_governance_principles
 	
@@ -25,17 +24,6 @@ law_chiefdom = {
 	
 	pop_support = {
 		value = 0
-		
-		add = {
-			desc = "POP_PEASANTS"
-			if = {
-				limit = { 
-					is_pop_type = peasants
-					owner = { has_law = law_type:law_chiefdom }
-				}
-				value = 1.0
-			}
-		}		
 	}
 }
 
@@ -65,18 +53,16 @@ law_monarchy = {
 	}
 	
 	pop_support = {
-		value = 0
-		
+		value = 0	
 		add = {
-			desc = "POP_PEASANTS"
+			desc = "POP_ARISTOCRATS"
 			if = {
 				limit = { 
-					is_pop_type = peasants
-					owner = { has_law = law_type:law_monarchy }
+					is_pop_type = aristocrats
 				}
-				value = 1.0
+				value = 0.33
 			}
-		}		
+		}
 	}
 	
 	ai_will_do = {
@@ -108,6 +94,19 @@ law_presidential_republic = {
 	possible_political_movements = {
 		law_council_republic
 	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_MIDDLE_STRATA"
+			if = {
+				limit = { 
+					strata = middle
+				}
+				value = 0.05
+			}
+		}
+	}
 	
 	ai_will_do = {
 		exists = ruler
@@ -137,6 +136,19 @@ law_parliamentary_republic = {
 	
 	possible_political_movements = {
 		law_council_republic
+	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_MIDDLE_STRATA"
+			if = {
+				limit = { 
+					strata = middle
+				}
+				value = 0.05
+			}
+		}
 	}
 	
 	ai_will_do = {
@@ -172,6 +184,20 @@ law_theocracy = {
 		law_parliamentary_republic
 		law_council_republic
 	}
+
+	pop_support = {
+		value = 0
+		
+		add = {
+			desc = "POP_CLERGYMEN"
+			if = {
+				limit = { 
+					is_pop_type = clergymen
+				}
+				value = 0.33
+			}
+		}
+	}
 	
 	ai_will_do = {
 		exists = ruler
@@ -195,6 +221,12 @@ law_council_republic = {
 	disallowing_laws = {
 		law_hereditary_bureaucrats
 	}
+	
+	on_activate = {		
+		custom_tooltip = {
+			text = enact_law_radical_leftist_government_warning_desc
+		}	
+	}		
 
 	modifier = {
 		country_legitimacy_govt_size_add = 1
@@ -207,6 +239,19 @@ law_council_republic = {
 	possible_political_movements = {
 		law_presidential_republic
 		law_parliamentary_republic
+	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_LOWER_STRATA"
+			if = {
+				limit = { 
+					strata = poor
+				}
+				value = 0.05
+			}
+		}
 	}
 	
 	ai_will_do = {
