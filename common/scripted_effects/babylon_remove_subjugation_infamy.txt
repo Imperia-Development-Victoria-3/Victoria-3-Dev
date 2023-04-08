@@ -1,0 +1,38 @@
+﻿calc_subjugation_infamy = {
+	set_variable = {
+		name = infamy_reduction_var
+		value = 3		#initialise
+	}
+	set_variable = {
+		name = population_var
+		value = scope:target.total_population
+	}
+	change_variable = {
+		name = population_var
+		divide = 10000
+	}
+	change_variable = {
+		name = population_var
+		multiply = 0.03
+	}
+	clamp_variable = {
+		name = population_var
+		min = 0
+		max = 50
+	}
+	change_variable = {
+		name = infamy_reduction_var
+		multiply = root.var:population_var
+	}
+	change_variable = {
+		name = infamy_reduction_var
+		multiply = -1
+	}
+}
+
+remove_subjugation_infamy = {
+	# custom_tooltip = {
+	# 	text = babylon_remove_subjugation_infamy_TT
+		change_infamy = root.var:infamy_reduction_var
+	# }
+}

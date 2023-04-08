@@ -1,0 +1,74 @@
+﻿
+dp_unify_america = {
+	war_goal = annex_country
+	requires_interest_marker = no
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		OR = {
+			country_has_primary_culture = cu:yankee
+			country_has_primary_culture = cu:dixie
+		}
+	}
+	
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		has_technology_researched = nationalism
+		
+		scope:target_country = {
+			NOT = { is_subject_of = root }
+			NOT = { is_country_type = decentralized }
+			country_is_in_north_america = yes
+			OR = {
+				country_has_primary_culture = cu:yankee
+				country_has_primary_culture = cu:dixie
+				country_has_primary_culture = cu:afro_american
+				country_has_primary_culture = cu:cajun
+			}
+		}
+	}
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+
+	on_war_end = {}
+}
+
+dp_customs_union = {
+	war_goal = humiliation
+	initiator_can_add_war_goals = no
+    target_can_add_war_goals = no
+	texture = "gfx/interface/icons/war_goals/open_market.dds"
+	possible = {
+		always = no
+	}
+	on_weekly_pulse = {
+		#Ensures this diplo play never reaches war directly
+		#Should be diplo play scope
+		if = {
+			limit = { 
+				escalation >= 80
+			}
+			initiator = {
+				#Initiator is overlord
+				remove_list_variable = {
+					name = babylon_new_customs_union_overlord
+					target = root.target
+				}
+			}
+			target = {
+				#target is applicant
+				remove_variable = babylon_new_customs_union_applicant
+			}
+			end_play = yes
+		}
+	}
+	on_war_begins = {
+	}
+	on_war_end = {
+	}
+}

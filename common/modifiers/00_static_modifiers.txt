@@ -3,12 +3,18 @@
 # Effects are fully scriptable here.
 #these names can NOT be removed or changed, as the code uses them....
 
+# Babylon additions
+# Infamy Rebalance - Changed max diplo to being 10% infamy reduction instead of 25%. Add trade route competitiveness multiplier to infamy levels. Bureaucracy multiplier on infamy levels.
+
 # Global Static Modifiers
 base_values = {
-	country_weekly_innovation_add = 50
-	country_weekly_innovation_max_add = 50
-	country_tech_spread_add = 25
-	
+	country_weekly_innovation_add = 25
+	country_weekly_innovation_max_add = 25
+	country_tech_spread_add = 35
+	country_military_tech_cost_mult = 0.05
+	country_society_tech_cost_mult = 0.05
+	country_production_tech_cost_mult = 0.05
+
 	country_loan_interest_rate_add = 0.2
 	
 	country_legitimacy_govt_size_add = 1
@@ -328,7 +334,6 @@ insufficient_convoys = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 }
 
-
 # Excess BUR increases construction speed by +10% at 2x production to usage
 efficient_bureaucracy = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
@@ -354,9 +359,10 @@ political_dysfunction = {
 }
 
 # Excess DIP increases Infamy decay by up to 25% at 2x production to usage
+# Babylon RP: Changed value to 10% reduction (Danarca)
 diplomatic_mitigation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_infamy_decay_mult = 0.25
+	country_infamy_decay_mult = 0.10
 }
 
 # Insufficient DIP reduces prestige by up to 50% at 2x usage to production
@@ -421,7 +427,6 @@ battle_navy_average_kill_rate = {
 }
 
 # Scales with how much population is under low pop threshold
-# We need to rework how high and low population work in a state, but save it until after 1.2 fixes migration and arable land
 low_pop_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_birth_rate_mult = 0.5
@@ -438,18 +443,28 @@ country_rivalry = {
 }
 
 # Infamy modifiers, applied from current infamy level
+#Babylon RP: Add trade route competitiveness multiplier. Add bureaucracy multiplier. (Danarca)
 infamy_reputable = {}
 
 infamy_infamous = {
 	country_radicals_from_conquest_mult = 0.25
+	country_trade_route_competitiveness_mult = -0.25
+	country_bureaucracy_mult = -0.125
+	country_influence_mult = -0.125
 }
 
 infamy_notorious = {
 	country_radicals_from_conquest_mult = 0.5
+	country_trade_route_competitiveness_mult = -0.5
+	country_bureaucracy_mult = -0.25
+	country_influence_mult = -0.25
 }
 
 infamy_pariah = {
 	country_radicals_from_conquest_mult = 1.0
+	country_trade_route_competitiveness_mult = -0.9
+	country_bureaucracy_mult = -0.5
+	country_influence_mult = -0.5
 }
 
 # Scales with devastation level
@@ -500,14 +515,15 @@ country_gdp = {
 # Scales with country literacy rate
 country_literacy_rate = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_weekly_innovation_max_add = 150
-	country_tech_spread_add = 75
+	country_weekly_innovation_max_add = 175
+	country_tech_spread_add = 125
+	country_weekly_innovation_add = 50
 }
 
 # Scales with number of excess innovation points
 excess_innovation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_tech_spread_add = 0.2
+	country_tech_spread_add = 0.09
 }
 
 # Scales with admiral convoy raiding strength

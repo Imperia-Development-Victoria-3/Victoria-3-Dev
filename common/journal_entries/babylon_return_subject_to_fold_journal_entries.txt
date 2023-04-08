@@ -1,0 +1,66 @@
+﻿je_babylon_subject_is_rebelling = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	immediate = {
+		scope:target = {
+			save_scope_as = target_loc
+		}
+	}
+	complete = {
+		scope:target = {
+			is_subject_of = root
+			NOT = {
+				has_war_with = root
+			}
+		}
+	}
+	fail = {
+		scope:target = {
+			NOT = {
+				is_subject_of = root
+			}
+			NOT = {
+				has_war_with = root
+			}
+		}
+	}
+	on_fail = {
+		custom_tooltip = je_babylon_return_subject_to_fold_TT
+		hidden_effect = {
+			add_journal_entry = {
+				type = je_babylon_return_subject_to_fold
+				target = scope:target
+			}
+		}
+	}
+}
+
+je_babylon_return_subject_to_fold = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	#fires for overlord
+	immediate = {
+		scope:target = {
+			save_scope_as = target_loc
+		}
+	}
+	complete = {
+		scope:target = {
+			is_subject_of = root
+		}
+	}
+	on_complete = {
+		change_infamy = scope:target.get_total_released_COUNTRY_infamy_worth_vassal
+	}
+	fail = {
+		custom_tooltip = {
+			text = target_no_longer_exists_TT
+			NOT = {
+				exists = scope:target
+			}
+		}
+	}
+	timeout = 3652	#10 years
+	on_timeout = {
+	}
+	weight = 100
+	inheritable = no
+}

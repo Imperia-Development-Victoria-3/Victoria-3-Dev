@@ -1,0 +1,1117 @@
+﻿namespace = decree_events
+
+# Engineers want to get important road contract
+decree_events.1 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.1.t
+	desc = decree_events.1.d
+	flavor = decree_events.1.f
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_automobile.bk2"
+	}
+
+	duration = 3
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/automobile"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_road_maintenance
+		}
+		any_scope_state = {
+			is_incorporated = yes
+			has_building = building_university
+		}
+		income >= 300
+		NOR = {
+			has_variable = road_maintenance_var
+		}
+		has_technology_researched = combustion_engine
+	}
+	
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_road_maintenance
+			}
+			save_scope_as = decree_state
+		}
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_building = building_university
+			}
+			save_scope_as = engineers_state
+		}
+		set_variable = road_maintenance_var
+	}
+	
+	option = { #engineer 1 wants it to have great drainage (expensive)
+		name = decree_events.1.a
+		if = {
+			limit = {
+				has_technology_researched = modern_sewerage
+			}
+			add_modifier = {
+				name = drainage_roads_cheaper_modifier
+				months = normal_modifier_time
+			}
+			add_modifier = {
+				name = drainage_roads_cheaper_modifier_costs
+				multiplier = money_amount_multiplier_medium
+				months = normal_modifier_time
+			}
+		}
+		else = {
+			add_modifier = {
+				name = drainage_roads_modifier
+				months = normal_modifier_time
+			}
+			add_modifier = {
+				name = drainage_roads_modifier_costs
+				multiplier = money_amount_multiplier_medium
+				months = normal_modifier_time
+			}
+		}
+	}
+	
+	option = { #engineer 2 cheap one
+		name = decree_events.1.b
+		default_option = yes
+		add_modifier = {
+			name = cheaper_roads_modifier
+			months = normal_modifier_time
+		}
+
+		add_modifier = {
+			name = cheaper_roads_modifier_costs
+			multiplier = money_amount_multiplier_very_small
+			months = normal_modifier_time
+		}
+	}
+	
+	option = { #engineer 3 has great and risky ideas
+		name = decree_events.1.c
+		random_list = {
+			1 = {
+				add_modifier = {
+					name = risky_road_modifier
+					months = normal_modifier_time
+				}
+
+				add_modifier = {
+					name = risky_road_modifier_costs
+					multiplier = money_amount_multiplier_medium
+					months = normal_modifier_time
+				}
+			}
+			3 = {
+				add_modifier = {
+					name = risky_road_modifier_costs
+					multiplier = money_amount_multiplier_very_small
+					months = normal_modifier_time
+				}
+			}
+		}
+	}
+	
+	option = { #we dont want to make our roads better
+		name = decree_events.1.e
+		ig:ig_industrialists = {
+			add_modifier = {
+				name = no_roads_sad_modifier
+				months = normal_modifier_time
+			}
+		}
+	}
+}
+
+# More traffic increases pollution so people protest
+decree_events.2 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.2.t
+	desc = decree_events.2.d
+	flavor = decree_events.2.f
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_automobile.bk2"
+	}
+
+	duration = 3
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/automobile"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_road_maintenance
+			state_region = {
+				pollution_amount > 75
+			}
+		}
+		any_interest_group = {
+			law_stance = {
+				law = law_type:law_no_health_system
+				value < neutral
+			}
+		}
+		NOR = {
+			has_modifier = addressed_pollution_modifier
+			has_modifier = ignored_pollution_modifier
+		}
+	}
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_road_maintenance
+				state_region = {
+					pollution_amount > 75
+				}
+			}
+			save_scope_as = decree_state
+		}
+		random_interest_group = {
+			limit = {
+				law_stance = {
+					law = law_type:law_no_health_system
+					value < neutral
+				}
+			}
+			save_scope_as = ecology_ig
+		}
+	}
+	
+	option = { #take measures
+		name = decree_events.2.a
+		default_option = yes
+		trigger = {
+			scope:decree_state.state_region = {
+				pollution_amount < 150
+			}
+		}
+		add_modifier = {
+			name = addressed_pollution_modifier
+			multiplier = money_amount_multiplier_medium
+			months = normal_modifier_time
+		}
+		scope:ecology_ig = {
+			add_modifier = {
+				name = good_pollution_modifier
+				months = normal_modifier_time
+			}
+		}
+		scope:decree_state.state_region = {
+			add_pollution = -50
+		}
+	}
+	
+	option = { #ignore it
+		name = decree_events.2.b
+		scope:decree_state.state_region = {
+			add_pollution = 10
+		}
+		scope:ecology_ig = {
+			add_modifier = {
+				name = ignored_pollution_modifier
+				months = normal_modifier_time
+			}
+		}
+	}
+	
+	option = { #super big pollution 
+		name = decree_events.2.a
+		trigger = {
+			scope:decree_state.state_region = {
+				pollution_amount >= 150
+			}
+		}
+		add_modifier = {
+			name = addressed_pollution_modifier
+			multiplier = money_amount_multiplier_small
+			months = normal_modifier_time
+		}
+		s:decree_state = {
+			add_pollution = -75
+		}
+	}
+}
+
+# David Copperfield (a lowborn man becomes important IG leader)
+decree_events.3 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.3.t
+	desc = decree_events.3.d
+	flavor = decree_events.3.f
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_london_center.bk2"
+	}
+
+	duration = 3
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/london_center"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_promote_social_innovation
+		}
+		NOT = { has_variable = david_copperfield_var }
+	}
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_promote_social_innovation
+			}
+			save_scope_as = decree_state
+		}
+		ig:ig_intelligentsia = {
+			save_scope_as = ig_intelligentsia
+		}
+		set_variable = david_copperfield_var
+	}
+	
+	option = { #support him to IG leader
+		name = decree_events.3.a
+		default_option = yes
+		if = {
+			limit = {
+				exists = c:GBR
+				c:GBR = ROOT
+			}
+			create_character = {
+				first_name = David
+				last_name = Copperfield
+				female = no
+				#role = politician # Remove this line
+				interest_group = ig_intelligentsia
+				ig_leader = yes
+				on_created = {
+					add_modifier = {
+						name = david_copperfield_modifier
+						months = normal_modifier_time
+					}
+				}
+			}
+		}
+		else = {
+			create_character = {
+				#role = politician # Remove this line
+				female = no
+				interest_group = ig_intelligentsia
+				ig_leader = yes
+				on_created = {
+					add_modifier = {
+						name = david_copperfield_modifier
+						months = normal_modifier_time
+					}
+				}
+			}
+		}
+	}
+	
+	option = { #ignore him
+		name = decree_events.3.b
+		ig:ig_intelligentsia = {
+			add_modifier = {
+				name = ignored_david_copperfield_modifier
+				months = normal_modifier_time
+			}
+		}
+	}
+}
+
+# Lowborn admiral
+decree_events.4 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.4.t
+	desc = decree_events.4.d
+	flavor = decree_events.4.f
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_naval_battle.bk2"
+	}
+
+	duration = 3
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/naval_battle"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_promote_social_innovation
+			any_scope_building = {
+				OR = {
+					is_building_type = building_whaling_station
+					is_building_type = building_fishing_wharf
+				}
+			}
+		}
+		NOT = { has_variable = social_mobility_var }
+		any_scope_character = {
+			is_ruler = no
+			age >= 35
+			OR = {
+				has_role = general
+				has_role = admiral
+				interest_group = {
+					OR = {
+						is_interest_group_type = ig_petty_bourgeoisie
+						is_interest_group_type = ig_landowners
+						is_interest_group_type = ig_industrialists
+						is_interest_group_type = ig_armed_forces
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_promote_social_innovation
+			}
+			save_scope_as = decree_state
+			random_scope_building = {
+				limit = {
+					OR = {
+						is_building_type = building_whaling_station
+						is_building_type = building_fishing_wharf
+					}
+				}
+				save_scope_as = decree_building
+			}
+		}
+		random_scope_character = {
+			limit = {
+				is_ruler = no
+				age >= 35
+				OR = {
+					has_role = general
+					has_role = admiral
+					interest_group = {
+						OR = {
+							is_interest_group_type = ig_petty_bourgeoisie
+							is_interest_group_type = ig_landowners
+							is_interest_group_type = ig_industrialists
+							is_interest_group_type = ig_armed_forces
+						}
+					}
+				}
+			}
+			save_scope_as = noble_character
+		}
+		set_variable = social_mobility_var
+	}
+	
+	
+	option = { #they deserve this
+		name = decree_events.4.a
+		default_option = yes
+		create_character = {
+			is_admiral = yes
+			interest_group = ig_trade_unions
+			ig_leader = no
+			noble = no
+		}
+		scope:decree_state = {
+			add_loyalists = {
+				value = small_radicals
+				pop_type = laborers
+			}
+		}
+		ig:ig_trade_unions = {
+			add_modifier = {
+				name = social_mobility_modifier
+				months = normal_modifier_time
+			}
+		}
+	}
+	
+	option = { #but the son of xxx wants it
+		name = decree_events.4.b
+		create_character = {
+			is_admiral = yes
+			interest_group = ig_landowners
+			ig_leader = no
+			noble = yes
+		}
+		scope:decree_state = {
+			add_radicals = {
+				value = small_radicals
+				pop_type = laborers
+			}
+		}
+		ig:ig_landowners = {
+			add_modifier = {
+				name = social_mobility_modifier
+				months = normal_modifier_time
+			}
+		}
+	}
+}
+
+# You commission an important composer to get a opera about your great nation
+decree_events.5 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.5.t
+	desc = decree_events.5.d
+	flavor = decree_events.5.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_world_fair.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/world_fair"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_promote_national_values
+			any_scope_building = {
+				is_building_type = building_arts_academy
+			}
+		}
+		income >= 400
+		NOR = {
+			has_modifier = opera_modifier
+			has_modifier = opera_didnt_pay_modifier
+		}
+	}
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_promote_national_values
+			}
+			save_scope_as = decree_state
+			random_scope_building = {
+				limit = {
+					is_building_type = building_arts_academy
+				}
+				save_scope_as = decree_building
+			}
+		}
+	}
+	
+	option = { #comission an important artist
+		name = decree_events.5.a
+		default_option = yes
+		add_modifier = {
+			name = opera_modifier
+			months = normal_modifier_time
+			multiplier = 2
+		}
+
+		add_modifier = {
+			name = opera_modifier_costs
+			months = normal_modifier_time
+			multiplier = money_amount_multiplier_small
+		}
+	}
+	
+	option = { #get a cheaper guy to do it
+		name = decree_events.5.b
+		add_modifier = {
+			name = opera_modifier
+			months = normal_modifier_time
+		}
+
+		add_modifier = {
+			name = opera_modifier_costs
+			months = normal_modifier_time
+			multiplier = money_amount_multiplier_very_small
+		}
+	}
+	
+	option = { #comission the expensive one, refuse to pay
+		name = decree_events.5.c
+		add_modifier = {
+			name = opera_didnt_pay_modifier
+			months = normal_modifier_time
+		}
+		ig:ig_intelligentsia = {
+			add_modifier = {
+				name = refused_to_pay_modifier
+				months = normal_modifier_time
+			}
+		}
+		scope:decree_state = {
+			add_radicals = {
+				value = medium_radicals
+				pop_type = academics
+			}
+		}
+	}
+}
+
+# You attract a famous troupe of foreign artists
+decree_events.6 = {
+	type = country_event
+	placement = scope:decree_state
+
+	title = decree_events.6.t
+	desc = decree_events.6.d
+	flavor = decree_events.6.f
+
+	event_image = {
+		video = "gfx/event_pictures/middleeast_upperclass_party.bk2"
+	}
+
+	duration = 3
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/middleeast/upperclass_party"
+	
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_greener_grass_campaign
+			any_scope_building = {
+				is_building_type = building_urban_center
+			}
+		}
+		income >= 100
+		NOT = { has_variable = concert_var }
+	}
+	
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_greener_grass_campaign
+			}
+			save_scope_as = decree_state
+			random_scope_building = {
+				limit = {
+					is_building_type = building_urban_center
+				}
+				save_scope_as = decree_building
+			}
+		}
+		set_variable = concert_var
+	}
+	
+	option = { #fund their concert
+		name = decree_events.6.a
+		default_option = yes
+		add_modifier = {
+			name = foreign_concert_costs_modifier
+			multiplier = money_amount_multiplier_small
+			months = normal_modifier_time
+		}
+		add_modifier = {
+			name = foreign_concert_modifier
+			months = normal_modifier_time
+		}
+	}
+	
+	option = { #ignore them
+		name = decree_events.6.b
+		ig:ig_intelligentsia = {
+			add_modifier = {
+				name = ignored_concert_modifier
+				months = normal_modifier_time
+			}
+		}
+		add_modifier = {
+			name = ignored_concert_country_modifier
+			months = normal_modifier_time
+		}
+	}
+}
+
+decree_events.106 = { #Regiments unhappy
+type = country_event
+	placement = scope:decree_enlistment
+	
+	title = decree_events.106.t
+	desc = decree_events.106.d
+	flavor = decree_events.106.f
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_before_the_battle.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/before_the_battle"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_building = building_barracks
+			has_decree = decree_military_training
+			any_neighbouring_state = {
+				owner = ROOT
+				is_incorporated = yes
+				NOT = { has_decree = decree_military_training }
+				has_building = building_barracks
+			}	
+		}
+		NOR = {
+			any_scope_state = {
+				has_modifier = decree_increased_pay
+			}
+			has_modifier = decree_resentful_military
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_building = building_barracks
+				has_decree = decree_military_training
+				any_neighbouring_state = {
+					owner = ROOT
+					is_incorporated = yes
+					NOT = { has_decree = decree_military_training }
+					has_building = building_barracks
+				}
+			}
+			save_scope_as = decree_enlistment_origin
+			set_variable = decree_enlistment_origin
+		}
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					has_variable = decree_enlistment_origin
+				}
+				is_incorporated = yes
+				NOT = { has_decree = decree_military_training }
+				has_building = building_barracks
+			}
+			save_scope_as = decree_enlistment
+		}
+		ig:ig_armed_forces = {
+			save_scope_as = armed_forces_ig_focus
+		}
+	}
+	
+	option = { #regimental resentment
+		name = decree_events.106.a
+		default_option = yes
+		add_modifier = {
+			name = decree_resentful_military
+			months = short_modifier_time
+		}
+		scope:decree_enlistment = {
+			add_radicals = {
+				pop_type = soldiers
+				value = large_radicals
+			}
+		}
+	}
+	option = { #invest into troops and get loyalists
+		name = decree_events.106.b
+		scope:decree_enlistment = {
+			add_modifier = {
+				name = decree_increased_pay
+				months = short_modifier_time
+			}
+			add_loyalists = {
+				pop_type = soldiers
+				value = large_radicals
+			}
+		}
+	}
+}
+
+decree_events.107 = { #tech progress 
+type = country_event
+	placement = scope:decree_elite_research
+	
+	title = decree_events.107.t
+	desc = decree_events.107.d
+	flavor = decree_events.107.f
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_before_the_battle.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/before_the_battle"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_military_training
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_military_training
+			}
+			save_scope_as = decree_elite_research
+		}
+	}
+	
+	option = {
+		name = decree_events.107.a
+		default_option = yes
+		scope:decree_elite_research = {
+			add_modifier = {
+				name = decree_tatics_to_ce
+				months = short_modifier_time
+			}
+		}
+	}
+	option = { #tech option 1
+		name = decree_events.107.b
+		trigger = {
+			has_technology_researched = military_statistics
+			NOT = {
+				has_technology_researched = wargaming
+			}
+			can_research = wargaming
+		}
+		add_technology_progress = { progress = 4000 technology = wargaming }
+	}
+	option = { #tech option 2
+		name = decree_events.107.c
+		trigger = {
+			has_technology_researched = military_statistics
+			has_technology_researched = trench_works
+			NOT = {
+				has_technology_researched = nco_training
+			} 
+			can_research = nco_training
+		}
+		add_technology_progress = { progress = 5000 technology = nco_training }
+	}
+	option = { #tech option 3
+		name = decree_events.107.e
+		trigger = {
+			has_technology_researched = wargaming
+			can_research = stormtroopers
+			NOT = {
+				has_technology_researched = stormtroopers
+			}
+		}
+		add_technology_progress = { progress = 5000 technology = stormtroopers }
+	}
+}
+
+decree_events.108 = { #violence suppression escalates
+type = country_event
+	placement = scope:decree_violent_supp
+	
+	title = decree_events.108.t
+	desc = decree_events.108.d
+	flavor = decree_events.108.f
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_springtime_of_nations.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/springtime_of_nation"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_violent_suppression
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_violent_suppression
+			}
+			save_scope_as = decree_violent_supp
+		}
+	}
+	
+	option = { #get loyalists but more radicals
+		name = decree_events.108.a
+		default_option = yes
+		scope:decree_violent_supp = {
+			add_modifier = {
+				name = decree_let_them_riot
+				months = short_modifier_time
+			}
+		}
+	}
+	option = { #more mortality but less radicals
+		name = decree_events.108.b
+		scope:decree_violent_supp = {
+			add_modifier = {
+				name = decree_put_the_riot_down
+				months = short_modifier_time
+			}
+		}
+	}
+}
+
+decree_events.109 = { #Protests in neighboring state
+type = country_event
+	placement = scope:decree_increased_violence
+	
+	title = decree_events.109.t
+	desc = decree_events.109.d
+	flavor = decree_events.109.f
+
+	event_image = {
+		video = "gfx/event_pictures/middleeast_police_breaking_door.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/middleeast/police_breaking_door"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			NOT = { has_decree = decree_violent_suppression }
+			any_neighbouring_state = {
+				has_decree = decree_violent_suppression 
+			}
+			any_scope_pop = {
+				culture = {
+					culture_is_discriminated_in = ROOT
+				}
+			}
+		}
+		NOT = {
+			any_scope_state = {
+				OR = {
+					has_modifier = decree_break_it_up
+					has_modifier = decree_let_them_protest
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				NOT = { has_decree = decree_violent_suppression }
+				any_neighbouring_state = {
+					has_decree = decree_violent_suppression
+				}
+				any_scope_pop = {
+					culture = {
+						culture_is_discriminated_in = ROOT
+					}
+				}
+			}
+			save_scope_as = decree_increased_violence
+			random_scope_pop = {
+				limit = { 
+					culture = {
+						culture_is_discriminated_in = ROOT
+					}
+				}
+				culture = { save_scope_as = violent_suppression_discriminated }
+			}
+		}
+	}
+	
+	option = { #more radicals but armed forces approval
+		name = decree_events.109.a
+		default_option = yes
+		scope:decree_increased_violence = {
+			add_modifier = {
+				name = decree_break_it_up
+				months = short_modifier_time
+			}
+		}
+		add_modifier = {
+			name = decree_protests_dispersed
+			months = short_modifier_time
+		}
+	}
+
+	option = { #migration pull in state and less radicals
+		name = decree_events.109.b
+		scope:decree_increased_violence = {
+			add_modifier = {
+				name = decree_let_them_protest
+				months = short_modifier_time
+			}
+		}
+		add_modifier = {
+			name = decree_protests_handled
+			months = short_modifier_time
+		}
+	}
+}
+
+
+decree_events.100 = { #Throughput vs minimum sol
+type = country_event
+	placement = scope:decree_manufacturing_industry
+	
+	title = decree_events.100.t
+	desc = decree_events.100.d
+	flavor = decree_events.100.f
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_gears_pistons.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/gears_pistons"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	
+	trigger = {
+		any_scope_state = {
+			is_incorporated = yes
+			has_decree = decree_encourage_manufacturing_industry
+			any_scope_building = {
+				OR = {
+					is_building_type = building_food_industry
+					is_building_type = building_textile_mills
+					is_building_type = building_furniture_manufacturies
+					is_building_type = building_glassworks
+					is_building_type = building_tooling_workshops
+					is_building_type = building_paper_mills
+					is_building_type = building_chemical_plants
+					is_building_type = building_synthetics_plants
+					is_building_type = building_steel_mills
+					is_building_type = building_motor_industry
+					is_building_type = building_shipyards
+					is_building_type = building_war_machine_industry
+					is_building_type = building_electrics_industry
+					is_building_type = building_arms_industry
+					is_building_type = building_munition_plants
+					is_building_type = building_power_plant
+				}
+				weekly_profit > 0
+				cash_reserves_ratio > 0.5
+			}
+			NOR = {
+				has_modifier = decree_manufacturing_throughput
+				has_modifier = decree_minimum_wealth
+			}
+		}
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				has_decree = decree_encourage_manufacturing_industry
+				NOR = {
+					has_modifier = decree_manufacturing_throughput
+					has_modifier = decree_minimum_wealth
+				}
+			}
+			save_scope_as = decree_manufacturing_industry
+			random_scope_building = {
+				limit = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_textile_mills
+						is_building_type = building_furniture_manufacturies
+						is_building_type = building_glassworks
+						is_building_type = building_tooling_workshops
+						is_building_type = building_paper_mills
+						is_building_type = building_chemical_plants
+						is_building_type = building_synthetics_plants
+						is_building_type = building_steel_mills
+						is_building_type = building_motor_industry
+						is_building_type = building_shipyards
+						is_building_type = building_war_machine_industry
+						is_building_type = building_electrics_industry
+						is_building_type = building_arms_industry
+						is_building_type = building_munition_plants
+						is_building_type = building_power_plant
+					}
+					weekly_profit > 0
+					cash_reserves_ratio > 0.5
+				}
+				save_scope_as = manufacturing_building_production
+			}
+		}
+	}
+	
+	option = { #increased throughput
+		name = decree_events.100.a
+		default_option = yes
+		scope:decree_manufacturing_industry = {
+			add_modifier = {
+				name = decree_manufacturing_throughput
+				months = short_modifier_time
+			}
+		}
+	}
+	option = { #Increase expected SoL
+		name = decree_events.100.b
+		trigger = {
+			institution_investment_level = {
+				institution = institution_social_security
+				value >= 1
+			}
+		}
+		scope:decree_manufacturing_industry = {
+			add_modifier = {
+				name = decree_minimum_wealth
+				months = short_modifier_time
+			}
+		}
+	}
+}
