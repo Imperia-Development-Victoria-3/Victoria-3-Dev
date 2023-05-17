@@ -1,0 +1,57 @@
+on_babylon_foreign_laws_permits_diplo_play_start = {
+	effect = {
+		if = {
+			#Diplomatic conquest, subjugation, and treaty port plays should be limited to regions of interest adjacent to incorporated states for expansionist countries.
+			limit = {
+				OR = {
+					is_diplomatic_play_type = dp_conquer_state
+					is_diplomatic_play_type = dp_make_dominion
+					is_diplomatic_play_type = dp_make_vassal
+					is_diplomatic_play_type = dp_make_puppet
+					is_diplomatic_play_type = dp_take_treaty_port
+				}
+				initiator = {
+					has_law = law_type:law_expansionism
+				}
+				region = {
+					NOR = {
+						any_scope_state = {
+							owner = root.initiator
+							is_incorporated = yes
+						}
+						any_neighbouring_state = {
+							owner = root.initiator
+							is_incorporated = yes
+						}
+					}
+				}
+			}
+			end_play = yes
+			#Add some sort of notification/event to alert the player that this action wasnt possible
+		}
+		if = {
+			#Diplomatic conquest, subjugation and treaty port plays should be limited to countries which are unrecognized or non-colonial. 
+			#Colonial battles between colonial nations should start with a custom diplomatic play which only imperialists can do on other colonial nations.
+			limit = { 
+				OR = {
+					is_diplomatic_play_type = dp_conquer_state
+					is_diplomatic_play_type = dp_make_dominion
+					is_diplomatic_play_type = dp_make_vassal
+					is_diplomatic_play_type = dp_make_puppet
+					is_diplomatic_play_type = dp_take_treaty_port
+				}
+				initiator = {
+					has_law = law_type:law_imperialism
+				}
+				target = {
+					NOT = {
+						is_country_type = unrecognized
+					}
+				}
+			}
+			end_play = yes
+			#Add some sort of notification/event to alert the player that this action wasnt possible
+		}
+		
+	}
+}
