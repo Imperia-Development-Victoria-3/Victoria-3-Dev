@@ -68,7 +68,7 @@ law_monarchy = {
 	ai_will_do = {
 		exists = ruler
 		ruler = {
-			has_ideology = ideology_royalist
+			has_monarchist_ideology = yes
 		}
 	}
 }
@@ -85,14 +85,27 @@ law_presidential_republic = {
 	}
 	
 	modifier = {
-		country_legitimacy_headofstate_add = 30
-		country_legitimacy_govt_total_votes_add = 20
-	#	country_legitimacy_ideological_incoherence_mult = 0.2
+		country_legitimacy_headofstate_add = 10
+		country_legitimacy_govt_total_votes_add = 10
+		#country_legitimacy_ideological_incoherence_mult = 0.2
 		country_authority_add = 100
+	}
+
+	on_activate = {
+		if = {
+			limit = {
+				has_variable = fra_republic_counter
+			}
+			change_variable = {
+				name = fra_republic_counter
+				add = 1
+			}
+		}
 	}
 	
 	possible_political_movements = {
 		law_council_republic
+		law_monarchy
 	}
 
 	pop_support = {
@@ -111,7 +124,7 @@ law_presidential_republic = {
 	ai_will_do = {
 		exists = ruler
 		ruler = {
-			has_ideology = ideology_republican_leader
+			has_ideology = ideology:ideology_republican_leader
 		}
 	}
 }
@@ -122,6 +135,11 @@ law_parliamentary_republic = {
 	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 	
 	progressiveness = 100
+	
+	# Has major legitimacy issues with autocracies, so should be oligarchy instead
+	disallowing_laws = {
+		law_autocracy
+	}
 	
 	unlocking_technologies = {
 		democracy
@@ -134,8 +152,21 @@ law_parliamentary_republic = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
 	}
 	
+	on_activate = {
+		if = {
+			limit = {
+				has_variable = fra_republic_counter
+			}
+			change_variable = {
+				name = fra_republic_counter
+				add = 1
+			}
+		}
+	}
+
 	possible_political_movements = {
 		law_council_republic
+		law_monarchy
 	}
 
 	pop_support = {
@@ -154,7 +185,7 @@ law_parliamentary_republic = {
 	ai_will_do = {
 		exists = ruler
 		ruler = {
-			has_ideology = ideology_republican_leader
+			has_ideology = ideology:ideology_republican_leader
 		}
 	}
 }
@@ -202,7 +233,7 @@ law_theocracy = {
 	ai_will_do = {
 		exists = ruler
 		ruler = {
-			has_ideology = ideology_theocrat
+			has_ideology = ideology:ideology_theocrat
 		}
 	}
 }
@@ -229,6 +260,7 @@ law_council_republic = {
 	}		
 
 	modifier = {
+		country_legitimacy_govt_total_votes_add = 10
 		country_legitimacy_govt_size_add = 1
 		country_legitimacy_ideological_incoherence_mult = -0.1
 		country_machinists_pol_str_mult = 0.15
@@ -258,9 +290,9 @@ law_council_republic = {
 		exists = ruler
 		ruler = {
 			OR = {
-				has_ideology = ideology_communist
-				has_ideology = ideology_anarchist
-				has_ideology = ideology_vanguardist
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_anarchist
+				has_ideology = ideology:ideology_vanguardist
 			}
 		}
 	}
