@@ -17,7 +17,7 @@ template speedometer_set_speed_properties
 	upframe = 1
 	overframe = 2
 	downframe = 3
-	enabled = "[TimeKeeper.CanSetGameSpeed]"
+	enabled = "[And(TimeKeeper.CanSetGameSpeed, JominiIsHostOrLocal)]"
 	using = tooltip_se
 	using = game_speed_sound
 }
@@ -144,7 +144,8 @@ types timekeeper
 
 					### PAUSED MIDDLE BUTTON
 					button = {
-						enabled = "[And(TimeKeeper.CanTogglePause, IsHost)]"
+						visible = "[JominiIsHostOrLocal]"
+						enabled = "[And(TimeKeeper.CanTogglePause, JominiIsHostOrLocal)]"
 						onclick = "[TimeKeeper.TogglePause]"
 						tooltip = "[TimeKeeper.GetTogglePauseTooltip]"
 						using = play_continue_button_sound
