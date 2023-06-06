@@ -1,0 +1,96 @@
+﻿calc_subjugation_infamy = {
+	set_variable = {
+		name = infamy_reduction_var
+		value = 3		#initialise
+	}
+	set_variable = {
+		name = population_var
+		value = scope:target.total_population
+	}
+	change_variable = {
+		name = population_var
+		divide = 10000
+	}
+	change_variable = {
+		name = population_var
+		multiply = 0.03
+	}
+	clamp_variable = {
+		name = population_var
+		min = 0
+		max = 50
+	}
+	change_variable = {
+		name = infamy_reduction_var
+		multiply = root.var:population_var
+	}
+	change_variable = {
+		name = infamy_reduction_var
+		multiply = -1
+	}
+}
+
+remove_subjugation_infamy = {
+	change_infamy = root.var:infamy_reduction_var
+	remove_variable = infamy_reduction_var
+}
+
+remove_infamy_worth_STATE_CONQUERSTATE = {
+	#STATE = which state is being evaluated
+	#CONQUERSTATE = bool (yes/no) - is the wargoal being reversed a conquer state wargoal?
+	$STATE$ = {
+		save_scope_as = target_state
+	}
+	if = {
+		#Conquer state wargoals give 5 base infamy, the rest gives 2
+		limit = {
+			$CONQUERSTATE$ = yes
+		}
+		set_local_variable = {
+			#initialise as conquer state wargoal
+			name = infamy_reduction_var
+			value = 5
+		}
+	}
+	else = {
+		set_local_variable = {
+			#initialise as return state/take treaty port wargoal
+			name = infamy_reduction_var
+			value = 2
+		}
+	}
+	#Sidestep, get the population multiplier
+	set_local_variable = {
+		name = population_var
+		value = scope:target_state.state_population
+	}
+	change_local_variable = {
+		name = population_var
+		#One million
+		divide = 1000000
+	}
+	change_local_variable = {
+		name = population_var
+		multiply = 3
+	}
+	change_local_variable = {
+		name = population_var
+		add = 1
+	}
+	clamp_local_variable = {
+		name = population_var
+		min = 0
+		max = 5
+	}
+	#Multiplier cooked!
+	change_local_variable = {
+		name = infamy_reduction_var
+		multiply = local_var:population_var
+	}
+	change_local_variable = {
+		#Do a reversal on the var; from positive to negative since it will be removed..
+		name = infamy_reduction_var
+		multiply = -1
+	}
+	change_infamy = local_var:infamy_reduction_var
+}
