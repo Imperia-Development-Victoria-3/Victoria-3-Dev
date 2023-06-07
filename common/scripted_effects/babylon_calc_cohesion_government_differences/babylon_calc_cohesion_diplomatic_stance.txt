@@ -1,0 +1,225 @@
+﻿babylon_calc_cohesion_diplomatic_stance = {
+	if = {
+		limit = {
+			has_law = law_type:law_expansionism
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_expansionism
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_imperialism
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_armed_neutrality
+						has_law = law_type:law_neutral
+						has_law = law_type:law_pacifist
+					}
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_anti_imperialist
+						has_law = law_type:law_true_neutrality
+					}
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+	}
+	#Exit expansionism
+	else_if = {
+		limit = {
+			has_law = law_type:law_imperialism
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_imperialism
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_armed_neutrality
+						has_law = law_type:law_neutral
+					}
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_pacifist
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_anti_imperialist
+						has_law = law_type:law_true_neutrality
+					}
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+	}
+	#Exit imperialism
+	else_if = {
+		limit = {
+			has_law = law_type:law_armed_neutrality
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_armed_neutrality
+						has_law = law_type:law_neutral
+					}
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_anti_imperialist
+						has_law = law_type:law_pacifist
+					}
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+	}
+	#Exit anti imperialist
+	else_if = {
+		limit = {
+			has_law = law_type:law_neutral
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_neutral
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_pacifist
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+	}
+	#Exit neutral
+	else_if = {
+		limit = {
+			has_law = law_type:law_pacifist
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_pacifist
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			change_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+	}
+	#Exit pacifist
+	else_if = {
+		limit = {
+			has_law = law_type:law_true_neutrality
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			#No change
+		}
+	}
+}

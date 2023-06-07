@@ -1,0 +1,36 @@
+﻿je_babylon_political_cohesion = {
+	possible = {
+		#Should always be active
+		always = yes
+	}
+	is_shown_when_inactive = {
+		always = yes
+	}
+	immediate = {
+		#This should happen on game start
+		set_variable = {
+			name = political_cohesion
+			value = 0
+		}
+        #Add cohesion value ("stress") for every defensive pact
+        every_country = {
+            limit = {
+                has_diplomatic_pact = {
+                    who = root
+                    type = defensive_pact
+                }
+            }
+            babylon_calc_cohesion_government_difference = {
+                TARGET = root
+                IS_GAIN = yes
+            }
+        }
+	}
+	current_value = {
+		value = var:political_cohesion
+	}
+	complete = {
+		#Cannot be completed, is there to show cohesion
+		always = no
+	}
+}
