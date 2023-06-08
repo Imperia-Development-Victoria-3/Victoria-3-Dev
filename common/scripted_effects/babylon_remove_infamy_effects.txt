@@ -35,29 +35,16 @@ remove_subjugation_infamy = {
 	remove_variable = infamy_reduction_var
 }
 
-remove_infamy_worth_STATE_CONQUERSTATE = {
+remove_infamy_worth_STATE_BASEINFAMY = {
 	#STATE = which state is being evaluated
-	#CONQUERSTATE = bool (yes/no) - is the wargoal being reversed a conquer state wargoal?
+	#BASEINFAMY = amount of infamy the wargoal gives, base
+	#Conquer state wargoals give 5 base infamy, the rest gives 2
 	$STATE$ = {
 		save_scope_as = target_state
 	}
-	if = {
-		#Conquer state wargoals give 5 base infamy, the rest gives 2
-		limit = {
-			$CONQUERSTATE$ = yes
-		}
-		set_local_variable = {
-			#initialise as conquer state wargoal
-			name = infamy_reduction_var
-			value = 5
-		}
-	}
-	else = {
-		set_local_variable = {
-			#initialise as return state/take treaty port wargoal
-			name = infamy_reduction_var
-			value = 2
-		}
+	set_local_variable = {
+		name = infamy_reduction_var
+		value = $BASEINFAMY$
 	}
 	#Sidestep, get the population multiplier
 	set_local_variable = {
@@ -93,4 +80,54 @@ remove_infamy_worth_STATE_CONQUERSTATE = {
 		multiply = -1
 	}
 	change_infamy = local_var:infamy_reduction_var
+}
+remove_infamy_worth_COUNTRY_BASEINFAMY = {
+	#COUNTRY = which (target)country is being evaluated
+	#BASEINFAMY = amount of infamy the wargoal gives, base
+	$COUNTRY$ = {
+		save_scope_as = target_country
+	}
+	set_local_variable = {
+		name = infamy_reduction_var
+		value = $BASEINFAMY$
+	}
+	#Sidestep, get the population multiplier
+	set_local_variable = {
+		name = population_var
+		value = scope:target_country.total_population
+	}
+	change_local_variable = {
+		name = population_var
+		#One million
+		divide = 1000000
+	}
+	change_local_variable = {
+		name = population_var
+		multiply = 3
+	}
+	change_local_variable = {
+		name = population_var
+		add = 1
+	}
+	clamp_local_variable = {
+		name = population_var
+		min = 0
+		max = 50
+	}
+	#Multiplier cooked!
+	change_local_variable = {
+		name = infamy_reduction_var
+		multiply = local_var:population_var
+	}
+	change_local_variable = {
+		#Do a reversal on the var; from positive to negative since it will be removed..
+		name = infamy_reduction_var
+		multiply = -1
+	}
+	change_infamy = local_var:infamy_reduction_var
+}
+
+test_effect = {
+	debug_log = "my stuff"
+	debug_log_scopes = yes
 }

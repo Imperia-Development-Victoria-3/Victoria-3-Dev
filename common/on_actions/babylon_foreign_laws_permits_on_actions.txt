@@ -26,13 +26,63 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 					}
 				}
 			}
+			if = {
+				#If the wargoal is state-based, save the targeted state in a scope
+				limit = {
+					OR = {
+						is_diplomatic_play_type = dp_conquer_state
+						is_diplomatic_play_type = dp_take_treaty_port
+					}
+				}
+				target = {
+					random_scope_state = {
+						limit = {
+							is_target_of_wargoal = root.initiator
+						}
+						save_scope_as = target_state
+					}
+				}
+			}
+			# switch = {
+			# 	trigger = is_diplomatic_play_type
+			# 	dp_conquer_state = {
+			# 		remove_infamy_worth_STATE_BASEINFAMY = {
+			# 			STATE = scope:target_state
+			# 			BASEINFAMY = 5
+			# 		}
+			# 	}
+			# 	dp_take_treaty_port = {
+			# 		remove_infamy_worth_STATE_BASEINFAMY = {
+			# 			STATE = scope:target_state
+			# 			BASEINFAMY = 2
+			# 		}
+			# 	}
+			# 	dp_make_dominion = {
+			# 		remove_infamy_worth_COUNTRY_BASEINFAMY = {
+			# 			COUNTRY = target
+			# 			BASEINFAMY = 2
+			# 		}
+			# 	}
+			# 	dp_make_vassal = {
+			# 		remove_infamy_worth_COUNTRY_BASEINFAMY = {
+			# 			COUNTRY = target
+			# 			BASEINFAMY = 3
+			# 		}
+			# 	}
+			# 	dp_make_puppet = {
+			# 		remove_infamy_worth_COUNTRY_BASEINFAMY = {
+			# 			COUNTRY = target
+			# 			BASEINFAMY = 3
+			# 		}
+			# 	}
+			# }
 			end_play = yes
 			#Add some sort of notification/event to alert the player that this action wasnt possible
 		}
 		if = {
 			#Diplomatic conquest, subjugation and treaty port plays should be limited to countries which are unrecognized or non-colonial. 
 			#Colonial battles between colonial nations should start with a custom diplomatic play which only imperialists can do on other colonial nations.
-			limit = { 
+			limit = {
 				OR = {
 					is_diplomatic_play_type = dp_conquer_state
 					is_diplomatic_play_type = dp_make_dominion
@@ -49,9 +99,55 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 					}
 				}
 			}
+			if = {
+				limit = {
+					is_diplomatic_play_type = dp_conquer_state
+					is_diplomatic_play_type = dp_take_treaty_port
+				}
+				target = {
+					random_scope_state = {
+						limit = {
+							is_target_of_wargoal = root.initiator
+						}
+						save_scope_as = target_state
+					}
+				}
+			}
+			switch = {
+				trigger = is_diplomatic_play_type
+				dp_conquer_state = {
+					remove_infamy_worth_STATE_BASEINFAMY = {
+						STATE = scope:target_state
+						BASEINFAMY = 5
+					}
+				}
+				dp_take_treaty_port = {
+					remove_infamy_worth_STATE_BASEINFAMY = {
+						STATE = scope:target_state
+						BASEINFAMY = 2
+					}
+				}
+				dp_make_dominion = {
+					remove_infamy_worth_COUNTRY_BASEINFAMY = {
+						COUNTRY = target
+						BASEINFAMY = 2
+					}
+				}
+				dp_make_vassal = {
+					remove_infamy_worth_COUNTRY_BASEINFAMY = {
+						COUNTRY = target
+						BASEINFAMY = 3
+					}
+				}
+				dp_make_puppet = {
+					remove_infamy_worth_COUNTRY_BASEINFAMY = {
+						COUNTRY = target
+						BASEINFAMY = 3
+					}
+				}
+			}
 			end_play = yes
 			#Add some sort of notification/event to alert the player that this action wasnt possible
 		}
-		
 	}
 }
