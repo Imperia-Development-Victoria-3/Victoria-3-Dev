@@ -1,0 +1,99 @@
+﻿babylon_political_cohesion_monthly_pulse_journal_entry = {
+	#First we (re)set the theoretical cohesion number
+	set_variable = {
+		name = theoretical_cohesion
+		value = 0
+	}
+	#Then we add to it for each foreign pact
+	#Defensive pacts
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = defensive_pact
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+		}
+	}
+	#Alliances
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = alliance
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+		}
+	}
+	#trade agreements
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = trade_agreement
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+		}
+	}
+	#Customs unions
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = customs_union
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+		}
+	}
+	#Rivalries (removes cohesion penalties)
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = rivalry
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = no
+		}
+	}
+	#Then we find the difference between the current and theoretical values
+	change_variable = {
+		name = theoretical_cohesion
+		subtract = var:political_cohesion
+	}
+	#Divide it...
+	change_variable = {
+		name = theoretical_cohesion
+		divide = 10
+	}
+	#Then we round it
+	round_variable = {
+		name = theoretical_cohesion
+		nearest = 1
+	}
+	#And apply it
+	change_variable = {
+		name = political_cohesion
+		add = var:theoretical_cohesion
+	}
+	#Clamp it so it doesnt go below zero
+	clamp_variable = {
+		name = political_cohesion
+		max = 400
+		min = 0
+	}
+}

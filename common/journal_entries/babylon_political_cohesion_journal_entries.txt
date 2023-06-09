@@ -7,24 +7,12 @@
 		always = yes
 	}
 	immediate = {
-		#This should happen on game start
+		#This should happen 5 days after game start
 		set_variable = {
 			name = political_cohesion
 			value = 0
 		}
-        #Add cohesion value ("stress") for every defensive pact
-        every_country = {
-            limit = {
-                has_diplomatic_pact = {
-                    who = root
-                    type = defensive_pact
-                }
-            }
-            babylon_calc_cohesion_government_difference = {
-                TARGET = root
-                IS_GAIN = yes
-            }
-        }
+		#Add cohesion value ("stress") for every defensive pact
 	}
 	status_desc = {
 		first_valid = {
@@ -50,6 +38,11 @@
 	}
 	current_value = {
 		value = var:political_cohesion
+	}
+	on_monthly_pulse = {
+		effect = {
+			babylon_political_cohesion_monthly_pulse_journal_entry = yes
+		}
 	}
 	complete = {
 		#Cannot be completed, is there to show cohesion
