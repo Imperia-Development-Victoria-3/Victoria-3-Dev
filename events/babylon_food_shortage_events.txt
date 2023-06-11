@@ -1,0 +1,47 @@
+﻿namespace = food_shortage_events
+
+food_shortage_event.1 = {
+	type = country_event
+	placement = scope:famine_state
+
+	title = famine_events.1.t
+	desc = famine_events.1.d
+	flavor = famine_events.1.f
+
+	event_image = {
+		video = "europenorthamerica_russian_serfs"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	duration = 3
+
+	trigger = {
+		# triggered by JE
+	}
+
+	immediate = {
+		random_scope_state = {
+			limit = { has_variable = famine_var }
+			save_scope_as = famine_state
+		}
+	}
+
+	option = { #there's nothing we can do
+		name = famine_events.1.a
+		default_option = yes
+		ig:ig_industrialists = {
+			add_modifier = {
+				name = thats_life_modifier
+				months = normal_modifier_time
+			}
+		}
+		scope:famine_state = {
+			add_modifier = {
+				name = great_famine_modifier
+				months = short_modifier_time
+			}
+		}
+}
