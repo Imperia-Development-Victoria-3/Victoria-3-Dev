@@ -1,0 +1,47 @@
+﻿dp_great_war = {
+	requires_interest_marker = no
+	war_goal = humiliation
+	texture = "gfx/interface/icons/war_goals/conquer_state.dds"
+	possible = {
+		NOT = { is_country_type = decentralized }
+		babylon_aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		#has_technology_researched = multilateral_alliances 
+
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			NOT = { is_subject_of = root }
+			#has_technology_researched = multilateral_alliances 
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
+			scope:target_country.relations:root < relations_threshold:cordial
+		}
+	}
+
+	on_weekly_pulse = {
+		every_scope_play_involved = {
+			root.war = {
+				if = {
+					limit = {
+					    has_war_support = {
+					        target = prev
+					        value < 0
+					    }
+					}
+
+					add_war_war_support = { 
+						target = prev 
+						value = 10
+					}
+				}
+			}
+		}
+	}
+
+	on_war_begins = {
+	}
+
+	on_war_end = {
+	}
+}
