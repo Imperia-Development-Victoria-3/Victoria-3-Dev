@@ -3,7 +3,7 @@
 	$TARGET$ = {
 		save_scope_as = target_country
 	}
-	set_local_variable = {
+	set_variable = {
 		name = cohesion_change
 		value = 0
 	}
@@ -21,19 +21,18 @@
 	### INSERT CALCULATION EFFECTS ABOVE ###
 	########################################
 	#Apply the change to both self and target
-	#Yes, even the target.
 	if = {
 		limit = {
 			$IS_GAIN$ = yes
 		}
 		change_variable = {
-			name = theoretical_cohesion
-			add = local_var:cohesion_change
+			name = political_cohesion
+			add = var:cohesion_change
 		}
 		scope:target_country = {
 			change_variable = {
-				name = theoretical_cohesion
-				add = local_var:cohesion_change
+				name = political_cohesion
+				add = root.var:cohesion_change
 			}
 		}
 	}
@@ -42,14 +41,16 @@
 			$IS_GAIN$ = no
 		}
 		change_variable = {
-			name = theoretical_cohesion
-			subtract = local_var:cohesion_change
+			name = political_cohesion
+			subtract = var:cohesion_change
 		}
 		scope:target_country = {
 			change_variable = {
-				name = theoretical_cohesion
-				subtract = local_var:cohesion_change
+				name = political_cohesion
+				subtract = root.var:cohesion_change
 			}
 		}
 	}
+	#Cleanup
+	remove_variable = cohesion_change
 }
