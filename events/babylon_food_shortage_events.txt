@@ -1,12 +1,12 @@
 ﻿namespace = food_shortage_events
 
-food_shortage_event.1 = {
+food_shortage_events.1 = {
 	type = country_event
-	placement = scope:famine_state
+	placement = scope:capital
 
-	title = famine_events.1.t
-	desc = famine_events.1.d
-	flavor = famine_events.1.f
+	title = food_shortage_events.1.t
+	desc = food_shortage_events.1.d
+	flavor = food_shortage_events.f
 
 	event_image = {
 		video = "europenorthamerica_russian_serfs"
@@ -18,30 +18,46 @@ food_shortage_event.1 = {
 
 	duration = 3
 
-	trigger = {
-		# triggered by JE
+	trigger = { # triggered by JE
 	}
 
 	immediate = {
-		random_scope_state = {
-			limit = { has_variable = famine_var }
-			save_scope_as = famine_state
-		}
 	}
 
-	option = { #there's nothing we can do
-		name = famine_events.1.a
+	option = { #Let them eat cake
+		name = food_shortage_events.1.a
 		default_option = yes
-		ig:ig_industrialists = {
-			add_modifier = {
-				name = thats_life_modifier
-				months = normal_modifier_time
-			}
+
+		add_modifier = {
+			state_radicals_from_sol_change_mult = 0.25
 		}
-		scope:famine_state = {
-			add_modifier = {
-				name = great_famine_modifier
-				months = short_modifier_time
-			}
+
+		add_loyalists = {
+			strata = poor
+			value = 0.10
 		}
+	}
+	
+	option = { #We must act now
+		 name = food_shortage_events.1.b
+		 default_option = no
+
+		 trigger = {	# This event is available if the country is not collecting consumption taxes on Grain
+			scope:country = {
+				NOT = {
+					has_consumption_tax = g:grain
+				}
+			}
+			
+			show_as_unavailable = yes
+		 }	
+
+		 add_modifier = {
+			country_mandate_subsidies = g:grain
+			state_welfare_payments_add = 5000
+		 }
+	
+	
+	}
+
 }
