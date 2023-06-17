@@ -18,6 +18,19 @@
 	ai_will_do = {
 		always = no
 	}
+
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+		
+		if = {
+			limit = { 
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+                scope:law = var:desired_law_var
+			}
+			add = 750
+		}
+	}
 }
 
 law_national_guard = {
@@ -40,6 +53,19 @@ law_national_guard = {
 		law_secret_police
 		law_guaranteed_liberties
 	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_OFFICERS"
+			if = {
+				limit = { 
+					is_pop_type = officers
+				}
+				value = 0.33
+			}
+		}	
+	}
 	
 	pop_support = {
 		value = 0
@@ -59,6 +85,19 @@ law_national_guard = {
 		NOR = {
 			has_law = law_type:law_secret_police
 			has_law = law_type:law_guaranteed_liberties
+		}
+	}
+
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+		
+		if = {
+			limit = { 
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+                scope:law = var:desired_law_var
+			}
+			add = 750
 		}
 	}
 }
@@ -89,6 +128,19 @@ law_secret_police = {
 
 	pop_support = {
 		value = 0
+	}
+
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+		
+		if = {
+			limit = { 
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+                scope:law = var:desired_law_var
+			}
+			add = 750
+		}
 	}
 }
 
@@ -123,6 +175,19 @@ law_guaranteed_liberties = {
 		add = {
 			desc = "ALL_POPS"
 			value = 0.01
+		}
+	}
+
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+		
+		if = {
+			limit = { 
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+                scope:law = var:desired_law_var
+			}
+			add = 750
 		}
 	}
 }
