@@ -1,0 +1,84 @@
+﻿babylon_calc_cohesion_character_ideology = {
+	set_local_variable = {
+		name = babylon_cohesion_character_ideology
+		value = 0
+	}
+	root = {
+		every_law = {
+			babylon_calc_LAW_stance = {
+				LAW = this
+				CHARACTER = $CHARACTER$
+			}
+		}
+		change_local_variable = {
+			name = babylon_cohesion_character_ideology
+			add = 2
+		}
+        change_local_variable = {
+            name = babylon_cohesion_character_ideology
+            multiply = $MULTIPLIER$
+        }
+        change_variable = {
+            name = theoretical_cohesion
+            add = local_var:babylon_cohesion_character_ideology
+        }
+		set_variable = {
+			name = character_opinions
+			value = local_var:babylon_cohesion_character_ideology
+		}
+	}
+	remove_local_variable = babylon_cohesion_character_ideology
+}
+
+babylon_calc_LAW_stance = {
+	$CHARACTER$ = {
+		if = {
+			limit = {
+				law_stance = {
+					law = $LAW$
+					value = strongly_disapprove
+				}
+			}
+			change_local_variable = {
+				name = babylon_cohesion_character_ideology
+				add = 10
+			}
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = $LAW$
+					value = disapprove
+				}
+			}
+			change_local_variable = {
+				name = babylon_cohesion_character_ideology
+				add = 5
+			}
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = $LAW$
+					value = approve
+				}
+			}
+			change_local_variable = {
+				name = babylon_cohesion_character_ideology
+				add = -5
+			}
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = $LAW$
+					value = strongly_approve
+				}
+			}
+			change_local_variable = {
+				name = babylon_cohesion_character_ideology
+				add = -10
+			}
+		}
+	}
+}

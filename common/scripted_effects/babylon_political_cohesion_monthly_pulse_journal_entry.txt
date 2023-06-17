@@ -4,6 +4,8 @@
 		name = theoretical_cohesion
 		value = 0
 	}
+	###############################
+	### EXTERNAL CONSIDERATIONS ###
 	#Then we add to it for each foreign pact
 	#Defensive pacts
 	every_country = {
@@ -30,7 +32,7 @@
 		babylon_calc_cohesion_government_difference = {
 			TARGET = root
 			IS_GAIN = yes
-			MULTIPLIER = 1.50
+			MULTIPLIER = 1.5
 		}
 	}
 	#trade agreements
@@ -72,9 +74,35 @@
 		babylon_calc_cohesion_government_difference = {
 			TARGET = root
 			IS_GAIN = no
-			MULTIPLIER = 1.50
+			MULTIPLIER = 1.5
 		}
 	}
+	### END EXTERNAL ##############
+	###############################
+	### INTERNAL CONSIDERATIONS ###
+	ruler = {
+		save_temporary_scope_as = ruler_scope
+	}
+	babylon_calc_cohesion_character_ideology = {
+		CHARACTER = scope:ruler_scope
+		MULTIPLIER = 2
+	}
+	every_interest_group = {
+		limit = {
+			is_in_government = yes
+		}
+		leader = {
+			save_temporary_scope_as = ig_leader_scope
+			root = {
+				babylon_calc_cohesion_character_ideology = {
+					CHARACTER = scope:ig_leader_scope
+					MULTIPLIER = 1
+				}
+			}
+		}
+	}
+	### END INTERNAL ###
+	####################
 	#Then we find the difference between the current and theoretical values
 	change_variable = {
 		name = theoretical_cohesion
