@@ -80,26 +80,38 @@
 	### END EXTERNAL ##############
 	###############################
 	### INTERNAL CONSIDERATIONS ###
+	# First the ruler
 	ruler = {
 		save_temporary_scope_as = ruler_scope
 	}
-	babylon_calc_cohesion_character_ideology = {
+	babylon_calc_cohesion_CHARACTER_ideology = {
 		CHARACTER = scope:ruler_scope
 		MULTIPLIER = 2
 	}
+	# Then leaders of every government IG
 	every_interest_group = {
 		limit = {
 			is_in_government = yes
 		}
+		# Their multiplier will be clout+1 (meaning a 28% clout IG would have 1.28 multiplier)
+		set_local_variable = {
+			name = interest_group_clout
+			value = ig_clout
+		}
+		change_local_variable = {
+			name = interest_group_clout
+			add = 1
+		}
 		leader = {
 			save_temporary_scope_as = ig_leader_scope
 			root = {
-				babylon_calc_cohesion_character_ideology = {
+				babylon_calc_cohesion_CHARACTER_ideology = {
 					CHARACTER = scope:ig_leader_scope
-					MULTIPLIER = 1
+					MULTIPLIER = local_var:interest_group_clout
 				}
 			}
 		}
+		remove_local_variable = interest_group_clout
 	}
 	### END INTERNAL ###
 	####################

@@ -1,31 +1,24 @@
-﻿babylon_calc_cohesion_character_ideology = {
+﻿babylon_calc_cohesion_CHARACTER_ideology = {
 	set_local_variable = {
 		name = babylon_cohesion_character_ideology
 		value = 0
 	}
-	root = {
-		every_law = {
+	every_law = {
+		type = {
+			save_temporary_scope_as = law_type_scope
 			babylon_calc_LAW_stance = {
-				LAW = this
+				LAW = scope:law_type_scope
 				CHARACTER = $CHARACTER$
 			}
 		}
-		change_local_variable = {
-			name = babylon_cohesion_character_ideology
-			add = 2
-		}
-        change_local_variable = {
-            name = babylon_cohesion_character_ideology
-            multiply = $MULTIPLIER$
-        }
-        change_variable = {
-            name = theoretical_cohesion
-            add = local_var:babylon_cohesion_character_ideology
-        }
-		set_variable = {
-			name = character_opinions
-			value = local_var:babylon_cohesion_character_ideology
-		}
+	}
+	change_local_variable = {
+		name = babylon_cohesion_character_ideology
+		multiply = $MULTIPLIER$
+	}
+	change_variable = {
+		name = theoretical_cohesion
+		add = local_var:babylon_cohesion_character_ideology
 	}
 	remove_local_variable = babylon_cohesion_character_ideology
 }
@@ -41,7 +34,7 @@ babylon_calc_LAW_stance = {
 			}
 			change_local_variable = {
 				name = babylon_cohesion_character_ideology
-				add = 10
+				add = 2
 			}
 		}
 		else_if = {
@@ -53,7 +46,7 @@ babylon_calc_LAW_stance = {
 			}
 			change_local_variable = {
 				name = babylon_cohesion_character_ideology
-				add = 5
+				add = 1
 			}
 		}
 		else_if = {
@@ -65,7 +58,7 @@ babylon_calc_LAW_stance = {
 			}
 			change_local_variable = {
 				name = babylon_cohesion_character_ideology
-				add = -5
+				add = -1
 			}
 		}
 		else_if = {
@@ -77,7 +70,7 @@ babylon_calc_LAW_stance = {
 			}
 			change_local_variable = {
 				name = babylon_cohesion_character_ideology
-				add = -10
+				add = -2
 			}
 		}
 	}
