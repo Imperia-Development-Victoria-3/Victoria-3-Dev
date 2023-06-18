@@ -1,29 +1,45 @@
 ﻿on_babylon_monthly_pulse_country = {
-	#updates provinces each month
 	events = {
 		naval_command_check.1
 		infamy_rebalance.1
 	}
 	effect = {
+		if = {
+			limit = {
+				infamy > 0
+			}
+			# If theres infamy present...
 			if = {
 				limit = {
 					has_law = law_type:law_command_economy
 				}
-				add_modifer = {
+				# Give command economies their own modifiers
+				add_modifier = {
 					name = babylon_country_infamy_workers
 					multiplier = babylon_infamy_multiplier
 				}
-		}
-		else = {
-		add_modifer = {
-			name = babylon_country_infamy_capitalist
-			multiplier = babylon_infamy_multiplier
+			}
+			else = {
+				# Rest is considered capitalist
+				add_modifier = {
+					name = babylon_country_infamy_capitalist
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			# No matter what form of economy, give every state a modifier
+			every_scope_state = {
+				add_modifier = {
+					name = babylon_state_infamy
+					multiplier = babylon_infamy_multiplier
+				}
 			}
 		}
-		every_scope_state = { 
-			add_modifier = {
-				name = babylon_state_infamy 
-				multiplier = babylon_infamy_multiplier
+		else = {
+			# Else if infamy is zero
+			remove_modifier = babylon_country_infamy_workers
+			remove_modifier = babylon_country_infamy_capitalist
+			every_scope_state = {
+				remove_modifier = babylon_state_infamy
 			}
 		}
 	}
