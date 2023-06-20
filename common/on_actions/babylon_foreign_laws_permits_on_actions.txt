@@ -116,22 +116,25 @@
 					has_law = law_type:law_armed_neutrality
 				}
 				target = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root.initiator
-					}
-				}
-				region = {
-					NOR = {
-						any_scope_state = {
-							owner = root.initiator
-							is_incorporated = yes
-						}
-						any_neighbouring_state = {
-							owner = root.initiator
-							is_incorporated = yes
+					NOT = {
+						any_primary_culture = {
+							shares_heritage_and_other_trait_with_any_primary_culture = root.initiator
 						}
 					}
 				}
+				# Below not neccesary if interest declaration is implemented
+				# region = {
+				# 	NOR = {
+				# 		any_scope_state = {
+				# 			owner = root.initiator
+				# 			is_incorporated = yes
+				# 		}
+				# 		any_neighbouring_state = {
+				# 			owner = root.initiator
+				# 			is_incorporated = yes
+				# 		}
+				# 	}
+				# }
 			}
 			root.initiator = {
 				babylon_reset_infamy_to_month_start = yes
@@ -144,7 +147,7 @@
 		}
 		if = {
 			#Anti-imperialist
-			#Diplomatic conquest,  subjugation and treaty port should only be possible on colonial countries and on countries which share both cultural heritage and a cultural trait (law_national_supremacy acceptance). 
+			#Diplomatic conquest, subjugation and treaty port should only be possible on colonial countries and on countries which share both cultural heritage and a cultural trait (law_national_supremacy acceptance). 
 			#This is to reflect anti imperialist sentiment but also the desire to unify the local region into a more powerful block.
 			limit = {
 				OR = {
@@ -159,11 +162,11 @@
 				}
 				target = {
 					OR = {
+						has_law = law_type:law_no_colonial_affairs
 						NOT = {
-							has_law = law_type:law_no_colonial_affairs
-						}
-						any_primary_culture = {
-							shares_heritage_and_other_trait_with_any_primary_culture = root.initiator
+							any_primary_culture = {
+								shares_heritage_and_other_trait_with_any_primary_culture = root.initiator
+							}
 						}
 					}
 				}
