@@ -40,6 +40,42 @@
 				multiplier = local_var:gained_land_trade_capcity
 			}
 		}
+		# Remove / reset babylon infamy modifiers
+		remove_modifier ?= babylon_country_infamy_workers
+		remove_modifier ?= babylon_country_infamy_capitalist
+		every_scope_state = {
+			remove_modifier ?= babylon_state_infamy
+		}
+		if = {
+			limit = {
+				infamy > 20
+			}
+			# If theres infamy present...
+			if = {
+				limit = {
+					has_law = law_type:law_command_economy
+				}
+				# Give command economies their own modifiers
+				add_modifier = {
+					name = babylon_country_infamy_workers
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			else = {
+				# Rest is considered capitalist
+				add_modifier = {
+					name = babylon_country_infamy_capitalist
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			# No matter what form of economy, give every state a modifier
+			every_scope_state = {
+				add_modifier = {
+					name = babylon_state_infamy
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+		}
 	}
 
 	events = {
