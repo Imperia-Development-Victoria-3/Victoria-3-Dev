@@ -13,6 +13,9 @@
 			name = political_cohesion
 			value = 0
 		}
+		add_modifier = {
+			name = cohesion_lvl_0_modifier
+		}
 	}
 	status_desc = {
 		first_valid = {
@@ -50,21 +53,188 @@
 			babylon_political_cohesion_monthly_pulse_journal_entry = yes
 			if = {
 				limit = {
-					var:political_cohesion >= 300
+					var:political_cohesion >= 400
 				}
-				#Break lvl 3
+				# Release vassals and (?) dissolve customs union
+				set_variable = is_cohesion_implosion_country
+				every_subject_or_below = {
+					limit = {
+						is_direct_subject_of = root
+					}
+					root = {
+						# VFM vassal types
+						remove_diplomatic_pact = {
+							country = prev
+							type = dependency
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = real_union
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = chartered_company
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = confederation
+						}
+						# Vanilla vassals
+						remove_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = protectorate
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = puppet
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = dominion
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = personal_union
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = vassal
+						}
+						remove_diplomatic_pact = {
+							country = prev
+							type = tributary
+						}
+					}
+				}
+				every_country = {
+					trigger_event = {
+						id = babylon_political_cohesion.3
+						popup = yes
+					}
+				}
+				every_scope_state = {
+					limit = {
+						is_capital = no
+					}
+					create_country = {
+						origin = root
+						state = this
+						on_created = {
+							trigger_event = {
+								id = babylon_political_cohesion.2
+							}
+							trigger_event = {
+								id = babylon_political_cohesion.4
+								days = 3
+							}
+						}
+					}
+				}
+				trigger_event = {
+					id = babylon_political_cohesion.4
+					days = 3
+				}
+				set_variable = {
+					name = political_cohesion
+					value = 200
+				}
+			}
+			else_if = {
+				limit = {
+					var:political_cohesion >= 300
+					NOT = {
+						has_variable = break_3_cooldown
+					}
+				}
+				set_variable = {
+					name = break_3_cooldown
+					months = 6
+				}
+				root = {
+					if = {
+						limit = {
+							OR = {
+								has_modifier = cohesion_lvl_0_modifier
+								has_modifier = cohesion_lvl_1_modifier
+								has_modifier = cohesion_lvl_2_modifier
+							}
+						}
+						remove_modifier ?= cohesion_lvl_0_modifier
+						remove_modifier ?= cohesion_lvl_1_modifier
+						remove_modifier ?= cohesion_lvl_2_modifier
+						add_modifier = {
+							name = cohesion_lvl_3_modifier
+						}
+					}
+				}
+				# Break lvl 3
 			}
 			else_if = {
 				limit = {
 					var:political_cohesion >= 200
+					NOR = {
+						has_variable = break_2_cooldown
+						has_variable = break_3_cooldown
+					}
 				}
-				#Break lvl 2
+				set_variable = {
+					name = break_2_cooldown
+					months = 6
+				}
+				root = {
+					if = {
+						limit = {
+							OR = {
+								has_modifier = cohesion_lvl_0_modifier
+								has_modifier = cohesion_lvl_1_modifier
+								has_modifier = cohesion_lvl_3_modifier
+							}
+						}
+						remove_modifier ?= cohesion_lvl_0_modifier
+						remove_modifier ?= cohesion_lvl_1_modifier
+						remove_modifier ?= cohesion_lvl_3_modifier
+						add_modifier = {
+							name = cohesion_lvl_2_modifier
+						}
+					}
+				}
+				# Break lvl 2
 			}
 			else_if = {
 				limit = {
 					var:political_cohesion >= 100
+					NOR = {
+						has_variable = break_1_cooldown
+						has_variable = break_2_cooldown
+						has_variable = break_3_cooldown
+					}
 				}
-				#Break lvl 1
+				root = {
+					if = {
+						limit = {
+							OR = {
+								has_modifier = cohesion_lvl_0_modifier
+								has_modifier = cohesion_lvl_2_modifier
+								has_modifier = cohesion_lvl_3_modifier
+							}
+						}
+						remove_modifier ?= cohesion_lvl_0_modifier
+						remove_modifier ?= cohesion_lvl_2_modifier
+						remove_modifier ?= cohesion_lvl_3_modifier
+						add_modifier = {
+							name = cohesion_lvl_1_modifier
+						}
+					}
+				}
+				set_variable = {
+					name = break_1_cooldown
+					months = 6
+				}
+				# Break lvl 1
 				random_list = {
 					100 = {
 						trigger_event = {
@@ -80,10 +250,32 @@
 					}
 				}
 			}
+			else = {
+				# Everything is normal
+				root = {
+					if = {
+						limit = {
+							OR = {
+								has_modifier = cohesion_lvl_1_modifier
+								has_modifier = cohesion_lvl_2_modifier
+								has_modifier = cohesion_lvl_3_modifier
+							}
+						}
+						remove_modifier ?= cohesion_lvl_1_modifier
+						remove_modifier ?= cohesion_lvl_2_modifier
+						remove_modifier ?= cohesion_lvl_3_modifier
+						add_modifier = {
+							name = cohesion_lvl_0_modifier
+						}
+					}
+				}
+			}
 		}
 	}
 	complete = {
 		#Cannot be completed, is there to show cohesion
-		always = no
+		hidden_trigger = {
+			always = no
+		}
 	}
 }
