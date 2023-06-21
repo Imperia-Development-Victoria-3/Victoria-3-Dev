@@ -4,16 +4,10 @@
 			#Expansionism
 			#Diplomatic conquest, subjugation, and treaty port plays should be limited to regions of interest adjacent to incorporated states for expansionist countries.
 			limit = {
-				OR = {
-					is_diplomatic_play_type = dp_conquer_state
-					is_diplomatic_play_type = dp_make_dominion
-					is_diplomatic_play_type = dp_make_vassal
-					is_diplomatic_play_type = dp_make_puppet
-					is_diplomatic_play_type = dp_take_treaty_port
-				}
 				initiator = {
 					has_law = law_type:law_expansionism
 				}
+				conquer_or_subjugation = yes
 				region = {
 					NOR = {
 						any_scope_state = {
@@ -59,19 +53,14 @@
 			#Diplomatic conquest, subjugation and treaty port plays should be limited to countries which are unrecognized or non-colonial. 
 			#Colonial battles between colonial nations should start with a custom diplomatic play which only imperialists can do on other colonial nations.
 			limit = {
-				OR = {
-					is_diplomatic_play_type = dp_conquer_state
-					is_diplomatic_play_type = dp_make_dominion
-					is_diplomatic_play_type = dp_make_vassal
-					is_diplomatic_play_type = dp_make_puppet
-					is_diplomatic_play_type = dp_take_treaty_port
-				}
+				conquer_or_subjugation = yes
 				initiator = {
 					has_law = law_type:law_imperialism
 				}
 				target = {
 					NOT = {
 						is_country_type = unrecognized
+						is_country_type = colonial
 					}
 				}
 			}
@@ -105,13 +94,7 @@
 			#This is meant to reflect the semi-isolationist policy of the nation where they cannot make significant changes except for their cultural region.
 			#Preferably, declared interests should be limited to regions of interest which border regions of interest they already have states in (both incorporated and unincorporated).
 			limit = {
-				OR = {
-					is_diplomatic_play_type = dp_conquer_state
-					is_diplomatic_play_type = dp_make_dominion
-					is_diplomatic_play_type = dp_make_vassal
-					is_diplomatic_play_type = dp_make_puppet
-					is_diplomatic_play_type = dp_take_treaty_port
-				}
+				conquer_or_subjugation = yes
 				initiator = {
 					has_law = law_type:law_armed_neutrality
 				}
@@ -150,13 +133,7 @@
 			#Diplomatic conquest, subjugation and treaty port should only be possible on colonial countries and on countries which share both cultural heritage and a cultural trait (law_national_supremacy acceptance). 
 			#This is to reflect anti imperialist sentiment but also the desire to unify the local region into a more powerful block.
 			limit = {
-				OR = {
-					is_diplomatic_play_type = dp_conquer_state
-					is_diplomatic_play_type = dp_make_dominion
-					is_diplomatic_play_type = dp_make_vassal
-					is_diplomatic_play_type = dp_make_puppet
-					is_diplomatic_play_type = dp_take_treaty_port
-				}
+				conquer_or_subjugation = yes
 				initiator = {
 					has_law = law_type:law_anti_imperialist
 				}
@@ -169,47 +146,6 @@
 							}
 						}
 					}
-				}
-			}
-			root.initiator = {
-				babylon_reset_infamy_to_month_start = yes
-				trigger_event = {
-					id = diplomatic_failure_events.1
-					days = 1
-				}
-			}
-			end_play = yes
-		}
-		if = {
-			#Pacifist
-			#Diplomatic play for conquest, subjugation and treaty port should not be possible
-			limit = {
-				OR = {
-					is_diplomatic_play_type = dp_conquer_state
-					is_diplomatic_play_type = dp_make_dominion
-					is_diplomatic_play_type = dp_make_vassal
-					is_diplomatic_play_type = dp_make_puppet
-					is_diplomatic_play_type = dp_take_treaty_port
-				}
-				initiator = {
-					has_law = law_type:law_pacifist
-				}
-			}
-			root.initiator = {
-				babylon_reset_infamy_to_month_start = yes
-				trigger_event = {
-					id = diplomatic_failure_events.1
-					days = 1
-				}
-			}
-			end_play = yes
-		}
-		if = {
-			#True neutral
-			#No Diplomatic plays can be done
-			limit = {
-				initiator = {
-					has_law = law_type:law_true_neutrality
 				}
 			}
 			root.initiator = {
