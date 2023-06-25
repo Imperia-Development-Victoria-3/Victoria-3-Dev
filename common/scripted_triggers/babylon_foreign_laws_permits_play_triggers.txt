@@ -1,0 +1,95 @@
+﻿babylon_foreign_laws_permits_play = {
+	#Country scope, inside a diplomatic play
+	trigger_if = {
+		limit = {
+			has_law = law_type:law_expansionism
+		}
+		scope:target_country = {
+			#Checks if the targeted country has states in tha same or neighbouring strategic region as an incorperated state
+			any_scope_state = {
+				region = {
+					OR = {
+						any_scope_state = {
+							owner = root
+							is_incorporated = yes
+						}
+						any_neighbouring_state = {
+							#An incorporated state belonging to root
+							owner = root
+							is_incorporated = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			has_law = law_type:law_imperialism
+		}
+		scope:target_country = {
+			OR = {
+				is_country_type = unrecognized
+				is_country_type = colonial
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			has_law = law_type:law_armed_neutrality
+		}
+		scope:target_country = {
+			OR = {
+				any_primary_culture = {
+					shares_heritage_trait_with_any_primary_culture = root
+					shares_non_heritage_trait_with_any_primary_culture = root
+				}
+				any_scope_state = {
+					is_homeland_of_country_cultures = root
+				}
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			has_law = law_type:law_anti_imperialist
+		}
+		OR = {
+			scope:target_country = {
+				NOT = {
+					has_law = law_type:law_no_colonial_affairs
+				}
+			}
+			scope:target_country = {
+				OR = {
+					any_primary_culture = {
+						shares_heritage_trait_with_any_primary_culture = root
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+					any_scope_state = {
+						is_homeland_of_country_cultures = root
+					}
+				}
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			has_law = law_type:law_pacifist
+		}
+		always = no
+	}
+	# True neutral cannot do any diplo plays; this feature is located in the 'babylon_aggressive_diplomatic_plays_permitted_custom.txt' file
+}
+
+
+
+conquer_or_subjugation = {
+	OR = {
+		is_diplomatic_play_type = dp_conquer_state
+		is_diplomatic_play_type = dp_make_dominion
+		is_diplomatic_play_type = dp_make_vassal
+		is_diplomatic_play_type = dp_make_puppet
+		is_diplomatic_play_type = dp_take_treaty_port
+	}
+}
