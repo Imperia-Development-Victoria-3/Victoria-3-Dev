@@ -13,8 +13,10 @@
 			name = political_cohesion
 			value = 0
 		}
-		add_modifier = {
-			name = cohesion_lvl_0_modifier
+		hidden_effect = {
+			add_modifier = {
+				name = cohesion_lvl_0_modifier
+			}
 		}
 	}
 	status_desc = {
@@ -55,8 +57,7 @@
 				limit = {
 					var:political_cohesion >= 400
 				}
-				# Release vassals and (?) dissolve customs union
-				set_variable = is_cohesion_implosion_country
+				# Release vassals and dissolve customs union
 				every_subject_or_below = {
 					limit = {
 						is_direct_subject_of = root
@@ -110,12 +111,17 @@
 						}
 					}
 				}
+				set_variable = {
+					name = just_imploded
+					days = 7
+				}
 				every_country = {
 					trigger_event = {
 						id = babylon_political_cohesion.3
 						popup = yes
 					}
 				}
+				set_variable = is_cohesion_implosion_country
 				every_scope_state = {
 					limit = {
 						is_capital = no
