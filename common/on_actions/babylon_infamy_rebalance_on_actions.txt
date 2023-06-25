@@ -1,8 +1,96 @@
 ﻿on_babylon_monthly_pulse_country = {
-	#updates provinces each month
+	effect = {
+		remove_modifier ?= modifier_land_trade_capacity
+		set_local_variable = {
+			name = total_infrastructure
+			value = 0
+		}
+		set_local_variable = {
+			name = number_of_states
+			value = 0
+		}
+		every_scope_state = {
+			change_local_variable = {
+				name = total_infrastructure
+				add = modifier:state_infrastructure_add		
+			}
+			change_local_variable = {
+				name = number_of_states
+				add = 1
+			}
+		}
+
+		set_local_variable = {
+			name = gained_land_trade_capcity
+			value = {
+				add = local_var:total_infrastructure
+				divide = local_var:number_of_states
+				subtract = 50 # counting from 50 infrasturucture
+				divide = 8 # every 8 infrastructure average is 1 land_trade capacity
+			}
+		}
+
+		if = {
+			limit = {
+				local_var:gained_land_trade_capcity >= 1
+			}
+
+			add_modifier = { 
+				name = modifier_land_trade_capacity
+				multiplier = local_var:gained_land_trade_capcity
+			}
+		}
+		# Remove / reset babylon infamy modifiers
+		remove_modifier ?= babylon_country_infamy_workers
+		remove_modifier ?= babylon_country_infamy_capitalist
+		every_scope_state = {
+			remove_modifier ?= babylon_state_infamy
+		}
+		if = {
+			limit = {
+				infamy > 20
+			}
+			# If theres infamy present...
+			if = {
+				limit = {
+					has_law = law_type:law_command_economy
+				}
+				# Give command economies their own modifiers
+				add_modifier = {
+					name = babylon_country_infamy_workers
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			else = {
+				# Rest is considered capitalist
+				add_modifier = {
+					name = babylon_country_infamy_capitalist
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			# No matter what form of economy, give every state a modifier
+			every_scope_state = {
+				add_modifier = {
+					name = babylon_state_infamy
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+		}
+	}
+
 	events = {
-		naval_command_check.1
-		infamy_rebalance.1
+		naval_command_check.1 # checks
+		infamy_rebalance.1	#updates provinces each month
+	}
+}
+
+#scope = country
+on_babylon_monthly_pulse_store_infamy = {
+	effect = {
+		set_variable = {
+			name = infamy_on_month_start
+			value = infamy
+		}
 	}
 }
 

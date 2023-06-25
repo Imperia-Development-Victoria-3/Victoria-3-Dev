@@ -37,6 +37,8 @@ law_traditionalism = {
 		law_agrarianism
 		law_laissez_faire
 	}
+
+	# no pop support because movements are impossible
 	
 	pop_support = {
 		value = 0
@@ -110,6 +112,27 @@ law_interventionism = {
 		law_agrarianism
 		law_laissez_faire
 		law_cooperative_ownership
+		law_industry_banned
+	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_CAPITALISTS"			
+			if = {
+				limit = {
+					owner = {
+						OR = { 
+							has_law = law_type:law_agrarianism 
+							has_law = law_type:law_traditionalism 
+							has_law = law_type:law_industry_banned 
+						}
+					}
+					is_pop_type = capitalists
+				}
+				value = 0.33
+			}
+		}
 	}
 
 	pop_support = {
@@ -380,6 +403,7 @@ law_industry_banned = {
 	}
 }
 
+
 law_laissez_faire = {
 	group = lawgroup_economic_system
 	
@@ -427,6 +451,27 @@ law_laissez_faire = {
 		law_command_economy
 		law_agrarianism
 		law_cooperative_ownership
+		law_industry_banned
+	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_CAPITALISTS"			
+			if = {
+				limit = {
+					owner = {
+						OR = { 
+							has_law = law_type:law_agrarianism 
+							has_law = law_type:law_traditionalism 
+							has_law = law_type:law_industry_banned 
+						}
+					}
+					is_pop_type = capitalists
+				}
+				value = 0.5
+			}
+		}
 	}
 
 	ai_enact_weight_modifier = { #Petitions
@@ -542,6 +587,8 @@ law_command_economy = {
 	unlocking_laws = {
 		law_autocracy
 		law_oligarchy
+		law_single_party_state
+		law_technocracy
 	}	
 	
 	on_activate = {
@@ -555,7 +602,7 @@ law_command_economy = {
 		country_subsidies_all = yes
 		country_disable_investment_pool = yes
 		
-		country_authority_mult = 0.25								
+		country_authority_mult = 0.25
 	}
 	
 	possible_political_movements = {
@@ -563,6 +610,20 @@ law_command_economy = {
 		law_agrarianism
 		law_laissez_faire
 		law_cooperative_ownership
+		law_industry_banned
+	}
+
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_BUREAUCRATS"			
+			if = {
+				limit = {
+					is_pop_type = bureaucrats
+				}
+				value = 0.2
+			}
+		}
 	}
 
 	pop_support = {
@@ -584,7 +645,7 @@ law_command_economy = {
 			AND = {
 				exists = ruler
 				ruler = {
-					has_ideology = ideology_vanguardist
+					has_ideology = ideology:ideology_vanguardist
 				}			
 			}
 		}
