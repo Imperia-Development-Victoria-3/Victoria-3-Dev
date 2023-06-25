@@ -1,10 +1,10 @@
-﻿namespace = ideology_break_1_event
-# Ideological break for level 1 reached
-ideology_break_1_event.1 = {
+﻿namespace = ideology_break_3_1_event
+# Ideological break for level 3 reached
+ideology_break_3_1_event.1 = {
 	type = country_event
-	title = ideology_break_1_event.1.t
-	desc = ideology_break_1_event.1.d
-	flavor = ideology_break_1_event.1.f
+	title = ideology_break_3_1_event.1.t
+	desc = ideology_break_3_1_event.1.d
+	flavor = ideology_break_3_1_event.1.f
 	event_image = {
 		video = "gfx/event_pictures/asia_politician_parliament_motion.bk2"
 	}
@@ -13,40 +13,33 @@ ideology_break_1_event.1 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/leader_speaking_to_a_group_of_people"
 	duration = 3
 	trigger = {
-		# Caused when a nation hits 100 on their cohesion level.
+		# Caused when a nation hits 300 on their cohesion level.
 	}
 	option = {
-		name = ideology_break_1_event.1.a
+		name = ideology_break_3_1_event.1.a
+		# Blame the workers
 		default_option = yes
-		trigger = {
-			NOT = {
-				ruler = {
-					OR = {
-						has_trait = opium_addiction
-						has_trait = reserved
-						has_trait = arrogant
-					}
-				}
-			}
-		}
 		random_list = {
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.2
+					# Good
+					id = ideology_break_3_1_event.2
 					days = 0
 					popup = yes
 				}
 			}
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.3
+					# Neutral
+					id = ideology_break_3_1_event.3
 					days = 0
 					popup = yes
 				}
 			}
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.4
+					# Bad
+					id = ideology_break_3_1_event.4
 					days = 0
 					popup = yes
 				}
@@ -54,35 +47,25 @@ ideology_break_1_event.1 = {
 		}
 	}
 	option = {
-		name = ideology_break_1_event.2.a
-		trigger = {
-			NOT = {
-				ruler = {
-					OR = {
-						has_trait = opium_addiction
-						has_trait = cautious
-					}
-				}
-			}
-		}
+		name = ideology_break_3_1_event.1.b
 		random_list = {
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.5
+					id = ideology_break_3_1_event.5
 					days = 0
 					popup = yes
 				}
 			}
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.6
+					id = ideology_break_3_1_event.6
 					days = 0
 					popup = yes
 				}
 			}
 			33 = {
 				trigger_event = {
-					id = ideology_break_1_event.7
+					id = ideology_break_3_1_event.7
 					days = 0
 					popup = yes
 				}
@@ -90,39 +73,26 @@ ideology_break_1_event.1 = {
 		}
 	}
 	option = {
-		name = ideology_break_1_event.3.a
+		name = ideology_break_3_1_event.1.c
 		trigger = {
-			NOT = {
-				ruler = {
-					OR = {
-						has_trait = cautious
-						has_trait = persistent
-						has_trait = tactful
-						has_trait = meticulous
-						has_trait = innovative
-						has_trait = basic_diplomat
-						has_trait = experienced_diplomat
-						has_trait = masterful_diplomat
-						has_trait = basic_political_operator
-						has_trait = experienced_political_operator
-						has_trait = expert_political_operator
-					}
-				}
+			institution_investment_level = {
+				institution = institution_police
+				value >= 4
 			}
 		}
 		trigger_event = {
-			id = ideology_break_1_event.8
+			id = ideology_break_3_1_event.8
 			days = 0
 			popup = yes
 		}
 	}
 }
 
-ideology_break_1_event.2 = {
+ideology_break_3_1_event.2 = {
 	type = country_event
-	title = ideology_break_1_event.2.t
-	desc = ideology_break_1_event.2.d
-	flavor = ideology_break_1_event.2.f
+	title = ideology_break_3_1_event.2.t
+	desc = ideology_break_3_1_event.2.d
+	flavor = ideology_break_3_1_event.2.f
 	event_image = {
 		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
 	}
@@ -133,22 +103,27 @@ ideology_break_1_event.2 = {
 	trigger = {
 		# Triggered by choosing option 1
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = 20
-		}
-	}
 	option = {
-		name = ideology_break_1_event.4.a
+		name = ideology_break_3_1_event.2.a
 		default_option = yes
+		add_modifier = {
+			name = culture_of_disapproval_bad
+			years = 2
+		}
+		capital = {
+			add_radicals = {
+				pop_type = laborers
+				value = 0.2
+			}
+		}
 	}
 }
 
-ideology_break_1_event.3 = {
+ideology_break_3_1_event.3 = {
 	type = country_event
-	title = ideology_break_1_event.3.t
-	desc = ideology_break_1_event.3.d
-	flavor = ideology_break_1_event.3.f
+	title = ideology_break_3_1_event.3.t
+	desc = ideology_break_3_1_event.3.d
+	flavor = ideology_break_3_1_event.3.f
 	event_image = {
 		video = "gfx/event_pictures/unspecific_politicians_arguing.bk2"
 	}
@@ -159,22 +134,17 @@ ideology_break_1_event.3 = {
 	trigger = {
 		# triggered by random chance from event
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = 0
-		}
-	}
 	option = {
-		name = ideology_break_1_event.5.a
+		name = ideology_break_3_1_event.5.a
 		default_option = yes
 	}
 }
 
-ideology_break_1_event.4 = {
+ideology_break_3_1_event.4 = {
 	type = country_event
-	title = ideology_break_1_event.4.t
-	desc = ideology_break_1_event.4.d
-	flavor = ideology_break_1_event.4.f
+	title = ideology_break_3_1_event.4.t
+	desc = ideology_break_3_1_event.4.d
+	flavor = ideology_break_3_1_event.4.f
 	event_image = {
 		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
 	}
@@ -185,22 +155,24 @@ ideology_break_1_event.4 = {
 	trigger = {
 		# triggered by dual monarchy JE
 	}
-	immediate = {
+	option = {
+		name = ideology_break_3_1_event.6.a
+		default_option = yes
+		add_modifier = {
+			name = culture_of_disapproval_good
+			years = 2
+		}
 		change_cohesion = {
 			VALUE = -20
 		}
 	}
-	option = {
-		name = ideology_break_1_event.6.a
-		default_option = yes
-	}
 }
 
-ideology_break_1_event.5 = {
+ideology_break_3_1_event.5 = {
 	type = country_event
-	title = ideology_break_1_event.5.t
-	desc = ideology_break_1_event.5.d
-	flavor = ideology_break_1_event.5.f
+	title = ideology_break_3_1_event.5.t
+	desc = ideology_break_3_1_event.5.d
+	flavor = ideology_break_3_1_event.5.f
 	event_image = {
 		video = "gfx/event_pictures/unspecific_military_parade.bk2"
 	}
@@ -211,22 +183,21 @@ ideology_break_1_event.5 = {
 	trigger = {
 		# triggered by sucess for event 
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = -30
-		}
-	}
 	option = {
-		name = ideology_break_1_event.7.a
+		name = ideology_break_3_1_event.7.a
 		default_option = yes
+		add_modifier = {
+			name = no_expense_spared
+			years = 2
+		}
 	}
 }
 
-ideology_break_1_event.6 = {
+ideology_break_3_1_event.6 = {
 	type = country_event
-	title = ideology_break_1_event.6.t
-	desc = ideology_break_1_event.6.d
-	flavor = ideology_break_1_event.6.f
+	title = ideology_break_3_1_event.6.t
+	desc = ideology_break_3_1_event.6.d
+	flavor = ideology_break_3_1_event.6.f
 	event_image = {
 		video = "gfx/event_pictures/middleeast_middleclass_cafe.bk2"
 	}
@@ -237,26 +208,17 @@ ideology_break_1_event.6 = {
 	trigger = {
 		# triggered by sucess for event 
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = 0
-		}
-		add_modifier = {
-			name = smear_campaign_costs
-			months = 6
-		}
-	}
 	option = {
-		name = ideology_break_1_event.8.a
+		name = ideology_break_3_1_event.8.a
 		default_option = yes
 	}
 }
 
-ideology_break_1_event.7 = {
+ideology_break_3_1_event.7 = {
 	type = country_event
-	title = ideology_break_1_event.7.t
-	desc = ideology_break_1_event.7.d
-	flavor = ideology_break_1_event.7.f
+	title = ideology_break_3_1_event.7.t
+	desc = ideology_break_3_1_event.7.d
+	flavor = ideology_break_3_1_event.7.f
 	event_image = {
 		video = "gfx/event_pictures/europenorthamerica_political_extremism.bk2"
 	}
@@ -267,26 +229,17 @@ ideology_break_1_event.7 = {
 	trigger = {
 		# triggered by sucess for event 
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = 30
-		}
-		add_modifier = {
-			name = smear_campaign_costs
-			months = 8
-		}
-	}
 	option = {
-		name = ideology_break_1_event.9.a
+		name = ideology_break_3_1_event.9.a
 		default_option = yes
 	}
 }
 
-ideology_break_1_event.8 = {
+ideology_break_3_1_event.8 = {
 	type = country_event
-	title = ideology_break_1_event.8.t
-	desc = ideology_break_1_event.8.d
-	flavor = ideology_break_1_event.8.f
+	title = ideology_break_3_1_event.8.t
+	desc = ideology_break_3_1_event.8.d
+	flavor = ideology_break_3_1_event.8.f
 	event_image = {
 		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
 	}
@@ -297,18 +250,8 @@ ideology_break_1_event.8 = {
 	trigger = {
 		# triggered by ignoring event
 	}
-	immediate = {
-		change_cohesion = {
-			VALUE = 40
-		}
-		ruler = {
-			add_modifier = {
-				name = politically_tone_deaf_leader
-			}
-		}
-	}
 	option = {
-		name = ideology_break_1_event.10.a
+		name = ideology_break_3_1_event.10.a
 		default_option = yes
 	}
 }
