@@ -643,3 +643,84 @@ first_inventions_events.16 = {
 		}
 	}
 }
+
+
+first_inventions_events.17 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = first_inventions_events.17.t
+	desc = first_inventions_events.17.d
+	flavor = first_inventions_events.17.f
+	duration = 3
+	trigger = {
+		has_technology_researched = trench_works
+		NOT = {
+			has_global_variable = trench_works_invented_global
+		}
+	}
+	immediate = {
+		set_global_variable = trench_works_invented_global
+	}
+	option = {
+		name = first_inventions_events.17.a
+		add_modifier = {
+			name = trench_works_invented_country
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = {
+						this = root
+					}
+				}
+				#delay event by 1 day. Because PDX.
+				trigger_event = {
+					id = first_inventions_events.18
+					popup = yes
+				}
+			}
+		}
+	}
+}
+first_inventions_events.18 = {
+	#trench_works invented by X
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = first_inventions_events.18.t
+	desc = first_inventions_events.18.d
+	flavor = first_inventions_events.18.f
+	duration = 3
+	immediate = {
+		random_country = {
+			limit = {
+				has_modifier = trench_works_invented_country
+			}
+			save_scope_as = inventor_scope
+		}
+	}
+	option = {
+		trigger = {
+			can_research = trench_works
+		}
+		name = first_inventions_events.18.close
+		default_option = yes
+	}
+	option = {
+		trigger = {
+			NOT = {
+				can_research = trench_works
+			}
+		}
+		name = first_inventions_events.18.far_off
+	}
+}
