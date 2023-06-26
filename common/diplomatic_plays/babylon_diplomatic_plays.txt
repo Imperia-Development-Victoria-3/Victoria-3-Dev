@@ -51,7 +51,7 @@ dp_customs_union = {
 		#Should be diplo play scope
 		if = {
 			limit = { 
-				escalation >= 80
+				escalation >= 60
 			}
 			initiator = {
 				#Initiator is overlord
@@ -70,5 +70,25 @@ dp_customs_union = {
 	on_war_begins = {
 	}
 	on_war_end = {
+	}
+}
+
+dp_colonial_war = {
+	war_goal = humiliation
+	texture = "gfx/interface/icons/war_goals/humiliation.dds"
+	possible = {
+		has_law = law_type:law_imperialism
+		NOT = { is_country_type = decentralized }
+		babylon_aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			NOT = { is_subject_of = root }
+			is_country_type = recognized
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
+			scope:target_country.relations:root < relations_threshold:cordial
+		}				
 	}
 }
