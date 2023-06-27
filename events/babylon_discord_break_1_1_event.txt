@@ -18,23 +18,44 @@ ideology_break_1_1_event.1 = {
 	option = {
 		name = ideology_break_1_1_event.1.a
 		default_option = yes
-		trigger = {
-			NOT = {
-				ruler = {
-					OR = {
-						has_trait = opium_addiction
-						has_trait = reserved
-						has_trait = arrogant
-					}
-				}
-			}
-		}
 		random_list = {
 			33 = {
+				modifier = {
+					if = {
+						limit = {
+							ruler = {
+								has_trait = opium_addiction
+							}
+						}
+						add = -7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = reserved
+							}
+						}
+						add = -7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = arrogant
+							}
+						}
+						add = -7
+					}
+				}
 				trigger_event = {
 					id = ideology_break_1_1_event.2
 					days = 0
 					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					change_cohesion = {
+						VALUE = -20
+					}
 				}
 			}
 			33 = {
@@ -45,32 +66,78 @@ ideology_break_1_1_event.1 = {
 				}
 			}
 			33 = {
+				modifier = {
+					if = {
+						limit = {
+							ruler = {
+								has_trait = opium_addiction
+							}
+						}
+						add = 7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = reserved
+							}
+						}
+						add = 7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = arrogant
+							}
+						}
+						add = 7
+					}
+				}
 				trigger_event = {
 					id = ideology_break_1_1_event.4
 					days = 0
 					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					change_cohesion = {
+						VALUE = 20
+					}
 				}
 			}
 		}
 	}
 	option = {
 		name = ideology_break_1_1_event.2.a
-		trigger = {
-			NOT = {
-				ruler = {
-					OR = {
-						has_trait = opium_addiction
-						has_trait = cautious
-					}
-				}
-			}
-		}
 		random_list = {
 			33 = {
+				modifier = {
+					if = {
+						limit = {
+							ruler = {
+								has_trait = opium_addiction
+							}
+						}
+						add = -7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = cautious
+							}
+						}
+						add = -7
+					}
+				}
 				trigger_event = {
 					id = ideology_break_1_1_event.5
 					days = 0
 					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					change_cohesion = {
+						VALUE = -30
+					}
 				}
 			}
 			33 = {
@@ -79,12 +146,47 @@ ideology_break_1_1_event.1 = {
 					days = 0
 					popup = yes
 				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					add_modifier = {
+						name = smear_campaign_costs
+						months = 6
+					}
+				}
 			}
 			33 = {
+				modifier = {
+					if = {
+						limit = {
+							ruler = {
+								has_trait = opium_addiction
+							}
+						}
+						add = 7
+					}
+					if = {
+						limit = {
+							ruler = {
+								has_trait = cautious
+							}
+						}
+						add = 7
+					}
+				}
 				trigger_event = {
 					id = ideology_break_1_1_event.7
 					days = 0
 					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					add_modifier = {
+						name = smear_campaign_costs
+						months = 8
+					}
+					change_cohesion = {
+						VALUE = 30
+					}
 				}
 			}
 		}
@@ -115,6 +217,17 @@ ideology_break_1_1_event.1 = {
 			days = 0
 			popup = yes
 		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			ruler = {
+				add_modifier = {
+					name = politically_tone_deaf_leader
+				}
+			}
+			change_cohesion = {
+				VALUE = 40
+			}
+		}
 	}
 }
 
@@ -137,7 +250,7 @@ ideology_break_1_1_event.2 = {
 		name = ideology_break_1_1_event.4.a
 		default_option = yes
 		change_cohesion = {
-			VALUE = 20
+			VALUE = -20
 		}
 	}
 }
@@ -160,9 +273,6 @@ ideology_break_1_1_event.3 = {
 	option = {
 		name = ideology_break_1_1_event.5.a
 		default_option = yes
-		change_cohesion = {
-			VALUE = 0
-		}
 	}
 }
 
@@ -185,7 +295,7 @@ ideology_break_1_1_event.4 = {
 		name = ideology_break_1_1_event.6.a
 		default_option = yes
 		change_cohesion = {
-			VALUE = -20
+			VALUE = 20
 		}
 	}
 }
@@ -230,16 +340,13 @@ ideology_break_1_1_event.6 = {
 		# triggered by sucess for event 
 	}
 	immediate = {
-		add_modifier = {
-			name = smear_campaign_costs
-			months = 6
-		}
 	}
 	option = {
 		name = ideology_break_1_1_event.8.a
 		default_option = yes
-		change_cohesion = {
-			VALUE = 0
+		add_modifier = {
+			name = smear_campaign_costs
+			months = 6
 		}
 	}
 }
@@ -260,14 +367,14 @@ ideology_break_1_1_event.7 = {
 		# triggered by sucess for event 
 	}
 	immediate = {
-		add_modifier = {
-			name = smear_campaign_costs
-			months = 8
-		}
 	}
 	option = {
 		name = ideology_break_1_1_event.9.a
 		default_option = yes
+		add_modifier = {
+			name = smear_campaign_costs
+			months = 8
+		}
 		change_cohesion = {
 			VALUE = 30
 		}
@@ -290,15 +397,15 @@ ideology_break_1_1_event.8 = {
 		# triggered by ignoring event
 	}
 	immediate = {
+	}
+	option = {
+		name = ideology_break_1_1_event.10.a
+		default_option = yes
 		ruler = {
 			add_modifier = {
 				name = politically_tone_deaf_leader
 			}
 		}
-	}
-	option = {
-		name = ideology_break_1_1_event.10.a
-		default_option = yes
 		change_cohesion = {
 			VALUE = 40
 		}
