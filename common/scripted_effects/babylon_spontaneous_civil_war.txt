@@ -1,0 +1,30 @@
+﻿instant_civil_war = {
+		random_scope_state = {
+			save_scope_as = civil_war_center
+		}
+		create_country = {
+			origin = root
+			state = scope:civil_war_center
+			on_created = {
+				set_variable = civil_war_country
+			}
+		}
+		random_country = {
+			limit = {
+				has_variable = civil_war_country
+			}
+			save_scope_as = civil_war_country
+		}
+		every_scope_state = {
+			random = {
+				chance = $CHANCE$
+				set_state_owner = scope:civil_war_country
+			}
+		}
+		scope:civil_war_country = {
+			create_diplomatic_play = {
+				type = dp_revolution
+				target_country = root
+			}
+		}
+}
