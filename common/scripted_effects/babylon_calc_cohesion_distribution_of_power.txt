@@ -1,0 +1,460 @@
+﻿babylon_calc_cohesion_distribution_of_power = {
+	if = {
+		limit = {
+			has_law = law_type:law_autocracy
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_single_party_state
+					}
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_technocracy
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_elder_council
+						has_law = law_type:law_landed_voting
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_wealth_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_census_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 20
+			}
+		}
+	}
+	#Exit autocracy check
+	else_if = {
+		limit = {
+			has_law = law_type:law_technocracy
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_technocracy
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_elder_council
+						has_law = law_type:law_landed_voting
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 4
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:single_party_state
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 15
+			}
+		}
+	}
+	#Exit technocracy check
+	else_if = {
+		limit = {
+			has_law = law_type:law_oligarchy
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_elder_council
+					}
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_landed_voting
+						has_law = law_type:law_wealth_voting
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_census_voting
+						has_law = law_type:single_party_state
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 20
+			}
+		}
+	}
+	#Exit oligarchy
+	else_if = {
+		limit = {
+			has_law = law_type:law_elder_council
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_elder_council
+						has_law = law_type:law_landed_voting
+					}
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					OR = {
+						has_law = law_type:law_census_voting
+						has_law = law_type:single_party_state
+						has_law = law_type:law_wealth_voting
+					}
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 4
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 15
+			}
+		}
+	}
+	#Exit elder council
+	else_if = {
+		limit = {
+			has_law = law_type:law_landed_voting
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_landed_voting
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_wealth_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_census_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_single_party_state
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 4
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 15
+			}
+		}
+	}
+	#Exit landed voting
+	else_if = {
+		limit = {
+			has_law = law_type:law_wealth_voting
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_wealth_voting
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_census_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_single_party_state
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 4
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 15
+			}
+		}
+	}
+	#Exit wealth voting
+	else_if = {
+		limit = {
+			has_law = law_type:law_census_voting
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_census_voting
+				}
+			}
+			#No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_census_voting
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_single_party_state
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 4
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 2
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_anarchy
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 15
+			}
+		}
+	}
+}

@@ -1,0 +1,137 @@
+﻿babylon_political_cohesion_monthly_pulse_journal_entry = {
+	#First we (re)set the theoretical cohesion number
+	set_variable = {
+		name = theoretical_cohesion
+		value = 0
+	}
+	###############################
+	### EXTERNAL CONSIDERATIONS ###
+	#Then we add to it for each foreign pact
+	#Defensive pacts
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = defensive_pact
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+			MULTIPLIER = 1.25
+		}
+	}
+	#Alliances
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = alliance
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+			MULTIPLIER = 1.5
+		}
+	}
+	#trade agreements
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = trade_agreement
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+			MULTIPLIER = 1
+		}
+	}
+	#Customs unions
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = customs_union
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = yes
+			MULTIPLIER = 1.1
+		}
+	}
+	#Rivalries (removes cohesion penalties)
+	every_country = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = rivalry
+			}
+		}
+		babylon_calc_cohesion_government_difference = {
+			TARGET = root
+			IS_GAIN = no
+			MULTIPLIER = 1.5
+		}
+	}
+	### END EXTERNAL ##############
+	###############################
+	### INTERNAL CONSIDERATIONS ###
+	# First the ruler
+	ruler = {
+		save_temporary_scope_as = ruler_scope
+	}
+	babylon_calc_cohesion_CHARACTER_ideology = {
+		CHARACTER = scope:ruler_scope
+		MULTIPLIER = 2
+	}
+	# Then leaders of every government IG
+	every_interest_group = {
+		limit = {
+			is_in_government = yes
+		}
+		# Their multiplier will be clout+1 (meaning a 28% clout IG would have 1.28 multiplier)
+		set_local_variable = {
+			name = interest_group_clout
+			value = ig_clout
+		}
+		change_local_variable = {
+			name = interest_group_clout
+			add = 1
+		}
+		leader = {
+			save_temporary_scope_as = ig_leader_scope
+			root = {
+				babylon_calc_cohesion_CHARACTER_ideology = {
+					CHARACTER = scope:ig_leader_scope
+					MULTIPLIER = local_var:interest_group_clout
+				}
+			}
+		}
+		remove_local_variable = interest_group_clout
+	}
+	### END INTERNAL ###
+	####################
+	#Then we find the difference between the current and theoretical values
+	change_variable = {
+		name = theoretical_cohesion
+		subtract = var:political_cohesion
+	}
+	#Divide it...
+	change_variable = {
+		name = theoretical_cohesion
+		divide = 10
+	}
+	#Then we round it
+	round_variable = {
+		name = theoretical_cohesion
+		nearest = 1
+	}
+	#And apply it
+	change_cohesion = {
+		VALUE = var:theoretical_cohesion
+	}
+}
