@@ -1,13 +1,19 @@
 ﻿law_expansionism = {
 	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/notification_icons/military.dds"
+	icon = "gfx/interface/icons/foreign_laws/expansionism.dds"
 	progressiveness = -80
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 30
-		country_influence_add = -100
-		country_infamy_generation_mult = -0.2
-		country_radicals_from_conquest_mult = 0.15
+		country_infamy_decay_mult = -0.25
+		country_influence_add = -200
+		country_radicals_from_conquest_mult = 0.5
 	}
+
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_expansionism_tip
+		}		
+	}
+
 	unlocking_technologies = {
 	}
 	disallowing_laws = {
@@ -27,10 +33,10 @@
 		}
 		ruler = {
 			OR = {
-				has_ideology = ideology:royalist
-				has_ideology = ideology:jingoist
-				has_ideology = ideology:fascist
-				has_ideology = ideology:ethno_nationalist
+				has_ideology = ideology:ideology_royalist
+				has_ideology = ideology:ideology_jingoist
+				has_ideology = ideology:ideology_fascist
+				has_ideology = ideology:ideology_ethno_nationalist
 			}
 		}
 	}
@@ -41,16 +47,21 @@ law_imperialism = {
 	icon = "gfx/interface/icons/law_icons/autocracy.dds"
 	progressiveness = -70
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 30
-		country_influence_add = 200
-		country_max_declared_interests_add = 3
+		country_radicals_from_conquest_mult = 0.5
+		country_max_declared_interests_mult = 0.1
+		country_authority_add = -200
 		state_disallow_incorporation = yes
+	}
+
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_imperialism_tip
+		}		
 	}
 	disallowing_laws = {
 		law_no_colonial_affairs
 	}
 	unlocking_technologies = {
-		colonization
 	}
 	possible_political_movements = {
 	}
@@ -71,8 +82,8 @@ law_imperialism = {
 		}
 		ruler = {
 			OR = {
-				has_ideology = ideology:slaver
-				has_ideology = ideology:market_liberal
+				has_ideology = ideology:ideology_slaver
+				has_ideology = ideology:ideology_market_liberal
 			}
 		}
 	}
@@ -80,14 +91,17 @@ law_imperialism = {
 
 law_armed_neutrality = {
 	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/law_icons/national_guard.dds"
+	icon = "gfx/interface/icons/foreign_laws/armed_neutrality.dds"
 	progressiveness = -50
 	modifier = {
-		unit_army_defense_add = 10
-		unit_navy_defense_add = 10
-		country_influence_add = -200
-		country_improve_relations_speed_mult = -0.5
-		country_trade_route_competitiveness_mult = -0.1
+		unit_army_defense_add = 7.5
+		unit_army_defense_mult = 0.05
+		country_military_goods_cost_mult = -0.2
+	}
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_armed_neutrality_tip
+		}		
 	}
 	unlocking_technologies = {
 	}
@@ -104,8 +118,8 @@ law_armed_neutrality = {
 		}
 		ruler = {
 			OR = {
-				has_ideology = ideology:communist
-				has_ideology = ideology:market_liberal
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_market_liberal
 			}
 		}
 	}
@@ -113,14 +127,17 @@ law_armed_neutrality = {
 
 law_anti_imperialist = {
 	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/law_icons/slavery_banned.dds"
+	icon = "gfx/interface/icons/foreign_laws/antiimperialism.dds"
 	progressiveness = -50
 	modifier = {
-		country_diplomatic_play_maneuvers_add = 40
+		country_influence_add = 400
 		country_max_declared_interests_add = 3
-		state_migration_pull_mult = 0.03
-		country_influence_add = 100
-		country_infamy_generation_mult = 0.1
+		country_infamy_generation_mult = 0.15	
+	}
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_pacifist_tip
+		}		
 	}
 	unlocking_technologies = {
 	}
@@ -139,49 +156,11 @@ law_anti_imperialist = {
 		}
 		ruler = {
 			OR = {
-				has_ideology = ideology:abolitionist
-				has_ideology = ideology:radical
-				has_ideology = ideology:social_democrat
-				has_ideology = ideology:ethno_nationalist
-				has_ideology = ideology:reformer
-			}
-		}
-	}
-}
-
-law_neutral = {
-	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/law_icons/presidential_republic.dds"
-	progressiveness = -50
-	modifier = {
-		state_conscription_rate_mult = 0.1
-		country_diplomatic_play_maneuvers_add = -20
-		country_influence_add = -50
-		battle_offense_owned_province_mult = 0.05
-		battle_defense_owned_province_mult = 0.15
-	}
-	unlocking_technologies = {
-	}
-	disallowing_laws = {
-		law_colonial_exploitation
-		law_colonial_resettlement
-		law_mass_conscription
-	}
-	possible_political_movements = {
-	}
-	pop_support = {
-		value = 0
-	}
-	ai_will_do = {
-		NOT = {
-			has_law = law_type:law_true_neutrality
-		}
-		ruler = {
-			OR = {
-				has_ideology = ideology:theocrat
-				has_ideology = ideology:traditionalist
-				has_ideology = ideology:royalist
-				has_ideology = ideology:moderate
+				has_ideology = ideology:ideology_abolitionist
+				has_ideology = ideology:ideology_radical
+				has_ideology = ideology:ideology_social_democrat
+				has_ideology = ideology:ideology_ethno_nationalist
+				has_ideology = ideology:ideology_reformer
 			}
 		}
 	}
@@ -189,16 +168,20 @@ law_neutral = {
 
 law_pacifist = {
 	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/notification_icons/peace.dds"
+	icon = "gfx/interface/icons/foreign_laws/pacifism.dds"
 	progressiveness = -50
 	modifier = {
-		country_influence_add = 150
-		state_migration_pull_mult = 0.1
-		country_radicals_from_conquest_mult = 0.5
-		country_war_exhaustion_casualties_mult = 0.3
-		unit_army_offense_mult = -0.1
+		state_migration_pull_mult = 0.2
+		country_influence_add = 200
 		building_throughput_mult = 0.05
-		country_infamy_generation_mult = 0.1
+		state_loyalists_from_sol_change_accepted_religion_mult = 0.1
+		country_legitimacy_base_add = 5
+		country_max_declared_interests_add = 1
+	}
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_pacifist_tip
+		}		
 	}
 	unlocking_technologies = {
 	}
@@ -217,23 +200,27 @@ law_pacifist = {
 			has_law = law_type:law_true_neutrality
 		}
 		ruler = {
-			has_ideology = ideology:pacifist
+			has_ideology = ideology:ideology_pacifist
 		}
 	}
 }
 
 law_true_neutrality = {
 	group = lawgroup_diplomatic_stance
-	icon = "gfx/interface/icons/alert_icons/active_peace_deal.dds"
+	icon = "gfx/interface/icons/foreign_laws/true_neutrality.dds"
 	progressiveness = -50
 	modifier = {
-		country_max_declared_interests_add = -1
-		country_radicals_from_conquest_mult = 1
-		country_trade_route_competitiveness_mult = -0.05
-		state_disallow_incorporation = yes
-		country_influence_add = 100
-		state_radicals_from_sol_change_mult = -0.2
-		country_legitimacy_base_add = 5
+		unit_army_defense_add = 10
+		unit_army_defense_mult = 0.15
+		country_military_goods_cost_mult = -0.1
+		country_legitimacy_base_add = 10
+		building_throughput_mult = 0.05
+	}
+	on_activate = {
+		custom_tooltip = {
+			text = custom_babylon_law_true_neutrality_tip
+			liberate_slaves = yes
+		}		
 	}
 	unlocking_technologies = {
 	}
@@ -242,7 +229,6 @@ law_true_neutrality = {
 		law_armed_neutrality
 		law_expansionism
 		law_imperialism
-		law_neutral
 		law_pacifist
 	}
 	pop_support = {

@@ -1,177 +1,28 @@
 ﻿namespace = infamy_rebalance
 infamy_rebalance.1 = {
-	#updates infamy modifiers in provinces
+	# Sets pariah neighbour journal entries
 	type = country_event
 	hidden = yes
 	trigger = {
-		OR = {
-			AND = {
-				infamy >= infamy_threshold:pariah
-				any_state = {
-					owner = ROOT
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						has_modifier = modifier_infamy_notorious
-						NOT = {
-							has_modifier = modifier_infamy_pariah
-						}
-					}
-				}
-			}
-			AND = {
-				infamy >= infamy_threshold:notorious
-				NOT = {
-					infamy >= infamy_threshold:pariah
-				}
-				any_state = {
-					owner = ROOT
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						NOT = {
-							has_modifier = modifier_infamy_notorious
-						}
-						has_modifier = modifier_infamy_pariah
-					}
-				}
-			}
-			AND = {
-				infamy >= infamy_threshold:infamous
-				NOT = {
-					infamy >= infamy_threshold:notorious
-				}
-				any_state = {
-					owner = ROOT
-					OR = {
-						NOT = {
-							has_modifier = modifier_infamy_infamous
-						}
-						has_modifier = modifier_infamy_notorious
-						has_modifier = modifier_infamy_pariah
-					}
-				}
-			}
-			AND = {
-				NOT = {
-					infamy >= infamy_threshold:infamous
-				}
-				any_state = {
-					owner = ROOT
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						has_modifier = modifier_infamy_notorious
-						has_modifier = modifier_infamy_pariah
-					}
-				}
-			}
-		}
+		infamy >= infamy_threshold:pariah
 	}
 	immediate = {
 		save_scope_as = pariah_scope
-		#name = infamy_rebalance.1.a
-		if = {
+		every_country = {
 			limit = {
-				infamy >= infamy_threshold:pariah
-			}
-			every_scope_state = {
-				limit = {
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						has_modifier = modifier_infamy_notorious
-						NOT = {
-							OR = {
-								has_modifier = modifier_infamy_infamous
-								has_modifier = modifier_infamy_notorious
-							}
-						}
+				AND = {
+					has_strategic_adjacency = scope:pariah_scope
+					NOT = {
+						this = scope:pariah_scope
+					}
+					NOT = {
+						is_country_type = decentralized
 					}
 				}
-				remove_modifier = modifier_infamy_infamous
-				remove_modifier = modifier_infamy_notorious
-				remove_modifier = modifier_infamy_pariah
-				add_modifier = {
-					name = modifier_infamy_pariah
-				}
 			}
-			every_country = {
-				limit = {
-					AND = {
-						has_strategic_adjacency = scope:pariah_scope
-						NOT = {
-							this = scope:pariah_scope
-						}
-						NOT = {
-							is_country_type = decentralized
-						}
-					}
-				}
-				add_journal_entry = {
-					type = je_pariah_neighbour
-					target = scope:pariah_scope
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				infamy >= infamy_threshold:notorious
-			}
-			every_scope_state = {
-				limit = {
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						has_modifier = modifier_infamy_pariah
-						NOT = {
-							OR = {
-								has_modifier = modifier_infamy_infamous
-								has_modifier = modifier_infamy_pariah
-							}
-						}
-					}
-				}
-				remove_modifier = modifier_infamy_infamous
-				remove_modifier = modifier_infamy_notorious
-				remove_modifier = modifier_infamy_pariah
-				add_modifier = {
-					name = modifier_infamy_notorious
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				infamy >= infamy_threshold:infamous
-			}
-			every_scope_state = {
-				limit = {
-					OR = {
-						has_modifier = modifier_infamy_notorious
-						has_modifier = modifier_infamy_pariah
-						NOT = {
-							OR = {
-								has_modifier = modifier_infamy_notorious
-								has_modifier = modifier_infamy_pariah
-							}
-						}
-					}
-				}
-				remove_modifier = modifier_infamy_infamous
-				remove_modifier = modifier_infamy_notorious
-				remove_modifier = modifier_infamy_pariah
-				add_modifier = {
-					name = modifier_infamy_infamous
-				}
-			}
-		}
-		else = {
-			every_scope_state = {
-				limit = {
-					OR = {
-						has_modifier = modifier_infamy_infamous
-						has_modifier = modifier_infamy_notorious
-						has_modifier = modifier_infamy_pariah
-					}
-				}
-				remove_modifier = modifier_infamy_infamous
-				remove_modifier = modifier_infamy_notorious
-				remove_modifier = modifier_infamy_pariah
+			add_journal_entry = {
+				type = je_pariah_neighbour
+				target = scope:pariah_scope
 			}
 		}
 	}
@@ -285,7 +136,7 @@ infamy_rebalance.4 = {
 				months = short_modifier_time
 				is_decaying = yes
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				value = 0.15
 			}
 		}

@@ -1,0 +1,56 @@
+﻿babylon_calc_cohesion_free_speech = {
+	if = {
+		limit = {
+			has_law = law_type:law_outlawed_dissent
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_right_of_assembly
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_protected_speech
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 5
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_censorship
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_right_of_assembly
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 1
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					has_law = law_type:law_protected_speech
+				}
+			}
+			change_local_variable = {
+				name = cohesion_change
+				add = 3
+			}
+		}
+	}
+}
