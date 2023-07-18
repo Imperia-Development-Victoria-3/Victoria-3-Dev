@@ -1,63 +1,50 @@
 ﻿namespace = food_shortage_events
-
 food_shortage_events.1 = {
 	type = country_event
-	placement = scope:capital
-
+	placement = capital
 	title = food_shortage_events.1.t
 	desc = food_shortage_events.1.d
 	flavor = food_shortage_events.f
-
 	event_image = {
 		video = "europenorthamerica_russian_serfs"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-
 	duration = 3
-
-	trigger = { # triggered by JE
+	trigger = {
+		# triggered by JE
 	}
-
 	immediate = {
 	}
-
-	option = { #Let them eat cake
+	option = {
+		#Let them eat cake
 		name = food_shortage_events.1.a
 		default_option = yes
-
 		add_modifier = {
-			state_radicals_from_sol_change_mult = 0.25
+			name = babylon_modifier_let_them_eat_cake
+			years = 2
 		}
-
 		add_radicals = {
 			strata = poor
-			value = 0.10
+			value = 0.1
 		}
 	}
-	
-	option = { #We must act now
-		 name = food_shortage_events.1.b
-		 default_option = no
-
-		 trigger = {	# This event is available if the country is not collecting consumption taxes on Grain
-			scope:country = {
+	option = {
+		#We must act now
+		name = food_shortage_events.1.b
+		default_option = no
+		trigger = {
+			# This event is available if the country is not collecting consumption taxes on Grain
+			root = {
 				NOT = {
 					has_consumption_tax = g:grain
 				}
 			}
-			
 			show_as_unavailable = yes
-		 }	
-
-		 add_modifier = {
-			country_mandate_subsidies = g:grain
-			state_welfare_payments_add = 5000
-		 }
-	
-	
+		}
+		add_modifier = {
+			name = babylon_modifier_mandated_grain_subsidies
+			years = 2
+		}
 	}
-
 }

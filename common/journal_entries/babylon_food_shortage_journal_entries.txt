@@ -1,68 +1,57 @@
 ﻿je_food_shortage = {
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-
 	is_shown_when_inactive = {
 		is_player = yes
 	}
-
 	possible = {
-		
 		market_capital.market = {
-			mg:grain = { 
+			mg:grain = {
 				market_goods_pricier > 0.33
 			}
 		}
 		OR = {
-		market_capital.market = {
-			mg:meat = {
-				market_goods_pricier > 0.25
+			market_capital.market = {
+				mg:meat = {
+					market_goods_pricier > 0.25
+				}
+			}
+			market_capital.market = {
+				mg:fish = {
+					market_goods_pricier > 0.25
+				}
 			}
 		}
-
-		market_capital.market = {
-			mg:fish = {
-				market_goods_pricier > 0.25
-			}
-		}	
 	}
-}
-	
 	immediate = {
-		trigger_event = { id = food_shortage_events.1 }
-}
-
-	complete = {
-	
-
-		market_capital.market = {
-			mg:grain = { 
-				market_goods_cheaper > 0.10
-			}
+		trigger_event = {
+			id = food_shortage_events.1
 		}
-
-		OR = {
-		market_capital.market = {
-			mg:meat = {
-				market_goods_cheaper > 0.10
-			}
-		}
-
-		market_capital.market = {
-			mg:fish = {
-				market_goods_cheaper > 0.10
-			}
-		}	
 	}
-}
-
+	complete = {
+		market_capital.market = {
+			mg:grain = {
+				market_goods_cheaper > 0.1
+			}
+		}
+		OR = {
+			market_capital.market = {
+				mg:meat = {
+					market_goods_cheaper > 0.1
+				}
+			}
+			market_capital.market = {
+				mg:fish = {
+					market_goods_cheaper > 0.1
+				}
+			}
+		}
+	}
 	on_complete = {
 		add_loyalists = {
 			strata = poor
-			value = 0.10
+			value = 0.1
 		}
 	}
-	
-
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
@@ -72,50 +61,38 @@
 			10 = food_shortage_events.5
 		}
 	}
-
 	timeout = 183
-
 	on_timeout = {
 		add_journal_entry = {
 			type = je_famine
 		}
 	}
-
 	fail = {
-
 		market_capital.market = {
-			mg:grain = { 
-				market_goods_pricier > 0.40
+			mg:grain = {
+				market_goods_pricier > 0.4
 			}
 		}
-
 		OR = {
-		market_capital.market = {
-			mg:meat = {
-				market_goods_pricier > 0.33
+			market_capital.market = {
+				mg:meat = {
+					market_goods_pricier > 0.33
+				}
+			}
+			market_capital.market = {
+				mg:fish = {
+					market_goods_pricier > 0.33
+				}
 			}
 		}
-
-		market_capital.market = {
-			mg:fish = {
-				market_goods_pricier > 0.33
-			}
-		}	
 	}
-}
-
 	on_fail = {
 		add_journal_entry = {
 			type = je_famine
 		}
 	}
-
-
 	weight = 200
-
 	should_be_pinned_by_default = yes
-
 	transferable = no
-
 	progressbar = yes
 }
