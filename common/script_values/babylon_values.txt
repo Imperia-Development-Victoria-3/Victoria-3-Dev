@@ -1,7 +1,7 @@
 ﻿babylon_ai_foreign_law_state_wargoal_weight = {
 	value = 1
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_expansionism
 			scope:target_state = {
 				region = {
@@ -21,7 +21,7 @@
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_imperialism
 			scope:target_country = {
 				NOT = {
@@ -32,7 +32,7 @@
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_armed_neutrality
 			scope:target_country = {
 				NOT = {
@@ -45,7 +45,7 @@
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_anti_imperialist
 			scope:target_country = {
 				OR = {
@@ -61,24 +61,23 @@
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_pacifist
 		}
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_true_neutrality
 		}
 		multiply = 0
 	}
 }
 
-
 babylon_ai_foreign_law_country_wargoal_weight = {
 	value = 1
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_expansionism
 			scope:target_country = {
 				NOT = {
@@ -92,7 +91,7 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_imperialism
 			scope:target_country = {
 				NOT = {
@@ -103,7 +102,7 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_armed_neutrality
 			scope:target_country = {
 				NOT = {
@@ -116,7 +115,7 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_anti_imperialist
 			scope:target_country = {
 				OR = {
@@ -132,15 +131,97 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_pacifist
 		}
 		multiply = 0
 	}
 	if = {
-		limit = { 
+		limit = {
 			has_law = law_type:law_true_neutrality
 		}
 		multiply = 0
+	}
+}
+
+babylon_player_construction_bonus_multiplier = {
+	switch = {
+		trigger = has_game_rule
+		disable_pcb = {
+			value = 0
+		}
+		enable_pcb_15 = {
+			value = 15
+		}
+		enable_pcb_051015 = {
+			if = {
+				limit = {
+					country_rank = great_power
+				}
+				value = 0
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = major_power
+						country_rank = unrecognized_major_power
+					}
+				}
+				value = 5
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = minor_power
+						country_rank = unrecognized_regional_power
+					}
+				}
+				value = 10
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = insignificant_power
+						country_rank = unrecognized_power
+					}
+				}
+				value = 15
+			}
+		}
+		enable_pcb_0247 = {
+			if = {
+				limit = {
+					country_rank = great_power
+				}
+				value = 0
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = major_power
+						country_rank = unrecognized_major_power
+					}
+				}
+				value = 2
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = minor_power
+						country_rank = unrecognized_regional_power
+					}
+				}
+				value = 4
+			}
+			else_if = {
+				limit = {
+					OR = {
+						country_rank = insignificant_power
+						country_rank = unrecognized_power
+					}
+				}
+				value = 7
+			}
+		}
 	}
 }

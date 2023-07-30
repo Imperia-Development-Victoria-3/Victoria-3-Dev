@@ -75,16 +75,22 @@
 				}
 			}
 		}
-		# Give players more construction
+		# Give players more construction if they deserve it
 		if = {
 			limit = {
 				is_player = yes
-				NOT = {
-					has_modifier = player_construction_bonus
-				}
 			}
-			add_modifier = {
-				name = player_construction_bonus
+			# Remove the bonus and resets it (if it exists); here in case a players rank is adjusted
+			remove_modifier ?= player_construction_bonus
+			if = {
+				# Only re-add the modifier if the contents (multiplier) are non-zero
+				limit = {
+					babylon_player_construction_bonus_multiplier != 0
+				}
+				add_modifier = {
+					name = player_construction_bonus
+					multiplier = babylon_player_construction_bonus_multiplier
+				}
 			}
 		}
 		else_if = {
