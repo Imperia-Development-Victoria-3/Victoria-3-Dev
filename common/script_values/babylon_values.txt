@@ -145,83 +145,92 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 }
 
 babylon_player_construction_bonus_multiplier = {
-	switch = {
-		trigger = has_game_rule
-		disable_pcb = {
+	if = {
+		limit = {
+			has_game_rule = disable_pcb
+		}
+		value = 0
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_pcb_15
+		}
+		value = 15
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_pcb_051015
+		}
+		if = {
+			limit = {
+				country_rank = rank_value:great_power
+			}
 			value = 0
 		}
-		enable_pcb_15 = {
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:major_power
+					country_rank = rank_value:unrecognized_major_power
+				}
+			}
+			value = 5
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:minor_power
+					country_rank = rank_value:unrecognized_regional_power
+				}
+			}
+			value = 10
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:insignificant_power
+					country_rank = rank_value:unrecognized_power
+				}
+			}
 			value = 15
 		}
-		enable_pcb_051015 = {
-			if = {
-				limit = {
-					country_rank = great_power
-				}
-				value = 0
-			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = major_power
-						country_rank = unrecognized_major_power
-					}
-				}
-				value = 5
-			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = minor_power
-						country_rank = unrecognized_regional_power
-					}
-				}
-				value = 10
-			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = insignificant_power
-						country_rank = unrecognized_power
-					}
-				}
-				value = 15
-			}
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_pcb_0247
 		}
-		enable_pcb_0247 = {
-			if = {
-				limit = {
-					country_rank = great_power
-				}
-				value = 0
+		if = {
+			limit = {
+				country_rank = rank_value:great_power
 			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = major_power
-						country_rank = unrecognized_major_power
-					}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:major_power
+					country_rank = rank_value:unrecognized_major_power
 				}
-				value = 2
 			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = minor_power
-						country_rank = unrecognized_regional_power
-					}
+			value = 2
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:minor_power
+					country_rank = rank_value:unrecognized_regional_power
 				}
-				value = 4
 			}
-			else_if = {
-				limit = {
-					OR = {
-						country_rank = insignificant_power
-						country_rank = unrecognized_power
-					}
+			value = 4
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:insignificant_power
+					country_rank = rank_value:unrecognized_power
 				}
-				value = 7
 			}
+			value = 7
 		}
 	}
 }
