@@ -1,7 +1,9 @@
-﻿babylon_calc_cohesion_citizenship = {
+﻿babylon_calc_discord_citizenship = {
 	if = {
 		limit = {
-			has_law = law_type:law_ethnostate
+			root = {
+				has_law = law_type:law_ethnostate
+			}
 		}
 		if = {
 			limit = {
@@ -21,9 +23,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 2
+			change_discord_factor = {
+				VALUE = political_discord_change_small
 			}
 		}
 		else_if = {
@@ -34,9 +35,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 4
+			change_discord_factor = {
+				VALUE = political_discord_change_large
 			}
 		}
 		else_if = {
@@ -47,9 +47,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 10
+			change_discord_factor = {
+				VALUE = political_discord_change_huge
 			}
 		}
 		else_if = {
@@ -62,16 +61,17 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 20
+			change_discord_factor = {
+				VALUE = political_discord_change_massive
 			}
 		}
 	}
-    # Exit ethnostate
+	# Exit ethnostate
 	if = {
 		limit = {
-			has_law = law_type:law_national_supremacy
+			root = {
+				has_law = law_type:law_national_supremacy
+			}
 		}
 		if = {
 			limit = {
@@ -91,9 +91,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 1
+			change_discord_factor = {
+				VALUE = political_discord_change_miniscule
 			}
 		}
 		else_if = {
@@ -104,9 +103,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 2
+			change_discord_factor = {
+				VALUE = political_discord_change_small
 			}
 		}
 		else_if = {
@@ -117,9 +115,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 4
+			change_discord_factor = {
+				VALUE = political_discord_change_large
 			}
 		}
 		else_if = {
@@ -132,83 +129,17 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 10
+			change_discord_factor = {
+				VALUE = political_discord_change_huge
 			}
 		}
 	}
-    # Exit national supremacy
+	# Exit national supremacy
 	if = {
 		limit = {
-			has_law = law_type:law_racial_segregation
-		}
-		if = {
-			limit = {
-				$TARGET$ = {
-					any_primary_culture = {
-						is_primary_culture_of = root
-					}
-				}
+			root = {
+				has_law = law_type:law_racial_segregation
 			}
-			# No change
-		}
-		else_if = {
-			limit = {
-				$TARGET$ = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root
-					}
-				}
-			}
-			# No change
-		}
-		else_if = {
-			limit = {
-				$TARGET$ = {
-					any_primary_culture = {
-						shares_heritage_trait_with_any_primary_culture = root
-					}
-				}
-			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 1
-			}
-		}
-		else_if = {
-			limit = {
-				$TARGET$ = {
-					any_primary_culture = {
-						shares_non_heritage_trait_with_any_primary_culture = root
-					}
-				}
-			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 2
-			}
-		}
-		else_if = {
-			limit = {
-				$TARGET$ = {
-					NOT = {
-						any_primary_culture = {
-							shares_trait_with_any_primary_culture = root
-						}
-					}
-				}
-			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 6
-			}
-		}
-	}
-    # Exit racial segregation
-	if = {
-		limit = {
-			has_law = law_type:law_cultural_exclusion
 		}
 		if = {
 			limit = {
@@ -238,7 +169,9 @@
 					}
 				}
 			}
-			# No change
+			change_discord_factor = {
+				VALUE = political_discord_change_miniscule
+			}
 		}
 		else_if = {
 			limit = {
@@ -248,9 +181,8 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 1
+			change_discord_factor = {
+				VALUE = political_discord_change_small
 			}
 		}
 		else_if = {
@@ -263,12 +195,75 @@
 					}
 				}
 			}
-			change_local_variable = {
-				name = cohesion_change
-				add = 4
+			change_discord_factor = {
+				VALUE = political_discord_change_xl
 			}
 		}
 	}
-    # Exit cultural exclusion
-    # No change for multicultural, not needed
+	# Exit racial segregation
+	if = {
+		limit = {
+			root = {
+				has_law = law_type:law_cultural_exclusion
+			}
+		}
+		if = {
+			limit = {
+				$TARGET$ = {
+					any_primary_culture = {
+						is_primary_culture_of = root
+					}
+				}
+			}
+			# No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					any_primary_culture = {
+						shares_heritage_and_other_trait_with_any_primary_culture = root
+					}
+				}
+			}
+			# No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					any_primary_culture = {
+						shares_heritage_trait_with_any_primary_culture = root
+					}
+				}
+			}
+			# No change
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					any_primary_culture = {
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+				}
+			}
+			change_discord_factor = {
+				VALUE = political_discord_change_miniscule
+			}
+		}
+		else_if = {
+			limit = {
+				$TARGET$ = {
+					NOT = {
+						any_primary_culture = {
+							shares_trait_with_any_primary_culture = root
+						}
+					}
+				}
+			}
+			change_discord_factor = {
+				VALUE = political_discord_change_large
+			}
+		}
+	}
+	# Exit cultural exclusion
+	# No change for multicultural, not needed
 }

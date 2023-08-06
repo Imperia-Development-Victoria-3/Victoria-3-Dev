@@ -1,28 +1,49 @@
-﻿change_cohesion = {
-	# $VALUE$ = num [should be the value that political cohesion changes by temporarily, before being adjusted by the monthly pulse gradually]
+﻿change_discord = {
+	# $VALUE$ = num [should be the value that political discord changes by temporarily, before being adjusted by the monthly pulse gradually]
 	save_temporary_scope_value_as = {
-		name = cohesion_change
+		name = discord_change
 		value = $VALUE$
 	}
 	if = {
-		limit = { 
+		limit = {
 			$VALUE$ > 0
 		}
-		custom_tooltip = increase_cohesion_tt
+		custom_tooltip = increase_discord_tt
 	}
 	else_if = {
-		limit = { 
+		limit = {
 			$VALUE$ < 0
 		}
-		custom_tooltip = decrease_cohesion_tt
+		custom_tooltip = decrease_discord_tt
 	}
 	change_variable = {
-		name = political_cohesion
+		name = political_discord
 		add = $VALUE$
 	}
 	clamp_variable = {
-		name = political_cohesion
+		name = political_discord
 		max = 450
 		min = 0
+	}
+}
+
+change_discord_factor = {
+	# Scope = diplomatic_pact
+	if = {
+		limit = {
+			scope:first_country = {
+				this = root
+			}
+		}
+		change_variable = {
+			name = discord_change_first_country
+			add = $VALUE$
+		}
+	}
+	else = {
+		change_variable = {
+			name = discord_change_second_country
+			add = $VALUE$
+		}
 	}
 }

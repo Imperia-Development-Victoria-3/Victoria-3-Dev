@@ -1,80 +1,73 @@
-﻿babylon_political_cohesion_monthly_pulse_journal_entry = {
-	#First we (re)set the theoretical cohesion number
+﻿babylon_political_discord_monthly_pulse_journal_entry = {
+	#First we (re)set the theoretical discord number
 	set_variable = {
-		name = theoretical_cohesion
+		name = theoretical_discord
 		value = 0
 	}
 	###############################
 	### EXTERNAL CONSIDERATIONS ###
 	#Then we add to it for each foreign pact
-	#Defensive pacts
-	every_country = {
-		limit = {
-			has_diplomatic_pact = {
-				who = root
-				type = defensive_pact
+	root = {
+		debug_log = "babylon_political_discord_monthly_pulse_journal_entry -> root scope"
+		debug_log_scopes = yes
+		every_scope_diplomatic_pact = {
+			debug_log = "babylon_political_discord_monthly_pulse_journal_entry -> root -> every_scope_diplomatic_pact scope"
+			debug_log_scopes = yes
+			limit = {
+				OR = {
+					# Add each diplomatic pact considered to the list below
+					is_diplomatic_action_type = defensive_pact
+					is_diplomatic_action_type = alliance
+					is_diplomatic_action_type = trade_agreement
+					is_diplomatic_action_type = customs_union
+					is_diplomatic_action_type = rivalry
+				}
 			}
-		}
-		babylon_calc_cohesion_government_difference = {
-			TARGET = root
-			IS_GAIN = yes
-			MULTIPLIER = 1.25
-		}
-	}
-	#Alliances
-	every_country = {
-		limit = {
-			has_diplomatic_pact = {
-				who = root
-				type = alliance
+			if = {
+				limit = {
+					is_diplomatic_action_type = defensive_pact
+				}
+				babylon_calc_discord_government_difference = {
+					IS_GAIN = yes
+					MULTIPLIER = 1.25
+				}
 			}
-		}
-		babylon_calc_cohesion_government_difference = {
-			TARGET = root
-			IS_GAIN = yes
-			MULTIPLIER = 1.5
-		}
-	}
-	#trade agreements
-	every_country = {
-		limit = {
-			has_diplomatic_pact = {
-				who = root
-				type = trade_agreement
+			else_if = {
+				limit = {
+					is_diplomatic_action_type = alliance
+				}
+				babylon_calc_discord_government_difference = {
+					IS_GAIN = yes
+					MULTIPLIER = 1.5
+				}
 			}
-		}
-		babylon_calc_cohesion_government_difference = {
-			TARGET = root
-			IS_GAIN = yes
-			MULTIPLIER = 1
-		}
-	}
-	#Customs unions
-	every_country = {
-		limit = {
-			has_diplomatic_pact = {
-				who = root
-				type = customs_union
+			else_if = {
+				limit = {
+					is_diplomatic_action_type = trade_agreement
+				}
+				babylon_calc_discord_government_difference = {
+					IS_GAIN = yes
+					MULTIPLIER = 1
+				}
 			}
-		}
-		babylon_calc_cohesion_government_difference = {
-			TARGET = root
-			IS_GAIN = yes
-			MULTIPLIER = 1.1
-		}
-	}
-	#Rivalries (removes cohesion penalties)
-	every_country = {
-		limit = {
-			has_diplomatic_pact = {
-				who = root
-				type = rivalry
+			else_if = {
+				limit = {
+					is_diplomatic_action_type = customs_union
+				}
+				babylon_calc_discord_government_difference = {
+					IS_GAIN = yes
+					MULTIPLIER = 1.1
+				}
 			}
-		}
-		babylon_calc_cohesion_government_difference = {
-			TARGET = root
-			IS_GAIN = no
-			MULTIPLIER = 1.5
+			else_if = {
+				limit = {
+					is_diplomatic_action_type = rivalry
+				}
+				babylon_calc_discord_government_difference = {
+					IS_GAIN = no
+					MULTIPLIER = 1.5
+				}
+			}
 		}
 	}
 	### END EXTERNAL ##############
@@ -84,7 +77,7 @@
 	ruler = {
 		save_temporary_scope_as = ruler_scope
 	}
-	babylon_calc_cohesion_CHARACTER_ideology = {
+	babylon_calc_discord_CHARACTER_ideology = {
 		CHARACTER = scope:ruler_scope
 		MULTIPLIER = 2
 	}
@@ -105,7 +98,7 @@
 		leader = {
 			save_temporary_scope_as = ig_leader_scope
 			root = {
-				babylon_calc_cohesion_CHARACTER_ideology = {
+				babylon_calc_discord_CHARACTER_ideology = {
 					CHARACTER = scope:ig_leader_scope
 					MULTIPLIER = local_var:interest_group_clout
 				}
@@ -115,23 +108,22 @@
 	}
 	### END INTERNAL ###
 	####################
-	#Then we find the difference between the current and theoretical values
+	#Then we find the difference between the current and theoretical values and divide it
 	change_variable = {
-		name = theoretical_cohesion
-		subtract = var:political_cohesion
+		name = theoretical_discord
+		subtract = var:political_discord
 	}
-	#Divide it...
 	change_variable = {
-		name = theoretical_cohesion
+		name = theoretical_discord
 		divide = 10
 	}
 	#Then we round it
 	round_variable = {
-		name = theoretical_cohesion
+		name = theoretical_discord
 		nearest = 1
 	}
 	#And apply it
-	change_cohesion = {
-		VALUE = var:theoretical_cohesion
+	change_discord = {
+		VALUE = var:theoretical_discord
 	}
 }

@@ -1,65 +1,97 @@
-﻿babylon_calc_cohesion_government_difference = {
-	#Preliminary setup
-	$TARGET$ = {
-		save_scope_as = target_country
+﻿babylon_calc_discord_government_difference = {
+	# Scope = diplomatic_pact
+	# Preliminary setup
+	if = {
+		limit = {
+			scope:first_country = {
+				this = root
+			}
+		}
+		set_variable = {
+			name = discord_change_first_country
+			value = 0
+		}
 	}
-	set_local_variable = {
-		name = cohesion_change
-		value = 0
+	else = {
+		set_variable = {
+			name = discord_change_second_country
+			value = 0
+		}
+	}
+	"diplomatic_pact_other_country(root)" = {
+		save_scope_as = other_country
 	}
 	########################################
 	### INSERT CALCULATION EFFECTS BELOW ###
-	babylon_calc_cohesion_distribution_of_power = {
-		TARGET = scope:target_country
+	babylon_calc_discord_distribution_of_power = {
+		TARGET = scope:other_country
 	}
-	babylon_calc_cohesion_governance_principles = {
-		TARGET = scope:target_country
+	babylon_calc_discord_governance_principles = {
+		TARGET = scope:other_country
 	}
-	babylon_calc_cohesion_diplomatic_stance = {
-		TARGET = scope:target_country
+	babylon_calc_discord_diplomatic_stance = {
+		TARGET = scope:other_country
 	}
-	babylon_calc_cohesion_free_speech = {
-		TARGET = scope:target_country
+	babylon_calc_discord_free_speech = {
+		TARGET = scope:other_country
 	}
-	babylon_calc_cohesion_citizenship = {
-		TARGET = scope:target_country
+	babylon_calc_discord_citizenship = {
+		TARGET = scope:other_country
 	}
 	### INSERT CALCULATION EFFECTS ABOVE ###
 	########################################
 	# Apply the multiplier...
-	change_local_variable = {
-		name = cohesion_change
-		multiply = $MULTIPLIER$
-	}
-	# Apply the change to both self and target
-	# Yes, even the target.
 	if = {
 		limit = {
-			$IS_GAIN$ = yes
+			scope:first_country = {
+				this = root
+			}
 		}
 		change_variable = {
-			name = theoretical_cohesion
-			add = local_var:cohesion_change
+			name = discord_change_first_country
+			multiply = $MULTIPLIER$
 		}
-		scope:target_country = {
+		# Apply the change to the theoretical
+		if = {
+			limit = {
+				$IS_GAIN$ = yes
+			}
 			change_variable = {
-				name = theoretical_cohesion
-				add = local_var:cohesion_change
+				name = theoretical_discord
+				add = var:discord_change_first_country
+			}
+		}
+		else_if = {
+			limit = {
+				$IS_GAIN$ = no
+			}
+			change_variable = {
+				name = theoretical_discord
+				subtract = var:discord_change_first_country
 			}
 		}
 	}
-	else_if = {
-		limit = {
-			$IS_GAIN$ = no
-		}
+	else = {
 		change_variable = {
-			name = theoretical_cohesion
-			subtract = local_var:cohesion_change
+			name = discord_change_second_country
+			multiply = $MULTIPLIER$
 		}
-		scope:target_country = {
+		if = {
+			limit = {
+				$IS_GAIN$ = yes
+			}
 			change_variable = {
-				name = theoretical_cohesion
-				subtract = local_var:cohesion_change
+				name = theoretical_discord
+				add = var:discord_change_second_country
+			}
+		}
+		else_if = {
+			limit = {
+				$IS_GAIN$ = no
+			}
+			change_variable = {
+				name = theoretical_discord
+				subtract = var:discord_change_second_country
 			}
 		}
 	}

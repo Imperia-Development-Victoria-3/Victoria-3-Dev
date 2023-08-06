@@ -24,6 +24,39 @@ belgium_primer_event.1 = {
 	}
 
 	immediate = {
+		random_scope_diplomatic_pact = {
+			set_variable = {
+				name = diplo_pact_var
+				value = 1
+			}
+		}
+		random_scope_diplomatic_pact = {
+			limit = {
+				has_variable = diplo_pact_var
+			}
+			change_variable = {
+				name = diplo_pact_var
+				add = 3
+			}
+		}
+		random_scope_diplomatic_pact = {
+			limit = {
+				has_variable = diplo_pact_var
+			}
+			save_scope_as = diplo_pact_scope
+		}
+		set_variable = {
+			name = treasury_add
+			value = 0.5
+		}
+		change_variable = {
+			name = treasury_add
+			add = scope:diplo_pact_scope.var:diplo_pact_var
+		}
+		change_variable = {
+			name = treasury_add
+			multiply = 500
+		}
 	}
 	
 	option = {
@@ -37,7 +70,7 @@ belgium_primer_event.1 = {
 	}
 	option = {
 		name = belgium_primer_event.2.a
-		custom_tooltip = babylon_discord_test_case_tt
+		add_treasury = var:treasury_add
 		default_option = yes	
 	}
 }
