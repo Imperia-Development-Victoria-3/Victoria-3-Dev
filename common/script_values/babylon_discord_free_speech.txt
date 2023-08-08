@@ -1,0 +1,122 @@
+﻿babylon_discord_free_speech = {
+	if = {
+		limit = {
+			exists = scope:target_country
+		}
+		if = {
+			limit = {
+				root = {
+					has_law = law_type:law_outlawed_dissent
+				}
+			}
+			if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_outlawed_dissent
+					}
+				}
+				value = 0
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_censorship
+					}
+				}
+				value = political_discord_change_miniscule
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_right_of_assembly
+					}
+				}
+				value = political_discord_change_medium
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_protected_speech
+					}
+				}
+				value = political_discord_change_xl
+			}
+		}
+		else_if = {
+			limit = {
+				root = {
+					has_law = law_type:law_censorship
+				}
+			}
+			if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_censorship
+					}
+				}
+				value = 0
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						OR = {
+							has_law = law_type:law_outlawed_dissent
+							has_law = law_type:law_right_of_assembly
+						}
+					}
+				}
+				value = political_discord_change_miniscule
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_protected_speech
+					}
+				}
+				value = political_discord_change_medium
+			}
+		}
+		else_if = {
+			limit = {
+				root = {
+					has_law = law_type:law_right_of_assembly
+				}
+			}
+			if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_right_of_assembly
+					}
+				}
+				value = 0
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_protected_speech
+					}
+				}
+				value = political_discord_change_miniscule
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_censorship
+					}
+				}
+				value = political_discord_change_medium
+			}
+			else_if = {
+				limit = {
+					scope:target_country = {
+						has_law = law_type:law_outlawed_dissent
+					}
+				}
+				value = political_discord_change_xl
+			}
+		}
+	}
+	else = {
+		value = 0
+	}
+}
