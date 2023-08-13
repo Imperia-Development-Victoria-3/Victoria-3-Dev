@@ -45,3 +45,68 @@ political_discord_customs_union_pact_mult = {
 political_discord_rivalry_pact_mult = {
 	value = 1.5
 }
+
+babylon_discord_fetch_value = {
+	value = 0 # gets through
+	every_scope_diplomatic_pact = {
+		limit = {
+			any_participant = {
+				this = scope:target_country
+			}
+			OR = {
+				# Add each diplomatic pact considered to the list below
+				is_diplomatic_action_type = defensive_pact
+				is_diplomatic_action_type = alliance
+				is_diplomatic_action_type = trade_agreement
+				is_diplomatic_action_type = customs_union
+				is_diplomatic_action_type = rivalry
+			}
+		}
+        # multiplications + number returnal
+		if = {
+			limit = {
+				is_diplomatic_action_type = defensive_pact
+			}
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_defensive_pact_mult
+			}
+		}
+		if = {
+			limit = {
+				is_diplomatic_action_type = alliance
+			}
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_alliance_pact_mult
+			}
+		}
+		if = {
+			limit = {
+				is_diplomatic_action_type = trade_agreement
+			}
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_trade_pact_mult
+			}
+		}
+		if = {
+			limit = {
+				is_diplomatic_action_type = customs_union
+			}
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_customs_union_pact_mult
+			}
+		}
+		if = {
+			limit = {
+				is_diplomatic_action_type = rivalry
+			}
+			subtract = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_rivalry_pact_mult
+			}
+		}
+	}
+}
