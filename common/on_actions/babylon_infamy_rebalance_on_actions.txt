@@ -1,5 +1,6 @@
 ﻿on_babylon_monthly_pulse_country = {
 	effect = {
+		# Land trade capacity
 		remove_modifier ?= modifier_land_trade_capacity
 
 		set_local_variable = {
@@ -13,7 +14,7 @@
 		every_scope_state = {
 			change_local_variable = {
 				name = total_infrastructure
-				add = modifier:state_infrastructure_add		
+				add = modifier:state_infrastructure_add
 			}
 			change_local_variable = {
 				name = number_of_states
@@ -83,11 +84,29 @@
 				}
 			}
 		}
+		# Give players more construction
+		if = {
+			limit = {
+				is_player = yes
+				NOT = {
+					has_modifier = player_construction_bonus
+				}
+			}
+			add_modifier = {
+				name = player_construction_bonus
+			}
+		}
+		else_if = {
+			limit = {
+				is_player = no
+				has_modifier = player_construction_bonus
+			}
+			remove_modifier = player_construction_bonus
+		}
 	}
-
 	events = {
-		naval_command_check.1 # checks
-		infamy_rebalance.1	#updates provinces each month
+		naval_command_check.1		# checks
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
