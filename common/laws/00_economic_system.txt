@@ -1,68 +1,55 @@
 ﻿# group = this is the law_group a law belongs to
 # icon = graphical icon shown in-game
 # modifier = {} modifier on country for having adopted this law
-
 law_traditionalism = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/traditionalism.dds"
-	
 	progressiveness = -50
-	
 	disallowing_laws = {
 		law_per_capita_based_taxation
 		law_proportional_taxation
 		law_graduated_taxation
 		law_anarchy
 	}
-		
 	on_activate = {
 	}
-	
 	modifier = {
-		state_shopkeepers_investment_pool_efficiency_mult = -0.5
-		state_capitalists_investment_pool_efficiency_mult = -0.5
-		state_aristocrats_investment_pool_efficiency_mult = -0.20	
+		state_shopkeepers_investment_pool_efficiency_mult = -0.4
+		state_farmers_investment_pool_efficiency_mult = -0.25
+		state_capitalists_investment_pool_efficiency_mult = -0.6
 		state_bureaucracy_population_base_cost_factor_mult = -0.25
 		state_tax_capacity_mult = -0.25
 		country_private_construction_allocation_mult = 0.25
-		
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 	}
-	
 	possible_political_movements = {
 		law_interventionism
 		law_command_economy
 		law_agrarianism
 		law_laissez_faire
 	}
-
 	# no pop support because movements are impossible
-	
 	pop_support = {
 		value = 0
 	}
-
 	build_from_investment_pool = {
 		bg_agriculture
 		bg_plantations
 		bg_ranching
-	}	
-	
+	}
 	# AI should never switch back to traditionalism
 	ai_will_do = {
 		always = no
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -71,28 +58,24 @@ law_traditionalism = {
 
 law_interventionism = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/interventionism.dds"
-	
 	progressiveness = 50
-	
 	disallowing_laws = {
 		law_serfdom
 		law_anarchy
 	}
-	
 	on_activate = {
 	}
-	
 	unlocking_technologies = {
 		manufacturies
 	}
-	
 	modifier = {
 		country_subsidies_all = yes
 		country_private_construction_allocation_mult = 0.5
+		state_shopkeepers_investment_pool_efficiency_mult = 0.25
+		state_farmers_investment_pool_efficiency_mult = 0.25
+		state_aristocrats_investment_pool_efficiency_mult = -0.05
 	}
-
 	build_from_investment_pool = {
 		bg_agriculture
 		bg_plantations
@@ -106,7 +89,6 @@ law_interventionism = {
 		bg_oil_extraction
 		bg_infrastructure
 	}
-	
 	possible_political_movements = {
 		law_command_economy
 		law_agrarianism
@@ -114,18 +96,17 @@ law_interventionism = {
 		law_cooperative_ownership
 		law_industry_banned
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_CAPITALISTS"			
+			desc = "POP_CAPITALISTS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_agrarianism 
-							has_law = law_type:law_traditionalism 
-							has_law = law_type:law_industry_banned 
+						OR = {
+							has_law = law_type:law_agrarianism
+							has_law = law_type:law_traditionalism
+							has_law = law_type:law_industry_banned
 						}
 					}
 					is_pop_type = capitalists
@@ -134,17 +115,16 @@ law_interventionism = {
 			}
 		}
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_CAPITALISTS"			
+			desc = "POP_CAPITALISTS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_agrarianism 
-							has_law = law_type:law_traditionalism 
+						OR = {
+							has_law = law_type:law_agrarianism
+							has_law = law_type:law_traditionalism
 						}
 					}
 					is_pop_type = capitalists
@@ -153,15 +133,14 @@ law_interventionism = {
 			}
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -170,35 +149,28 @@ law_interventionism = {
 
 law_agrarianism = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/agrarianism.dds"
-	
 	progressiveness = 0
-	
 	disallowing_laws = {
 		law_anarchy
-	}	
-	
+	}
 	unlocking_technologies = {
 		romanticism
 	}
-	
 	on_activate = {
 	}
-	
 	modifier = {
-		state_aristocrats_investment_pool_efficiency_mult = 0.5
-		state_farmers_investment_pool_efficiency_mult = 0.5
-		state_capitalists_investment_pool_efficiency_mult = -0.25
+		state_aristocrats_investment_pool_efficiency_mult = 0.6
+		state_farmers_investment_pool_efficiency_mult = 0.8
+		state_shopkeepers_investment_pool_efficiency_mult = -0.25
+		state_capitalists_investment_pool_efficiency_mult = -0.4
 		country_private_construction_allocation_mult = 0.5
-		
 		country_subsidies_bg_agriculture = yes
 		country_subsidies_bg_ranching = yes
 		country_subsidies_bg_plantations = yes
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 	}
-
 	build_from_investment_pool = {
 		bg_agriculture
 		bg_plantations
@@ -209,24 +181,22 @@ law_agrarianism = {
 		bg_rubber
 		bg_fishing
 	}
-	
 	possible_political_movements = {
 		law_interventionism
 		law_command_economy
 		law_laissez_faire
 		law_cooperative_ownership
 	}
-	
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_FARMERS"			
+			desc = "POP_FARMERS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_interventionism 
-							has_law = law_type:law_laissez_faire 
+						OR = {
+							has_law = law_type:law_interventionism
+							has_law = law_type:law_laissez_faire
 							has_law = law_type:law_traditionalism
 						}
 					}
@@ -236,13 +206,13 @@ law_agrarianism = {
 			}
 		}
 		add = {
-			desc = "POP_ARISTOCRATS"			
+			desc = "POP_ARISTOCRATS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_interventionism 
-							has_law = law_type:law_laissez_faire 
+						OR = {
+							has_law = law_type:law_interventionism
+							has_law = law_type:law_laissez_faire
 						}
 					}
 					is_pop_type = aristocrats
@@ -251,22 +221,20 @@ law_agrarianism = {
 			}
 		}
 	}
-		
 	ai_will_do = {
 		OR = {
 			has_law = law_type:law_traditionalism
 			literacy_rate < 0.4
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -275,14 +243,11 @@ law_agrarianism = {
 
 law_industry_banned = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/industry_banned.dds"
 	progressiveness = 0
-	
 	unlocking_technologies = {
 		romanticism
 	}
-
 	on_activate = {
 		custom_tooltip = industry_banned_tt
 		custom_tooltip = {
@@ -339,12 +304,12 @@ law_industry_banned = {
 			}
 		}
 	}
-
 	modifier = {
-		building_group_bg_agriculture_throughput_mult = 0.1
+		building_group_bg_agriculture_throughput_mult = 0.15
 		state_expected_sol_mult = -0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.5
-		state_aristocrats_investment_pool_contribution_add = 0.25
+		state_farmers_investment_pool_efficiency_mult = 1
+		state_aristocrats_investment_pool_contribution_add = 0.35
 		country_private_construction_allocation_mult = 0.5
 		country_production_tech_cost_mult = 0.25
 		country_production_tech_spread_mult = -0.25
@@ -354,30 +319,27 @@ law_industry_banned = {
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 	}
-
 	build_from_investment_pool = {
 		bg_agriculture
 		bg_plantations
 		bg_ranching
 		bg_infrastructure
 	}
-	
 	possible_political_movements = {
 		law_interventionism
 		law_command_economy
 		law_laissez_faire
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_FARMERS"			
+			desc = "POP_FARMERS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_interventionism 
-							has_law = law_type:law_laissez_faire 
+						OR = {
+							has_law = law_type:law_interventionism
+							has_law = law_type:law_laissez_faire
 							has_law = law_type:law_traditionalism
 						}
 					}
@@ -387,57 +349,48 @@ law_industry_banned = {
 			}
 		}
 	}
-
 	ai_will_do = {
 		always = no
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
 	}
 }
 
-
 law_laissez_faire = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/laissez_faire.dds"
-	
 	progressiveness = 100
-	
 	disallowing_laws = {
 		law_serfdom
 		law_isolationism
 		law_anarchy
 	}
-	
 	unlocking_technologies = {
 		international_trade
 	}
-	
 	on_activate = {
 	}
-	
 	modifier = {
 		country_loan_interest_rate_mult = -0.15
-		state_shopkeepers_investment_pool_efficiency_mult = 0.25	
-		state_capitalists_investment_pool_efficiency_mult = 0.25
+		state_shopkeepers_investment_pool_efficiency_mult = 0.5
+		state_capitalists_investment_pool_efficiency_mult = 0.3
+		interest_group_ig_industrialists_pol_str_mult = 0.25
+		country_trade_route_competitiveness_mult = 0.1
 		country_private_construction_allocation_mult = 0.75
-		
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 		country_private_buildings_protected = yes
 	}
-
 	build_from_investment_pool = {
 		bg_manufacturing
 		bg_mining
@@ -446,9 +399,8 @@ law_laissez_faire = {
 		bg_oil_extraction
 		bg_infrastructure
 		bg_whaling
-		bg_fishing	
+		bg_fishing
 	}
-	
 	possible_political_movements = {
 		law_interventionism
 		law_command_economy
@@ -456,18 +408,17 @@ law_laissez_faire = {
 		law_cooperative_ownership
 		law_industry_banned
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_CAPITALISTS"			
+			desc = "POP_CAPITALISTS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_agrarianism 
-							has_law = law_type:law_traditionalism 
-							has_law = law_type:law_industry_banned 
+						OR = {
+							has_law = law_type:law_agrarianism
+							has_law = law_type:law_traditionalism
+							has_law = law_type:law_industry_banned
 						}
 					}
 					is_pop_type = capitalists
@@ -476,15 +427,14 @@ law_laissez_faire = {
 			}
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -493,33 +443,27 @@ law_laissez_faire = {
 
 law_cooperative_ownership = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/cooperative_ownership.dds"
-	
 	progressiveness = 100
-	
 	disallowing_laws = {
 		law_serfdom
 	}
-	
 	unlocking_laws = {
-		law_council_republic			
+		law_council_republic
 	}
-	
-	on_activate = {		
+	on_activate = {
 		custom_tooltip = {
 			text = enact_law_radical_leftist_economy_warning_desc
-		}	
+		}
 	}
-	
 	modifier = {
-		state_shopkeepers_investment_pool_efficiency_mult = 0.35	
-		state_farmers_investment_pool_efficiency_mult = 0.35
+		country_law_enactment_time_mult = 0.15
+		state_shopkeepers_investment_pool_efficiency_mult = 0.40
+		state_farmers_investment_pool_efficiency_mult = 0.40
+		country_trade_route_competitiveness_mult = -0.1
 		country_private_construction_allocation_mult = 0.35
-
 		country_subsidies_all = yes
 	}
-	
 	build_from_investment_pool = {
 		bg_manufacturing
 		bg_mining
@@ -528,26 +472,24 @@ law_cooperative_ownership = {
 		bg_oil_extraction
 		bg_infrastructure
 		bg_whaling
-		bg_fishing	
-	}	
-	
+		bg_fishing
+	}
 	possible_political_movements = {
 		law_interventionism
 		law_agrarianism
 		law_laissez_faire
 		law_command_economy
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_CAPITALISTS"			
+			desc = "POP_CAPITALISTS"
 			if = {
 				limit = {
 					owner = {
-						OR = { 
-							has_law = law_type:law_agrarianism 
-							has_law = law_type:law_traditionalism 
+						OR = {
+							has_law = law_type:law_agrarianism
+							has_law = law_type:law_traditionalism
 						}
 					}
 					is_pop_type = capitalists
@@ -556,15 +498,14 @@ law_cooperative_ownership = {
 			}
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -573,41 +514,34 @@ law_cooperative_ownership = {
 
 law_command_economy = {
 	group = lawgroup_economic_system
-	
 	icon = "gfx/interface/icons/law_icons/command_economy.dds"
-	
 	progressiveness = 100
-	
 	disallowing_laws = {
 		law_serfdom
 		law_anarchy
 	}
-	
 	unlocking_technologies = {
 		central_planning
 	}
-	
 	unlocking_laws = {
 		law_autocracy
 		law_oligarchy
 		law_single_party_state
 		law_technocracy
-	}	
-	
+	}
 	on_activate = {
 		seize_investment_pool = yes
 		custom_tooltip = {
 			text = enact_law_radical_leftist_economy_warning_desc
-		}	
+		}
 	}
-	
 	modifier = {
 		country_subsidies_all = yes
 		country_disable_investment_pool = yes
-		
+		country_authority_add = 100
 		country_authority_mult = 0.25
+		country_trade_route_competitiveness_mult = -0.20
 	}
-	
 	possible_political_movements = {
 		law_interventionism
 		law_agrarianism
@@ -615,11 +549,10 @@ law_command_economy = {
 		law_cooperative_ownership
 		law_industry_banned
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_BUREAUCRATS"			
+			desc = "POP_BUREAUCRATS"
 			if = {
 				limit = {
 					is_pop_type = bureaucrats
@@ -628,11 +561,10 @@ law_command_economy = {
 			}
 		}
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_BUREAUCRATS"			
+			desc = "POP_BUREAUCRATS"
 			if = {
 				limit = {
 					is_pop_type = bureaucrats
@@ -641,7 +573,6 @@ law_command_economy = {
 			}
 		}
 	}
-	
 	ai_will_do = {
 		OR = {
 			has_law = law_type:law_council_republic
@@ -649,19 +580,18 @@ law_command_economy = {
 				exists = ruler
 				ruler = {
 					has_ideology = ideology:ideology_vanguardist
-				}			
+				}
 			}
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
