@@ -47,7 +47,7 @@ political_discord_rivalry_pact_mult = {
 }
 
 babylon_discord_fetch_value = {
-	value = 0 # gets through
+	value = 0	# gets through
 	every_scope_diplomatic_pact = {
 		limit = {
 			any_participant = {
@@ -62,7 +62,7 @@ babylon_discord_fetch_value = {
 				is_diplomatic_action_type = rivalry
 			}
 		}
-        # multiplications + number returnal
+		# multiplications + number returnal
 		if = {
 			limit = {
 				is_diplomatic_action_type = defensive_pact
@@ -109,4 +109,130 @@ babylon_discord_fetch_value = {
 			}
 		}
 	}
+}
+
+babylon_discord_character_calculation = {
+	# scope = character
+	value = 0
+	owner = {
+		# scope to country
+		every_law = {
+			# start iterating through laws
+			if = {
+				limit = {
+					# but
+					owner = {
+						# only laws the country has
+						has_law = prev.type
+					}
+				}
+				save_temporary_scope_as = law_scope
+				root = {
+					if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = strongly_disapprove
+							}
+						}
+						add = political_discord_change_small
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = disapprove
+							}
+						}
+						add = political_discord_change_miniscule
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = approve
+							}
+						}
+						subtract = political_discord_change_miniscule
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = strongly_approve
+							}
+						}
+						subtract = political_discord_change_small
+					}
+				}
+			}
+		}
+	}
+	if = {
+		# If character is a ruler theres a multiplier of 2, he got a big influence on politics
+		limit = {
+			is_ruler = yes
+		}
+		multiply = 2
+	}
+	else = {
+		# Else its the ig clout% + 1, e.g. 1.23x for a 23% ig
+		multiply = {
+			value = interest_group.ig_clout
+			add = 1
+		}
+	}
+	multiply = {
+		# After that popularity is taken into account...
+		# -25 popularity would be a 0.75x multiplier, people care less about him; reduced ability to influence politics
+		# +50 popularity would be a 1.5x multiplier, people care more about him; increased ability to influence politics
+		value = popularity
+		add = 100
+		divide = 100
+	}
+}
+
+babylon_discord_domestic_law_calculation = {
+	# character_scope = saved character
+	# law_scope = saved law
+	value = 0
+	scope:character_scope = {
+		if = {
+			limit = {
+				law_stance = {
+					law = scope:law_scope
+					value = strongly_disapprove
+				}
+			}
+			add = political_discord_change_small
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = scope:law_scope
+					value = disapprove
+				}
+			}
+			add = political_discord_change_miniscule
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = scope:law_scope
+					value = approve
+				}
+			}
+			subtract = political_discord_change_miniscule
+		}
+		else_if = {
+			limit = {
+				law_stance = {
+					law = scope:law_scope
+					value = strongly_approve
+				}
+			}
+			subtract = political_discord_change_small
+		}
+	}
+	multiply = local_var:domestic_law_discord_multiplier
 }
