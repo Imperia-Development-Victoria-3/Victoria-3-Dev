@@ -617,16 +617,19 @@ types country_panel_types
 
 				##POLITICAL DISCORD
 				country_stats_entry = {
-					blockoverride "stats_tooltip" {}
+					visible = "[Not(CountryPanel.GetCountry.IsPlayer)]"
+					blockoverride "stats_tooltip" {
+						tooltip = "DISCORD_WITH_COUNTRY_BREAKDOWN_TOOLTIP"
+					}
 
 					blockoverride "information_icon" {
 						texture = "gfx/interface/icons/topbar/discord_icon.dds"
 					}
 					blockoverride "stats_label" {
-						raw_text = "Political Discord"
+						raw_text = "[concept_political_discord] w/ target"
 					}
 					blockoverride "stats_value" {
-						raw_text = "[GetScriptedGui('political_discord_country').ExecuteTooltip(GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('target_country', Country.MakeScope).End)]"
+						raw_text = "#v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_fetch_value')]#!"
 					}
 				}
 				}
