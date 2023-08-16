@@ -36,7 +36,7 @@ law_national_guard = {
 	unlocking_technologies = {
 		law_enforcement
 	}
-	institution = institution_home_affairs
+	institution = institution_home_defence
 	institution_modifier = {
 		state_conscription_rate_add = 0.005
 		political_movement_radicalism_mult = -0.05
@@ -74,13 +74,6 @@ law_national_guard = {
 			}
 		}
 	}
-	# Don't return to national guard we have something more advanced
-	ai_will_do = {
-		NOR = {
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_guaranteed_liberties
-		}
-	}
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
@@ -110,7 +103,7 @@ law_localized_garrisons = {
 		law_serfdom
 		law_tenant_farmers
 	}
-	institution = institution_home_affairs
+	institution = institution_home_defence
 	institution_modifier = {
 		state_conscription_rate_add = 0.0025
 		unit_army_defense_add = 1
@@ -130,10 +123,10 @@ law_localized_garrisons = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_OFFICERS"
+			desc = "POP_LANDOWNERS"
 			if = {
 				limit = {
-					is_pop_type = officers
+					is_pop_type = aristocrats
 				}
 				value = 0.33
 			}
@@ -147,15 +140,8 @@ law_localized_garrisons = {
 				limit = {
 					is_pop_type = officers
 				}
-				value = 0.33
+				value = 0.20
 			}
-		}
-	}
-	# Don't return to national guard we have something more advanced
-	ai_will_do = {
-		NOR = {
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_guaranteed_liberties
 		}
 	}
 	ai_enact_weight_modifier = {
@@ -179,10 +165,21 @@ law_faith_orders = {
 	unlocking_technologies = {
 		romanticism
 	}
-	institution = institution_home_affairs
+	unlocking_laws = {
+		law_inquisition
+		law_religious_schools
+		law_state_religion
+		law_denominational_exclusion
+		law_freedom_of_conscience
+	}
+	institution = institution_home_defence
 	institution_modifier = {
-		state_conscription_rate_add = 0.005
+		state_conscription_rate_add = 0.001
 		political_movement_radicalism_mult = -0.05
+		country_authority_add = 20
+		interest_group_ig_devout_pop_attraction_mult = 0.05
+		state_conversion_mult = 0.15
+		unit_morale_recovery_mult = 0.02
 	}
 	possible_political_movements = {
 		law_national_guard
@@ -192,10 +189,10 @@ law_faith_orders = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_OFFICERS"
+			desc = "POP_CLERGYMEN"
 			if = {
 				limit = {
-					is_pop_type = officers
+					is_pop_type = clergymen
 				}
 				value = 0.33
 			}
@@ -211,13 +208,6 @@ law_faith_orders = {
 				}
 				value = 0.33
 			}
-		}
-	}
-	# Don't return to national guard we have something more advanced
-	ai_will_do = {
-		NOR = {
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_guaranteed_liberties
 		}
 	}
 	ai_enact_weight_modifier = {
@@ -241,10 +231,11 @@ law_emergency_relief_services = {
 	unlocking_technologies = {
 		human_rights
 	}
-	institution = institution_home_affairs
+	institution = institution_home_defence
 	institution_modifier = {
-		state_conscription_rate_add = 0.005
+		country_authority_add = -10
 		political_movement_radicalism_mult = -0.05
+		state_radicals_from_sol_change_mult = -0.03
 	}
 	possible_political_movements = {
 		law_national_guard
@@ -254,10 +245,10 @@ law_emergency_relief_services = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_OFFICERS"
+			desc = "POP_PEASANTS"
 			if = {
 				limit = {
-					is_pop_type = officers
+					is_pop_type = peasants
 				}
 				value = 0.33
 			}
@@ -266,20 +257,13 @@ law_emergency_relief_services = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_OFFICERS"
+			desc = "POP_LABORERS"
 			if = {
 				limit = {
-					is_pop_type = officers
+					is_pop_type = laborers
 				}
 				value = 0.33
 			}
-		}
-	}
-	# Don't return to national guard we have something more advanced
-	ai_will_do = {
-		NOR = {
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_guaranteed_liberties
 		}
 	}
 	ai_enact_weight_modifier = {
