@@ -111,9 +111,10 @@ babylon_discord_fetch_value = {
 	}
 }
 
-babylon_discord_character_calculation = {
+babylon_discord_character_law_calculation = {
 	# scope = character
 	value = 0
+	save_temporary_scope_as = character_scope
 	owner = {
 		# scope to country
 		every_law = {
@@ -127,7 +128,7 @@ babylon_discord_character_calculation = {
 					}
 				}
 				save_temporary_scope_as = law_scope
-				root = {
+				scope:character_scope = {
 					if = {
 						limit = {
 							law_stance = {
@@ -235,4 +236,80 @@ babylon_discord_domestic_law_calculation = {
 		}
 	}
 	multiply = local_var:domestic_law_discord_multiplier
+}
+
+babylon_discord_interest_group_law_calculation = {
+	# scope = some interest group within the country
+	value = 0
+	save_temporary_scope_as = ig_scope
+	owner = {
+		# scope to country
+		every_law = {
+			# start iterating through laws
+			if = {
+				limit = {
+					# but
+					owner = {
+						# only laws the country has
+						has_law = prev.type
+					}
+				}
+				save_temporary_scope_as = law_scope
+				scope:ig_scope = {
+					if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = strongly_disapprove
+							}
+						}
+						add = political_discord_change_small
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = disapprove
+							}
+						}
+						add = political_discord_change_miniscule
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = approve
+							}
+						}
+						subtract = political_discord_change_miniscule
+					}
+					else_if = {
+						limit = {
+							law_stance = {
+								law = scope:law_scope.type
+								value = strongly_approve
+							}
+						}
+						subtract = political_discord_change_small
+					}
+				}
+			}
+		}
+	}
+	multiply = {
+		value = ig_clout
+		add = 1
+	}
+}
+
+babylon_discord_legitimacy_offset_value = {
+	# Get the legitimacy, 75 for example
+	value = government_legitimacy
+	# Subtract by 50, so 25 now
+	subtract = 50
+	# Do this and you get the value, just with the other sign (-/+)
+	multiply = -1
+	# A government at 0 legit. will get 50 discord
+	# -||- at 50 legit. wont get any bonus, or malus
+	# -||- at 100 will get -50 discord
 }

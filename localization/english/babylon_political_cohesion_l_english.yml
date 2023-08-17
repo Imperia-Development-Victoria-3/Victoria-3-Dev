@@ -13,15 +13,21 @@
  increase_discord_tt: "#r [concept_political_discord] will change by [SCOPE.GetValue('discord_change')|0v]#!."
  decrease_discord_tt: "#g [concept_political_discord] will change by [SCOPE.GetValue('discord_change')|0v]#!."
 
+ discord_government_legitimacy_contribution_tt: "A [concept_legitimacy] value of #v [SCOPE.sCountry('root_scope').GetGovernmentLegitimacy|v]#! changes your Discord by #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_legitimacy_offset_value')]#!
+
  domestic_law_discord_tt: "[SCOPE.sCharacter('character_scope').GetFullName] changes your Discord by [Country.MakeScope.ScriptValue('babylon_discord_domestic_law_calculation')] because of their opinion of your [SCOPE.sLaw('law_scope').GetName] law."
 
- discord_character_contribution_tt: "[SCOPE.sCharacter('character_scope').GetPrimaryRoleTitle] [SCOPE.sCharacter('character_scope').GetFullName] [Concept('concept_discord_contribution','contributes')] #v [SCOPE.sCharacter('character_scope').MakeScope.ScriptValue('babylon_discord_character_calculation')|v0]#! discord."
+ discord_character_contribution_tt: "[SCOPE.sCharacter('character_scope').GetPrimaryRoleTitle] [SCOPE.sCharacter('character_scope').GetFullName] contributes #v [SCOPE.sCharacter('character_scope').MakeScope.ScriptValue('babylon_discord_character_law_calculation')|v0]#! discord."
+
+ discord_ig_contribution_tt: "[SCOPE.gsInterestGroup('ig_scope').GetName] contributes #v [SCOPE.gsInterestGroup('ig_scope').MakeScope.ScriptValue('babylon_discord_interest_group_law_calculation')|v0]#! discord."
 
  political_discord_je_was_added: "#variable Political Discord#! was added to the Journal of #variable [SCOPE.GetRootScope.GetCountry.GetNameNoFlag]#!"
- je_babylon_political_discord_normal: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #g normal#!."
- je_babylon_political_discord_medium: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #y manageable#!."
- je_babylon_political_discord_worrisome: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #r worrisome#!."
- je_babylon_political_discord_catastrophic: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, #r Abandon All Hope!#!"
+ je_babylon_political_discord_normal: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #g normal#!.\n$je_babylon_theorethical_discord$"
+ je_babylon_political_discord_medium: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #y manageable#!.\n$je_babylon_theorethical_discord$"
+ je_babylon_political_discord_worrisome: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, which is #r worrisome#!.\n$je_babylon_theorethical_discord$"
+ je_babylon_political_discord_catastrophic: "[concept_political_discord] is at #variable [SCOPE.GetRootScope.GetVariable('political_discord').GetValue|0v]#!, #r Abandon All Hope!#!\n$je_babylon_theorethical_discord$"
+
+ je_babylon_theorethical_discord: "[concept_political_discord] will gradually move towards #v [SCOPE.GetRootScope.GetVariable('equilibrium_discord').GetValue|0v]#! given current circumstances."
 
  discord_implosion_country_name: "[Country.GetCustom('babylon_discord_implosion_country')]"
  discord_implosion_country_name_adj: "[Country.GetCustom('babylon_discord_implosion_country')]"
@@ -43,4 +49,4 @@
  DISCORD_WITH_COUNTRY_BREAKDOWN_TOOLTIP: "#header [concept_political_discord] with [Country.GetName]#!\n Difference in #b $lawgroup_governance_principles$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_governance_principles')]#!\n Difference in #b $lawgroup_distribution_of_power$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_distribution_of_power')]#!\n Difference in #b $lawgroup_citizenship$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_citizenship')]#!\n Difference in #b $lawgroup_diplomatic_stance$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_diplomatic_stance')]#!\n Difference in #b $lawgroup_free_speech$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_free_speech')]#!\n\nThe #b $trade_agreement$#! pact #r increases Discord#! by the above values.\nThe #b $customs_union$#! pact #r increases Discord#! by the above values, plus #v 10%#!\nA #b $defensive_pact$#! #r increases Discord#! by the above values, plus #v 25%#!\nAn #b $alliance$#! #r increases Discord#! by the above values, plus #v 50%#!\n\nA #b $rivalry$#! #g decreases Discord#! by the above values, plus #v 50%#!"
 
  concept_discord_contribution: "Discord Contribution"
- concept_discord_contribution_desc: "Total contribution of [SCOPE.sCharacter('character_scope').GetPrimaryRoleTitle] [SCOPE.sCharacter('character_scope').GetFullName] to [ROOT.GetCountry.GetName]: #v [SCOPE.sCharacter('character_scope').MakeScope.ScriptValue('babylon_discord_character_calculation')|v0]#![GetScriptedGui('character_discord_contribution').ExecuteTooltip(GuiScope.SetRoot(SCOPE.sCharacter('character_scope').MakeScope).End)]"
+ concept_discord_contribution_desc: "Total contribution of [SCOPE.sCharacter('character_scope').GetPrimaryRoleTitle] [SCOPE.sCharacter('character_scope').GetFullName] to [ROOT.GetCountry.GetName]: #v [SCOPE.sCharacter('character_scope').MakeScope.ScriptValue('babylon_discord_character_law_calculation')|v0]#![GetScriptedGui('character_discord_contribution').ExecuteTooltip(GuiScope.SetRoot(SCOPE.sCharacter('character_scope').MakeScope).End)]"

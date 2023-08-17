@@ -6,63 +6,89 @@
 	}
 	###############################
 	### EXTERNAL CONSIDERATIONS ###
-	#Then we add to it for each foreign pact
+	# Then we add to it for each foreign country we have a valid pact with
+	# Inside the *fetch operation the different valid pacts are evaluated
 	every_country = {
 		limit = {
-			any_scope_diplomatic_pact = {
-				any_participant = {
-					this = root
+			OR = {
+				has_diplomatic_pact = {
+					who = root
+					type = defensive_pact
+				}
+				has_diplomatic_pact = {
+					who = root
+					type = alliance
+				}
+				has_diplomatic_pact = {
+					who = root
+					type = trade_agreement
+				}
+				has_diplomatic_pact = {
+					who = root
+					type = customs_union
+				}
+				has_diplomatic_pact = {
+					who = root
+					type = rivalry
 				}
 			}
 		}
 		babylon_discord_fetch = {
-			FIRST_COUNTRY = root
-			SECOND_COUNTRY = this
+			TARGET_COUNTRY = this
 		}
-		change_variable = {
-			name = theoretical_discord
-			add = local_var:discord_fetch_result
+		root = {
+			change_variable = {
+				name = theoretical_discord
+				add = local_var:discord_fetch_result
+			}
 		}
 	}
 	### END EXTERNAL ##############
 	###############################
 	### INTERNAL CONSIDERATIONS ###
 	# First the ruler
-	ruler = {
-		save_temporary_scope_as = ruler_scope
+	change_variable = {
+		name = theoretical_discord
+		add = ruler.babylon_discord_character_law_calculation
 	}
-	babylon_calc_discord_CHARACTER_ideology = {
-		CHARACTER = scope:ruler_scope
-		MULTIPLIER = 2
-	}
-	# Then leaders of every government IG
+	# Then leaders of every government IG, along with the government IGs 
 	every_interest_group = {
 		limit = {
 			is_in_government = yes
 		}
-		# Their multiplier will be clout+1 (meaning a 28% clout IG would have 1.28 multiplier)
-		set_local_variable = {
-			name = interest_group_clout
-			value = ig_clout
-		}
-		change_local_variable = {
-			name = interest_group_clout
-			add = 1
+		root = {
+			change_variable = {
+				name = theoretical_discord
+				add = prev.babylon_discord_interest_group_law_calculation
+			}
 		}
 		leader = {
-			save_temporary_scope_as = ig_leader_scope
 			root = {
-				babylon_calc_discord_CHARACTER_ideology = {
-					CHARACTER = scope:ig_leader_scope
-					MULTIPLIER = local_var:interest_group_clout
+				change_variable = {
+					name = theoretical_discord
+					add = prev.babylon_discord_character_law_calculation
 				}
 			}
 		}
-		remove_local_variable = interest_group_clout
+	}
+	# Legitimacy also have an impact
+	change_variable = {
+		name = theoretical_discord
+		add = babylon_discord_legitimacy_offset_value
 	}
 	### END INTERNAL ###
 	####################
 	#Then we find the difference between the current and theoretical values and divide it
+	set_variable = {
+		# Do a side trip and set an equilibrium variable, just for the journal entry
+		name = equilibrium_discord
+		value = var:theoretical_discord
+	}
+	clamp_variable = {
+		name = equilibrium_discord
+		max = 9999
+		min = 0
+	}
 	change_variable = {
 		name = theoretical_discord
 		subtract = var:political_discord

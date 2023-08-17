@@ -1,86 +1,83 @@
 ﻿babylon_discord_fetch = {
-	$SECOND_COUNTRY$ = {
+	$TARGET_COUNTRY$ = {
 		save_scope_as = target_country
 	}
 	set_local_variable = {
 		name = discord_fetch_result
 		value = 0
 	}
-	$FIRST_COUNTRY$ = {
-		every_scope_diplomatic_pact = {
-			limit = {
-				any_participant = {
-					this = $SECOND_COUNTRY$
-				}
-				OR = {
-					# Add each diplomatic pact considered to the list below
-					is_diplomatic_action_type = defensive_pact
-					is_diplomatic_action_type = alliance
-					is_diplomatic_action_type = trade_agreement
-					is_diplomatic_action_type = customs_union
-					is_diplomatic_action_type = rivalry
-				}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = defensive_pact
 			}
-            # multiplications + number returnal
-			if = {
-				limit = {
-					is_diplomatic_action_type = defensive_pact
-				}
-				change_local_variable = {
-					name = discord_fetch_result
-					add = {
-						value = babylon_discord_pact_calculation
-						multiply = political_discord_defensive_pact_mult
-					}
-				}
+		}
+		change_local_variable = {
+			name = discord_fetch_result
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_defensive_pact_mult
 			}
-			if = {
-				limit = {
-					is_diplomatic_action_type = alliance
-				}
-				change_local_variable = {
-					name = discord_fetch_result
-					add = {
-						value = babylon_discord_pact_calculation
-						multiply = political_discord_alliance_pact_mult
-					}
-				}
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = alliance
 			}
-			if = {
-				limit = {
-					is_diplomatic_action_type = trade_agreement
-				}
-				change_local_variable = {
-					name = discord_fetch_result
-					add = {
-						value = babylon_discord_pact_calculation
-						multiply = political_discord_trade_pact_mult
-					}
-				}
+		}
+		change_local_variable = {
+			name = discord_fetch_result
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_alliance_pact_mult
 			}
-			if = {
-				limit = {
-					is_diplomatic_action_type = customs_union
-				}
-				change_local_variable = {
-					name = discord_fetch_result
-					add = {
-						value = babylon_discord_pact_calculation
-						multiply = political_discord_customs_union_pact_mult
-					}
-				}
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = trade_agreement
 			}
-			if = {
-				limit = {
-					is_diplomatic_action_type = rivalry
-				}
-				change_local_variable = {
-					name = discord_fetch_result
-					subtract = {
-						value = babylon_discord_pact_calculation
-						multiply = political_discord_rivalry_pact_mult
-					}
-				}
+		}
+		change_local_variable = {
+			name = discord_fetch_result
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_trade_pact_mult
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = customs_union
+			}
+		}
+		change_local_variable = {
+			name = discord_fetch_result
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_customs_union_pact_mult
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = root
+				type = rivalry
+			}
+		}
+		change_local_variable = {
+			name = discord_fetch_result
+			add = {
+				value = babylon_discord_pact_calculation
+				multiply = political_discord_rivalry_pact_mult
 			}
 		}
 	}
