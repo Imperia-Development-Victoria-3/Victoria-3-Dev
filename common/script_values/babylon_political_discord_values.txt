@@ -46,67 +46,82 @@ political_discord_rivalry_pact_mult = {
 	value = 1.5
 }
 
+political_discord_strongly_approve = {
+	value = political_discord_change_small
+}
+
+political_discord_approve = {
+	value = political_discord_change_miniscule
+}
+
+political_discord_strongly_disapprove = {
+	value = political_discord_change_large
+}
+
+political_discord_disapprove = {
+	value = political_discord_change_small
+}
+
 babylon_discord_fetch_value = {
-	value = 0	# gets through
-	every_scope_diplomatic_pact = {
+	value = 0
+	if = {
 		limit = {
-			any_participant = {
-				this = scope:target_country
-			}
-			OR = {
-				# Add each diplomatic pact considered to the list below
-				is_diplomatic_action_type = defensive_pact
-				is_diplomatic_action_type = alliance
-				is_diplomatic_action_type = trade_agreement
-				is_diplomatic_action_type = customs_union
-				is_diplomatic_action_type = rivalry
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = defensive_pact
 			}
 		}
-		# multiplications + number returnal
-		if = {
-			limit = {
-				is_diplomatic_action_type = defensive_pact
-			}
-			add = {
-				value = babylon_discord_pact_calculation
-				multiply = political_discord_defensive_pact_mult
+		add = {
+			value = babylon_discord_pact_calculation
+			multiply = political_discord_defensive_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = alliance
 			}
 		}
-		if = {
-			limit = {
-				is_diplomatic_action_type = alliance
-			}
-			add = {
-				value = babylon_discord_pact_calculation
-				multiply = political_discord_alliance_pact_mult
+		add = {
+			value = babylon_discord_pact_calculation
+			multiply = political_discord_alliance_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = trade_agreement
 			}
 		}
-		if = {
-			limit = {
-				is_diplomatic_action_type = trade_agreement
-			}
-			add = {
-				value = babylon_discord_pact_calculation
-				multiply = political_discord_trade_pact_mult
+		add = {
+			value = babylon_discord_pact_calculation
+			multiply = political_discord_trade_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = customs_union
 			}
 		}
-		if = {
-			limit = {
-				is_diplomatic_action_type = customs_union
-			}
-			add = {
-				value = babylon_discord_pact_calculation
-				multiply = political_discord_customs_union_pact_mult
+		add = {
+			value = babylon_discord_pact_calculation
+			multiply = political_discord_customs_union_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = rivalry
 			}
 		}
-		if = {
-			limit = {
-				is_diplomatic_action_type = rivalry
-			}
-			subtract = {
-				value = babylon_discord_pact_calculation
-				multiply = political_discord_rivalry_pact_mult
-			}
+		subtract = {
+			value = babylon_discord_pact_calculation
+			multiply = political_discord_rivalry_pact_mult
 		}
 	}
 }
@@ -136,7 +151,7 @@ babylon_discord_character_law_calculation = {
 								value = strongly_disapprove
 							}
 						}
-						add = political_discord_change_small
+						add = political_discord_strongly_disapprove
 					}
 					else_if = {
 						limit = {
@@ -145,7 +160,7 @@ babylon_discord_character_law_calculation = {
 								value = disapprove
 							}
 						}
-						add = political_discord_change_miniscule
+						add = political_discord_disapprove
 					}
 					else_if = {
 						limit = {
@@ -154,7 +169,7 @@ babylon_discord_character_law_calculation = {
 								value = approve
 							}
 						}
-						subtract = political_discord_change_miniscule
+						subtract = political_discord_approve
 					}
 					else_if = {
 						limit = {
@@ -163,7 +178,7 @@ babylon_discord_character_law_calculation = {
 								value = strongly_approve
 							}
 						}
-						subtract = political_discord_change_small
+						subtract = political_discord_strongly_approve
 					}
 				}
 			}
@@ -205,7 +220,7 @@ babylon_discord_domestic_law_calculation = {
 					value = strongly_disapprove
 				}
 			}
-			add = political_discord_change_small
+			add = political_discord_strongly_disapprove
 		}
 		else_if = {
 			limit = {
@@ -214,7 +229,7 @@ babylon_discord_domestic_law_calculation = {
 					value = disapprove
 				}
 			}
-			add = political_discord_change_miniscule
+			add = political_discord_disapprove
 		}
 		else_if = {
 			limit = {
@@ -223,7 +238,7 @@ babylon_discord_domestic_law_calculation = {
 					value = approve
 				}
 			}
-			subtract = political_discord_change_miniscule
+			subtract = political_discord_approve
 		}
 		else_if = {
 			limit = {
@@ -232,7 +247,7 @@ babylon_discord_domestic_law_calculation = {
 					value = strongly_approve
 				}
 			}
-			subtract = political_discord_change_small
+			subtract = political_discord_strongly_approve
 		}
 	}
 	multiply = local_var:domestic_law_discord_multiplier
@@ -263,7 +278,7 @@ babylon_discord_interest_group_law_calculation = {
 								value = strongly_disapprove
 							}
 						}
-						add = political_discord_change_small
+						add = political_discord_strongly_disapprove
 					}
 					else_if = {
 						limit = {
@@ -272,7 +287,7 @@ babylon_discord_interest_group_law_calculation = {
 								value = disapprove
 							}
 						}
-						add = political_discord_change_miniscule
+						add = political_discord_disapprove
 					}
 					else_if = {
 						limit = {
@@ -281,7 +296,7 @@ babylon_discord_interest_group_law_calculation = {
 								value = approve
 							}
 						}
-						subtract = political_discord_change_miniscule
+						subtract = political_discord_strongly_approve
 					}
 					else_if = {
 						limit = {
@@ -290,7 +305,7 @@ babylon_discord_interest_group_law_calculation = {
 								value = strongly_approve
 							}
 						}
-						subtract = political_discord_change_small
+						subtract = political_discord_approve
 					}
 				}
 			}
@@ -303,13 +318,13 @@ babylon_discord_interest_group_law_calculation = {
 }
 
 babylon_discord_legitimacy_offset_value = {
-	# Get the legitimacy, 75 for example
+	# Get the legitimacy, 80 for example
 	value = government_legitimacy
-	# Subtract by 50, so 25 now
-	subtract = 50
+	# Subtract by 75, so 5 now
+	subtract = 75
 	# Do this and you get the value, just with the other sign (-/+)
 	multiply = -1
-	# A government at 0 legit. will get 50 discord
-	# -||- at 50 legit. wont get any bonus, or malus
-	# -||- at 100 will get -50 discord
+	# A government at 0 legit. will get 75 discord
+	# -||- at 75 legit. wont get any bonus, or malus
+	# -||- at 100 will get -25 discord
 }
