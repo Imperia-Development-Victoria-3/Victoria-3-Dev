@@ -328,3 +328,37 @@ babylon_discord_legitimacy_offset_value = {
 	# -||- at 75 legit. wont get any bonus, or malus
 	# -||- at 100 will get -25 discord
 }
+
+babylon_discord_cultural_majority_value = {
+	# Same logic as in the legitimacy calculation.
+	# If roughly 75% of the country are primary culture, and rest is discriminated against...
+	value = babylon_get_primary_culture_percentage_rough
+	# The percentage is given as a fraction, so 0.75 here
+	multiply = 100
+	#Now its 75
+	if = {
+		limit = {
+			root = {
+				is_subject = yes
+			}
+			overlord = {
+				any_primary_culture = {
+					OR = {
+						is_primary_culture_of = root
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+				}
+			}
+		}
+		# 33 is the midpoint, if you're a subject with a same-culture('ish) overlord
+		subtract = 33
+	}
+	else = {
+		# else 66 is the midpoint
+		subtract = 66
+	}
+	# So now its 11
+	multiply = -1
+	# Reverse the sign, so..
+	# A 75% primary_culture'd nation would have 11 discord removed.
+}
