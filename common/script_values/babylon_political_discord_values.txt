@@ -338,9 +338,7 @@ babylon_discord_cultural_majority_value = {
 	#Now its 75
 	if = {
 		limit = {
-			root = {
-				is_subject = yes
-			}
+			is_subject = yes
 			overlord = {
 				any_primary_culture = {
 					OR = {
@@ -361,4 +359,26 @@ babylon_discord_cultural_majority_value = {
 	multiply = -1
 	# Reverse the sign, so..
 	# A 75% primary_culture'd nation would have 11 discord removed.
+}
+
+babylon_discord_religious_majority_value = {
+	value = babylon_get_state_religion_percentage_rough
+	multiply = 100
+	if = {
+		limit = {
+			is_subject = yes
+			overlord.religion = root.religion
+		}
+		subtract = 30
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_theocracy
+		}
+		subtract = 80
+	}
+	else = {
+		subtract = 60
+	}
+	multiply = -1
 }
