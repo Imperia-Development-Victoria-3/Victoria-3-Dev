@@ -1,101 +1,149 @@
 ﻿law_no_home_affairs = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
-	
 	progressiveness = 0
-	
 	possible_political_movements = {
-		law_national_guard
 		law_secret_police
 		law_guaranteed_liberties
+		law_empowered_gendarmerie
+		law_provincial_courts
+		law_inquisition
 	}
-
 	pop_support = {
 		value = 0
 	}
-	
 	# AI shouldn't try to abolish institutions
 	ai_will_do = {
 		always = no
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
 	}
 }
 
-law_national_guard = {
+law_provincial_courts = {
 	group = lawgroup_internal_security
-	icon = "gfx/interface/icons/law_icons/national_guard.dds"
-	
-	progressiveness = 25
-
+	icon = "gfx/interface/icons/law_icons/secret_police.dds"
+	progressiveness = 0
 	unlocking_technologies = {
-		law_enforcement
+		centralization
 	}
-
+	unlocking_laws = {
+		law_monarchy
+		law_autocracy
+		law_oligarchy
+		law_technocracy
+	}
+	disallowing_laws = {
+		law_protected_speech
+		law_no_police
+	}
 	institution = institution_home_affairs
 	institution_modifier = {
-		state_conscription_rate_add = 0.005
-		political_movement_radicalism_mult = -0.05
+		country_authority_add = 50
+		country_radicals_from_legitimacy_mult = -0.03
+		country_loyalists_from_legitimacy_mult = 0.03
+		interest_group_ig_landowners_pol_str_mult = 0.10
+		interest_group_ig_petty_bourgeoisie_pol_str_mult = 0.02
+		country_revolution_progress_mult = -0.05
+		country_secession_progress_mult = -0.05
 	}
-	
 	possible_political_movements = {
 		law_secret_police
 		law_guaranteed_liberties
+		law_empowered_gendarmerie
+		law_inquisition
 	}
-
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_OFFICERS"
+			desc = "POP_LANDOWNERS"
 			if = {
-				limit = { 
-					is_pop_type = officers
-				}
-				value = 0.33
-			}
-		}	
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_OFFICERS"
-			if = {
-				limit = { 
-					is_pop_type = officers
+				limit = {
+					is_pop_type = aristocrats
 				}
 				value = 0.33
 			}
 		}
 	}
-
-	# Don't return to national guard we have something more advanced
-	ai_will_do = {
-		NOR = {
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_guaranteed_liberties
-		}
-	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
+			}
+			add = 750
+		}
+	}
+}
+
+law_inquisition = {
+	group = lawgroup_internal_security
+	icon = "gfx/interface/icons/law_icons/secret_police.dds"
+	progressiveness = 0
+	unlocking_technologies = {
+		centralization
+	}
+	unlocking_laws = {
+		law_monarchy
+		law_theocracy
+		law_religious_schools
+		law_state_religion
+	}
+	disallowing_laws = {
+		law_protected_speech
+		law_total_separation
+		law_state_atheism
+	}
+	institution = institution_home_affairs
+	institution_modifier = {
+		country_authority_add = 30
+		political_movement_radicalism_mult = -0.10
+		state_conversion_mult = 0.25
+		country_radicals_from_legitimacy_mult = -0.01
+		country_loyalists_from_legitimacy_mult = 0.05
+		interest_group_ig_devout_pol_str_mult = 0.05
+		country_revolution_progress_mult = 0.1
+		country_secession_progress_mult = 0.1
+	}
+	possible_political_movements = {
+		law_secret_police
+		law_guaranteed_liberties
+		law_empowered_gendarmerie
+		law_provincial_courts
+	}
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_CLERGYMEN"
+			if = {
+				limit = {
+					is_pop_type = clergymen
+				}
+				value = 0.33
+			}
+		}
+	}
+	ai_enact_weight_modifier = {
+		#Petitions
+		value = 0
+		if = {
+			limit = {
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -105,39 +153,113 @@ law_national_guard = {
 law_secret_police = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/secret_police.dds"
-	
-	progressiveness = 0
-	
+	progressiveness = 25
 	unlocking_technologies = {
 		central_archives
 	}
-
-	modifier = {
-		country_institution_home_affairs_max_investment_add = 2
+	unlocking_laws = {
+		law_autocracy
+		law_oligarchy
+		law_technocracy
+		law_single_party_state
+		law_patriot_schools
 	}
-	
+
+	disallowing_laws = {
+		law_right_of_assembly
+		law_protected_speech
+		law_no_police
+		law_local_police
+	}
 	institution = institution_home_affairs
 	institution_modifier = {
 		country_suppression_ig_attraction_mult = -0.05
-		political_movement_radicalism_mult = -0.1
+		country_authority_add = 30
+		country_tech_spread_mult = 0.03
+		country_radicals_from_legitimacy_mult = -0.03
+		interest_group_ig_intelligentsia_pol_str_mult = 0.01
+		interest_group_ig_petty_bourgeoisie_pol_str_mult = 0.04
+		country_secession_progress_mult = 0.1
+
 	}
-	
 	possible_political_movements = {
 		law_guaranteed_liberties
+		law_empowered_gendarmerie
+		law_provincial_courts
+		law_inquisition
 	}
-
 	pop_support = {
 		value = 0
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
+			}
+			add = 750
+		}
+	}
+}
+
+law_empowered_gendarmerie = {
+	group = lawgroup_internal_security
+	icon = "gfx/interface/icons/law_icons/secret_police.dds"
+	progressiveness = 25
+	unlocking_technologies = {
+		nationalism
+	}
+	unlocking_laws = {
+		law_ethnostate
+		law_national_supremacy
+		law_patriot_schools
+	}
+	disallowing_laws = {
+		law_protected_speech
+		law_no_police
+		law_local_police
+	}
+	institution = institution_home_affairs
+	institution_modifier = {
+		country_authority_add = 25
+		political_movement_radicalism_mult = -0.05
+		state_radicals_from_sol_change_mult = -0.025
+		state_loyalists_from_sol_change_mult = 0.01
+		state_turmoil_effects_mult = -0.04
+		interest_group_ig_armed_forces_pol_str_mult = 0.05
+		interest_group_ig_petty_bourgeoisie_pol_str_mult = 0.02
+		country_revolution_progress_mult = 0.1
+		country_secession_progress_mult = 0.1
+	}
+	possible_political_movements = {
+		law_secret_police
+		law_guaranteed_liberties
+		law_provincial_courts
+		law_inquisition
+	}
+	pop_support = {
+		value = 0
+		add = {
+			desc = "POP_OFFICERS"
+			if = {
+				limit = {
+					is_pop_type = officers
+				}
+				value = 0.33
+			}
+		}
+	}
+	ai_enact_weight_modifier = {
+		#Petitions
+		value = 0
+		if = {
+			limit = {
+				has_journal_entry = je_government_petition
+				has_variable = desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
@@ -147,29 +269,35 @@ law_secret_police = {
 law_guaranteed_liberties = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
-	
 	progressiveness = 100
-	
+	unlocking_technologies = {
+		human_rights
+	}
 	unlocking_laws = {
 		law_right_of_assembly
 		law_protected_speech
 	}
-	
+	disallowing_laws = {
+		law_no_home_defence
+		law_national_guard
+		law_localized_garrisons
+		law_faith_orders
+		law_private_paramilitaries
+	}
 	modifier = {
-		country_institution_home_affairs_max_investment_add = 2
 		country_institution_multiculturalism_max_investment_add = 1
 	}
-	
 	institution = institution_home_affairs
 	institution_modifier = {
 		state_radicals_from_sol_change_mult = -0.05
 		state_loyalists_from_sol_change_mult = 0.05
 	}
-	
 	possible_political_movements = {
 		law_secret_police
+		law_empowered_gendarmerie
+		law_provincial_courts
+		law_inquisition
 	}
-
 	pop_support = {
 		value = 0
 		add = {
@@ -177,15 +305,14 @@ law_guaranteed_liberties = {
 			value = 0.01
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {
+		#Petitions
 		value = 0
-		
 		if = {
-			limit = { 
+			limit = {
 				has_journal_entry = je_government_petition
 				has_variable = desired_law_var
-                scope:law = var:desired_law_var
+				scope:law = var:desired_law_var
 			}
 			add = 750
 		}
