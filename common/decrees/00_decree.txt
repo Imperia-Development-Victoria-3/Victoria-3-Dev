@@ -23,7 +23,6 @@ decree_road_maintenance = {
 				OR = {
 					relative_infrastructure < 1
 					AND = {
-						has_decree = promote_efficient_administration
 						relative_infrastructure < 1.25
 					}
 				}
@@ -151,7 +150,6 @@ decree_violent_suppression = {
 	modifier = {
 		state_turmoil_effects_mult = -0.6
 		state_mortality_turmoil_mult = 0.02
-		political_movement_radicalism_mult = -0.2
 		state_political_strength_from_discrimination_mult = -0.2
 		state_political_strength_from_welfare_mult = -0.2
 	}
@@ -191,14 +189,12 @@ decree_emergency_relief = {
 	}
 	valid = {
 		NOR = {
-			has_decree = decree_genocide
-			has_decree = decree/decree_violent_suppression
+			has_decree = decree_violent_suppression
 		}
 	}
 	modifier = {
 		state_welfare_payments_add = 0.6
 		state_migration_pull_mult = 0.1
-		country_tension_decay_mult = 0.25
 		building_working_conditions_mult = -0.15
 		state_mortality_mult = -0.01
 	}
@@ -291,6 +287,7 @@ decree_worker_exploitation = {
 	}
 	valid = {
 		owner = {
+			is_player = yes
 			NOT = {
 				has_law = law_type:law_guaranteed_liberties
 			}
@@ -302,7 +299,6 @@ decree_worker_exploitation = {
 		building_throughput_mult = 0.2
 		state_unincorporated_starting_wages_mult = -0.12
 		building_subsistence_output_mult = -0.25
-		country_tension_decay_mult = -0.25
 		state_laborers_mortality_mult = 0.01
 		state_machinists_mortality_mult = 0.01
 		state_farmers_mortality_mult = 0.01
@@ -313,9 +309,6 @@ decree_worker_exploitation = {
 		building_working_conditions_mult = 0.15
 	}
 	cost = 40
-	valid = {
-		is_player = yes
-	}
 }
 
 decree_promote_national_values = {
@@ -726,8 +719,9 @@ decree_penal_colony = {
 	texture = "gfx/interface/icons/decree/penal.dds"
 	valid = {
 		owner = {
+			is_player = yes
 			NOT = {
-				has_law = law_no_colonial_affairs
+				has_law = law_type:law_no_colonial_affairs
 			}
 		}
 		is_isolated_from_market = no
@@ -738,7 +732,6 @@ decree_penal_colony = {
 		state_migration_pull_mult = -0.75
 		building_throughput_mult = -0.1
 		state_loyalists_from_sol_change_mult = 0.1
-		political_movement_radicalism_add = -0.05
 		state_turmoil_effects_mult = -0.1
 		state_political_strength_from_wealth_mult = 0.1
 		state_political_strength_from_welfare_mult = -0.1
@@ -748,9 +741,6 @@ decree_penal_colony = {
 		colonization
 	}
 	cost = 75
-	valid = {
-		is_player = yes
-	}
 }
 
 decree_military_training = {
