@@ -658,43 +658,15 @@ infamy_rebalance.12 = {
 			name = modifier_pariah_international_isolation
 			years = 20
 		}
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = {
-					this = root
-				}
-			}
-			change_relations = {
-				country = root
-				value = -400
-			}
-			if = {
+		custom_tooltip = {
+			text = minus_relations_every_country_tt
+			every_country = {
 				limit = {
-					has_diplomatic_pact = {
-						who = root
-						type = alliance
+					this != root
+					has_diplomatic_relevance = root
+					NOT = {
+						is_country_type = decentralized
 					}
-				}
-				remove_diplomatic_pact = {
-					country = root
-					type = alliance
-				}
-			}
-			if = {
-				limit = {
-					has_diplomatic_pact = {
-						who = root
-						type = defensive_pact
-					}
-				}
-				remove_diplomatic_pact = {
-					country = root
-					type = defensive_pact
-				}
-			}
-			if = {
-				limit = {
 					NOT = {
 						has_diplomatic_pact = {
 							who = root
@@ -702,18 +674,8 @@ infamy_rebalance.12 = {
 						}
 					}
 				}
-				create_diplomatic_pact = {
-					country = root
-					type = embargo
-				}
-			}
-		}
-		custom_tooltip = {
-			text = minus_relations_every_country_tt
-			every_country = {
-				change_relations = {
-					country = root
-					value = -100
+				trigger_event = {
+					id = infamy_rebalance.16
 				}
 			}
 		}
@@ -913,5 +875,97 @@ infamy_rebalance.15 = {
 		ai_chance = {
 			base = 1
 		}
+	}
+}
+
+infamy_rebalance.16 = {
+	# Double down possibility
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.16.t
+	desc = infamy_rebalance.16.d
+	flavor = infamy_rebalance.16.f
+	duration = 1
+	immediate = {
+		# save pariah scope
+		random_country = {
+			limit = {
+				has_modifier = modifier_pariah_international_isolation
+				NOT = {
+					root = {
+						has_diplomatic_pact = {
+							who = prev
+							type = embargo
+						}
+					}
+				}
+			}
+			save_scope_as = pariah_scope
+		}
+		set_variable = {
+			value = scope:pariah_scope.infamy
+			name = infamy_increase
+		}
+		change_variable = {
+			name = infamy_increase
+			multiply = 0.333
+		}
+	}
+	option = {
+		# Cut relations and start embargo
+		name = infamy_rebalance.16.a
+		default_option = yes
+		change_relations = {
+			country = scope:pariah_scope
+			value = -400
+		}
+		if = {
+			limit = {
+				has_diplomatic_pact = {
+					who = scope:pariah_scope
+					type = alliance
+				}
+			}
+			remove_diplomatic_pact = {
+				country = scope:pariah_scope
+				type = alliance
+			}
+		}
+		if = {
+			limit = {
+				has_diplomatic_pact = {
+					who = scope:pariah_scope
+					type = defensive_pact
+				}
+			}
+			remove_diplomatic_pact = {
+				country = scope:pariah_scope
+				type = defensive_pact
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_diplomatic_pact = {
+						who = scope:pariah_scope
+						type = embargo
+					}
+				}
+			}
+			create_diplomatic_pact = {
+				country = scope:pariah_scope
+				type = embargo
+			}
+		}
+	}
+	option = {
+		# Double down
+		name = infamy_rebalance.16.b
+		change_infamy = var:infamy_increase
 	}
 }
