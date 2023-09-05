@@ -2,6 +2,7 @@
 	effect = {
 		# Land trade capacity
 		remove_modifier ?= modifier_land_trade_capacity
+
 		set_local_variable = {
 			name = total_infrastructure
 			value = 0
@@ -20,25 +21,33 @@
 				add = 1
 			}
 		}
-		set_local_variable = {
-			name = gained_land_trade_capcity
-			value = {
-				add = local_var:total_infrastructure
-				divide = local_var:number_of_states
-				subtract = 50				# counting from 50 infrasturucture
-				divide = 8				# every 8 infrastructure average is 1 land_trade capacity
-			}
-		}
 		if = {
 			limit = {
-				local_var:gained_land_trade_capcity >= 1
+				local_var:number_of_states > 0
 			}
-			add_modifier = {
-				name = modifier_land_trade_capacity
-				multiplier = local_var:gained_land_trade_capcity
+			
+			set_local_variable = {
+				name = gained_land_trade_capicity
+				value = {
+					add = local_var:total_infrastructure
+					divide = local_var:number_of_states
+					subtract = 50 # counting from 50 infrasturucture
+					divide = 8 # every 8 infrastructure average is 1 land_trade capacity
+				}
+			}
+
+			if = {
+				limit = {
+					local_var:gained_land_trade_capicity >= 1
+				}
+
+				add_modifier = { 
+					name = modifier_land_trade_capacity
+					multiplier = local_var:gained_land_trade_capicity
+				}
 			}
 		}
-		# Infamy modifiers
+
 		# Remove / reset babylon infamy modifiers
 		remove_modifier ?= babylon_country_infamy_workers
 		remove_modifier ?= babylon_country_infamy_capitalist
@@ -169,6 +178,45 @@ on_babylon_country_released_as_own_subject = {
 			trigger_event = {
 				id = infamy_rebalance.14
 				popup = yes
+			}
+		}
+	}
+}
+
+
+on_babylon_monthly_pulse_allow_incorporation = {
+	effect = {
+		if = {
+			limit = {
+				has_law = law_type:law_imperialism
+			}
+			every_scope_state = {
+				save_scope_as = current_state
+				limit = { 
+					is_incorporated = no
+					is_being_incorporated = no
+				}
+
+				if = {
+					limit = {
+						any_scope_culture = {
+							NOT = { culture_is_discriminated_in = root }
+							has_homeland = scope:current_state
+
+						}
+					}
+					remove_modifier ?= modifier_state_disallow_incorporation 
+				}
+				else = {
+					if ={
+						limit = {
+							NOT = {
+								has_modifier = modifier_state_disallow_incorporation
+							}
+						}
+						add_modifier = modifier_state_disallow_incorporation
+					}
+				}
 			}
 		}
 	}
