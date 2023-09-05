@@ -5,18 +5,48 @@
 			has_law = law_type:law_expansionism
 		}
 		scope:target_country = {
-			#Checks if the targeted country has states in tha same or neighbouring strategic region as an incorperated state
+			#Checks if the targeted country has states in tha same or neighbouring strategic region as an incorporated state
 			any_scope_state = {
+				count = all
 				region = {
-					OR = {
-						any_scope_state = {
-							owner = root
-							is_incorporated = yes
+					add_to_temporary_list = regions
+				}
+				trigger_if = {
+					limit = {
+						has_variable = sea_region
+					}
+					var:sea_region = {
+						add_to_temporary_list = sea_regions
+					}	
+				}
+			}
+			OR = {
+				# Land connection
+				custom_tooltip = {
+					text = CUSTOM_TOOLTIP_EXPANSIONISM_LAND_ADJACENCY
+					any_in_list = {
+						list = regions
+						OR = {
+							any_scope_state = {
+								owner = root
+								is_incorporated = yes
+							}
+
+							any_neighbouring_state = {
+								owner = root
+								is_incorporated = yes
+							}	
 						}
+					}
+				}
+				custom_tooltip = {
+					text = CUSTOM_TOOLTIP_EXPANSIONISM_SEA_ADJACENCY
+					# Sea connection
+					any_in_list = {
+						list = sea_regions
 						any_neighbouring_state = {
-							#An incorporated state belonging to root
 							owner = root
-							is_incorporated = yes
+							is_incorporated = yes					
 						}
 					}
 				}
@@ -41,7 +71,6 @@
 		scope:target_country = {
 			OR = {
 				any_primary_culture = {
-					shares_heritage_trait_with_any_primary_culture = root
 					shares_non_heritage_trait_with_any_primary_culture = root
 				}
 				any_scope_state = {
@@ -63,7 +92,6 @@
 			scope:target_country = {
 				OR = {
 					any_primary_culture = {
-						shares_heritage_trait_with_any_primary_culture = root
 						shares_non_heritage_trait_with_any_primary_culture = root
 					}
 					any_scope_state = {
