@@ -9,14 +9,37 @@
 				}
 				conquer_or_subjugation = yes
 				region = {
-					NOR = {
-						any_scope_state = {
-							owner = root.initiator
-							is_incorporated = yes
+					any_scope_state = {
+						count = all
+						trigger_if = {
+							limit = {
+								has_variable = sea_region
+							}
+							var:sea_region = {
+								add_to_temporary_list = sea_regions
+							}	
 						}
-						any_neighbouring_state = {
-							owner = root.initiator
-							is_incorporated = yes
+					}
+					NOR = {
+						# Land connection
+						OR = {
+							any_scope_state = {
+								owner = root.initiator
+								is_incorporated = yes
+							}
+
+							any_neighbouring_state = {
+								owner = root.initiator
+								is_incorporated = yes
+							}	
+						}
+						# Sea connection
+						any_in_list = {
+							list = sea_regions
+							any_neighbouring_state = {
+								owner = root.initiator
+								is_incorporated = yes					
+							}
 						}
 					}
 				}
@@ -58,10 +81,8 @@
 					has_law = law_type:law_imperialism
 				}
 				target = {
-					NOR = {
-						is_country_type = unrecognized
-						is_country_type = colonial
-					}
+					NOT = { is_country_type = unrecognized }
+					NOT = {	is_country_type = colonial }
 				}
 			}
 			if = {
