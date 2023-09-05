@@ -176,3 +176,42 @@ on_babylon_country_released_as_own_subject = {
 		}
 	}
 }
+
+
+on_babylon_monthly_pulse_allow_incorporation = {
+	effect = {
+		if = {
+			limit = {
+				has_law = law_type:law_imperialism
+			}
+			every_scope_state = {
+				save_scope_as = current_state
+				limit = { 
+					is_incorporated = no
+					is_being_incorporated = no
+				}
+
+				if = {
+					limit = {
+						any_scope_culture = {
+							NOT = { culture_is_discriminated_in = root }
+							has_homeland = scope:current_state
+
+						}
+					}
+					remove_modifier ?= modifier_state_disallow_incorporation 
+				}
+				else = {
+					if ={
+						limit = {
+							NOT = {
+								has_modifier = modifier_state_disallow_incorporation
+							}
+						}
+						add_modifier = modifier_state_disallow_incorporation
+					}
+				}
+			}
+		}
+	}
+}
