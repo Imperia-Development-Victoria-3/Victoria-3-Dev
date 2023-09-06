@@ -1,4 +1,103 @@
-﻿on_babylon_foreign_laws_permits_diplo_play_start = {
+# Root = Diplomatic Play
+on_babylon_liberate_subject_diplo_play_start = {
+	effect = {
+		if = {
+			limit = {
+				#Is liberate subject
+				is_diplomatic_play_type = dp_liberate_subject
+				#And target is an applicant
+				target = {
+					has_variable = babylon_new_customs_union_applicant
+				}
+			}
+			#Iterate through overlords backers (located in target, AKA applicant..)
+			target = {
+				every_in_list = {
+					variable = custom_union_overlord_backers
+					#And add them to the new play
+					root = {
+						add_target_backers = {
+							prev
+						}
+					}
+				}
+				#Then get rid of the list
+				clear_variable_list = custom_union_overlord_backers
+			}
+		}
+	}
+}
+
+# Root = Diplomatic Play
+on_babylon_transfer_diplo_play_start = {
+	effect = {
+		if = {
+			limit = {
+				is_diplomatic_play_type = dp_transfer_liberate_subject
+			}
+			# Add previous backers on both sides to this diplo play, as we can't do this when we create the play
+			root.target = {
+				every_in_list = {
+					variable = objectors
+					root = { add_initiator_backers = {prev} }
+				}
+
+				every_in_list = {
+					variable = supporters
+					root = { add_target_backers = {prev} }
+				}
+
+				if = {
+					limit = {
+						has_variable_list = objectors
+					}
+					clear_variable_list = objectors
+				}
+
+				if = {
+					limit = {
+						has_variable_list = supporters
+					}
+					clear_variable_list = supporters
+				}
+				
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					add_target_backers = {
+						root.target.overlord
+					}
+				}
+			}
+		}
+	}
+}
+
+# Root = Diplomatic Play
+on_babylon_true_neutral_diplo_play_start = {
+	effect = {
+		if = {
+			limit = {
+				#If a true neutral country is the target...
+				target = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			#Fire an event for the attacker after 1 days (for [pdx-spaghetti-code] reasons)
+			initiator = {
+				trigger_event = {
+					id = babylon_neutrality_events.1
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+
+# Root = Diplomatic Play
+on_babylon_foreign_laws_permits_diplo_play_start = {
 	effect = {
 		if = {
 			#Expansionism
