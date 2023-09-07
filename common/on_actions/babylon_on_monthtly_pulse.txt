@@ -84,16 +84,22 @@
 				}
 			}
 		}
-		# Give players more construction
+		# Give players more construction if they deserve it
 		if = {
 			limit = {
 				is_player = yes
-				NOT = {
-					has_modifier = player_construction_bonus
-				}
 			}
-			add_modifier = {
-				name = player_construction_bonus
+			# Remove the bonus and resets it (if it exists); here in case a players rank is adjusted
+			remove_modifier ?= player_construction_bonus
+			if = {
+				# Only re-add the modifier if the contents (multiplier) are non-zero
+				limit = {
+					babylon_player_construction_bonus_multiplier != 0
+				}
+				add_modifier = {
+					name = player_construction_bonus
+					multiplier = babylon_player_construction_bonus_multiplier
+				}
 			}
 		}
 		else_if = {
@@ -172,6 +178,45 @@ on_babylon_country_released_as_own_subject = {
 			trigger_event = {
 				id = infamy_rebalance.14
 				popup = yes
+			}
+		}
+	}
+}
+
+
+on_babylon_monthly_pulse_allow_incorporation = {
+	effect = {
+		if = {
+			limit = {
+				has_law = law_type:law_imperialism
+			}
+			every_scope_state = {
+				save_scope_as = current_state
+				limit = { 
+					is_incorporated = no
+					is_being_incorporated = no
+				}
+
+				if = {
+					limit = {
+						any_scope_culture = {
+							NOT = { culture_is_discriminated_in = root }
+							has_homeland = scope:current_state
+
+						}
+					}
+					remove_modifier ?= modifier_state_disallow_incorporation 
+				}
+				else = {
+					if ={
+						limit = {
+							NOT = {
+								has_modifier = modifier_state_disallow_incorporation
+							}
+						}
+						add_modifier = modifier_state_disallow_incorporation
+					}
+				}
 			}
 		}
 	}
