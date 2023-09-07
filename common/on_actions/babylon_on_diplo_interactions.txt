@@ -1,9 +1,35 @@
-﻿on_babylon_diplo_play_backdown = {
+# Root = Diplomatic Play
+on_babylon_contain_threat_diplo_play_war_start = {
+	effect = {
+		if = {
+			limit = {
+				has_play_goal = contain_threat
+			}
+			every_country = {
+				limit = {
+					has_variable = pariah_coalition_member
+					has_strategic_adjacency = root.target
+					NOT = {
+						is_diplomatic_play_enemy_of = root.target
+					}
+				}
+				add_modifier = {
+					name = scared_of_pariah_prestige_loss
+					months = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
+	}
+}
+
+# Root = Diplomatic Play
+on_babylon_diplo_play_backdown = {
 	effect = {
 		if = {
 			#If somebody backs down while nobody has joined the original customs union play....
 			limit = {
-				is_diplomatic_play_type = dp_customs_union
+				is_diplomatic_play_type = dp_babylon_customs_union
 				OR = {
 					initiator_is = scope:actor
 					target_is = scope:actor
@@ -53,7 +79,7 @@
 				target = {
 					has_variable = babylon_new_customs_union_applicant
 				}
-				#Assume its the 2nd stage of dp_customs_union
+				#Assume its the 2nd stage of dp_babylon_customs_union
 			}
 			target = {
 				#Get the customs union overlord (from the applicant var that points at overlord)
@@ -95,12 +121,13 @@
 }
 
 
+# Root = Diplomatic Play
 on_babylon_play_join_side = {
 	effect = {
 		if = {
 			limit = {
 				#Upon someone joining the customs union play on the side of the applicant...
-				is_diplomatic_play_type = dp_customs_union
+				is_diplomatic_play_type = dp_babylon_customs_union
 				NOT = {
 					has_variable = someone_objected
 				}
@@ -138,35 +165,6 @@ on_babylon_play_join_side = {
 						target_country = root.initiator
 					}
 				}
-			}
-		}
-	}
-}
-
-on_babylon_liberate_subject_diplo_play_start = {
-	effect = {
-		if = {
-			limit = {
-				#Is liberate subject
-				is_diplomatic_play_type = dp_liberate_subject
-				#And target is an applicant
-				target = {
-					has_variable = babylon_new_customs_union_applicant
-				}
-			}
-			#Iterate through overlords backers (located in target, AKA applicant..)
-			target = {
-				every_in_list = {
-					variable = custom_union_overlord_backers
-					#And add them to the new play
-					root = {
-						add_target_backers = {
-							prev
-						}
-					}
-				}
-				#Then get rid of the list
-				clear_variable_list = custom_union_overlord_backers
 			}
 		}
 	}
