@@ -66,60 +66,6 @@ babylon_foreign_law_tip = {
 	}
 }
 
-babylon_cohesion_implosion_country = {
-	type = country
-	random_valid = no
-	text = {
-		trigger = {
-			OR = {
-				has_government_type = gov_military_dictatorship
-				has_government_type = gov_junta
-			}
-		}
-		localization_key = cohesion_implosion_country_junta
-	}
-	text = {
-		trigger = {
-			has_law = law_type:law_theocracy
-		}
-		localization_key = cohesion_implosion_country_holy
-	}
-	text = {
-		trigger = {
-			has_law = law_type:law_laissez_faire
-			has_law = law_type:law_free_trade
-			OR = {
-				has_law = law_type:law_presidential_republic
-				has_law = law_type:law_parliamentary_republic
-			}
-			OR = {
-				has_law = law_type:law_oligarchy
-				has_law = law_type:law_wealth_voting
-			}
-		}
-		localization_key = cohesion_implosion_country_corporate
-	}
-	text = {
-		trigger = {
-			OR = {
-				has_law = law_type:law_presidential_republic
-				has_law = law_type:law_parliamentary_republic
-				has_law = law_type:law_council_republic
-			}
-			OR = {
-				has_law = law_type:law_universal_suffrage
-				has_law = law_type:law_census_voting
-				has_law = law_type:law_anarchy
-			}
-		}
-		localization_key = cohesion_implosion_country_free
-	}
-	text = {
-		fallback = yes
-		localization_key = cohesion_implosion_country_basic
-	}
-}
-
 is_naval_invasion = { 
 	type = state
 	random_valid = no
@@ -148,5 +94,177 @@ naval_invasion_state_tooltip = {
 			has_modifier = modifier_incoming_naval_invasion
 		}
 		localization_key = BABYLON_NAVAL_INVASION_STATE_TOOLTIP
+	}
+}
+babylon_discord_implosion_country = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			OR = {
+				has_government_type = gov_military_dictatorship
+				has_government_type = gov_junta
+			}
+		}
+		localization_key = discord_implosion_country_junta
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_theocracy
+		}
+		localization_key = discord_implosion_country_holy
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_laissez_faire
+			has_law = law_type:law_free_trade
+			OR = {
+				has_law = law_type:law_presidential_republic
+				has_law = law_type:law_parliamentary_republic
+			}
+			OR = {
+				has_law = law_type:law_oligarchy
+				has_law = law_type:law_wealth_voting
+			}
+		}
+		localization_key = discord_implosion_country_corporate
+	}
+	text = {
+		trigger = {
+			OR = {
+				has_law = law_type:law_presidential_republic
+				has_law = law_type:law_parliamentary_republic
+				has_law = law_type:law_council_republic
+			}
+			OR = {
+				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_anarchy
+			}
+		}
+		localization_key = discord_implosion_country_free
+	}
+	text = {
+		fallback = yes
+		localization_key = discord_implosion_country_basic
+	}
+}
+
+babylon_discord_current_effect_je = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:political_discord < 400
+			var:political_discord >= 300
+		}
+		localization_key = babylon_discord_current_effect_je_300
+	}
+	text = {
+		trigger = {
+			var:political_discord >= 200
+		}
+		localization_key = babylon_discord_current_effect_je_200
+	}
+	text = {
+		trigger = {
+			var:political_discord >= 100
+		}
+		localization_key = babylon_discord_current_effect_je_100
+	}
+	text = {
+		localization_key = babylon_discord_current_effect_je_0
+	}
+}
+
+babylon_discord_have_same_culture_overlord = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			is_subject = yes
+			overlord = {
+				any_primary_culture = {
+					OR = {
+						is_primary_culture_of = root
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+				}
+			}
+		}
+		localization_key = babylon_discord_have_same_culture_overlord_yes
+	}
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = babylon_discord_have_same_culture_overlord_no
+	}
+}
+
+babylon_discord_have_internal_religious_modifier = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			is_subject = yes
+			overlord.religion = root.religion
+		}
+		localization_key = babylon_discord_have_internal_religious_modifier_overlord
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_theocracy
+		}
+		localization_key = babylon_discord_have_internal_religious_modifier_theocracy
+	}
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = babylon_discord_have_internal_religious_modifier_no
+	}
+}
+
+babylon_discord_external_religious_explainer_extra = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_law = law_type:law_state_atheism
+			scope:target_country = {
+				has_law = law_type:law_theocracy
+			}
+		}
+		localization_key = babylon_discord_external_religious_explainer_extra_atheist_vs_theocracy
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_theocracy
+		}
+		localization_key = babylon_discord_external_religious_explainer_extra_is_theocracy
+	}
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = babylon_discord_external_religious_explainer_extra_none
+	}
+}
+
+babylon_discord_external_homeland_nationalism_modifier = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_technology_researched = nationalism
+		}
+		localization_key = babylon_discord_external_homeland_nationalism_modifier_yes
+	}
+	text = {
+		trigger = {
+			always = yes
+		}
+		localization_key = babylon_discord_external_homeland_nationalism_modifier_no
 	}
 }
