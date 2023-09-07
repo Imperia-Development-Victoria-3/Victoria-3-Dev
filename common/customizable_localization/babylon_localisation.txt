@@ -65,3 +65,88 @@ babylon_foreign_law_tip = {
 		localization_key = custom_babylon_law_true_neutrality_tip
 	}
 }
+
+babylon_cohesion_implosion_country = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			OR = {
+				has_government_type = gov_military_dictatorship
+				has_government_type = gov_junta
+			}
+		}
+		localization_key = cohesion_implosion_country_junta
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_theocracy
+		}
+		localization_key = cohesion_implosion_country_holy
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_laissez_faire
+			has_law = law_type:law_free_trade
+			OR = {
+				has_law = law_type:law_presidential_republic
+				has_law = law_type:law_parliamentary_republic
+			}
+			OR = {
+				has_law = law_type:law_oligarchy
+				has_law = law_type:law_wealth_voting
+			}
+		}
+		localization_key = cohesion_implosion_country_corporate
+	}
+	text = {
+		trigger = {
+			OR = {
+				has_law = law_type:law_presidential_republic
+				has_law = law_type:law_parliamentary_republic
+				has_law = law_type:law_council_republic
+			}
+			OR = {
+				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_anarchy
+			}
+		}
+		localization_key = cohesion_implosion_country_free
+	}
+	text = {
+		fallback = yes
+		localization_key = cohesion_implosion_country_basic
+	}
+}
+
+is_naval_invasion = { 
+	type = state
+	random_valid = no
+	log_loc_errors = no
+	
+	text = {
+		trigger = {
+			has_modifier = modifier_incoming_naval_invasion
+		}
+		localization_key = "yes"
+	}
+	
+	text = {
+		localization_key = "no"
+	}
+}
+
+
+naval_invasion_state_tooltip = { 
+	type = state
+	random_valid = no
+	log_loc_errors = no
+	
+	text = {
+		trigger = {
+			has_modifier = modifier_incoming_naval_invasion
+		}
+		localization_key = BABYLON_NAVAL_INVASION_STATE_TOOLTIP
+	}
+}
