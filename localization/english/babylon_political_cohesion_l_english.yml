@@ -19,11 +19,11 @@
 
  discord_ig_contribution_tt: "[SCOPE.gsInterestGroup('ig_scope').GetName] contributes #v [SCOPE.gsInterestGroup('ig_scope').MakeScope.ScriptValue('babylon_discord_interest_group_law_calculation')|v0]#! discord."
 
- discord_religious_contribution_tt: "Roughly #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_get_state_religion_percentage_refined')|v0]%#! of your population is [SCOPE.sCountry('root_scope').GetStateReligion.GetName], contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_religious_majority_value')|v0]#! Discord.[SCOPE.sCountry('root_scope').GetCustom('babylon_discord_have_internal_religious_modifier')]"
+ discord_religious_contribution_tt: "Roughly #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_get_state_religion_percentage_refined')|v0]%#! [SCOPE.sCountry('root_scope').GetStateReligion.GetName] [concept_religious_dominance], contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_religious_majority_value')|v0]#! Discord."
 
- discord_cultural_contribution_tt: "Roughly #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_get_primary_culture_percentage_refined')|v0]%#! of your population are of your primary culture(s), contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_cultural_majority_value')|v0]#! discord.[SCOPE.sCountry('root_scope').GetCustom('babylon_discord_have_same_culture_overlord')]"
+ discord_cultural_contribution_tt: "Roughly #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_get_primary_culture_percentage_refined')|v0]%#! [concept_cultural_dominance], contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_cultural_majority_value')|v0]#! discord."
 
- discord_turmoil_contribution_tt: "#v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_average_turmoil_in_country_value')|v0]%#! of your country is in turmoil, contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_average_turmoil_in_country_value')|v0]#! discord. Unincorporated states only count for half an incorporated state."
+ discord_turmoil_contribution_tt: "#v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_average_turmoil_in_country_value')|v0]%#! of your [Concept('concept_country_turmoil','Country is in Turmoil')], contributing #v [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('babylon_discord_average_turmoil_in_country_value')|v0]#! discord."
 
  political_discord_je_was_added: "#variable Political Discord#! was added to the Journal of #variable [SCOPE.GetRootScope.GetCountry.GetNameNoFlag]#!"
 
@@ -60,7 +60,7 @@
 
  DISCORD_BREAKDOWN_lawgroup_distribution_of_power: "Difference in #b $lawgroup_distribution_of_power$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_distribution_of_power')]#!"
 
- DISCORD_BREAKDOWN_lawgroup_citizenship: "[concept_cultural_tensions]: [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_citizenship')]#!"
+ DISCORD_BREAKDOWN_lawgroup_citizenship: "[concept_cultural_tensions]: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_citizenship')]#!"
 
  DISCORD_BREAKDOWN_lawgroup_diplomatic_stance: "Difference in #b $lawgroup_diplomatic_stance$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_diplomatic_stance')]#!"
 
@@ -71,16 +71,22 @@
  DISCORD_BREAKDOWN_nationalism_homelands: "[concept_nationalist_tensions]: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_homeland_nationalism_value')]#!"
 
  concept_nationalist_tensions: "Nationalist Tensions"
-
- concept_nationalist_tensions_desc: "Researching #v Nationalism#! will inflame #b Nationalist Tensions#!; they will give rise to Political Discord whenever you engage diplomatically with countries that own your homelands and discriminate against your main culture."
+ concept_nationalist_tensions_desc: "Researching #v Nationalism#! will inflame #b Nationalist Tensions#!; they will give rise to [concept_political_discord] whenever you engage diplomatically with countries that own your homelands and discriminate against your main culture."
 
  concept_religious_tensions: "Religious Tensions"
-
- concept_religious_tensions_desc: "#b TODO:#! Inter-faith diplomacy causes Political Discord; how much is gained depends on differences in [concept_state_religion] and stances on $lawgroup_church_and_state$ of both countries.\n\nTheocracies are burdened with a 2x modifier, while Atheist States must deal with a 3x modifier."
+ concept_religious_tensions_desc: "Diplomacy between nations causes [concept_political_discord] based upon your [GetLawGroup('lawgroup_church_and_state').GetName] law, and the target country's [concept_state_religion]'s distance from your own #b State Religion#!.\n\nIf you're a [GetLawType('law_theocracy').GetName] you gain 2x more Discord from #b Religious Tensions#!, and as such it would be wise to keep diplomacy confined to your own religion when playing as one.\n\n#b $atheist$#! countries gets a 3x malus towards #b Theocracies#!."
 
  concept_cultural_tensions: "Cultural Tensions"
+ concept_cultural_tensions_desc: "Diplomacy between nations causes [concept_political_discord] based upon your [GetLawGroup('lawgroup_citizenship').GetName] law and the target country's [concept_primary_cultures] distance from your own #b Primary Cultures#!."
 
- concept_cultural_tensions_desc: "Inter-cultural diplomacy causes Political Discord; how much is gained depends on the cultures and stances on Citizenship laws of both countries."
+ concept_country_turmoil: "Country Turmoil"
+ concept_country_turmoil_desc: "The average [concept_turmoil] in your country is added as [concept_political_discord].\n\n[Concept('concept_unincorporated_state','$concept_unincorporated_states$')] only count for half an [concept_incorporated_state].\n\n#f For example, if you have 9 Incorporated states with no Turmoil, and 1 Unincorporated state with 100% Turmoil, the Discord gain would be 5, not 10.#!"
+ 
+ concept_cultural_dominance: "Cultural Dominance"
+ concept_cultural_dominance_desc: "#b Cultural Dominance#! is the percentage of your population that is of one of your [concept_primary_cultures].\n\nThe #b Equilibrium Point#! is #v 33%#! for countries with an [concept_overlord] of the same [concept_culture].\nElse it's #v 66%#!\n\n#g Going above that percentage removes Discord#!. \n#r Going below that percentage adds Discord#!.\n\nIt is therefore always good to have more Population of your culture."
+
+ concept_religious_dominance: "Religious Dominance"
+ concept_religious_dominance_desc: "#b Religious Dominance#! is the percentage of your population that follows your [concept_state_religion].\n\nThe #b Equilibrium Point#! is #v 33%#! for countries with an [concept_overlord] of the same [concept_religion].\nElse if you're a [GetLawType('law_theocracy').GetName] it's #v 80%#!\nElse it's #v 60%#!.\n\n#g Going above that percentage removes Discord#!. \n#r Going below that percentage adds Discord#!.\n\nIt is therefore always good to have more Population of your [concept_state_religion]."
 
  babylon_discord_have_same_culture_overlord_yes: "\nYour [concept_overlord] has changed this number by #v -33#! by virtue of having a shared cultural trait."
 
