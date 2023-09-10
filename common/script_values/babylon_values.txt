@@ -144,6 +144,45 @@ babylon_ai_foreign_law_country_wargoal_weight = {
 	}
 }
 
+babylon_infamy_multiplier = {
+	if = {
+		limit = {
+			infamy > 20
+		}
+		add = root.infamy
+		subtract = 20 # Remove 'excess' infamy from calculations
+		divide = 80 # Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
+	}
+	else = {
+		value = 0
+	}
+}
+
+pariah_infamy_SCOPE_VALUE_MULT_VAR_trigger = {
+	value = infamy_threshold:pariah
+	multiply = scope:mult_var
+}
+
+get_total_released_COUNTRY_infamy_worth_vassal = {
+	value = total_population
+	divide = 10000
+	multiply = 0.03
+	multiply = 3
+	multiply = -1
+	min = -50
+	max = 50
+}
+
+get_total_released_COUNTRY_infamy_worth_annex = {
+	value = total_population
+	divide = 10000
+	multiply = 0.03
+	multiply = 5
+	multiply = -1
+	min = -50
+	max = 50
+}
+
 babylon_player_construction_bonus_multiplier = {
 	if = {
 		limit = {

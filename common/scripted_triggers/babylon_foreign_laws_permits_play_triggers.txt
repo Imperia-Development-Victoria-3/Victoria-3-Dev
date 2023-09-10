@@ -28,13 +28,29 @@
 						list = regions
 						OR = {
 							any_scope_state = {
-								owner = root
-								is_incorporated = yes
+								OR = {
+									AND = {
+										owner = root
+										is_incorporated = yes
+									}
+									owner = {
+										babylon_target_is_puppet = yes
+									}
+								}
+
+								
 							}
 
 							any_neighbouring_state = {
-								owner = root
-								is_incorporated = yes
+								OR = {
+									AND = {
+										owner = root
+										is_incorporated = yes
+									}
+									owner = {
+										babylon_target_is_puppet = yes
+									}
+								}						
 							}	
 						}
 					}
@@ -45,8 +61,15 @@
 					any_in_list = {
 						list = sea_regions
 						any_neighbouring_state = {
-							owner = root
-							is_incorporated = yes					
+							OR = {
+								AND = {
+									owner = root
+									is_incorporated = yes
+								}
+								owner = {
+									babylon_target_is_puppet = yes
+								}
+							}					
 						}
 					}
 				}
@@ -112,12 +135,31 @@
 
 
 
-conquer_or_subjugation = {
+babylon_conquer_or_subjugation = {
 	OR = {
 		is_diplomatic_play_type = dp_conquer_state
 		is_diplomatic_play_type = dp_make_dominion
 		is_diplomatic_play_type = dp_make_vassal
 		is_diplomatic_play_type = dp_make_puppet
 		is_diplomatic_play_type = dp_take_treaty_port
+	}
+}
+
+
+babylon_target_is_puppet = {
+	AND = {
+		is_subject_of = root
+		has_diplomatic_pact = {
+			who = scope:target_country
+			type = puppet
+		}
+		has_diplomatic_pact = {
+			who = scope:target_country
+			type = personal_union
+		}
+		has_diplomatic_pact = {
+			who = scope:target_country
+			type = vassal
+		}
 	}
 }
