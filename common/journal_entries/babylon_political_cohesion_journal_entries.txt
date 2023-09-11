@@ -1,4 +1,4 @@
-﻿je_babylon_political_cohesion = {
+﻿je_babylon_political_discord = {
 	icon = "gfx/interface/icons/topbar/discord_icon.dds"
 	possible = {
 		#Should always be active
@@ -13,42 +13,42 @@
 		if = {
 			limit = { 
 				NOT = {
-					has_variable = political_cohesion
+					has_variable = political_discord
 				}
 			}
 			set_variable = {
-				name = political_cohesion
+				name = political_discord
 				value = 0
 			}
 		}
 		hidden_effect = {
 			add_modifier = {
-				name = cohesion_lvl_0_modifier
+				name = discord_lvl_0_modifier
 			}
 		}
 	}
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_babylon_political_cohesion_catastrophic
+				desc = je_babylon_political_discord_catastrophic
 				trigger = {
-					var:political_cohesion >= 300
+					var:political_discord >= 300
 				}
 			}
 			triggered_desc = {
-				desc = je_babylon_political_cohesion_worrisome
+				desc = je_babylon_political_discord_worrisome
 				trigger = {
-					var:political_cohesion >= 200
+					var:political_discord >= 200
 				}
 			}
 			triggered_desc = {
-				desc = je_babylon_political_cohesion_medium
+				desc = je_babylon_political_discord_medium
 				trigger = {
-					var:political_cohesion >= 100
+					var:political_discord >= 100
 				}
 			}
 			triggered_desc = {
-				desc = je_babylon_political_cohesion_normal
+				desc = je_babylon_political_discord_normal
 				trigger = {
 					always = yes
 				}
@@ -56,14 +56,14 @@
 		}
 	}
 	current_value = {
-		value = var:political_cohesion
+		value = var:political_discord
 	}
 	on_monthly_pulse = {
 		effect = {
-			babylon_political_cohesion_monthly_pulse_journal_entry = yes
+			babylon_political_discord_monthly_pulse_journal_entry = yes
 			if = {
 				limit = {
-					var:political_cohesion >= 400
+					var:political_discord >= 400
 					any_scope_state = {
 						count >= 2
 					}
@@ -128,11 +128,11 @@
 				}
 				every_country = {
 					trigger_event = {
-						id = babylon_political_cohesion.3
+						id = babylon_political_discord.3
 						popup = yes
 					}
 				}
-				set_variable = is_cohesion_implosion_country
+				set_variable = is_discord_implosion_country
 				every_scope_state = {
 					limit = {
 						is_capital = no
@@ -142,27 +142,27 @@
 						state = this
 						on_created = {
 							trigger_event = {
-								id = babylon_political_cohesion.2
+								id = babylon_political_discord.2
 							}
 							trigger_event = {
-								id = babylon_political_cohesion.4
+								id = babylon_political_discord.4
 								days = 3
 							}
 						}
 					}
 				}
 				trigger_event = {
-					id = babylon_political_cohesion.4
+					id = babylon_political_discord.4
 					days = 3
 				}
 				set_variable = {
-					name = political_cohesion
+					name = political_discord
 					value = 200
 				}
 			}
 			else_if = {
 				limit = {
-					var:political_cohesion >= 300
+					var:political_discord >= 300
 					NOT = {
 						has_variable = break_3_cooldown
 					}
@@ -175,16 +175,16 @@
 					if = {
 						limit = {
 							OR = {
-								has_modifier = cohesion_lvl_0_modifier
-								has_modifier = cohesion_lvl_1_modifier
-								has_modifier = cohesion_lvl_2_modifier
+								has_modifier = discord_lvl_0_modifier
+								has_modifier = discord_lvl_1_modifier
+								has_modifier = discord_lvl_2_modifier
 							}
 						}
-						remove_modifier ?= cohesion_lvl_0_modifier
-						remove_modifier ?= cohesion_lvl_1_modifier
-						remove_modifier ?= cohesion_lvl_2_modifier
+						remove_modifier ?= discord_lvl_0_modifier
+						remove_modifier ?= discord_lvl_1_modifier
+						remove_modifier ?= discord_lvl_2_modifier
 						add_modifier = {
-							name = cohesion_lvl_3_modifier
+							name = discord_lvl_3_modifier
 						}
 					}
 				}
@@ -206,7 +206,7 @@
 			}
 			else_if = {
 				limit = {
-					var:political_cohesion >= 200
+					var:political_discord >= 200
 					NOR = {
 						has_variable = break_2_cooldown
 						has_variable = break_3_cooldown
@@ -220,16 +220,16 @@
 					if = {
 						limit = {
 							OR = {
-								has_modifier = cohesion_lvl_0_modifier
-								has_modifier = cohesion_lvl_1_modifier
-								has_modifier = cohesion_lvl_3_modifier
+								has_modifier = discord_lvl_0_modifier
+								has_modifier = discord_lvl_1_modifier
+								has_modifier = discord_lvl_3_modifier
 							}
 						}
-						remove_modifier ?= cohesion_lvl_0_modifier
-						remove_modifier ?= cohesion_lvl_1_modifier
-						remove_modifier ?= cohesion_lvl_3_modifier
+						remove_modifier ?= discord_lvl_0_modifier
+						remove_modifier ?= discord_lvl_1_modifier
+						remove_modifier ?= discord_lvl_3_modifier
 						add_modifier = {
-							name = cohesion_lvl_2_modifier
+							name = discord_lvl_2_modifier
 						}
 					}
 				}
@@ -251,7 +251,7 @@
 			}
 			else_if = {
 				limit = {
-					var:political_cohesion >= 100
+					var:political_discord >= 100
 					NOR = {
 						has_variable = break_1_cooldown
 						has_variable = break_2_cooldown
@@ -262,16 +262,16 @@
 					if = {
 						limit = {
 							OR = {
-								has_modifier = cohesion_lvl_0_modifier
-								has_modifier = cohesion_lvl_2_modifier
-								has_modifier = cohesion_lvl_3_modifier
+								has_modifier = discord_lvl_0_modifier
+								has_modifier = discord_lvl_2_modifier
+								has_modifier = discord_lvl_3_modifier
 							}
 						}
-						remove_modifier ?= cohesion_lvl_0_modifier
-						remove_modifier ?= cohesion_lvl_2_modifier
-						remove_modifier ?= cohesion_lvl_3_modifier
+						remove_modifier ?= discord_lvl_0_modifier
+						remove_modifier ?= discord_lvl_2_modifier
+						remove_modifier ?= discord_lvl_3_modifier
 						add_modifier = {
-							name = cohesion_lvl_1_modifier
+							name = discord_lvl_1_modifier
 						}
 					}
 				}
@@ -301,16 +301,16 @@
 					if = {
 						limit = {
 							OR = {
-								has_modifier = cohesion_lvl_1_modifier
-								has_modifier = cohesion_lvl_2_modifier
-								has_modifier = cohesion_lvl_3_modifier
+								has_modifier = discord_lvl_1_modifier
+								has_modifier = discord_lvl_2_modifier
+								has_modifier = discord_lvl_3_modifier
 							}
 						}
-						remove_modifier ?= cohesion_lvl_1_modifier
-						remove_modifier ?= cohesion_lvl_2_modifier
-						remove_modifier ?= cohesion_lvl_3_modifier
+						remove_modifier ?= discord_lvl_1_modifier
+						remove_modifier ?= discord_lvl_2_modifier
+						remove_modifier ?= discord_lvl_3_modifier
 						add_modifier = {
-							name = cohesion_lvl_0_modifier
+							name = discord_lvl_0_modifier
 						}
 					}
 				}
@@ -318,7 +318,7 @@
 		}
 	}
 	complete = {
-		#Cannot be completed, is there to show cohesion
+		#Cannot be completed, is there to show discord
 		hidden_trigger = {
 			always = no
 		}
