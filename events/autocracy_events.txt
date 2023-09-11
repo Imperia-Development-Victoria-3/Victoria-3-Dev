@@ -2,6 +2,8 @@
 #scope:samurai_ig = {
 #			remove_ideology = ideology_bakufu
 #		}
+
+#EVENT OF PRIMARY IMPORTANCE BELOW. IT IS THE EVENT FINISHING OFF THE COMPLETION OF THE JE.
 autocracy.1 = {
 	type = country_event
 	placement = ROOT
@@ -52,40 +54,62 @@ autocracy.1 = {
 			}
 		}
 	}
+#BELOW - The Aristocracy is Supreme!
+
+#DELETE LATER - The Aristocracy is Supreme! - 
+#Aristocrats, Capitalists +20% loyal
+#Aristocrats +15% Political Strength for 10 years
+#apitalists lose republican ideology, gain pro-monarch industrialism ideology.
+#Traditionalist & Royalist characters are more likely to appear, Republicans significantly less likely to appear
 
 	option = { # increase assimilation and gain same culture loyalists
 		name = autocracy.1.b
+
 		add_loyalists = {
-			culture = scope:primary_culture_scope
-			value = 0.05
+			pop_type = aristocrats
+			value = 0.2
 		}
+
+		add_loyalists = {
+			pop_type = capitalists
+			value = 0.2
+		}
+
+
+		ig:ig_industrialists = {
+				remove_ideology = ideology_plutocratic
+				add_ideology = ideology_neo_feudalistic
+		}
+
+
 		add_modifier = {
-			name = russification_modifier
-			months = very_long_modifier_time
+			name = rise_of_neo_feudalism_mod
+			months = long_modifier_time
 		}
 	}
 
 #BELOW - Faith is the way forward. Neo-Scholasticism for Intelligentsia.
 	option = { # increase conversion
 		name = autocracy.1.c
+
 		add_loyalists = {
 			pop_type = clergymen
 			religion = root.religion
 			value = 0.2 #originally was 0.6 (!) The doc wanted it to be 0.05, but that feels too low... Especially for the designated religious option and after waiting 30 years.
 		}
 
-			add_loyalists = {
+		add_loyalists = {
 			pop_type = farmers
 			religion = root.religion #I am doing something fun here. Only the RELIGIOUS (following the only correct and true religion) farmers will become loyalists.
 			value = 0.05
 		}
-			add_loyalists = {
+		add_loyalists = {
 			pop_type = laborers
 			religion = root.religion
 			value = 0.05
 		}
 
-			ig:ig_intelligentsia = {
+		ig:ig_intelligentsia = {
 				remove_ideology = ideology_anti_clerical
 				remove_ideology = ideology_republican
 				add_ideology = ideology_neo_scholastic
@@ -95,8 +119,10 @@ autocracy.1 = {
 			name = rise_of_neo_scholasticism_mod
 			months = long_modifier_time
 		}
+		#IMPLEMENT LATER - Traditionalist & Theocrat characters are more likely to appear, Nihilist characters are significantly less likely to appear
 	}
 }
+# EVENTS OF SECONDARY IMPORTANCE BELOW. They are random events possibly spawning during the JE.
 
 # secret societies
 autocracy.2 = {
