@@ -1,0 +1,265 @@
+﻿babylon_discord_church_and_state = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:target_country
+		}
+		if = {
+			limit = {
+				root = {
+					# Fully automated battle-religion
+					has_law = law_type:law_state_religion
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						country_has_state_religion = root.religion
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_heritage_trait_with_state_religion = root
+						}
+					}
+					add = political_discord_change_miniscule
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_trait_with_state_religion = root
+						}
+					}
+					add = political_discord_change_small
+				}
+				else_if = {
+					limit = {
+						country_has_state_religion = rel:atheist
+					}
+					add = political_discord_change_huge
+				}
+				else = {
+					add = political_discord_change_xl
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# Exclusive muslim law; like denominational just with the taxing of infidels
+					# Less hateful of said infidels in comparison to state religion
+					has_law = law_type:law_jizya
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						country_has_state_religion = root.religion
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_heritage_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_trait_with_state_religion = root
+						}
+					}
+					add = political_discord_change_small
+				}
+				else_if = {
+					limit = {
+						country_has_state_religion = rel:atheist
+					}
+					add = political_discord_change_xl
+				}
+				else = {
+					add = political_discord_change_small
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# The state has an official state religion but the people may choose to identify with adjacent denominations. 
+					# Distant sects and exotic religions are discriminated against.
+					has_law = law_type:law_denominational_exclusion
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						country_has_state_religion = root.religion
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_heritage_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_trait_with_state_religion = root
+						}
+					}
+					add = political_discord_change_small
+				}
+				else_if = {
+					limit = {
+						country_has_state_religion = rel:atheist
+					}
+					add = political_discord_change_large
+				}
+				else = {
+					add = political_discord_change_medium
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# Still got a state religion, else you're free to worship as you wish.
+					# Some exotic sects are discriminated against
+					has_law = law_type:law_freedom_of_conscience
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						country_has_state_religion = root.religion
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_heritage_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						country_has_state_religion = rel:atheist
+					}
+					add = political_discord_change_small
+				}
+				else = {
+					add = political_discord_change_small
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# Self explanatory, state and religion are not to be confused with each other in any way. Agnostic.
+					has_law = law_type:law_total_separation
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						country_has_state_religion = root.religion
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_heritage_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						religion = {
+							shares_trait_with_state_religion = root
+						}
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						# Miniscule dislike for atheism, since atheists are against religion.
+						country_has_state_religion = rel:atheist
+					}
+					add = political_discord_change_miniscule
+				}
+				else = {
+					add = 0
+				}
+				if = {
+					limit = {
+						# Slight dislike for theocracies. You shouldn't mix state and religion, duh!
+						has_law = law_type:law_theocracy
+					}
+					add = political_discord_change_small
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# Against religion, technically adopts their own "Atheist" religion, ingame.
+					has_law = law_type:law_state_atheism
+				}
+			}
+			scope:target_country = {
+				if = {
+					limit = {
+						has_law = law_type:law_state_atheism
+					}
+					add = 0
+				}
+				else_if = {
+					limit = {
+						has_law = law_type:law_total_separation
+					}
+					add = political_discord_change_medium
+				}
+				else = {
+					add = political_discord_change_huge
+				}
+				if = {
+					limit = {
+						# Atheists *really* hate theocracies!
+						has_law = law_type:law_theocracy
+					}
+					multiply = 3
+				}
+			}
+		}
+		if = {
+			limit = {
+				root = {
+					# Theocracies takes their religion seriously.
+					has_law = law_type:law_theocracy
+				}
+			}
+			multiply = 2
+		}
+	}
+}
