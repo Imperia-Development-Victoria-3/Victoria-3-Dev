@@ -36,33 +36,51 @@ autocracy.1 = {
 		ig:ig_devout = {
 			save_scope_as = church_scope
 		}
+		ig:ig_landowners = {
+            save_scope_as = landowners_ig
+        }
+		ig:ig_industrialists = {
+            save_scope_as = industrialist_ig
+        }
+		ig:ig_armed_forces = {
+            save_scope_as = military_ig
+        }
+        ig:ig_intelligentsia = {
+            save_scope_as = intelligentsia_ig
+        }
 	}
-
-	option = { # increase ruler popularity and IG attraction
+#BELOW - the military shields us all
+	option = {
 		name = autocracy.1.a
 		default_option = yes
-		ruler = {
-			add_modifier = {
-				name = popular_autocrat
-				months = very_long_modifier_time
-			}
-			interest_group = {
-				add_modifier = {
-					name = popular_autocrat_ig
-					months = very_long_modifier_time
-				}
-			}
+
+		add_loyalists = {
+			pop_type = soldiers
+			value = 0.1
 		}
+
+		add_loyalists = {
+			pop_type = officers
+			value = 0.15
+		}
+
+		ig:ig_trade_unions = {
+				remove_ideology = ideology_populist
+				add_ideology = ideology_militant_populism
+				set_variable = {
+                	name = militant_populism_leader_ideology_weights
+                }
+		}
+
+		add_modifier = {
+			name = rise_of_militarist_idealization_mod
+			months = long_modifier_time
+		}
+		#Traditionalist & Jingoist characters are more likely to appear, Pacifists significantly less likely to appear
 	}
 #BELOW - The Aristocracy is Supreme!
 
-#DELETE LATER - The Aristocracy is Supreme! - 
-#Aristocrats, Capitalists +20% loyal
-#Aristocrats +15% Political Strength for 10 years
-#apitalists lose republican ideology, gain pro-monarch industrialism ideology.
-#Traditionalist & Royalist characters are more likely to appear, Republicans significantly less likely to appear
-
-	option = { # increase assimilation and gain same culture loyalists
+	option = {
 		name = autocracy.1.b
 
 		add_loyalists = {
@@ -79,6 +97,9 @@ autocracy.1 = {
 		ig:ig_industrialists = {
 				remove_ideology = ideology_plutocratic
 				add_ideology = ideology_neo_feudalistic
+				set_variable = {
+        			name = neo_feudalistic_leader_ideology_weights
+       				}
 		}
 
 
@@ -86,10 +107,12 @@ autocracy.1 = {
 			name = rise_of_neo_feudalism_mod
 			months = long_modifier_time
 		}
+
+		#Traditionalist & Royalist characters are more likely to appear, Republicans significantly less likely to appear
 	}
 
 #BELOW - Faith is the way forward. Neo-Scholasticism for Intelligentsia.
-	option = { # increase conversion
+	option = { 
 		name = autocracy.1.c
 
 		add_loyalists = {
@@ -113,12 +136,16 @@ autocracy.1 = {
 				remove_ideology = ideology_anti_clerical
 				remove_ideology = ideology_republican
 				add_ideology = ideology_neo_scholastic
+                set_variable = {
+                	name = neo_scholastic_leader_ideology_weights
+                }
 		}
 
 		add_modifier = {
 			name = rise_of_neo_scholasticism_mod
 			months = long_modifier_time
 		}
+
 		#IMPLEMENT LATER - Traditionalist & Theocrat characters are more likely to appear, Nihilist characters are significantly less likely to appear
 	}
 }

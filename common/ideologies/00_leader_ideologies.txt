@@ -103,6 +103,19 @@ ideology_traditionalist = {
 				is_interest_group_type = ig_petty_bourgeoisie
 				is_interest_group_type = ig_landowners
 				is_interest_group_type = ig_devout
+				OR = {
+					AND = 					
+						{
+						is_interest_group_type = ig_intelligentsia
+						has_variable = neo_scholastic_leader_ideology_weights
+						}
+					AND =
+						{
+						is_interest_group_type = ig_industrialists
+						has_variable = neo_feudalistic_leader_ideology_weights
+						}
+					}
+				}
 			}
 		}
 		scope:interest_group = {
@@ -147,6 +160,32 @@ ideology_traditionalist = {
 			}
 			add = 50
 		}
+		if = {
+			limit = {
+				scope:interest_group = {
+					OR = {
+						AND = {
+							is_interest_group_type = ig_intelligentsia
+							has_variable = neo_scholastic_leader_ideology_weights
+						}
+						AND = {
+							is_interest_group_type = ig_industrialists
+							has_variable = neo_feudalistic_leader_ideology_weights
+						}
+					}
+				}
+			add = 70
+	}
+}
+		if = {
+			limit = {
+				scope:interest_group = {
+					AND = {
+						is_interest_group_type = ig_trade_unions
+						has_variable = militant_populism_leader_ideology_weights
+					}
+				}
+			add = 100 #this seems absolutely massive, but keep in mind the trade unions get a negative 75 just a few lines above as a baseline.
 	}
 }
 
@@ -211,6 +250,7 @@ ideology_atheist = {
 				has_variable = chose_fascism
 				has_variable = chose_conservatism
 				has_variable = chose_ethno_nationalism
+				has_variable = neo_scholastic_leader_ideology_weights
 			}
 		}
 	}
@@ -318,6 +358,8 @@ ideology_republican_leader = {
 				has_variable = chose_fascism
 				has_variable = chose_conservatism
 				has_variable = chose_ethno_nationalism
+				has_variable = neo_scholastic_leader_ideology_weights
+				has_variable = neo_feudalistic_leader_ideology_weights
 			}
 		}
 	}
@@ -1058,6 +1100,7 @@ ideology_pacifist = {
 				has_variable = chose_fascism
 				has_variable = chose_conservatism
 				has_variable = chose_ethno_nationalism
+				has_variable = militant_populism_leader_ideology_weights
 			}
 		}
 	}
@@ -1266,6 +1309,16 @@ ideology_jingoist_leader = {
 			}
 			add = 50
 		}
+
+		if = {
+			limit = {
+				scope:interest_group = {
+					is_interest_group_type = ig_trade_unions
+					has_variable = militant_populism_leader_ideology_weights
+				}
+			}
+			add = 115 #Seems massive, but there are many potential negative modifiers.
+		}
 	}
 }
 
@@ -1319,6 +1372,10 @@ ideology_royalist = {
 				is_interest_group_type = ig_rural_folk
 				is_interest_group_type = ig_petty_bourgeoisie
 				is_interest_group_type = ig_armed_forces
+				AND = {
+					is_interest_group_type = ig_industrialists
+					has_variable = neo_feudalistic_leader_ideology_weights
+				}
 			}
 		}
 		scope:interest_group = {
@@ -1375,6 +1432,17 @@ ideology_royalist = {
 				}
 			}
 			add = 50
+		}
+		if = {
+			limit = {
+				scope:interest_group = {
+					AND = {
+						is_interest_group_type = ig_industrialists
+						has_variable = neo_feudalistic_leader_ideology_weights
+					}
+				}
+			}
+			add = 75
 		}
 	}
 }
@@ -2519,43 +2587,53 @@ ideology_theocrat = {
 		law_private_paramilitaries = strongly_disapprove
 	}	
 	
-	possible = {
-		# Agitator ideologies should disapprove of a current law
-		NAND = {
-			has_role = agitator
-			owner = {
-				has_law = law_type:law_theocracy
-				has_law = law_type:law_state_religion
-			}
-		}
-		OR = {
-			owner = {
-				has_law = law_type:law_theocracy
-			}
-			scope:interest_group = {
-				is_interest_group_type = ig_devout
-			}
-		}
-		scope:interest_group = {
-			OR = {
-				is_interest_group_type = ig_rural_folk
-				is_interest_group_type = ig_trade_unions
-				is_interest_group_type = ig_armed_forces
-				is_interest_group_type = ig_petty_bourgeoisie
-				is_interest_group_type = ig_landowners
-				is_interest_group_type = ig_devout
-			}
-		}
-		scope:interest_group = {
-			NOR = {
-				has_variable = chose_vanguardism
-				has_variable = communist_ig_var
-				has_variable = chose_fascism
-				has_variable = chose_conservatism
-				has_variable = chose_ethno_nationalism
-			}
-		}
-	}
+	    possible = {
+        # Agitator ideologies should disapprove of a current law
+        NAND = {
+            has_role = agitator
+            owner = {
+                has_law = law_type:law_theocracy
+                has_law = law_type:law_state_religion
+            }
+        }
+        OR = {
+            owner = {
+                has_law = law_type:law_theocracy
+            }
+            scope:interest_group = {
+                OR = {
+                  is_interest_group_type = ig_devout
+                  AND = {
+                    is_interest_group_type = ig_intelligentsia
+                    has_variable = neo_scholastic_leader_ideology_weights
+                  }
+                }
+            }
+        }
+        scope:interest_group = {
+            OR = {
+                is_interest_group_type = ig_rural_folk
+                is_interest_group_type = ig_trade_unions
+                is_interest_group_type = ig_armed_forces
+                is_interest_group_type = ig_petty_bourgeoisie
+                is_interest_group_type = ig_landowners
+                is_interest_group_type = ig_devout
+                AND = {
+                  is_interest_group_type = ig_intelligentsia
+                  has_variable = neo_scholastic_leader_ideology_weights
+                }
+            }
+        }
+        scope:interest_group = {
+            NOR = {
+                has_variable = chose_vanguardism
+                has_variable = communist_ig_var
+                has_variable = chose_fascism
+                has_variable = chose_conservatism
+                has_variable = chose_ethno_nationalism
+            }
+        }
+    }
 	
 	leader_weight = {
 		value = 100
@@ -2565,6 +2643,12 @@ ideology_theocrat = {
 				scope:interest_group = {
 					ig_approval <= -5
 					is_interest_group_type = ig_devout
+					OR = {
+						AND = {
+                  			is_interest_group_type = ig_intelligentsia
+                  			has_variable = neo_scholastic_leader_ideology_weights
+                			}
+					}
 				}
 				owner = {
 					NOR = {
@@ -2613,6 +2697,17 @@ ideology_theocrat = {
 				}
 			}
 			add = 50
+		}
+		if = {
+			limit = {
+				scope:interest_group = {
+					AND = {
+						is_interest_group_type = ig_intelligentsia
+						has_variable = neo_scholastic_leader_ideology_weights
+					}
+				}
+			}
+			add = 65
 		}
 	}
 }
