@@ -1,27 +1,19 @@
 ﻿namespace = autocracy
-
 autocracy.1 = {
 	type = country_event
 	placement = ROOT
-	
 	title = autocracy.1.t
 	desc = autocracy.1.d
 	flavor = autocracy.1.f
-	
 	event_image = {
 		video = "votp_monarch_holding_court"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
-	
 	duration = 3
-	
 	trigger = {
 		# triggered by je_autocracy completion
 	}
-
 	immediate = {
 		ruler = {
 			save_scope_as = monarch_scope
@@ -33,36 +25,32 @@ autocracy.1 = {
 			save_scope_as = church_scope
 		}
 		ig:ig_landowners = {
-        	save_scope_as = landowners_ig
-       	}
+			save_scope_as = landowners_ig
+		}
 		ig:ig_industrialists = {
-            save_scope_as = industrialist_ig
-        }
+			save_scope_as = industrialist_ig
+		}
 		ig:ig_armed_forces = {
-            save_scope_as = military_ig
-        }
-        ig:ig_intelligentsia = {
-            save_scope_as = intelligentsia_ig
-        }
-        ig:ig_trade_unions = {
-        	save_scope_as = trade_unions_ig
-        }
+			save_scope_as = military_ig
+		}
+		ig:ig_intelligentsia = {
+			save_scope_as = intelligentsia_ig
+		}
+		ig:ig_trade_unions = {
+			save_scope_as = trade_unions_ig
+		}
 	}
-
 	option = {
 		name = autocracy.1.a
 		default_option = yes
-
 		add_loyalists = {
 			pop_type = soldiers
 			value = 0.1
 		}
-
 		add_loyalists = {
 			pop_type = officers
 			value = 0.15
 		}
-
 		ig:ig_trade_unions = {
 			remove_ideology = ideology_populist
 			add_ideology = ideology_militant_populism
@@ -70,30 +58,23 @@ autocracy.1 = {
 				name = militant_populism_leader_ideology_weights
 			}
 		}
-
 		custom_tooltip = militant_populism_leader_ideology_weights_applied.tt
-
 		add_modifier = {
 			name = rise_of_militarist_idealization_mod
 			months = long_modifier_time
 		}
 		#Traditionalist & Jingoist characters are more likely to appear, Pacifists significantly less likely to appear
 	}
-
 	option = {
 		name = autocracy.1.b
-
 		add_loyalists = {
 			pop_type = aristocrats
 			value = 0.2
 		}
-
 		add_loyalists = {
 			pop_type = capitalists
 			value = 0.2
 		}
-
-
 		ig:ig_industrialists = {
 			remove_ideology = ideology_plutocratic
 			add_ideology = ideology_neo_feudalistic
@@ -101,28 +82,22 @@ autocracy.1 = {
 				name = neo_feudalistic_leader_ideology_weights
 			}
 		}
-
 		custom_tooltip = neo_feudalistic_leader_ideology_weights_applied.tt
-
-
 		add_modifier = {
 			name = rise_of_neo_feudalism_mod
 			months = long_modifier_time
 		}
 	}
-
-	option = { 
+	option = {
 		name = autocracy.1.c
-
 		add_loyalists = {
 			pop_type = clergymen
 			religion = root.religion
-			value = 0.2 #originally was 0.6 (!) The doc wanted it to be 0.05, but that feels too low... Especially for the designated religious option and after waiting 30 years.
+			value = 0.2			#originally was 0.6 (!) The doc wanted it to be 0.05, but that feels too low... Especially for the designated religious option and after waiting 30 years.
 		}
-
 		add_loyalists = {
 			pop_type = farmers
-			religion = root.religion #I am doing something fun here. Only the RELIGIOUS (following the only correct and true religion) farmers will become loyalists.
+			religion = root.religion			#I am doing something fun here. Only the RELIGIOUS (following the only correct and true religion) farmers will become loyalists.
 			value = 0.05
 		}
 		add_loyalists = {
@@ -130,18 +105,15 @@ autocracy.1 = {
 			religion = root.religion
 			value = 0.05
 		}
-
 		ig:ig_intelligentsia = {
-				remove_ideology = ideology_anti_clerical
-				remove_ideology = ideology_republican
-				add_ideology = ideology_neo_scholastic
-                set_variable = {
-                	name = neo_scholastic_leader_ideology_weights
-                }
+			remove_ideology = ideology_anti_clerical
+			remove_ideology = ideology_republican
+			add_ideology = ideology_neo_scholastic
+			set_variable = {
+				name = neo_scholastic_leader_ideology_weights
+			}
 		}
-
 		custom_tooltip = neo_scholastic_leader_ideology_weights_applied.tt
-
 		add_modifier = {
 			name = rise_of_neo_scholasticism_mod
 			months = long_modifier_time
@@ -153,21 +125,15 @@ autocracy.1 = {
 autocracy.2 = {
 	type = country_event
 	placement = scope:secret_societies_state
-	
 	title = autocracy.2.t
 	desc = autocracy.2.d
 	flavor = autocracy.2.f
-	
 	event_image = {
 		video = "votp_conspiring"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
-	
 	duration = 3
-	
 	trigger = {
 		NOT = {
 			has_variable = secret_societies_timer
@@ -196,7 +162,6 @@ autocracy.2 = {
 			}
 		}
 	}
-
 	immediate = {
 		set_variable = {
 			name = secret_societies_timer
@@ -221,7 +186,6 @@ autocracy.2 = {
 			}
 		}
 	}
-	
 	cancellation_trigger = {
 		scope:secret_societies_state = {
 			is_incorporated = yes
@@ -232,8 +196,8 @@ autocracy.2 = {
 			}
 		}
 	}
-
-	option = { # tolerate them
+	option = {
+		# tolerate them
 		name = autocracy.2.a
 		default_option = yes
 		scope:secret_society_ig = {
@@ -243,8 +207,8 @@ autocracy.2 = {
 			}
 		}
 	}
-
-	option = { # crack down on secret societies
+	option = {
+		# crack down on secret societies
 		name = autocracy.2.b
 		scope:secret_society_ig = {
 			add_modifier = {
@@ -265,23 +229,19 @@ autocracy.2 = {
 autocracy.3 = {
 	type = country_event
 	placement = scope:religious_serfs_state
-	
 	title = autocracy.3.t
 	desc = autocracy.3.d
 	flavor = autocracy.3.f
-	
 	event_image = {
 		video = "europenorthamerica_russian_serfs"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	
 	duration = 3
-	
 	trigger = {
-		NOT = { has_variable = religious_serfs_timer }
+		NOT = {
+			has_variable = religious_serfs_timer
+		}
 		ig:ig_devout = {
 			is_powerful = yes
 			is_in_government = yes
@@ -305,7 +265,6 @@ autocracy.3 = {
 			}
 		}
 	}
-
 	immediate = {
 		set_variable = {
 			name = religious_serfs_timer
@@ -338,8 +297,8 @@ autocracy.3 = {
 			save_scope_as = church_scope
 		}
 	}
-
-	option = { # increase loyalty
+	option = {
+		# increase loyalty
 		name = autocracy.3.a
 		default_option = yes
 		scope:religious_serfs_state = {
@@ -349,8 +308,8 @@ autocracy.3 = {
 			}
 		}
 	}
-
-	option = { # reduce radicals
+	option = {
+		# reduce radicals
 		name = autocracy.3.b
 		scope:religious_serfs_state = {
 			add_modifier = {
