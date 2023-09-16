@@ -1,0 +1,47 @@
+﻿domestic_discord_contribution = {
+	scope = country
+	effect = {
+		save_temporary_scope_as = root_scope
+		custom_tooltip = discord_government_legitimacy_contribution_tt
+		custom_tooltip = discord_turmoil_contribution_tt
+		if = {
+			limit = {
+				is_discord_cultural_internal_calc_active = yes
+			}
+			custom_tooltip = discord_cultural_contribution_tt
+		}
+		if = {
+			limit = {
+				is_discord_religious_internal_calc_active = yes
+			}
+			custom_tooltip = discord_religious_contribution_tt
+		}
+		ruler = {
+			save_temporary_scope_as = character_scope
+			custom_tooltip = discord_character_contribution_tt
+		}
+		every_interest_group = {
+			limit = {
+				AND = {
+					is_in_government = yes
+					leader = {
+						NOT = {
+							root.ruler = this
+						}
+					}
+				}
+			}
+			leader = {
+				save_temporary_scope_as = character_scope
+			}
+			custom_tooltip = discord_character_contribution_tt
+		}
+		every_interest_group = {
+			limit = {
+				is_in_government = yes
+			}
+			save_temporary_scope_as = ig_scope
+			custom_tooltip = discord_ig_contribution_tt
+		}
+	}
+}

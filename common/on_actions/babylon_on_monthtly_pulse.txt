@@ -1,0 +1,165 @@
+﻿on_babylon_monthly_pulse_country = {
+	effect = {
+		# Land trade capacity
+		remove_modifier ?= modifier_land_trade_capacity
+
+		set_local_variable = {
+			name = total_infrastructure
+			value = 0
+		}
+		set_local_variable = {
+			name = number_of_states
+			value = 0
+		}
+		every_scope_state = {
+			change_local_variable = {
+				name = total_infrastructure
+				add = modifier:state_infrastructure_add
+			}
+			change_local_variable = {
+				name = number_of_states
+				add = 1
+			}
+		}
+		if = {
+			limit = {
+				local_var:number_of_states > 0
+			}
+			
+			set_local_variable = {
+				name = gained_land_trade_capicity
+				value = {
+					add = local_var:total_infrastructure
+					divide = local_var:number_of_states
+					subtract = 50 # counting from 50 infrasturucture
+					divide = 8 # every 8 infrastructure average is 1 land_trade capacity
+				}
+			}
+
+			if = {
+				limit = {
+					local_var:gained_land_trade_capicity >= 1
+				}
+
+				add_modifier = { 
+					name = modifier_land_trade_capacity
+					multiplier = local_var:gained_land_trade_capicity
+				}
+			}
+		}
+
+		# Remove / reset babylon infamy modifiers
+		remove_modifier ?= babylon_country_infamy_workers
+		remove_modifier ?= babylon_country_infamy_capitalist
+		every_scope_state = {
+			remove_modifier ?= babylon_state_infamy
+		}
+		if = {
+			limit = {
+				infamy > 20
+			}
+			# If theres infamy present...
+			if = {
+				limit = {
+					has_law = law_type:law_command_economy
+				}
+				# Give command economies their own modifiers
+				add_modifier = {
+					name = babylon_country_infamy_workers
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			else = {
+				# Rest is considered capitalist
+				add_modifier = {
+					name = babylon_country_infamy_capitalist
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+			# No matter what form of economy, give every state a modifier
+			every_scope_state = {
+				add_modifier = {
+					name = babylon_state_infamy
+					multiplier = babylon_infamy_multiplier
+				}
+			}
+		}
+		# Give players more construction if they deserve it
+		if = {
+			limit = {
+				is_player = yes
+			}
+			# Remove the bonus and resets it (if it exists); here in case a players rank is adjusted
+			remove_modifier ?= player_construction_bonus
+			if = {
+				# Only re-add the modifier if the contents (multiplier) are non-zero
+				limit = {
+					babylon_player_construction_bonus_multiplier != 0
+				}
+				add_modifier = {
+					name = player_construction_bonus
+					multiplier = babylon_player_construction_bonus_multiplier
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_player = no
+				has_modifier = player_construction_bonus
+			}
+			remove_modifier = player_construction_bonus
+		}
+	}
+	events = {
+		naval_command_check.1		# checks
+		infamy_rebalance.1		#updates provinces each month
+	}
+}
+
+#scope = country
+on_babylon_monthly_pulse_store_infamy = {
+	effect = {
+		set_variable = {
+			name = infamy_on_month_start
+			value = infamy
+		}
+	}
+}
+
+on_babylon_monthly_pulse_allow_incorporation = {
+	effect = {
+		if = {
+			limit = {
+				has_law = law_type:law_imperialism
+			}
+			every_scope_state = {
+				save_scope_as = current_state
+				limit = { 
+					is_incorporated = no
+					is_being_incorporated = no
+				}
+
+				if = {
+					limit = {
+						any_scope_culture = {
+							NOT = { culture_is_discriminated_in = root }
+							has_homeland = scope:current_state
+
+						}
+					}
+					remove_modifier ?= modifier_state_disallow_incorporation 
+				}
+				else = {
+					if ={
+						limit = {
+							NOT = {
+								has_modifier = modifier_state_disallow_incorporation
+							}
+						}
+						add_modifier = modifier_state_disallow_incorporation
+					}
+				}
+			}
+		}
+	}
+}
