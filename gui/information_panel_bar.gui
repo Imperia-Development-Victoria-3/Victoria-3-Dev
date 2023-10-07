@@ -9,7 +9,7 @@
 @spacing_widget_size = 20
 
 @diplomatic_position = 270
-@international_position = 310
+@vienna_congress_position = 310
 @technology_position = 350
 @culture_position = 390
 @population_position = 430
@@ -345,52 +345,50 @@ types information_panel_bar_types {
 					input_action = "open_diplomatic"
 				}
 				
-				### INTERNATIONAL
+				### VIENNA CONGRESS
 				sidebar_label_button_small = {
 					enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
-					position = { -100 @international_position }
+					position = { -100 @vienna_congress_position }
 					blockoverride "onclick" {
-						onclick = "[GetVariableSystem.Toggle('international_open')]"
+						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+						input_action = "PLACEHOLDER"
 						onclick = "[InformationPanelBar.ClosePanel]"
 						onclick = "[MapListPanelManager.CloseCurrentPanel]"
-						onclick = "[GetScriptedGui('toggle_unsc_sgui_list').Execute( GuiScope.End )]"
 					}
 				}
-
 				sidebar_label_text_small = {
-					position = { -100 @international_position }
-					text = "INTERNATIONAL_ORGANIZATIONS"
+					position = { -100 @vienna_congress_position }
+					text = "DIPLOMACY"
 				}
 				widget = {
 					enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
-					name = "tutorial_highlight_international"
-					position = { 0 @international_position }
+					position = { 0 @vienna_congress_position }
+					name = "tutorial_highlight_diplomacy_2"
 					using = clickthrough_blocker
 					using = sidebar_button_size_small
 					using = selected_sidepanel_animation_small
 					blockoverride "selected_visibility" {
-						visible = "[GetVariableSystem.Exists('international_open')]"
+						visible = "[GetVariableSystem.Exists('babylon_vienna_congress_open')]"
 					}
 					sidepanel_button_small = {
 						blockoverride "icon" {
-							texture = "gfx/interface/main_hud/international_btn.dds"
+							texture = "gfx/interface/main_hud/dip_btn.dds"
 						}
 						blockoverride "button_selected" {
-							visible = "[GetVariableSystem.Exists('international_open')]"
+							visible = "[InformationPanelBar.IsPanelOpen('diplomatic_overview')]"
 						}
+						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+						input_action = "PLACEHOLDER"
 						onclick = "[InformationPanelBar.ClosePanel]"
 						onclick = "[MapListPanelManager.CloseCurrentPanel]"
-						onclick = "[GetVariableSystem.Toggle('international_open')]"
-						onclick = "[GetVariableSystem.Clear('un_panel')]" 
-						onclick = "[GetVariableSystem.Clear('banks_panel')]" 
-						onclick = "[GetVariableSystem.Clear('nato_panel')]" 
-						onclick = "[GetVariableSystem.Clear('warsaw_pact_panel')]" 
-						onclick = "[GetVariableSystem.Clear('imf_panel')]" 
 					}
 				}
 				sidebar_tooltip_area_small = {
-					position = { 0 @international_position }
+					position = { 0 @vienna_congress_position }
+					tooltip = "BUTTON_DIPLOMATIC_OVERVIEW"
+					input_action = "open_diplomatic"
 				}
+
 				### TECHNOLOGY
 				sidebar_label_button_small = {
 					enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
