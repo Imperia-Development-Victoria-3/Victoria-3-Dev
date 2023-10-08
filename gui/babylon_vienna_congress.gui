@@ -26,10 +26,219 @@ types babylon_vienna_congress
 		#		}
 		#	}
 		#}
-		
-		blockoverride "window_header_name"
-		{
+
+		blockoverride "back_button_fullscreen" {
+			back_button_large = {
+				position = { 11 15 }
+				parentanchor = top|left
+				onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+				input_action = "back"
+			}
+		}
+
+		blockoverride "close_button_onclick" {
+			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+		}
+
+		blockoverride "window_header_name" {
+			margin_left = 20
 			raw_text = "Vienna Congress Placeholder"
+			
+			# PLACEHOLDER
+			#icon = {
+			#	position = { -80 -10 }
+			#	texture = "gfx/interface/icons/cwp_icons/united_nations.dds"
+			#	tooltip = "[concept_united_nations_desc]"
+			#	size = { 70 70 }
+			#	background = {
+			#	}
+			#}
+		}
+
+		blockoverride "fixed_top" {
+			### TABS
+			tab_buttons_fullscreen = {
+
+				# Production
+				blockoverride "first_button" {
+					text = "PRODUCTION_NO_CONCEPT"
+				}
+				blockoverride "first_button_tooltip" {
+					tooltip = "PRODUCTION_NO_CONCEPT"
+				}
+				blockoverride "first_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Orange
+						alpha = 0.5
+					}
+				}
+				blockoverride "first_button_click" {
+					onclick = "[GetVariableSystem.Toggle('babylon_congress_countries')]"
+					onclick = "[GetVariableSystem.Clear('babylon_congress_resolution')]"
+					onclick = "[GetVariableSystem.Clear('babylon_congress_proposal')]"
+				}
+				blockoverride "first_button_visibility" {
+					visible = "[GetVariableSystem.Exists('babylon_congress_countries')]"
+				}
+				blockoverride "first_button_visibility_checked" {
+					visible = "[Not(GetVariableSystem.Exists('babylon_congress_countries'))]"
+				}
+				blockoverride "first_button_selected" {
+					text = "PRODUCTION_NO_CONCEPT"
+				}
+
+				blockoverride "first_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Orange
+						alpha = 0.5
+					}
+				}
+
+				# Military
+				blockoverride "second_button" {
+					text = "MILITARY"
+				}
+				blockoverride "second_button_tooltip" {
+					tooltip = "MILITARY"
+				}
+				blockoverride "second_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Red
+						alpha = 0.15
+					}
+				}
+				blockoverride "second_button_click" {
+					onclick = "[GetVariableSystem.Clear('babylon_congress_countries')]"
+					onclick = "[GetVariableSystem.Toggle('babylon_congress_resolution')]"
+					onclick = "[GetVariableSystem.Clear('babylon_congress_proposal')]"
+				}
+				blockoverride "second_button_visibility" {
+					visible = "[GetVariableSystem.Exists('babylon_congress_resolution')]"
+				}
+				blockoverride "second_button_visibility_checked" {
+					visible = "[Not(GetVariableSystem.Exists('babylon_congress_resolution'))]"
+				}
+				blockoverride "second_button_selected" {
+					text = "MILITARY"
+				}
+				blockoverride "second_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Red
+						alpha = 0.15
+					}
+				}
+
+				# Society
+				blockoverride "third_button" {
+					text = "SOCIETY"
+				}
+				blockoverride "third_button_tooltip" {
+					tooltip = "SOCIETY"
+				}
+				blockoverride "third_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Purple
+						alpha = 0.5
+					}
+				}
+				blockoverride "third_button_click" {
+					onclick = "[GetVariableSystem.Clear('babylon_congress_countries')]"
+					onclick = "[GetVariableSystem.Clear('babylon_congress_resolution')]"
+					onclick = "[GetVariableSystem.Toggle('babylon_congress_proposal')]"
+				}
+				blockoverride "third_button_visibility" {
+					visible = "[GetVariableSystem.Exists('babylon_congress_proposal')]"
+				}
+				blockoverride "third_button_visibility_checked" {
+					visible = "[Not(GetVariableSystem.Exists('babylon_congress_proposal'))]"
+				}
+				blockoverride "third_button_selected" {
+					text = "SOCIETY"
+				}
+				blockoverride "third_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Purple
+						alpha = 0.5
+					}
+				}
+			}
+		}
+
+		blockoverride "scrollarea_content" {
+			widget = {
+				size = { 100% 100% }
+				visible = "[GetVariableSystem.Exists('babylon_congress_countries')]"
+				flowcontainer = { # UNSC Members
+					spacing = 20
+					direction = vertical
+					flowcontainer = {	
+						margin_left = 60
+						parentanchor = hcenter						
+						textbox = {
+							autoresize = yes
+							raw_text = "#t Permanent UNSC Members#!"
+							using = header_font_fancy
+							using = fontsize_mega
+							align = center
+						}
+					}
+					flowcontainer = { # Flag List
+						parentanchor = hcenter
+						margin_left = 250
+						fixedgridbox = {
+							minimumsize = { 400 10 }
+							addcolumn = 100
+							addrow = 50
+							datamodel_wrap = 5
+							flipdirection = yes
+							datamodel = "[GetGlobalList('babylon_congress_great_powers')]"
+							item = {
+								flowcontainer = {
+									margin_left = 80
+									#datacontext = "[Scope.AccessCountry]"
+									#textbox = {
+									#	autoresize = yes
+									#	raw_text = "#t Permanent UNSC Members#!"
+									#	using = header_font_fancy
+									#	using = fontsize_mega
+									#	align = center
+									#}									
+									small_flag = {
+										parentanchor = vcenter
+										using = tooltip_above
+										datacontext = "[Scope.AccessCountry]"						
+										blockoverride "flag_tooltip" {
+											tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+										}
+										#onclick = "[GetVariableSystem.Clear('un_panel')]"
+										#onclick = "[GetVariableSystem.Clear('international_open')]"
+									}
+								}
+							}
+						}
+					}
+				}
+				widget = {
+					visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
+					size = { 10 10 }
+					textbox = {
+						autoresize = yes
+						raw_text = "EMPTY MOTHER FUCKERS"
+						using = header_font_fancy
+						using = fontsize_mega
+						align = center
+					}		
+				}
+			}
 		}
 	}
 }
