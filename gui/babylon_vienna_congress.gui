@@ -59,12 +59,12 @@ types babylon_vienna_congress
 			### TABS
 			tab_buttons_fullscreen = {
 
-				# Production
+				# Overview
 				blockoverride "first_button" {
-					text = "PRODUCTION_NO_CONCEPT"
+					text = "Overview"
 				}
 				blockoverride "first_button_tooltip" {
-					tooltip = "PRODUCTION_NO_CONCEPT"
+					tooltip = "Overview"
 				}
 				blockoverride "first_button_background" {
 					background = {
@@ -86,7 +86,7 @@ types babylon_vienna_congress
 					visible = "[Not(GetVariableSystem.Exists('babylon_congress_countries'))]"
 				}
 				blockoverride "first_button_selected" {
-					text = "PRODUCTION_NO_CONCEPT"
+					text = "Overview"
 				}
 
 				blockoverride "first_button_background_selected" {
@@ -99,10 +99,10 @@ types babylon_vienna_congress
 
 				# Military
 				blockoverride "second_button" {
-					text = "MILITARY"
+					text = "Current Conference"
 				}
 				blockoverride "second_button_tooltip" {
-					tooltip = "MILITARY"
+					tooltip = "Current Conference"
 				}
 				blockoverride "second_button_background" {
 					background = {
@@ -124,7 +124,7 @@ types babylon_vienna_congress
 					visible = "[Not(GetVariableSystem.Exists('babylon_congress_resolution'))]"
 				}
 				blockoverride "second_button_selected" {
-					text = "MILITARY"
+					text = "Current Conference"
 				}
 				blockoverride "second_button_background_selected" {
 					background = {
@@ -136,10 +136,10 @@ types babylon_vienna_congress
 
 				# Society
 				blockoverride "third_button" {
-					text = "SOCIETY"
+					text = "Motions"
 				}
 				blockoverride "third_button_tooltip" {
-					tooltip = "SOCIETY"
+					tooltip = "Motions"
 				}
 				blockoverride "third_button_background" {
 					background = {
@@ -161,7 +161,7 @@ types babylon_vienna_congress
 					visible = "[Not(GetVariableSystem.Exists('babylon_congress_proposal'))]"
 				}
 				blockoverride "third_button_selected" {
-					text = "SOCIETY"
+					text = "Motions"
 				}
 				blockoverride "third_button_background_selected" {
 					background = {
@@ -177,15 +177,15 @@ types babylon_vienna_congress
 			widget = {
 				size = { 100% 100% }
 				visible = "[GetVariableSystem.Exists('babylon_congress_countries')]"
-				flowcontainer = { # UNSC Members
+				flowcontainer = { # Great Powers
 					spacing = 20
 					direction = vertical
 					flowcontainer = {	
-						margin_left = 60
+						margin_top = 20
 						parentanchor = hcenter						
 						textbox = {
 							autoresize = yes
-							raw_text = "#t Permanent UNSC Members#!"
+							raw_text = "[Concept('concept_great_power', 'Great Powers')]"
 							using = header_font_fancy
 							using = fontsize_mega
 							align = center
@@ -196,11 +196,69 @@ types babylon_vienna_congress
 						margin_left = 250
 						fixedgridbox = {
 							minimumsize = { 400 10 }
-							addcolumn = 100
-							addrow = 50
-							datamodel_wrap = 5
+							addcolumn = 120
+							addrow = 95
+							datamodel_wrap = 4
 							flipdirection = yes
 							datamodel = "[GetGlobalList('babylon_congress_great_powers')]"
+							item = {
+								flowcontainer = {
+									margin_left = 80
+									#datacontext = "[Scope.AccessCountry]"
+									#textbox = {
+									#	autoresize = yes
+									#	raw_text = "#t Permanent UNSC Members#!"
+									#	using = header_font_fancy
+									#	using = fontsize_mega
+									#	align = center
+									#}									
+									large_flag = {
+										parentanchor = vcenter
+										using = tooltip_above
+										datacontext = "[Scope.AccessCountry]"						
+										blockoverride "flag_tooltip" {
+											tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+										}
+										#onclick = "[GetVariableSystem.Clear('un_panel')]"
+										#onclick = "[GetVariableSystem.Clear('international_open')]"	
+										textbox = {
+											autoresize = yes
+											margin_top = 65
+											margin_left = 35
+											raw_text = "[Scope.AccessCountry.GetPrestige]"
+											align = center
+										}
+									}			
+								}
+							}
+						}
+					}
+				}
+				flowcontainer = { # Major Powers
+					spacing = 20
+					direction = vertical
+					flowcontainer = {	
+						margin_top = 250
+						margin_left = 90
+						parentanchor = hcenter						
+						textbox = {
+							autoresize = yes
+							raw_text = "[Concept('concept_major_power', 'Major Powers')]"
+							using = header_font_fancy
+							using = fontsize_mega
+							align = center
+						}
+					}
+					flowcontainer = { # Flag List
+						parentanchor = hcenter
+						margin_left = 250
+						fixedgridbox = {
+							minimumsize = { 400 10 }
+							addcolumn = 80
+							addrow = 60
+							datamodel_wrap = 5
+							flipdirection = yes
+							datamodel = "[GetGlobalList('babylon_congress_major_powers')]"
 							item = {
 								flowcontainer = {
 									margin_left = 80
@@ -221,6 +279,13 @@ types babylon_vienna_congress
 										}
 										#onclick = "[GetVariableSystem.Clear('un_panel')]"
 										#onclick = "[GetVariableSystem.Clear('international_open')]"
+										textbox = {
+											autoresize = yes
+											margin_top = 30
+											margin_left = 15
+											raw_text = "[Scope.AccessCountry.GetPrestige]"
+											align = center
+										}
 									}
 								}
 							}
