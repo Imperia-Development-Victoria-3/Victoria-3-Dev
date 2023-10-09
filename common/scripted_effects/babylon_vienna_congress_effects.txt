@@ -1,0 +1,28 @@
+﻿babylon_vienna_congress_compile_lists = {
+	# Get rid of the previous list (if they exist, only relevant the first monthly tick)
+	clear_global_variable_list ?= babylon_congress_great_powers
+	clear_global_variable_list ?= babylon_congress_major_powers
+	# Then we get the sorted countries
+	ordered_country = {
+		limit = {
+			country_rank = rank_value:great_power
+		}
+		order_by = prestige
+		max = babylon_num_of_great_powers
+		add_to_global_variable_list = {
+			name = babylon_congress_great_powers
+			target = this
+		}
+	}
+	ordered_country = {
+		limit = {
+			country_rank = rank_value:major_power
+		}
+		order_by = prestige
+		max = babylon_num_of_major_powers
+		add_to_global_variable_list = {
+			name = babylon_congress_major_powers
+			target = this
+		}
+	}
+}
