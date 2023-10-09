@@ -3,7 +3,7 @@
 #Commander Skills
 resupply_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/resupply_commander.dds"
+	texture = gfx/interface/icons/character_trait_icons/resupply_commander.dds
 
 	command_modifier = {
 		unit_supply_consumption_mult = -0.1
@@ -43,7 +43,7 @@ resupply_commander = {
 
 pillager = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/pillager.dds"
+	texture = gfx/interface/icons/character_trait_icons/pillager.dds
 
 	command_modifier = {
 		character_supply_route_cost_mult = -0.5
@@ -65,7 +65,7 @@ pillager = {
 
 surveyor = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/surveyor.dds"
+	texture = gfx/interface/icons/character_trait_icons/surveyor.dds
 
 	command_modifier = {
 		battle_offense_owned_province_mult = 0.1
@@ -88,7 +88,7 @@ surveyor = {
 
 forest_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/forest_commander.dds"
+	texture = gfx/interface/icons/character_trait_icons/forest_commander.dds
 
 	command_modifier = {
 		unit_defense_forested_mult = 0.25
@@ -109,7 +109,7 @@ forest_commander = {
 
 plains_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/plains_commander.dds"
+	texture = gfx/interface/icons/character_trait_icons/plains_commander.dds
 
 	command_modifier = {
 		unit_offense_flat_mult = 0.25
@@ -130,7 +130,7 @@ plains_commander = {
 
 mountain_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/mountain_commander.dds"
+	texture = gfx/interface/icons/character_trait_icons/mountain_commander.dds
 
 	command_modifier = {
 		unit_defense_elevated_mult = 0.25
@@ -149,81 +149,82 @@ mountain_commander = {
 	value = 2
 }
 
+# TO DO: Re-enable this by hooking it into Formation Composition rather than old Pms
 basic_artillery_commander = {
-	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/basic_artillery_commander.dds"
+ 	type = skill
+	texture = gfx/interface/icons/character_trait_icons/basic_artillery_commander.dds
 
-	command_modifier = {
-		unit_offense_add = 5
-		character_battle_condition_aggressive_maneuver_mult = 1
-		character_battle_condition_mud_mult = 0.5
-	}
+ 	command_modifier = {
+ 		unit_offense_add = 5
+ 		character_battle_condition_aggressive_maneuver_mult = 1
+ 		character_battle_condition_mud_mult = 0.5
+ 	}
 
-	possible = {
-		has_role = general
-		owner ?= {
-			has_technology_researched = artillery
-		}
-		NOR = {
-			has_trait = experienced_artillery_commander
-			has_trait = expert_artillery_commander
-		}
-		NOT = { age < define:NCharacters|ADULT_AGE }
-	}
+ 	possible = {
+ 		has_role = general
+ 		owner ?= {
+ 			has_technology_researched = artillery
+ 		}
+ 		NOR = {
+ 			has_trait = experienced_artillery_commander
+ 			has_trait = expert_artillery_commander
+ 		}
+ 		NOT = { age < define:NCharacters|ADULT_AGE }
+ 	}
 
-	weight = {
-		value = 2
-		if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_cannon_artillery
-					value > 0.5
-				}
-			}
-			multiply = 2
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_mobile_artillery
-					value > 0.5
-				}
-			}
-			multiply = 5
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_shrapnel_artillery
-					value > 0.5
-				}
-			}
-			multiply = 10
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_siege_artillery
-					value > 0.5
-				}
-			}
-			multiply = 20
-		}
-	}
+ 	weight = {
+ 		value = 2
+		#if = {
+ 		#	limit = {
+		#		commander_pm_usage = {
+ 		#			target = owner
+ 		#			production_method = pm_cannon_artillery
+ 		#			value > 0.5
+ 		#		}
+ 		#	}
+ 		#	multiply = 2
+ 		#}
+ 		#else_if = {
+ 		#	limit = {
+ 		#		commander_pm_usage = {
+ 		#			target = owner
+ 		#			production_method = pm_mobile_artillery
+ 		#			value > 0.5
+ 		#		}
+ 		#	}
+ 		#	multiply = 5
+		#}
+ 		#else_if = {
+ 		#	limit = {
+ 		#		commander_pm_usage = {
+ 		#			target = owner
+		#			production_method = pm_shrapnel_artillery
+ 		#			value > 0.5
+ 		#		}
+ 		#	}
+ 		#	multiply = 10
+ 		#}
+ 		#else_if = {
+ 		#	limit = {
+ 		#		commander_pm_usage = {
+ 		#			target = owner
+ 		#			production_method = pm_siege_artillery
+ 		#			value > 0.5
+ 		#		}
+ 		#	}
+ 		#	multiply = 20
+ 		#}
+ 	}
 
-	replace = {
-	}
+ 	replace = {
+ 	}
 
-	value = 1
+ 	value = 1
 }
 
 experienced_artillery_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/experienced_artillery_commander.dds"
+	texture =gfx/interface/icons/character_trait_icons/experienced_artillery_commander.dds
 
 	command_modifier = {
 		unit_offense_add = 10
@@ -238,36 +239,36 @@ experienced_artillery_commander = {
 
 	weight = {
 		value = 5
-		if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_mobile_artillery
-					value > 0.5
-				}
-			}
-			multiply = 5
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_shrapnel_artillery
-					value > 0.5
-				}
-			}
-			multiply = 10
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_siege_artillery
-					value > 0.5
-				}
-			}
-			multiply = 20
-		}
+		#if = {
+		#	limit = {
+		#		commander_pm_usage = {
+		#			target = owner
+					# production_method = pm_mobile_artillery
+					# value > 0.5
+				# }
+			# }
+			# multiply = 5
+		# }
+		# else_if = {
+			# limit = {
+				# commander_pm_usage = {
+					# target = owner
+					# production_method = pm_shrapnel_artillery
+					# value > 0.5
+				# }
+			# }
+			# multiply = 10
+		# }
+		# else_if = {
+			# limit = {
+				# commander_pm_usage = {
+					# target = owner
+					# production_method = pm_siege_artillery
+					# value > 0.5
+				# }
+			# }
+			# multiply = 20
+		# }
 	}
 
 	replace = {
@@ -279,7 +280,7 @@ experienced_artillery_commander = {
 
 expert_artillery_commander = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/expert_artillery_commander.dds"
+	texture =gfx/interface/icons/character_trait_icons/expert_artillery_commander.dds
 
 	command_modifier = {
 		unit_offense_add = 15
@@ -294,26 +295,26 @@ expert_artillery_commander = {
 
 	weight = {
 		value = 5
-		if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_shrapnel_artillery
-					value > 0.5
-				}
-			}
-			multiply = 10
-		}
-		else_if = {
-			limit = {
-				commander_pm_usage = {
-					target = owner
-					production_method = pm_siege_artillery
-					value > 0.5
-				}
-			}
-			multiply = 20
-		}
+		# if = {
+			# limit = {
+				# commander_pm_usage = {
+					# target = owner
+					# production_method = pm_shrapnel_artillery
+					# value > 0.5
+				# }
+			# }
+			# multiply = 10
+		# }
+		# else_if = {
+			# limit = {
+				# commander_pm_usage = {
+					# target = owner
+					# production_method = pm_siege_artillery
+					# value > 0.5
+				# }
+			# }
+			# multiply = 20
+		# }
 	}
 
 	replace = {
@@ -325,7 +326,7 @@ expert_artillery_commander = {
 
 stalwart_defender = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/stalwart_defender.dds"
+	texture =gfx/interface/icons/character_trait_icons/stalwart_defender.dds
 
 	command_modifier = {
 		unit_defense_add = 10
@@ -356,7 +357,7 @@ stalwart_defender = {
 
 trench_rat = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/trench_rat.dds"
+	texture =gfx/interface/icons/character_trait_icons/trench_rat.dds
 
 	command_modifier = {
 		unit_defense_add = 20
@@ -395,7 +396,7 @@ trench_rat = {
 
 defense_in_depth_specialist = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/defense_in_depth_specialist.dds"
+	texture =gfx/interface/icons/character_trait_icons/defense_in_depth_specialist.dds
 
 	command_modifier = {
 		unit_defense_add = 30
@@ -446,7 +447,7 @@ defense_in_depth_specialist = {
 
 basic_offensive_planner = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/basic_offensive_planner.dds"
+	texture =gfx/interface/icons/character_trait_icons/basic_offensive_planner.dds
 
 	command_modifier = {
 		unit_offense_mult = 0.1
@@ -475,7 +476,7 @@ basic_offensive_planner = {
 
 experienced_offensive_planner = {
 	type = skill
-	texture = "gfx/interface/icons/character_trait_icons/experienced_offensive_planner.dds"
+	texture =gfx/interface/icons/character_trait_icons/experienced_offensive_planner.dds
 
 	command_modifier = {
 		unit_offense_mult = 0.2

@@ -441,7 +441,7 @@ ai_strategy_colonial_expansion = {
 
 	wargoal_weights = {
 		conquer_state = 1.5
-		make_dominion = 1.5
+		reduce_autonomy = 1.5
 		take_treaty_port = 1.5
 	}	
 		
@@ -566,9 +566,9 @@ ai_strategy_armed_isolationism = {
 
 	wargoal_weights = {
 		conquer_state = 0.0
-		make_puppet = 0.0
-		make_dominion = 0.0
-		make_vassal = 0.0
+		make_protectorate = 0.0
+		reduce_autonomy = 0.0
+		make_tributary = 0.0
 	}	
 	
 	wargoal_scores = {
@@ -835,9 +835,9 @@ ai_strategy_economic_imperialism = {
 
 	wargoal_weights = {
 		take_treaty_port = 1.5
-		make_puppet = 1.5
-		make_dominion = 1.5	
-		make_vassal = 1.5	
+		make_protectorate = 1.5
+		reduce_autonomy = 1.5	
+		make_tributary = 1.5	
 	}	
 	
 	wargoal_scores = {	
@@ -851,7 +851,15 @@ ai_strategy_economic_imperialism = {
 						has_law = law_type:law_isolationism
 					}
 				}
-				add = 1000
+				add = {
+					value = 200
+				
+					# Less likely to use open market if we're already enemies in a play, ie they attacked us first
+					if = {
+						limit = { is_diplomatic_play_enemy_of = scope:target_country }
+						multiply = 0.25
+					}
+				}
 			}
 		}
 
@@ -860,7 +868,6 @@ ai_strategy_economic_imperialism = {
 		}
 
 		take_treaty_port = {
-			multiply = babylon_ai_foreign_law_state_wargoal_weight
 		}
 
 		make_puppet = {
@@ -874,6 +881,30 @@ ai_strategy_economic_imperialism = {
 		make_vassal = {
 			multiply = babylon_ai_foreign_law_country_wargoal_weight
 		}
+		take_treaty_port = {
+			value = 0
+		
+			if = {
+				limit = {
+					can_reach_target_state = yes
+					scope:target_country = {
+						has_law = law_type:law_isolationism
+					}
+					scope:target_state = { is_incorporated = yes }
+				}
+				add = {
+					value = 100
+				
+					# More likely to grab a treaty port if we're already enemies in a play, ie they attacked us first
+					if = {
+						limit = { is_diplomatic_play_enemy_of = scope:target_country }
+						multiply = 2.0
+					}
+				}
+			}
+			multiply = babylon_ai_foreign_law_state_wargoal_weight
+
+		}		
 	}
 		
 	possible = {
@@ -1396,6 +1427,12 @@ ai_strategy_unify_italy = {
 
 	weight = {
 		value = 1000	
+		if = {
+			limit = {
+				has_variable = risorgimento_anti_unifying_stance
+			}
+			multiply = 0.01
+		}
 	}
 }
 

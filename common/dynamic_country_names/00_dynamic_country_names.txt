@@ -44,6 +44,21 @@ DEFAULT = {
 			}			
 		}
 	}
+	# San Marco
+	dynamic_country_name = {
+		name = rsm_revolt_name
+		adjective = rsm_revolt_name_adj
+		
+		is_revolutionary = yes
+		priority = 100
+		
+		trigger = {
+			scope:actor = {
+				c:RSM ?= this
+			}
+		}
+	}
+
 	# Important ideologies
 	dynamic_country_name = {
 		name = generic_revolt_communist
@@ -903,6 +918,23 @@ CSA = { # Confederate States of America
 	}
 }
 
+RSM = { # Republic of San Marco
+	dynamic_country_name = {
+		name = dyn_c_republic_of_san_marco
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			OR = {
+				has_law = law_type:law_parliamentary_republic
+				has_law = law_type:law_presidential_republic
+				has_law = law_type:law_council_republic
+			}
+		}
+	}
+}
+
 FIN = { # Finland
 	dynamic_country_name = {
 		name = dyn_c_grand_duchy_of_finland
@@ -1338,6 +1370,39 @@ MOL = { # Moldavia
 		
 		trigger = {
 			coa_def_monarchy_flag_trigger = no
+		}
+	}
+
+	dynamic_country_name = {
+		name = dyn_c_united_principalities
+		adjective = dyn_c_united_principalities_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor = {
+				has_variable = ROM_united_principality
+			}
+		}
+	}
+
+	dynamic_country_name = {
+		name = dyn_c_moldavia_and_wallachia
+		adjective = dyn_c_moldavia_and_wallachia_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_monarchy_flag_trigger = no
+			scope:actor = {
+				has_variable = ROM_united_principality
+			}
+			c:WAL ?= {
+				is_subject_of = scope:actor
+			}
 		}
 	}
 }
@@ -2424,6 +2489,41 @@ FRA = {
 			exists = scope:actor
 			scope:actor = {
 				has_law = law_type:law_council_republic
+			}
+		}
+	}
+}
+
+WAL = { # Wallachia
+	dynamic_country_name = {
+		name = dyn_c_united_principalities
+		adjective = dyn_c_united_principalities_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor = {
+				has_variable = ROM_united_principality
+			}
+		}
+	}
+
+	dynamic_country_name = {
+		name = dyn_c_wallachia_and_moldavia
+		adjective = dyn_c_wallachia_and_moldavia_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_monarchy_flag_trigger = no
+			scope:actor = {
+				has_variable = ROM_united_principality
+			}
+			c:MOL ?= {
+				is_subject_of = scope:actor
 			}
 		}
 	}
