@@ -364,7 +364,6 @@ types right_click_menu_types {
 
 				widget = {
 					size = { 235 30 }
-					spacing = 5
 
 					textbox = {
 						parentanchor = vcenter
@@ -830,12 +829,16 @@ right_click_menu = {
 			
 			item = {
 				flowcontainer = {
+					tooltipwidget = {
+						FancyTooltip_CombatUnitType = {}
+					}
+					
 					default_unit_right_click_item = {
-						visible = "[Not(ObjectsEqual(CombatUnitType.AccessSelf, MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.AccessSelf)))]"
+						visible = "[Not(ObjectsEqual(CombatUnitType.AccessSelf, MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.Self)))]"
 					}
 
 					default_unit_right_click_item_selected = {
-						visible = "[ObjectsEqual(CombatUnitType.AccessSelf, MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.AccessSelf))]"
+						visible = "[ObjectsEqual(CombatUnitType.AccessSelf, MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.Self))]"
 					}
 				}
 			}
@@ -947,7 +950,7 @@ right_click_menu = {
 
 				blockoverride "texture" {
 					### PLACEHOLDER ICON
-					texture = "gfx/interface/icons/commander_order_icons/unused/move.dds"
+					texture = "gfx/interface/icons/commander_order_icons/move.dds"
 				}
 
 				blockoverride = "text" {
@@ -964,6 +967,7 @@ right_click_menu = {
 
 				blockoverride "properties" {
 					tooltip = "DEPLOY_MILITARY_FORMATION_TO_SEA_NODE_TOOLTIP"
+                    enabled = "[MilitaryFormation.CanDeployToSeaNode]"
 					onclick = "[MilitaryFormation.OnDeployToSeaNodeClicked]"
 				}
 
@@ -985,6 +989,7 @@ right_click_menu = {
 				
 				blockoverride "properties" {
 					tooltip = "STATION_MILITARY_FORMATION_TOOLTIP"
+                    enabled = "[MilitaryFormation.CanStation]"
 					onclick = "[MilitaryFormation.OnStationClicked]"
 				}
 
@@ -1542,7 +1547,7 @@ right_click_menu = {
 	name = "add_fleet_naval_invasion_right_click_menu"
 
 	blockoverride "title_text" {
-		text = "SELECT_FLEET_TO_SEND"
+		text = "SELECT_FLEET_TO_SEND" # todo PRCAL-29752
 	}
 
 	blockoverride "items" {
@@ -1556,7 +1561,7 @@ right_click_menu = {
 					size = { 320 80 }
 
 					military_formation_right_click_item = {
-						#visible = "[Not(NavalInvasion.IsMilitaryFormationPresent(MilitaryFormation.Self))]" # todo PRCAL-29752
+						#visible = "[Not(NavalInvasion.IsMilitaryFormationPresentOrOnTheWayHere(MilitaryFormation.Self))]" # todo PRCAL-29752
 
                         blockoverride "tooltip" {
                         	tooltipwidget = {
@@ -1564,7 +1569,7 @@ right_click_menu = {
                         			blockoverride "text_before" {
                         				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
                         				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752
+                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752 - this adds text at the top of the fancy tooltip for Formations
                         				margin_bottom = 15
                         			}
                         		}
@@ -1579,7 +1584,7 @@ right_click_menu = {
 					}
 
 					military_formation_right_click_item_selected = {
-						#visible = "[NavalInvasion.IsMilitaryFormationPresent(MilitaryFormation.Self)]" # todo PRCAL-29752
+						#visible = "[NavalInvasion.IsMilitaryFormationPresentOrOnTheWayHere(MilitaryFormation.Self)]" # todo PRCAL-29752
 
 						blockoverride "tooltip" {
 							tooltipwidget = {
@@ -1587,7 +1592,7 @@ right_click_menu = {
                         			blockoverride "text_before" {
                         				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
                         				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752
+                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752 - this adds text at the top of the fancy tooltip for Formations
                         				margin_bottom = 15
                         			}
                         		}
@@ -1604,7 +1609,7 @@ right_click_menu = {
 	name = "add_army_naval_invasion_right_click_menu"
 
 	blockoverride "title_text" {
-		text = "SELECT_ARMY_TO_SEND"
+		text = "SELECT_ARMY_TO_SEND" # todo PRCAL-29752
 	}
 
 	blockoverride "items" {
@@ -1680,7 +1685,7 @@ right_click_menu = {
 				item = {
 					flowcontainer = {
 						right_click_menu_item = {
-							visible = "[Not(ObjectsEqual(Character.GetOrderType.Self, CommanderOrderType.Self))]"
+							visible = "[And( Not( ObjectsEqual(Character.GetNextOrderType.Self, CommanderOrderType.Self) ), Not( And( Not(Character.GetNextOrderType.IsValid), Character.HasOrder( CommanderOrderType.Self ) ) ) )]"
 
 							blockoverride "properties" {
 								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
@@ -1699,13 +1704,29 @@ right_click_menu = {
 							}
 
 							blockoverride "size" {
-								size = { 260 44 }
+								size = { 360 44 }
+							}
+
+							blockoverride "right_text" {
+								textbox = {
+									visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "CURRENT"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
 							}
 						}
 
+						
+
 						widget = {
-							visible = "[Character.HasOrder( CommanderOrderType.Self )]"
-							size = { 260 44 }
+							visible = "[And(Not(Character.GetNextOrderType.IsValid), Character.HasOrder( CommanderOrderType.Self ))]"
+							size = { 360 44 }
 							tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
 
 							background = {
@@ -1732,6 +1753,64 @@ right_click_menu = {
 		                    		using = look_at_me_text_animation
 		                    	}
 		                    }
+
+		                    textbox = {
+								visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+								parentanchor = right|vcenter
+								autoresize = yes
+								raw_text = "CURRENT"
+								align = right|nobaseline
+								fontsize_min = 12
+								elide = right
+								margin = { 5 0 }
+								margin_right = 10
+							}
+
+		                    icon = {
+		                    	using = highlighted_square_selection
+		                    }
+						}
+
+						widget = {
+							visible = "[ObjectsEqual(Character.GetNextOrderType.Self, CommanderOrderType.Self)]"
+							size = { 360 44 }
+							tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+
+							background = {
+		                    	using = paper_bg
+		                    }
+
+		                    flowcontainer = {
+		                    	parentanchor = vcenter
+		                    	position = { 10 0 }
+		                    	spacing = 5
+
+		                    	icon = {
+		                    		parentanchor = vcenter
+		                    		size = { 28 28 }
+		                    		texture = "[Character.GetNextOrderType.GetTexture]"
+		                    	}
+
+		                    	textbox = {
+		                    		parentanchor = vcenter
+		                    		align = nobaseline
+		                    		autoresize = yes
+		                    		text = "[Character.GetNextOrderType.GetName]"
+		                    		using = fontsize_large
+		                    		using = look_at_me_text_animation
+		                    	}
+		                    }
+
+		                    textbox = {
+								parentanchor = right|vcenter
+								autoresize = yes
+								raw_text = "NEXT"
+								align = right|nobaseline
+								fontsize_min = 12
+								elide = right
+								margin = { 5 0 }
+								margin_right = 10
+							}
 
 		                    icon = {
 		                    	using = highlighted_square_selection
@@ -1766,7 +1845,7 @@ right_click_menu = {
 			}
 
 			blockoverride "size" {
-				size = { 260 44 }
+				size = { 360 44 }
 			}
 		}
 
@@ -1782,7 +1861,7 @@ right_click_menu = {
 			}
 
 			blockoverride "size" {
-				size = { 260 44 }
+				size = { 360 44 }
 			}
 		}
 
@@ -1811,7 +1890,7 @@ right_click_menu = {
 				}
 
 				blockoverride "size" {
-					size = { 260 44 }
+					size = { 360 44 }
 				}
 			}
 
@@ -1830,7 +1909,7 @@ right_click_menu = {
 				}
 
 				blockoverride "size" {
-					size = { 260 44 }
+					size = { 360 44 }
 				}
 			}
 
@@ -1855,7 +1934,7 @@ right_click_menu = {
 						}
 
 						blockoverride "size" {
-							size = { 260 44 }
+							size = { 360 44 }
 						}
 					}
 				}
@@ -1867,37 +1946,159 @@ right_click_menu = {
 			visible = "[Character.GetCountry.IsLocalPlayer]"
 
 			textbox = {					# CURRENT ORDER (TEXT)
-				visible = "[Character.IsCommander]"
+				visible = "[And(Character.IsCommander, Not(Character.GetNextOrderType.IsValid))]"
 				margin_top = 5
 				margin_left = 5
 				autoresize = yes
 				align = left|nobaseline
-				text = "COMMANDER_PANEL_CURRENT_ORDER"
+				text = "COMMANDER_PANEL_CURRENT_ORDER_SHORT"
+			}
+
+			textbox = {					# NEXT ORDER (TEXT)
+				visible = "[And(Character.IsCommander, Character.GetNextOrderType.IsValid)]"
+				margin_top = 5
+				margin_left = 5
+				margin_bottom = 5
+				autoresize = yes
+				align = left|nobaseline
+				text = "COMMANDER_PANEL_NEXT_ORDER_SHORT"
 			}
 
 			dynamicgridbox = {			# ORDERS
 				datamodel = "[Character.AccessOrders]"
 				item = {
 					container = {
-						right_click_menu_item = {	# SELECT ORDER (WITHOUT MAP INTERACTION)
+						right_click_menu_item = {
+							visible = "[And( Not( ObjectsEqual(Character.GetNextOrderType.Self, CommanderOrderType.Self) ), Not( And( Not(Character.GetNextOrderType.IsValid), Character.HasOrder( CommanderOrderType.Self ) ) ) )]"
+
 							blockoverride "properties" {
 								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
-								enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
-								onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+								clicksound = "[CommanderOrderType.GetClickSound]"
+						        enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
+						        onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+						        onclick = "[RightClickMenuManager.Close]"
 							}
-							clicksound = "[CommanderOrderType.GetClickSound]"
 
 							blockoverride "texture" {
 								texture = "[CommanderOrderType.GetTexture]"
 							}
-							
-							blockoverride = "text" {
+
+							blockoverride "text" {
 								text = "[CommanderOrderType.GetName]"
 							}
 
 							blockoverride "size" {
-								size = { 260 44 }
+								size = { 360 44 }
 							}
+
+							blockoverride "right_text" {
+								textbox = {
+									visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "CURRENT"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
+							}
+						}
+
+						
+
+						widget = {
+							visible = "[And(Not(Character.GetNextOrderType.IsValid), Character.HasOrder( CommanderOrderType.Self ))]"
+							size = { 360 44 }
+							tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+
+							background = {
+		                    	using = paper_bg
+		                    }
+
+		                    flowcontainer = {
+		                    	parentanchor = vcenter
+		                    	position = { 10 0 }
+		                    	spacing = 5
+
+		                    	icon = {
+		                    		parentanchor = vcenter
+		                    		size = { 28 28 }
+		                    		texture = "[CommanderOrderType.GetTexture]"
+		                    	}
+
+		                    	textbox = {
+		                    		parentanchor = vcenter
+		                    		align = nobaseline
+		                    		autoresize = yes
+		                    		text = "[CommanderOrderType.GetName]"
+		                    		using = fontsize_large
+		                    		using = look_at_me_text_animation
+		                    	}
+		                    }
+
+		                    textbox = {
+								visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+								parentanchor = right|vcenter
+								autoresize = yes
+								raw_text = "CURRENT"
+								align = right|nobaseline
+								fontsize_min = 12
+								elide = right
+								margin = { 5 0 }
+								margin_right = 10
+							}
+
+		                    icon = {
+		                    	using = highlighted_square_selection
+		                    }
+						}
+
+						widget = {
+							visible = "[ObjectsEqual(Character.GetNextOrderType.Self, CommanderOrderType.Self)]"
+							size = { 360 44 }
+							tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+
+							background = {
+		                    	using = paper_bg
+		                    }
+
+		                    flowcontainer = {
+		                    	parentanchor = vcenter
+		                    	position = { 10 0 }
+		                    	spacing = 5
+
+		                    	icon = {
+		                    		parentanchor = vcenter
+		                    		size = { 28 28 }
+		                    		texture = "[Character.GetNextOrderType.GetTexture]"
+		                    	}
+
+		                    	textbox = {
+		                    		parentanchor = vcenter
+		                    		align = nobaseline
+		                    		autoresize = yes
+		                    		text = "[Character.GetNextOrderType.GetName]"
+		                    		using = fontsize_large
+		                    		using = look_at_me_text_animation
+		                    	}
+		                    }
+
+		                    textbox = {
+								parentanchor = right|vcenter
+								autoresize = yes
+								raw_text = "NEXT"
+								align = right|nobaseline
+								fontsize_min = 12
+								elide = right
+								margin = { 5 0 }
+								margin_right = 10
+							}
+
+		                    icon = {
+		                    	using = highlighted_square_selection
+		                    }
 						}
 					}
 				}
@@ -1931,7 +2132,7 @@ right_click_menu = {
 				}
 
 				blockoverride "size" {
-					size = { 260 44 }
+					size = { 360 44 }
 				}
 			}
 		}
@@ -2291,23 +2492,6 @@ right_click_menu = {
 						texture = "[DecreeType.GetTexture]"
 					}			
 				}
-			}
-		}
-
-		right_click_menu_item = {
-			datacontext = "[State.GetBuilding('building_conscription_center')]"
-			datacontext = "[Building.GetHQ]"
-			blockoverride "properties" {
-
-				tooltip = "ACTIVATE_CONSCRIPTION_CENTER_TOOLTIP"
-				visible = "[IsValid( State.ActivateConscriptionCenter )]"
-				onclick = "[Execute( State.ActivateConscriptionCenter )]"
-			}
-
-			blockoverride "icon" {}
-
-			blockoverride "text" {
-				text = "ACTIVATE_CONSCRIPTION_CENTER"
 			}
 		}
 
