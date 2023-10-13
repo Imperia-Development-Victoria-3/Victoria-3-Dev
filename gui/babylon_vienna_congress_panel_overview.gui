@@ -1,0 +1,153 @@
+types babylon_vienna_congress_types 
+{
+    ### COUNTRIES TAB
+	type babylon_vienna_congress_overview = vbox {
+        widget = {
+            size = { 200% 100% }
+            flowcontainer = { # Great Powers
+                spacing = 20
+                direction = vertical
+                flowcontainer = {
+                    textbox = {
+                        autoresize = yes
+                        raw_text = "[Concept('concept_great_power', 'Great Powers')]"
+                        using = header_font_fancy
+                        using = fontsize_mega
+                    }
+                }
+                flowcontainer = { # Flag List
+                    fixedgridbox = {
+                        minimumsize = { 400 10 }
+                        addcolumn = 120
+                        addrow = 95
+                        datamodel_wrap = 4
+                        flipdirection = yes
+                        datamodel = "[GetGlobalList('babylon_congress_great_powers')]"
+                        item = {
+                            flowcontainer = {							
+                                large_flag = {
+                                    parentanchor = vcenter
+                                    using = tooltip_above
+                                    datacontext = "[Scope.AccessCountry]"						
+                                    blockoverride "flag_tooltip" {
+                                        tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                    }
+                                    textbox = {
+                                        autoresize = yes
+                                        margin_top = 65
+                                        margin_left = 35
+                                        raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                        align = center
+                                    }
+                                }			
+                            }
+                        }
+                    }
+                }
+            }
+            flowcontainer = { # Major Powers
+                spacing = 20
+                direction = vertical
+                flowcontainer = {	
+                    margin_top = 270
+                    #margin_left = 90
+                    parentanchor = left						
+                    textbox = {
+                        autoresize = yes
+                        raw_text = "[Concept('concept_major_power', 'Major Powers')]"
+                        using = header_font_fancy
+                        using = fontsize_xxl
+                        align = left
+                    }
+                }
+                flowcontainer = { # Flag List
+                    parentanchor = hcenter
+                    #margin_left = 250
+                    fixedgridbox = {
+                        minimumsize = { 400 10 }
+                        addcolumn = 80
+                        addrow = 60
+                        datamodel_wrap = 5
+                        flipdirection = yes
+                        datamodel = "[GetGlobalList('babylon_congress_major_powers')]"
+                        item = {
+                            flowcontainer = {
+                                #margin_left = 80				
+                                small_flag = {
+                                    parentanchor = vcenter
+                                    using = tooltip_above
+                                    datacontext = "[Scope.AccessCountry]"						
+                                    blockoverride "flag_tooltip" {
+                                        tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                    }
+                                    textbox = {
+                                        autoresize = yes
+                                        margin_top = 30
+                                        margin_left = 15
+                                        raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                        align = center
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            widget = {
+                visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
+                size = { 10 10 }
+                textbox = {
+                    autoresize = yes
+                    raw_text = "EMPTY MOTHER FUCKERS"
+                    using = header_font_fancy
+                    using = fontsize_mega
+                    align = center
+                }		
+            }
+        }
+    }
+    ### RESOLUTION TAB
+    type babylon_vienna_congress_resolution = vbox {
+        widget = {
+            size = { 200% 100% }
+            flowcontainer = {
+                spacing = 20
+                direction = vertical
+                flowcontainer = {	
+                    margin_top = 20
+                    margin_right = 90
+                    parentanchor = hcenter						
+                    textbox = {
+                        autoresize = yes
+                        raw_text = "Current Resolution"
+                        using = header_font_fancy
+                        using = fontsize_mega
+                        align = center
+                    }
+                }
+            }
+        }
+    }
+    # PROPOSALS TAB
+    type babylon_vienna_congress_proposals = vbox {
+        widget = {
+            size = { 200% 100% }
+            flowcontainer = {
+                spacing = 20
+                direction = vertical
+                flowcontainer = {	
+                    margin_top = 20
+                    margin_right = 90
+                    parentanchor = hcenter						
+                    textbox = {
+                        autoresize = yes
+                        raw_text = "Possible proposals"
+                        using = header_font_fancy
+                        using = fontsize_mega
+                        align = center
+                    }
+                }
+            }
+        }
+    }
+}
