@@ -6,6 +6,16 @@
 		state_bureaucracy_population_base_cost_factor_mult = -0.3
 		interest_group_ig_landowners_pol_str_mult = 0.25
 	}
+
+	on_enact = {
+		custom_tooltip = urban_aristocrats_int_ig_shift_effect_tt
+		if = {
+			limit = {
+				has_law = law_type:law_elected_bureaucrats
+			}
+			custom_tooltip = bureaucrats_pb_ig_shift_effect_negative_tt
+		}
+	}
 	disallowing_laws = {
 		law_council_republic
 	}
@@ -26,6 +36,11 @@
 			}
 		}
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
 	ai_will_do = {
 		exists = ruler
 		ruler = {
@@ -59,6 +74,22 @@ law_appointed_bureaucrats = {
 	possible_political_movements = {
 		law_appointed_bureaucrats
 	}
+
+	on_enact = {
+		if = {
+			limit = {
+				has_law = law_type:law_elected_bureaucrats
+			}
+			custom_tooltip = bureaucrats_pb_ig_shift_effect_negative_tt
+		}
+		if = {
+			limit = {
+				has_law = law_type:law_hereditary_bureaucrats
+			}
+			custom_tooltip = urban_aristocrats_int_ig_shift_effect_negative_tt
+		}
+	}
+
 	pop_support = {
 		value = 0
 		# Academics like technocracy
@@ -160,6 +191,9 @@ law_appointed_bureaucrats = {
 			}
 		}
 	}
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	}
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
@@ -215,8 +249,12 @@ law_meritocratic_bureaucracy = {
 			value = 0.25
 		}
 	}
-	ai_enact_weight_modifier = {
-		#Petitions
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
 			limit = {
@@ -245,6 +283,17 @@ law_elected_bureaucrats = {
 		state_loyalists_from_sol_change_mult = 0.1
 		state_radicals_from_sol_change_mult = 0.1
 	}
+
+	on_enact = {
+		custom_tooltip = bureaucrats_pb_ig_shift_effect_tt
+		if = {
+			limit = {
+				has_law = law_type:law_hereditary_bureaucrats
+			}
+			custom_tooltip = urban_aristocrats_int_ig_shift_effect_negative_tt
+		}
+	}
+	
 	possible_political_movements = {
 		law_appointed_bureaucrats
 	}
@@ -264,8 +313,12 @@ law_elected_bureaucrats = {
 			value = 0.25
 		}
 	}
-	ai_enact_weight_modifier = {
-		#Petitions
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
 			limit = {

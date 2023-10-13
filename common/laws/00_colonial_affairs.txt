@@ -5,12 +5,17 @@
 	pop_support = {
 		value = 0
 	}
+
 	disallowing_laws = {
 		law_imperialism
 	}
 	# AI will never fully dismantle institutions
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
 	ai_will_do = {
-		always = no
+		has_law = law_type:law_council_republic
 	}	
 
 	ai_enact_weight_modifier = { #Petitions
@@ -23,6 +28,19 @@
                 scope:law = var:desired_law_var
 			}
 			add = 750
+		}
+
+		if = {
+			limit = {
+				has_law = law_type:law_council_republic
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				has_strategy = ai_strategy_anti_imperialism
+			}
+			multiply = 2
 		}
 	}
 }
@@ -59,6 +77,29 @@ law_colonial_resettlement = {
 			}
 		}
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+
+	pop_support = {
+		value = 0
+		# Officers like colonialism
+		add = {
+			desc = "POP_OFFICERS"			
+			if = {
+				limit = {
+					owner = { 
+						has_law = law_type:law_no_colonial_affairs 
+					} 
+					is_pop_type = officers
+				}
+				value = 0.25
+			}
+		}
+	}
+	
 	ai_will_do = {
 		OR = {
 			has_law = law_type:law_colonial_exploitation
@@ -94,9 +135,13 @@ law_colonial_exploitation = {
 		colonization
 	}
 	modifier = {
-		building_unincorporated_throughput_add = 0.1
-		state_unincorporated_starting_wages_mult = -0.15
-		building_unincorporated_subsistence_output_mult = -0.15
+		building_group_bg_manufacturing_unincorporated_throughput_add = -0.1
+		building_group_bg_plantations_unincorporated_throughput_add = 0.2
+		building_group_bg_rubber_unincorporated_throughput_add = 0.2
+		building_group_bg_logging_unincorporated_throughput_add = 0.2
+		building_group_bg_mining_unincorporated_throughput_add = 0.2
+		state_unincorporated_starting_wages_mult = -0.10
+		building_unincorporated_subsistence_output_mult = -0.10
 		country_tension_decay_mult = -0.25
 	}
 	institution = institution_colonial_affairs
@@ -116,6 +161,12 @@ law_colonial_exploitation = {
 			}
 		}
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+	
 	ai_will_do = {
 		OR = {
 			has_law = law_type:law_colonial_resettlement
