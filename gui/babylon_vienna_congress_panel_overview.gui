@@ -12,13 +12,16 @@ types babylon_vienna_congress_types
         direction = vertical
         #align = left|top
         flowcontainer = { # Great Powers
-            spacing = 20
+            spacing = 5
             direction = vertical
             textbox = {
                 autoresize = yes
                 raw_text = "[Concept('concept_great_power', 'Great Powers')]"
                 using = header_font_fancy
                 using = fontsize_mega
+            }
+            block "divider" {
+                divider_decorative = {}
             }
             fixedgridbox = {
                 addcolumn = 120
@@ -44,8 +47,11 @@ types babylon_vienna_congress_types
                 }
             }
         }
+		block "divider" {
+			divider_clean = {}
+		}
         flowcontainer = { # Major Powers
-            spacing = 20
+            spacing = 5
             direction = vertical
             textbox = {
                 autoresize = yes
@@ -53,6 +59,9 @@ types babylon_vienna_congress_types
                 using = header_font_fancy
                 using = fontsize_xxl
                 align = left
+            }
+            block "divider" {
+                divider_clean = {}
             }
             fixedgridbox = {
                 addcolumn = 80
@@ -123,14 +132,23 @@ types babylon_vienna_congress_types
     type babylon_vienna_congress_proposals =  flowcontainer {
         layoutpolicy_horizontal = expanding
         layoutpolicy_vertical = expanding
-        #direction = vertical
+        #direction = horizontal
         margin_left = 100
         margin_top = 20
         datacontext = "[GetPlayer]" 
         flowcontainer = {
             spacing = 20
+            textbox = {
+                margin_top = 20
+                margin_right = 90	
+                raw_text = "proposal_desc"
+            }
+        }
+        flowcontainer = {
+            spacing = 5
             direction = vertical
             flowcontainer = {	
+                spacing = 5
                 margin_top = 20
                 margin_right = 90	
                 direction = vertical	
@@ -142,8 +160,8 @@ types babylon_vienna_congress_types
                     using = fontsize_mega
                     align = center
                 }
-                widget = {
-                    size = { 10 10 }
+                block "divider" {
+                    divider_decorative = {}
                 }
                 button = {
                     using = default_button
@@ -173,7 +191,7 @@ types babylon_vienna_congress_types
                 }
                 textbox = {
                     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
-                    raw_text = "Denouncement [GetPlayer.MakeScope.Var('congress_proposal_type').GetValue]"
+                    raw_text = "Denouncement"
                     align = center|nobaseline
                     autoresize = yes
                     maximumsize = { 250 -1 }
@@ -183,6 +201,8 @@ types babylon_vienna_congress_types
                 button = {
                     using = default_button
                     onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','2')]"
+                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
+
 					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','2'))]"
                     textbox = {
                         resizeparent = yes
@@ -207,6 +227,8 @@ types babylon_vienna_congress_types
                 button = {
                     using = default_button
                     onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','3')]"
+                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
+
 					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','3'))]"
                     textbox = {
                         resizeparent = yes
@@ -231,6 +253,8 @@ types babylon_vienna_congress_types
                 button = {
                     using = default_button
                     onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','4')]"
+                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
+
 					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','4'))]"
                     textbox = {
                         resizeparent = yes
@@ -252,14 +276,73 @@ types babylon_vienna_congress_types
                     minimumsize = { 250 -1 }
                     margin = { 10 10 }
                 }
-            }
-        }
-        flowcontainer = {
-            spacing = 20
-            textbox = {
-                margin_top = 20
-                margin_right = 90	
-                raw_text = "proposal_desc"
+                block "divider" {
+                    divider_decorative = {}
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_denouncement')]"
+                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Select Target"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
+                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Select Target"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
+                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Select Target"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
+                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Select Target"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
             }
         }
     }
