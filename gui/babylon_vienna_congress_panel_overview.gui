@@ -126,7 +126,7 @@ types babylon_vienna_congress_types
         #direction = vertical
         margin_left = 100
         margin_top = 20
-        #datacontext = "[GetPlayer]" 
+        datacontext = "[GetPlayer]" 
         flowcontainer = {
             spacing = 20
             direction = vertical
@@ -134,7 +134,7 @@ types babylon_vienna_congress_types
                 margin_top = 20
                 margin_right = 90	
                 direction = vertical	
-                datacontext = "[GetScriptedGui('set_proposal_type')]"
+                #datacontext = "[GetScriptedGui('set_proposal_type')]"
                 textbox = {
                     autoresize = yes
                     raw_text = "Possible proposals"
@@ -149,7 +149,15 @@ types babylon_vienna_congress_types
                     using = default_button
 
                     onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','1')]"
-                    onclick = "[ScriptedGui.Execute(GuiScope.SetRoot.(GetPlayer.MakeScope)).End]"
+
+                    # Call without the value
+                    #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+
+                    # Call which sends a value with it
+                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
+
+                    # Call which would send a country with it Country.MakeScope needs to be replaced however.
+                    #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope) .AddScope('target_country', Country.MakeScope).End)]"
 
 					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','1'))]"
                     textbox = {
@@ -165,7 +173,7 @@ types babylon_vienna_congress_types
                 }
                 textbox = {
                     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
-                    raw_text = "Denouncement"
+                    raw_text = "Denouncement [GetPlayer.MakeScope.Var('congress_proposal_type').GetValue]"
                     align = center|nobaseline
                     autoresize = yes
                     maximumsize = { 250 -1 }
