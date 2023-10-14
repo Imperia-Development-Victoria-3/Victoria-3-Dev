@@ -7,8 +7,10 @@ types babylon_vienna_congress_types
         #spacing = -50
 
         #size = { 100% 100% }
+        margin_left = 100
+        margin_top = 20
         direction = vertical
-        align = left|top
+        #align = left|top
         flowcontainer = { # Great Powers
             spacing = 20
             direction = vertical
@@ -90,46 +92,166 @@ types babylon_vienna_congress_types
         #}
     }
     ### RESOLUTION TAB
-    type babylon_vienna_congress_resolution = vbox {
-        widget = {
-            size = { 100% 100% }
-            flowcontainer = {
-                spacing = 20
-                direction = vertical
-                flowcontainer = {	
-                    margin_top = 20
-                    margin_right = 90
-                    parentanchor = hcenter						
-                    textbox = {
-                        autoresize = yes
-                        raw_text = "Current Resolution"
-                        using = header_font_fancy
-                        using = fontsize_mega
-                        align = center
-                    }
+    type babylon_vienna_congress_resolution =  flowcontainer {
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical = expanding
+        #spacing = -50
+
+        #size = { 100% 100% }
+        direction = vertical
+        align = top
+        margin_left = 100
+        margin_top = 20
+        flowcontainer = {
+            spacing = 20
+            direction = vertical
+            flowcontainer = {	
+                margin_top = 20
+                margin_right = 90
+                parentanchor = hcenter						
+                textbox = {
+                    autoresize = yes
+                    raw_text = "Current Resolution"
+                    using = header_font_fancy
+                    using = fontsize_mega
+                    align = center
                 }
             }
         }
     }
     # PROPOSALS TAB
-    type babylon_vienna_congress_proposals = vbox {
-        widget = {
-            size = { 100% 100% }
-            flowcontainer = {
-                spacing = 20
-                direction = vertical
-                flowcontainer = {	
-                    margin_top = 20
-                    margin_right = 90
-                    parentanchor = hcenter						
+    type babylon_vienna_congress_proposals =  flowcontainer {
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical = expanding
+        #direction = vertical
+        margin_left = 100
+        margin_top = 20
+        #datacontext = "[GetPlayer]" 
+        flowcontainer = {
+            spacing = 20
+            direction = vertical
+            flowcontainer = {	
+                margin_top = 20
+                margin_right = 90	
+                direction = vertical	
+                datacontext = "[GetScriptedGui('set_proposal_type')]"
+                textbox = {
+                    autoresize = yes
+                    raw_text = "Possible proposals"
+                    using = header_font_fancy
+                    using = fontsize_mega
+                    align = center
+                }
+                widget = {
+                    size = { 10 10 }
+                }
+                button = {
+                    using = default_button
+
+                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','1')]"
+                    onclick = "[ScriptedGui.Execute(GuiScope.SetRoot.(GetPlayer.MakeScope)).End]"
+
+					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','1'))]"
                     textbox = {
+                        resizeparent = yes
+                        raw_text = "Denouncement"
+                        align = center|nobaseline
                         autoresize = yes
-                        raw_text = "Possible proposals"
-                        using = header_font_fancy
-                        using = fontsize_mega
-                        align = center
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
                     }
                 }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+                    raw_text = "Denouncement"
+                    align = center|nobaseline
+                    autoresize = yes
+                    maximumsize = { 250 -1 }
+                    minimumsize = { 250 -1 }
+                    margin = { 10 10 }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','2')]"
+					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','2'))]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "State Claim"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                    raw_text = "State Claim"
+                    align = center|nobaseline
+                    autoresize = yes
+                    maximumsize = { 250 -1 }
+                    minimumsize = { 250 -1 }
+                    margin = { 10 10 }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','3')]"
+					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','3'))]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Embargo"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                    raw_text = "Embargo"
+                    align = center|nobaseline
+                    autoresize = yes
+                    maximumsize = { 250 -1 }
+                    minimumsize = { 250 -1 }
+                    margin = { 10 10 }
+                }
+                button = {
+                    using = default_button
+                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','4')]"
+					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','4'))]"
+                    textbox = {
+                        resizeparent = yes
+                        raw_text = "Country Liberation"
+                        align = center|nobaseline
+                        autoresize = yes
+                        maximumsize = { 250 -1 }
+                        minimumsize = { 250 -1 }
+                        margin = { 10 10 }
+                        parentanchor = center
+                    }
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
+                    raw_text = "Country Liberation"
+                    align = center|nobaseline
+                    autoresize = yes
+                    maximumsize = { 250 -1 }
+                    minimumsize = { 250 -1 }
+                    margin = { 10 10 }
+                }
+            }
+        }
+        flowcontainer = {
+            spacing = 20
+            textbox = {
+                margin_top = 20
+                margin_right = 90	
+                raw_text = "proposal_desc"
             }
         }
     }
