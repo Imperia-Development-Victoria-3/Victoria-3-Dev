@@ -20,8 +20,12 @@ types babylon_vienna_congress_types
                 using = header_font_fancy
                 using = fontsize_mega
             }
-            block "divider" {
-                divider_decorative = {}
+            divider_decorative = {}
+            
+            textbox = {
+                visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
+                autoresize = yes
+                raw_text = "Please let the game run for a bit."
             }
             fixedgridbox = {
                 addcolumn = 120
@@ -47,9 +51,8 @@ types babylon_vienna_congress_types
                 }
             }
         }
-		block "divider" {
-			divider_clean = {}
-		}
+        divider_clean = {}
+		
         flowcontainer = { # Major Powers
             spacing = 5
             direction = vertical
@@ -60,8 +63,12 @@ types babylon_vienna_congress_types
                 using = fontsize_xxl
                 align = left
             }
-            block "divider" {
-                divider_clean = {}
+            divider_clean = {}
+            
+            textbox = {
+                visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_major_powers'))]"
+                autoresize = yes
+                raw_text = "Please let the game run for a bit."
             }
             fixedgridbox = {
                 addcolumn = 80
@@ -117,13 +124,129 @@ types babylon_vienna_congress_types
             flowcontainer = {	
                 margin_top = 20
                 margin_right = 90
-                parentanchor = hcenter						
+                parentanchor = hcenter
+                direction = vertical					
                 textbox = {
                     autoresize = yes
                     raw_text = "Current Resolution"
                     using = header_font_fancy
                     using = fontsize_mega
                     align = center
+                }
+                divider_decorative = {}
+                
+                flowcontainer = {
+                    # This one doesnt work, is supposed to only show up if this global_var is true
+                    visible = "[Not(IsEmpty(GetGlobalVariable('babylon_vienna_congress_in_session')))]"
+                    direction = vertical
+                    textbox = {
+                        autoresize = yes
+                        raw_text = "insert_current_conference_name"
+                        using = header_font_fancy
+                        using = fontsize_mega
+                        align = center
+                    }
+                    divider_decorative = {}
+                    flowcontainer = {
+                        direction = horizontal
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "Supporters"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                align = center
+                            }
+                            divider_decorative = {}
+                            
+                            button = {
+                                using = default_button
+                                # Onclick works!
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
+                                # Visible does not :(
+                                # Is supposed to show true if the player country is NOT in this global_list
+                                visible = "[Not(GetGlobalList.HasValue('current_congress_members_on_stance_1', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+                                textbox = {
+                                    resizeparent = yes
+                                    raw_text = "Support"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            textbox = {
+                                # Doesnt work
+                                # Is supposed to show true if the player country is in this global_list
+                                visible = "[GetGlobalList.HasValue('current_congress_members_on_stance_1', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
+                                raw_text = "Supporting"
+                                align = center|nobaseline
+                                autoresize = yes
+                                maximumsize = { 250 -1 }
+                                minimumsize = { 250 -1 }
+                                margin = { 10 10 }
+                            }
+                            divider_clean = {}
+                            # List of stance_1 countries here
+                        }
+                        vertical_divider = {}
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "Undecided"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                align = center
+                            }
+                            divider_decorative = {}
+                            button = {
+                                using = default_button
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
+        
+                                visible = "[Not(GetGlobalList.HasValue('current_congress_members_on_stance_2', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+                                textbox = {
+                                    resizeparent = yes
+                                    raw_text = "Neutral"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            textbox = {
+                                visible = "[GetGlobalList.HasValue('current_congress_members_on_stance_2', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
+                                raw_text = "Undecided"
+                                align = center|nobaseline
+                                autoresize = yes
+                                maximumsize = { 250 -1 }
+                                minimumsize = { 250 -1 }
+                                margin = { 10 10 }
+                            }
+                            divider_clean = {}
+                            # List of stance_2 countries here
+                        }
+                        vertical_divider = {}
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "Opposed"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                align = center
+                            }
+                            divider_decorative = {}
+                            #Button here + clicked textbox
+                            divider_clean = {}
+                            # List of stance_3 countries here
+                        }
+                    }
                 }
             }
         }
@@ -135,15 +258,7 @@ types babylon_vienna_congress_types
         #direction = horizontal
         margin_left = 100
         margin_top = 20
-        datacontext = "[GetPlayer]" 
-        flowcontainer = {
-            spacing = 20
-            textbox = {
-                margin_top = 20
-                margin_right = 90	
-                raw_text = "proposal_desc"
-            }
-        }
+        datacontext = "[GetPlayer]"
         flowcontainer = {
             spacing = 5
             direction = vertical
@@ -160,124 +275,130 @@ types babylon_vienna_congress_types
                     using = fontsize_mega
                     align = center
                 }
-                block "divider" {
-                    divider_decorative = {}
+                divider_decorative = {}
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
+                    autoresize = yes
+                    raw_text = "Please let the game run for a bit."
                 }
-                button = {
-                    using = default_button
+                flowcontainer = {	
+                    direction = vertical
+                    visible = "[Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers')))]"
+                    button = {
+                        using = default_button
 
-                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','1')]"
+                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','1')]"
 
-                    # Call without the value
-                    #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+                        # Call without the value
+                        #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 
-                    # Call which sends a value with it
-                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
+                        # Call which sends a value with it
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
 
-                    # Call which would send a country with it Country.MakeScope needs to be replaced however.
-                    #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope) .AddScope('target_country', Country.MakeScope).End)]"
+                        # Call which would send a country with it Country.MakeScope needs to be replaced however.
+                        #onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope) .AddScope('target_country', Country.MakeScope).End)]"
 
-					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','1'))]"
+                        visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','1'))]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Denouncement"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
                     textbox = {
-                        resizeparent = yes
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
                         raw_text = "Denouncement"
                         align = center|nobaseline
                         autoresize = yes
                         maximumsize = { 250 -1 }
                         minimumsize = { 250 -1 }
                         margin = { 10 10 }
-                        parentanchor = center
                     }
-                }
-                textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
-                    raw_text = "Denouncement"
-                    align = center|nobaseline
-                    autoresize = yes
-                    maximumsize = { 250 -1 }
-                    minimumsize = { 250 -1 }
-                    margin = { 10 10 }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','2')]"
-                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
+                    button = {
+                        using = default_button
+                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','2')]"
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
 
-					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','2'))]"
+                        visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','2'))]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "State Claim"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
                     textbox = {
-                        resizeparent = yes
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
                         raw_text = "State Claim"
                         align = center|nobaseline
                         autoresize = yes
                         maximumsize = { 250 -1 }
                         minimumsize = { 250 -1 }
                         margin = { 10 10 }
-                        parentanchor = center
                     }
-                }
-                textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
-                    raw_text = "State Claim"
-                    align = center|nobaseline
-                    autoresize = yes
-                    maximumsize = { 250 -1 }
-                    minimumsize = { 250 -1 }
-                    margin = { 10 10 }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','3')]"
-                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
+                    button = {
+                        using = default_button
+                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','3')]"
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
 
-					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','3'))]"
+                        visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','3'))]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Embargo"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
                     textbox = {
-                        resizeparent = yes
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
                         raw_text = "Embargo"
                         align = center|nobaseline
                         autoresize = yes
                         maximumsize = { 250 -1 }
                         minimumsize = { 250 -1 }
                         margin = { 10 10 }
-                        parentanchor = center
                     }
-                }
-                textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
-                    raw_text = "Embargo"
-                    align = center|nobaseline
-                    autoresize = yes
-                    maximumsize = { 250 -1 }
-                    minimumsize = { 250 -1 }
-                    margin = { 10 10 }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','4')]"
-                    onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
+                    button = {
+                        using = default_button
+                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','4')]"
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
 
-					visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','4'))]"
+                        visible = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','4'))]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Country Liberation"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
                     textbox = {
-                        resizeparent = yes
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
                         raw_text = "Country Liberation"
                         align = center|nobaseline
                         autoresize = yes
                         maximumsize = { 250 -1 }
                         minimumsize = { 250 -1 }
                         margin = { 10 10 }
-                        parentanchor = center
                     }
-                }
-                textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
-                    raw_text = "Country Liberation"
-                    align = center|nobaseline
-                    autoresize = yes
-                    maximumsize = { 250 -1 }
-                    minimumsize = { 250 -1 }
-                    margin = { 10 10 }
-                }
-                block "divider" {
                     divider_decorative = {}
+                    
                 }
                 button = {
                     using = default_button
