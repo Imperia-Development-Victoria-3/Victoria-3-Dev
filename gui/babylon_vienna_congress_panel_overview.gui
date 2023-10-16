@@ -128,16 +128,14 @@ types babylon_vienna_congress_types
                 direction = vertical					
                 textbox = {
                     autoresize = yes
-                    raw_text = "Current Resolution"
+                    raw_text = "Current Conference"
                     using = header_font_fancy
                     using = fontsize_mega
                     align = center
                 }
                 divider_decorative = {}
-                
                 flowcontainer = {
-                    # This one doesnt work, is supposed to only show up if this global_var is true
-                    visible = "[Not(IsEmpty(GetGlobalVariable('babylon_vienna_congress_in_session')))]"
+                    visible = "[GetGlobalVariable('babylon_vienna_congress_in_session').IsSet]"
                     direction = vertical
                     textbox = {
                         autoresize = yes
@@ -166,7 +164,7 @@ types babylon_vienna_congress_types
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
                                 # Visible does not :(
                                 # Is supposed to show true if the player country is NOT in this global_list
-                                visible = "[Not(GetGlobalList.HasValue('current_congress_members_on_stance_1', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+                                visible = "[Not(DataModelHasItems(GetGlobalList('current_congress_members_on_stance_1'), GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
                                 textbox = {
                                     resizeparent = yes
                                     raw_text = "Support"
@@ -181,7 +179,7 @@ types babylon_vienna_congress_types
                             textbox = {
                                 # Doesnt work
                                 # Is supposed to show true if the player country is in this global_list
-                                visible = "[GetGlobalList.HasValue('current_congress_members_on_stance_1', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
+                                visible = "[DataModelHasItems(GetGlobalList('current_congress_members_on_stance_1'), GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
                                 raw_text = "Supporting"
                                 align = center|nobaseline
                                 autoresize = yes
@@ -190,11 +188,35 @@ types babylon_vienna_congress_types
                                 margin = { 10 10 }
                             }
                             divider_clean = {}
-                            # List of stance_1 countries here
+                            fixedgridbox = {
+                                addcolumn = 120
+                                addrow = 95
+                                datamodel_wrap = 4
+                                flipdirection = no
+                                datamodel = "[GetGlobalList('current_congress_members_on_stance_1')]"
+                                item = {
+                                    align = center|nobaseline
+                                    large_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                        textbox = {
+                                            autoresize = yes
+                                            margin_top = 65
+                                            margin_left = 35
+                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                            align = center
+                                        }
+                                    }			
+                                }
+                            }
                         }
                         vertical_divider = {}
                         flowcontainer = {
                             direction = vertical
+                            datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
                             textbox = {
                                 autoresize = yes
                                 raw_text = "Undecided"
@@ -206,8 +228,9 @@ types babylon_vienna_congress_types
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
-        
-                                visible = "[Not(GetGlobalList.HasValue('current_congress_members_on_stance_2', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+
+                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
+                                visible = "[Not(DataModelHasItems(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
                                 textbox = {
                                     resizeparent = yes
                                     raw_text = "Neutral"
@@ -220,7 +243,8 @@ types babylon_vienna_congress_types
                                 }
                             }
                             textbox = {
-                                visible = "[GetGlobalList.HasValue('current_congress_members_on_stance_2', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
+                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
+                                visible = "[DataModelHasItems(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
                                 raw_text = "Undecided"
                                 align = center|nobaseline
                                 autoresize = yes
@@ -229,7 +253,29 @@ types babylon_vienna_congress_types
                                 margin = { 10 10 }
                             }
                             divider_clean = {}
-                            # List of stance_2 countries here
+                            fixedgridbox = {
+                                addcolumn = 120
+                                addrow = 95
+                                datamodel_wrap = 4
+                                flipdirection = no
+                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
+                                item = {
+                                    large_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                        textbox = {
+                                            autoresize = yes
+                                            margin_top = 65
+                                            margin_left = 35
+                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                            align = center
+                                        }
+                                    }			
+                                }
+                            }
                         }
                         vertical_divider = {}
                         flowcontainer = {
@@ -283,7 +329,7 @@ types babylon_vienna_congress_types
                 }
                 flowcontainer = {	
                     direction = vertical
-                    visible = "[Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers')))]"
+                    visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
                     button = {
                         using = default_button
 
@@ -400,68 +446,72 @@ types babylon_vienna_congress_types
                     divider_decorative = {}
                     
                 }
-                button = {
-                    using = default_button
-                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_denouncement')]"
-                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
-                    textbox = {
-                        resizeparent = yes
-                        raw_text = "Select Target"
-                        align = center|nobaseline
-                        autoresize = yes
-                        maximumsize = { 250 -1 }
-                        minimumsize = { 250 -1 }
-                        margin = { 10 10 }
-                        parentanchor = center
+                flowcontainer = {
+                    visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
+
+                    button = {
+                        using = default_button
+                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_denouncement')]"
+                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Select Target"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
                     }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
-                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
-                    textbox = {
-                        resizeparent = yes
-                        raw_text = "Select Target"
-                        align = center|nobaseline
-                        autoresize = yes
-                        maximumsize = { 250 -1 }
-                        minimumsize = { 250 -1 }
-                        margin = { 10 10 }
-                        parentanchor = center
+                    button = {
+                        using = default_button
+                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
+                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Select Target"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
                     }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
-                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
-                    textbox = {
-                        resizeparent = yes
-                        raw_text = "Select Target"
-                        align = center|nobaseline
-                        autoresize = yes
-                        maximumsize = { 250 -1 }
-                        minimumsize = { 250 -1 }
-                        margin = { 10 10 }
-                        parentanchor = center
+                    button = {
+                        using = default_button
+                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
+                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Select Target"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
                     }
-                }
-                button = {
-                    using = default_button
-                    onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
-                    onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
-                    textbox = {
-                        resizeparent = yes
-                        raw_text = "Select Target"
-                        align = center|nobaseline
-                        autoresize = yes
-                        maximumsize = { 250 -1 }
-                        minimumsize = { 250 -1 }
-                        margin = { 10 10 }
-                        parentanchor = center
+                    button = {
+                        using = default_button
+                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
+                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "Select Target"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
                     }
                 }
             }
