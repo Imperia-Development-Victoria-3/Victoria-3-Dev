@@ -139,7 +139,7 @@ types babylon_vienna_congress_types
                     direction = vertical
                     textbox = {
                         autoresize = yes
-                        raw_text = "insert_current_conference_name"
+                        text = "CURRENT_CONFERENCE_NAME"
                         using = header_font_fancy
                         using = fontsize_mega
                         align = center
@@ -154,17 +154,14 @@ types babylon_vienna_congress_types
                                 raw_text = "Supporters"
                                 using = header_font_fancy
                                 using = fontsize_mega
-                                align = center
+                                align = center|nobaseline
                             }
                             divider_decorative = {}
                             
                             button = {
                                 using = default_button
-                                # Onclick works!
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
-                                # Visible does not :(
-                                # Is supposed to show true if the player country is NOT in this global_list
-                                visible = "[Not(DataModelHasItems(GetGlobalList('current_congress_members_on_stance_1'), GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End))]"
                                 textbox = {
                                     resizeparent = yes
                                     raw_text = "Support"
@@ -176,18 +173,7 @@ types babylon_vienna_congress_types
                                     parentanchor = center
                                 }
                             }
-                            textbox = {
-                                # Doesnt work
-                                # Is supposed to show true if the player country is in this global_list
-                                visible = "[DataModelHasItems(GetGlobalList('current_congress_members_on_stance_1'), GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
-                                raw_text = "Supporting"
-                                align = center|nobaseline
-                                autoresize = yes
-                                maximumsize = { 250 -1 }
-                                minimumsize = { 250 -1 }
-                                margin = { 10 10 }
-                            }
-                            divider_clean = {}
+                            divider_decorative = {}
                             fixedgridbox = {
                                 addcolumn = 120
                                 addrow = 95
@@ -195,7 +181,6 @@ types babylon_vienna_congress_types
                                 flipdirection = no
                                 datamodel = "[GetGlobalList('current_congress_members_on_stance_1')]"
                                 item = {
-                                    align = center|nobaseline
                                     large_flag = {
                                         using = tooltip_above
                                         datacontext = "[Scope.AccessCountry]"						
@@ -219,7 +204,7 @@ types babylon_vienna_congress_types
                             datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
                             textbox = {
                                 autoresize = yes
-                                raw_text = "Undecided"
+                                raw_text = "Abstaining"
                                 using = header_font_fancy
                                 using = fontsize_mega
                                 align = center
@@ -228,12 +213,10 @@ types babylon_vienna_congress_types
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
-
-                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
-                                visible = "[Not(DataModelHasItems(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
+                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End))]"
                                 textbox = {
                                     resizeparent = yes
-                                    raw_text = "Neutral"
+                                    raw_text = "Abstain"
                                     align = center|nobaseline
                                     autoresize = yes
                                     maximumsize = { 250 -1 }
@@ -242,17 +225,7 @@ types babylon_vienna_congress_types
                                     parentanchor = center
                                 }
                             }
-                            textbox = {
-                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
-                                visible = "[DataModelHasItems(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope)]"
-                                raw_text = "Undecided"
-                                align = center|nobaseline
-                                autoresize = yes
-                                maximumsize = { 250 -1 }
-                                minimumsize = { 250 -1 }
-                                margin = { 10 10 }
-                            }
-                            divider_clean = {}
+                            divider_decorative = {}
                             fixedgridbox = {
                                 addcolumn = 120
                                 addrow = 95
@@ -288,9 +261,45 @@ types babylon_vienna_congress_types
                                 align = center
                             }
                             divider_decorative = {}
-                            #Button here + clicked textbox
-                            divider_clean = {}
-                            # List of stance_3 countries here
+                            button = {
+                                using = default_button
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)]"
+                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End))]"
+                                textbox = {
+                                    resizeparent = yes
+                                    raw_text = "Oppose"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            divider_decorative = {}
+                            fixedgridbox = {
+                                addcolumn = 120
+                                addrow = 95
+                                datamodel_wrap = 4
+                                flipdirection = no
+                                datamodel = "[GetGlobalList('current_congress_members_on_stance_3')]"
+                                item = {
+                                    large_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                        textbox = {
+                                            autoresize = yes
+                                            margin_top = 65
+                                            margin_left = 35
+                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                            align = center
+                                        }
+                                    }			
+                                }
+                            }
                         }
                     }
                 }
