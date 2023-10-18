@@ -1,3 +1,5 @@
+@supporters_width = "[GetPlayer.MakeScope.ScriptValue('supporters_width_value')]"
+
 types babylon_vienna_congress_types 
 {
     ### COUNTRIES TAB
@@ -10,7 +12,6 @@ types babylon_vienna_congress_types
         margin_left = 100
         margin_top = 20
         direction = vertical
-        #align = left|top
         flowcontainer = { # Great Powers
             spacing = 5
             direction = vertical
@@ -107,7 +108,7 @@ types babylon_vienna_congress_types
         #    }		
         #}
     }
-    ### RESOLUTION TAB
+    ### CURRENT CONFERENCE TAB
     type babylon_vienna_congress_resolution =  flowcontainer {
         layoutpolicy_horizontal = expanding
         layoutpolicy_vertical = expanding
@@ -116,14 +117,15 @@ types babylon_vienna_congress_types
         #size = { 100% 100% }
         direction = vertical
         align = top
-        margin_left = 100
+        #margin_left = 100
         margin_top = 20
         flowcontainer = {
             spacing = 20
             direction = vertical
+            parentanchor = center|top
             flowcontainer = {	
                 margin_top = 20
-                margin_right = 90
+                #margin_right = 90
                 parentanchor = hcenter
                 direction = vertical					
                 textbox = {
@@ -131,7 +133,7 @@ types babylon_vienna_congress_types
                     raw_text = "Current Conference"
                     using = header_font_fancy
                     using = fontsize_mega
-                    align = center
+                    parentanchor = center|top
                 }
                 divider_decorative = {}
                 flowcontainer = {
@@ -142,7 +144,7 @@ types babylon_vienna_congress_types
                         text = "CURRENT_CONFERENCE_NAME"
                         using = header_font_fancy
                         using = fontsize_mega
-                        align = center
+                        parentanchor = center|top
                     }
                     divider_decorative = {}
                     flowcontainer = {
@@ -154,10 +156,10 @@ types babylon_vienna_congress_types
                                 raw_text = "Supporters"
                                 using = header_font_fancy
                                 using = fontsize_mega
-                                align = center|nobaseline
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
-                            
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
@@ -172,6 +174,15 @@ types babylon_vienna_congress_types
                                     margin = { 10 10 }
                                     parentanchor = center
                                 }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_supporters_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
                             fixedgridbox = {
@@ -201,13 +212,13 @@ types babylon_vienna_congress_types
                         vertical_divider = {}
                         flowcontainer = {
                             direction = vertical
-                            datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
                             textbox = {
                                 autoresize = yes
                                 raw_text = "Abstaining"
                                 using = header_font_fancy
                                 using = fontsize_mega
-                                align = center
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
                             button = {
@@ -224,6 +235,15 @@ types babylon_vienna_congress_types
                                     margin = { 10 10 }
                                     parentanchor = center
                                 }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_neutral_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
                             fixedgridbox = {
@@ -255,10 +275,11 @@ types babylon_vienna_congress_types
                             direction = vertical
                             textbox = {
                                 autoresize = yes
-                                raw_text = "Opposed"
+                                raw_text = "Opposing"
                                 using = header_font_fancy
                                 using = fontsize_mega
-                                align = center
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
                             button = {
@@ -275,6 +296,15 @@ types babylon_vienna_congress_types
                                     margin = { 10 10 }
                                     parentanchor = center
                                 }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_opposers_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
                             }
                             divider_decorative = {}
                             fixedgridbox = {
@@ -302,6 +332,20 @@ types babylon_vienna_congress_types
                             }
                         }
                     }
+                    divider_decorative = {}
+                    flowcontainer = {
+                        direction = horizontal
+                        parentanchor = center|top
+                        margin_top = 5
+                        green_progressbar_horizontal = {
+                            size = { 270 20 }
+                            blockoverride "values" {
+                                value = "[GetPlayer.MakeScope.ScriptValue('conference_supporters_percentage_value')]"
+                                min = 0
+                                max = 1
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -322,7 +366,6 @@ types babylon_vienna_congress_types
                 margin_top = 20
                 margin_right = 90	
                 direction = vertical	
-                #datacontext = "[GetScriptedGui('set_proposal_type')]"
                 textbox = {
                     autoresize = yes
                     raw_text = "Possible proposals"

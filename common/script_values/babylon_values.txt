@@ -768,3 +768,67 @@ babylon_num_of_major_powers = {
 		add = 1
 	}
 }
+
+total_prestige_of_conference_members = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = conference_member
+		}
+		add = prestige
+	}
+}
+
+conference_supporters_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_1
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_neutral_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_2
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_opposers_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_3
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_supporters_percentage_value = {
+	value = conference_supporters_prestige_value
+	divide = total_prestige_of_conference_members
+}
+
+conference_neutral_percentage_value = {
+	value = conference_neutral_prestige_value
+	divide = total_prestige_of_conference_members
+}
+
+conference_opposers_percentage_value = {
+	value = conference_opposers_prestige_value
+	divide = total_prestige_of_conference_members
+}
