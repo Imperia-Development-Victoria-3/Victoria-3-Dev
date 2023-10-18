@@ -1,7 +1,6 @@
 ﻿namespace = babylon_vienna_congress
-
 babylon_vienna_congress.1 = {
-    type = country_event
+	type = country_event
 	event_image = {
 		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
 	}
@@ -12,8 +11,65 @@ babylon_vienna_congress.1 = {
 	desc = babylon_vienna_congress.1.d
 	flavor = babylon_vienna_congress.1.f
 	duration = 3
-    option = {
-        name = babylon_vienna_congress.1.a
-		
-    }
+	immediate = {
+		global_var:babylon_vienna_congress_session_initiator = {
+			save_scope_as = initiator_scope
+		}
+		global_var:babylon_vienna_congress_session_target = {
+			save_scope_as = target_scope
+		}
+		global_var:babylon_vienna_congress_session_target_state = {
+			save_scope_as = target_state_scope
+		}
+		if = {
+			limit = {
+				has_global_highest_gdp = yes
+				# The effects of the congress should only take place ONCE
+			}
+			if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_type = 1
+					# Denouncement
+				}
+				denounce_target = {
+					TARGET = scope:target_scope
+				}
+			}
+			if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_type = 2
+					# State claim
+				}
+			}
+			if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_type = 3
+					# Embargo
+				}
+			}
+			if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_type = 4
+					# Liberation
+				}
+			}
+		}
+		remove_variable ?= conference_member
+		remove_variable ?= congress_proposal_type
+	}
+	option = {
+		name = babylon_vienna_congress.1.a
+		if = {
+			limit = {
+				global_var:babylon_vienna_congress_session_type = 1
+				# Denouncement
+			}
+			custom_tooltip = following_has_happened_tt
+			show_as_tooltip = {
+				denounce_target = {
+					TARGET = scope:target_scope
+				}
+			}
+		}
+	}
 }

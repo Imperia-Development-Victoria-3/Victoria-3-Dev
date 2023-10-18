@@ -832,3 +832,25 @@ conference_opposers_percentage_value = {
 	value = conference_opposers_prestige_value
 	divide = total_prestige_of_conference_members
 }
+
+conference_sanctions_severity = {
+	if = {
+		limit = {
+			conference_supporters_percentage_value < 0.2
+		}
+		value = 0
+	}
+	else_if = {
+		limit = {
+			conference_supporters_percentage_value > 0.8
+		}
+		value = 1
+	} else = {
+		value = {
+			value = conference_supporters_percentage_value
+			subtract = 0.2
+			multiply = 1.6667
+		}
+		max = 1
+	}
+}

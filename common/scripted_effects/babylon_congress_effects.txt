@@ -7,12 +7,15 @@
 				has_global_variable = babylon_vienna_congress_in_session
 			}
 		}
+		# Remove previous global variables
+		clear_global_variable_list ?= current_congress_members_on_stance_1
+		clear_global_variable_list ?= current_congress_members_on_stance_2
+		clear_global_variable_list ?= current_congress_members_on_stance_3
 		set_global_variable = {
 			name = babylon_vienna_congress_in_session
-			days = 366
+			days = 365
 		}
 		every_country = {
-
 			trigger_event = {
 				id = babylon_vienna_congress.1
 				days = 365
@@ -85,11 +88,6 @@
 				}
 			}
 		}
-		# save_temporary_scope_value_as = {
-		# 	name = babylon_vienna_congress_current_session_scope_value
-        #     # Value does not get parsed, instead delivers as string
-		# 	value = global_var:babylon_vienna_congress_current_session
-		# }
 		congress_initialise_conference_global_vars = {
 			TYPE = $TYPE$
 			TARGET = $TARGET$
@@ -117,7 +115,6 @@
 }
 
 congress_initialise_conference_global_vars = {
-	# For the history panel (potentially)
 	set_global_variable = {
 		name = babylon_vienna_congress_session_type
 		value = $TYPE$
@@ -135,13 +132,6 @@ congress_initialise_conference_global_vars = {
 		value = $TARGET_STATE$
 	}
 }
-
-# congress_memorise_country_as_participant = {
-# 	add_to_global_variable_list = {
-# 		name = babylon_vienna_congress_session_$NUM$_participants
-# 		target = $COUNTRY$
-# 	}
-# }
 
 set_congress_stance_effect = {
 	if = {
@@ -183,5 +173,35 @@ set_congress_stance_effect = {
 	add_to_global_variable_list = {
 		name = current_congress_members_on_stance_$STANCE$
 		target = $ROOT$
+	}
+}
+
+denounce_target = {
+	if = {
+		limit = { 
+			conference_sanctions_severity != 0
+		}
+		every_in_global_list = {
+			variable = current_congress_members_on_stance_1
+			change_relations = {
+				country = $TARGET$
+				value = -50
+			}
+		}
+		$TARGET$ = {
+			add_modifier = {
+				name = babylon_congress_denouncement_modifier
+				years = 3
+				multiplier = conference_sanctions_severity
+			}
+			save_temporary_scope_value_as = {
+				name = infamy_addition
+				value = {
+					value = 30
+					multiply = conference_sanctions_severity
+				}
+			}
+			change_infamy = scope:infamy_addition
+		}
 	}
 }
