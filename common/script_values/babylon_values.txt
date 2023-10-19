@@ -773,7 +773,21 @@ total_prestige_of_conference_members = {
 	value = 0
 	every_country = {
 		limit = {
-			has_variable = conference_member
+			OR = {
+				has_variable = conference_member
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_1
+					target = this
+				}
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_2
+					target = this
+				}
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_3
+					target = this
+				}
+			}
 		}
 		add = prestige
 	}
@@ -845,7 +859,8 @@ conference_sanctions_severity = {
 			conference_supporters_percentage_value > 0.8
 		}
 		value = 1
-	} else = {
+	}
+	else = {
 		value = {
 			value = conference_supporters_percentage_value
 			subtract = 0.2
