@@ -9,104 +9,102 @@ types babylon_vienna_congress_types
         #spacing = -50
 
         #size = { 100% 100% }
-        margin_left = 100
+        #margin_left = 100
+        align = top
         margin_top = 20
         direction = vertical
-        flowcontainer = { # Great Powers
+        flowcontainer = {
             spacing = 5
+            margin_top = 20
             direction = vertical
-            textbox = {
-                autoresize = yes
-                raw_text = "[Concept('concept_great_power', 'Great Powers')]"
-                using = header_font_fancy
-                using = fontsize_mega
-            }
-            divider_decorative = {}
-            
-            textbox = {
-                visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
-                autoresize = yes
-                raw_text = "Please let the game run for a bit."
-            }
-            fixedgridbox = {
-                addcolumn = 120
-                addrow = 95
-                datamodel_wrap = 4
-                flipdirection = yes
-                datamodel = "[GetGlobalList('babylon_congress_great_powers')]"
-                item = {
-                    large_flag = {
-                        using = tooltip_above
-                        datacontext = "[Scope.AccessCountry]"						
-                        blockoverride "flag_tooltip" {
-                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                        }
-                        textbox = {
-                            autoresize = yes
-                            margin_top = 65
-                            margin_left = 35
-                            raw_text = "[Scope.AccessCountry.GetPrestige]"
-                            align = center
-                        }
-                    }			
+            parentanchor = center|top
+            flowcontainer = { # Great Powers
+                spacing = 5
+                margin_top = 20
+                direction = vertical
+                parentanchor = hcenter
+                textbox = {
+                    autoresize = yes
+                    raw_text = "[Concept('concept_great_power', 'Great Powers')]"
+                    using = header_font_fancy
+                    using = fontsize_mega
                 }
-            }
-        }
-        divider_clean = {}
-		
-        flowcontainer = { # Major Powers
-            spacing = 5
-            direction = vertical
-            textbox = {
-                autoresize = yes
-                raw_text = "[Concept('concept_major_power', 'Major Powers')]"
-                using = header_font_fancy
-                using = fontsize_xxl
-                align = left
+                divider_decorative = {}
+                
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
+                    autoresize = yes
+                    raw_text = "Please let the game run for a bit."
+                }
+                fixedgridbox = {
+                    addcolumn = 120
+                    addrow = 95
+                    datamodel_wrap = 4
+                    flipdirection = yes
+                    datamodel = "[GetGlobalList('babylon_congress_great_powers')]"
+                    item = {
+                        large_flag = {
+                            using = tooltip_above
+                            datacontext = "[Scope.AccessCountry]"						
+                            blockoverride "flag_tooltip" {
+                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                            }
+                            textbox = {
+                                autoresize = yes
+                                margin_top = 65
+                                margin_left = 35
+                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                align = center
+                            }
+                        }			
+                    }
+                }
             }
             divider_clean = {}
             
-            textbox = {
-                visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_major_powers'))]"
-                autoresize = yes
-                raw_text = "Please let the game run for a bit."
-            }
-            fixedgridbox = {
-                addcolumn = 80
-                addrow = 60
-                datamodel_wrap = 5
-                flipdirection = yes
-                datamodel = "[GetGlobalList('babylon_congress_major_powers')]"
-                item = {
-                    small_flag = {
-                        parentanchor = vcenter
-                        using = tooltip_above
-                        datacontext = "[Scope.AccessCountry]"						
-                        blockoverride "flag_tooltip" {
-                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                        }
-                        textbox = {
-                            autoresize = yes
-                            margin_top = 30
-                            margin_left = 15
-                            raw_text = "[Scope.AccessCountry.GetPrestige]"
-                            align = center
+            flowcontainer = { # Major Powers
+                spacing = 5
+                direction = vertical
+                textbox = {
+                    autoresize = yes
+                    raw_text = "[Concept('concept_major_power', 'Major Powers')]"
+                    using = header_font_fancy
+                    using = fontsize_xxl
+                    align = left
+                }
+                divider_clean = {}
+                
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_major_powers'))]"
+                    autoresize = yes
+                    raw_text = "Please let the game run for a bit."
+                }
+                fixedgridbox = {
+                    addcolumn = 80
+                    addrow = 60
+                    datamodel_wrap = 5
+                    flipdirection = yes
+                    datamodel = "[GetGlobalList('babylon_congress_major_powers')]"
+                    item = {
+                        small_flag = {
+                            parentanchor = vcenter
+                            using = tooltip_above
+                            datacontext = "[Scope.AccessCountry]"						
+                            blockoverride "flag_tooltip" {
+                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                            }
+                            textbox = {
+                                autoresize = yes
+                                margin_top = 30
+                                margin_left = 15
+                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                align = center
+                            }
                         }
                     }
                 }
             }
         }
-        #widget = {
-        #    visible = "[IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))]"
-        #    size = { 10 10 }
-        #    textbox = {
-        #        autoresize = yes
-        #        raw_text = "EMPTY MOTHER FUCKERS"
-        #        using = header_font_fancy
-        #        using = fontsize_mega
-        #        align = center
-        #    }		
-        #}
     }
     ### CURRENT CONFERENCE TAB
     type babylon_vienna_congress_resolution =  flowcontainer {
@@ -163,7 +161,7 @@ types babylon_vienna_congress_types
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
-                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End))]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -225,7 +223,7 @@ types babylon_vienna_congress_types
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
-                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End))]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -287,7 +285,7 @@ types babylon_vienna_congress_types
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)]"
-                                enabled = "[Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End))]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -368,7 +366,7 @@ types babylon_vienna_congress_types
         datacontext = "[GetPlayer]"
         flowcontainer = {
             spacing = 5
-            direction = vertical
+            direction = horizontal
             flowcontainer = {	
                 spacing = 5
                 margin_top = 20
@@ -537,6 +535,44 @@ types babylon_vienna_congress_types
                             parentanchor = center
                         }
                     }
+                }
+            }
+            vertical_divider = {}
+            flowcontainer = {
+                margin_top = 20
+                visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVar('babylon_vienna_congress_in_session').IsSet))]"
+                textbox = {
+                    autoresize = yes
+                    text = "CONGRESS_HOW_TO_DESCRIPTION"
+                }
+            }
+            vertical_divider = {}
+            flowcontainer = {
+                visible = "[GetVariableSystem('babylon_congress_proposal_type').IsSet]"
+                spacing = 5
+                direction = vertical
+                margin_top = 20
+                margin_right = 90
+                size = { 250 250 }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+                    text = "DENOUNCEMENT_DESCRIPTION"
+                    autoresize = yes
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                    text = "STATE_CLAIM_DESCRIPTION"
+                    autoresize = yes
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                    text = "EMBARGO_DESCRIPTION"
+                    autoresize = yes
+                }
+                textbox = {
+                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
+                    text = "LIBERATION_DESCRIPTION"
+                    autoresize = yes
                 }
             }
         }

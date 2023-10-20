@@ -123,16 +123,24 @@ congress_start_conference = {
 			INITIATOR = $INITIATOR$
 			TARGET_STATE = scope:target_state
 		}
-		every_in_global_list = {
-			variable = babylon_congress_great_powers
-			set_variable = conference_member
-			add_to_global_variable_list = {
-				name = current_congress_members_on_stance_2
-				target = this
+		every_country = {
+			limit = {
+				OR = {
+					is_target_in_global_variable_list = {
+						name = babylon_congress_great_powers
+						target = this
+					}
+					is_target_in_global_variable_list = {
+						name = babylon_congress_major_powers
+						target = this
+					}
+					AND = {
+						# If target is recognised he gets a say
+						global_var:babylon_vienna_congress_session_target = this
+						is_country_type = recognized
+					}
+				}
 			}
-		}
-		every_in_global_list = {
-			variable = babylon_congress_major_powers
 			set_variable = conference_member
 			add_to_global_variable_list = {
 				name = current_congress_members_on_stance_2
