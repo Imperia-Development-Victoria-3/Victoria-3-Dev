@@ -1,58 +1,24 @@
-types babylon_vienna_congress_types
+types babylon_vienna_congress
 {
-	type babylon_vienna_congress_panel = fullscreen_block_window {
-		name = "babylon_vienna_congress_panel"
+	type babylon_vienna_congress = fullscreen_block_window {
+		name = "babylon_vienna_congress"
 		enabled = yes
-		visible = "[GetVariableSystem.Exists('babylon_vienna_congress_open')]"
-		#blockoverride "animation_state_block" {
-		#	state = {
-		#		name = _show
-		#		start_sound = {
-		#			soundeffect = "event:/SFX/UI/SideBar/technology"
-		#		}
-		#		start_sound = {
-		#			soundeffect = "snapshot:/Dynamic/mute_world_80"
-		#		}
-		#		start_sound = {
-		#			soundeffect = "snapshot:/Dynamic/mute_vfx_war_100"
-
-		#		}
-		#	}
-
-		#	state = {
-		#		name = _hide
-		#		start_sound = {
-		#			soundeffect = "event:/SFX/UI/SideBar/technology_stop"
-		#		}
-		#	}
-		#}
-
 		blockoverride "back_button_fullscreen" {
 			back_button_large = {
 				position = { 11 15 }
 				parentanchor = top|left
-				onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+				onclick = "[InformationPanelBar.OpenPreviousPanel]"
 				input_action = "back"
 			}
 		}
 
 		blockoverride "close_button_onclick" {
-			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+			onclick = "[InformationPanelBar.ClosePanel]"
 		}
 
 		blockoverride "window_header_name" {
 			margin_left = 20
 			raw_text = "Congress of Vienna"
-			
-			# PLACEHOLDER
-			#icon = {
-			#	position = { -80 -10 }
-			#	texture = "gfx/interface/icons/cwp_icons/united_nations.dds"
-			#	tooltip = "[concept_united_nations_desc]"
-			#	size = { 70 70 }
-			#	background = {
-			#	}
-			#}
 		}
 
 		blockoverride "fixed_top" {
@@ -75,15 +41,13 @@ types babylon_vienna_congress_types
 					}
 				}
 				blockoverride "first_button_click" {
-					onclick = "[GetVariableSystem.Toggle('babylon_congress_countries')]"
-					onclick = "[GetVariableSystem.Clear('babylon_congress_resolution')]"
-					onclick = "[GetVariableSystem.Clear('babylon_congress_proposal')]"
+					onclick = "[InformationPanel.SelectTab('default')]"
 				}
 				blockoverride "first_button_visibility" {
-					visible = "[GetVariableSystem.Exists('babylon_congress_countries')]"
+					visible = "[InformationPanel.IsTabSelected('default')]"
 				}
 				blockoverride "first_button_visibility_checked" {
-					visible = "[Not(GetVariableSystem.Exists('babylon_congress_countries'))]"
+					visible = "[Not( InformationPanel.IsTabSelected('default') )]"
 				}
 				blockoverride "first_button_selected" {
 					text = "Overview"
@@ -97,7 +61,7 @@ types babylon_vienna_congress_types
 					}
 				}
 
-				# Military
+				# Current Conference
 				blockoverride "second_button" {
 					text = "Current Conference"
 				}
@@ -113,15 +77,13 @@ types babylon_vienna_congress_types
 					}
 				}
 				blockoverride "second_button_click" {
-					onclick = "[GetVariableSystem.Clear('babylon_congress_countries')]"
-					onclick = "[GetVariableSystem.Toggle('babylon_congress_resolution')]"
-					onclick = "[GetVariableSystem.Clear('babylon_congress_proposal')]"
+					onclick = "[InformationPanel.SelectTab('current_conference')]"
 				}
 				blockoverride "second_button_visibility" {
-					visible = "[GetVariableSystem.Exists('babylon_congress_resolution')]"
+					visible = "[InformationPanel.IsTabSelected('current_conference')]"
 				}
 				blockoverride "second_button_visibility_checked" {
-					visible = "[Not(GetVariableSystem.Exists('babylon_congress_resolution'))]"
+					visible = "[Not( InformationPanel.IsTabSelected('current_conference') )]"
 				}
 				blockoverride "second_button_selected" {
 					text = "Current Conference"
@@ -134,7 +96,7 @@ types babylon_vienna_congress_types
 					}
 				}
 
-				# Society
+				# Proposals
 				blockoverride "third_button" {
 					text = "Proposals"
 				}
@@ -150,15 +112,13 @@ types babylon_vienna_congress_types
 					}
 				}
 				blockoverride "third_button_click" {
-					onclick = "[GetVariableSystem.Clear('babylon_congress_countries')]"
-					onclick = "[GetVariableSystem.Clear('babylon_congress_resolution')]"
-					onclick = "[GetVariableSystem.Toggle('babylon_congress_proposal')]"
+					onclick = "[InformationPanel.SelectTab('proposals')]"
 				}
 				blockoverride "third_button_visibility" {
-					visible = "[GetVariableSystem.Exists('babylon_congress_proposal')]"
+					visible = "[InformationPanel.IsTabSelected('proposals')]"
 				}
 				blockoverride "third_button_visibility_checked" {
-					visible = "[Not(GetVariableSystem.Exists('babylon_congress_proposal'))]"
+					visible = "[Not( InformationPanel.IsTabSelected('proposals') )]"
 				}
 				blockoverride "third_button_selected" {
 					text = "Proposals"
@@ -174,24 +134,24 @@ types babylon_vienna_congress_types
 		}
 		blockoverride "entire_content_area" {
 			babylon_vienna_congress_overview = {
-				# 1st page (overview)
-				visible = "[GetVariableSystem.Exists('babylon_congress_countries')]"
+				visible = "[InformationPanel.IsTabSelected('default')]"
+				# 1st page (overview) 
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 			}
 			
-			babylon_vienna_congress_resolution = {
-				# 2nd page (resolution)
-				visible = "[GetVariableSystem.Exists('babylon_congress_resolution')]"
+			babylon_vienna_congress_current_conference = {
+				visible = "[InformationPanel.IsTabSelected('current_conference')]"
+				# 2nd page (current conference)
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 			}
 			
 			babylon_vienna_congress_proposals = {
+				visible = "[InformationPanel.IsTabSelected('proposals')]"
 				# 3rd page (proposals)
-				visible = "[GetVariableSystem.Exists('babylon_congress_proposal')]"
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding

@@ -1,6 +1,4 @@
-@supporters_width = "[GetPlayer.MakeScope.ScriptValue('supporters_width_value')]"
-
-types babylon_vienna_congress_types 
+types babylon_vienna_congress 
 {
     ### COUNTRIES TAB
 	type babylon_vienna_congress_overview = flowcontainer {
@@ -107,7 +105,7 @@ types babylon_vienna_congress_types
         }
     }
     ### CURRENT CONFERENCE TAB
-    type babylon_vienna_congress_resolution =  flowcontainer {
+    type babylon_vienna_congress_current_conference =  flowcontainer {
         layoutpolicy_horizontal = expanding
         layoutpolicy_vertical = expanding
         #spacing = -50
@@ -473,8 +471,8 @@ types babylon_vienna_congress_types
 
                     button = {
                         using = default_button
+                        onclick = "[InformationPanelBar.ClosePanel]"
                         onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_denouncement')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
                         visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
                         textbox = {
                             resizeparent = yes
@@ -489,8 +487,8 @@ types babylon_vienna_congress_types
                     }
                     button = {
                         using = default_button
+                        onclick = "[InformationPanelBar.ClosePanel]"
                         onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
                         visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
                         textbox = {
                             resizeparent = yes
@@ -505,8 +503,8 @@ types babylon_vienna_congress_types
                     }
                     button = {
                         using = default_button
+                        onclick = "[InformationPanelBar.ClosePanel]"
                         onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
                         visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
                         textbox = {
                             resizeparent = yes
@@ -521,8 +519,8 @@ types babylon_vienna_congress_types
                     }
                     button = {
                         using = default_button
+                        onclick = "[InformationPanelBar.ClosePanel]"
                         onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
                         visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
                         textbox = {
                             resizeparent = yes
@@ -540,7 +538,7 @@ types babylon_vienna_congress_types
             vertical_divider = {}
             flowcontainer = {
                 margin_top = 20
-                visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVar('babylon_vienna_congress_in_session').IsSet))]"
+                visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
                 textbox = {
                     autoresize = yes
                     text = "CONGRESS_HOW_TO_DESCRIPTION"
@@ -548,12 +546,11 @@ types babylon_vienna_congress_types
             }
             vertical_divider = {}
             flowcontainer = {
-                visible = "[GetVariableSystem('babylon_congress_proposal_type').IsSet]"
+                visible = "[And(GetVariableSystem('babylon_congress_proposal_type').IsSet, Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
                 spacing = 5
                 direction = vertical
                 margin_top = 20
                 margin_right = 90
-                size = { 250 250 }
                 textbox = {
                     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
                     text = "DENOUNCEMENT_DESCRIPTION"
