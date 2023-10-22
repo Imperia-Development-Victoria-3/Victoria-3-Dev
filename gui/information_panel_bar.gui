@@ -350,9 +350,11 @@ types information_panel_bar_types {
 					enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
 					position = { -100 @vienna_congress_position }
 					blockoverride "onclick" {
-						onclick = "[InformationPanelBar.OpenPanelCycleTabs('babylon_vienna_congress', 'default|current_conference|proposals')]"
+						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
 
 						input_action = "PLACEHOLDER"
+						onclick = "[InformationPanelBar.ClosePanel]"
+						onclick = "[MapListPanelManager.CloseCurrentPanel]"
 					}
 				}
 				sidebar_label_text_small = {
@@ -367,16 +369,17 @@ types information_panel_bar_types {
 					using = sidebar_button_size_small
 					using = selected_sidepanel_animation_small
 					blockoverride "selected_visibility" {
-						visible = "[InformationPanelBar.IsPanelOpen('babylon_vienna_congress')]"
+						visible = "[GetVariableSystem.Exists('babylon_vienna_congress_open')]"
 					}
 					sidepanel_button_small = {
 						blockoverride "icon" {
 							scale = 0.75
 							texture = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 						}
-						onclick = "[InformationPanelBar.OpenPanelCycleTabs('babylon_vienna_congress', 'default|current_conference|proposals')]"
+						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
 						input_action = "PLACEHOLDER"
-						#onclick = "[MapListPanelManager.CloseCurrentPanel]"
+						onclick = "[InformationPanelBar.ClosePanel]"
+						onclick = "[MapListPanelManager.CloseCurrentPanel]"
 					}
 				}
 				sidebar_tooltip_area_small = {

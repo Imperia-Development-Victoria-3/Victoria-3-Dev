@@ -3,17 +3,18 @@ types babylon_vienna_congress
 	type babylon_vienna_congress = fullscreen_block_window {
 		name = "babylon_vienna_congress"
 		enabled = yes
+		visible = "[GetVariableSystem.Exists('babylon_vienna_congress_open')]"
 		blockoverride "back_button_fullscreen" {
 			back_button_large = {
 				position = { 11 15 }
 				parentanchor = top|left
-				onclick = "[InformationPanelBar.OpenPreviousPanel]"
+				onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
 				input_action = "back"
 			}
 		}
 
 		blockoverride "close_button_onclick" {
-			onclick = "[InformationPanelBar.ClosePanel]"
+			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
 		}
 
 		blockoverride "window_header_name" {
@@ -41,13 +42,13 @@ types babylon_vienna_congress
 					}
 				}
 				blockoverride "first_button_click" {
-					onclick = "[InformationPanel.SelectTab('default')]"
+					onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','overview')]"
 				}
 				blockoverride "first_button_visibility" {
-					visible = "[InformationPanel.IsTabSelected('default')]"
+					visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','overview')]"
 				}
 				blockoverride "first_button_visibility_checked" {
-					visible = "[Not( InformationPanel.IsTabSelected('default') )]"
+					visible = "[Not( GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','overview') )]"
 				}
 				blockoverride "first_button_selected" {
 					text = "Overview"
@@ -77,13 +78,13 @@ types babylon_vienna_congress
 					}
 				}
 				blockoverride "second_button_click" {
-					onclick = "[InformationPanel.SelectTab('current_conference')]"
+					onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
 				}
 				blockoverride "second_button_visibility" {
-					visible = "[InformationPanel.IsTabSelected('current_conference')]"
+					visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','current_conference')]"
 				}
 				blockoverride "second_button_visibility_checked" {
-					visible = "[Not( InformationPanel.IsTabSelected('current_conference') )]"
+					visible = "[Not( GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','current_conference') )]"
 				}
 				blockoverride "second_button_selected" {
 					text = "Current Conference"
@@ -112,13 +113,13 @@ types babylon_vienna_congress
 					}
 				}
 				blockoverride "third_button_click" {
-					onclick = "[InformationPanel.SelectTab('proposals')]"
+					onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','proposals')]"
 				}
 				blockoverride "third_button_visibility" {
-					visible = "[InformationPanel.IsTabSelected('proposals')]"
+					visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','proposals')]"
 				}
 				blockoverride "third_button_visibility_checked" {
-					visible = "[Not( InformationPanel.IsTabSelected('proposals') )]"
+					visible = "[Not( GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','proposals') )]"
 				}
 				blockoverride "third_button_selected" {
 					text = "Proposals"
@@ -134,7 +135,7 @@ types babylon_vienna_congress
 		}
 		blockoverride "entire_content_area" {
 			babylon_vienna_congress_overview = {
-				visible = "[InformationPanel.IsTabSelected('default')]"
+				visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','overview')]"
 				# 1st page (overview) 
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
@@ -142,7 +143,7 @@ types babylon_vienna_congress
 			}
 			
 			babylon_vienna_congress_current_conference = {
-				visible = "[InformationPanel.IsTabSelected('current_conference')]"
+				visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','current_conference')]"
 				# 2nd page (current conference)
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
@@ -150,7 +151,7 @@ types babylon_vienna_congress
 			}
 			
 			babylon_vienna_congress_proposals = {
-				visible = "[InformationPanel.IsTabSelected('proposals')]"
+				visible = "[GetVariableSystem.HasValue('babylon_vienna_congress_tab_selected','proposals')]"
 				# 3rd page (proposals)
 				using = default_fade_in_out
 				layoutpolicy_horizontal = expanding
