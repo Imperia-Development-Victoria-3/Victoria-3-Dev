@@ -22,6 +22,10 @@ types babylon_vienna_congress
                 direction = vertical
                 parentanchor = hcenter
                 textbox = {
+                    raw_text = "Remaining Time: [GetVarTimeRemaining( GetPlayer.MakeScope, GetGlobalVariable('babylon_vienna_congress_in_session') )]"
+                    autoresize = yes
+                }
+                textbox = {
                     autoresize = yes
                     raw_text = "[Concept('concept_great_power', 'Great Powers')]"
                     using = header_font_fancy
@@ -123,13 +127,16 @@ types babylon_vienna_congress
                 margin_top = 20
                 #margin_right = 90
                 parentanchor = hcenter
-                direction = vertical					
-                textbox = {
-                    autoresize = yes
-                    raw_text = "Current Conference"
-                    using = header_font_fancy
-                    using = fontsize_mega
+                direction = vertical
+                flowcontainer = {
                     parentanchor = center|top
+                    direction = horizontal
+                    textbox = {
+                        raw_text = "Current Conference"
+                        autoresize = yes
+                        using = header_font_fancy
+                        using = fontsize_mega
+                    }
                 }
                 divider_decorative = {}
                 flowcontainer = {
@@ -336,6 +343,7 @@ types babylon_vienna_congress
                         direction = horizontal
                         parentanchor = center|top
                         margin_top = 5
+                        margin_bottom = 5
                         green_progressbar_horizontal = {
                             size = { 360 30 }
                             blockoverride "values" {
@@ -348,6 +356,23 @@ types babylon_vienna_congress
                                 parentanchor = center|top
                                 autoresize = yes
                             }
+                        }
+                    }
+                    button = {
+                        using = default_button
+                        onclick = "[GetScriptedGui('end_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+                        enabled = "[GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                        parentanchor = center|top
+                        margin_top = 20
+                        textbox = {
+                            resizeparent = yes
+                            raw_text = "End Conference Early"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
                         }
                     }
                 }
