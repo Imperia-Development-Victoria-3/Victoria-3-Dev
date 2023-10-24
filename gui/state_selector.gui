@@ -1,140 +1,156 @@
-default_popup =  {
-	name = "state_selector"
-	movable = yes
-	resizable = yes
-	layer = top
+types state_selectors
+{
+	type state_selector = default_popup {
+		name = "state_selector"
+		movable = no
+		resizable = no
+		layer = top
 
-	parentanchor = center
+		visible = yes
 
-	blockoverride "behind_window" {
-		state = {
-			name = _show
-			start_sound = {
-				soundeffect = "event:/SFX/UI/MapLenses/location_finder"
+		parentanchor = center
+
+		blockoverride "behind_window" {
+			state = {
+				name = _show
+				start_sound = {
+					soundeffect = "event:/SFX/UI/MapLenses/location_finder"
+				}
 			}
 		}
-	}
-	blockoverride "window_header_name" {
-		text = "PLACE_HOLDER"
-	}
-	
-	blockoverride "header_back_button_visibility" {
-		#visible = no
-		# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
-	}
-
-	blockoverride "header_close_button_visibility" {
-		visible = yes
-	}
-
-	blockoverride "header_close_button" {
-		#onclick = "[LocationFinder.Close]"
-	}
-
-	blockoverride "entire_scrollarea" {
-		flowcontainer = {
-			margin = { 10 10 }
-			margin_bottom = 0
-			using = default_list_position
-			spacing = 10
-			direction = vertical
+		blockoverride "window_header_name" {
+			text = "PLACE_HOLDER"
+		}
 		
-			scrollarea = {
-				name = "state_selector_output"
-				size = { 640 420 }
-				scrollbarpolicy_horizontal = always_off
-				
+		blockoverride "header_back_button_visibility" {
+			#visible = no
+			# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
+		}
 
-				scrollwidget = {
-					#visible = WHEN STRATEGIC REGION IS NOT SELECTED
-					fixedgridbox = {
-						#datamodel = 
-						# NEEDS to reference to a globalList we compute at the beginning filled with all the strategic reigions
-						addcolumn = 630
-						addrow = 70
-								
-						item = {
-							button = {
-								using = default_button
-								using = zoom_button_sound
-								size = { 630 70 }
-								#onclick = "[StrategicRegion.]"
-								# Needs to set the strategic region in a scope associated with the player PSEUDO CODE: Player.variablename = StrategicRegion.Makescope
-								flowcontainer = {
-									parentanchor = vcenter
-									direction = vertical
-									margin_left = 15
-									textbox = {
-										autoresize = yes
-										raw_text = "#BOLD [StrategicRegion.GetName]#!"
-										align = nobaseline
-										using = fontsize_large
-									}
-								}
-		
-							#	textbox = {
-							#		visible = "[InDebugMode]"
-							#		autoresize = yes
-							#		raw_text = "DEBUG ID: [Location.GetID]"
-							#		parentanchor = right|vcenter
-							#		widgetanchor = right|vcenter
-							#		align = right|nobaseline
-							#		position = { -10 0 }
-							#	}
-							}
-						}
-					}
+		blockoverride "header_close_button_visibility" {
+			visible = yes
+		}
+
+		blockoverride "header_close_button" {
+			#onclick = "[LocationFinder.Close]"
+		}
+
+		blockoverride "entire_scrollarea" {
+			flowcontainer = {
+				margin = { 10 10 }
+				margin_bottom = 0
+				using = default_list_position
+				spacing = 10
+				direction = vertical
+			
+
+				textbox = {
+					visible = "[InDebugMode]"
+					autoresize = yes
+					raw_text = "somethings"
+					parentanchor = right|vcenter
+					widgetanchor = right|vcenter
+					align = right|nobaseline
+					position = { -10 0 }
 				}
 
+				#scrollarea = {
+				#	name = "state_selector_output"
+				#	size = { 640 420 }
+				#	scrollbarpolicy_horizontal = always_off
+					
+
+					#scrollwidget = {
+					#	#visible = WHEN STRATEGIC REGION IS NOT SELECTED
+					#	fixedgridbox = {
+					#		#datamodel = 
+					#		# NEEDS to reference to a globalList we compute at the beginning filled with all the strategic reigions
+					#		addcolumn = 630
+					#		addrow = 70
+									
+					#		item = {
+					#			button = {
+					#				using = default_button
+					#				using = zoom_button_sound
+					#				size = { 630 70 }
+					#				#onclick = "[StrategicRegion.]"
+					#				# Needs to set the strategic region in a scope associated with the player PSEUDO CODE: Player.variablename = StrategicRegion.Makescope
+					#				flowcontainer = {
+					#					parentanchor = vcenter
+					#					direction = vertical
+					#					margin_left = 15
+					#					textbox = {
+					#						autoresize = yes
+					#						raw_text = "#BOLD [StrategicRegion.GetName]#!"
+					#						align = nobaseline
+					#						using = fontsize_large
+					#					}
+					#				}
+			
+					#			#	textbox = {
+					#			#		visible = "[InDebugMode]"
+					#			#		autoresize = yes
+					#			#		raw_text = "DEBUG ID: [Location.GetID]"
+					#			#		parentanchor = right|vcenter
+					#			#		widgetanchor = right|vcenter
+					#			#		align = right|nobaseline
+					#			#		position = { -10 0 }
+					#			#	}
+					#			}
+					#		}
+					#	}
+					#}
 
 
 
-				scrollwidget = {
-					#visible = WHEN STRATEGIC REGION IS SELECTED
-					fixedgridbox = {
-						#datamodel = "[LocationFinder.GetLocations]"
-						# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
-						addcolumn = 630
-						addrow = 70
-								
-						item = {
-							button = {
-								using = default_button
-								using = zoom_button_sound
-								size = { 630 70 }
-								#onclick = "[State.]"
-								# Needs to add the state to a list use scripted gui
+
+				#	scrollwidget = {
+				#		#visible = WHEN STRATEGIC REGION IS SELECTED
+				#		fixedgridbox = {
+				#			#datamodel = "[LocationFinder.GetLocations]"
+				#			# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
+				#			addcolumn = 630
+				#			addrow = 70
+									
+				#			item = {
+				#				button = {
+				#					using = default_button
+				#					using = zoom_button_sound
+				#					size = { 630 70 }
+				#					#onclick = "[State.]"
+				#					# Needs to add the state to a list use scripted gui
 
 
-								flowcontainer = {
-									parentanchor = vcenter
-									direction = vertical
-									margin_left = 15
-									textbox = {
-										autoresize = yes
-										raw_text = "#BOLD [State.GetName]#!"
-										align = nobaseline
-										using = fontsize_large
-									}
-								}
-		
-							#	textbox = {
-							#		visible = "[InDebugMode]"
-							#		autoresize = yes
-							#		raw_text = "DEBUG ID: [Location.GetID]"
-							#		parentanchor = right|vcenter
-							#		widgetanchor = right|vcenter
-							#		align = right|nobaseline
-							#		position = { -10 0 }
-							#	}
-							}
-						}
-					}
-				}
-				
-				scrollbar_vertical = {
-					using = vertical_scrollbar
-				}
+				#					flowcontainer = {
+				#						parentanchor = vcenter
+				#						direction = vertical
+				#						margin_left = 15
+				#						textbox = {
+				#							autoresize = yes
+				#							raw_text = "#BOLD [State.GetName]#!"
+				#							align = nobaseline
+				#							using = fontsize_large
+				#						}
+				#					}
+			
+				#				#	textbox = {
+				#				#		visible = "[InDebugMode]"
+				#				#		autoresize = yes
+				#				#		raw_text = "DEBUG ID: [Location.GetID]"
+				#				#		parentanchor = right|vcenter
+				#				#		widgetanchor = right|vcenter
+				#				#		align = right|nobaseline
+				#				#		position = { -10 0 }
+				#				#	}
+				#				}
+				#			}
+				#		}
+				#	}
+					
+				#	scrollbar_vertical = {
+				#		using = vertical_scrollbar
+				#	}
+				#}
 			}
 		}
 	}
