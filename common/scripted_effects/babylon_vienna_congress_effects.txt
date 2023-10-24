@@ -25,6 +25,17 @@
 			target = this
 		}
 	}
+	every_country = {
+		clear_variable_list ?= current_states
+		every_scope_state = {
+			prev = {
+				add_to_variable_list = {
+					name = current_states
+					target = prev
+				}
+			}
+		}
+	}
 }
 
 congress_start_conference = {
@@ -272,6 +283,34 @@ embargo_target = {
 				name = forced_embargo
 				years = 3
 				multiplier = conference_sanctions_severity
+			}
+		}
+	}
+}
+
+make_strategic_region_list = {
+	# So when can reset, mostly for debugging purposes
+	clear_global_variable_list ?= strategic_region_list
+	every_state_region = {
+		limit = {
+			is_state_region_land = yes
+		}
+		if = {
+			limit = {
+				region = {
+					NOT = {
+						is_target_in_global_variable_list = {
+							name = strategic_region_list
+							target = this
+						}
+					}
+				}
+			}
+		}
+		region = {
+			add_to_global_variable_list = {
+				name = strategic_region_list
+				target = this
 			}
 		}
 	}
