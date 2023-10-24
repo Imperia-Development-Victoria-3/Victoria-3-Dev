@@ -1,0 +1,277 @@
+namespace = babylon_qing_substates
+
+babylon_qing_substates.1 = { #Sichuan - Setup Event
+	type = country_event
+	placement = root
+	title = babylon_qing_substates.1.t
+	desc = babylon_qing_substates.1.d
+	flavor = babylon_qing_substates.1.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_rich_and_poor.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = {
+		name = babylon_qing_substates.1.a
+		default_option = yes
+			add_journal_entry = {
+			type = je_pacify_highland_tribes
+		}
+		s:STATE_YUNNAN.region_state:SIH = {
+				add_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				add_modifier = modifier_highland_tribes
+			}
+	}
+}
+
+babylon_qing_substates.2 = { #Sichuan - Pacify Highland Tribes Complete
+	type = country_event
+	placement = root
+	title = babylon_qing_substates.2.t
+	desc = babylon_qing_substates.2.d
+	flavor = babylon_qing_substates.2.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_rich_and_poor.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = {
+		name = babylon_qing_substates.2.a
+		default_option = yes
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:zhuang
+		add_loyalists = {
+			culture = cu:zhuang
+			value = 0.2
+		}		
+	}
+	
+		option = {
+		name = babylon_qing_substates.2.b
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:yi
+		add_loyalists = {
+			culture = cu:yi
+			value = 0.2
+		}
+	}
+	
+		option = {
+		name = babylon_qing_substates.2.c
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:miao
+		add_loyalists = {
+			culture = cu:miao
+			value = 0.2
+		}
+	}
+}
+
+babylon_qing_substates.3 = { # Sichuan - Tribal Conflict Event 
+	type = country_event
+	placement = root
+	title = babylon_qing_substates.3.t
+	desc = babylon_qing_substates.3.d
+	flavor = babylon_qing_substates.3.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_rich_and_poor.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = { #Let them fight
+		name = babylon_qing_substates.3.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_modifier = {
+				name = modifier_tribal_conflicts
+				months = 12
+			}
+		}
+	}
+		option = { #Send in troops
+		name = babylon_qing_substates.3.b
+		default_option = yes
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:zhuang
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:miao
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:yi
+			}
+		}
+		add_modifier = { 
+			name = deploying_the_army
+			multiplier = money_amount_multiplier_very_small
+			months = short_modifier_time
+		}
+	}
+}
+
+babylon_qing_substates.4 = { # Sichuan - Han Settlers Murdered
+	type = country_event
+	placement = root
+	title = babylon_qing_substates.4.t
+	desc = babylon_qing_substates.4.d
+	flavor = babylon_qing_substates.4.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_rich_and_poor.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = { #Do nothing
+		name = babylon_qing_substates.4.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:han
+			}
+		}
+	}
+
+		option = { #Send in troops
+		name = babylon_qing_substates.4.b
+		default_option = yes
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:zhuang
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:miao
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:yi
+			}
+			add_loyalists_in_state = {
+				value = 0.05
+				culture = cu:han
+			}
+		}
+		add_modifier = { 
+			name = deploying_the_army
+			multiplier = money_amount_multiplier_very_small
+			months = short_modifier_time
+		}
+	}
+}
+
+babylon_qing_substates.5 = { # Sichuan - Highlanders Sinicized
+	type = country_event
+	placement = root
+	title = babylon_qing_substates.5.t
+	desc = babylon_qing_substates.5.d
+	flavor = babylon_qing_substates.5.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_rich_and_poor.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = { #Let them fight
+		name = babylon_qing_substates.5.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_loyalists_in_state = {
+				value = 0.05
+			}
+		add_modifier = {
+			name = modifier_successful_sinicization
+			months = 12
+			}
+		}
+	}
+}
+

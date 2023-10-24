@@ -1,0 +1,187 @@
+##Qing Entries
+##Local Entries
+
+
+##Substate-Specific
+
+je_pacify_highland_tribes = { #Sichuan
+	icon = "gfx/interface/icons/institution_icons/schools.dds"
+
+	modifiers_while_active = {
+		modifier_tusi_system
+		}
+
+	complete = {
+		AND = {
+			institution_investment_level = {
+				institution = institution_police
+				value >= 2
+			}
+			has_law = law_type:law_dedicated_police
+		
+			NOR = {
+					has_law = law_type:law_traditionalism
+					has_law = law_type:law_localized_garrisons
+				}
+			bureaucracy >= 0 
+			approaching_bureaucracy_shortage = no
+			}
+		}
+
+
+	on_complete = {
+		add_modifier = {
+			name = modifier_tusi_system
+			months = long_modifier_time
+			is_decaying = yes
+			}
+		trigger_event = {
+			id = babylon_qing_substates.2
+			}
+		}
+
+	on_monthly_pulse = {
+		random_events = {
+			100 = 0
+			10 = babylon_qing_substates.3
+			10 = babylon_qing_substates.4
+			10 = babylon_qing_substates.5
+		}
+	}
+	weight = 100
+	should_be_pinned_by_default = yes
+}
+
+je_gateway_to_the_west = { #Liangguang
+	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	
+	complete = {
+		AND = {
+			any_scope_building = {
+                is_building_type = building_port
+                level >= 10
+				}
+			has_law = law_type:law_free_trade
+		
+			NOR = {
+					has_law = law_type:law_traditionalism
+					has_law = law_type:law_agrarianism
+				}
+			}
+		}
+		
+		on_complete = {
+		add_modifier = {
+			name = modifier_gateway_to_the_west
+			}
+		}
+	should_be_pinned_by_default = yes
+}
+
+je_breadbasket_of_the_south = { #Huguang
+	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	
+	modifiers_while_active = {
+		modifier_breadbasket_of_the_south
+	}
+	
+		complete = {
+		pop_type_percent_country = {
+			pop_type = peasants
+			percent < 0.60
+		}
+		OR = {
+			has_law = law_type:law_interventionism
+			has_law = law_type:law_laissez_faire
+		}
+	}
+	
+		on_complete = {
+#			trigger_event = {
+#			id = babylon_qing_substates.6 
+#			}
+			add_modifier = {
+			name = modifier_breadbasket_of_the_south
+			months = long_modifier_time
+			is_decaying = yes
+			}
+		}
+	should_be_pinned_by_default = yes
+}
+
+je_settle_the_steppe = { #Eastern Provinces
+	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	
+	complete = {
+		has_law = law_type:law_cultural_exclusion
+		s:STATE_SHENGJING.region_state:MCH = {
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 15
+			}				
+		}
+		s:STATE_SOUTHERN_MANCHURIA.region_state:MCH = {
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 15
+			}				
+		}
+		s:STATE_NORTHERN_MANCHURIA.region_state:MCH = {
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 15
+			}				
+		}
+	}
+	
+	on_complete = {
+	add_primary_culture = cu:han
+	
+		add_modifier = {
+			name = modifier_qing_new_frontiers
+			months = 240
+			is_decaying = yes
+		}
+	}
+	should_be_pinned_by_default = yes
+}
+
+je_pacify_and_settle_taiwan = { #Formosa
+	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	
+	complete = {
+		pop_type_percent_country = {
+			pop_type = peasants
+			percent < 0.35
+		}
+		s:STATE_FORMOSA.region_state:FRS = {
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 10
+			}				
+		}
+#		scope:journal_entry = {
+#			is_goal_complete = yes
+#		}		
+	}
+	
+	on_complete = {	
+		add_modifier = {
+			name = modifier_qing_new_frontiers
+			months = 240
+			is_decaying = yes
+		}
+	}
+#		current_value = {
+#		value = root.gdp
+#	}
+#
+#	goal_add_value = {
+#		value = root.gdp
+#		multiply = 1
+#	}
+#	progressbar = yes
+	should_be_pinned_by_default = yes
+}
+	
+	
