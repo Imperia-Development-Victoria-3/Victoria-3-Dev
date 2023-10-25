@@ -5,10 +5,7 @@ types state_selectors
 		movable = no
 		resizable = no
 		layer = top
-
-		visible = yes
-
-		parentanchor = center|top
+		visible = "[GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open')]"
 
 		blockoverride "behind_window" {
 			state = {
@@ -19,11 +16,13 @@ types state_selectors
 			}
 		}
 		blockoverride "window_header_name" {
-			text = "PLACE_HOLDER"
+			raw_text = "Select Congress Target"
 		}
-		
 		blockoverride "header_back_button_visibility" {
-			#visible = no
+			visible = yes
+		}
+		blockoverride "header_back_button" {
+			onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 			# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
 		}
 
@@ -32,7 +31,8 @@ types state_selectors
 		}
 
 		blockoverride "header_close_button" {
-			#onclick = "[LocationFinder.Close]"
+			onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
 		}
 
 		blockoverride "entire_scrollarea" {
@@ -42,15 +42,12 @@ types state_selectors
 				using = default_list_position
 				spacing = 10
 				direction = vertical
-
 				scrollarea = {
-					name = "state_selector_output"
+					name = "state_selector_strategic_region_output"
+					visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]"
 					size = { 640 420 }
 					scrollbarpolicy_horizontal = always_off
 					scrollwidget = {
-						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]" # Doesnt work - wont disappear
-						#visible = "[Not(GetScriptedGui('has_strategic_region_target').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
-						#visible = WHEN STRATEGIC REGION IS NOT SELECTED
 						fixedgridbox = {
 							datamodel = "[GetGlobalList('strategic_region_list')]"
 							datacontext = "[Scope.AccessStrategicRegion]"
@@ -58,10 +55,11 @@ types state_selectors
 							addcolumn = 210
 							addrow = 70
 									
+							datamodel_wrap = 3
+							flipdirection = yes
 							item = {
 								button = {
 									using = default_button
-									using = zoom_button_sound
 									size = { 210 70 }
 									onclick = "[GetScriptedGui('set_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
 									# 
@@ -78,28 +76,31 @@ types state_selectors
 							}
 						}
 					}
-
-
-
-
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
+				}
+				scrollarea = {
+					name = "state_selector_state_output"
+					visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')))]"
+					size = { 640 420 }
+					scrollbarpolicy_horizontal = always_off
 					scrollwidget = {
-						# This whole thing doesnt appear??? - possibly because the above is always showing...
-						visible = yes
-						#visible = "[DataModelHasItems(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]"
-						#visible = "[GetScriptedGui('has_strategic_region_target').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 						fixedgridbox = {
-							datamodel = "[GetPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"
+							datamodel = "[AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"
 							datacontext = "[Scope.AccessState]"
 
 							# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
 
 							addcolumn = 210
 							addrow = 70
+
+							datamodel_wrap = 3
+                   			flipdirection = yes
 									
 							item = {
 								button = {
 									using = default_button
-									using = zoom_button_sound
 									size = { 210 70 }
 									#onclick = "[State.]"
 									# Needs to add the state to a list use scripted gui
@@ -130,7 +131,6 @@ types state_selectors
 							}
 						}
 					}
-					
 					scrollbar_vertical = {
 						using = vertical_scrollbar
 					}

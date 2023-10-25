@@ -410,7 +410,7 @@ types babylon_vienna_congress
                 }
                 flowcontainer = {	
                     direction = vertical
-                    visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
+                    visible = "[And(And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet)),GetScriptedGui('is_great_power').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
                     button = {
                         using = default_button
 
@@ -483,13 +483,12 @@ types babylon_vienna_congress
                     
                 }
                 flowcontainer = {
-                    visible = "[And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet))]"
+                    visible = "[And(And(Not(IsDataModelEmpty(GetGlobalList('babylon_congress_great_powers'))), Not(GetGlobalVariable('babylon_vienna_congress_in_session').IsSet)),GetScriptedGui('is_great_power').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
 
                     button = {
                         using = default_button
                         onclick = "[InformationPanelBar.ClosePanel]"
-                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_denouncement')]"
-                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_state_selector_open')]"
                         onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
                         textbox = {
                             resizeparent = yes
@@ -502,60 +501,60 @@ types babylon_vienna_congress
                             parentanchor = center
                         }
                     }
-                    button = {
-                        using = default_button
-                        onclick = "[InformationPanelBar.ClosePanel]"
-                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
-                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    # button = {
+                    #     using = default_button
+                    #     onclick = "[InformationPanelBar.ClosePanel]"
+                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
+                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
 
-                        textbox = {
-                            resizeparent = yes
-                            raw_text = "Select Target"
-                            align = center|nobaseline
-                            autoresize = yes
-                            maximumsize = { 250 -1 }
-                            minimumsize = { 250 -1 }
-                            margin = { 10 10 }
-                            parentanchor = center
-                        }
-                    }
-                    button = {
-                        using = default_button
-                        onclick = "[InformationPanelBar.ClosePanel]"
-                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
-                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    #     textbox = {
+                    #         resizeparent = yes
+                    #         raw_text = "Select Target"
+                    #         align = center|nobaseline
+                    #         autoresize = yes
+                    #         maximumsize = { 250 -1 }
+                    #         minimumsize = { 250 -1 }
+                    #         margin = { 10 10 }
+                    #         parentanchor = center
+                    #     }
+                    # }
+                    # button = {
+                    #     using = default_button
+                    #     onclick = "[InformationPanelBar.ClosePanel]"
+                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
+                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
 
-                        textbox = {
-                            resizeparent = yes
-                            raw_text = "Select Target"
-                            align = center|nobaseline
-                            autoresize = yes
-                            maximumsize = { 250 -1 }
-                            minimumsize = { 250 -1 }
-                            margin = { 10 10 }
-                            parentanchor = center
-                        }
-                    }
-                    button = {
-                        using = default_button
-                        onclick = "[InformationPanelBar.ClosePanel]"
-                        onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
-                        visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
-                        onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                    #     textbox = {
+                    #         resizeparent = yes
+                    #         raw_text = "Select Target"
+                    #         align = center|nobaseline
+                    #         autoresize = yes
+                    #         maximumsize = { 250 -1 }
+                    #         minimumsize = { 250 -1 }
+                    #         margin = { 10 10 }
+                    #         parentanchor = center
+                    #     }
+                    # }
+                    # button = {
+                    #     using = default_button
+                    #     onclick = "[InformationPanelBar.ClosePanel]"
+                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
+                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
+                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
 
-                        textbox = {
-                            resizeparent = yes
-                            raw_text = "Select Target"
-                            align = center|nobaseline
-                            autoresize = yes
-                            maximumsize = { 250 -1 }
-                            minimumsize = { 250 -1 }
-                            margin = { 10 10 }
-                            parentanchor = center
-                        }
-                    }
+                    #     textbox = {
+                    #         resizeparent = yes
+                    #         raw_text = "Select Target"
+                    #         align = center|nobaseline
+                    #         autoresize = yes
+                    #         maximumsize = { 250 -1 }
+                    #         minimumsize = { 250 -1 }
+                    #         margin = { 10 10 }
+                    #         parentanchor = center
+                    #     }
+                    # }
                 }
             }
             vertical_divider = {
