@@ -287,6 +287,204 @@ types windows {
 		}
 	}
 
+
+	type default_popup_static = widget { # NEEDS TO BASE OF WIDGET INSTEAD OF WINDOW TO MAKE STATIC
+		parentanchor = center
+		movable = yes
+		layer = popups
+		allow_outside = yes
+
+		block "behind_window" {}
+
+		widget = {
+			size = { 100% 100% }
+
+			background = {
+				texture = "gfx/interface/backgrounds/popup_bg.dds"
+				spriteType = Corneredstretched
+				spriteborder = { 90 90 }
+				texture_density = 2
+
+				modify_texture = {
+					texture = "gfx/interface/backgrounds/default_bg_shading.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = overlay
+				}
+				modify_texture = {
+					using = texture_velvet
+				}
+			}
+		}
+
+		block "sound" {
+			state = {
+				name = sound
+				trigger_on_create = yes
+				start_sound = {
+					using = ui_sfx_global_popup
+				}
+			}
+		}
+
+		### HEADER
+		block "header" {
+			widget = {
+				size = { 100% 82 }
+
+				popup_top_header = {}
+
+				textbox = {
+					block "first_line_position" {
+						position = { 0 24 }
+					}
+					size = { 75% 40 }
+					block "window_header_name" {
+						text = ""
+					}
+					elide = right
+					fontsize_min = 14
+					parentanchor = hcenter
+					align = center|nobaseline
+					using = header_font
+					using = header_font_size
+					default_format = "#header"
+				}
+
+				block "second_line" {}
+			}
+		}
+
+		### FRAME
+		popup_bg_frame = {}
+
+		### BACK
+		container = {
+			position = { 3 10 }
+			block "header_back_button_visibility" {
+				visible = no
+			}
+
+			icon = {
+				size = { 53 53 }
+				texture = "gfx/interface/backgrounds/round_button_bg.dds"
+			}
+			back_button_large = {
+				block "header_back_button" {}
+				parentanchor = center
+			}
+		}
+
+		### CLOSE
+		container = {
+			parentanchor = right
+			position = { -3 10 }
+			block "header_close_button_visibility" {
+				visible = no
+			}
+
+			icon = {
+				size = { 53 53 }
+				texture = "gfx/interface/backgrounds/round_button_bg.dds"
+			}
+			block "minimize" {
+				close_button_large = {
+					block "header_close_button" {
+						onclick = "[InformationPanelBar.ClosePanel]"
+					}
+					parentanchor = center
+					shortcut = "close_window"
+				}
+			}
+		}
+
+		widget = {
+			block "goto_visibility" {
+				visible = no
+			}
+			size = { 30 30 }
+			position = { -48 16 }
+			parentanchor = right
+
+			button_icon_zoom = {
+				size = { 100% 100% }
+				block "goto_properties" {}
+			}
+		}
+
+		### CONTENT
+		block "content" {
+			flowcontainer = {
+				direction = vertical
+				resizeparent = no  # CHANGE TO MAKE IT STATIC
+
+				block "side_margins" {
+					margin = { 50 0 }
+				}
+
+				block "bottom_margin" {
+					margin_bottom = 30
+				}
+
+				block "top_margin" {
+					margin_top = 100
+				}
+
+				block "window_header" {}
+
+				block "entire_scrollarea" {
+					scrollarea = {
+						using = default_list_position
+						layoutpolicy_vertical = preferred
+						layoutpolicy_horizontal = preferred
+						maximumsize = { -1 800 }
+
+						scrollbarpolicy_horizontal = always_off
+
+						block "scrollarea_backgrounds" {
+						}
+
+						scrollbar_vertical = {
+							using = vertical_scrollbar
+						}
+
+						scrollwidget = {
+							block "scrollarea_content" {
+								widget = {
+									size = { @panel_width_plus_20 1000 }
+									background = {
+										using = default_background
+									}
+								}
+							}
+						}
+					}
+				}
+
+				block "fixed_bottom" {
+				}
+			}
+		}
+	}
+
+	type default_popup_two_lines = default_popup {
+		blockoverride "first_line_position" {
+			position = { 0 14 }
+		}
+
+		blockoverride "second_line" {
+			textbox = {
+				block "second_text" {
+					raw_text = "Second text"
+				}
+				position = { 0 49 }
+				parentanchor = hcenter
+				autoresize = yes
+				align = nobaseline
+			}
+		}
+	}
+
 	### DEFAULT WINDOW
 	type default_block_window = widget {
 		using = sidepanel_plus_sidebar_size

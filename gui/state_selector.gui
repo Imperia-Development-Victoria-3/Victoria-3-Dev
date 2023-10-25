@@ -1,9 +1,14 @@
 types state_selectors
 {
-	type state_selector = default_popup {
+	type state_selector = default_popup_static {
 		name = "state_selector"
 		movable = no
 		resizable = no
+		parentanchor = hcenter
+		# Needs manual calculation for size because we can't autoresize based on content:
+		# width = (scroll_area margin + default_popup_static side margin) * 2 + scroll area width
+		# height = (scroll_area margin) * 2 + default_popup_static header margin + default_popup_static bottom margin + scroll_area height
+		size = {710 570} # (10 + 50) * 2 + 640, 10 * 2 + 100 + 30 + 420
 		layer = top
 		visible = "[GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open')]"
 
