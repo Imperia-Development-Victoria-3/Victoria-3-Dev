@@ -48,7 +48,8 @@ types state_selectors
 					size = { 640 420 }
 					scrollbarpolicy_horizontal = always_off
 					scrollwidget = {
-						#visible = "[Not( GetVariableSystem.Exists('babylon_vienna_congress_strategic_region_target') )]"
+						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]" # Doesnt work - wont disappear
+						#visible = "[Not(GetScriptedGui('has_strategic_region_target').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
 						#visible = WHEN STRATEGIC REGION IS NOT SELECTED
 						fixedgridbox = {
 							datamodel = "[GetGlobalList('strategic_region_list')]"
@@ -62,7 +63,8 @@ types state_selectors
 									using = default_button
 									using = zoom_button_sound
 									size = { 210 70 }
-									onclick = "[GetVariableSystem.Set('babylon_vienna_congress_strategic_region_target', Scope.AccessStrategicRegion.GetName)]"
+									onclick = "[GetScriptedGui('set_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
+									# 
 									#onclick = "[StrategicRegion.]"
 									# Needs to set the strategic region in a scope associated with the player PSEUDO CODE: Player.variablename = StrategicRegion.Makescope
 									textbox = {
@@ -72,16 +74,6 @@ types state_selectors
 										using = fontsize_large
 										parentanchor = center
 									}
-			
-								#	textbox = {
-								#		visible = "[InDebugMode]"
-								#		autoresize = yes
-								#		raw_text = "DEBUG ID: [Location.GetID]"
-								#		parentanchor = right|vcenter
-								#		widgetanchor = right|vcenter
-								#		align = right|nobaseline
-								#		position = { -10 0 }
-								#	}
 								}
 							}
 						}
@@ -91,18 +83,24 @@ types state_selectors
 
 
 					scrollwidget = {
-						visible = "[GetVariableSystem.Exists('babylon_vienna_congress_strategic_region_target')]"
+						# This whole thing doesnt appear??? - possibly because the above is always showing...
+						visible = yes
+						#visible = "[DataModelHasItems(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]"
+						#visible = "[GetScriptedGui('has_strategic_region_target').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 						fixedgridbox = {
-							#datamodel = "[LocationFinder.GetLocations]"
+							datamodel = "[GetPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"
+							datacontext = "[Scope.AccessState]"
+
 							# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
-							addcolumn = 630
+
+							addcolumn = 210
 							addrow = 70
 									
 							item = {
 								button = {
 									using = default_button
 									using = zoom_button_sound
-									size = { 630 70 }
+									size = { 210 70 }
 									#onclick = "[State.]"
 									# Needs to add the state to a list use scripted gui
 
@@ -113,7 +111,7 @@ types state_selectors
 										margin_left = 15
 										textbox = {
 											autoresize = yes
-											raw_text = "[State.GetName]"
+											raw_text = "[Scope.AccessState.GetName]"
 											align = nobaseline
 											using = fontsize_large
 										}

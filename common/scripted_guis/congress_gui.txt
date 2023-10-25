@@ -47,21 +47,6 @@ set_congress_stance = {
 	}
 }
 
-#congress_add_target_country = {
-#	scope = country
-#	saved_scopes = {
-#		target_country
-#	}
-#	effect = {
-#		if ={
-#			set_variable = {
-#				name = congress_proposal_target
-#				value = scope:target_country
-#			}
-#		}
-#	}
-#}
-
 has_congress_stance = {
 	scope = country
 	saved_scopes = {
@@ -112,5 +97,35 @@ end_congress = {
 				id = babylon_vienna_congress.1
 			}
 		}
+	}
+}
+
+set_strategic_region_target = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	effect = {
+		clear_variable_list ?= states_in_selected_strategic_region
+		every_state_region = {
+			limit = {
+				region = scope:strategic_region
+			}
+			every_scope_state = {
+				root = {
+					add_to_variable_list = {
+						name = states_in_selected_strategic_region
+						target = prev
+					}
+				}
+			}
+		}
+	}
+}
+
+has_strategic_region_target = {
+	scope = country
+	is_shown = {
+		has_variable_list =  states_in_selected_strategic_region
 	}
 }
