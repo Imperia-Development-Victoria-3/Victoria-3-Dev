@@ -88,10 +88,11 @@ types babylon_vienna_congress
                     flipdirection = yes
                     datamodel = "[GetGlobalList('babylon_congress_major_powers')]"
                     item = {
+
                         small_flag = {
                             parentanchor = vcenter
                             using = tooltip_above
-                            datacontext = "[Scope.AccessCountry]"						
+                            datacontext = "[Scope.AccessCountry]"
                             blockoverride "flag_tooltip" {
                                 tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                             }
@@ -361,7 +362,7 @@ types babylon_vienna_congress
                     button = {
                         using = default_button
                         onclick = "[GetScriptedGui('end_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
-                        enabled = "[GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+                        enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End), Not(GetGlobalVariable('babylon_vienna_congress_minimum_time').IsSet))]"
                         parentanchor = center|top
                         margin_top = 20
                         textbox = {
@@ -414,9 +415,8 @@ types babylon_vienna_congress
                     button = {
                         using = default_button
 
-                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','1')]"
                         onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
-                        enabled = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','1'))]"
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)1')).End))]"
                         textbox = {
                             resizeparent = yes
                             raw_text = "Denouncement"
@@ -430,10 +430,9 @@ types babylon_vienna_congress
                     }
                     button = {
                         using = default_button
-                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','2')]"
                         onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
 
-                        enabled = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','2'))]"
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End))]"
                         textbox = {
                             resizeparent = yes
                             raw_text = "State Claim"
@@ -447,10 +446,9 @@ types babylon_vienna_congress
                     }
                     button = {
                         using = default_button
-                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','3')]"
                         onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
 
-                        enabled = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','3'))]"
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)3')).End))]"
                         textbox = {
                             resizeparent = yes
                             raw_text = "Embargo"
@@ -464,13 +462,12 @@ types babylon_vienna_congress
                     }
                     button = {
                         using = default_button
-                        onclick = "[GetVariableSystem.Set('babylon_congress_proposal_type','4')]"
                         onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
 
-                        enabled = "[Not(GetVariableSystem.HasValue('babylon_congress_proposal_type','4'))]"
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End))]"
                         textbox = {
                             resizeparent = yes
-                            raw_text = "Country Liberation"
+                            raw_text = "Recognition"
                             align = center|nobaseline
                             autoresize = yes
                             maximumsize = { 250 -1 }
@@ -489,7 +486,9 @@ types babylon_vienna_congress
                         using = default_button
                         onclick = "[InformationPanelBar.ClosePanel]"
 						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_state_selector_open')]"
+                        onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
                         onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+                        enabled = "[GetPlayer.MakeScope.Var('congress_proposal_type').IsSet]"
                         textbox = {
                             resizeparent = yes
                             raw_text = "Select Target"
@@ -501,60 +500,6 @@ types babylon_vienna_congress
                             parentanchor = center
                         }
                     }
-                    # button = {
-                    #     using = default_button
-                    #     onclick = "[InformationPanelBar.ClosePanel]"
-                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_state_claim')]"
-                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
-                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-
-                    #     textbox = {
-                    #         resizeparent = yes
-                    #         raw_text = "Select Target"
-                    #         align = center|nobaseline
-                    #         autoresize = yes
-                    #         maximumsize = { 250 -1 }
-                    #         minimumsize = { 250 -1 }
-                    #         margin = { 10 10 }
-                    #         parentanchor = center
-                    #     }
-                    # }
-                    # button = {
-                    #     using = default_button
-                    #     onclick = "[InformationPanelBar.ClosePanel]"
-                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_embargo')]"
-                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
-                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-
-                    #     textbox = {
-                    #         resizeparent = yes
-                    #         raw_text = "Select Target"
-                    #         align = center|nobaseline
-                    #         autoresize = yes
-                    #         maximumsize = { 250 -1 }
-                    #         minimumsize = { 250 -1 }
-                    #         margin = { 10 10 }
-                    #         parentanchor = center
-                    #     }
-                    # }
-                    # button = {
-                    #     using = default_button
-                    #     onclick = "[InformationPanelBar.ClosePanel]"
-                    #     onclick = "[GetLensToolbar.ActivateOption('dp_babylon_congress_liberate_country')]"
-                    #     visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
-                    #     onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-
-                    #     textbox = {
-                    #         resizeparent = yes
-                    #         raw_text = "Select Target"
-                    #         align = center|nobaseline
-                    #         autoresize = yes
-                    #         maximumsize = { 250 -1 }
-                    #         minimumsize = { 250 -1 }
-                    #         margin = { 10 10 }
-                    #         parentanchor = center
-                    #     }
-                    # }
                 }
             }
             vertical_divider = {
@@ -569,33 +514,33 @@ types babylon_vienna_congress
                 }
             }
             vertical_divider = {
-                visible = "[And( GetVariableSystem.Exists('babylon_congress_proposal_type') , Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
+                visible = "[And( GetPlayer.MakeScope.GetVariable('congress_proposal_type').IsSet , Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
             }
 
             flowcontainer = {
-                visible = "[And(GetVariableSystem.Exists('babylon_congress_proposal_type'), Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
+                visible = "[And(  GetPlayer.MakeScope.GetVariable('congress_proposal_type').IsSet, Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
                 spacing = 5
                 direction = vertical
                 margin_top = 20
                 margin_right = 90
                 textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','1')]"
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
                     text = "DENOUNCEMENT_DESCRIPTION"
                     autoresize = yes
                 }
                 textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','2')]"
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
                     text = "STATE_CLAIM_DESCRIPTION"
                     autoresize = yes
                 }
                 textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','3')]"
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
                     text = "EMBARGO_DESCRIPTION"
                     autoresize = yes
                 }
                 textbox = {
-                    visible = "[GetVariableSystem.HasValue('babylon_congress_proposal_type','4')]"
-                    text = "LIBERATION_DESCRIPTION"
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
+                    text = "RECOGNITION_DESCRIPTION"
                     autoresize = yes
                 }
             }

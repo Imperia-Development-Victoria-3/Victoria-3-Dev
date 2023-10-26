@@ -11,6 +11,17 @@
 	}
 }
 
+has_proposal_type = {
+	scope = country
+	saved_scopes = {
+		proposal_type
+	}
+	is_shown = {
+		has_variable = congress_proposal_type
+		var:congress_proposal_type = scope:proposal_type
+	}
+}
+
 set_congress_stance = {
 	scope = country
 	saved_scopes = {
@@ -22,7 +33,7 @@ set_congress_stance = {
 				scope:congress_stance = 1
 			}
 			set_congress_stance_effect = {
-				ROOT = root
+				COUNTRY = root
 				STANCE = 1
 			}
 		}
@@ -31,7 +42,7 @@ set_congress_stance = {
 				scope:congress_stance = 2
 			}
 			set_congress_stance_effect = {
-				ROOT = root
+				COUNTRY = root
 				STANCE = 2
 			}
 		}
@@ -40,7 +51,7 @@ set_congress_stance = {
 				scope:congress_stance = 3
 			}
 			set_congress_stance_effect = {
-				ROOT = root
+				COUNTRY = root
 				STANCE = 3
 			}
 		}
@@ -107,14 +118,77 @@ set_strategic_region_target = {
 	}
 	effect = {
 		clear_variable_list ?= states_in_selected_strategic_region
-		every_state_region = {
+		clear_variable_list ?= countries_in_selected_strategic_region
+		if = {
+			# Country scope
 			limit = {
-				region = scope:strategic_region
+				OR = {
+					var:congress_proposal_type = 1
+					var:congress_proposal_type = 3
+				}
 			}
-			every_scope_state = {
+			scope:strategic_region = {
+				every_scope_state = {
+					limit = {
+						NOT = {
+							owner = root
+						}
+						NOT = {
+							owner = {
+								is_country_type = decentralized
+							}
+						}
+					}
+					owner = {
+						root = {
+							add_to_variable_list = {
+								name = countries_in_selected_strategic_region
+								target = prev
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			# State scope
+			limit = {
+				var:congress_proposal_type = 2
+			}
+			scope:strategic_region = {
+				every_scope_state = {
+					limit = {
+						NOT = {
+							owner = root
+						}
+					}
+					root = {
+						add_to_variable_list = {
+							name = states_in_selected_strategic_region
+							target = prev
+						}
+					}
+				}
+			}
+		}
+		if = {
+			# Possible recognisable countries
+			limit = {
+				var:congress_proposal_type = 4
+			}
+			every_country = {
+				limit = {
+					NOT = {
+						this = root
+					}
+					is_country_type = unrecognized
+					any_scope_state = {
+						region = scope:strategic_region
+					}
+				}
 				root = {
 					add_to_variable_list = {
-						name = states_in_selected_strategic_region
+						name = countries_in_selected_strategic_region
 						target = prev
 					}
 				}
@@ -126,7 +200,7 @@ set_strategic_region_target = {
 has_strategic_region_target = {
 	scope = country
 	is_shown = {
-		has_variable_list =  states_in_selected_strategic_region
+		has_variable_list = states_in_selected_strategic_region
 	}
 }
 
@@ -141,5 +215,62 @@ is_great_power = {
 	scope = country
 	is_shown = {
 		country_rank >= rank_value:great_power
+	}
+}
+
+any_valid_state_in_strategic_region = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	is_shown = {
+		trigger_if = {
+			# Hostile scope
+			limit = {
+				OR = {
+					var:congress_proposal_type = 1
+					var:congress_proposal_type = 2
+					var:congress_proposal_type = 3
+				}
+			}
+			scope:strategic_region = {
+				any_scope_state = {
+					count > 0
+					NOT = {
+						owner = root
+					}
+				}
+			}
+		}
+		trigger_if = {
+			# Unrecognised Country scope
+			limit = {
+				var:congress_proposal_type = 4
+			}
+			scope:strategic_region = {
+				any_scope_state = {
+					count > 0
+					owner = {
+						is_country_type = unrecognized
+					}
+				}
+			}
+		}
+	}
+}
+
+start_congress = {
+	scope = country
+	saved_scopes = {
+		target
+		target_state
+	}
+	effect = {
+		congress_start_conference = {
+			TYPE = var:congress_proposal_type
+			INITIATOR = root
+			TARGET = scope:target
+			TARGET_STATE = scope:target_state
+		}
 	}
 }

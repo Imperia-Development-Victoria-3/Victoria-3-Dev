@@ -54,6 +54,10 @@ congress_start_conference = {
 		set_global_variable = {
 			name = babylon_vienna_congress_in_session
 		}
+		set_global_variable = {
+			name = babylon_vienna_congress_minimum_time
+			days = 30
+		}
 		if = {
 			limit = {
 				NOT = {
@@ -87,13 +91,8 @@ congress_start_conference = {
 				$TYPE$ = 2
 				# State Claim
 			}
-			$TARGET$ = {
-				random_scope_state = {
-					limit = {
-						is_target_of_wargoal = $INITIATOR$
-					}
-					save_scope_as = target_state
-				}
+			$TARGET_STATE$ = {
+				save_scope_as = target_state
 			}
 		}
 		if = {
@@ -110,13 +109,10 @@ congress_start_conference = {
 		if = {
 			limit = {
 				$TYPE$ = 4
-				# Liberate Country
+				# Recognises Country
 			}
 			$TARGET$ = {
-				random_scope_state = {
-					limit = {
-						is_target_of_wargoal = $INITIATOR$
-					}
+				capital = {
 					save_scope_as = target_state
 				}
 			}
@@ -146,12 +142,36 @@ congress_start_conference = {
 				}
 			}
 			set_variable = conference_member
-			add_to_global_variable_list = {
-				name = current_congress_members_on_stance_2
-				target = this
+			set_congress_stance_effect = {
+				COUNTRY = this
+				STANCE = 2
 			}
 		}
-		end_play = yes
+		$TARGET$ = {
+			if = {
+				limit = {
+					has_variable = conference_member
+				}
+				set_congress_stance_effect = {
+					COUNTRY = this
+					STANCE = 3
+				}
+			}
+		}
+		$INITIATOR$ = {
+			set_congress_stance_effect = {
+				COUNTRY = this
+				STANCE = 1
+			}
+		}
+		every_country = {
+			limit = {
+				NOT = {
+					this = $INITIATOR$
+				}
+			}
+			post_notification = babylon_vienna_congress_started
+		}
 	}
 }
 
@@ -179,41 +199,41 @@ set_congress_stance_effect = {
 		limit = {
 			is_target_in_global_variable_list = {
 				name = current_congress_members_on_stance_1
-				target = $ROOT$
+				target = $COUNTRY$
 			}
 		}
 		remove_list_global_variable = {
 			name = current_congress_members_on_stance_1
-			target = $ROOT$
+			target = $COUNTRY$
 		}
 	}
 	if = {
 		limit = {
 			is_target_in_global_variable_list = {
 				name = current_congress_members_on_stance_2
-				target = $ROOT$
+				target = $COUNTRY$
 			}
 		}
 		remove_list_global_variable = {
 			name = current_congress_members_on_stance_2
-			target = $ROOT$
+			target = $COUNTRY$
 		}
 	}
 	if = {
 		limit = {
 			is_target_in_global_variable_list = {
 				name = current_congress_members_on_stance_3
-				target = $ROOT$
+				target = $COUNTRY$
 			}
 		}
 		remove_list_global_variable = {
 			name = current_congress_members_on_stance_3
-			target = $ROOT$
+			target = $COUNTRY$
 		}
 	}
 	add_to_global_variable_list = {
 		name = current_congress_members_on_stance_$STANCE$
-		target = $ROOT$
+		target = $COUNTRY$
 	}
 }
 
@@ -253,6 +273,30 @@ denounce_target = {
 	}
 }
 
+state_claim_target = {
+	if = {
+		limit = {
+			conference_sanctions_severity != 0.5
+		}
+		every_in_global_list = {
+			variable = current_congress_members_on_stance_1
+			change_relations = {
+				country = global_var:babylon_vienna_congress_session_target
+				value = -50
+			}
+			global_var:babylon_vienna_congress_session_target = {
+				change_relations = {
+					country = prev
+					value = -50
+				}
+			}
+		}
+		$TARGET$.state_region = {
+			add_claim = global_var:babylon_vienna_congress_session_initiator
+		}
+	}
+}
+
 embargo_target = {
 	if = {
 		limit = {
@@ -284,6 +328,26 @@ embargo_target = {
 				years = 3
 				multiplier = conference_sanctions_severity
 			}
+		}
+	}
+}
+
+recognise_target = {
+	if = {
+		limit = {
+			conference_supporters_percentage_value > 0.75
+		}
+		every_in_global_list = {
+			variable = current_congress_members_on_stance_1
+			$TARGET$ = {
+				change_relations = {
+					country = prev
+					value = 50
+				}
+			}
+		}
+		$TARGET$ = {
+			set_country_type = recognized
 		}
 	}
 }

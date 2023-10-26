@@ -1,13 +1,15 @@
 ﻿l_english:
- CURRENT_CONFERENCE_NAME: "[GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetCapital.GetCityHubName] Congress [GetMetaPlayer.GetPlayedOrObservedCountry.GetCustom('babylon_vienna_congress_name_affix')]"
+ CURRENT_CONFERENCE_NAME: "[GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetCapital.GetCityHubName] Congress[GetMetaPlayer.GetPlayedOrObservedCountry.GetCustom('babylon_vienna_congress_name_affix')]"
  
  babylon_vienna_congress_name_affix_denouncement: " on [GetGlobalVariable('babylon_vienna_congress_session_target').GetCountry.GetAdjectiveNoFormatting] Aggression"
 
- babylon_vienna_congress_name_affix_state_claim: " on the [GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetAdjectiveNoFormatting] Claim on [GetGlobalVariable('babylon_vienna_congress_session_target_state').GetState.GetName]"
+ babylon_vienna_congress_name_affix_state_claim: " on the [GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetAdjectiveNoFormatting] Claim to [GetGlobalVariable('babylon_vienna_congress_session_target_state').GetState.GetName]"
  
  babylon_vienna_congress_name_affix_embargo: " on the Embargo of [GetGlobalVariable('babylon_vienna_congress_session_target').GetCountry.GetNameNoFormatting]"
 
  babylon_vienna_congress_name_affix_liberation: " on the Liberation of [GetGlobalVariable('babylon_vienna_congress_session_target_state').GetState.GetName]"
+
+ babylon_vienna_congress_name_affix_recognition: " on the Recognition of [GetGlobalVariable('babylon_vienna_congress_session_target').GetCountry.GetNameNoFormatting]"
 
  DENOUNCEMENT_DESCRIPTION: "#b Denouncement:#!\n\nDenouncing a target will give them a malus to infamy decay and an amount of infamy,\nscaling per the power of the supporting nations.\n\nAlso gives -50 relations with every supporting country."
 
@@ -17,21 +19,7 @@
 
  LIBERATION_DESCRIPTION: "#b Liberation:#!\n\nLiberates the target country."
 
- dp_babylon_congress_denouncement: "Congress: Denounce"
- dp_babylon_congress_denouncement_tooltip: "#header Start a Denouncement Congress#!\n$TOOLTIP_DELIMITER$\n$dp_babylon_congress_denouncement_desc$"
- dp_babylon_congress_denouncement_desc: "If successful, the target will get some bad modifiers."
-
- dp_babylon_congress_state_claim: "Congress: State Claim"
- dp_babylon_congress_state_claim_tooltip: "#header Start a State Claim Congress#!\n$TOOLTIP_DELIMITER$\n$dp_babylon_congress_state_claim_desc$"
- dp_babylon_congress_state_claim_desc: "If successful, the initiator will get a claim on the target state."
-
- dp_babylon_congress_embargo: "Congress: Embargo"
- dp_babylon_congress_embargo_tooltip: "#header Start an Embargo Congress#!\n$TOOLTIP_DELIMITER$\n$dp_babylon_congress_embargo_desc$"
- dp_babylon_congress_embargo_desc: "If successful, the target will be embargoed."
-
- dp_babylon_congress_liberate_country: "Congress: Liberation"
- dp_babylon_congress_liberate_country_tooltip: "#header Start a Liberation Congress#!\n$TOOLTIP_DELIMITER$\n$dp_babylon_congress_liberate_country_desc$"
- dp_babylon_congress_liberate_country_desc: "If successful, the target will be liberated."
+ RECOGNITION_DESCRIPTION: "#b Recognition:#!\n\nRecognises the target unrecognised country."
 
  forced_embargo_pact: "Forced $embargo$"
  forced_embargo_pact_action_name: "[concept_embargo]"
@@ -52,4 +40,24 @@
  forced_embargo_pact_effect_desc_first: "[COUNTRY.GetAdjectiveNoFlag] starts to [concept_embargo] [TARGET_COUNTRY.GetName]"
  forced_embargo_pact_effect_desc_third: "[COUNTRY.GetName] starts to [concept_embargo] [AddTextIf(ObjectsEqual(GetMetaPlayer.GetPlayedOrObservedCountry.Self, TARGET_COUNTRY.Self),TARGET_COUNTRY.GetNameNoFlag)][AddTextIf(Not(ObjectsEqual(GetMetaPlayer.GetPlayedOrObservedCountry.Self, TARGET_COUNTRY.Self)),TARGET_COUNTRY.GetName)]"
 
- CONGRESS_HOW_TO_DESCRIPTION: "#b How to Congress:#!\n\n1) Select a Congress Type. This decides the effects of the Congress of passed.\n2) Select the Target.\n3) #r !!Force Diplomatic Play!!#! \n4) The Congress should start."
+ CONGRESS_HOW_TO_DESCRIPTION: "#b How to Congress:#!\n\n1) Select a #b Congress#! Type. This decides the effects of the #b Congress#! if passed.\n2) Press 'Select the Target'.\n3) Navigate to your target.\n4) Once a state/country has been pressed, the #b Congress#! will start.\n\nEffects of the #b Denouncement#! and #b Embargo Congresses#! starts at #v 20%#! of the congress\nmembers #b Prestige#! being on the #b Supporting#! side, while the max effect is reached at #v 80%#!.\n\nThe #b State Claim Congress#! needs to be #v 50%#! in favour to give a claim.\n\nThe #b Recognition Congress#! needs to have #v 75%#! in favour to #b Recognise#! an #b Unrecognised#! country."
+
+ notification_babylon_vienna_congress_started_name: "Congress Called"
+ notification_babylon_vienna_congress_started_desc: "The $CURRENT_CONFERENCE_NAME$ have been called."
+
+ babylon_vienna_congress.1.t: "End of the $CURRENT_CONFERENCE_NAME$"
+ babylon_vienna_congress.1.d: "The $CURRENT_CONFERENCE_NAME$ have ended, with #v [GetPlayer.MakeScope.ScriptValue('conference_supporters_percentage_value')|v%]#! of the diplomats present in favour of the resolution.\n\n[GetPlayer.GetCustom('babylon_vienna_congress_end_event_not_enough')], thus the Congress ends in favour of the [GetPlayer.GetCustom('babylon_vienna_congress_end_event_support_oppose')]."
+ babylon_vienna_congress.1.f: "I believe it is peace in our time!"
+ babylon_vienna_congress.1.a: "Peace and Prosperity!"
+
+ BABYLON_VIENNA_CONGRESS_NOT_ENOUGH: "This is not enough support for it"
+ BABYLON_VIENNA_CONGRESS_JUST_ENOUGH: "This is just enough support for it"
+ BABYLON_VIENNA_CONGRESS_ENOUGH: "This is enough support for it"
+ BABYLON_VIENNA_CONGRESS_A_CLEAR_MANDATE: "This is a clear mandate"
+ BABYLON_VIENNA_CONGRESS_OVERWHELMING: "This is overwhelming to say the least"
+
+ BABYLON_VIENNA_CONGRESS_OPPOSED: "opposed"
+ BABYLON_VIENNA_CONGRESS_SUPPORTERS: "supporters"
+
+ babylon_congress_denouncement_modifier: "Denounced"
+ forced_embargo: "Forcefully Embargoed"

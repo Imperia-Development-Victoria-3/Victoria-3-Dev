@@ -294,6 +294,86 @@ babylon_vienna_congress_name_affix = {
 		trigger = {
 			global_var:babylon_vienna_congress_session_type = 4
 		}
-		localization_key = babylon_vienna_congress_name_affix_liberation
+		localization_key = babylon_vienna_congress_name_affix_recognition
+	}
+}
+
+babylon_vienna_congress_end_event_not_enough = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			conference_supporters_percentage_value > 0.8
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_OVERWHELMING
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					conference_supporters_percentage_value < 0.6
+					conference_supporters_percentage_value > 0.4
+					global_var:babylon_vienna_congress_session_type != 4
+				}
+				AND = {
+					global_var:babylon_vienna_congress_session_type = 4
+					conference_supporters_percentage_value > 0.75
+				}
+			}
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_ENOUGH
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					conference_supporters_percentage_value < 0.2
+					global_var:babylon_vienna_congress_session_type != 4
+				}
+				AND = {
+					global_var:babylon_vienna_congress_session_type = 4
+					conference_supporters_percentage_value < 0.75
+				}
+			}
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_NOT_ENOUGH
+	}
+	text = {
+		trigger = {
+			conference_supporters_percentage_value < 0.8
+			conference_supporters_percentage_value > 0.6
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_A_CLEAR_MANDATE
+	}
+	text = {
+		trigger = {
+			conference_supporters_percentage_value < 0.4
+			conference_supporters_percentage_value > 0.2
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_JUST_ENOUGH
+	}
+}
+
+babylon_vienna_congress_end_event_support_oppose = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					conference_supporters_percentage_value > 0.2
+					global_var:babylon_vienna_congress_session_type != 4
+				}
+				AND = {
+					conference_supporters_percentage_value > 0.75
+					global_var:babylon_vienna_congress_session_type = 4
+				}
+			}
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_SUPPORTERS
+	}
+	text = {
+		fallback = yes
+		localization_key = BABYLON_VIENNA_CONGRESS_OPPOSED
 	}
 }

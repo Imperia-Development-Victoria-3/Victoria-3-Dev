@@ -28,6 +28,9 @@ types state_selectors
 		}
 		blockoverride "header_back_button" {
 			onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+			onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
+			enabled = "[Not(GetVariableSystem.HasValue('state_selector_mode','strategic_region'))]"
+
 			# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
 		}
 
@@ -47,9 +50,25 @@ types state_selectors
 				using = default_list_position
 				spacing = 10
 				direction = vertical
+				# textbox = {
+				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
+				# 	text = "strategic region"
+				# }
+				# textbox = {
+				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','states')]"
+				# 	text = "states"
+				# }
+				# textbox = {
+				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','countries')]"
+				# 	text = "countries"
+				# }
+				# textbox = {
+				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','liberation')]"
+				# 	text = "liberation"
+				# }
 				scrollarea = {
 					name = "state_selector_strategic_region_output"
-					visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region'))]"
+					visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
 					size = { 640 420 }
 					scrollbarpolicy_horizontal = always_off
 					scrollwidget = {
@@ -67,7 +86,10 @@ types state_selectors
 									using = default_button
 									size = { 210 70 }
 									onclick = "[GetScriptedGui('set_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
-									# 
+									onclick = "[GetVariableSystem.SetIf('state_selector_mode','countries',Or(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)1')).End),GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)3')).End)))]"
+									onclick = "[GetVariableSystem.SetIf('state_selector_mode','states',GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End))]"
+									onclick = "[GetVariableSystem.SetIf('state_selector_mode','countries',GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End))]"
+									enabled = "[GetScriptedGui('any_valid_state_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
 									#onclick = "[StrategicRegion.]"
 									# Needs to set the strategic region in a scope associated with the player PSEUDO CODE: Player.variablename = StrategicRegion.Makescope
 									textbox = {
@@ -85,9 +107,72 @@ types state_selectors
 						using = vertical_scrollbar
 					}
 				}
+				# Country selection
+				scrollarea = {
+					name = "state_selector_country_output"
+
+					visible = "[GetVariableSystem.HasValue('state_selector_mode','countries')]"					
+					size = { 640 420 }
+					scrollbarpolicy_horizontal = always_off
+					scrollwidget = {
+						fixedgridbox = {
+							datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region')]"
+							datacontext = "[Scope.AccessCountry]"
+
+							addcolumn = 210
+							addrow = 70
+
+							datamodel_wrap = 3
+                   			flipdirection = yes
+									
+							item = {
+								button = {
+									using = default_button
+									size = { 210 70 }
+									onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).AddScope('target_state', Scope.GetCountry.GetCapital.MakeScope).End)]"
+									
+									onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
+
+									onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+									onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
+
+									flowcontainer = {
+										parentanchor = vcenter
+										direction = horizontal
+										margin_left = 15
+										textbox = {
+											autoresize = yes
+											raw_text = "[Scope.AccessCountry.GetName]"
+											align = left|nobaseline
+											using = fontsize_large
+											using = tooltip_above
+											blockoverride "flag_tooltip" {
+												tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+											}
+										}
+									}
+			
+								#	textbox = {
+								#		visible = "[InDebugMode]"
+								#		autoresize = yes
+								#		raw_text = "DEBUG ID: [Location.GetID]"
+								#		parentanchor = right|vcenter
+								#		widgetanchor = right|vcenter
+								#		align = right|nobaseline
+								#		position = { -10 0 }
+								#	}
+								}
+							}
+						}
+					}
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
+				}
+				# State selection
 				scrollarea = {
 					name = "state_selector_state_output"
-					visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')))]"
+					visible = "[GetVariableSystem.HasValue('state_selector_mode','states')]"
 					size = { 640 420 }
 					scrollbarpolicy_horizontal = always_off
 					scrollwidget = {
@@ -107,18 +192,29 @@ types state_selectors
 								button = {
 									using = default_button
 									size = { 210 70 }
-									#onclick = "[State.]"
-									# Needs to add the state to a list use scripted gui
+									onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetState.GetOwner.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
+									
+									onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
 
+									onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+									onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
 
 									flowcontainer = {
 										parentanchor = vcenter
-										direction = vertical
+										direction = horizontal
 										margin_left = 15
+										tiny_flag = {
+											using = tooltip_above
+											datacontext = "[Scope.AccessState.AccessOwner]"
+											align = left|vcenter
+											blockoverride "flag_tooltip" {
+												tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+											}
+										}
 										textbox = {
 											autoresize = yes
 											raw_text = "[Scope.AccessState.GetName]"
-											align = nobaseline
+											align = right|vcenter
 											using = fontsize_large
 										}
 									}
@@ -140,6 +236,111 @@ types state_selectors
 						using = vertical_scrollbar
 					}
 				}
+				# Liberation
+				scrollarea = {
+					name = "state_selector_liberation_output"
+
+					visible = "[GetVariableSystem.HasValue('state_selector_mode','liberation')]"					
+					size = { 640 420 }
+					scrollbarpolicy_horizontal = always_off
+					scrollwidget = {
+						fixedgridbox = {
+							datamodel = "[AccessPlayer.AccessReleasableCountries]"
+							datacontext = "[CountryCreation.GetDefinition]"
+							# .MakeScope.GetList('releaseables_in_selected_strategic_region')
+							addcolumn = 210
+							addrow = 70
+
+							datamodel_wrap = 3
+                   			flipdirection = yes
+									
+							item = {
+								releasable_country_button = {}
+								# button = {
+								# 	using = default_button
+								# 	size = { 210 70 }
+								# 	#onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetState.GetOwner.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
+									
+								# 	#nclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
+
+								# 	#onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+								# 	#onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
+
+								# 	flowcontainer = {
+								# 		parentanchor = vcenter
+								# 		direction = horizontal
+								# 		margin_left = 15
+								# 		textbox = {
+								# 			autoresize = yes
+								# 			raw_text = "[Scope.AccessCountry.GetName]"
+								# 			align = left|nobaseline
+								# 			using = fontsize_large
+								# 			using = tooltip_above
+								# 			blockoverride "flag_tooltip" {
+								# 				tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+								# 			}
+								# 		}
+								# 	}
+								# }
+							}
+						}
+					}
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
+				}
+				# Recognition
+				# scrollarea = {
+				# 	name = "state_selector_recognition_output"
+
+				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','recognition')]"					
+				# 	size = { 640 420 }
+				# 	scrollbarpolicy_horizontal = always_off
+				# 	scrollwidget = {
+				# 		fixedgridbox = {
+				# 			datamodel = "[AccessPlayer.AccessReleasableCountries]"
+				# 			datacontext = "[CountryCreation.GetDefinition]"
+				# 			# .MakeScope.GetList('releaseables_in_selected_strategic_region')
+				# 			addcolumn = 210
+				# 			addrow = 70
+
+				# 			datamodel_wrap = 3
+                #    			flipdirection = yes
+									
+				# 			item = {
+				# 				button = {
+				# 					using = default_button
+				# 					size = { 210 70 }
+				# 					#onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetState.GetOwner.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
+									
+				# 					#onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
+
+				# 					#onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+				# 					#onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
+
+				# 					flowcontainer = {
+				# 						parentanchor = vcenter
+				# 						direction = horizontal
+				# 						margin_left = 15
+				# 						textbox = {
+				# 							autoresize = yes
+				# 							raw_text = "[Scope.AccessCountry.GetName]"
+				# 							align = left|nobaseline
+				# 							using = fontsize_large
+				# 							using = tooltip_above
+				# 							blockoverride "flag_tooltip" {
+				# 								tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+				# 							}
+				# 						}
+				# 					}
+				# 				}
+				# 			}
+				# 		}
+				# 	}
+				# 	scrollbar_vertical = {
+				# 		using = vertical_scrollbar
+				# 	}
+				# }
 			}
 		}
 	}
