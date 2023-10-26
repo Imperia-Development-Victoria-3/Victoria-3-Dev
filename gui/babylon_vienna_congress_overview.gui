@@ -120,10 +120,34 @@ types babylon_vienna_congress
         align = top
         #margin_left = 100
         margin_top = 20
+        
         flowcontainer = {
             spacing = 20
             direction = vertical
             parentanchor = center|top
+            # textbox = {
+            #     text = "end_congress_confirmation NOT set"
+            #     visible = "[Not(GetVariableSystem.Exists('end_congress_confirmation'))]"
+            # }
+            # textbox = {
+            #     text = "end_congress_confirmation set"
+            #     visible = "[GetVariableSystem.Exists('end_congress_confirmation')]"
+            # }
+            # button = {
+            #     using = default_button
+            #     onclick = "[GetVariableSystem.Clear('end_congress_confirmation')]"
+            #     parentanchor = center|top
+            #     textbox = {
+            #         resizeparent = yes
+            #         raw_text = "clear end_congress_confirmation"
+            #         align = center|nobaseline
+            #         autoresize = yes
+            #         maximumsize = { 250 -1 }
+            #         minimumsize = { 250 -1 }
+            #         margin = { 10 10 }
+            #         parentanchor = center
+            #     }
+            # }
             flowcontainer = {	
                 margin_top = 20
                 #margin_right = 90
@@ -361,7 +385,8 @@ types babylon_vienna_congress
                     }
                     button = {
                         using = default_button
-                        onclick = "[GetScriptedGui('end_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+                        #onclick = "[PopupManager.AskConfirmationCustom(GetVariableSystem.Toggle('end_congress_confirmation'), 'default_confirmation_widget')]"
+                        onclick = "[GetVariableSystem.Toggle('end_congress_confirmation')]"
                         enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End), Not(GetGlobalVariable('babylon_vienna_congress_minimum_time').IsSet))]"
                         parentanchor = center|top
                         margin_top = 20
@@ -379,6 +404,7 @@ types babylon_vienna_congress
                 }
             }
         }
+        
     }
     # PROPOSALS TAB
     type babylon_vienna_congress_proposals =  flowcontainer {

@@ -1,0 +1,28 @@
+types confirmation_widgets 
+{
+	### Confirmation widget - Babylon
+    type end_congress_confirmation = default_confirmation_widget {
+        name = "end_congress_confirmation"
+        parentanchor = top|center
+        layer = top
+        size = { 380 100 }
+        visible = "[GetVariableSystem.Exists('end_congress_confirmation')]"
+        textbox = {
+            parentanchor = top|center
+            using = header_font_fancy
+            using = fontsize_xxl
+            raw_text = "Really end the Congress?"
+            autoresize = yes
+        }
+        blockoverride "answer_yes_handler" {
+            onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
+            onclick = "[GetScriptedGui('end_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+            onclick = "[GetVariableSystem.Clear('end_congress_confirmation')]"
+			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
+        }
+        blockoverride "answer_ho_handler" {
+            onclick = "[GetVariableSystem.Clear('end_congress_confirmation')]"
+            onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
+        }
+    }
+}
