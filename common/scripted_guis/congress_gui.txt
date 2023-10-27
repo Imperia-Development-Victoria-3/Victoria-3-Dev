@@ -107,13 +107,22 @@ end_congress = {
 		}
 		remove_global_variable = babylon_vienna_congress_in_session
 		every_country = {
+			limit = {
+				OR = {
+					is_country_type = recognized
+					is_country_type = colonial
+				}
+			}
 			if = {
 				limit = {
 					scope:target_country != this
 				}
 				aftermath_event_choice = yes
 			}
-			else {
+			else_if = {
+				limit = {
+					conference_sanctions_severity > 0
+				}
 				aftermath_event_consequence = yes
 			}
 		}
@@ -169,6 +178,9 @@ set_strategic_region_target = {
 					limit = {
 						NOT = {
 							owner = root
+						}
+						NOT = {
+							has_claim_by = root
 						}
 					}
 					root = {
@@ -247,6 +259,14 @@ any_valid_state_in_strategic_region = {
 					count > 0
 					NOT = {
 						owner = root
+					}
+					trigger_if = {
+						limit = {
+							root.var:congress_proposal_type = 2
+						}
+						NOT = {
+							has_claim_by = root
+						}
 					}
 				}
 			}

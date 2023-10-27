@@ -1,300 +1,362 @@
 ﻿namespace = conference_aftermath_denouncement
-
 # DENOUNCEMENT RESOLUTIONS
 conference_aftermath_denouncement.1 = {
-    type = country_event
-    event_image = {
-        video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_denouncement.1.t
+	desc = conference_aftermath_denouncement.1.desc
+	flavor = conference_aftermath_denouncement.1.flavor
+	duration = 3
+	immediate = {
+		global_var:babylon_vienna_congress_session_target = {
+			save_scope_as = target_country
+		}
+	}
+	# Accept when support
+	option = {
+		name = conference_aftermath_denouncement.1.a
+		default_option = yes
+		trigger = {
+			is_congress_supporter = yes
+            conference_sanctions_severity != 0
+		}
+		if = {
+			# lost the power struggle
+			limit = {
+				conference_sanctions_severity < 0
+			}
+			# ADD scaled -20% prestige modifier
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				years = 3
+				is_decaying = yes
+				multiplier = {
+					value = 20
+					multiply = conference_sanctions_severity
+				}
+			}
+		}
+		else_if = {
+			# won the power struggle
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			denounce_target = yes
+		}
+		else = {
+			# stalemate
+			# ADD -4% prestige modifer
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				years = 3
+				is_decaying = yes
+				multiplier = 4
+			}
+		}
+		ai_chance = {
+			base = 1000
+		}
+	}
+	# Reject when support but failed (sore loser)
+	option = {
+		name = conference_aftermath_denouncement.1.b
+		trigger = {
+			AND = {
+				is_congress_supporter = yes
+				conference_sanctions_severity < 0
+			}
+		}
+		# Do the thing anyway
+		denounce_target = yes
+		# Suffer the consequences for undermining the congress
+		# ADD -20% prestige modifier
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 20
+		}
+		change_infamy = {
+			add = 50
+			multiply = abs_conference_sanctions_severity
+		}
+		adjust_opinions_conference_voters_reject = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	# Accept when abstained
+	option = {
+		default_option = yes
+		trigger = {
+			is_congress_abstainer = yes
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.c
+		if = {
+			# only do something when proposal was supported
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			denounce_target = yes
+		}
+		ai_chance = {
+			base = 1000
+		}
+	}
+	# Reject when abstained
+	option = {
+		trigger = {
+			is_congress_abstainer = yes
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.d
+		# Do the opposite of the resolution
+		if = {
+			limit = {
+				conference_sanctions_severity < 0
+			}
+			denounce_target = yes
+		}
+		# ADD -10% prestige modifier
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 10
+		}
+		change_infamy = {
+			add = 25
+			multiply = abs_conference_sanctions_severity
+		}
+		adjust_opinions_conference_voters_reject = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	# Accept when opposed
+	option = {
+		name = conference_aftermath_denouncement.1.e
+		default_option = yes
+		trigger = {
+			is_congress_opposer = yes
+            conference_sanctions_severity != 0
+		}
+		if = {
+			# won the power struggle
+			limit = {
+				conference_sanctions_severity < 0
+			}
+			# ADD scaled 10% prestige modifier
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				years = 3
+				is_decaying = yes
+				multiplier = {
+					value = 10
+					multiply = conference_sanctions_severity
+				}
+			}
+		}
+		else_if = {
+			# lost the power struggle
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			# ADD scaled -20% prestige modifier
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				years = 3
+				is_decaying = yes
+				multiplier = {
+					value = 20
+					multiply = conference_sanctions_severity
+				}
+			}
+			denounce_target = yes
+		}
+		else = {
+			# stalemate
+			# ADD 4% prestige modifer
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				years = 3
+				is_decaying = yes
+				multiplier = 4
+			}
+		}
+		ai_chance = {
+			base = 1000
+		}
+	}
+	# Reject when opposed but failed
+	option = {
+		name = conference_aftermath_denouncement.1.f
+		trigger = {
+			is_congress_opposer = yes
+			conference_sanctions_severity > 0
+		}
+		# ADD -20% prestige modifier
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 20
+		}
+		change_infamy = {
+			add = 50
+			multiply = abs_conference_sanctions_severity
+		}
+		adjust_opinions_conference_voters_reject = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	# Accept when observed
+	option = {
+		default_option = yes
+		trigger = {
+			is_congress_observer = yes
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.g
+		if = {
+			# only do something when proposal was supported
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			denounce_target = yes
+		}
+		ai_chance = {
+			base = 1000
+		}
+	}
+	# Reject when observed (pathetic nation doesn't know whats good for them)
+	option = {
+		trigger = {
+			is_congress_observer = yes
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.h
+		if = {
+			limit = {
+				conference_sanctions_severity < 0
+			}
+			denounce_target = yes
+		}
+		# ADD -75% prestige modifier
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 75
+		}
+		change_infamy = {
+			add = 10
+			multiply = abs_conference_sanctions_severity
+		}
+		adjust_opinions_conference_voters_reject = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	# Accept when not attended
+	option = {
+		default_option = yes
+		trigger = {
+			is_congress_attendee = no
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.i
+		if = {
+			# only do something when proposal was supported
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			denounce_target = yes
+		}
+		ai_chance = {
+			base = 1000
+		}
+	}
+	# Reject when not attended
+	option = {
+		trigger = {
+			is_congress_attendee = no
+            conference_sanctions_severity != 0
+		}
+		name = conference_aftermath_denouncement.1.j
+		if = {
+			limit = {
+				conference_sanctions_severity < 0
+			}
+			denounce_target = yes
+		}
+		# ADD -25% prestige modifier
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 25
+		}
+		adjust_opinions_conference_voters_reject = yes
+		ai_chance = {
+			base = 0
+		}
     }
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-    on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
-    icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-    title = conference_aftermath_denouncement.1.t
-    desc = conference_aftermath_denouncement.1.desc
-    flavor = conference_aftermath_denouncement.1.flavor
-    duration = 3
-
-    immediate = {
-        global_var:babylon_vienna_congress_session_target = {
-            save_scope_as = target_country
-        }        
-    }
-
-    # Accept when support
     option = {
-        name = conference_aftermath_denouncement.1.a
+        trigger = {
+            conference_sanctions_severity = 0
+        }
         default_option = yes
-        trigger = {
-            is_congress_supporter = yes
-        }
-
-        if = { # lost the power struggle
-            limit = {
-                conference_sanctions_severity < 0
-            }
-            # ADD scaled -20% prestige modifier
-        } else_if = { # won the power struggle
-            limit = {
-                conference_sanctions_severity > 0
-            }
-            denounce_target = yes
-        } else = { # stalemate
-            # ADD -4% prestige modifer
-        }
-
-        ai_chance = {
-            base = 1000
-        }
-    }
-
-    # Reject when support but failed (sore loser)
-    option = {
-        name = conference_aftermath_denouncement.1.b
-        trigger = {
-            AND = {
-                is_congress_supporter = yes
-                conference_sanctions_severity < 0
-            }
-        }
-
-        # Do the thing anyway
-        denounce_target = yes
-
-        # Suffer the consequences for undermining the congress
-        # ADD -20% prestige modifier
-        change_infamy = {
-            add = 50
-            multiply = abs_conference_sanctions_severity
-        }
-        adjust_opinions_conference_voters_reject = yes
-
-        ai_chance = {
-            base = 0
-        }  
-    }
-
-    # Accept when abstained
-    option = {
-        default_option = yes
-        trigger = {
-            is_congress_abstainer = yes
-        }
-        name = conference_aftermath_denouncement.1.c
-
-        if = { # only do something when proposal was supported
-            limit = {
-                conference_sanctions_severity > 0
-            }
-            denounce_target = yes
-        }
-
-        ai_chance = {
-            base = 1000
-        }  
-    }
-
-    # Reject when abstained
-    option = {
-        trigger = {
-            is_congress_abstainer = yes
-        }
-        name = conference_aftermath_denouncement.1.d
-
-        # Do the opposite of the resolution
-        if = {
-            limit = {
-                conference_sanctions_severity < 0
-            }
-            denounce_target = yes
-        } 
-
-        # ADD -10% prestige modifier
-        change_infamy = {
-            add = 25
-            multiply = abs_conference_sanctions_severity
-        }
-        adjust_opinions_conference_voters_reject = yes
-
-        ai_chance = {
-            base = 0
-        }
-    }
-
-    # Accept when opposed
-    option = {
-        name = conference_aftermath_denouncement.1.e
-        default_option = yes
-        trigger = {
-            is_congress_opposer = yes
-        }
-
-        if = { # won the power struggle
-            limit = {
-                conference_sanctions_severity < 0
-            }
-            # ADD scaled 10% prestige modifier
-        } else_if = { # lost the power struggle
-            limit = {
-                conference_sanctions_severity > 0
-            }
-            # ADD scaled -20% prestige modifier
-            denounce_target = yes
-        } else = { # stalemate
-            # ADD 4% prestige modifer
-        }
-
-        ai_chance = {
-            base = 1000
-        }
-    }
-
-    # Reject when opposed but failed
-    option = {
-        name = conference_aftermath_denouncement.1.f
-        trigger = {
-            is_congress_opposer = yes
-            conference_sanctions_severity > 0
-        }
-
-        # ADD -20% prestige modifier
-        change_infamy = {
-            add = 50
-            multiply = abs_conference_sanctions_severity
-        }
-        adjust_opinions_conference_voters_reject = yes
-
-        ai_chance = {
-            base = 0
-        }
-    }
-
-    # Accept when observed
-    option = {
-        default_option = yes
-        trigger = {
-            is_congress_observer = yes
-        }
-        name = conference_aftermath_denouncement.1.g
-
-
-        if = { # only do something when proposal was supported
-            limit = {
-                conference_sanctions_severity > 0
-            }
-            denounce_target = yes
-        }
-
-        ai_chance = {
-            base = 1000
-        }  
-    }
-
-    # Reject when observed (pathetic nation doesn't know whats good for them)
-    option = {
-        trigger = {
-            is_congress_observer = yes
-        }
-        name = conference_aftermath_denouncement.1.h
-
-        if = {
-            limit = {
-                conference_sanctions_severity < 0
-            }
-            denounce_target = yes
-        } 
-
-        # ADD -75% prestige modifier
-        change_infamy = {
-            add = 10
-            multiply = abs_conference_sanctions_severity
-        }
-        adjust_opinions_conference_voters_reject = yes
-
-        ai_chance = {
-            base = 0
-        }  
-    }
-
-    # Accept when not attended
-    option = {
-        default_option = yes
-        trigger = {
-            is_congress_attendee = no
-        }
-        name = conference_aftermath_denouncement.1.i
-
-
-        if = { # only do something when proposal was supported
-            limit = {
-                conference_sanctions_severity > 0
-            }
-            denounce_target = yes
-        }
-
-        ai_chance = {
-            base = 1000
-        }  
-    }
-
-    # Reject when not attended
-    option = {
-        trigger = {
-            is_congress_attendee = no
-        }
-        name = conference_aftermath_denouncement.1.j
-
-        if = {
-            limit = {
-                conference_sanctions_severity < 0
-            }
-            denounce_target = yes
-        }
-
-        # ADD -25% prestige modifier
-        adjust_opinions_conference_voters_reject = yes
-
-        ai_chance = {
-            base = 0
-        }  
+		name = conference_aftermath_denouncement.1.k
     }
 }
 
-
 conference_aftermath_denouncement.2 = {
-    type = country_event
-    event_image = {
-        video = "gfx/event_pictures/unspecific_signed_contract.bk2"
-    }
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-    on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
-    icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-    title = conference_aftermath_denouncement.2.t
-    desc = conference_aftermath_denouncement.2.desc
-    flavor = conference_aftermath_denouncement.2.flavor
-    duration = 3
-
-    immediate = {
-        # cannot delay effects by not picking the decision
-        denouncement_effect = yes
-    }
-
-
-    # Gracefully accept
-    option = {
-        default_option = true
-        show_as_tooltip = {
-            denouncement_effect = yes
-        }
-    }
-
-    # Regain prestige at the cost of ifamy
-    option = {
-        default_option = true
-        show_as_tooltip = {
-            denouncement_effect = yes
-        }
-
-        # ADD +20% prestige
-        # ADD +30 infamy
-    }
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_denouncement.2.t
+	desc = conference_aftermath_denouncement.2.desc
+	flavor = conference_aftermath_denouncement.2.flavor
+	duration = 3
+	immediate = {
+		# cannot delay effects by not picking the decision
+		denouncement_effect = yes
+	}
+	# Gracefully accept
+	option = {
+		name = conference_aftermath_denouncement.2.a
+		default_option = true
+		show_as_tooltip = {
+			denouncement_effect = yes
+		}
+	}
+	# Regain prestige at the cost of ifamy
+	option = {
+		name = conference_aftermath_denouncement.2.b
+		# default_option = true
+		show_as_tooltip = {
+			denouncement_effect = yes
+		}
+		# ADD +20% prestige
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_positive_prestige_modifier
+			years = 3
+			is_decaying = yes
+			multiplier = 20
+		}
+		# ADD +30 infamy
+		change_infamy = 30
+	}
 }

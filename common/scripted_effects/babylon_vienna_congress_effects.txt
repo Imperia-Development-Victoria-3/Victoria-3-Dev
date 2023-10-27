@@ -125,22 +125,14 @@ congress_start_conference = {
 		}
 		every_country = {
 			limit = {
-				is_country_type = recognized
+				OR = {
+					is_country_type = recognized
+					is_country_type = colonial
+				}
 			}
 			if = {
 				limit = {
-					global_var:babylon_vienna_congress_session_initiator != this
-					OR = {
-						is_target_in_global_variable_list = {
-							name = babylon_congress_great_powers
-							target = this
-						}
-						is_target_in_global_variable_list = {
-							name = babylon_congress_major_powers
-							target = this
-						}
-						global_var:babylon_vienna_congress_session_target = this
-					}
+					global_var:babylon_vienna_congress_session_target = this
 				}
 				trigger_event = {
 					id = babylon_vienna_congress.2
@@ -157,6 +149,26 @@ congress_start_conference = {
 					STANCE = 1
 				}
 				
+			}
+			else_if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_initiator != this
+					global_var:babylon_vienna_congress_session_target != this
+					OR = {
+						is_target_in_global_variable_list = {
+							name = babylon_congress_great_powers
+							target = this
+						}
+						is_target_in_global_variable_list = {
+							name = babylon_congress_major_powers
+							target = this
+						}
+					}
+				}
+				trigger_event = {
+					id = babylon_vienna_congress.2
+					popup = yes
+				}
 			}
 			else = {
 				trigger_event = {
