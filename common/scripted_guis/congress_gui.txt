@@ -102,12 +102,20 @@ is_congress_initiator = {
 
 end_congress = {
 	effect = {
+		global_var:babylon_vienna_congress_session_target = {
+			save_scope_as = target_country
+		}
 		remove_global_variable = babylon_vienna_congress_in_session
 		every_country = {
-			trigger_event = {
-				id = babylon_vienna_congress.1
-				popup = yes
+			if = {
+				limit = {
+					scope:target_country != this
+				}
+				aftermath_event_choice = yes
 			}
+			#else {
+				# A SEPERATE EVENT	
+			#}
 		}
 	}
 }

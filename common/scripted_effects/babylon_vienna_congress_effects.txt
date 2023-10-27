@@ -175,6 +175,48 @@ congress_start_conference = {
 	}
 }
 
+
+aftermath_event_choice = {
+	# NEEDS FILLING IN ACCORDING TO TYPE
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 1
+		}
+		trigger_event = {
+			id = conference_aftermath_denouncement.1
+			popup = yes
+		}
+	}
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 2
+		}
+		trigger_event = {
+			id = conference_aftermath_denouncement.1
+			popup = yes
+		}
+	}
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 3
+		}
+		trigger_event = {
+			id = conference_aftermath_denouncement.1
+			popup = yes
+		}
+	}
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 4
+		}
+		trigger_event = {
+			id = conference_aftermath_denouncement.1
+			popup = yes
+		}
+	}
+}
+
+
 congress_initialise_conference_global_vars = {
 	set_global_variable = {
 		name = babylon_vienna_congress_session_type
@@ -237,39 +279,69 @@ set_congress_stance_effect = {
 	}
 }
 
+# Needs to be in country scope
+adjust_opinions_conference_voters_reject = {
+	every_in_global_list = {
+		variable = current_congress_members_on_stance_1
+		limit = {
+			this != prev
+		}
+		change_relations = {
+			country = prev
+			value = {
+				add = -50
+				multiply = conference_sanctions_severity
+			}
+		}
+	}
+
+	every_in_global_list = {
+		variable = current_congress_members_on_stance_3
+		limit = {
+			this != prev
+		}
+		change_relations = {
+			country = prev
+			value = {
+				add = 50
+				multiply = conference_sanctions_severity
+			}
+		}
+	}
+}
+
+# scope: country
+# defined: scope:target_country
 denounce_target = {
+	change_relations = {
+		country = scope:target_country
+		value = {
+			add = -50
+			multiply = conference_sanctions_severity
+		}
+	}
+}
+
+# scope: country
+denouncement_effect = {
 	if = {
 		limit = {
 			conference_sanctions_severity != 0
 		}
-		every_in_global_list = {
-			variable = current_congress_members_on_stance_1
-			change_relations = {
-				country = $TARGET$
-				value = -50
-			}
-			$TARGET$ = {
-				change_relations = {
-					country = prev
-					value = -50
-				}
+
+		add_modifier = {
+			name = babylon_congress_denouncement_modifier
+			years = 3
+			multiplier = conference_sanctions_severity
+		}
+		save_temporary_scope_value_as = {
+			name = infamy_addition
+			value = {
+				add = 30
+				multiply = conference_sanctions_severity
 			}
 		}
-		$TARGET$ = {
-			add_modifier = {
-				name = babylon_congress_denouncement_modifier
-				years = 3
-				multiplier = conference_sanctions_severity
-			}
-			save_temporary_scope_value_as = {
-				name = infamy_addition
-				value = {
-					value = 30
-					multiply = conference_sanctions_severity
-				}
-			}
-			change_infamy = scope:infamy_addition
-		}
+		change_infamy = scope:infamy_addition
 	}
 }
 
