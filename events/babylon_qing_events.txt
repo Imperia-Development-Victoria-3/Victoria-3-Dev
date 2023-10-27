@@ -1,0 +1,154 @@
+namespace = babylon_qing
+
+babylon_qing.1 = { #Qing set-up event
+	type = country_event
+	placement = root
+	title = babylon_qing.1.t
+	desc = babylon_qing.1.d
+	flavor = babylon_qing.1.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+		option = { #Troubling news
+		name = babylon_qing.1.a
+
+			add_journal_entry = {
+			type = je_end_han_discrimination
+			}
+			add_journal_entry = {
+			type = je_qing_administrative_reform
+			}
+#			add_journal_entry = {
+#			type = je_rural_poverty_qing
+#			}
+			add_journal_entry = {
+			type = je_end_female_infanticide
+			}
+#			add_journal_entry = {
+#			type = je_promote_western_science
+#			}
+#			add_journal_entry = {
+#			type = je_reform_the_banner_system
+#			}
+	}
+}
+
+babylon_qing.2 = { #Anti-Manchu Sentiment
+	type = country_event
+	placement = root
+	title = babylon_qing.2.t
+	desc = babylon_qing.2.d
+	flavor = babylon_qing.2.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_union_leader.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Crack-down 
+	name = babylon_qing.2.a
+	
+		random_scope_state = { 
+			limit = {
+				exists = c:CHI
+				owner = c:CHI
+				
+				NOT = {
+					has_modifier = modifier_qing_reprisal
+				}
+			}
+			add_radicals_in_state = {
+				value = small_radicals
+				culture = cu:han
+			}
+			add_modifier = { 
+			name = modifier_manchu_reprisal
+			months = 36
+			}
+		}
+	}
+	
+	option = { #Ignore it
+	name = babylon_qing.2.b
+	
+		random_scope_state = { 
+			limit = {
+				exists = c:CHI
+				owner = c:CHI
+				
+				NOT = {
+					has_modifier = modifier_qing_reprisal
+				}
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:han
+			}
+		}
+	}
+}
+	
+babylon_qing.3 = { #Substate Set-up Event
+	type = country_event
+	placement = root
+	title = babylon_qing.3.t
+	desc = babylon_qing.3.d
+	flavor = babylon_qing.3.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}	
+	
+			option = { #Troubling news
+		name = babylon_qing.1.a
+
+			if = {
+				limit = {
+					has_modifier = modifier_rural_poverty
+				}
+					add_journal_entry = {
+						type = je_rural_poverty_substate
+			}
+		}
+			add_journal_entry = {
+			type = je_end_female_infanticide
+			}
+#			add_journal_entry = {
+#			type = je_promote_western_science
+#			}
+			add_journal_entry = {
+			type = je_establish_local_armies
+			}
+	}
+}

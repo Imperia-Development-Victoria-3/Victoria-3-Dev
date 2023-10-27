@@ -1,11 +1,119 @@
 ##Qing Entries
+
+je_end_han_discrimination = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	
+	complete = {
+			has_law = law_type:law_cultural_exclusion
+		}
+		
+	on_complete = {
+		remove_modifier = modifier_anti_manchu_sentiment
+		add_loyalists = {
+			value = 0.1
+			culture = cu:han
+			}
+	}
+	
+	fail = {
+		custom_tooltip = {
+		text = taiping_happened_tt
+		has_variable = taiping_defeated
+		}		
+	}
+	
+	on_fail = {
+		remove_modifier = modifier_anti_manchu_sentiment
+		#+1 to fragile unity
+		}
+		
+	on_monthly_pulse = {
+		random_events = {
+			100 = 0
+			3 = babylon_qing.2
+		}
+	}
+}
+
+je_qing_administrative_reform = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	complete = {
+		AND = {
+			institution_investment_level = {
+				institution = institution_police
+				value >= 3
+			}
+			has_law = law_type:law_dedicated_police
+			bureaucracy >= 0 
+			approaching_bureaucracy_shortage = no
+			has_technology_researched = central_archives
+		}
+	}
+	
+	on_complete = {
+	add_modifier = modifier_baojia_system
+	}
+}
+
+je_end_female_infanticide = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	complete = {
+		OR = {
+			has_law = law_type:law_women_in_the_workplace
+			has_law = law_type:law_womens_suffrage
+		}
+	}
+	
+	on_complete = {
+	remove_modifier = modifier_female_shortage
+	}
+}
+			
 ##Local Entries
+
+	
+je_establish_local_armies = { #Common
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	complete = {
+		army_size >= 50
+		has_technology_researched = napoleonic_warfare
+		
+		OR = {
+		has_law = law_type:law_national_guard
+		has_law = law_type:law_localized_garrisons
+		has_law = law_type:law_faith_orders
+		}
+		
+		NOT = {
+			any_scope_building = {
+				is_building_type = building_barracks				
+				OR = {
+					building_has_goods_shortage = yes
+					has_active_production_method = pm_no_organization
+					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+					# has_active_production_method = pm_no_artillery
+					# has_active_production_method = pm_cannon_artillery
+				}
+			}
+		}
+	}
+	
+	on_complete = {
+		add_modifier = {
+			name = modifier_local_armies
+		}
+		#something about a variable here so i can track this for fragile unity/qing military reforms
+	}
+}
 
 
 ##Substate-Specific
 
 je_pacify_highland_tribes = { #Sichuan
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	modifiers_while_active = {
 		modifier_tusi_system
@@ -43,9 +151,9 @@ je_pacify_highland_tribes = { #Sichuan
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = babylon_qing_substates.3
-			10 = babylon_qing_substates.4
-			10 = babylon_qing_substates.5
+			3 = babylon_qing_substates.3
+			3 = babylon_qing_substates.4
+			3 = babylon_qing_substates.5
 		}
 	}
 	weight = 100
@@ -53,7 +161,7 @@ je_pacify_highland_tribes = { #Sichuan
 }
 
 je_gateway_to_the_west = { #Liangguang
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	
 	complete = {
 		AND = {
@@ -79,7 +187,7 @@ je_gateway_to_the_west = { #Liangguang
 }
 
 je_breadbasket_of_the_south = { #Huguang
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 	
 	modifiers_while_active = {
 		modifier_breadbasket_of_the_south
@@ -97,20 +205,21 @@ je_breadbasket_of_the_south = { #Huguang
 	}
 	
 		on_complete = {
-#			trigger_event = {
-#			id = babylon_qing_substates.6 
-#			}
 			add_modifier = {
 			name = modifier_breadbasket_of_the_south
 			months = long_modifier_time
+			}
 			is_decaying = yes
+			ig:ig_landowners = {
+			remove_ideology = ideology_huguang_agrarian_idyll
+			add_ideology = ideology_scholar_paternalistic
 			}
 		}
 	should_be_pinned_by_default = yes
 }
 
 je_settle_the_steppe = { #Eastern Provinces
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	
 	complete = {
 		has_law = law_type:law_cultural_exclusion
@@ -147,7 +256,7 @@ je_settle_the_steppe = { #Eastern Provinces
 }
 
 je_pacify_and_settle_taiwan = { #Formosa
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	
 	complete = {
 		pop_type_percent_country = {
@@ -183,5 +292,3 @@ je_pacify_and_settle_taiwan = { #Formosa
 #	progressbar = yes
 	should_be_pinned_by_default = yes
 }
-	
-	
