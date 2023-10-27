@@ -114,7 +114,7 @@ end_congress = {
 				aftermath_event_choice = yes
 			}
 			#else {
-				# A SEPERATE EVENT	
+			# A SEPERATE EVENT	
 			#}
 		}
 	}
@@ -268,18 +268,42 @@ any_valid_state_in_strategic_region = {
 	}
 }
 
-start_congress = {
+set_congress_target_country = {
 	scope = country
 	saved_scopes = {
 		target
+	}
+	effect = {
+		set_variable = {
+			name = set_congress_target_country
+			value = scope:target
+		}
+	}
+}
+
+set_congress_target_state = {
+	scope = country
+	saved_scopes = {
 		target_state
 	}
+	effect = {
+		set_variable = {
+			name = set_congress_target_state
+			value = scope:target_state
+		}
+	}
+}
+
+start_congress = {
+	scope = country
 	effect = {
 		congress_start_conference = {
 			TYPE = var:congress_proposal_type
 			INITIATOR = root
-			TARGET = scope:target
-			TARGET_STATE = scope:target_state
+			TARGET = var:set_congress_target_country
+			TARGET_STATE = var:set_congress_target_state
 		}
+		remove_variable = set_congress_target_country
+		remove_variable = set_congress_target_state
 	}
 }

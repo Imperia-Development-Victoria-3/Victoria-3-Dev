@@ -125,32 +125,50 @@ congress_start_conference = {
 		}
 		every_country = {
 			limit = {
-				OR = {
-					is_target_in_global_variable_list = {
-						name = babylon_congress_great_powers
-						target = this
-					}
-					is_target_in_global_variable_list = {
-						name = babylon_congress_major_powers
-						target = this
-					}
-					AND = {
-						# If target is recognised he gets a say
+				is_country_type = recognized
+			}
+			if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_initiator != this
+					OR = {
+						is_target_in_global_variable_list = {
+							name = babylon_congress_great_powers
+							target = this
+						}
+						is_target_in_global_variable_list = {
+							name = babylon_congress_major_powers
+							target = this
+						}
 						global_var:babylon_vienna_congress_session_target = this
-						is_country_type = recognized
 					}
 				}
+				trigger_event = {
+					id = babylon_vienna_congress.2
+					popup = yes
+				}
 			}
-			set_variable = conference_member
-			set_congress_stance_effect = {
-				COUNTRY = this
-				STANCE = 2
+			else_if = {
+				limit = {
+					global_var:babylon_vienna_congress_session_initiator = this
+				}
+				set_variable = voting_conference_member
+				set_congress_stance_effect = {
+					COUNTRY = this
+					STANCE = 1
+				}
+				
+			}
+			else = {
+				trigger_event = {
+					id = babylon_vienna_congress.3
+					popup = yes
+				}
 			}
 		}
 		$TARGET$ = {
 			if = {
 				limit = {
-					has_variable = conference_member
+					has_variable = voting_conference_member
 				}
 				set_congress_stance_effect = {
 					COUNTRY = this
@@ -174,7 +192,6 @@ congress_start_conference = {
 		}
 	}
 }
-
 
 aftermath_event_choice = {
 	# NEEDS FILLING IN ACCORDING TO TYPE
@@ -215,7 +232,6 @@ aftermath_event_choice = {
 		}
 	}
 }
-
 
 congress_initialise_conference_global_vars = {
 	set_global_variable = {
@@ -273,9 +289,102 @@ set_congress_stance_effect = {
 			target = $COUNTRY$
 		}
 	}
+	if = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_4
+				target = $COUNTRY$
+			}
+		}
+		remove_list_global_variable = {
+			name = current_congress_members_on_stance_4
+			target = $COUNTRY$
+		}
+	}
 	add_to_global_variable_list = {
 		name = current_congress_members_on_stance_$STANCE$
 		target = $COUNTRY$
+	}
+	if = {
+		limit = {
+			$STANCE$ = 4
+		}
+		update_observer_bench = yes
+	}
+	else = {
+		every_subject_or_below = {
+			update_observer_bench = yes
+		}
+	}
+}
+
+# Country scope
+update_observer_bench = {
+	if = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_4
+				target = this
+			}
+		}
+		if = {
+			limit = {
+				top_overlord = {
+					is_target_in_global_variable_list = {
+						name = current_congress_members_on_stance_1
+						target = this
+					}
+				}
+			}
+			add_to_global_variable_list = {
+				name = current_congress_members_on_observer_bench_stance_1
+				target = this
+			}
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_2
+				target = this
+			}
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_3
+				target = this
+			}
+		}
+		else_if = {
+			limit = {
+				top_overlord = {
+					is_target_in_global_variable_list = {
+						name = current_congress_members_on_stance_3
+						target = this
+					}
+				}
+			}
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_1
+				target = this
+			}
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_2
+				target = this
+			}
+			add_to_global_variable_list = {
+				name = current_congress_members_on_observer_bench_stance_3
+				target = this
+			}
+		}
+		else = {
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_1
+				target = this
+			}
+			add_to_global_variable_list = {
+				name = current_congress_members_on_observer_bench_stance_2
+				target = this
+			}
+			remove_list_global_variable = {
+				name = current_congress_members_on_observer_bench_stance_3
+				target = this
+			}
+		}
 	}
 }
 
@@ -294,7 +403,6 @@ adjust_opinions_conference_voters_reject = {
 			}
 		}
 	}
-
 	every_in_global_list = {
 		variable = current_congress_members_on_stance_3
 		limit = {
@@ -328,7 +436,6 @@ denouncement_effect = {
 		limit = {
 			conference_sanctions_severity != 0
 		}
-
 		add_modifier = {
 			name = babylon_congress_denouncement_modifier
 			years = 3

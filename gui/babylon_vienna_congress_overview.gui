@@ -179,6 +179,29 @@ types babylon_vienna_congress
                         direction = horizontal
                         flowcontainer = {
                             direction = vertical
+                            parentanchor = vcenter
+                            fixedgridbox = {
+                                addcolumn = 40
+                                addrow = 30
+                                flipdirection = no
+                                datamodel_wrap = 15
+                                spacing = 5
+                                datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_1')]"
+                                item = {
+                                    tiny_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                    }			
+                                }
+                            }
+                        }
+                        vertical_divider = {
+                        }
+                        flowcontainer = {
+                            direction = vertical
                             textbox = {
                                 autoresize = yes
                                 raw_text = "Supporters"
@@ -191,7 +214,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -214,27 +237,31 @@ types babylon_vienna_congress
                                 parentanchor = center|top
                             }
                             divider_decorative = {}
-                            fixedgridbox = {
-                                addcolumn = 120
-                                addrow = 95
-                                datamodel_wrap = 4
-                                flipdirection = no
-                                datamodel = "[GetGlobalList('current_congress_members_on_stance_1')]"
-                                item = {
-                                    large_flag = {
-                                        using = tooltip_above
-                                        datacontext = "[Scope.AccessCountry]"						
-                                        blockoverride "flag_tooltip" {
-                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                                        }
-                                        textbox = {
-                                            autoresize = yes
-                                            margin_top = 65
-                                            margin_left = 35
-                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
-                                            align = center
-                                        }
-                                    }			
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_1')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
                                 }
                             }
                         }
@@ -253,7 +280,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -276,27 +303,31 @@ types babylon_vienna_congress
                                 parentanchor = center|top
                             }
                             divider_decorative = {}
-                            fixedgridbox = {
-                                addcolumn = 120
-                                addrow = 95
-                                datamodel_wrap = 4
-                                flipdirection = no
-                                datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
-                                item = {
-                                    large_flag = {
-                                        using = tooltip_above
-                                        datacontext = "[Scope.AccessCountry]"						
-                                        blockoverride "flag_tooltip" {
-                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                                        }
-                                        textbox = {
-                                            autoresize = yes
-                                            margin_top = 65
-                                            margin_left = 35
-                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
-                                            align = center
-                                        }
-                                    }			
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
                                 }
                             }
                         }
@@ -315,7 +346,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetPlayer.MakeScope.GetVariable('conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -338,25 +369,52 @@ types babylon_vienna_congress
                                 parentanchor = center|top
                             }
                             divider_decorative = {}
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_3')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
+                                }
+                            }
+                        }
+                        vertical_divider = {}
+                        flowcontainer = {
+                            direction = vertical
+                            parentanchor = vcenter
+                            margin_left = 20
                             fixedgridbox = {
-                                addcolumn = 120
-                                addrow = 95
-                                datamodel_wrap = 4
+                                addcolumn = 40
+                                addrow = 30
                                 flipdirection = no
-                                datamodel = "[GetGlobalList('current_congress_members_on_stance_3')]"
+                                datamodel_wrap = 15
+                                spacing = 5
+                                datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_3')]"
                                 item = {
-                                    large_flag = {
+                                    tiny_flag = {
                                         using = tooltip_above
                                         datacontext = "[Scope.AccessCountry]"						
                                         blockoverride "flag_tooltip" {
                                             tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                                        }
-                                        textbox = {
-                                            autoresize = yes
-                                            margin_top = 65
-                                            margin_left = 35
-                                            raw_text = "[Scope.AccessCountry.GetPrestige]"
-                                            align = center
                                         }
                                     }			
                                 }
@@ -385,7 +443,6 @@ types babylon_vienna_congress
                     }
                     button = {
                         using = default_button
-                        #onclick = "[PopupManager.AskConfirmationCustom(GetVariableSystem.Toggle('end_congress_confirmation'), 'default_confirmation_widget')]"
                         onclick = "[GetVariableSystem.Toggle('end_congress_confirmation')]"
                         enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End), Not(GetGlobalVariable('babylon_vienna_congress_minimum_time').IsSet))]"
                         parentanchor = center|top
@@ -399,6 +456,29 @@ types babylon_vienna_congress
                             minimumsize = { 250 -1 }
                             margin = { 10 10 }
                             parentanchor = center
+                        }
+                    }
+                    
+                    flowcontainer = {
+                        direction = vertical
+                        parentanchor = hcenter
+                        margin_top = 20
+                        fixedgridbox = {
+                            addcolumn = 40
+                            addrow = 30
+                            flipdirection = yes
+                            datamodel_wrap = 21
+                            spacing = 5
+                            datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_2')]"
+                            item = {
+                                tiny_flag = {
+                                    using = tooltip_above
+                                    datacontext = "[Scope.AccessCountry]"						
+                                    blockoverride "flag_tooltip" {
+                                        tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                    }
+                                }			
+                            }
                         }
                     }
                 }

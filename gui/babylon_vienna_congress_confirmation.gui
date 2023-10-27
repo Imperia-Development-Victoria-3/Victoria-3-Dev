@@ -25,4 +25,64 @@ types confirmation_widgets
             onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
         }
     }
+    
+    type start_congress_confirmation_countries = default_confirmation_widget {
+        name = "start_congress_confirmation_countries"
+        parentanchor = top|center
+        layer = top
+        size = { 380 100 }
+        visible = "[GetVariableSystem.Exists('start_congress_confirmation_countries')]"
+        textbox = {
+            parentanchor = top|center
+            using = header_font_fancy
+            using = fontsize_xxl
+            raw_text = "Really start a Congress?"
+            autoresize = yes
+        }
+        blockoverride "answer_yes_handler" {
+            onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
+            onclick = "[GetVariableSystem.Clear('start_congress_confirmation_countries')]"
+
+            onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+            onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+            onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
+
+        }
+        blockoverride "answer_ho_handler" {
+            onclick = "[GetVariableSystem.Clear('start_congress_confirmation_countries')]"
+            onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
+            
+            onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_state_selector_open')]"
+        } 
+    }
+
+    type start_congress_confirmation_states = default_confirmation_widget {
+        name = "start_congress_confirmation_states"
+        parentanchor = top|center
+        layer = top
+        size = { 380 100 }
+        visible = "[GetVariableSystem.Exists('start_congress_confirmation_states')]"
+        textbox = {
+            parentanchor = top|center
+            using = header_font_fancy
+            using = fontsize_xxl
+            raw_text = "Really start a Congress?"
+            autoresize = yes
+        }
+        blockoverride "answer_yes_handler" {
+            onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
+            onclick = "[GetVariableSystem.Clear('start_congress_confirmation_states')]"
+
+            onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+            onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_open')]"
+            onclick = "[GetVariableSystem.Set('babylon_vienna_congress_tab_selected','current_conference')]"
+
+        }
+        blockoverride "answer_ho_handler" {
+            onclick = "[GetVariableSystem.Clear('start_congress_confirmation_states')]"
+            onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
+
+            onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_state_selector_open')]"
+        } 
+    }
 }
