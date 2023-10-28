@@ -903,40 +903,38 @@ abs_conference_sanctions_severity = {
 }
 
 babylon_vienna_congress_session_target_region_strategic_fraction = {
-	value = 0
-	every_state_region = {
-		limit = {
-			is_target_in_variable_list = {
-				list = congress_target_state
-				target = this
+	value = {
+		every_in_global_list = {
+			variable = babylon_vienna_congress_session_target_states
+			limit = {
+				local_var:strategic_region = this.region
 			}
-			region = scope:strategic_region
+			add = 1
 		}
-		add = 1
 	}
 	divide = {
-		every_in_list = {
-			variable = congress_target_state
+		every_in_global_list = {
+			variable = babylon_vienna_congress_session_target_states
 			add = 1
 		}
 	}
 }
 
 babylon_vienna_congress_session_target_region_culture_fraction = {
-	value = 0
-	every_state_region = {
-		limit = {
-			is_target_in_variable_list = {
-				list = congress_target_state
-				target = this
+	value = {
+		every_in_global_list = {
+			variable = babylon_vienna_congress_session_target_states
+			limit = {
+				local_var:culture_var = {
+					has_homeland = prev
+				}
 			}
-			is_homeland = scope:culture_scope
+			add = 1
 		}
-		add = 1
 	}
 	divide = {
-		every_in_list = {
-			variable = congress_target_state
+		every_in_global_list = {
+			variable = babylon_vienna_congress_session_target_states
 			add = 1
 		}
 	}

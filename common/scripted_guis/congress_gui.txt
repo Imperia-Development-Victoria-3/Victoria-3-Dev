@@ -312,29 +312,36 @@ has_congress_target_country = {
 	}
 }
 
-set_congress_target_state = {
+set_congress_target_state_basket = {
 	scope = country
 	saved_scopes = {
 		target_state
 	}
 	effect = {
 		add_to_variable_list = {
-			name = congress_target_state
+			name = congress_target_state_basket
 			target = scope:target_state
 		}
 	}
 }
 
-unset_congress_target_state = {
+unset_congress_target_state_basket = {
 	scope = country
 	saved_scopes = {
 		target_state
 	}
 	effect = {
 		remove_list_variable = {
-			name = congress_target_state
+			name = congress_target_state_basket
 			target = scope:target_state
 		}
+	}
+}
+
+has_states_in_congress_basket = {
+	scope = country
+	is_shown = {
+		has_variable_list = congress_target_state_basket
 	}
 }
 
@@ -346,8 +353,8 @@ start_congress = {
 			INITIATOR = root
 			TARGET = var:set_congress_target_country
 		}
-		remove_variable = set_congress_target_country
-		clear_variable_list = congress_target_state
+		remove_variable ?= set_congress_target_country
+		clear_variable_list ?= congress_target_state_basket
 	}
 }
 
@@ -357,9 +364,21 @@ state_is_in_selection = {
 		state
 	}
 	is_shown = {
-		is_target_in_variable_list = {
-			name = congress_target_state
-			target = scope:state
+		OR = {
+			is_target_in_variable_list = {
+				name = congress_target_state_basket
+				target = scope:state
+			}
+			scope:state.state_region = {
+				any_scope_state = {
+					root = {
+						is_target_in_variable_list = {
+							name = congress_target_state_basket
+							target = prev
+						}
+					}
+				}
+			}
 		}
 	}
 }
