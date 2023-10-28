@@ -872,7 +872,8 @@ conference_sanctions_severity = {
 			conference_power_balance_percentage_value > 0.8
 		}
 		value = 1
-	} else_if = {
+	}
+	else_if = {
 		limit = {
 			conference_power_balance_percentage_value < -0.8
 		}
@@ -888,7 +889,6 @@ conference_sanctions_severity = {
 	}
 }
 
-
 abs_conference_sanctions_severity = {
 	value = 0
 	if = {
@@ -896,7 +896,48 @@ abs_conference_sanctions_severity = {
 			conference_sanctions_severity > 0
 		}
 		add = conference_sanctions_severity
-	} else = {
+	}
+	else = {
 		subtract = conference_sanctions_severity
+	}
+}
+
+babylon_vienna_congress_session_target_region_strategic_fraction = {
+	value = 0
+	every_state_region = {
+		limit = {
+			is_target_in_variable_list = {
+				list = congress_target_state
+				target = this
+			}
+			region = scope:strategic_region
+		}
+		add = 1
+	}
+	divide = {
+		every_in_list = {
+			variable = congress_target_state
+			add = 1
+		}
+	}
+}
+
+babylon_vienna_congress_session_target_region_culture_fraction = {
+	value = 0
+	every_state_region = {
+		limit = {
+			is_target_in_variable_list = {
+				list = congress_target_state
+				target = this
+			}
+			is_homeland = scope:culture_scope
+		}
+		add = 1
+	}
+	divide = {
+		every_in_list = {
+			variable = congress_target_state
+			add = 1
+		}
 	}
 }

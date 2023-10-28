@@ -1,0 +1,117 @@
+﻿namespace = conference_aftermath_recognition
+conference_aftermath_recognition.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_recognition.1.t
+	desc = conference_aftermath_recognition.1.desc
+	flavor = conference_aftermath_recognition.1.flavor
+	duration = 3
+	immediate = {
+		global_var:babylon_vienna_congress_session_target = {
+			save_scope_as = target_scope
+		}
+	}
+	# When the recognition passed
+	option = {
+		name = conference_aftermath_recognition.1.a
+		default_option = yes
+		trigger = {
+            has_enough_support_for_recognition = yes
+		}
+		if = {
+			limit = {
+				is_congress_supporter = yes
+			}
+			change_relations = {
+				country = scope:target_scope
+				value = 20
+			}
+		}
+		else_if = {
+			limit = {
+				is_congress_opposer = yes
+			}
+			change_relations = {
+				country = scope:target_scope
+				value = -20
+			}
+		}
+	}
+	# Too few to pass recognition
+	option = {
+		name = conference_aftermath_recognition.1.b
+		default_option = yes
+		trigger = {
+            has_enough_support_for_recognition = no
+		}
+		if = {
+			limit = {
+				is_congress_supporter = yes
+			}
+			change_relations = {
+				country = scope:target_scope
+				value = 20
+			}
+		}
+		else_if = {
+			limit = {
+				is_congress_opposer = yes
+			}
+			change_relations = {
+				country = scope:target_scope
+				value = -20
+			}
+		}
+	}
+}
+
+conference_aftermath_recognition.2 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_recognition.2.t
+	desc = conference_aftermath_recognition.2.desc
+	flavor = conference_aftermath_recognition.2.flavor
+	duration = 3
+	immediate = {
+		if = {
+            # Redundancy check
+			limit = {
+                has_enough_support_for_recognition = yes
+			}
+			recognise_target = {
+				TARGET = this
+			}
+		}
+	}
+	# When the recognition passed
+	option = {
+		name = conference_aftermath_recognition.2.a
+		default_option = yes
+		trigger = {
+            has_enough_support_for_recognition = yes
+		}
+		show_as_tooltip = {
+			recognise_target = {
+				TARGET = this
+			}
+		}
+	}
+	# Too few to pass recognition
+	option = {
+		name = conference_aftermath_recognition.2.b
+		default_option = yes
+		trigger = {
+            has_enough_support_for_recognition = no
+		}
+	}
+}

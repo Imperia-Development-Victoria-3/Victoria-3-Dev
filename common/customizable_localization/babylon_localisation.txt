@@ -281,8 +281,17 @@ babylon_vienna_congress_name_affix = {
 	text = {
 		trigger = {
 			global_var:babylon_vienna_congress_session_type = 2
+			exists = global_var:babylon_vienna_congress_session_target_single_state
+
 		}
-		localization_key = babylon_vienna_congress_name_affix_state_claim
+		localization_key = babylon_vienna_congress_name_affix_state_claim_single
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 2
+			exists = global_var:chosen_vienna_congress_target_region_or_culture
+		}
+		localization_key = babylon_vienna_congress_name_affix_state_claim_multiple
 	}
 	text = {
 		trigger = {
@@ -317,7 +326,7 @@ babylon_vienna_congress_end_event_not_enough = {
 				}
 				AND = {
 					global_var:babylon_vienna_congress_session_type = 4
-					conference_supporters_percentage_value > 0.75
+					has_enough_support_for_recognition = yes
 				}
 			}
 		}
@@ -365,7 +374,7 @@ babylon_vienna_congress_end_event_support_oppose = {
 					global_var:babylon_vienna_congress_session_type != 4
 				}
 				AND = {
-					conference_supporters_percentage_value > 0.75
+					has_enough_support_for_recognition = yes
 					global_var:babylon_vienna_congress_session_type = 4
 				}
 			}

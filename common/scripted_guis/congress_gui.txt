@@ -107,15 +107,13 @@ end_congress = {
 		}
 		remove_global_variable = babylon_vienna_congress_in_session
 		every_country = {
-			limit = {
-				OR = {
-					is_country_type = recognized
-					is_country_type = colonial
-				}
-			}
 			if = {
 				limit = {
 					scope:target_country != this
+					OR = {
+						is_country_type = recognized
+						is_country_type = colonial
+					}
 				}
 				aftermath_event_choice = yes
 			}
@@ -301,15 +299,41 @@ set_congress_target_country = {
 	}
 }
 
+has_congress_target_country = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	is_shown = {
+		is_target_in_variable_list = {
+			name = set_congress_target_country
+			target = scope:target
+		}
+	}
+}
+
 set_congress_target_state = {
 	scope = country
 	saved_scopes = {
 		target_state
 	}
 	effect = {
-		set_variable = {
-			name = set_congress_target_state
-			value = scope:target_state
+		add_to_variable_list = {
+			name = congress_target_state
+			target = scope:target_state
+		}
+	}
+}
+
+unset_congress_target_state = {
+	scope = country
+	saved_scopes = {
+		target_state
+	}
+	effect = {
+		remove_list_variable = {
+			name = congress_target_state
+			target = scope:target_state
 		}
 	}
 }
@@ -321,9 +345,21 @@ start_congress = {
 			TYPE = var:congress_proposal_type
 			INITIATOR = root
 			TARGET = var:set_congress_target_country
-			TARGET_STATE = var:set_congress_target_state
 		}
 		remove_variable = set_congress_target_country
-		remove_variable = set_congress_target_state
+		clear_variable_list = congress_target_state
+	}
+}
+
+state_is_in_selection = {
+	scope = country
+	saved_scopes = {
+		state
+	}
+	is_shown = {
+		is_target_in_variable_list = {
+			name = congress_target_state
+			target = scope:state
+		}
 	}
 }

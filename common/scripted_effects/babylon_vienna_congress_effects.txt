@@ -51,6 +51,9 @@ congress_start_conference = {
 		clear_global_variable_list ?= current_congress_members_on_stance_1
 		clear_global_variable_list ?= current_congress_members_on_stance_2
 		clear_global_variable_list ?= current_congress_members_on_stance_3
+		clear_global_variable_list ?= babylon_vienna_congress_session_target_states
+		remove_global_variable ?= babylon_vienna_congress_session_target_single_state
+		remove_global_variable ?= chosen_vienna_congress_target_region_or_culture
 		set_global_variable = {
 			name = babylon_vienna_congress_in_session
 		}
@@ -75,53 +78,10 @@ congress_start_conference = {
 				add = 1
 			}
 		}
-		if = {
-			limit = {
-				$TYPE$ = 1
-				# Denouncement
-			}
-			$TARGET$ = {
-				capital = {
-					save_scope_as = target_state
-				}
-			}
-		}
-		if = {
-			limit = {
-				$TYPE$ = 2
-				# State Claim
-			}
-			$TARGET_STATE$ = {
-				save_scope_as = target_state
-			}
-		}
-		if = {
-			limit = {
-				$TYPE$ = 3
-				# Embargo
-			}
-			$TARGET$ = {
-				capital = {
-					save_scope_as = target_state
-				}
-			}
-		}
-		if = {
-			limit = {
-				$TYPE$ = 4
-				# Recognises Country
-			}
-			$TARGET$ = {
-				capital = {
-					save_scope_as = target_state
-				}
-			}
-		}
 		congress_initialise_conference_global_vars = {
 			TYPE = $TYPE$
 			TARGET = $TARGET$
 			INITIATOR = $INITIATOR$
-			TARGET_STATE = scope:target_state
 		}
 		every_country = {
 			limit = {
@@ -148,7 +108,6 @@ congress_start_conference = {
 					COUNTRY = this
 					STANCE = 1
 				}
-				
 			}
 			else_if = {
 				limit = {
@@ -230,7 +189,7 @@ aftermath_event_choice = {
 			global_var:babylon_vienna_congress_session_type = 3
 		}
 		trigger_event = {
-			id = conference_aftermath_denouncement.1
+			id = conference_aftermath_embargo.1
 			popup = yes
 		}
 	}
@@ -239,12 +198,11 @@ aftermath_event_choice = {
 			global_var:babylon_vienna_congress_session_type = 4
 		}
 		trigger_event = {
-			id = conference_aftermath_denouncement.1
+			id = conference_aftermath_recognition.1
 			popup = yes
 		}
 	}
 }
-
 
 aftermath_event_consequence = {
 	# NEEDS FILLING IN ACCORDING TO TYPE
@@ -271,7 +229,7 @@ aftermath_event_consequence = {
 			global_var:babylon_vienna_congress_session_type = 3
 		}
 		trigger_event = {
-			id = conference_aftermath_denouncement.2
+			id = conference_aftermath_embargo.2
 			popup = yes
 		}
 	}
@@ -280,7 +238,7 @@ aftermath_event_consequence = {
 			global_var:babylon_vienna_congress_session_type = 4
 		}
 		trigger_event = {
-			id = conference_aftermath_denouncement.2
+			id = conference_aftermath_recognition.2
 			popup = yes
 		}
 	}
@@ -299,9 +257,109 @@ congress_initialise_conference_global_vars = {
 		name = babylon_vienna_congress_session_initiator
 		value = $INITIATOR$
 	}
-	set_global_variable = {
-		name = babylon_vienna_congress_session_target_state
-		value = $TARGET_STATE$
+	if = {
+		limit = {
+			$TYPE$ = 2
+			# State Claim
+		}
+		if = {
+			limit = {
+				list_size = {
+					name = congress_target_state
+					value = 1
+				}
+			}
+			random_in_list = {
+				list = congress_target_state
+				set_global_variable = {
+					name = babylon_vienna_congress_session_target_single_state
+					value = this
+				}
+			}
+		}
+		else = {
+			every_in_list = {
+				variable = congress_target_state
+				region = {
+					if = {
+						limit = {
+							NOT = {
+								is_target_in_local_variable_list = {
+									name = strategic_regions_in_congress_target
+									target = this
+								}
+							}
+						}
+						add_to_local_variable_list = {
+							name = strategic_regions_in_congress_target
+							target = this
+						}
+					}
+				}
+				every_scope_culture = {
+					limit = {
+						has_homeland = prev
+					}
+					if = {
+						limit = {
+							NOT = {
+								is_target_in_local_variable_list = {
+									name = homeland_cultures_in_congress_target
+									target = this
+								}
+							}
+						}
+						add_to_local_variable_list = {
+							name = homeland_cultures_in_congress_target
+							target = this
+						}
+					}
+				}
+			}
+			save_temporary_scope_value_as = {
+				name = highest_congress_target_fraction
+				value = 0
+			}
+			every_in_local_list = {
+				variable = strategic_regions_in_congress_target
+				save_scope_as = strategic_region
+				if = {
+					limit = {
+						babylon_vienna_congress_session_target_region_strategic_fraction > scope_value:highest_congress_target_fraction
+					}
+					save_temporary_scope_value_as = {
+						name = highest_congress_target_fraction
+						value = babylon_vienna_congress_session_target_region_strategic_fraction
+					}
+					save_scope_as = chosen_vienna_congress_target_region_or_culture
+				}
+			}
+			every_in_local_list = {
+				variable = homeland_cultures_in_congress_target
+				save_scope_as = strategic_region
+				if = {
+					limit = {
+						babylon_vienna_congress_session_target_region_culture_fraction > scope_value:highest_congress_target_fraction
+					}
+					save_temporary_scope_value_as = {
+						name = highest_congress_target_fraction
+						value = babylon_vienna_congress_session_target_region_culture_fraction
+					}
+					save_scope_as = chosen_vienna_congress_target_region_or_culture
+				}
+			}
+			set_global_variable = {
+				name = chosen_vienna_congress_target_region_or_culture
+				value = scope:chosen_vienna_congress_target_region_or_culture
+			}
+		}
+	}
+	every_in_list = {
+		variable = congress_target_state
+		add_to_global_variable_list = {
+			name = babylon_vienna_congress_session_target_states
+			value = this
+		}
 	}
 }
 
@@ -529,36 +587,47 @@ state_claim_target = {
 	}
 }
 
+# scope: country (the embargoer)
 embargo_target = {
 	if = {
 		limit = {
-			conference_sanctions_severity != 0
+			conference_sanctions_severity > 0
+		}
+		change_relations = {
+			country = $TARGET$
+			value = {
+				add = -50
+				multiply = conference_sanctions_severity
+			}
+		}
+		create_diplomatic_pact = {
+			country = $TARGET$
+			type = forced_embargo_pact
+		}
+	}
+}
+
+# scope: country (the target)
+embargo_effect = {
+	if = {
+		limit = {
+			conference_sanctions_severity > 0
+		}
+		add_modifier = {
+			name = forced_embargo
+			years = 3
+			multiplier = conference_sanctions_severity
 		}
 		every_in_global_list = {
 			variable = current_congress_members_on_stance_1
-			change_relations = {
-				country = $TARGET$
-				value = -50
-			}
-			create_diplomatic_pact = {
-				country = $TARGET$
-				type = forced_embargo_pact
-			}
-		}
-		every_in_global_list = {
-			variable = current_congress_members_on_stance_1
-			$TARGET$ = {
+			root = {
 				change_relations = {
 					country = prev
-					value = -50
+					value = {
+						add = -50
+						multiply = conference_sanctions_severity
+					}
 				}
-			}
-		}
-		$TARGET$ = {
-			add_modifier = {
-				name = forced_embargo
-				years = 3
-				multiplier = conference_sanctions_severity
 			}
 		}
 	}
@@ -567,16 +636,7 @@ embargo_target = {
 recognise_target = {
 	if = {
 		limit = {
-			conference_supporters_percentage_value > 0.75
-		}
-		every_in_global_list = {
-			variable = current_congress_members_on_stance_1
-			$TARGET$ = {
-				change_relations = {
-					country = prev
-					value = 50
-				}
-			}
+			has_enough_support_for_recognition = yes
 		}
 		$TARGET$ = {
 			set_country_type = recognized
