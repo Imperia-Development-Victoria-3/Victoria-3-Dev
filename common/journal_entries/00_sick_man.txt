@@ -291,6 +291,138 @@ je_sick_man_kurdish_absolute = {
 	progressbar = yes
 }
 
+# Nationalism
+je_sick_man_separatism = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	complete = {
+		trigger_if = {
+			limit = {
+				has_variable = absolute_tanzimat
+			}
+			has_law = law_type:law_faith_orders
+			NOT = {
+				has_law = law_type:law_no_migration_controls
+			}
+			institution_investment_level = {
+				institution = institution_police
+				value >= 2
+			}
+			has_diplomatic_pact = {
+				who = c:SER
+				type = dominion
+			}
+			has_diplomatic_pact = {
+				who = c:WAL
+				type = dominion
+			}
+			has_diplomatic_pact = {
+				who = c:MOL
+				type = dominion
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = liberal_tanzimat
+			}
+			scope:journal_entry = {
+				is_goal_complete = yes
+			}
+			highest_secession_progress < 0.75
+			any_scope_state = {
+				turmoil <= 0.6
+			}
+			has_law = law_type:law_no_migration_controls
+			has_law = law_type:law_cultural_exclusion
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = liberal_tanzimat
+			}
+			add_loyalists = {
+				value = 0.05
+				religion = rel:catholic
+			}
+			add_loyalists = {
+				value = 0.05
+				religion = rel:orthodox
+			}
+			add_radicals = {
+				value = 0.05
+				religion = rel:sunni
+			}
+			add_modifier = {
+				name = balkan_liberal_peace
+				years = 5
+			}
+		}
+		else = {
+			add_modifier = {
+				name = balkan_absolute_peace
+				years = 10
+			}
+			s:STATE_PELOPONNESE = {
+				add_claim = ROOT
+			}
+			s:STATE_ATTICA = {
+				add_claim = ROOT
+			}
+			s:STATE_WEST_AEGEAN_ISLANDS = {
+				add_claim = ROOT
+			}
+			s:STATE_IONIAN_ISLANDS = {
+				add_claim = ROOT
+			}
+		}
+		set_variable = completed_separatism_sick_man_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier = balkan_disarray
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_variable = liberal_tanzimat
+					highest_secession_progress < 0.75
+					any_scope_state = {
+						turmoil <= 0.6
+					}
+					has_law = law_type:law_no_migration_controls
+					has_law = law_type:law_cultural_exclusion
+				}
+				change_variable = {
+					name = sick_man_separatist_var
+					add = 1
+				}
+			}
+		}
+		random_events = {
+			100 = 0
+			10 = tanzimat_events.5			# Paranoia Event
+		}
+	}
+	current_value = {
+		value = var:sick_man_separatist_var
+	}
+	goal_add_value = {
+		add = 120
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5000
+	progressbar = yes
+}
+
 je_sick_man_syria = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	complete = {
@@ -423,138 +555,6 @@ je_sick_man_education = {
 	goal_add_value = {
 		value = root.literacy_rate
 		add = 0.2
-	}
-	invalid = {
-		custom_tooltip = {
-			text = finished_sick_man_tt
-			has_variable = sick_man_complete
-		}
-	}
-	transferable = no
-	weight = 5000
-	progressbar = yes
-}
-
-# Nationalism
-je_sick_man_separatism = {
-	icon = "gfx/interface/icons/event_icons/event_fire.dds"
-	complete = {
-		trigger_if = {
-			limit = {
-				has_variable = absolute_tanzimat
-			}
-			has_law = law_type:law_faith_orders
-			NOT = {
-				has_law = law_type:law_no_migration_controls
-			}
-			institution_investment_level = {
-				institution = institution_police
-				value >= 2
-			}
-			has_diplomatic_pact = {
-				who = c:SER
-				type = dominion
-			}
-			has_diplomatic_pact = {
-				who = c:WAL
-				type = dominion
-			}
-			has_diplomatic_pact = {
-				who = c:MOL
-				type = dominion
-			}
-		}
-		trigger_if = {
-			limit = {
-				has_variable = liberal_tanzimat
-			}
-			scope:journal_entry = {
-				is_goal_complete = yes
-			}
-			highest_secession_progress < 0.75
-			any_scope_state = {
-				turmoil <= 0.6
-			}
-			has_law = law_type:law_no_migration_controls
-			has_law = law_type:law_cultural_exclusion
-		}
-	}
-	on_complete = {
-		if = {
-			limit = {
-				has_variable = liberal_tanzimat
-			}
-			add_loyalists = {
-				value = 0.05
-				religion = rel:catholic
-			}
-			add_loyalists = {
-				value = 0.05
-				religion = rel:orthodox
-			}
-			add_radicals = {
-				value = 0.05
-				religion = rel:sunni
-			}
-			add_modifier = {
-				name = balkan_liberal_peace
-				years = 5
-			}
-		}
-		else = {
-			add_modifier = {
-				name = balkan_absolute_peace
-				years = 10
-			}
-			s:STATE_PELOPONNESE = {
-				add_claim = ROOT
-			}
-			s:STATE_ATTICA = {
-				add_claim = ROOT
-			}
-			s:STATE_WEST_AEGEAN_ISLANDS = {
-				add_claim = ROOT
-			}
-			s:STATE_IONIAN_ISLANDS = {
-				add_claim = ROOT
-			}
-		}
-		set_variable = completed_separatism_sick_man_je
-		custom_tooltip = je_sick_man_advance
-		change_variable = {
-			name = sick_man_var
-			add = 1
-		}
-		remove_modifier = balkan_disarray
-	}
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = {
-					has_variable = liberal_tanzimat
-					highest_secession_progress < 0.75
-					any_scope_state = {
-						turmoil <= 0.6
-					}
-					has_law = law_type:law_no_migration_controls
-					has_law = law_type:law_cultural_exclusion
-				}
-				change_variable = {
-					name = sick_man_separatist_var
-					add = 1
-				}
-			}
-		}
-		random_events = {
-			100 = 0
-			10 = tanzimat_events.5			# Paranoia Event
-		}
-	}
-	current_value = {
-		value = var:sick_man_separatist_var
-	}
-	goal_add_value = {
-		add = 120
 	}
 	invalid = {
 		custom_tooltip = {
