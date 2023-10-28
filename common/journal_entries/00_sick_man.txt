@@ -423,6 +423,79 @@ je_sick_man_separatism = {
 	progressbar = yes
 }
 
+# Literacy and Universities
+je_sick_man_education = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	complete = {
+		any_scope_building = {
+			is_building_type = building_university
+			occupancy > 0.9
+			level >= 5
+		}
+		trigger_if = {
+			limit = {
+				has_variable = liberal_tanzimat
+			}
+			OR = {
+				has_law = law_type:law_private_schools
+				has_law = law_type:law_public_schools
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = absolute_tanzimat
+			}
+			OR = {
+				has_law = law_type:law_patriot_schools
+				has_law = law_type:law_religious_schools
+			}
+		}
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		if = {
+			limit = {
+				has_variable = liberal_tanzimat
+			}
+			add_modifier = {
+				name = sick_man_liberal_education
+				years = 5
+			}
+		}
+		else = {
+			add_modifier = {
+				name = sick_man_absolute_education
+				years = 10
+			}
+		}
+		set_variable = completed_sick_man_education_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+	}
+	current_value = {
+		value = root.literacy_rate
+	}
+	goal_add_value = {
+		value = root.literacy_rate
+		add = 0.15
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5000
+	progressbar = yes
+	remove_modifier = imbalanced_education
+}
+
 je_sick_man_syria = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	complete = {
@@ -526,43 +599,4 @@ je_sick_man_egypt = {
 	}
 	transferable = no
 	weight = 5000
-}
-
-# Literacy and Universities
-je_sick_man_education = {
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-	complete = {
-		any_scope_building = {
-			is_building_type = building_university
-			occupancy > 0.9
-			level >= 5
-		}
-		scope:journal_entry = {
-			is_goal_complete = yes
-		}
-	}
-	on_complete = {
-		set_variable = completed_sick_man_education_je
-		custom_tooltip = je_sick_man_advance
-		change_variable = {
-			name = sick_man_var
-			add = 1
-		}
-	}
-	current_value = {
-		value = root.literacy_rate
-	}
-	goal_add_value = {
-		value = root.literacy_rate
-		add = 0.2
-	}
-	invalid = {
-		custom_tooltip = {
-			text = finished_sick_man_tt
-			has_variable = sick_man_complete
-		}
-	}
-	transferable = no
-	weight = 5000
-	progressbar = yes
 }
