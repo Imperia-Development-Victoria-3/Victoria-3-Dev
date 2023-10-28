@@ -27,6 +27,12 @@
 		value = var:sick_man_var
 	}
 
+	on_monthly_pulse = {
+		random_events = {
+			10 = sick_man.4
+		}
+	}
+
 	goal_add_value = {
 		add = 8
 	}
@@ -204,6 +210,120 @@ je_sick_man_navy = {
 	weight = 5000
 }
 
+# Kurdish Question
+je_sick_man_kurdish_liberal = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_diplomatic_pact = { who = c:KUR type = protectorate }
+		is_at_war = no
+	}
+
+	on_complete = {
+		set_variable = completed_sick_man_army_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier = kurdish_question
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+
+	current_value = {
+		value = var:sick_man_kurdish_liberal_var
+	}
+
+	goal_add_value = {
+		add = 180
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_diplomatic_pact = { who = c:KUR type = protectorate }
+					is_at_war = no
+				}
+				change_variable = {
+					name = sick_man_kurdish_liberal_var
+					add = 1
+				}
+			}
+		}
+	}
+
+	transferable = no
+
+	weight = 5000
+
+	progressbar = yes
+}
+
+je_sick_man_kurdish_absolute = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_diplomatic_pact = { who = c:KUR type = puppet }
+		is_at_war = no
+	}
+
+	on_complete = {
+		set_variable = completed_sick_man_army_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier = kurdish_question
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+
+	current_value = {
+		value = var:sick_man_kurdish_absolute_var
+	}
+
+	goal_add_value = {
+		add = 180
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_diplomatic_pact = { who = c:KUR type = puppet }
+					is_at_war = no
+				}
+				change_variable = {
+					name = sick_man_kurdish_absolute_var
+					add = 1
+				}
+			}
+		}
+	}
+
+	transferable = no
+
+	weight = 5000
+
+	progressbar = yes
+}
 
 je_sick_man_syria = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
@@ -257,11 +377,6 @@ je_sick_man_syria = {
 			change_variable = {
 				name = sick_man_var
 				add = 1
-			}
-		}
-		else = {
-			add_journal_entry = {
-				type = je_sick_man_egypt
 			}
 		}
 		custom_tooltip = sickman_syria_egypt
