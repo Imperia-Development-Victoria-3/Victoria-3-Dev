@@ -183,6 +183,12 @@ je_sick_man_navy = {
 # Kurdish Question
 je_sick_man_kurdish_liberal = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	immediate = {
+		set_variable = {
+			name = sick_man_kurdish_liberal_var
+			value = 0
+		}
+	}
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -199,6 +205,28 @@ je_sick_man_kurdish_liberal = {
 		change_variable = {
 			name = sick_man_var
 			add = 1
+		}
+		add_loyalists = {
+			value = 0.20
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = ottoman_kurdish_liberal_reward
+			years = 5
+		}	
+		c:KUR = {
+			add_loyalists = {
+				value = 0.30
+				culture = cu:kurdish
+			}
+			add_modifier = {
+				name = kurdish_liberal_reward
+				years = 5
+			}	
 		}
 		remove_modifier = kurdish_question
 	}
@@ -222,7 +250,7 @@ je_sick_man_kurdish_liberal = {
 						who = c:KUR
 						type = protectorate
 					}
-					is_at_war = no
+					NOT = { has_war_with = c:KUR }
 				}
 				change_variable = {
 					name = sick_man_kurdish_liberal_var
@@ -238,6 +266,12 @@ je_sick_man_kurdish_liberal = {
 
 je_sick_man_kurdish_absolute = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	immediate = {
+		set_variable = {
+			name = sick_man_kurdish_absolute_var
+			value = 0
+		}
+	}
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -255,6 +289,14 @@ je_sick_man_kurdish_absolute = {
 			name = sick_man_var
 			add = 1
 		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_modifier = {
+			name = ottoman_kurdish_absolute_reward
+			years = 5
+		}	
 		remove_modifier = kurdish_question
 	}
 	invalid = {
@@ -277,7 +319,7 @@ je_sick_man_kurdish_absolute = {
 						who = c:KUR
 						type = puppet
 					}
-					is_at_war = no
+					NOT = { has_war_with = c:KUR }
 				}
 				change_variable = {
 					name = sick_man_kurdish_absolute_var
