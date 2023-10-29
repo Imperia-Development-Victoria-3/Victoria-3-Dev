@@ -756,6 +756,7 @@ je_sick_man_liberal_secularism = {
 	weight = 5000
 }
 
+# Labor
 je_sick_man_liberal_labor = {
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 	complete = {
@@ -791,6 +792,7 @@ je_sick_man_liberal_labor = {
 	weight = 5000
 }
 
+# Syria & Egypt
 je_sick_man_syria = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	complete = {
@@ -800,6 +802,10 @@ je_sick_man_syria = {
 		owns_entire_state_region = STATE_PALESTINE
 		owns_entire_state_region = STATE_TRANSJORDAN
 		owns_entire_state_region = STATE_ADANA
+		OR = {
+			has_law = law_type:law_agrarianism
+			has_law = law_type:law_interventionism
+		}
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -884,6 +890,15 @@ je_sick_man_egypt = {
 			name = sick_man_var
 			add = 1
 		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = sick_man_absolute_egypt
+			years = 15
+			is_decaying = yes
+		}
 		remove_modifier = internal_strife
 	}
 	invalid = {
@@ -894,4 +909,74 @@ je_sick_man_egypt = {
 	}
 	transferable = no
 	weight = 5000
+}
+
+# Islamism
+je_sick_man_absolute_islam = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	immediate = {
+		set_variable = {
+			name = sick_man_absolute_tradition_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.05
+			religion = rel:sunni
+		}
+		add_modifier = {
+			name = sick_man_absolute_islamism
+			years = 5
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_absolute_tradition_var
+	}
+	goal_add_value = {
+		add = 180
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					AND = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_inquisition
+						has_law = law_type:law_legal_guardianship
+						has_law = law_type:law_tenant_farmers
+					}
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_technocracy
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_landed_voting
+					}
+				}
+				change_variable = {
+					name = sick_man_absolute_tradition_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5000
+	progressbar = yes
 }
