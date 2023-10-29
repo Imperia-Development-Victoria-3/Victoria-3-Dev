@@ -30,18 +30,21 @@ babylon_qing.1 = { #Qing set-up event
 			add_journal_entry = {
 			type = je_qing_administrative_reform
 			}
-#			add_journal_entry = {
-#			type = je_rural_poverty_qing
-#			}
+			add_journal_entry = {
+			type = je_rural_poverty_qing
+			}
 			add_journal_entry = {
 			type = je_end_female_infanticide
 			}
-#			add_journal_entry = {
-#			type = je_promote_western_science
-#			}
-#			add_journal_entry = {
-#			type = je_reform_the_banner_system
-#			}
+			add_journal_entry = {
+			type = je_promote_western_learning
+			}
+			add_journal_entry = {
+			type = je_reform_the_banner_system
+			}
+			add_journal_entry = {
+			type = je_industrialize_china
+			}
 	}
 }
 
@@ -130,7 +133,7 @@ babylon_qing.3 = { #Substate Set-up Event
 	trigger = {
 	}	
 	
-			option = { #Troubling news
+		option = { #Troubling news
 		name = babylon_qing.1.a
 
 			if = {
@@ -144,11 +147,69 @@ babylon_qing.3 = { #Substate Set-up Event
 			add_journal_entry = {
 			type = je_end_female_infanticide
 			}
-#			add_journal_entry = {
-#			type = je_promote_western_science
-#			}
+			add_journal_entry = {
+			type = je_promote_western_learning
+			}
 			add_journal_entry = {
 			type = je_establish_local_armies
 			}
+			add_journal_entry = {
+			type = je_industrialize_china
+			}
+	}
+}
+
+babylon_qing.4 = { #Result of Reforming Banner System
+	type = country_event
+	placement = root
+	title = babylon_qing.4.t
+	desc = babylon_qing.4.d
+	flavor = babylon_qing.4.f
+
+	duration = 3
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+
+	trigger = {
+	}	
+
+	option = { #New Army
+		name = babylon_qing.4.a
+
+#		trigger = {
+#			has_variable = chose_new_army
+#		}
+		
+		add_modifier = modifier_new_army
+		ig:ig_armed_forces= {
+			set_interest_group_name = ig_new_army
+		}
+		
+		#line here to remove yong ying and crumbling banner system from substates
+		#line to + fragile unity
+	}
+	
+	option = { #Yong-Ying System
+		name = babylon_qing.4.b
+	
+#		trigger = {
+#		has_variable = chose_yong_ying
+#		}
+		
+		add_modifier = modifier_yong_ying_system
+		ig:ig_armed_forces= {
+			set_interest_group_name = ig_beiyang_army
+		}
+		
+		#line here to remove modifiers from substates
+		#line to - fragile unity
+		#line here to rename all substate armed forces
 	}
 }

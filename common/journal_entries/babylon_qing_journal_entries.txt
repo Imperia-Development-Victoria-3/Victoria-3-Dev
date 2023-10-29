@@ -1,5 +1,7 @@
 ##Qing Entries
 
+#je_establish_national_language
+
 je_end_han_discrimination = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 	
@@ -70,6 +72,122 @@ je_end_female_infanticide = {
 	remove_modifier = modifier_female_shortage
 	}
 }
+
+je_rural_poverty_qing = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	
+	complete = {
+		average_sol >= 10
+		
+		NOT = {
+			has_law = law_type:law_serfdom
+		}
+		
+		NOR = {
+			has_law = law_type:law_consumption_based_taxation
+			has_law = law_type:law_land_based_taxation
+		}
+	}
+	
+	#line of code here that checks if at least 75% of substates have done it
+	
+	on_complete = {
+		remove_modifier = modifier_rural_poverty
+		
+		add_loyalists = {
+		value = 0.1
+	#line of code here that affects fragile unity
+		}
+	}
+}
+
+je_reform_the_banner_system = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	complete = {
+	
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	
+		OR = {
+			AND = {
+			
+			custom_tooltip = {
+			text = chose_yong_ying_tt
+			has_variable = chose_yong_ying
+			}
+		
+			army_size >= 150
+			has_technology_researched = napoleonic_warfare
+		
+				OR = {
+					has_law = law_type:law_national_guard
+					has_law = law_type:law_localized_garrisons
+					has_law = law_type:law_faith_orders			
+				}
+			
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_barracks				
+						OR = {
+							building_has_goods_shortage = yes
+							has_active_production_method = pm_no_organization
+							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+							# has_active_production_method = pm_no_artillery
+							# has_active_production_method = pm_cannon_artillery
+						}
+					}
+				}
+			}
+		
+			AND = {
+			
+			custom_tooltip = {
+			text = chose_new_army_tt
+			has_variable = chose_new_army
+			}
+		
+			army_size >= 150
+			has_technology_researched = general_staff
+			has_technology_researched = logistics
+			has_technology_researched = rifling
+			
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_barracks				
+						OR = {
+							building_has_goods_shortage = yes
+							has_active_production_method = pm_no_organization
+							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+							# has_active_production_method = pm_no_artillery
+							# has_active_production_method = pm_cannon_artillery
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_complete = {
+	
+		trigger_event = event_babylon_qing.4
+		remove_modifier = modifier_crumbling_banner_system
+	}
+	
+	fail = {
+		ig:ig_armed_forces = {
+			is_powerful = yes
+		}
+	}
+	
+	on_fail = {
+		#trigger_event = event_babylon_qing.5 #Tyranny of the Eight Banners
+		remove_modifier = modifier_crumbling_banner_system
+	}
+}
+		
+		
 			
 ##Local Entries
 
@@ -109,7 +227,93 @@ je_establish_local_armies = { #Common
 	}
 }
 
+je_rural_poverty_substate = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	
+	complete = {
+		average_sol >= 10
+		
+		NOT = {
+			has_law = law_type:law_serfdom
+		}
+		
+		NOR = {
+			has_law = law_type:law_consumption_based_taxation
+			has_law = law_type:law_land_based_taxation
+		}
+	}
+		
+	on_complete = {
+		remove_modifier = modifier_rural_poverty
+		
+		add_loyalists = {
+		value = 0.1
+		}
+		
+		#line of code here that hooks it into China's Rural Poverty JE
+	}	
+}
 
+je_industrialize_china = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	
+	complete = {
+		OR = {
+			any_scope_state = {
+				is_incorporated = yes
+				has_building = building_urban_center
+				percent >= 0.75
+				level >= 20
+			}
+			
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent < 0.35
+			}			
+		}
+	}
+	
+	on_complete = {
+		add_modifier = {
+			type = modifier_great_leap_forward
+			months = 240
+		}
+	}
+}
+
+je_promote_western_learning = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	
+	complete = {
+		has_technology_researched = dialectics
+		
+		any_scope_building = {
+			is_building_type = building_university
+			occupancy > 0.9
+			level >= 5
+		}
+		
+		NOT = {
+			has_law = law_type:law_no_schools
+		}
+		
+		institution_investment_level = {
+			institution = institution_schooling
+			value >= 2
+		}		
+	}
+	
+	on_complete = {
+		add_modifier = {
+			name = modifier_self_strengthening_movement
+			months = 240
+			decaying = yes
+		}
+		remove_modifier = modifier_chinese_diglossia
+	}
+}
+		
+	
 ##Substate-Specific
 
 je_pacify_highland_tribes = { #Sichuan
@@ -198,6 +402,7 @@ je_breadbasket_of_the_south = { #Huguang
 			pop_type = peasants
 			percent < 0.60
 		}
+
 		OR = {
 			has_law = law_type:law_interventionism
 			has_law = law_type:law_laissez_faire
