@@ -522,7 +522,7 @@ je_sick_man_education = {
 			}
 			add_modifier = {
 				name = sick_man_liberal_education
-				years = 5
+				years = 10
 			}
 		}
 		else = {
@@ -558,7 +558,7 @@ je_sick_man_education = {
 
 # Liberalism
 je_sick_man_liberal_voting = {
-	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
 	immediate = {
 		set_variable = {
 			name = sick_man_voting_liberal_var
@@ -629,7 +629,7 @@ je_sick_man_liberal_voting = {
 
 # Secularism
 je_sick_man_liberal_secularism = {
-	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -741,7 +741,43 @@ je_sick_man_liberal_secularism = {
 			}
 		}
 		add_modifier = {
-			name = sick_man_liberal_voting
+			name = sick_man_liberal_secularism
+			years = 10
+		}
+		remove_modifier = internal_strife
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5000
+}
+
+je_sick_man_liberal_labor = {
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	complete = {
+		NOR = {
+			has_law = law_type:law_serfdom
+			has_law = law_type:law_tenant_farmers
+		}
+		OR = {
+			has_law = law_type:law_interventionism
+			has_law = law_type:law_laissez_faire
+		}
+		has_law = law_type:law_slavery_banned
+	}
+	on_complete = {
+		set_variable = completed_sick_man_bureaucracy_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_liberal_labor
 			years = 10
 		}
 	}
