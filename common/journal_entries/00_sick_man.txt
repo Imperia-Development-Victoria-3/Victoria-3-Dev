@@ -53,6 +53,10 @@ je_sick_man_bureaucracy = {
 			name = sick_man_var
 			add = 1
 		}
+		add_modifier = {
+			name = sick_man_tanzimat_bureaucracy
+			years = 10
+		}	
 		remove_modifier = outmoded_bureaucracy
 	}
 	on_monthly_pulse = {
@@ -89,6 +93,10 @@ je_sick_man_economy = {
 			name = sick_man_var
 			add = 1
 		}
+		add_modifier = {
+			name = sick_man_tanzimat_economy
+			years = 10
+		}	
 		remove_modifier = stagnant_economy
 	}
 	invalid = {
@@ -126,6 +134,11 @@ je_sick_man_army = {
 			name = sick_man_var
 			add = 1
 		}
+		add_modifier = {
+			name = sick_man_tanzimat_army
+			years = 10
+			is_decaying = yes
+		}	
 		remove_modifier = janissary_legacy
 	}
 	on_monthly_pulse = {
@@ -168,6 +181,11 @@ je_sick_man_navy = {
 			name = sick_man_var
 			add = 1
 		}
+		add_modifier = {
+			name = sick_man_tanzimat_navy
+			years = 10
+			is_decaying = yes
+		}	
 		remove_modifier = rampant_piracy
 	}
 	invalid = {
@@ -535,6 +553,78 @@ je_sick_man_education = {
 	weight = 5000
 	progressbar = yes
 	remove_modifier = imbalanced_education
+}
+
+# Liberalism
+je_sick_man_voting_liberal = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	immediate = {
+		set_variable = {
+			name = sick_man_voting_liberal_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		set_variable = completed_sick_man_army_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.10
+			strata = poor
+		}
+		add_radicals = {
+			value = 0.15
+			strata = rich
+		}
+		add_modifier = {
+			name = sick_man_liberal_voting
+			years = 10
+		}	
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_voting_liberal_var
+	}
+	goal_add_value = {
+		add = 120
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_right_of_assembly
+						has_law = law_type:law_protected_speech
+					}
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+						has_law = law_type:law_universal_suffrage
+					}
+				}
+				change_variable = {
+					name = sick_man_voting_liberal_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5000
+	progressbar = yes
 }
 
 je_sick_man_syria = {
