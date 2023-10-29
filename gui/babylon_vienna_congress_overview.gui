@@ -22,10 +22,6 @@ types babylon_vienna_congress
                 direction = vertical
                 parentanchor = hcenter
                 textbox = {
-                    raw_text = "Remaining Time: [GetVarTimeRemaining( GetPlayer.MakeScope, GetGlobalVariable('babylon_vienna_congress_in_session') )]"
-                    autoresize = yes
-                }
-                textbox = {
                     autoresize = yes
                     raw_text = "[Concept('concept_great_power', 'Great Powers')]"
                     using = header_font_fancy
@@ -125,32 +121,8 @@ types babylon_vienna_congress
             spacing = 20
             direction = vertical
             parentanchor = center|top
-            # textbox = {
-            #     text = "end_congress_confirmation NOT set"
-            #     visible = "[Not(GetVariableSystem.Exists('end_congress_confirmation'))]"
-            # }
-            # textbox = {
-            #     text = "end_congress_confirmation set"
-            #     visible = "[GetVariableSystem.Exists('end_congress_confirmation')]"
-            # }
-            # button = {
-            #     using = default_button
-            #     onclick = "[GetVariableSystem.Clear('end_congress_confirmation')]"
-            #     parentanchor = center|top
-            #     textbox = {
-            #         resizeparent = yes
-            #         raw_text = "clear end_congress_confirmation"
-            #         align = center|nobaseline
-            #         autoresize = yes
-            #         maximumsize = { 250 -1 }
-            #         minimumsize = { 250 -1 }
-            #         margin = { 10 10 }
-            #         parentanchor = center
-            #     }
-            # }
             flowcontainer = {	
                 margin_top = 20
-                #margin_right = 90
                 parentanchor = hcenter
                 direction = vertical
                 flowcontainer = {
@@ -167,12 +139,17 @@ types babylon_vienna_congress
                 flowcontainer = {
                     visible = "[GetGlobalVariable('babylon_vienna_congress_in_session').IsSet]"
                     direction = vertical
-                    textbox = {
-                        autoresize = yes
-                        text = "CURRENT_CONFERENCE_NAME"
-                        using = header_font_fancy
-                        using = fontsize_mega
+                    flowcontainer = {
+                        direction = horizontal
                         parentanchor = center|top
+                        textbox = {
+                            autoresize = yes
+                            text = "CURRENT_CONFERENCE_NAME"
+                            using = header_font_fancy
+                            using = fontsize_mega
+                            default_format = "#tooltippable_concept"
+                            tooltip = "BABYLON_POLITICAL_CONGRESS_EFFECTS_TOOLTIP"
+                        }
                     }
                     divider_decorative = {}
                     # benches

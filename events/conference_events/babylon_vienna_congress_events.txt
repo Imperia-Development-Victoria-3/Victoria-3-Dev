@@ -58,7 +58,7 @@
 # 					global_var:babylon_vienna_congress_session_type = 4
 # 					# Recognition
 # 				}
-# 				recognise_target = {
+# 				recognise_effect = {
 # 					TARGET = scope:target_country
 # 				}
 # 			}
@@ -111,14 +111,13 @@
 # 			}
 # 			custom_tooltip = following_has_happened_tt
 # 			show_as_tooltip = {
-# 				recognise_target = {
+# 				recognise_effect = {
 # 					TARGET = scope:target_country
 # 				}
 # 			}
 # 		}
 # 	}
 # }
-
 babylon_vienna_congress.2 = {
 	# Invitation to GPs + MPs
 	type = country_event
@@ -140,7 +139,13 @@ babylon_vienna_congress.2 = {
 		set_variable = voting_conference_member
 		if = {
 			limit = {
-				this = global_var:babylon_vienna_congress_session_target
+				OR = {
+					this = global_var:babylon_vienna_congress_session_target
+					is_target_in_global_variable_list = {
+						name = babylon_vienna_congress_session_target_state_owners
+						target = this
+					}
+				}
 			}
 			set_congress_stance_effect = {
 				COUNTRY = this
@@ -154,7 +159,7 @@ babylon_vienna_congress.2 = {
 			}
 		}
 		ai_chance = {
-			base = 1
+			base = 100
 		}
 	}
 	option = {
