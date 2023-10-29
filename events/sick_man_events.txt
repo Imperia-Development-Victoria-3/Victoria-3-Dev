@@ -86,7 +86,7 @@ sick_man.1 = {
 	}
 }
 
-# Success event
+# Liberal Success event
 sick_man.2 = {
 	type = country_event
 	placement = root
@@ -318,6 +318,112 @@ sick_man.4 = {
 		}
 		add_journal_entry = {
 			type = je_sick_man_absolute_islam
+		}
+	}
+}
+
+
+# Absolute Success event
+sick_man.5 = {
+	type = country_event
+	placement = root
+	title = sick_man.2.t
+	desc = sick_man.2.desc
+	flavor = sick_man.2.f
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_london_center"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+	}
+	immediate = {
+		set_variable = sick_man_complete
+		remove_modifier = outmoded_bureaucracy
+		remove_modifier = cizye_tax
+		remove_modifier = stagnant_economy
+		remove_modifier = janissary_legacy
+		remove_modifier = rampant_piracy
+		remove_modifier = kurdish_question
+		remove_modifier = balkan_disarray
+		remove_modifier = imbalanced_education
+		remove_modifier = internal_strife
+	}
+	option = {
+		name = sick_man.2.a
+		default_option = yes
+		trigger = {
+			has_variable = completed_sick_man_army_je
+		}
+		add_modifier = {
+			name = ottoman_army_reform
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = sick_man.2.b
+		trigger = {
+			OR = {
+				has_variable = completed_syria_je
+				has_variable = completed_separatism_sick_man_je
+			}
+			NAND = {
+				owns_entire_state_region = STATE_ATTICA
+				owns_entire_state_region = STATE_PELOPONNESE
+				owns_entire_state_region = STATE_CRETE
+				owns_entire_state_region = STATE_NORTHERN_SERBIA
+				owns_entire_state_region = STATE_SOUTHERN_TRANSYLVANIA
+				owns_entire_state_region = STATE_NORTHERN_TRANSYLVANIA
+			}
+		}
+		s:STATE_ATTICA = {
+			add_claim = ROOT
+		}
+		s:STATE_PELOPONNESE = {
+			add_claim = ROOT
+		}
+		s:STATE_CRETE = {
+			add_claim = ROOT
+		}
+		s:STATE_NORTHERN_SERBIA = {
+			add_claim = ROOT
+		}
+		s:STATE_SOUTHERN_TRANSYLVANIA = {
+			add_claim = ROOT
+		}
+		s:STATE_NORTHERN_TRANSYLVANIA = {
+			add_claim = ROOT
+		}
+	}
+	option = {
+		name = sick_man.2.c
+		trigger = {
+			has_variable = completed_sick_man_economy_je
+		}
+		add_modifier = {
+			name = ottoman_urbanization
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = sick_man.2.d
+		trigger = {
+			has_variable = completed_sick_man_education_je
+		}
+		add_modifier = {
+			name = ottoman_education
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = sick_man.2.e
+		trigger = {
+			has_variable = completed_sick_man_bureaucracy_je
+		}
+		add_modifier = {
+			name = ottoman_bureaucracy
+			months = normal_modifier_time
 		}
 	}
 }
