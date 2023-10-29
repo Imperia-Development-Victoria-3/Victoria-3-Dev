@@ -1,0 +1,149 @@
+﻿namespace = conference_aftermath_state_claim
+conference_aftermath_state_claim.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_state_claim.1.t
+	desc = conference_aftermath_state_claim.1.desc
+	flavor = conference_aftermath_state_claim.1.flavor
+	duration = 3
+	immediate = {
+		global_var:babylon_vienna_congress_session_initiator = {
+			save_scope_as = initiator_scope
+		}
+	}
+	# When the state claim passed
+	option = {
+		name = conference_aftermath_state_claim.1.a
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0.5
+		}
+		if = {
+			limit = {
+				is_congress_supporter = yes
+			}
+			change_relations = {
+				country = scope:initiator_scope
+				value = 20
+			}
+            every_in_global_list = {
+                variable = babylon_vienna_congress_session_target_state_owners
+                root = {
+                    change_relations = {
+                        country = prev
+                        value = -20
+                    }
+                }
+            }
+		}
+		else_if = {
+			limit = {
+				is_congress_opposer = yes
+			}
+			change_relations = {
+				country = scope:initiator_scope
+				value = -20
+			}
+            every_in_global_list = {
+                variable = babylon_vienna_congress_session_target_state_owners
+                root = {
+                    change_relations = {
+                        country = prev
+                        value = 20
+                    }
+                }
+            }
+		}
+	}
+	# Too few to pass recognition
+	option = {
+		name = conference_aftermath_state_claim.1.b
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity < 0.5
+		}
+		if = {
+			limit = {
+				is_congress_supporter = yes
+			}
+			change_relations = {
+				country = scope:initiator_scope
+				value = 20
+			}
+            every_in_global_list = {
+                variable = babylon_vienna_congress_session_target_state_owners
+                root = {
+                    change_relations = {
+                        country = prev
+                        value = -20
+                    }
+                }
+            }
+		}
+		else_if = {
+			limit = {
+				is_congress_opposer = yes
+			}
+			change_relations = {
+				country = scope:initiator_scope
+				value = -20
+			}
+            every_in_global_list = {
+                variable = babylon_vienna_congress_session_target_state_owners
+                root = {
+                    change_relations = {
+                        country = prev
+                        value = 20
+                    }
+                }
+            }
+		}
+	}
+}
+
+conference_aftermath_state_claim.2 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_state_claim.2.t
+	desc = conference_aftermath_state_claim.2.desc
+	flavor = conference_aftermath_state_claim.2.flavor
+	duration = 3
+	immediate = {
+		if = {
+            # Redundancy check
+			limit = {
+                conference_sanctions_severity > 0.5
+			}
+            state_claim_effect_for_claimer = yes
+		}
+	}
+	# When the recognition passed
+	option = {
+		name = conference_aftermath_state_claim.2.a
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0.5
+		}
+		show_as_tooltip = {
+            state_claim_effect_for_claimer = yes
+		}
+	}
+	# Too few to pass recognition
+	option = {
+		name = conference_aftermath_state_claim.2.b
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity < 0.5
+		}
+	}
+}
