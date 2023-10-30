@@ -322,7 +322,6 @@ sick_man.4 = {
 	}
 }
 
-
 # Absolute Success event
 sick_man.5 = {
 	type = country_event
@@ -351,32 +350,82 @@ sick_man.5 = {
 		remove_modifier = internal_strife
 	}
 	option = {
-		name = sick_man.2.a
+		name = sick_man.5.a
 		default_option = yes
-		trigger = {
-			has_variable = completed_sick_man_army_je
+		add_loyalists = {
+			value = 0.15
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bedouin
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:turkish
 		}
 		add_modifier = {
-			name = ottoman_army_reform
-			months = normal_modifier_time
+			name = sick_man_absolute_devout
+			months = 120
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sick_man_absolute_sharia
+		}
+		custom_tooltip = {
+			text = increased_sunni_relations_tt
+			every_country = {
+				limit = {
+					religion = rel:sunni
+				}
+				change_relations = {
+					country = ROOT
+					value = 30
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				religion = rel:shiite
+			}
+			change_relations = {
+				country = ROOT
+				value = -30
+			}
+		}
+		change_relations = {
+			country = c:FRA
+			value = -30
+		}
+		every_state_region = {
+			limit = {
+				region = sr:region_arabic
+				NOT = {
+					root = {
+						owns_entire_state_region = prev
+					}
+				}
+			}
+			add_claim = root
+		}
+		ig:ig_intelligentsia = {
+			remove_ideology = ideology_anti_clerical
+			remove_ideology = ideology_republican
+			add_ideology = ideology_neo_scholastic
 		}
 	}
 	option = {
-		name = sick_man.2.b
-		trigger = {
-			OR = {
-				has_variable = completed_syria_je
-				has_variable = completed_separatism_sick_man_je
-			}
-			NAND = {
-				owns_entire_state_region = STATE_ATTICA
-				owns_entire_state_region = STATE_PELOPONNESE
-				owns_entire_state_region = STATE_CRETE
-				owns_entire_state_region = STATE_NORTHERN_SERBIA
-				owns_entire_state_region = STATE_SOUTHERN_TRANSYLVANIA
-				owns_entire_state_region = STATE_NORTHERN_TRANSYLVANIA
-			}
-		}
+		name = sick_man.5.b
+		default_option = yes
+		
 		s:STATE_ATTICA = {
 			add_claim = ROOT
 		}
@@ -397,7 +446,7 @@ sick_man.5 = {
 		}
 	}
 	option = {
-		name = sick_man.2.c
+		name = sick_man.5.c
 		trigger = {
 			has_variable = completed_sick_man_economy_je
 		}
@@ -407,22 +456,12 @@ sick_man.5 = {
 		}
 	}
 	option = {
-		name = sick_man.2.d
+		name = sick_man.5.d
 		trigger = {
 			has_variable = completed_sick_man_education_je
 		}
 		add_modifier = {
 			name = ottoman_education
-			months = normal_modifier_time
-		}
-	}
-	option = {
-		name = sick_man.2.e
-		trigger = {
-			has_variable = completed_sick_man_bureaucracy_je
-		}
-		add_modifier = {
-			name = ottoman_bureaucracy
 			months = normal_modifier_time
 		}
 	}
