@@ -13,9 +13,11 @@
 
  babylon_vienna_congress_name_affix_recognition: " on the Recognition of [GetGlobalVariable('babylon_vienna_congress_session_target').GetCountry.GetNameNoFormatting]"
 
+ CANNOT_START_CONGRESS: "Not currently eligible for Congress.\nAll of the following must be true;\n\nYou must NOT be at war.\nYou must NOT be in a diplomatic play.\nYou must be a Great Power.\nAn active Congress cannot be in session."
+
  DENOUNCEMENT_DESCRIPTION: "#b Denouncement:#!\n\nDenouncing a target will give them a malus to infamy decay and an amount of infamy,\nscaling per the power of the supporting nations.\n\nAlso gives -50 relations with every supporting country."
 
- STATE_CLAIM_DESCRIPTION: "#b State Claim:#!\n\nIf voted through, the State Claim Congress will bestow a claim on the targeted state for the host nation."
+ STATE_CLAIM_DESCRIPTION: "#b State Claim:#!\n\nIf voted through, the State Claim Congress will bestow\na claim on the targeted state for the host nation."
 
  EMBARGO_DESCRIPTION: "#b Embargo:#!\n\nEmbargoing a target will create a forced embargo of the target by every supporting nation.\n\nAlso gives the target a malus to prestige, scaling per the power of the supporting countries."
 
@@ -42,7 +44,7 @@
  forced_embargo_pact_effect_desc_first: "[COUNTRY.GetAdjectiveNoFlag] starts to [concept_embargo] [TARGET_COUNTRY.GetName]"
  forced_embargo_pact_effect_desc_third: "[COUNTRY.GetName] starts to [concept_embargo] [AddTextIf(ObjectsEqual(GetMetaPlayer.GetPlayedOrObservedCountry.Self, TARGET_COUNTRY.Self),TARGET_COUNTRY.GetNameNoFlag)][AddTextIf(Not(ObjectsEqual(GetMetaPlayer.GetPlayedOrObservedCountry.Self, TARGET_COUNTRY.Self)),TARGET_COUNTRY.GetName)]"
 
- CONGRESS_HOW_TO_DESCRIPTION: "#b How to Congress:#!\n\n1) Select a #b Congress#! Type. This decides the effects of the #b Congress#! if passed.\n2) Press 'Select the Target'.\n3) Navigate to your target.\n4) Once a state/country has been pressed, the #b Congress#! will start.\n\nEffects of the #b Denouncement#! and #b Embargo Congresses#! starts at #v 20%#! of the congress\nmembers #b Prestige#! being on the #b Supporting#! side, while the max effect is reached at #v 80%#!.\n\nThe #b State Claim Congress#! needs to be #v 50%#! in favour to give a claim.\n\nThe #b Recognition Congress#! needs to have #v 75%#! in favour to #b Recognise#! an #b Unrecognised#! country."
+ CONGRESS_HOW_TO_DESCRIPTION: "#b How to Congress:#!\n\n1) Select a #b Congress#! Type. This decides the effects of the #b Congress#! if passed.\n2) Press 'Select the Target'.\n3) Navigate to your target.\n\n4) Either;\n    Select a country.\n    Select the states you want and click the #b Start Congress#! button.\n\n5) A popup will require your confirmation.\n\nEffects of the #b Denouncement#! and #b Embargo Congresses#! starts at #v 20%#! of the congress\nmembers #b Prestige#! being on the #b Supporting#! side, while the max effect is reached at #v 80%#!.\n\nThe #b State Claim Congress#! needs to be #v 50%#! in favour to give a claim.\n\nThe #b Recognition Congress#! needs to have #v 75%#! in favour to #b Recognise#! an #b Unrecognised#! country."
 
  notification_babylon_vienna_congress_started_name: "Congress Called"
  notification_babylon_vienna_congress_started_desc: "The $CURRENT_CONFERENCE_NAME$ have been called."
@@ -91,12 +93,13 @@
  conference_aftermath_state_claim.1.flavor: ""
  conference_aftermath_state_claim.1.a: "We accept their claims"
  conference_aftermath_state_claim.1.b: "Pfft! Drivel!"
+ conference_aftermath_state_claim.1.d: "We reject their claims"
 
- conference_aftermath_state_claim.2.t: "Claims on our Lands"
- conference_aftermath_state_claim.2.desc: "The International community has given [GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetName] a claim on some of our territory...\nA terrible tragedy, and surely a sign that the Congress just doesn't work."
+ conference_aftermath_state_claim.2.t: "End of the $CURRENT_CONFERENCE_NAME$"
+ conference_aftermath_state_claim.2.desc: "The $CURRENT_CONFERENCE_NAME$ have ended, with #v [GetPlayer.MakeScope.ScriptValue('conference_supporters_percentage_value')|v%]#! of the diplomats present in favour of the claims on our lands, and #v [GetPlayer.MakeScope.ScriptValue('conference_opposers_percentage_value')|v%]#! of the diplomats present opposed.\n\n[GetPlayer.GetCustom('babylon_vienna_congress_end_event_support_oppose')]"
  conference_aftermath_state_claim.2.flavor: "'Care about what other people think and you will always be their prisoner.' - Lao Tzu"
- conference_aftermath_state_claim.2.a: "Curse the Congress!"
- conference_aftermath_state_claim.2.b: "The [GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetAdjectiveNoFormatting] can take it from our cold, dead hands!"
+ conference_aftermath_state_claim.2.a: "The [GetGlobalVariable('babylon_vienna_congress_session_initiator').GetCountry.GetAdjectiveNoFormatting] can take it from our cold, dead hands!"
+ conference_aftermath_state_claim.2.b: "The Congress chose wisely!"
 
  conference_aftermath_embargo.1.t: "End of the $CURRENT_CONFERENCE_NAME$"
  conference_aftermath_embargo.1.desc: "The $CURRENT_CONFERENCE_NAME$ have ended, with #v [GetPlayer.MakeScope.ScriptValue('conference_supporters_percentage_value')|v%]#! of the diplomats present in favour of the embargo, and #v [GetPlayer.MakeScope.ScriptValue('conference_opposers_percentage_value')|v%]#! of the diplomats present opposed.\n\n[GetPlayer.GetCustom('babylon_vienna_congress_end_event_support_oppose')]"

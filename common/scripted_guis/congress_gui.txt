@@ -109,23 +109,7 @@ end_congress = {
 		every_country = {
 			if = {
 				limit = {
-					trigger_if = {
-						limit = {
-							global_var:babylon_vienna_congress_session_type != 2
-						}
-						scope:target_country != this
-					}
-					trigger_if = {
-						limit = {
-							global_var:babylon_vienna_congress_session_type = 2
-						}
-						NOT = {
-							is_target_in_global_variable_list = {
-								name = babylon_vienna_congress_session_target_state_owners
-								target = this
-							}
-						}
-					}
+					is_congress_target = no
 					OR = {
 						is_country_type = recognized
 						is_country_type = colonial
@@ -135,7 +119,20 @@ end_congress = {
 			}
 			else_if = {
 				limit = {
-					conference_sanctions_severity > 0
+					is_congress_target = yes
+					OR = {
+						AND = {
+							# These 2 only pop up if a support verdict was made
+							OR = {
+								global_var:babylon_vienna_congress_session_type = 1
+								global_var:babylon_vienna_congress_session_type = 3
+							}
+							conference_sanctions_severity > 0
+						}
+						# These 2 pop up no matter the outcome
+						global_var:babylon_vienna_congress_session_type = 2
+						global_var:babylon_vienna_congress_session_type = 4
+					}
 				}
 				aftermath_event_consequence = yes
 			}
@@ -294,13 +291,6 @@ clear_strategic_region_target = {
 	}
 }
 
-is_great_power = {
-	scope = country
-	is_shown = {
-		country_rank >= rank_value:great_power
-	}
-}
-
 any_valid_state_in_strategic_region = {
 	scope = country
 	saved_scopes = {
@@ -419,6 +409,21 @@ start_congress = {
 		}
 		remove_variable ?= set_congress_target_country
 		clear_variable_list ?= congress_target_state_basket
+	}
+}
+
+can_start_congress = {
+	scope = country
+	is_shown = {
+		is_at_war = no
+		NOR = {
+			is_diplomatic_play_committed_participant = yes
+			is_diplomatic_play_undecided_participant = yes
+		}
+		country_rank >= rank_value:great_power
+		NOT = {
+			has_global_variable = babylon_vienna_congress_in_session
+		}
 	}
 }
 

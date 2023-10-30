@@ -476,12 +476,16 @@ adjust_opinions_conference_voters_reject = {
 		variable = current_congress_members_on_stance_1
 		limit = {
 			this != prev
+			is_congress_target = no
+			this != global_var:babylon_vienna_congress_session_initiator
 		}
-		change_relations = {
-			country = prev
-			value = {
-				add = -50
-				multiply = conference_sanctions_severity
+		prev = {
+			change_relations = {
+				country = prev
+				value = {
+					add = -50
+					multiply = conference_sanctions_severity
+				}
 			}
 		}
 	}
@@ -489,12 +493,16 @@ adjust_opinions_conference_voters_reject = {
 		variable = current_congress_members_on_stance_3
 		limit = {
 			this != prev
+			is_congress_target = no
+			this != global_var:babylon_vienna_congress_session_initiator
 		}
-		change_relations = {
-			country = prev
-			value = {
-				add = 50
-				multiply = conference_sanctions_severity
+		prev = {
+			change_relations = {
+				country = prev
+				value = {
+					add = 50
+					multiply = conference_sanctions_severity
+				}
 			}
 		}
 	}
@@ -537,7 +545,7 @@ denouncement_effect = {
 state_claim_effect_for_claimer = {
 	if = {
 		limit = {
-			conference_sanctions_severity > 0.5
+			has_enough_support_for_state_claim = yes
 		}
 		every_in_global_list = {
 			variable = babylon_vienna_congress_session_target_states
@@ -545,14 +553,43 @@ state_claim_effect_for_claimer = {
 				add_claim = global_var:babylon_vienna_congress_session_initiator
 			}
 		}
-		every_in_global_list = {
-			variable = babylon_vienna_congress_session_target_state_owners
+		every_country = {
 			limit = {
-				this != global_var:babylon_vienna_congress_session_initiator
+				is_congress_target = yes
 			}
 			change_relations = {
 				country = global_var:babylon_vienna_congress_session_initiator
 				value = -50
+			}
+		}
+	}
+}
+
+# scope: country
+denounce_state_claimer = {
+	if = {
+		limit = {
+			root != global_var:babylon_vienna_congress_session_initiator
+		}
+		every_country = {
+			limit = {
+				is_congress_target = yes
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = {
+						value = 50
+						multiply = conference_sanctions_severity
+					}
+				}
+			}
+		}
+		change_relations = {
+			country = global_var:babylon_vienna_congress_session_initiator
+			value = {
+				value = -50
+				multiply = conference_sanctions_severity
 			}
 		}
 	}
@@ -639,18 +676,7 @@ congress_send_out_invitation = {
 		}
 		if = {
 			limit = {
-				trigger_if = {
-					limit = {
-						global_var:babylon_vienna_congress_session_type = 2
-					}
-					is_target_in_global_variable_list = {
-						name = babylon_vienna_congress_session_target_state_owners
-						target = this
-					}
-				}
-				trigger_else = {
-					global_var:babylon_vienna_congress_session_target = this
-				}
+				is_congress_target = yes
 			}
 			trigger_event = {
 				id = babylon_vienna_congress.2
