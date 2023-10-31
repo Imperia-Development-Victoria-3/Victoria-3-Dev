@@ -87,6 +87,9 @@ je_rural_poverty_qing = {
 			has_law = law_type:law_consumption_based_taxation
 			has_law = law_type:law_land_based_taxation
 		}
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}	
 	}
 	
 	#line of code here that checks if at least 75% of substates have done it
@@ -99,24 +102,41 @@ je_rural_poverty_qing = {
 	#line of code here that affects fragile unity
 		}
 	}
-}
+	
+	current_value = {
+		value = var:rural_poverty_var
+	}
 
-je_reform_the_banner_system = {
+	goal_add_value = {
+		add = 3
+	}
+
+	progressbar = yes
+}
+		
+je_investigate_military_reform = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	complete = {
 	
+			has_technology_researched = line_infantry	
 		NOT = {
 			has_law = law_type:law_peasant_levies
 		}
+	}		
 	
-		OR = {
-			AND = {
+	on_complete = {
+		add_journal_entry = { type = je_reform_the_banner_system_local }
+		add_journal_entry = { type = je_reform_the_banner_system_modern }
+	}
+}	
 			
-			custom_tooltip = {
-			text = chose_yong_ying_tt
-			has_variable = chose_yong_ying
-			}
+je_reform_the_banner_system_local = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	complete = {
+
+			AND = {
 		
 			army_size >= 150
 			has_technology_researched = napoleonic_warfare
@@ -126,53 +146,20 @@ je_reform_the_banner_system = {
 					has_law = law_type:law_localized_garrisons
 					has_law = law_type:law_faith_orders			
 				}
-			
-				NOT = {
-					any_scope_building = {
-						is_building_type = building_barracks				
-						OR = {
-							building_has_goods_shortage = yes
-							has_active_production_method = pm_no_organization
-							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-							# has_active_production_method = pm_no_artillery
-							# has_active_production_method = pm_cannon_artillery
-						}
-					}
-				}
 			}
-		
-			AND = {
-			
-			custom_tooltip = {
-			text = chose_new_army_tt
-			has_variable = chose_new_army
-			}
-		
-			army_size >= 150
-			has_technology_researched = general_staff
-			has_technology_researched = logistics
-			has_technology_researched = rifling
-			
-				NOT = {
-					any_scope_building = {
-						is_building_type = building_barracks				
-						OR = {
-							building_has_goods_shortage = yes
-							has_active_production_method = pm_no_organization
-							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-							# has_active_production_method = pm_no_artillery
-							# has_active_production_method = pm_cannon_artillery
-						}
-					}
-				}
-			}
+			scope:journal_entry = {
+				is_goal_complete = yes
+			}	
 		}
-	}
-
+		
 	on_complete = {
 	
-		trigger_event = event_babylon_qing.4
+		trigger_event = {
+			id = event_babylon_qing.4
+		}
 		remove_modifier = modifier_crumbling_banner_system
+		
+		add_variable = chose_yong_ying
 	}
 	
 	fail = {
@@ -182,13 +169,80 @@ je_reform_the_banner_system = {
 	}
 	
 	on_fail = {
-		#trigger_event = event_babylon_qing.5 #Tyranny of the Eight Banners
+		#trigger_event = { id = event_babylon_qing.5 } #Tyranny of the Eight Banners
 		remove_modifier = modifier_crumbling_banner_system
 	}
+	
+	invalid = {
+		NOT = {
+			has_modifier = modifier_crumbling_banner_system
+		}
+	}
+	
+	current_value = {
+		value = var:yong_ying_var
+	}
+
+	goal_add_value = {
+		add = 4
+	}
+
+	progressbar = yes	
+	
 }
+
+je_reform_the_banner_system_modern = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	complete = {
+			AND = {
 		
+				army_size >= 150
+				has_technology_researched = general_staff
+				has_technology_researched = logistics
+				has_technology_researched = rifling
+				
+				NOT = {
+					any_scope_building = {
+						is_building_type = building_barracks				
+						OR = {
+							building_has_goods_shortage = yes
+							has_active_production_method = pm_no_organization
+							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+						}
+					}
+				}
+			}
+		}
 		
-			
+	on_complete = {
+	
+		trigger_event = {
+			id = event_babylon_qing.4
+		}
+		remove_modifier = modifier_crumbling_banner_system
+		add_variable = chose_new_army
+	}
+	
+	fail = {
+		ig:ig_armed_forces = {
+			is_powerful = yes
+		}
+	}
+	
+	on_fail = {
+		#trigger_event = { id = event_babylon_qing.5 } #Tyranny of the Eight Banners
+		remove_modifier = modifier_crumbling_banner_system
+	}
+	
+	invalid = {
+		NOT = {
+			has_modifier = modifier_crumbling_banner_system
+		}
+	}
+}	
+	
+	
 ##Local Entries
 
 	
@@ -220,10 +274,31 @@ je_establish_local_armies = { #Common
 	}
 	
 	on_complete = {
-		add_modifier = {
-			name = modifier_local_armies
+		
+		if = {
+			limit = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				change_variable = {
+					name = yong_ying_var
+					add = 1
+				}
+			}
+			add_modifier = {
+				name = modifier_local_armies
+			}
 		}
-		#something about a variable here so i can track this for fragile unity/qing military reforms
+		
+		else = {
+			remove_modifier = modifier_crumbling_banner_system
+			c:CHI = {
+				change_variable = {
+					name = yong_ying_var
+					add = 1
+				}
+			}
+		}
 	}
 }
 
@@ -250,7 +325,17 @@ je_rural_poverty_substate = {
 		value = 0.1
 		}
 		
-		#line of code here that hooks it into China's Rural Poverty JE
+		if = {
+			limit = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				change_variable = {
+					name = rural_poverty_var
+					add = 1
+				}
+			}
+		}
 	}	
 }
 
