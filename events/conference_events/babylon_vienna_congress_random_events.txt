@@ -1,0 +1,181 @@
+﻿namespace = congress_random_event
+congress_random_event.1 = {
+	# Shoe throwing event
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = congress_random_event.1.t
+	desc = congress_random_event.1.d
+	flavor = congress_random_event.1.f
+	duration = 3
+	trigger = {
+		# Should only throw a shoe if you're on the benches
+		is_congress_observer = yes
+	}
+	immediate = {
+		root = {
+			save_scope_as = shoe_thrower
+		}
+		random_country = {
+			limit = {
+				# Should only throw shoes at attendees they have bad relations with
+				is_congress_attendee = yes
+				relations:root <= relations_threshold:poor
+			}
+			save_scope_as = shoe_target
+		}
+	}
+	option = {
+		# Throw the shoe
+		name = congress_random_event.1.a
+		random_list = {
+			50 = {
+				# Miss
+				custom_tooltip = shoe_miss_tt
+				change_relations = {
+					country = scope:shoe_target
+					value = -10
+				}
+			}
+			50 = {
+				# Hit!
+				custom_tooltip = shoe_hit_tt
+				change_relations = {
+					country = scope:shoe_target
+					value = -25
+				}
+				scope:shoe_target = {
+					trigger_event = {
+						id = congress_random_event.2
+						popup = yes
+					}
+					show_as_tooltip = {
+						add_modifier = {
+							name = babylon_vienna_congress_scaling_negative_prestige_modifier
+							years = 1
+							is_decaying = yes
+							multiplier = 5
+						}
+					}
+				}
+				if = {
+					# If the target is actually on the floor everyone notices
+					limit = {
+						scope:shoe_target = {
+							is_congress_observer = no
+						}
+					}
+					custom_tooltip = {
+						text = everyone_notices_your_hijinks_tt
+						every_country = {
+							limit = {
+								is_congress_attendee = yes
+							}
+							trigger_event = {
+								id = congress_random_event.3
+							}
+						}
+					}
+				}
+				else = {
+					# Else theres a 15% chance that people notices
+					custom_tooltip = {
+						text = observers_might_notice_your_hijinks_tt
+						every_country = {
+							limit = {
+								is_congress_observer = yes
+							}
+							random = {
+								chance = 15
+								trigger_event = {
+									id = congress_random_event.3
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 1
+			is_decaying = yes
+			multiplier = 5
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		# Behave
+		default_option = yes
+		name = congress_random_event.1.b
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+congress_random_event.2 = {
+	# Shoe throwing event - direct hit!
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = congress_random_event.2.t
+	desc = congress_random_event.2.d
+	flavor = congress_random_event.2.f
+	duration = 3
+	trigger = {
+		is_congress_attendee = yes
+	}
+	immediate = {
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_negative_prestige_modifier
+			years = 1
+			is_decaying = yes
+			multiplier = 5
+		}
+	}
+	option = {
+		# Someone just threw a shoe at us!
+		name = congress_random_event.2.a
+		show_as_tooltip = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				years = 1
+				is_decaying = yes
+				multiplier = 5
+			}
+		}
+	}
+}
+
+congress_random_event.3 = {
+	# Shoe throwing event - audience broadcast
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = congress_random_event.3.t
+	desc = congress_random_event.3.d
+	flavor = congress_random_event.3.f
+	duration = 3
+	trigger = {
+		is_congress_attendee = yes
+	}
+	option = {
+		# Someone just threw a shoe at someone!
+		name = congress_random_event.3.a
+	}
+}

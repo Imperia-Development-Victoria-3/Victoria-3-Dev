@@ -16,55 +16,79 @@ conference_aftermath_recognition.1 = {
 			save_scope_as = target_scope
 		}
 	}
-	# When the recognition passed
+	# When the recognition passed and you supported
 	option = {
 		name = conference_aftermath_recognition.1.a
 		default_option = yes
 		trigger = {
-            has_enough_support_for_recognition = yes
+			has_enough_support_for_recognition = yes
+			is_congress_supporter = yes
 		}
-		if = {
-			limit = {
-				is_congress_supporter = yes
-			}
-			change_relations = {
-				country = scope:target_scope
-				value = 20
-			}
-		}
-		else_if = {
-			limit = {
-				is_congress_opposer = yes
-			}
-			change_relations = {
-				country = scope:target_scope
-				value = -20
-			}
+		change_relations = {
+			country = scope:target_scope
+			value = 20
 		}
 	}
-	# Too few to pass recognition
+	# When the recognition passed and you opposed
 	option = {
 		name = conference_aftermath_recognition.1.b
 		default_option = yes
 		trigger = {
-            has_enough_support_for_recognition = no
+			has_enough_support_for_recognition = yes
+			is_congress_opposer = yes
 		}
-		if = {
-			limit = {
+		change_relations = {
+			country = scope:target_scope
+			value = -20
+		}
+	}
+	# When the recognition passed and you didnt take a position
+	option = {
+		name = conference_aftermath_recognition.1.c
+		default_option = yes
+		trigger = {
+			has_enough_support_for_recognition = yes
+			NOR = {
+				is_congress_opposer = yes
 				is_congress_supporter = yes
 			}
-			change_relations = {
-				country = scope:target_scope
-				value = 20
-			}
 		}
-		else_if = {
-			limit = {
+	}
+	# When the recognition didnt pass and you supported
+	option = {
+		name = conference_aftermath_recognition.1.d
+		default_option = yes
+		trigger = {
+			has_enough_support_for_recognition = no
+			is_congress_supporter = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = 20
+		}
+	}
+	# When the recognition didnt pass and you opposed
+	option = {
+		name = conference_aftermath_recognition.1.e
+		default_option = yes
+		trigger = {
+			has_enough_support_for_recognition = no
+			is_congress_opposer = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = -20
+		}
+	}
+	# When the recognition didnt pass and you didnt take a position
+	option = {
+		name = conference_aftermath_recognition.1.f
+		default_option = yes
+		trigger = {
+			has_enough_support_for_recognition = no
+			NOR = {
 				is_congress_opposer = yes
-			}
-			change_relations = {
-				country = scope:target_scope
-				value = -20
+				is_congress_supporter = yes
 			}
 		}
 	}
@@ -84,9 +108,9 @@ conference_aftermath_recognition.2 = {
 	duration = 3
 	immediate = {
 		if = {
-            # Redundancy check
+			# Redundancy check
 			limit = {
-                has_enough_support_for_recognition = yes
+				has_enough_support_for_recognition = yes
 			}
 			recognise_effect = yes
 		}
@@ -96,7 +120,7 @@ conference_aftermath_recognition.2 = {
 		name = conference_aftermath_recognition.2.a
 		default_option = yes
 		trigger = {
-            has_enough_support_for_recognition = yes
+			has_enough_support_for_recognition = yes
 		}
 		show_as_tooltip = {
 			recognise_effect = yes
@@ -107,7 +131,7 @@ conference_aftermath_recognition.2 = {
 		name = conference_aftermath_recognition.2.b
 		default_option = yes
 		trigger = {
-            has_enough_support_for_recognition = no
+			has_enough_support_for_recognition = no
 		}
 	}
 }
