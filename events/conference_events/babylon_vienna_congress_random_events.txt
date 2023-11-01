@@ -3,18 +3,22 @@ congress_random_event.1 = {
 	# Shoe throwing event
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+		video = "unspecific_politicians_arguing"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 	title = congress_random_event.1.t
 	desc = congress_random_event.1.d
 	flavor = congress_random_event.1.f
-	duration = 3
+	placement = global_var:babylon_vienna_congress_session_initiator.capital
+	duration = 1
 	trigger = {
 		# Should only throw a shoe if you're on the benches
 		is_congress_observer = yes
+		any_country = {
+			is_congress_attendee = yes
+			relations:root <= relations_threshold:poor
+		}
 	}
 	immediate = {
 		root = {
@@ -38,7 +42,11 @@ congress_random_event.1 = {
 				custom_tooltip = shoe_miss_tt
 				change_relations = {
 					country = scope:shoe_target
-					value = -10
+					value = -5
+				}
+				post_notification = shoe_miss_for_thrower
+				scope:shoe_target = {
+					post_notification = shoe_miss_for_target
 				}
 			}
 			50 = {
@@ -46,7 +54,7 @@ congress_random_event.1 = {
 				custom_tooltip = shoe_hit_tt
 				change_relations = {
 					country = scope:shoe_target
-					value = -25
+					value = -10
 				}
 				scope:shoe_target = {
 					trigger_event = {
@@ -62,6 +70,7 @@ congress_random_event.1 = {
 						}
 					}
 				}
+				post_notification = shoe_hit_for_thrower
 				if = {
 					# If the target is actually on the floor everyone notices
 					limit = {
@@ -74,6 +83,8 @@ congress_random_event.1 = {
 						every_country = {
 							limit = {
 								is_congress_attendee = yes
+								this != scope:shoe_target
+								this != scope:shoe_thrower
 							}
 							trigger_event = {
 								id = congress_random_event.3
@@ -88,6 +99,8 @@ congress_random_event.1 = {
 						every_country = {
 							limit = {
 								is_congress_observer = yes
+								this != scope:shoe_target
+								this != scope:shoe_thrower
 							}
 							random = {
 								chance = 15
@@ -107,7 +120,7 @@ congress_random_event.1 = {
 			multiplier = 5
 		}
 		ai_chance = {
-			base = 50
+			base = 20
 		}
 	}
 	option = {
@@ -115,7 +128,7 @@ congress_random_event.1 = {
 		default_option = yes
 		name = congress_random_event.1.b
 		ai_chance = {
-			base = 50
+			base = 80
 		}
 	}
 }
@@ -124,15 +137,14 @@ congress_random_event.2 = {
 	# Shoe throwing event - direct hit!
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+		video = "unspecific_politicians_arguing"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 	title = congress_random_event.2.t
 	desc = congress_random_event.2.d
 	flavor = congress_random_event.2.f
-	duration = 3
+	duration = 1
 	trigger = {
 		is_congress_attendee = yes
 	}
@@ -162,20 +174,467 @@ congress_random_event.3 = {
 	# Shoe throwing event - audience broadcast
 	type = country_event
 	event_image = {
-		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+		video = "unspecific_politicians_arguing"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 	title = congress_random_event.3.t
 	desc = congress_random_event.3.d
 	flavor = congress_random_event.3.f
-	duration = 3
+	duration = 1
 	trigger = {
 		is_congress_attendee = yes
 	}
 	option = {
-		# Someone just threw a shoe at someone!
+		# Someone just threw a shoe! Awesome!
 		name = congress_random_event.3.a
+		change_relations = {
+			country = scope:shoe_target
+			value = -10
+		}
+		change_relations = {
+			country = scope:shoe_thrower
+			value = 10
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		# Someone just threw a shoe!
+		name = congress_random_event.3.b
+		default_option = yes
+		ai_chance = {
+			base = 80
+		}
+	}
+	option = {
+		# Someone just threw a shoe! Awful
+		name = congress_random_event.3.c
+		change_relations = {
+			country = scope:shoe_target
+			value = 10
+		}
+		change_relations = {
+			country = scope:shoe_thrower
+			value = -10
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+congress_random_event.4 = {
+	type = country_event
+	event_image = {
+		video = "europenorthamerica_capitalists_meeting"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.4.t
+	desc = congress_random_event.4.desc
+	flavor = congress_random_event.4.flavor
+	duration = 1
+	trigger = {
+		is_congress_attendee = yes
+		is_congress_observer = yes
+	}
+	immediate = {
+		enable_random_congress_random_event_4_option = yes
+		enable_random_congress_random_event_4_option = yes
+		enable_random_congress_random_event_4_option = yes
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				is_congress_observer = no
+				this != root
+			}
+			save_scope_as = notable_attendee_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = notable_attendee_scope_var
+					value = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				this != root
+				is_subject = no
+			}
+			save_scope_as = observer_1_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = observer_1_scope_var
+					value = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				this != root
+				is_subject = no
+				scope:observer_1_scope != this
+			}
+			save_scope_as = observer_2_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = observer_2_scope_var
+					value = prev
+				}
+			}
+		}
+	}
+	option = {
+		name = congress_random_event.4.a
+		trigger = {
+			has_variable = event_option_a_enabled
+		}
+		change_relations = {
+			country = global_var:babylon_vienna_congress_session_initiator
+			value = 10
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.b
+		trigger = {
+			has_variable = event_option_b_enabled
+		}
+		global_var:babylon_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 5
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.c
+		trigger = {
+			has_variable = event_option_c_enabled
+		}
+		add_modifier = {
+			name = babylon_vienna_congress_scaling_positive_prestige_modifier
+			multiplier = 2
+			years = 1
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.d
+		trigger = {
+			has_variable = event_option_d_enabled
+		}
+		random_country = {
+			limit = {
+				this != root
+				is_congress_attendee = yes
+				is_congress_observer = no
+			}
+			ruler = {
+				add_modifier = {
+					name = babylon_ruler_popularity
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.e
+		trigger = {
+			has_variable = event_option_e_enabled
+		}
+		global_var:babylon_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 5
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.f
+		trigger = {
+			has_variable = event_option_f_enabled
+		}
+		var:notable_attendee_scope_var = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 5
+				years = 1
+				is_decaying = yes
+			}
+			ruler = {
+				add_modifier = {
+					name = babylon_ruler_popularity
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.g
+		trigger = {
+			has_variable = event_option_g_enabled
+		}
+		every_country = {
+			limit = {
+				is_congress_target = yes
+			}
+			if = {
+				limit = {
+					can_research = analytical_philosophy
+				}
+				add_technology_progress = {
+					progress = 1000
+					technology = analytical_philosophy
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = psychoanalysis
+				}
+				add_technology_progress = {
+					progress = 825
+					technology = psychoanalysis
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = philosophical_pragmatism
+				}
+				add_technology_progress = {
+					progress = 650
+					technology = philosophical_pragmatism
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = psychiatry
+				}
+				add_technology_progress = {
+					progress = 500
+					technology = psychiatry
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = empiricism
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = empiricism
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = academia
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = academia
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = rationalism
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = rationalism
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.h
+		trigger = {
+			has_variable = event_option_h_enabled
+		}
+		scope:observer_1_scope = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 10
+				years = 1
+				is_decaying = yes
+			}
+		}
+		scope:observer_2_scope = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 10
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.i
+		trigger = {
+			has_variable = event_option_i_enabled
+		}
+		if = {
+			limit = {
+				can_research = analytical_philosophy
+			}
+			add_technology_progress = {
+				progress = 1000
+				technology = analytical_philosophy
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = psychoanalysis
+			}
+			add_technology_progress = {
+				progress = 825
+				technology = psychoanalysis
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = philosophical_pragmatism
+			}
+			add_technology_progress = {
+				progress = 650
+				technology = philosophical_pragmatism
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = psychiatry
+			}
+			add_technology_progress = {
+				progress = 500
+				technology = psychiatry
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = empiricism
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = empiricism
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = academia
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = academia
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = rationalism
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = rationalism
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.j
+		trigger = {
+			has_variable = event_option_j_enabled
+		}
+		global_var:babylon_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 5
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.k
+		trigger = {
+			has_variable = event_option_k_enabled
+		}
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+			}
+			change_relations = {
+				country = root
+				value = 10
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.l
+		trigger = {
+			has_variable = event_option_l_enabled
+		}
+		every_country = {
+			limit = {
+				capital.region = global_var:babylon_vienna_congress_session_target.capital.region
+				this != root
+				is_congress_target = no
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = 5
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	after = {
+		clear_congress_random_event_4_option_variables = yes
 	}
 }
