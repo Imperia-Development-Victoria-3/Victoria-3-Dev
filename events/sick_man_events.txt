@@ -116,40 +116,133 @@ sick_man.2 = {
 	option = {
 		name = sick_man.2.a
 		default_option = yes
-		trigger = {
-			has_variable = completed_sick_man_army_je
+		ig:ig_intelligentsia = {
+			remove_ideology = ideology_anti_clerical
+			remove_ideology = ideology_republican
+			add_ideology = ideology_neo_scholastic
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bedouin
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:turkish
 		}
 		add_modifier = {
-			name = ottoman_army_reform
-			months = normal_modifier_time
+			name = sick_man_absolute_devout
+			months = 120
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sick_man_absolute_sharia
+		}
+		custom_tooltip = {
+			text = increased_sunni_relations_tt
+			every_country = {
+				limit = {
+					religion = rel:sunni
+				}
+				change_relations = {
+					country = ROOT
+					value = 30
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				religion = rel:shiite
+			}
+			change_relations = {
+				country = ROOT
+				value = -30
+			}
+		}
+		change_relations = {
+			country = c:FRA
+			value = -30
+		}
+		custom_tooltip = {
+			text = arabian_claims_tt
+			every_state_region = {
+				limit = {
+					region = sr:region_arabic
+					any_scope_state = {
+						NOT = {
+							owner = root
+						}
+					}
+				}
+				add_claim = root
+			}
 		}
 	}
 	option = {
 		name = sick_man.2.b
-		trigger = {
-			OR = {
-				has_variable = completed_syria_je
-				has_variable = completed_separatism_sick_man_je
-			}
-			NAND = {
-				owns_entire_state_region = STATE_ATTICA
-				owns_entire_state_region = STATE_PELOPONNESE
-				owns_entire_state_region = STATE_CRETE
-				owns_entire_state_region = STATE_NORTHERN_SERBIA
-				owns_entire_state_region = STATE_SOUTHERN_TRANSYLVANIA
-				owns_entire_state_region = STATE_NORTHERN_TRANSYLVANIA
-			}
+		default_option = yes
+		ig:ig_trade_unions = {
+			remove_ideology = ideology_populist
+			add_ideology = ideology_militant_populism
 		}
-		s:STATE_ATTICA = {
-			add_claim = ROOT
+		add_loyalists = {
+			value = 0.15
+			pop_type = servicemen
 		}
-		s:STATE_PELOPONNESE = {
+		add_loyalists = {
+			value = 0.2
+			pop_type = officers
+		}
+		add_modifier = {
+			name = sick_man_absolute_military
+			months = 120
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sick_man_absolute_mansure_army
+		}
+		change_relations = {
+			country = c:RUS
+			value = -50
+		}
+		change_relations = {
+			country = c:AUS
+			value = -50
+		}
+		change_relations = {
+			country = c:HDJ
+			value = -30
+		}
+		s:STATE_HEDJAZ = {
 			add_claim = ROOT
 		}
 		s:STATE_CRETE = {
 			add_claim = ROOT
 		}
-		s:STATE_NORTHERN_SERBIA = {
+		s:STATE_CROATIA = {
+			add_claim = ROOT
+		}
+		s:STATE_DALMATIA = {
+			add_claim = ROOT
+		}
+		s:STATE_SLAVONIA = {
+			add_claim = ROOT
+		}
+		s:STATE_BANAT = {
+			add_claim = ROOT
+		}
+		s:STATE_DELVIDEK = {
 			add_claim = ROOT
 		}
 		s:STATE_SOUTHERN_TRANSYLVANIA = {
@@ -158,37 +251,121 @@ sick_man.2 = {
 		s:STATE_NORTHERN_TRANSYLVANIA = {
 			add_claim = ROOT
 		}
+		s:STATE_CRIMEA = {
+			add_claim = ROOT
+		}
+		s:STATE_KUBAN = {
+			add_claim = ROOT
+		}
+		s:STATE_GREATER_CAUCASUS = {
+			add_claim = ROOT
+		}
+		s:STATE_KARS = {
+			add_claim = ROOT
+		}
 	}
 	option = {
 		name = sick_man.2.c
-		trigger = {
-			has_variable = completed_sick_man_economy_je
+		default_option = yes
+		ig:ig_industrialists = {
+			remove_ideology = ideology_plutocratic
+			add_ideology = ideology_neo_feudalistic
+		}
+		add_loyalists = {
+			value = 0.2
+			pop_type = aristocrats
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = capitalists
 		}
 		add_modifier = {
-			name = ottoman_urbanization
-			months = normal_modifier_time
+			name = sick_man_absolute_aristocrats
+			months = 180
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sick_man_absolute_sultan
+		}
+		change_relations = {
+			country = c:FRA
+			value = -30
+		}
+		change_relations = {
+			country = c:HDJ
+			value = -30
+		}
+		change_relations = {
+			country = c:PER
+			value = -30
+		}
+		s:STATE_TABRIZ = {
+			add_claim = ROOT
+		}
+		s:STATE_LURISTAN = {
+			add_claim = ROOT
+		}
+		s:STATE_KHUZESTAN = {
+			add_claim = ROOT
+		}
+		s:STATE_HEDJAZ = {
+			add_claim = ROOT
+		}
+		s:STATE_CONSTANTINE = {
+			add_claim = ROOT
+		}
+		s:STATE_ALGIERS = {
+			add_claim = ROOT
+		}
+		s:STATE_ORAN = {
+			add_claim = ROOT
 		}
 	}
 	option = {
 		name = sick_man.2.d
-		trigger = {
-			has_variable = completed_sick_man_education_je
+		default_option = yes
+		ig:ig_industrialists = {
+			remove_ideology = ideology_plutocratic
+			add_ideology = ideology_neo_feudalistic
+		}
+		ig:ig_intelligentsia = {
+			remove_ideology = ideology_anti_clerical
+			remove_ideology = ideology_republican
+			add_ideology = ideology_neo_scholastic
+		}
+		ig:ig_trade_unions = {
+			remove_ideology = ideology_populist
+			add_ideology = ideology_militant_populism
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:bedouin
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:mashriqi
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:greek
 		}
 		add_modifier = {
-			name = ottoman_education
-			months = normal_modifier_time
+			name = sick_man_absolute_renaissance
+			months = 180
+		}
+		change_relations = {
+			country = c:HDJ
+			value = -30
+		}
+		s:STATE_HEDJAZ = {
+			add_claim = ROOT
 		}
 	}
-	option = {
-		name = sick_man.2.e
-		trigger = {
-			has_variable = completed_sick_man_bureaucracy_je
-		}
-		add_modifier = {
-			name = ottoman_bureaucracy
-			months = normal_modifier_time
-		}
-	}
+
 }
 
 # Fail event
@@ -208,8 +385,6 @@ sick_man.3 = {
 	}
 	immediate = {
 		set_variable = sick_man_complete
-		remove_modifier = outmoded_bureaucracy
-		remove_modifier = cizye_tax
 		ruler = {
 			save_scope_as = ottoman_sultan
 		}
@@ -253,6 +428,9 @@ sick_man.3 = {
 				make_independent = yes
 			}
 		}
+		add_modifier = {
+			name = dead_man_of_europe
+		}
 		set_country_type = unrecognized
 		ruler = {
 			kill_character = yes
@@ -260,7 +438,7 @@ sick_man.3 = {
 	}
 }
 
-# choice event
+# Choice Event
 sick_man.4 = {
 	type = country_event
 	placement = root
@@ -273,8 +451,14 @@ sick_man.4 = {
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	immediate = {
+		set_variable = sick_man_liberal_or_absolute_var
+	}
 	trigger = {
 		var:sick_man_var >= 4
+		NOT = {
+			has_variable = sick_man_liberal_or_absolute_var 
+		   }
 	}
 	option = {
 		name = sick_man.4.a
@@ -459,6 +643,13 @@ sick_man.5 = {
 			country = c:AUS
 			value = -50
 		}
+		change_relations = {
+			country = c:HDJ
+			value = -30
+		}
+		s:STATE_HEDJAZ = {
+			add_claim = ROOT
+		}
 		s:STATE_CRETE = {
 			add_claim = ROOT
 		}
@@ -555,12 +746,46 @@ sick_man.5 = {
 	}
 	option = {
 		name = sick_man.5.d
-		trigger = {
-			has_variable = completed_sick_man_education_je
+		default_option = yes
+		ig:ig_industrialists = {
+			remove_ideology = ideology_plutocratic
+			add_ideology = ideology_neo_feudalistic
+		}
+		ig:ig_intelligentsia = {
+			remove_ideology = ideology_anti_clerical
+			remove_ideology = ideology_republican
+			add_ideology = ideology_neo_scholastic
+		}
+		ig:ig_trade_unions = {
+			remove_ideology = ideology_populist
+			add_ideology = ideology_militant_populism
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:bedouin
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:mashriqi
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:greek
 		}
 		add_modifier = {
-			name = ottoman_education
-			months = normal_modifier_time
+			name = sick_man_absolute_renaissance
+			months = 180
+		}
+		change_relations = {
+			country = c:HDJ
+			value = -30
+		}
+		s:STATE_HEDJAZ = {
+			add_claim = ROOT
 		}
 	}
 }
