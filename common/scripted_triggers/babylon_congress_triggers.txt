@@ -53,3 +53,121 @@ has_enough_support_for_recognition = {
 has_enough_support_for_state_claim = {
 	conference_sanctions_severity > 0.5
 }
+
+whist_ended_in_grand_slam_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points = 13
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points = 13
+		}
+	}
+}
+
+whist_ended_in_small_slam_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points = 12
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points = 12
+		}
+	}
+}
+
+whist_ended_in_win_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points >= 7
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points >= 7
+		}
+	}
+}
+
+whist_ended_in_loss_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points < 7
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points < 7
+		}
+	}
+}
+
+whist_we_got_caught_cheating = {
+	OR = {
+		scope:player_1 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_2 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_3 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_4 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+	}
+}
+
+whist_someone_got_caught_cheating = {
+	OR = {
+		scope:player_1 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_2 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_3 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_4 = {
+			has_variable = caught_cheating_in_whist
+		}
+	}
+}
+
+is_in_game_of_whist = {
+	has_variable = whist_player
+}

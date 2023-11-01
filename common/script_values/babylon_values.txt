@@ -949,6 +949,97 @@ babylon_vienna_congress_monthly_chance_for_random_event = {
 			add = 1
 		}
 	}
-	divide = 5 # Events per month in total
-	multiply = 100 # To get the chance %
+	divide = 5	# Events per month in total
+	multiply = 100	# To get the chance %
+}
+
+whist_opinion_value = {
+	if = {
+		# Team 1
+		limit = {
+			OR = {
+				scope:player_1 = this
+				scope:player_3 = this
+			}
+		}
+		add = {
+			value = var:team_1_points
+			if = {
+				limit = {
+					scope:player_1 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_1 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+		}
+	}
+	if = {
+		# Team 2
+		limit = {
+			OR = {
+				scope:player_2 = this
+				scope:player_4 = this
+			}
+		}
+		add = {
+			value = var:team_2_points
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_4 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+			if = {
+				limit = {
+					scope:player_4 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+		}
+	}
 }

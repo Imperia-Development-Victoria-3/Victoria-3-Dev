@@ -740,6 +740,13 @@ congress_random_events = {
 				id = congress_random_event.4
 			}
 		}
+		1 = {
+			trigger_event = {
+				# Game of whist
+				id = congress_random_event.5
+			}
+			
+		}
 	}
 }
 
@@ -860,4 +867,236 @@ clear_congress_random_event_4_option_variables = {
 	remove_variable ?= notable_attendee_scope_var
 	remove_variable ?= observer_1_scope_var
 	remove_variable ?= observer_2_scope_var
+}
+
+play_whist_round = {
+	random_list = {
+		100 = {
+			modifier = {
+				if = {
+					limit = {
+						scope:player_1 = {
+							has_variable = plays_whist_smart
+						}
+					}
+					add = 20
+				}
+				if = {
+					limit = {
+						scope:player_1 = {
+							has_variable = plays_whist_communicating
+						}
+					}
+					add = 30
+				}
+				if = {
+					limit = {
+						scope:player_1 = {
+							has_variable = plays_whist_cheating
+						}
+					}
+					add = 45
+				}
+			}
+			scope:player_1 = {
+				change_variable = {
+					name = points_team_1
+					add = 1
+				}
+			}
+		}
+		100 = {
+			modifier = {
+				if = {
+					limit = {
+						scope:player_2 = {
+							has_variable = plays_whist_smart
+						}
+					}
+					add = 20
+				}
+				if = {
+					limit = {
+						scope:player_2 = {
+							has_variable = plays_whist_communicating
+						}
+					}
+					add = 30
+				}
+				if = {
+					limit = {
+						scope:player_2 = {
+							has_variable = plays_whist_cheating
+						}
+					}
+					add = 45
+				}
+			}
+			scope:player_1 = {
+				change_variable = {
+					name = points_team_2
+					add = 1
+				}
+			}
+		}
+		100 = {
+			modifier = {
+				if = {
+					limit = {
+						scope:player_3 = {
+							has_variable = plays_whist_smart
+						}
+					}
+					add = 20
+				}
+				if = {
+					limit = {
+						scope:player_3 = {
+							has_variable = plays_whist_communicating
+						}
+					}
+					add = 30
+				}
+				if = {
+					limit = {
+						scope:player_3 = {
+							has_variable = plays_whist_cheating
+						}
+					}
+					add = 45
+				}
+			}
+			scope:player_1 = {
+				change_variable = {
+					name = points_team_1
+					add = 1
+				}
+			}
+		}
+		100 = {
+			modifier = {
+				if = {
+					limit = {
+						scope:player_4 = {
+							has_variable = plays_whist_smart
+						}
+					}
+					add = 20
+				}
+				if = {
+					limit = {
+						scope:player_4 = {
+							has_variable = plays_whist_communicating
+						}
+					}
+					add = 30
+				}
+				if = {
+					limit = {
+						scope:player_4 = {
+							has_variable = plays_whist_cheating
+						}
+					}
+					add = 45
+				}
+			}
+			scope:player_1 = {
+				change_variable = {
+					name = points_team_2
+					add = 1
+				}
+			}
+		}
+	}
+}
+
+end_whist_game = {
+	if = {
+		limit = {
+			OR = {
+				scope:player_1 = this
+				scope:player_2 = this
+			}
+		}
+		change_relations = {
+			country = scope:whist_teammate
+			value = whist_opinion_value
+		}
+	}
+	else = {
+		show_as_tooltip = {
+			change_relations = {
+				country = scope:whist_teammate
+				value = whist_opinion_value
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_variable = plays_whist_honorably
+		}
+		change_relations = {
+			country = scope:whist_opponent_1
+			value = 10
+		}
+		change_relations = {
+			country = scope:whist_opponent_2
+			value = 10
+		}
+	}
+	else = {
+		change_relations = {
+			country = scope:whist_opponent_1
+			value = 5
+		}
+		change_relations = {
+			country = scope:whist_opponent_2
+			value = 5
+		}
+	}
+}
+
+end_whist_game_cheater = {
+	if = {
+		limit = {
+			has_variable = caught_cheating_in_whist
+		}
+		show_as_tooltip = {
+			every_country = {
+				limit = {
+					OR = {
+						scope:player_1 = this
+						scope:player_2 = this
+						scope:player_3 = this
+						scope:player_4 = this
+					}
+					this != root
+				}
+				change_relations = {
+					country = root
+					value = -15
+				}
+			}
+		}
+	}
+	else = {
+		change_relations = {
+			country = scope:cheating_country_other
+			value = -15
+		}
+	}
+}
+
+whist_variable_cleanup = {
+	remove_variable ?= caught_cheating_in_whist
+	remove_variable ?= plays_whist_smart
+	remove_variable ?= plays_whist_honorably
+	remove_variable ?= plays_whist_communicating
+	remove_variable ?= plays_whist_cheating
+	remove_variable ?= players_selected_playstyle
+	remove_variable ?= points_team_1
+	remove_variable ?= points_team_2
+	remove_variable ?= team_1_points
+	remove_variable ?= team_2_points
+	remove_variable ?= whist_player
 }
