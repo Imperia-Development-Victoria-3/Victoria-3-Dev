@@ -103,6 +103,7 @@ sick_man.2 = {
 	}
 	immediate = {
 		set_variable = sick_man_complete
+		remove_modifier = sick_man_of_europe
 		remove_modifier = outmoded_bureaucracy
 		remove_modifier = cizye_tax
 		remove_modifier = stagnant_economy
@@ -116,18 +117,62 @@ sick_man.2 = {
 	option = {
 		name = sick_man.2.a
 		default_option = yes
-		ig:ig_intelligentsia = {
-			remove_ideology = ideology_anti_clerical
-			remove_ideology = ideology_republican
-			add_ideology = ideology_neo_scholastic
+		add_loyalists = {
+			value = 0.20
+			strata = middle
 		}
+		add_loyalists = {
+			value = 0.10
+			strata = rich
+		}
+		add_modifier = {
+			name = sick_man_liberal_western_happy
+			months = 120
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = sick_man_liberal_western_education
+		}
+		change_relations = {
+			country = c:FRA
+			value = 30
+		}
+		change_relations = {
+			country = c:GBR
+			value = 30
+		}
+		change_relations = {
+			country = c:PRU
+			value = 30
+		}
+		change_relations = {
+			country = c:USA
+			value = 30
+		}
+	}
+	option = {
+		name = sick_man.2.b
+		default_option = yes
+		add_loyalists = {
+			value = 0.05
+			country = c:TUR
+		}
+		add_modifier = {
+			name = sick_man_liberal_constitution_new
+			months = 180
+		}
+		add_modifier = {
+			name = sick_man_liberal_constitution_sultan
+		}
+		add_primary_culture = cu:misri
+	}
+	option = {
+		name = sick_man.2.c
+		default_option = yes
+		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
 			value = 0.15
 			culture = cu:albanian
-		}
-		add_loyalists = {
-			value = 0.15
-			culture = cu:bedouin
 		}
 		add_loyalists = {
 			value = 0.15
@@ -135,235 +180,62 @@ sick_man.2 = {
 		}
 		add_loyalists = {
 			value = 0.15
+			culture = cu:greek
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bulgarian
+		}
+		add_loyalists = {
+			value = 0.10
+			culture = cu:bedouin
+		}
+		add_loyalists = {
+			value = 0.10
 			culture = cu:kurdish
 		}
 		add_loyalists = {
-			value = 0.15
-			culture = cu:turkish
+			value = 0.10
+			culture = cu:misri
 		}
 		add_modifier = {
-			name = sick_man_absolute_devout
+			name = sick_man_liberal_crossroads_boost
 			months = 120
-			is_decaying = yes
 		}
 		add_modifier = {
-			name = sick_man_absolute_sharia
+			name = sick_man_liberal_crossroads_migration
 		}
-		custom_tooltip = {
-			text = increased_sunni_relations_tt
-			every_country = {
-				limit = {
-					religion = rel:sunni
-				}
-				change_relations = {
-					country = ROOT
-					value = 30
-				}
-			}
-		}
-		every_country = {
-			limit = {
-				religion = rel:shiite
-			}
-			change_relations = {
-				country = ROOT
-				value = -30
-			}
-		}
-		change_relations = {
-			country = c:FRA
-			value = -30
-		}
-		custom_tooltip = {
-			text = arabian_claims_tt
-			every_state_region = {
-				limit = {
-					region = sr:region_arabic
-					any_scope_state = {
-						NOT = {
-							owner = root
-						}
-					}
-				}
-				add_claim = root
-			}
-		}
-	}
-	option = {
-		name = sick_man.2.b
-		default_option = yes
-		ig:ig_trade_unions = {
-			remove_ideology = ideology_populist
-			add_ideology = ideology_militant_populism
-		}
-		add_loyalists = {
-			value = 0.15
-			pop_type = servicemen
-		}
-		add_loyalists = {
-			value = 0.2
-			pop_type = officers
-		}
-		add_modifier = {
-			name = sick_man_absolute_military
-			months = 120
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = sick_man_absolute_mansure_army
-		}
-		change_relations = {
-			country = c:RUS
-			value = -50
-		}
-		change_relations = {
-			country = c:AUS
-			value = -50
-		}
-		change_relations = {
-			country = c:HDJ
-			value = -30
-		}
-		s:STATE_HEDJAZ = {
-			add_claim = ROOT
-		}
-		s:STATE_CRETE = {
-			add_claim = ROOT
-		}
-		s:STATE_CROATIA = {
-			add_claim = ROOT
-		}
-		s:STATE_DALMATIA = {
-			add_claim = ROOT
-		}
-		s:STATE_SLAVONIA = {
-			add_claim = ROOT
-		}
-		s:STATE_BANAT = {
-			add_claim = ROOT
-		}
-		s:STATE_DELVIDEK = {
-			add_claim = ROOT
-		}
-		s:STATE_SOUTHERN_TRANSYLVANIA = {
-			add_claim = ROOT
-		}
-		s:STATE_NORTHERN_TRANSYLVANIA = {
-			add_claim = ROOT
-		}
-		s:STATE_CRIMEA = {
-			add_claim = ROOT
-		}
-		s:STATE_KUBAN = {
-			add_claim = ROOT
-		}
-		s:STATE_GREATER_CAUCASUS = {
-			add_claim = ROOT
-		}
-		s:STATE_KARS = {
-			add_claim = ROOT
-		}
-	}
-	option = {
-		name = sick_man.2.c
-		default_option = yes
-		ig:ig_industrialists = {
-			remove_ideology = ideology_plutocratic
-			add_ideology = ideology_neo_feudalistic
-		}
-		add_loyalists = {
-			value = 0.2
-			pop_type = aristocrats
-		}
-		add_loyalists = {
-			value = 0.1
-			pop_type = capitalists
-		}
-		add_modifier = {
-			name = sick_man_absolute_aristocrats
-			months = 180
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = sick_man_absolute_sultan
-		}
-		change_relations = {
-			country = c:FRA
-			value = -30
-		}
-		change_relations = {
-			country = c:HDJ
-			value = -30
-		}
-		change_relations = {
-			country = c:PER
-			value = -30
-		}
-		s:STATE_TABRIZ = {
-			add_claim = ROOT
-		}
-		s:STATE_LURISTAN = {
-			add_claim = ROOT
-		}
-		s:STATE_KHUZESTAN = {
-			add_claim = ROOT
-		}
-		s:STATE_HEDJAZ = {
-			add_claim = ROOT
-		}
-		s:STATE_CONSTANTINE = {
-			add_claim = ROOT
-		}
-		s:STATE_ALGIERS = {
-			add_claim = ROOT
-		}
-		s:STATE_ORAN = {
-			add_claim = ROOT
-		}
+		add_primary_culture = cu:greek
 	}
 	option = {
 		name = sick_man.2.d
 		default_option = yes
-		ig:ig_industrialists = {
-			remove_ideology = ideology_plutocratic
-			add_ideology = ideology_neo_feudalistic
-		}
-		ig:ig_intelligentsia = {
-			remove_ideology = ideology_anti_clerical
-			remove_ideology = ideology_republican
-			add_ideology = ideology_neo_scholastic
-		}
-		ig:ig_trade_unions = {
-			remove_ideology = ideology_populist
-			add_ideology = ideology_militant_populism
-		}
+		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
-			value = 0.2
+			value = 0.15
 			culture = cu:turkish
 		}
 		add_loyalists = {
-			value = 0.2
-			culture = cu:bedouin
+			value = 0.15
+			culture = cu:kurdish
 		}
 		add_loyalists = {
 			value = 0.15
-			culture = cu:mashriqi
-		}
-		add_loyalists = {
-			value = 0.1
-			culture = cu:greek
+			culture = cu:azerbaijani
 		}
 		add_modifier = {
-			name = sick_man_absolute_renaissance
+			name = sick_man_liberal_turanian_heritage
 			months = 180
+			is_decaying = yes
 		}
-		change_relations = {
-			country = c:HDJ
-			value = -30
+		add_modifier = {
+			name = sick_man_liberal_turanian_movement
 		}
-		s:STATE_HEDJAZ = {
-			add_claim = ROOT
-		}
+		add_primary_culture = cu:turkmen
 	}
 
 }
@@ -451,13 +323,11 @@ sick_man.4 = {
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-	immediate = {
-		set_variable = sick_man_liberal_or_absolute_var
-	}
 	trigger = {
 		var:sick_man_var >= 4
-		NOT = {
-			has_variable = sick_man_liberal_or_absolute_var 
+		NOR = {
+			has_variable = liberal_tanzimat
+			has_variable = absolute_tanzimat
 		   }
 	}
 	option = {
@@ -523,6 +393,7 @@ sick_man.5 = {
 	}
 	immediate = {
 		set_variable = sick_man_complete
+		remove_modifier = sick_man_of_europe
 		remove_modifier = outmoded_bureaucracy
 		remove_modifier = cizye_tax
 		remove_modifier = stagnant_economy
@@ -544,6 +415,7 @@ sick_man.5 = {
 			remove_ideology = ideology_republican
 			add_ideology = ideology_neo_scholastic
 		}
+		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
 			value = 0.15
 			culture = cu:albanian
@@ -760,6 +632,7 @@ sick_man.5 = {
 			remove_ideology = ideology_populist
 			add_ideology = ideology_militant_populism
 		}
+		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
 			value = 0.2
 			culture = cu:turkish
