@@ -385,13 +385,15 @@ je_sick_man_separatism = {
 				who = c:SER
 				type = dominion
 			}
-			has_diplomatic_pact = {
-				who = c:WAL
-				type = dominion
-			}
-			has_diplomatic_pact = {
-				who = c:MOL
-				type = dominion
+			OR = {
+				has_diplomatic_pact = {
+					who = c:WAL
+					type = dominion
+				}
+				has_diplomatic_pact = {
+					who = c:MOL
+					type = dominion
+				}
 			}
 		}
 		trigger_if = {
@@ -582,6 +584,15 @@ je_sick_man_liberal_voting = {
 		scope:journal_entry = {
 			is_goal_complete = yes
 		}
+		OR = {
+			has_law = law_type:law_right_of_assembly
+			has_law = law_type:law_protected_speech
+		}
+		OR = {
+			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_universal_suffrage
+		}
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -759,6 +770,9 @@ je_sick_man_liberal_secularism = {
 je_sick_man_liberal_labor = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
 		NOR = {
 			has_law = law_type:law_serfdom
 			has_law = law_type:law_tenant_farmers
