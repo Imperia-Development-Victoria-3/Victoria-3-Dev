@@ -628,7 +628,8 @@ embargo_effect = {
 			years = 3
 			multiplier = conference_sanctions_severity
 		}
-	} else_if = {
+	}
+	else_if = {
 		limit = {
 			conference_sanctions_severity < 0
 		}
@@ -703,6 +704,12 @@ congress_send_out_invitation = {
 				COUNTRY = this
 				STANCE = 1
 			}
+			trigger_event = {
+				# Start parade
+				id = congress_random_event.14
+				popup = yes
+				days = 35
+			}
 		}
 		else_if = {
 			limit = {
@@ -734,33 +741,32 @@ congress_send_out_invitation = {
 }
 
 # scope: country
-# While congress is in session, on average once a month this will be popped 5 times. In theory.
+# While congress is in session, on average once a month this will be popped 5 times globally. In theory.
 # Remember to do the event triggers
 # Shoe throwing as template
 congress_random_events = {
-	random_list = {
-		1 = {
-			trigger_event = {
-				# Shoe throwing event
-				id = congress_random_event.1
-			}
+	if = {
+		limit = {
+			has_global_variable = congress_random_events_enabled
 		}
-		1 = {
-			trigger_event = {
-				# Dinner party
-				id = congress_random_event.4
+		random_list = {
+			1 = {
+				trigger_event = {
+					# Shoe throwing event
+					id = congress_random_event.1
+				}
 			}
-		}
-		1 = {
-			trigger_event = {
-				# Game of whist
-				id = congress_random_event.5
+			1 = {
+				trigger_event = {
+					# Dinner party
+					id = congress_random_event.4
+				}
 			}
-		}
-		1 = {
-			trigger_event = {
-				# Masked Ball
-				id = congress_random_event.9
+			1 = {
+				trigger_event = {
+					# Game of whist
+					id = congress_random_event.5
+				}
 			}
 		}
 	}
@@ -1115,4 +1121,134 @@ whist_variable_cleanup = {
 	remove_variable ?= team_1_points
 	remove_variable ?= team_2_points
 	remove_variable ?= whist_player
+}
+
+congress_parade_start = {
+	set_global_variable = {
+		name = entry_synonym
+		value = {
+			integer_range = {
+				min = 1
+				max = 8
+			}
+		}
+	}
+	set_global_variable = {
+		name = allied_synonym
+		value = {
+			integer_range = {
+				min = 1
+				max = 8
+			}
+		}
+	}
+	set_global_variable = {
+		name = ruler_synonym
+		value = {
+			integer_range = {
+				min = 1
+				max = 8
+			}
+		}
+	}
+	set_global_variable = {
+		name = parade_over_num
+		value = 0
+	}
+	random_country = {
+		limit = {
+			has_variable = congress_lead_accepted
+		}
+		set_global_variable = {
+			name = congress_lead_1
+			value = this
+		}
+	}
+	random_country = {
+		limit = {
+			has_variable = congress_lead_accepted
+			global_var:congress_lead_1 != this
+		}
+		set_global_variable = {
+			name = congress_lead_2
+			value = this
+		}
+	}
+	random_country = {
+		limit = {
+			has_variable = congress_lead_accepted
+			global_var:congress_lead_1 != this
+			global_var:congress_lead_2 != this
+		}
+		set_global_variable = {
+			name = congress_lead_3
+			value = this
+		}
+	}
+	every_country = {
+		limit = {
+			is_congress_attendee = yes
+		}
+		trigger_event = {
+			id = congress_random_event.17
+			popup = yes
+		}
+	}
+}
+
+congress_parade_invite_lead = {
+	if = {
+		limit = {
+			any_country = {
+				count > 0
+				country_rank >= rank_value:great_power
+				is_congress_attendee = yes
+				is_congress_observer = no
+				is_congress_target = no
+				this != global_var:babylon_vienna_congress_session_initiator
+				NOR = {
+					has_variable = congress_lead_invitee
+					has_variable = congress_lead_accepted
+					has_variable = congress_lead_declined
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				is_congress_attendee = yes
+				is_congress_observer = no
+				is_congress_target = no
+				this != global_var:babylon_vienna_congress_session_initiator
+				NOR = {
+					has_variable = congress_lead_invitee
+					has_variable = congress_lead_accepted
+					has_variable = congress_lead_declined
+				}
+			}
+			trigger_event = {
+				id = congress_random_event.15
+				popup = yes
+			}
+		}
+	}
+	else = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				is_congress_observer = no
+				is_congress_target = no
+				this != global_var:babylon_vienna_congress_session_initiator
+				NOR = {
+					has_variable = congress_lead_invitee
+					has_variable = congress_lead_accepted
+					has_variable = congress_lead_declined
+				}
+			}
+			trigger_event = {
+				id = congress_random_event.15
+				popup = yes
+			}
+		}
+	}
 }

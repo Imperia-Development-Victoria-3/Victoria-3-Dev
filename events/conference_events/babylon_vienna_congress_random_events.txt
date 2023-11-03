@@ -1,6 +1,6 @@
 ﻿namespace = congress_random_event
+# Shoe throwing event
 congress_random_event.1 = {
-	# Shoe throwing event
 	type = country_event
 	event_image = {
 		video = "unspecific_politicians_arguing"
@@ -133,8 +133,8 @@ congress_random_event.1 = {
 	}
 }
 
+# Shoe throwing event - direct hit!
 congress_random_event.2 = {
-	# Shoe throwing event - direct hit!
 	type = country_event
 	event_image = {
 		video = "unspecific_politicians_arguing"
@@ -170,8 +170,8 @@ congress_random_event.2 = {
 	}
 }
 
+# Shoe throwing event - audience broadcast
 congress_random_event.3 = {
-	# Shoe throwing event - audience broadcast
 	type = country_event
 	event_image = {
 		video = "unspecific_politicians_arguing"
@@ -225,6 +225,7 @@ congress_random_event.3 = {
 	}
 }
 
+# Dinner event
 congress_random_event.4 = {
 	type = country_event
 	event_image = {
@@ -640,6 +641,7 @@ congress_random_event.4 = {
 	}
 }
 
+### Whist
 # Setting up the whist table...
 congress_random_event.5 = {
 	type = country_event
@@ -1066,6 +1068,7 @@ congress_random_event.8 = {
 	}
 }
 
+### Masked Ball
 # Masked Ball preparations
 congress_random_event.9 = {
 	type = country
@@ -1829,6 +1832,783 @@ congress_random_event.13 = {
 				remove_variable ?= mysterious_person
 				remove_global_variable ?= masked_ball_over
 			}
+		}
+	}
+}
+
+### Parade
+# Start of parade chain - host budget
+congress_random_event.14 = {
+	type = country
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.14.t
+	desc = congress_random_event.14.desc
+	flavor = congress_random_event.14.flavor
+	placement = global_var:babylon_vienna_congress_session_initiator.capital
+	duration = 3
+	trigger = {
+		this = global_var:babylon_vienna_congress_session_initiator
+		NOR = {
+			# One of these would be true if the event has been fired this congress round...
+			has_variable = very_low_budget_amount
+			has_variable = chosen_budget_level
+			has_variable = chosen_budget_amount
+		}
+	}
+	immediate = {
+		set_variable = {
+			name = very_low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.15
+			}
+		}
+		set_variable = {
+			name = low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.3
+			}
+		}
+		set_variable = {
+			name = medium_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.45
+			}
+		}
+		set_variable = {
+			name = high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.6
+			}
+		}
+		set_variable = {
+			name = very_high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.75
+			}
+		}
+		congress_parade_invite_lead = yes
+		congress_parade_invite_lead = yes
+		congress_parade_invite_lead = yes
+	}
+	# Very low budget
+	option = {
+		name = congress_random_event.14.a
+		set_variable = {
+			name = chosen_budget_level
+			value = 1
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Low budget
+	option = {
+		name = congress_random_event.14.b
+		set_variable = {
+			name = chosen_budget_level
+			value = 2
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Satisfactory/medium budget
+	option = {
+		default_option = yes
+		name = congress_random_event.14.c
+		set_variable = {
+			name = chosen_budget_level
+			value = 3
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:medium_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:medium_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+	# High budget
+	option = {
+		name = congress_random_event.14.d
+		set_variable = {
+			name = chosen_budget_level
+			value = 4
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# very high budget
+	option = {
+		name = congress_random_event.14.e
+		set_variable = {
+			name = chosen_budget_level
+			value = 5
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		remove_variable = very_low_budget_amount
+		remove_variable = low_budget_amount
+		remove_variable = medium_budget_amount
+		remove_variable = high_budget_amount
+		remove_variable = very_high_budget_amount
+		if = {
+			limit = {
+				is_congress_parade_ready = yes
+			}
+			congress_parade_start = yes
+		}
+	}
+}
+
+#Invitation to be lead
+congress_random_event.15 = {
+	type = country
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.15.t
+	desc = congress_random_event.15.desc
+	flavor = congress_random_event.15.flavor
+	placement = global_var:babylon_vienna_congress_session_initiator.capital
+	duration = 1
+	immediate = {
+		set_variable = congress_lead_invitee
+	}
+	option = {
+		# Accept the lead invite
+		default_option = yes
+		name = congress_random_event.15.a
+		remove_variable = congress_lead_invitee
+		set_variable = congress_lead_accepted
+		trigger_event = {
+			id = congress_random_event.16
+			popup = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		# Decline the lead invite
+		name = congress_random_event.15.b
+		remove_variable = congress_lead_invitee
+		set_variable = congress_lead_declined
+		congress_parade_invite_lead = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				any_country = {
+					count = 0
+					is_congress_attendee = yes
+					is_congress_observer = no
+					NOR = {
+						has_variable = congress_lead_invitee
+						has_variable = congress_lead_accepted
+						has_variable = congress_lead_declined
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				post_notification = parade_cancelled
+			}
+		}
+	}
+}
+
+# lead budget selection
+congress_random_event.16 = {
+	type = country
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.16.t
+	desc = congress_random_event.16.desc
+	flavor = congress_random_event.16.flavor
+	placement = capital
+	duration = 1
+	trigger = {
+		has_variable = congress_lead_accepted
+		NOR = {
+			# One of these would be true if the event has been fired this congress round...
+			has_variable = very_low_budget_amount
+			has_variable = chosen_budget_level
+			has_variable = chosen_budget_amount
+		}
+	}
+	immediate = {
+		set_variable = {
+			name = very_low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.15
+			}
+		}
+		set_variable = {
+			name = low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.3
+			}
+		}
+		set_variable = {
+			name = medium_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.45
+			}
+		}
+		set_variable = {
+			name = high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.6
+			}
+		}
+		set_variable = {
+			name = very_high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.75
+			}
+		}
+	}
+	# Very low budget
+	option = {
+		name = congress_random_event.16.a
+		set_variable = {
+			name = chosen_budget_level
+			value = 1
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Low budget
+	option = {
+		name = congress_random_event.16.b
+		set_variable = {
+			name = chosen_budget_level
+			value = 2
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Satisfactory/medium budget
+	option = {
+		default_option = yes
+		name = congress_random_event.16.c
+		set_variable = {
+			name = chosen_budget_level
+			value = 3
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:medium_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:medium_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+	# High budget
+	option = {
+		name = congress_random_event.16.d
+		set_variable = {
+			name = chosen_budget_level
+			value = 4
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# very high budget
+	option = {
+		name = congress_random_event.16.e
+		set_variable = {
+			name = chosen_budget_level
+			value = 5
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		remove_variable = very_low_budget_amount
+		remove_variable = low_budget_amount
+		remove_variable = medium_budget_amount
+		remove_variable = high_budget_amount
+		remove_variable = very_high_budget_amount
+		if = {
+			limit = {
+				is_congress_parade_ready = yes
+			}
+			congress_parade_start = yes
+		}
+	}
+}
+
+# Actual parade
+congress_random_event.17 = {
+	type = country
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.17.t
+	desc = congress_random_event.17.desc
+	flavor = congress_random_event.17.flavor
+	placement = global_var:babylon_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		NOT = {
+			has_variable = parade_seen
+		}
+	}
+	immediate = {
+		set_variable = parade_seen
+		global_var:congress_lead_1 = {
+			save_scope_as = congress_lead_1_scope
+		}
+		global_var:congress_lead_2 = {
+			save_scope_as = congress_lead_2_scope
+		}
+		global_var:congress_lead_3 = {
+			save_scope_as = congress_lead_3_scope
+		}
+	}
+	# Hurrah!
+	option = {
+		default_option = yes
+		name = congress_random_event.17.a
+		trigger_event = {
+			id = congress_random_event.18
+			popup = yes
+		}
+	}
+}
+
+# Arrival at palace
+congress_random_event.18 = {
+	type = country
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
+	title = congress_random_event.18.t
+	desc = congress_random_event.18.desc
+	flavor = congress_random_event.18.flavor
+	placement = global_var:babylon_vienna_congress_session_initiator.capital
+	duration = 1
+	# Host spent most
+	option = {
+		default_option = yes
+		name = congress_random_event.18.a
+		trigger = {
+			global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount >= average_congress_parade_lead_budget
+		}
+		if = {
+			limit = {
+				this = global_var:babylon_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = increases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:babylon_vienna_congress_session_initiator
+						value = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = decreases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:babylon_vienna_congress_session_initiator
+						value = {
+							value = -5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				global_var:babylon_vienna_congress_session_initiator = {
+					add_modifier = {
+						name = babylon_vienna_congress_scaling_positive_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+				}
+				change_relations = {
+					country = global_var:babylon_vienna_congress_session_initiator
+					value = {
+						value = 5
+						multiply = congress_parade_multiplier
+					}
+				}
+				every_country = {
+					limit = {
+						has_variable = congress_lead_accepted
+					}
+					add_modifier = {
+						name = babylon_vienna_congress_scaling_negative_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+					root = {
+						change_relations = {
+							country = prev
+							value = {
+								value = -5
+								multiply = congress_parade_multiplier
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	# Leads spent more
+	option = {
+		default_option = yes
+		name = congress_random_event.18.b
+		trigger = {
+			global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount < average_congress_parade_lead_budget
+		}
+		if = {
+			limit = {
+				this = global_var:babylon_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_negative_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = decreases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:babylon_vienna_congress_session_initiator
+						value = {
+							value = -5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = babylon_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = increases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:babylon_vienna_congress_session_initiator
+						value = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				global_var:babylon_vienna_congress_session_initiator = {
+					add_modifier = {
+						name = babylon_vienna_congress_scaling_negative_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+				}
+				change_relations = {
+					country = global_var:babylon_vienna_congress_session_initiator
+					value = {
+						value = -5
+						multiply = congress_parade_multiplier
+					}
+				}
+				every_country = {
+					limit = {
+						has_variable = congress_lead_accepted
+					}
+					add_modifier = {
+						name = babylon_vienna_congress_scaling_positive_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+					root = {
+						change_relations = {
+							country = prev
+							value = {
+								value = 5
+								multiply = congress_parade_multiplier
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = parade_over_num
+			add = 1
+		}
+		if = {
+			limit = {
+				this = global_var:babylon_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:chosen_budget_amount
+				years = 1
+			}
+			trigger_event = {
+				# Masked Ball
+				id = congress_random_event.9
+				days = 30
+			}
+		}
+		if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:chosen_budget_amount
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					parade_over_num >= babylon_num_of_congress_attendees
+				}
+			}
+			set_global_variable = congress_random_events_enabled
+			remove_variable ?= parade_seen
+			remove_variable ?= congress_lead_accepted
+			remove_variable ?= chosen_budget_amount
+			remove_variable ?= chosen_budget_level
+			remove_global_variable ?= congress_lead_1
+			remove_global_variable ?= congress_lead_2
+			remove_global_variable ?= congress_lead_3
+			remove_global_variable ?= parade_over_num
 		}
 	}
 }

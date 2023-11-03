@@ -952,8 +952,8 @@ babylon_vienna_congress_session_target_region_culture_fraction = {
 
 babylon_vienna_congress_monthly_chance_for_random_event = {
 	value = babylon_num_of_congress_attendees
-	divide = 5	# Events per month in total
-	multiply = 100	# To get the chance %
+	divide = 100 # For each x amount of people
+	multiply = 5	# x events will pop each month
 }
 
 whist_opinion_value = {
@@ -1052,96 +1052,51 @@ random_costume_choice = {
 		min = 1
 		max = 9
 	}
-	# random_list = {
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 1
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 1
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 2
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 2
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 3
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 3
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 4
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 4
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 5
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 5
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 6
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 6
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 7
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 7
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 8
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 8
-	# 	}
-	# 	1 = {
-	# 		trigger = {
-	# 			save_temporary_scope_value_as = {
-	# 				name = temporary_event_10_option
-	# 				value = 9
-	# 			}
-	# 			random_congress_random_event_10_OPTION_enabled = no
-	# 		}
-	# 		value = 9
-	# 	}
-	# }
+}
+
+average_congress_parade_lead_budget = {
+	# basically adds 1 to the final number to avoid div/0 errors
+	value = 3
+	add = global_var:congress_lead_1.var:chosen_budget_amount
+	add = global_var:congress_lead_2.var:chosen_budget_amount
+	add = global_var:congress_lead_3.var:chosen_budget_amount
+	divide = 3
+}
+
+congress_parade_highest_spent = {
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount >= average_congress_parade_lead_budget
+		}
+		value = global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount
+	}
+	else = {
+		value = average_congress_parade_lead_budget
+	}
+}
+
+congress_parade_lowest_spent = {
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount < average_congress_parade_lead_budget
+		}
+		value = global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_amount
+	}
+	else = {
+		value = average_congress_parade_lead_budget
+	}
+}
+
+congress_parade_multiplier = {
+	value = congress_parade_highest_spent
+	divide = congress_parade_lowest_spent
+}
+
+congress_parade_average_budget_level_of_leads = {
+	value = 0
+	add = global_var:congress_lead_1.var:chosen_budget_level
+	add = global_var:congress_lead_2.var:chosen_budget_level
+	add = global_var:congress_lead_3.var:chosen_budget_level
+	divide = 3
+	round = yes
 }
