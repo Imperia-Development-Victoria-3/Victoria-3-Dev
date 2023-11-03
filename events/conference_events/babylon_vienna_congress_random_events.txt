@@ -1304,6 +1304,7 @@ congress_random_event.10 = {
 		trigger_event = {
 			id = congress_random_event.11
 			popup = yes
+			days = 2
 		}
 	}
 }
@@ -1403,7 +1404,7 @@ congress_random_event.11 = {
 		}
 		if = {
 			limit = {
-				global_var:ready_for_masked_ball = babylon_num_of_congress_attendees
+				global_var:ready_for_masked_ball >= babylon_num_of_congress_attendees
 			}
 			every_country = {
 				limit = {
@@ -1412,6 +1413,7 @@ congress_random_event.11 = {
 				trigger_event = {
 					id = congress_random_event.12
 					popup = yes
+					days = 7
 				}
 			}
 		}
@@ -1465,6 +1467,7 @@ congress_random_event.12 = {
 				trigger_event = {
 					id = congress_random_event.13
 					popup = yes
+					days = 3
 				}
 			}
 		}
@@ -2324,6 +2327,7 @@ congress_random_event.17 = {
 		trigger_event = {
 			id = congress_random_event.18
 			popup = yes
+			days = 3
 		}
 	}
 }
@@ -2581,11 +2585,6 @@ congress_random_event.18 = {
 				multiplier = var:chosen_budget_amount
 				years = 1
 			}
-			trigger_event = {
-				# Masked Ball
-				id = congress_random_event.9
-				days = 30
-			}
 		}
 		if = {
 			limit = {
@@ -2599,19 +2598,29 @@ congress_random_event.18 = {
 		}
 		if = {
 			limit = {
-				any_country = {
-					parade_over_num >= babylon_num_of_congress_attendees
-				}
+				global_var:parade_over_num >= babylon_num_of_congress_attendees
 			}
 			set_global_variable = congress_random_events_enabled
-			remove_variable ?= parade_seen
-			remove_variable ?= congress_lead_accepted
-			remove_variable ?= chosen_budget_amount
-			remove_variable ?= chosen_budget_level
 			remove_global_variable ?= congress_lead_1
 			remove_global_variable ?= congress_lead_2
 			remove_global_variable ?= congress_lead_3
 			remove_global_variable ?= parade_over_num
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				remove_variable ?= parade_seen
+				remove_variable ?= congress_lead_accepted
+				remove_variable ?= chosen_budget_amount
+				remove_variable ?= chosen_budget_level
+			}
+			global_var:babylon_vienna_congress_session_initiator = {
+				trigger_event = {
+					# Masked Ball
+					id = congress_random_event.9
+					days = 30
+				}
+			}
 		}
 	}
 }
