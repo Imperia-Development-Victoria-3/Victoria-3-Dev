@@ -10,7 +10,7 @@ types state_selectors
 		# height = (scroll_area margin) * 2 + default_popup_static header margin + default_popup_static bottom margin + scroll_area height
 		size = { 710 570 } # (10 + 50) * 2 + 640, 10 * 2 + 100 + 30 + 420
 		layer = top
-		visible = "[And(GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open'), GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+		visible = "[And(GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open'), GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
 
 		blockoverride "behind_window" {
 			state = {
@@ -184,7 +184,7 @@ types state_selectors
 								datamodel = "[AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"
 								datacontext = "[Scope.AccessState]"
 	
-								# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
+								# NEEDS to reference to a getList for example: GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetList('current_states')
 	
 								addcolumn = 210
 								addrow = 70
@@ -283,7 +283,7 @@ types state_selectors
 								datamodel = "[AccessPlayer.MakeScope.GetList('congress_target_state_basket')]"
 								datacontext = "[Scope.AccessState]"
 	
-								# NEEDS to reference to a getList for example: GetPlayer.MakeScope.GetList('current_states')
+								# NEEDS to reference to a getList for example: GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetList('current_states')
 	
 								addcolumn = 210
 								addrow = 70

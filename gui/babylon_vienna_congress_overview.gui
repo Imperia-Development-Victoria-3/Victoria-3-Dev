@@ -197,7 +197,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -213,7 +213,7 @@ types babylon_vienna_congress
                             divider_decorative = {}
                             textbox = {
                                 autoresize = yes
-                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_opposers_prestige_value')]#!"
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_opposers_prestige_value')]#!"
                                 using = header_font_fancy
                                 using = fontsize_mega
                                 margin_bottom = 5
@@ -265,7 +265,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -281,7 +281,7 @@ types babylon_vienna_congress
                             divider_decorative = {}
                             textbox = {
                                 autoresize = yes
-                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_neutral_prestige_value')]#!"
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_neutral_prestige_value')]#!"
                                 using = header_font_fancy
                                 using = fontsize_mega
                                 margin_bottom = 5
@@ -333,7 +333,7 @@ types babylon_vienna_congress
                             button = {
                                 using = default_button
                                 onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
-                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetPlayer.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
                                 parentanchor = center|top
                                 textbox = {
                                     resizeparent = yes
@@ -349,7 +349,7 @@ types babylon_vienna_congress
                             divider_decorative = {}
                             textbox = {
                                 autoresize = yes
-                                raw_text = "#v [GetPlayer.MakeScope.ScriptValue('conference_supporters_prestige_value')]#!"
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_supporters_prestige_value')]#!"
                                 using = header_font_fancy
                                 using = fontsize_mega
                                 margin_bottom = 5
@@ -423,13 +423,13 @@ types babylon_vienna_congress
                             parentanchor = bottom
 
                             blockoverride "value_left" {
-                                value = "[FixedPointToFloat(GetPlayer.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
+                                value = "[FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
                             }
                             blockoverride "value_right" {
-                                value = "[FixedPointToFloat(GetPlayer.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
+                                value = "[FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
                             }
                             textbox = {
-                                raw_text = "#v [FixedPointToProgressbarValue(GetPlayer.MakeScope.ScriptValue('conference_power_balance_percentage_value'))|v1]%#!"
+                                raw_text = "#v [FixedPointToProgressbarValue(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))|v1]%#!"
                                 parentanchor = center|top
                                 autoresize = yes
                             }
@@ -439,7 +439,7 @@ types babylon_vienna_congress
                     button = {
                         using = default_button
                         onclick = "[GetVariableSystem.Toggle('end_congress_confirmation')]"
-                        enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End), Not(GetGlobalVariable('babylon_vienna_congress_minimum_time').IsSet))]"
+                        enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End), Not(GetGlobalVariable('babylon_vienna_congress_minimum_time').IsSet))]"
                         parentanchor = center|top
                         margin_top = 20
                         textbox = {
@@ -511,13 +511,13 @@ types babylon_vienna_congress
                     raw_text = "Please let the game run for a bit."
                 }
                 textbox = {
-                    visible = "[Not(GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+                    visible = "[Not(GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
                     autoresize = yes
                     text = "CANNOT_START_CONGRESS"
                 }
                 flowcontainer = {	
                     direction = vertical
-                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('babylon_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('babylon_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
                     button = {
                         using = default_button
 
@@ -586,7 +586,7 @@ types babylon_vienna_congress
                     
                 }
                 flowcontainer = {
-                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('babylon_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('babylon_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
 
                     button = {
                         using = default_button
@@ -594,7 +594,7 @@ types babylon_vienna_congress
 						onclick = "[GetVariableSystem.Toggle('babylon_vienna_congress_state_selector_open')]"
                         onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
                         onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_open')]"
-                        enabled = "[GetPlayer.MakeScope.Var('congress_proposal_type').IsSet]"
+                        enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.Var('congress_proposal_type').IsSet]"
                         textbox = {
                             resizeparent = yes
                             raw_text = "Select Target"
@@ -620,11 +620,11 @@ types babylon_vienna_congress
                 }
             }
             vertical_divider = {
-                visible = "[And( GetPlayer.MakeScope.GetVariable('congress_proposal_type').IsSet , Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
+                visible = "[And( GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('congress_proposal_type').IsSet , Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
             }
 
             flowcontainer = {
-                visible = "[And(  GetPlayer.MakeScope.GetVariable('congress_proposal_type').IsSet, Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
+                visible = "[And(  GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('congress_proposal_type').IsSet, Not( GetGlobalVariable('babylon_vienna_congress_in_session').IsSet ) )]"
                 spacing = 5
                 direction = vertical
                 margin_top = 20
