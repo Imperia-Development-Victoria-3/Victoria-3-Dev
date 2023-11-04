@@ -346,7 +346,28 @@ conference_aftermath_embargo.2 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 	title = conference_aftermath_embargo.2.t
-	desc = conference_aftermath_embargo.2.desc
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = conference_aftermath_embargo.2.desc1
+				trigger = {
+					conference_sanctions_severity > 0
+				}
+			}
+			triggered_desc = {
+				desc = conference_aftermath_embargo.2.desc2
+				trigger = {
+					conference_sanctions_severity < 0
+				}
+			}
+			triggered_desc = {
+				desc = conference_aftermath_embargo.2.desc3
+				trigger = {
+					conference_sanctions_severity = 0
+				}
+			}
+		}
+	}
 	flavor = conference_aftermath_embargo.2.flavor
 	duration = 3
 	immediate = {
@@ -356,7 +377,7 @@ conference_aftermath_embargo.2 = {
 	# Gracefully accept
 	option = {
 		trigger = {
-			conference_sanctions_severity != 0
+			conference_sanctions_severity > 0
 		}
 		name = conference_aftermath_denouncement.2.a
 		default_option = yes
@@ -386,7 +407,7 @@ conference_aftermath_embargo.2 = {
 		name = conference_aftermath_denouncement.2.c
 		default_option = yes
 		trigger = {
-			conference_sanctions_severity = 0
+			conference_sanctions_severity <= 0
 		}
 	}
 }
