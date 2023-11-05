@@ -2,46 +2,16 @@ types state_selectors
 {
 	type state_selector = default_popup_static {
 		name = "state_selector"
-		movable = no
-		resizable = no
+		# movable = no
+		# resizable = no
 		parentanchor = hcenter|top
 		# Needs manual calculation for size because we can't autoresize based on content:
 		# width = (scroll_area margin + default_popup_static side margin) * 2 + scroll area width
 		# height = (scroll_area margin) * 2 + default_popup_static header margin + default_popup_static bottom margin + scroll_area height
 		size = { 710 570 } # (10 + 50) * 2 + 640, 10 * 2 + 100 + 30 + 420
 		layer = top
-		visible = "[And(GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open'), GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
+		visible = "[GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope))]"
 
-		blockoverride "behind_window" {
-			state = {
-				name = _show
-				start_sound = {
-					soundeffect = "event:/SFX/UI/MapLenses/location_finder"
-				}
-			}
-		}
-		blockoverride "window_header_name" {
-			raw_text = "Select Congress Target"
-		}
-		blockoverride "header_back_button_visibility" {
-			visible = yes
-		}
-		blockoverride "header_back_button" {
-			onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
-			onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
-			enabled = "[Not(GetVariableSystem.HasValue('state_selector_mode','strategic_region'))]"
-
-			# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
-		}
-
-		blockoverride "header_close_button_visibility" {
-			visible = yes
-		}
-
-		blockoverride "header_close_button" {
-			onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
-			onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
-		}
 
 		blockoverride "entire_scrollarea" {
 			flowcontainer = {
@@ -431,13 +401,47 @@ types state_selectors
 			}
 		}
 	}
-	type state_selector_container = flowcontainer {
+	type state_selector_container = default_popup_static {
 		visible = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
-		
-		parentanchor = hcenter|top
-		layer = confirmation
+		# movable = no
+		# resizable = no
+		parentanchor = hcenter
+		# position = { 0 -285 }
+		maximumsize = { 710 570 }
+		layer = top
 		state_selector = {
+			visible = "[GetVariableSystem.Exists('babylon_vienna_congress_state_selector_open')]"
 			using = clickthrough_blocker
+			blockoverride "behind_window" {
+				state = {
+					name = _show
+					start_sound = {
+						soundeffect = "event:/SFX/UI/MapLenses/location_finder"
+					}
+				}
+			}
+			blockoverride "window_header_name" {
+				raw_text = "Select Congress Target"
+			}
+			blockoverride "header_back_button_visibility" {
+				visible = yes
+			}
+			blockoverride "header_back_button" {
+				onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+				onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
+				enabled = "[Not(GetVariableSystem.HasValue('state_selector_mode','strategic_region'))]"
+	
+				# SHOULD GO BACK TO STRATEGIC REGION SELECTOR IF PRESSED OTHERWISE NOTHING
+			}
+	
+			blockoverride "header_close_button_visibility" {
+				visible = yes
+			}
+	
+			blockoverride "header_close_button" {
+				onclick = "[GetScriptedGui('clear_strategic_region_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+				onclick = "[GetVariableSystem.Clear('babylon_vienna_congress_state_selector_open')]"
+			}
 		}
 		start_congress_confirmation_countries = {}
 		start_congress_confirmation_states = {}
