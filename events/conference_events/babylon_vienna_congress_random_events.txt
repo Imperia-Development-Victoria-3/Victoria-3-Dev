@@ -2662,6 +2662,14 @@ congress_random_event.18 = {
 					id = congress_random_event.9
 					days = 30
 				}
+				random = {
+					chance = 5
+					trigger_event = {
+						# Hot air balloon crashes the conference
+						id = congress_random_event.20
+						days = 3
+					}
+				}
 			}
 		}
 	}
@@ -3002,7 +3010,7 @@ congress_random_event.19 = {
 	}
 }
 
-# Hot air balloon crasher perspective
+# Hot air balloon host perspective
 congress_random_event.20 = {
 	type = country_event
 	event_image = {
@@ -3018,9 +3026,17 @@ congress_random_event.20 = {
 	duration = 1
 	trigger = {
 		global_var:babylon_vienna_congress_session_initiator = root
+		has_global_variable = babylon_vienna_congress_in_session
 	}
-	immediate = {}
-
+	immediate = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+			}
+			save_scope_as = congress_crasher
+		}
+	}
 	option = {
 		# Forgive the congress crasher
 		name = congress_random_event.20.a
@@ -3032,38 +3048,31 @@ congress_random_event.20 = {
 				multiplier = 5
 			}
 		}
-		
 		add_modifier = {
 			name = babylon_vienna_congress_scaling_negative_prestige_modifier
 			years = 1
 			is_decaying = yes
 			multiplier = 5
 		}
-
 		change_relations = {
 			country = scope:congress_crasher
 			value = 20
 		}
-
 		save_scope_value_as = {
 			name = forgave_congress_crasher
 			value = yes
 		}
-
 		scope:congress_crasher = {
 			trigger_event = congress_random_event.21
 		}
-
 		ai_chance = {
 			base = 30
 		}
 	}
-
 	option = {
 		# Punish the congress crasher
 		default_option = yes
 		name = congress_random_event.20.b
-
 		scope:congress_crasher = {
 			add_modifier = {
 				name = babylon_vienna_congress_scaling_negative_prestige_modifier
@@ -3072,27 +3081,34 @@ congress_random_event.20 = {
 				multiplier = 20
 			}
 		}
-
 		change_relations = {
 			country = scope:congress_crasher
 			value = -20
 		}
-
 		save_scope_value_as = {
 			name = forgave_congress_crasher
 			value = no
 		}
-
 		scope:congress_crasher = {
 			trigger_event = congress_random_event.21
 		}
-
 		ai_chance = {
 			base = 70
 		}
 	}
+	after = {
+		every_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != scope:congress_crasher
+			}
+			trigger_event = {
+				id = congress_random_event.22
+			}
+		}
+	}
 }
-
 
 # Hot air balloon crasher perspective
 congress_random_event.21 = {
@@ -3108,20 +3124,15 @@ congress_random_event.21 = {
 	flavor = congress_random_event.21.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
-	trigger = {
-		global_var:babylon_vienna_congress_session_initiator = root
-	}
 	immediate = {
-
 	}
-
 	# Not really a choice just informing the player
 	option = {
 		default_option = yes
-		name = congress_random_event.21.b
+		name = congress_random_event.21.a
 		if = {
 			limit = {
-				scope:forgave_congress_crasher
+				scope:forgave_congress_crasher = no
 			}
 			show_as_tooltip = {
 				add_modifier = {
@@ -3130,13 +3141,12 @@ congress_random_event.21 = {
 					is_decaying = yes
 					multiplier = 20
 				}
-
 				change_relations = {
 					country = global_var:babylon_vienna_congress_session_initiator
 					value = -20
 				}
 			}
-		} 
+		}
 		else = {
 			show_as_tooltip = {
 				scope:congress_crasher = {
@@ -3147,27 +3157,22 @@ congress_random_event.21 = {
 						multiplier = 5
 					}
 				}
-				
 				add_modifier = {
 					name = babylon_vienna_congress_scaling_negative_prestige_modifier
 					years = 1
 					is_decaying = yes
 					multiplier = 5
 				}
-
 				change_relations = {
-					country = prev
+					country = global_var:babylon_vienna_congress_session_initiator
 					value = 20
 				}
 			}
 		}
-		
 	}
 }
 
-
 # Hot air balloon bystander perspective
-# congress_random_event.22
 congress_random_event.22 = {
 	type = country_event
 	event_image = {
@@ -3181,16 +3186,9 @@ congress_random_event.22 = {
 	flavor = congress_random_event.22.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
-	trigger = {
-		global_var:babylon_vienna_congress_session_initiator = root
-	}
-	immediate = {
-
-	}
-
 	# Not really a choice just informing the player
 	option = {
 		default_option = yes
-		name = congress_random_event.22.b
+		name = congress_random_event.22.a
 	}
 }
