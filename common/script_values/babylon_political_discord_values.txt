@@ -95,24 +95,31 @@ political_discord_rivalry_pact_mult = {
 }
 
 political_discord_strongly_approve = {
-	value = political_discord_change_small
-}
-
-political_discord_approve = {
 	value = political_discord_change_miniscule
 }
 
+political_discord_approve = {
+	value = {
+		value = political_discord_change_miniscule
+		divide = 2
+	}
+}
+
 political_discord_strongly_disapprove = {
-	value = political_discord_change_large
+	value = {
+		value = political_discord_change_large
+		multiply = 2
+	}
 }
 
 political_discord_disapprove = {
-	value = political_discord_change_small
+	value = political_discord_change_large
 }
 
 babylon_discord_fetch_value = {
 	# Another country should be saved as scope:target_country
 	# This is called from the GUI, with a MakeScope setting the target_country
+	# And also from the journal entry
 	value = 0
 	if = {
 		limit = {
@@ -353,17 +360,26 @@ babylon_discord_cultural_majority_value = {
 				}
 			}
 		}
-		# 33 is the midpoint, if you're a subject with a same-culture('ish) overlord
-		subtract = 33
+		# 35 is the midpoint, if you're a subject with a same-culture('ish) overlord
+		subtract = 35
 	}
 	else = {
-		# else 66 is the midpoint
-		subtract = 66
+		# else 65 is the midpoint
+		subtract = 65
 	}
 	# So now its 11
 	multiply = -1
+	if = {
+		limit = {
+			babylon_get_primary_culture_percentage_rough > 0.65
+		}
+		divide = 2
+	}
+	else = {
+		multiply = 2
+	}
 	# Reverse the sign, so..
-	# A 75% primary_culture'd nation would have 11 discord removed.
+	# A 75% primary_culture'd nation would have 10 discord removed.
 }
 
 babylon_discord_religious_majority_value = {
@@ -440,4 +456,495 @@ babylon_discord_average_turmoil_in_country_value = {
 		}
 	}
 	multiply = 100
+}
+
+babylon_get_slave_pop_percentage_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.175
+			}
+		}
+		value = 0.175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.125
+			}
+		}
+		value = 0.125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.075
+			}
+		}
+		value = 0.075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else = {
+		value = 0
+	}
+}
+
+babylon_get_slave_pop_percentage_refined = {
+	value = babylon_get_slave_pop_percentage_rough
+	multiply = 100
+}
+
+babylon_discord_slave_contribution_value = {
+	value = babylon_get_slave_pop_percentage_refined
+	multiply = 2
+}
+
+babylon_discord_radicals_percentage_refined = {
+	value = radical_fraction
+	multiply = 100
+}
+
+babylon_discord_radicals_value = {
+	value = babylon_discord_radicals_percentage_refined
+	multiply = 2
+}
+
+babylon_get_serf_pop_percentage_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.175
+			}
+		}
+		value = 0.175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.125
+			}
+		}
+		value = 0.125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.075
+			}
+		}
+		value = 0.075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else = {
+		value = 0
+	}
+}
+
+babylon_get_serf_pop_percentage_refined = {
+	value = babylon_get_serf_pop_percentage_rough
+	multiply = 100
+}
+
+babylon_discord_serf_contribution_value = {
+	value = babylon_get_serf_pop_percentage_refined
 }
