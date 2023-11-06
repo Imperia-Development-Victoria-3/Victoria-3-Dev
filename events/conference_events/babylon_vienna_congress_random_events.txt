@@ -15,9 +15,13 @@ congress_random_event.1 = {
 	duration = 1
 	trigger = {
 		# Should only throw a shoe if you're on the benches
+		has_global_variable = babylon_vienna_congress_in_session
 		is_congress_observer = yes
 		any_country = {
 			is_congress_attendee = yes
+			NOT = {
+				has_variable = shoe_thrown_at_recently
+			}
 			relations:root <= relations_threshold:poor
 		}
 	}
@@ -29,6 +33,9 @@ congress_random_event.1 = {
 			limit = {
 				# Should only throw shoes at attendees they have bad relations with
 				is_congress_attendee = yes
+				NOT = {
+					has_variable = shoe_thrown_at_recently
+				}
 				relations:root <= relations_threshold:poor
 			}
 			save_scope_as = shoe_target
@@ -120,6 +127,13 @@ congress_random_event.1 = {
 			is_decaying = yes
 			multiplier = 5
 		}
+		scope:shoe_target = {
+			# A 2 month cooldown to being thrown shoes at
+			set_variable = {
+				name = shoe_thrown_at_recently
+				days = 60
+			}
+		}
 		ai_chance = {
 			base = 20
 		}
@@ -149,6 +163,7 @@ congress_random_event.2 = {
 	duration = 1
 	trigger = {
 		is_congress_attendee = yes
+		has_global_variable = babylon_vienna_congress_in_session
 	}
 	immediate = {
 		add_modifier = {
@@ -187,6 +202,7 @@ congress_random_event.3 = {
 	duration = 1
 	trigger = {
 		is_congress_attendee = yes
+		has_global_variable = babylon_vienna_congress_in_session
 	}
 	option = {
 		# Someone just threw a shoe! Awesome!
@@ -245,6 +261,7 @@ congress_random_event.4 = {
 	trigger = {
 		is_congress_attendee = yes
 		is_congress_observer = yes
+		has_global_variable = babylon_vienna_congress_in_session
 	}
 	immediate = {
 		enable_random_congress_random_event_4_option = yes
@@ -652,6 +669,7 @@ congress_random_event.5 = {
 	hidden = yes
 	trigger = {
 		is_congress_observer = yes
+		has_global_variable = babylon_vienna_congress_in_session
 		is_in_game_of_whist = no
 		any_country = {
 			count >= 4
@@ -734,9 +752,6 @@ congress_random_event.5 = {
 # Everyone decides their playstyle
 congress_random_event.6 = {
 	type = country_event
-	event_image = {
-		video = ""
-	}
 	event_image = {
 		texture = "gfx/event_pictures/game_of_cards.dds"
 	}
@@ -1084,6 +1099,7 @@ congress_random_event.9 = {
 	hidden = yes
 	trigger = {
 		this = global_var:babylon_vienna_congress_session_initiator
+		has_global_variable = babylon_vienna_congress_in_session
 		NOT = {
 			has_global_variable = masked_ball_held
 		}
@@ -1127,6 +1143,9 @@ congress_random_event.10 = {
 	flavor = congress_random_event.10.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	immediate = {
 		# Choose 5 costumes randomly
 		save_scope_value_as = {
@@ -1335,19 +1354,20 @@ congress_random_event.11 = {
 	option = {
 		name = congress_random_event.11.a
 		trigger = {
-			weekly_net_fixed_income < 750
+			masked_ball_max_afford < 555
 		}
 		set_variable = {
 			name = masked_ball_budget
 			value = 1
 		}
+		custom_tooltip = masked_ball_no_budget_tt
 	}
 	# very low
 	option = {
 		name = congress_random_event.11.b
 		trigger = {
-			weekly_net_fixed_income > 375
-			weekly_net_fixed_income < 1500
+			masked_ball_max_afford > 156
+			masked_ball_max_afford < 1110
 		}
 		set_variable = {
 			name = masked_ball_budget
@@ -1359,8 +1379,8 @@ congress_random_event.11 = {
 	option = {
 		name = congress_random_event.11.c
 		trigger = {
-			weekly_net_fixed_income > 750
-			weekly_net_fixed_income < 3000
+			masked_ball_max_afford > 312
+			masked_ball_max_afford < 2222
 		}
 		set_variable = {
 			name = masked_ball_budget
@@ -1372,8 +1392,8 @@ congress_random_event.11 = {
 	option = {
 		name = congress_random_event.11.d
 		trigger = {
-			weekly_net_fixed_income > 1500
-			weekly_net_fixed_income < 6000
+			masked_ball_max_afford > 625
+			masked_ball_max_afford < 4444
 		}
 		set_variable = {
 			name = masked_ball_budget
@@ -1385,8 +1405,8 @@ congress_random_event.11 = {
 	option = {
 		name = congress_random_event.11.e
 		trigger = {
-			weekly_net_fixed_income > 3000
-			weekly_net_fixed_income < 12000
+			masked_ball_max_afford > 1250
+			masked_ball_max_afford < 8888
 		}
 		set_variable = {
 			name = masked_ball_budget
@@ -1398,7 +1418,7 @@ congress_random_event.11 = {
 	option = {
 		name = congress_random_event.11.f
 		trigger = {
-			weekly_net_fixed_income > 6000
+			masked_ball_max_afford > 2500
 		}
 		set_variable = {
 			name = masked_ball_budget
@@ -1442,6 +1462,9 @@ congress_random_event.12 = {
 	flavor = congress_random_event.12.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	immediate = {
 		random_country = {
 			limit = {
@@ -1496,6 +1519,9 @@ congress_random_event.13 = {
 	flavor = congress_random_event.13.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	immediate = {
 		random_country = {
 			limit = {
@@ -2056,6 +2082,9 @@ congress_random_event.15 = {
 	flavor = congress_random_event.15.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	immediate = {
 		set_variable = congress_lead_invitee
 	}
@@ -2131,6 +2160,7 @@ congress_random_event.16 = {
 			has_variable = chosen_budget_level
 			has_variable = chosen_budget_amount
 		}
+		has_global_variable = babylon_vienna_congress_in_session
 	}
 	immediate = {
 		set_variable = {
@@ -2333,6 +2363,7 @@ congress_random_event.17 = {
 		NOT = {
 			has_variable = parade_seen
 		}
+		has_global_variable = babylon_vienna_congress_in_session
 	}
 	immediate = {
 		set_variable = parade_seen
@@ -2387,6 +2418,9 @@ congress_random_event.18 = {
 	flavor = congress_random_event.18.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	# Host spent most
 	option = {
 		default_option = yes
@@ -2675,7 +2709,6 @@ congress_random_event.18 = {
 						days = 3
 					}
 				}
-				
 			}
 		}
 	}
@@ -2688,7 +2721,6 @@ congress_random_event.19 = {
 		texture = "gfx/event_pictures/chapel_in_city.dds"
 	}
 	on_opened_soundeffect = "event:/SFX/Events/southamerica/christianity"
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/law_icons/parliamentary_republic.dds"
 	title = congress_random_event.19.t
@@ -3388,6 +3420,9 @@ congress_random_event.24 = {
 	flavor = congress_random_event.24.flavor
 	placement = global_var:babylon_vienna_congress_session_initiator.capital
 	duration = 1
+	trigger = {
+		has_global_variable = babylon_vienna_congress_in_session
+	}
 	# Use the preferred language of the host
 	option = {
 		name = congress_random_event.24.a
