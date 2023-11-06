@@ -20,6 +20,9 @@ law_traditionalism = {
 		state_bureaucracy_population_base_cost_factor_mult = -0.25
 		state_tax_capacity_mult = -0.25
 		country_private_construction_allocation_mult = 0.25
+
+		state_market_access_price_impact = -0.15
+		
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 	}
@@ -33,6 +36,11 @@ law_traditionalism = {
 	pop_support = {
 		value = 0
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
 	build_from_investment_pool = {
 		bg_agriculture
 		bg_plantations
@@ -75,7 +83,6 @@ law_interventionism = {
 		state_shopkeepers_investment_pool_efficiency_mult = 0.25
 		state_farmers_investment_pool_efficiency_mult = 0.25
 		state_aristocrats_investment_pool_efficiency_mult = -0.10
-		state_capitalists_investment_pool_efficiency_mult = -0.05
 	}
 	build_from_investment_pool = {
 		bg_agriculture
@@ -116,24 +123,11 @@ law_interventionism = {
 			}
 		}
 	}
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_CAPITALISTS"
-			if = {
-				limit = {
-					owner = {
-						OR = {
-							has_law = law_type:law_agrarianism
-							has_law = law_type:law_traditionalism
-						}
-					}
-					is_pop_type = capitalists
-				}
-				value = 0.33
-			}
-		}
-	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
@@ -161,7 +155,7 @@ law_agrarianism = {
 	on_activate = {
 	}
 	modifier = {
-		state_aristocrats_investment_pool_efficiency_mult = 0.6
+		state_aristocrats_investment_pool_efficiency_mult = 0.5
 		state_farmers_investment_pool_efficiency_mult = 0.8
 		state_shopkeepers_investment_pool_efficiency_mult = -0.25
 		state_capitalists_investment_pool_efficiency_mult = -0.4
@@ -222,6 +216,11 @@ law_agrarianism = {
 			}
 		}
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+		
 	ai_will_do = {
 		OR = {
 			has_law = law_type:law_traditionalism
@@ -306,11 +305,11 @@ law_industry_banned = {
 		}
 	}
 	modifier = {
-		building_group_bg_agriculture_throughput_mult = 0.20
-		building_group_bg_plantations_throughput_mult = 0.20
+		building_group_bg_agriculture_throughput_add = 0.20
+		building_group_bg_plantations_throughput_add = 0.20
 		state_expected_sol_mult = -0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.5
-		state_farmers_investment_pool_efficiency_mult = 1
+		state_farmers_investment_pool_efficiency_mult = 2
 		state_aristocrats_investment_pool_contribution_add = 0.35
 		country_private_construction_allocation_mult = 0.5
 		country_production_tech_research_speed_mult = -0.25
@@ -351,6 +350,11 @@ law_industry_banned = {
 			}
 		}
 	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
 	ai_will_do = {
 		always = no
 	}
@@ -389,6 +393,8 @@ law_laissez_faire = {
 		interest_group_ig_industrialists_pol_str_mult = 0.25
 		country_trade_route_competitiveness_mult = 0.1
 		country_private_construction_allocation_mult = 0.75
+		country_max_companies_add = 1
+		
 		country_subsidies_bg_infrastructure = yes
 		country_subsidies_bg_trade = yes
 		country_private_buildings_protected = yes
@@ -429,8 +435,12 @@ law_laissez_faire = {
 			}
 		}
 	}
-	ai_enact_weight_modifier = {
-		#Petitions
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
 			limit = {
@@ -500,8 +510,12 @@ law_cooperative_ownership = {
 			}
 		}
 	}
-	ai_enact_weight_modifier = {
-		#Petitions
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+
+	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
 			limit = {
@@ -510,6 +524,13 @@ law_cooperative_ownership = {
 				scope:law = var:desired_law_var
 			}
 			add = 750
+		}
+		
+		if = {
+			limit = { 
+				has_law = law_type:law_council_republic
+			}
+			add = 250
 		}
 	}
 }
@@ -563,26 +584,22 @@ law_command_economy = {
 			}
 		}
 	}
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_BUREAUCRATS"
-			if = {
-				limit = {
-					is_pop_type = bureaucrats
-				}
-				value = 0.2
-			}
-		}
-	}
+
+	can_impose = { 
+		is_subject_of = scope:initiator	
+	} 
+	
 	ai_will_do = {
 		OR = {
-			has_law = law_type:law_council_republic
+			has_law = law_type:law_technocracy
 			AND = {
-				exists = ruler
-				ruler = {
-					has_ideology = ideology:ideology_vanguardist
-				}
+				has_law = law_type:law_council_republic
+				ruler ?= {
+					OR = {
+						has_ideology = ideology:ideology_vanguardist
+						has_ideology = ideology:ideology_communist						
+					}
+				}			
 			}
 		}
 	}
@@ -596,6 +613,20 @@ law_command_economy = {
 				scope:law = var:desired_law_var
 			}
 			add = 750
+		}
+		
+		if = {
+			limit = { 
+				has_law = law_type:law_council_republic
+			}
+			add = 250
+		}
+		
+		if = {
+			limit = { 
+				has_law = law_type:law_technocracy
+			}
+			add = 100
 		}
 	}
 }
