@@ -245,8 +245,29 @@ babylon_discord_character_law_calculation = {
 		# If character is a ruler theres a multiplier of 2, he got a big influence on politics
 		limit = {
 			is_ruler = yes
+			NOT = {
+				has_ideology = ideology:ideology_moderate
+			}
 		}
 		multiply = 2
+	}
+	else_if = {
+		# Unless hes a moderate, then he takes his position from his IG, halved
+		limit = {
+			is_ruler = yes
+			has_ideology = ideology:ideology_moderate
+		}
+		owner = {
+			every_interest_group = {
+				limit = {
+					any_scope_character = {
+						is_ruler = yes
+					}
+				}
+				add = babylon_discord_interest_group_law_calculation
+			}
+		}
+		divide = 2
 	}
 	else = {
 		# Else its the ig clout% + 1, e.g. 1.23x for a 23% ig
@@ -344,7 +365,7 @@ babylon_discord_legitimacy_offset_value = {
 babylon_discord_cultural_majority_value = {
 	# Same logic as in the legitimacy calculation.
 	# If roughly 75% of the country are primary culture, and rest is discriminated against...
-	value = babylon_get_primary_culture_percentage_rough
+	value = babylon_get_primary_culture_fraction_rough
 	# The percentage is given as a fraction, so 0.75 here
 	multiply = 100
 	#Now its 75
@@ -371,7 +392,7 @@ babylon_discord_cultural_majority_value = {
 	multiply = -1
 	if = {
 		limit = {
-			babylon_get_primary_culture_percentage_rough > 0.65
+			babylon_get_primary_culture_fraction_rough > 0.65
 		}
 		divide = 2
 	}
@@ -383,7 +404,7 @@ babylon_discord_cultural_majority_value = {
 }
 
 babylon_discord_religious_majority_value = {
-	value = babylon_get_state_religion_percentage_rough
+	value = babylon_get_state_religion_fraction_rough
 	multiply = 100
 	if = {
 		limit = {
@@ -458,7 +479,7 @@ babylon_discord_average_turmoil_in_country_value = {
 	multiply = 100
 }
 
-babylon_get_slave_pop_percentage_rough = {
+babylon_get_slave_pop_fraction_rough = {
 	if = {
 		limit = {
 			pop_type_percent_country = {
@@ -684,13 +705,22 @@ babylon_get_slave_pop_percentage_rough = {
 		}
 		value = 0.01
 	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.005
+			}
+		}
+		value = 0.005
+	}
 	else = {
 		value = 0
 	}
 }
 
 babylon_get_slave_pop_percentage_refined = {
-	value = babylon_get_slave_pop_percentage_rough
+	value = babylon_get_slave_pop_fraction_rough
 	multiply = 100
 }
 
@@ -709,7 +739,274 @@ babylon_discord_radicals_value = {
 	multiply = 2
 }
 
-babylon_get_serf_pop_percentage_rough = {
+babylon_get_aristocrat_pop_fraction_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.02
+			}
+		}
+		value = 0.02
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0175
+			}
+		}
+		value = 0.0175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.015
+			}
+		}
+		value = 0.015
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0125
+			}
+		}
+		value = 0.0125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0075
+			}
+		}
+		value = 0.0075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.005
+			}
+		}
+		value = 0.005
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0025
+			}
+		}
+		value = 0.0025
+	}
+	else = {
+		value = 0
+	}
+}
+
+babylon_get_peasant_pop_fraction_rough = {
 	if = {
 		limit = {
 			pop_type_percent_country = {
@@ -940,8 +1237,20 @@ babylon_get_serf_pop_percentage_rough = {
 	}
 }
 
+babylon_get_peasant_pop_fraction_refined = {
+	value = babylon_get_peasant_pop_fraction_rough
+	multiply = 100
+}
+
+babylon_get_serf_potency = {
+	value = babylon_get_aristocrat_pop_fraction_rough
+	# This 20 should be tied aristocrat SoL, but doesnt seem possible with the current targets available...
+	multiply = 20
+}
+
 babylon_get_serf_pop_percentage_refined = {
-	value = babylon_get_serf_pop_percentage_rough
+	value = babylon_get_peasant_pop_fraction_rough
+	max = babylon_get_serf_potency
 	multiply = 100
 }
 
