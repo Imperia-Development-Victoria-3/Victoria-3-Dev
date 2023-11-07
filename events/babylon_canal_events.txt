@@ -1,0 +1,56 @@
+﻿namespace = babylon_canal_events
+# Kiel Survey Complete
+babylon_canal_events.1 = {
+	type = country_event
+	title = expedition_events.400.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = expedition_events.400.d
+				trigger = {
+					any_scope_state = {
+						state_region = s:STATE_SINAI
+					}
+				}
+			}
+			triggered_desc = {
+				desc = babylon_canal_events.100.d
+				trigger = {
+					NOT = {
+						any_scope_state = {
+							state_region = s:STATE_SINAI
+						}
+					}
+				}
+			}
+		}
+	}
+	flavor = expedition_events.400.f
+	event_image = {
+		video = "africa_desert_expedition"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	trigger = {
+		# triggered by JE
+	}
+	immediate = {
+		set_variable = kiel_survey_complete
+		s:STATE_SCHLESWIG_HOLSTEIN = {
+			save_scope_as = kiel_state
+			random_scope_state = {
+				owner = {
+					save_scope_as = kiel_owner
+				}
+			}
+		}
+	}
+	option = {
+		name = babylon_canal_events.100.a
+		default_option = yes
+		add_journal_entry = {
+			type = je_kiel_canal_construction
+		}
+	}
+}
