@@ -208,8 +208,18 @@ babylon_qing.4 = { #Result of Reforming Banner System
 			set_interest_group_name = ig_new_army
 		}
 		
-		#line here to remove yong ying and crumbling banner system from substates
-		#line to + fragile unity
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
+		
+		change_variable = {
+			name = china_warlord_explosion
+			add = -10
+		}
 	}
 	
 	option = { #Yong-Ying System
@@ -220,13 +230,47 @@ babylon_qing.4 = { #Result of Reforming Banner System
 #		}
 		
 		add_modifier = modifier_yong_ying_system
-		ig:ig_armed_forces= {
+		ig:ig_armed_forces = {
 			set_interest_group_name = ig_beiyang_army
 		}
 		
-		#line here to remove modifiers from substates
-		#line to - fragile unity
-		#line here to rename all substate armed forces
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
+		change_variable = {
+			name = china_warlord_explosion
+			add = 5
+		}
+		
+		c:SIH = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_sichuan_army
+			}	
+		}
+		c:XIB = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_gansu_army
+			}
+		}
+		c:MCH = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_manchuria_army
+			}
+		}
+		c:HNA = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_huguang_army
+			}
+		}
+		c:YUE = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_liangguang_army
+			}
+		}
 	}
 }
 
@@ -253,6 +297,19 @@ babylon_qing.5 = { #Tyranny of the Eight Banners
 	
 	immediate = {
 		remove_modifier = modifier_crumbling_banner_system
+				
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+				
+				OR = {
+					country_has_primary_culture = cu:han
+					c:MCH = this
+				}
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
 	}
 	
 	option = { #A Return to Martial Tradition
@@ -264,9 +321,28 @@ babylon_qing.5 = { #Tyranny of the Eight Banners
 			is_decaying = yes
 		}
 		
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+				
+				OR = {
+					country_has_primary_culture = cu:han
+					c:MCH = this
+				}
+			}
+			add_modifier = {
+				name = modifier_crumbling_banner_system
+				years = 40
+				is_decaying = yes
+			}
+		}
+		
 		set_variable = cant_discriminate_han
 		
-		#tick up fragile unity
+		change_variable = {
+			name = china_warlord_explosion
+			add = 10
+		}
 		ruler = {
 			kill_character = yes
 		}
