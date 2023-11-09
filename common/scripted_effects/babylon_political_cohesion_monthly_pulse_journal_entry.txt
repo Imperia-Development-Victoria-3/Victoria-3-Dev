@@ -117,6 +117,62 @@
 			}
 		}
 	}
+	# Do the opposition, if you're democratic in any way
+	if = {
+		limit = {
+			country_has_voting_franchise = yes
+		}
+		every_interest_group = {
+			limit = {
+				is_in_government = no
+				is_marginal = no
+				has_party = yes
+				NOT = {
+					party = {
+						any_member = {
+							is_in_government = yes
+						}
+					}
+				}
+			}
+			root = {
+				if = {
+					limit = {
+						prev.babylon_discord_democratic_opposition_law_calculation > 0
+					}
+					change_variable = {
+						name = theoretical_discord_add
+						add = prev.babylon_discord_democratic_opposition_law_calculation
+					}
+				}
+				else = {
+					change_variable = {
+						name = theoretical_discord_subtract
+						add = prev.babylon_discord_democratic_opposition_law_calculation
+					}
+				}
+			}
+			leader = {
+				root = {
+					if = {
+						limit = {
+							prev.babylon_discord_democratic_opposition_character_law_calculation > 0
+						}
+						change_variable = {
+							name = theoretical_discord_add
+							add = prev.babylon_discord_democratic_opposition_character_law_calculation
+						}
+					}
+					else = {
+						change_variable = {
+							name = theoretical_discord_subtract
+							add = prev.babylon_discord_democratic_opposition_character_law_calculation
+						}
+					}
+				}
+			}
+		}
+	}
 	# Legitimacy also have an impact
 	if = {
 		limit = {
