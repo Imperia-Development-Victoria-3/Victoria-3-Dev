@@ -39,28 +39,32 @@ on_babylon_transfer_diplo_play_start = {
 			root.target = {
 				every_in_list = {
 					variable = objectors
-					root = { add_initiator_backers = {prev} }
+					root = {
+						add_initiator_backers = {
+							prev
+						}
+					}
 				}
-
 				every_in_list = {
 					variable = supporters
-					root = { add_target_backers = {prev} }
+					root = {
+						add_target_backers = {
+							prev
+						}
+					}
 				}
-
 				if = {
 					limit = {
 						has_variable_list = objectors
 					}
 					clear_variable_list = objectors
 				}
-
 				if = {
 					limit = {
 						has_variable_list = supporters
 					}
 					clear_variable_list = supporters
 				}
-				
 				if = {
 					limit = {
 						is_subject = yes
@@ -95,7 +99,6 @@ on_babylon_true_neutral_diplo_play_start = {
 	}
 }
 
-
 # Root = Diplomatic Play
 on_babylon_foreign_laws_permits_diplo_play_start = {
 	effect = {
@@ -116,7 +119,7 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 							}
 							var:sea_region = {
 								add_to_temporary_list = sea_regions
-							}	
+							}
 						}
 					}
 					NOR = {
@@ -126,18 +129,17 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 								owner = root.initiator
 								is_incorporated = yes
 							}
-
 							any_neighbouring_state = {
 								owner = root.initiator
 								is_incorporated = yes
-							}	
+							}
 						}
 						# Sea connection
 						any_in_list = {
 							list = sea_regions
 							any_neighbouring_state = {
 								owner = root.initiator
-								is_incorporated = yes					
+								is_incorporated = yes
 							}
 						}
 					}
@@ -180,8 +182,12 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 					has_law = law_type:law_imperialism
 				}
 				target = {
-					NOT = { is_country_type = unrecognized }
-					NOT = {	is_country_type = colonial }
+					NOT = {
+						is_country_type = unrecognized
+					}
+					NOT = {
+						is_country_type = colonial
+					}
 				}
 			}
 			if = {
@@ -198,7 +204,6 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 					}
 				}
 			}
-
 			root.initiator = {
 				babylon_reset_infamy_to_month_start = yes
 				trigger_event = {
@@ -227,18 +232,18 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 					}
 				}
 				# Below not neccesary if interest declaration is implemented
-				 region = {
-				 	NOR = {
-				 		any_scope_state = {
-				 			owner = root.initiator
-				 			is_incorporated = yes
-				 		}
-				 		any_neighbouring_state = {
-				 			owner = root.initiator
-				 			is_incorporated = yes
-				 		}
-				 	}
-				 }
+				region = {
+					NOR = {
+						any_scope_state = {
+							owner = root.initiator
+							is_incorporated = yes
+						}
+						any_neighbouring_state = {
+							owner = root.initiator
+							is_incorporated = yes
+						}
+					}
+				}
 			}
 			root.initiator = {
 				babylon_reset_infamy_to_month_start = yes
@@ -277,6 +282,19 @@ on_babylon_foreign_laws_permits_diplo_play_start = {
 				}
 			}
 			end_play = yes
+		}
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_babylon_revolution_start = {
+	effect = {
+		if = {
+			limit = {
+				has_journal_entry = je_end_han_discrimination
+			}
+			set_variable = cant_discriminate_han
 		}
 	}
 }
