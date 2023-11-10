@@ -202,10 +202,18 @@ babylon_discord_character_law_calculation = {
 		add = 100
 		divide = 100
 	}
+	if = {
+		limit = {
+			is_ruler = yes
+		}
+		add = {
+			value = popularity
+			multiply = -1
+		}
+	}
 }
 
-babylon_discord_interest_group_law_calculation = {
-	# scope = some interest group within the country
+babylon_discord_interest_group_law_calculation_pre = {
 	value = 0
 	save_temporary_scope_as = ig_scope
 	owner = {
@@ -262,12 +270,23 @@ babylon_discord_interest_group_law_calculation = {
 			}
 		}
 	}
-	multiply = {
-		value = {
-			value = ig_clout
-			multiply = 100
+}
+
+babylon_discord_interest_group_law_calculation = {
+	# scope = some interest group within the country
+	value = babylon_discord_interest_group_law_calculation_pre
+	multiply = ig_clout
+	add = {
+		value = babylon_discord_interest_group_law_calculation_pre
+		if = {
+			limit = {
+				babylon_discord_interest_group_law_calculation_pre > 0
+			}
+			divide = 2
 		}
-		divide = 10
+		else = {
+			divide = 4
+		}
 	}
 }
 
@@ -275,7 +294,7 @@ babylon_discord_democratic_opposition_law_calculation = {
 	value = 0
 	add = {
 		value = babylon_discord_interest_group_law_calculation
-		divide = 1.5
+		divide = 2.5
 	}
 }
 
@@ -283,7 +302,7 @@ babylon_discord_democratic_opposition_character_law_calculation = {
 	value = 0
 	add = {
 		value = babylon_discord_character_law_calculation
-		divide = 1.5
+		divide = 2.5
 	}
 }
 
@@ -1193,4 +1212,6 @@ babylon_get_serf_pop_percentage_refined = {
 
 babylon_discord_serf_contribution_value = {
 	value = babylon_get_serf_pop_percentage_refined
+	multiply = 2
+	max = babylon_get_peasant_pop_fraction_refined
 }
