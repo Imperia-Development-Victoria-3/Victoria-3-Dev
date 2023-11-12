@@ -22,6 +22,12 @@ political_discord_alliance_pact_mult = 1.5
 political_discord_trade_pact_mult = 1
 political_discord_customs_union_pact_mult = 1.1
 political_discord_rivalry_pact_mult = 1.5
+democratic_opposition_division_value = 2.5
+cultural_majority_same_culture_overlord_midpoint_fraction = 0.35
+cultural_majority_normal_midpoint_fraction = 0.65
+serfs_per_aristocrat = 20
+slave_percent_to_discord = 2
+radical_percent_to_discord = 2
 political_discord_approve = 1
 political_discord_strongly_approve = {
 	value = political_discord_approve
@@ -294,7 +300,7 @@ babylon_discord_democratic_opposition_law_calculation = {
 	value = 0
 	add = {
 		value = babylon_discord_interest_group_law_calculation
-		divide = 2.5
+		divide = democratic_opposition_division_value
 	}
 }
 
@@ -302,7 +308,7 @@ babylon_discord_democratic_opposition_character_law_calculation = {
 	value = 0
 	add = {
 		value = babylon_discord_character_law_calculation
-		divide = 2.5
+		divide = democratic_opposition_division_value
 	}
 }
 
@@ -338,25 +344,49 @@ babylon_discord_cultural_majority_value = {
 			}
 		}
 		# 35 is the midpoint, if you're a subject with a same-culture('ish) overlord
-		subtract = 35
+		subtract = {
+			value =  cultural_majority_same_culture_overlord_midpoint_fraction
+			multiply = 100
+		}
 	}
 	else = {
 		# else 65 is the midpoint
-		subtract = 65
+		subtract = {
+			value = cultural_majority_normal_midpoint_fraction
+			multiply = 100
+		}
 	}
-	# So now its 10
+	# So since our imaginary country just had 65 removed
+	# Its now 10
 	multiply = -1
+	# Then if you have above that that midpoint; a discord loss
+	# You halve the loss
 	if = {
 		limit = {
-			babylon_get_primary_culture_fraction_rough > 0.65
+			OR = {
+				babylon_get_primary_culture_fraction_rough > cultural_majority_normal_midpoint_fraction
+				AND = {
+					is_subject = yes
+					overlord = {
+						any_primary_culture = {
+							OR = {
+								is_primary_culture_of = root
+								shares_non_heritage_trait_with_any_primary_culture = root
+							}
+						}
+					}
+					babylon_get_primary_culture_fraction_rough > cultural_majority_same_culture_overlord_midpoint_fraction
+				}
+			}
 		}
 		divide = 2
 	}
+	# If you would gain discord; double it
 	else = {
 		multiply = 2
 	}
 	# Reverse the sign, so..
-	# A 75% primary_culture'd nation would have 10 discord removed.
+	# A 75% primary_culture'd nation would have 5 discord removed.
 }
 
 babylon_discord_religious_majority_value = {
@@ -682,7 +712,7 @@ babylon_get_slave_pop_percentage_refined = {
 
 babylon_discord_slave_contribution_value = {
 	value = babylon_get_slave_pop_percentage_refined
-	multiply = 2
+	multiply = slave_percent_to_discord
 }
 
 babylon_discord_radicals_percentage_refined = {
@@ -692,7 +722,7 @@ babylon_discord_radicals_percentage_refined = {
 
 babylon_discord_radicals_value = {
 	value = babylon_discord_radicals_percentage_refined
-	multiply = 2
+	multiply = radical_percent_to_discord
 }
 
 babylon_get_aristocrat_pop_fraction_rough = {
@@ -1201,7 +1231,7 @@ babylon_get_peasant_pop_fraction_refined = {
 babylon_get_serf_potency = {
 	value = babylon_get_aristocrat_pop_fraction_rough
 	# This 20 should be tied aristocrat SoL, but doesnt seem possible with the current targets available...
-	multiply = 20
+	multiply = serfs_per_aristocrat
 }
 
 babylon_get_serf_pop_percentage_refined = {
@@ -1212,6 +1242,11 @@ babylon_get_serf_pop_percentage_refined = {
 
 babylon_discord_serf_contribution_value = {
 	value = babylon_get_serf_pop_percentage_refined
-	multiply = 2
+	if = {
+		limit = {
+			has_law = law_type:law_serfdom
+		}
+		multiply = 2
+	}
 	max = babylon_get_peasant_pop_fraction_refined
 }
