@@ -102,11 +102,19 @@ on_babylon_diplo_play_backdown = {
 					target_is = scope:actor
 				}
 				#If it is...
-				#Remove customs union
 				target = {
-					remove_diplomatic_pact = {
-						country = scope:overlord_scope
-						type = customs_union
+					if = {
+						#Remove customs union, if it exists
+						limit = {
+							has_diplomatic_pact = {
+								who = scope:overlord_scope
+								type = customs_union
+							}
+						}
+						remove_diplomatic_pact = {
+							country = scope:overlord_scope
+							type = customs_union
+						}
 					}
 					#Add a 5 year cooldown to adding the applicant to a customs union
 					set_variable = {
@@ -119,7 +127,6 @@ on_babylon_diplo_play_backdown = {
 		}
 	}
 }
-
 
 # Root = Diplomatic Play
 on_babylon_play_join_side = {
