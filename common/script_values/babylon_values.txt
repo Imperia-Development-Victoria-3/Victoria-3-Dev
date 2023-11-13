@@ -1153,3 +1153,30 @@ masked_ball_max_afford = {
 		multiply = 6
 	}
 }
+
+# scope : AI voting country
+babylon_discord_ai_voting_weight = {
+	value = 0
+	# Positive value = set to support
+	# Negative value = set to oppose
+	# First find every target
+	every_country = {
+		limit = {
+			is_congress_target = yes
+		}
+		if = {
+			limit = {
+				global_var:babylon_vienna_congress_session_type != 4
+			}
+			# Subtract their relations, so if the AI has negative relations with the target they will support the motion
+			# Only if the motion is not recognition (a positive congress)
+			subtract = relations:root
+		} else = {
+			add = relations:root
+		}
+	}
+	global_var:babylon_vienna_congress_session_initiator = {
+		# For the initiator a simple add is made; AI will support the initiator if they like them, oppose if they dislike
+		add = relations:root
+	}
+}

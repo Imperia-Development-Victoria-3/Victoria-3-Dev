@@ -1269,3 +1269,29 @@ congress_parade_invite_lead = {
 		}
 	}
 }
+
+end_congress_scripted_effect = {
+	global_var:babylon_vienna_congress_session_target = {
+		save_scope_as = target_country
+	}
+	remove_global_variable = babylon_vienna_congress_in_session
+	remove_global_variable = congress_random_events_enabled
+	every_country = {
+		if = {
+			limit = {
+				is_congress_target = no
+				OR = {
+					is_country_type = recognized
+					is_country_type = colonial
+				}
+			}
+			aftermath_event_choice = yes
+		}
+		else_if = {
+			limit = {
+				is_congress_target = yes
+			}
+			aftermath_event_consequence = yes
+		}
+	}
+}

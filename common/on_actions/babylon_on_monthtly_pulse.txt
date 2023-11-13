@@ -181,3 +181,145 @@ on_babylon_monthly_pulse_state = {
 		babylon_arable_land_green_grass_effect = yes
 	}
 }
+
+on_babylon_monthly_pulse_ai_congress_voting = {
+	effect = {
+		if = {
+			limit = {
+				is_player = no
+				has_variable = voting_conference_member
+			}
+			if = {
+				# Else if its a target and they're NOT opposing
+				limit = {
+					is_congress_target = yes
+					NOT = {
+						is_target_in_global_variable_list = {
+							name = current_congress_members_on_stance_3
+							target = this
+						}
+					}
+				}
+				# Set to oppose
+				set_congress_stance_effect = {
+					COUNTRY = this
+					STANCE = 3
+				}
+			}
+			if = {
+				# If you're the initiator and NOT supporting
+				limit = {
+					global_var:babylon_vienna_congress_session_initiator = this
+					NOT = {
+						is_target_in_global_variable_list = {
+							name = current_congress_members_on_stance_1
+							target = this
+						}
+					}
+				}
+				# Set to stance 1: Supporters
+				set_congress_stance_effect = {
+					COUNTRY = this
+					STANCE = 1
+				}
+			}
+			if = {
+				# If you're not a target or the initiator
+				limit = {
+					is_congress_target = no
+					global_var:babylon_vienna_congress_session_initiator != this
+				}
+				# Weights have been divided into 3 pieces of 133;
+				# -200 : -65
+				# -65 : 65
+				# 65 : 200
+				# Dead zones are between +/-75 and +/-55, they will stay on their chosen stance, prevents flip-flopping
+				if = {
+					# If the voting weight is between above 75 (and you're not supporting)
+					limit = {
+						babylon_discord_ai_voting_weight > 75
+						NOT = {
+							is_target_in_global_variable_list = {
+								name = current_congress_members_on_stance_1
+								target = this
+							}
+						}
+					}
+					# Set to stance 1: Supporters
+					set_congress_stance_effect = {
+						COUNTRY = this
+						STANCE = 1
+					}
+				}
+				else_if = {
+					# Else if the voting weight is below -75 (and you're not opposing)
+					limit = {
+						babylon_discord_ai_voting_weight < -75
+						NOT = {
+							is_target_in_global_variable_list = {
+								name = current_congress_members_on_stance_3
+								target = this
+							}
+						}
+					}
+					# Set to stance 3 : Opposers
+					set_congress_stance_effect = {
+						COUNTRY = this
+						STANCE = 3
+					}
+				}
+				else_if = {
+					# Else if the voting weight is in the middle (and you're not abstaining)
+					limit = {
+						OR = {
+							AND = {
+								is_target_in_global_variable_list = {
+									name = current_congress_members_on_stance_1
+									target = this
+								}
+								babylon_discord_ai_voting_weight < 55
+							}
+							AND = {
+								babylon_discord_ai_voting_weight < 55
+								babylon_discord_ai_voting_weight > -55
+							}
+							AND = {
+								is_target_in_global_variable_list = {
+									name = current_congress_members_on_stance_3
+									target = this
+								}
+								babylon_discord_ai_voting_weight > -55
+							}
+						}
+						NOT = {
+							is_target_in_global_variable_list = {
+								name = current_congress_members_on_stance_2
+								target = this
+							}
+						}
+					}
+					# Set to stance 2: Abstainers
+					set_congress_stance_effect = {
+						COUNTRY = this
+						STANCE = 2
+					}
+				}
+			}
+			if = {
+				# If you're the initiator, and you can end...
+				# (And you're of course still a voting AI)
+				limit = {
+					global_var:babylon_vienna_congress_session_initiator = this
+					NOT = {
+						has_global_variable = babylon_vienna_congress_minimum_time
+					}
+				}
+				# Have a 20% chance of ending it
+				random = {
+					chance = 20
+					end_congress_scripted_effect = yes
+				}
+			}
+		}
+	}
+}
