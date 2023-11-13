@@ -1,22 +1,18 @@
 ##Qing Entries
-
 #je_establish_national_language
-
 je_end_han_discrimination = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
-	
 	complete = {
-			has_law = law_type:law_cultural_exclusion
-		}
-		
+		has_law = law_type:law_cultural_exclusion
+	}
 	on_complete = {
 		remove_modifier = modifier_anti_manchu_sentiment
 		add_loyalists = {
 			value = 0.1
 			culture = cu:han
-			}
+		}
 		custom_tooltip = {
-		text = fragile_unity_major_remove_tt
+			text = fragile_unity_major_remove_tt
 			set_variable = je_end_han_discrimination_completed
 			# change_variable = {
 			# 	name = china_warlord_explosion
@@ -24,27 +20,23 @@ je_end_han_discrimination = {
 			# }
 		}
 	}
-	
 	fail = {
 		custom_tooltip = {
-		text = taiping_happened_tt
-		has_variable = cant_discriminate_han
-		}		
+			text = taiping_happened_tt
+			has_variable = cant_discriminate_han
+		}
 	}
-	
 	on_fail = {
 		remove_modifier = modifier_anti_manchu_sentiment
-		
 		custom_tooltip = {
-		text = fragile_unity_major_add_tt
-		set_variable = je_end_han_discrimination_failed
+			text = fragile_unity_major_add_tt
+			set_variable = je_end_han_discrimination_failed
 			# change_variable = {
 			# name = china_warlord_explosion
 			# add = 10
 			# }
-		}	
+		}
 	}
-		
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
@@ -55,7 +47,6 @@ je_end_han_discrimination = {
 
 je_qing_administrative_reform = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-
 	complete = {
 		AND = {
 			institution_investment_level = {
@@ -63,17 +54,15 @@ je_qing_administrative_reform = {
 				value >= 3
 			}
 			has_law = law_type:law_dedicated_police
-			bureaucracy >= 0 
+			bureaucracy >= 0
 			approaching_bureaucracy_shortage = no
 			has_technology_researched = central_archives
 		}
 	}
-	
 	on_complete = {
 		add_modifier = modifier_baojia_system
-		
 		custom_tooltip = {
-		text = fragile_unity_minor_remove_tt
+			text = fragile_unity_minor_remove_tt
 			set_variable = je_qing_administrative_reform_completed
 			# change_variable = {
 			# 	name = china_warlord_explosion
@@ -81,20 +70,15 @@ je_qing_administrative_reform = {
 			# }
 		}
 	}
-	
 	fail = {
-		
 		custom_tooltip = {
-		text = qing_administrative_fail_tt
-		var:var_qing_administrative_fail > 480
+			text = qing_administrative_fail_tt
+			var:var_qing_administrative_fail > 480
 		}
-		
 	}
-	
 	on_fail = {
-
 		custom_tooltip = {
-		text = fragile_unity_minor_add_tt
+			text = fragile_unity_minor_add_tt
 			set_variable = je_qing_administrative_reform_failed
 			# change_variable = {
 			# 	name = china_warlord_explosion
@@ -102,74 +86,65 @@ je_qing_administrative_reform = {
 			# }
 		}
 	}
-	
 	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = {
 					OR = {
-						bureaucracy < 0 
+						bureaucracy < 0
 						has_law = law_type:law_traditionalism
 					}
 				}
 				change_variable = {
-				name = var_qing_administrative_fail
-				add = 1
+					name = var_qing_administrative_fail
+					add = 1
 				}
 			}
 		}
 	}
-	
 	immediate = {
 		set_variable = {
-		name = var_qing_administrative_fail
-		value = 0
+			name = var_qing_administrative_fail
+			value = 0
 		}
 	}
 }
 
 je_end_female_infanticide = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
-
 	complete = {
 		OR = {
 			has_law = law_type:law_women_in_the_workplace
 			has_law = law_type:law_womens_suffrage
 		}
 	}
-	
 	on_complete = {
-	remove_modifier = modifier_female_shortage
+		remove_modifier = modifier_female_shortage
 	}
 }
 
 je_rural_poverty_qing = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
-	
 	complete = {
 		average_sol >= 10
-		
 		NOT = {
 			has_law = law_type:law_serfdom
 		}
-		
 		NOR = {
 			has_law = law_type:law_consumption_based_taxation
 			has_law = law_type:law_land_based_taxation
 		}
 		scope:journal_entry = {
 			is_goal_complete = yes
-		}	
+		}
 	}
-	
 	on_complete = {
 		remove_modifier = modifier_rural_poverty
-		
 		add_loyalists = {
-		value = 0.1
+			value = 0.1
 		}
 		custom_tooltip = {
-		text = fragile_unity_major_remove_tt
+			text = fragile_unity_major_remove_tt
 			set_variable = je_rural_poverty_qing_completed
 			# change_variable = {
 			# 	name = china_warlord_explosion
@@ -177,37 +152,31 @@ je_rural_poverty_qing = {
 			# }
 		}
 	}
-	
 	fail = {
 		custom_tooltip = {
-		text = rural_poverty_fail_tt
-		var:var_rural_poverty_fail > 420
+			text = rural_poverty_fail_tt
+			var:var_rural_poverty_fail > 420
 		}
 	}
-	
 	on_fail = {
 		add_radicals = {
-		value = 0.1
+			value = 0.1
 		}
-		
 		custom_tooltip = {
-		text = fragile_unity_major_add_tt
+			text = fragile_unity_major_add_tt
 			set_variable = je_rural_poverty_qing_failed
 			# change_variable = {
 			# name = china_warlord_explosion
 			# add = 10
 			# }
 		}
-	}		
-	
+	}
 	current_value = {
 		value = var:rural_poverty_var
 	}
-
 	goal_add_value = {
 		add = 3
 	}
-
 	on_monthly_pulse = {
 		effect = {
 			if = {
@@ -215,184 +184,155 @@ je_rural_poverty_qing = {
 					average_sol < 10
 				}
 				change_variable = {
-				name = var_rural_poverty_fail
-				add = 1
+					name = var_rural_poverty_fail
+					add = 1
 				}
 			}
 		}
 	}
-	
 	immediate = {
 		set_variable = {
-		name = var_rural_poverty_fail
-		value = 0
+			name = var_rural_poverty_fail
+			value = 0
 		}
 	}
 	progressbar = yes
 }
-		
+
 je_investigate_military_reform = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
 	complete = {
-	
-			has_technology_researched = line_infantry	
+		has_technology_researched = line_infantry
 		NOT = {
 			has_law = law_type:law_peasant_levies
 		}
-	}		
-	
-	on_complete = {
-		add_journal_entry = { type = je_reform_the_banner_system_local }
-		add_journal_entry = { type = je_reform_the_banner_system_modern }
 	}
-	
+	on_complete = {
+		add_journal_entry = {
+			type = je_reform_the_banner_system_local
+		}
+		add_journal_entry = {
+			type = je_reform_the_banner_system_modern
+		}
+	}
 	fail = {
 		ig:ig_armed_forces = {
 			is_powerful = yes
 		}
 	}
-	
 	on_fail = {
-		trigger_event = { 
-			id = babylon_qing.5 
+		trigger_event = {
+			id = babylon_qing.5
 		}
 	}
-}	
-			
+}
+
 je_reform_the_banner_system_local = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
 	complete = {
-
-			AND = {
-		
+		AND = {
 			army_size >= 150
 			has_technology_researched = napoleonic_warfare
-		
-				OR = {
-					has_law = law_type:law_national_guard
-					has_law = law_type:law_localized_garrisons
-					has_law = law_type:law_faith_orders			
-				}
+			OR = {
+				has_law = law_type:law_national_guard
+				has_law = law_type:law_localized_garrisons
+				has_law = law_type:law_faith_orders
 			}
-			scope:journal_entry = {
-				is_goal_complete = yes
-			}	
 		}
-		
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
 	on_complete = {
-	
 		trigger_event = {
 			id = babylon_qing.4
 		}
 		remove_modifier = modifier_crumbling_banner_system
-		
 		set_variable = chose_yong_ying
 	}
-	
 	fail = {
 		ig:ig_armed_forces = {
 			is_powerful = yes
 		}
 	}
-	
 	on_fail = {
-		trigger_event = { 
-			id = babylon_qing.5 
+		trigger_event = {
+			id = babylon_qing.5
 		}
 	}
-	
 	invalid = {
 		NOT = {
 			has_modifier = modifier_crumbling_banner_system
 		}
 	}
-	
 	current_value = {
 		value = var:yong_ying_var
 	}
-
 	goal_add_value = {
 		add = 4
 	}
-
-	progressbar = yes	
-	
+	progressbar = yes
 }
 
 je_reform_the_banner_system_modern = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
 	complete = {
-			AND = {
-		
-				army_size >= 150
-				has_technology_researched = general_staff
-				has_technology_researched = logistics
-				has_technology_researched = rifling
-				
-				NOT = {
-					any_scope_building = {
-						is_building_type = building_barracks				
-						OR = {
-							building_has_goods_shortage = yes
-							has_active_production_method = pm_no_organization
-							# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-						}
+		AND = {
+			army_size >= 150
+			has_technology_researched = general_staff
+			has_technology_researched = logistics
+			has_technology_researched = rifling
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_barracks
+					OR = {
+						building_has_goods_shortage = yes
+						has_active_production_method = pm_no_organization
+						# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
 					}
 				}
 			}
 		}
-		
+	}
 	on_complete = {
-	
 		trigger_event = {
 			id = babylon_qing.4
 		}
 		remove_modifier = modifier_crumbling_banner_system
 		set_variable = chose_new_army
 	}
-	
 	fail = {
 		ig:ig_armed_forces = {
 			is_powerful = yes
 		}
 	}
-	
 	on_fail = {
-		trigger_event = { 
-			id = babylon_qing.5 
+		trigger_event = {
+			id = babylon_qing.5
 		}
 	}
-	
 	invalid = {
 		NOT = {
 			has_modifier = modifier_crumbling_banner_system
 		}
 	}
-}	
-	
-	
-##Local Entries
+}
 
-	
-je_establish_local_armies = { #Common
+##Local Entries
+je_establish_local_armies = {
+	#Common
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-	
 	complete = {
 		army_size >= 50
 		has_technology_researched = napoleonic_warfare
-		
 		OR = {
-		has_law = law_type:law_national_guard
-		has_law = law_type:law_localized_garrisons
-		has_law = law_type:law_faith_orders
+			has_law = law_type:law_national_guard
+			has_law = law_type:law_localized_garrisons
+			has_law = law_type:law_faith_orders
 		}
-		
 		NOT = {
 			any_scope_building = {
-				is_building_type = building_barracks				
+				is_building_type = building_barracks
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_organization
@@ -403,9 +343,7 @@ je_establish_local_armies = { #Common
 			}
 		}
 	}
-	
 	on_complete = {
-		
 		if = {
 			limit = {
 				is_subject_of = c:CHI
@@ -420,7 +358,6 @@ je_establish_local_armies = { #Common
 				name = modifier_local_armies
 			}
 		}
-		
 		else = {
 			remove_modifier = modifier_crumbling_banner_system
 			c:CHI = {
@@ -435,27 +372,21 @@ je_establish_local_armies = { #Common
 
 je_rural_poverty_substate = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
-	
 	complete = {
 		average_sol >= 10
-		
 		NOT = {
 			has_law = law_type:law_serfdom
 		}
-		
 		NOR = {
 			has_law = law_type:law_consumption_based_taxation
 			has_law = law_type:law_land_based_taxation
 		}
 	}
-		
 	on_complete = {
 		remove_modifier = modifier_rural_poverty
-		
 		add_loyalists = {
-		value = 0.1
+			value = 0.1
 		}
-		
 		if = {
 			limit = {
 				is_subject_of = c:CHI
@@ -467,12 +398,11 @@ je_rural_poverty_substate = {
 				}
 			}
 		}
-	}	
+	}
 }
 
 je_industrialize_china = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
-	
 	complete = {
 		OR = {
 			any_scope_state = {
@@ -481,14 +411,12 @@ je_industrialize_china = {
 				percent >= 0.75
 				level >= 20
 			}
-			
 			pop_type_percent_country = {
 				pop_type = peasants
 				percent < 0.35
-			}			
+			}
 		}
 	}
-	
 	on_complete = {
 		add_modifier = {
 			name = modifier_great_leap_forward
@@ -500,26 +428,21 @@ je_industrialize_china = {
 
 je_promote_western_learning = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-	
 	complete = {
 		has_technology_researched = dialectics
-		
 		any_scope_building = {
 			is_building_type = building_university
 			occupancy > 0.9
 			level >= 5
 		}
-		
 		NOT = {
 			has_law = law_type:law_no_schools
 		}
-		
 		institution_investment_level = {
 			institution = institution_schools
 			value >= 2
-		}		
+		}
 	}
-	
 	on_complete = {
 		add_modifier = {
 			name = modifier_self_strengthening_movement
@@ -527,9 +450,8 @@ je_promote_western_learning = {
 			is_decaying = yes
 		}
 		remove_modifier = modifier_chinese_diglossia
-		
 		custom_tooltip = {
-		text = fragile_unity_major_remove_tt
+			text = fragile_unity_major_remove_tt
 			set_variable = je_promote_western_learning_completed
 			# change_variable = {
 			# 	name = china_warlord_explosion
@@ -538,17 +460,14 @@ je_promote_western_learning = {
 		}
 	}
 }
-		
-	
+
 ##Substate-Specific
-
-je_pacify_highland_tribes = { #Sichuan
+je_pacify_highland_tribes = {
+	#Sichuan
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
 	modifiers_while_active = {
 		modifier_tusi_system
-		}
-
+	}
 	complete = {
 		AND = {
 			institution_investment_level = {
@@ -556,29 +475,26 @@ je_pacify_highland_tribes = { #Sichuan
 				value >= 2
 			}
 			has_law = law_type:law_dedicated_police
-		
 			NOR = {
-					has_law = law_type:law_traditionalism
-					has_law = law_type:law_localized_garrisons
-				}
-			bureaucracy >= 0 
-			approaching_bureaucracy_shortage = no
+				has_law = law_type:law_traditionalism
+				has_law = law_type:law_localized_garrisons
 			}
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
 		}
-
-
+	}
 	on_complete = {
 		add_modifier = {
 			name = modifier_tusi_system
 			months = long_modifier_time
 			is_decaying = yes
-			}
+		}
 		trigger_event = {
 			id = babylon_qing_substates.2
-			}
+		}
 		c:CHI = {
 			custom_tooltip = {
-			text = fragile_unity_minor_remove_tt
+				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_highland_tribes_completed
 				# change_variable = {
 				# 	name = china_warlord_explosion
@@ -587,7 +503,6 @@ je_pacify_highland_tribes = { #Sichuan
 			}
 		}
 	}
-
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
@@ -600,123 +515,114 @@ je_pacify_highland_tribes = { #Sichuan
 	should_be_pinned_by_default = yes
 }
 
-je_gateway_to_the_west = { #Liangguang
+je_gateway_to_the_west = {
+	#Liangguang
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
-	
 	complete = {
 		AND = {
 			any_scope_building = {
-                is_building_type = building_port
-                level >= 10
-				}
+				is_building_type = building_port
+				level >= 10
+			}
 			has_law = law_type:law_free_trade
-		
 			NOR = {
-					has_law = law_type:law_traditionalism
-					has_law = law_type:law_agrarianism
-				}
+				has_law = law_type:law_traditionalism
+				has_law = law_type:law_agrarianism
 			}
 		}
-		
-		on_complete = {
-			add_modifier = {
+	}
+	on_complete = {
+		add_modifier = {
 			name = modifier_gateway_to_the_west
-			}
-			c:CHI = {
-				custom_tooltip = {
+		}
+		c:CHI = {
+			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
-					set_variable = je_gateway_to_the_west_completed
-					# change_variable = {
-					# 	name = china_warlord_explosion
-					# 	add = 5
-					# }
-				}
+				set_variable = je_gateway_to_the_west_completed
+				# change_variable = {
+				# 	name = china_warlord_explosion
+				# 	add = 5
+				# }
 			}
 		}
+	}
 	should_be_pinned_by_default = yes
 }
 
-je_breadbasket_of_the_south = { #Huguang
+je_breadbasket_of_the_south = {
+	#Huguang
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
-	
 	modifiers_while_active = {
 		modifier_breadbasket_of_the_south
 	}
-	
-		complete = {
-			pop_type_percent_country = {
-				pop_type = peasants
-				percent < 0.60
-			}
-
-			OR = {
-				has_law = law_type:law_interventionism
-				has_law = law_type:law_laissez_faire
-			}
+	complete = {
+		pop_type_percent_country = {
+			pop_type = peasants
+			percent < 0.6
 		}
-	
-		on_complete = {
-			add_modifier = {
-				name = modifier_breadbasket_of_the_south
-				months = long_modifier_time
-				is_decaying = yes
-			}
-			ig:ig_landowners = {
-				remove_ideology = ideology_huguang_agrarian_idyll
-				add_ideology = ideology_scholar_paternalistic
-			}
-			c:CHI = {
-				custom_tooltip = {
+		OR = {
+			has_law = law_type:law_interventionism
+			has_law = law_type:law_laissez_faire
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = modifier_breadbasket_of_the_south
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_landowners = {
+			remove_ideology = ideology_huguang_agrarian_idyll
+			add_ideology = ideology_scholar_paternalistic
+		}
+		c:CHI = {
+			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
-					set_variable = je_breadbasket_of_the_south_completed
-					# change_variable = {
-					# 	name = china_warlord_explosion
-					# 	add = 5
-					# }
-				}
+				set_variable = je_breadbasket_of_the_south_completed
+				# change_variable = {
+				# 	name = china_warlord_explosion
+				# 	add = 5
+				# }
 			}
 		}
+	}
 	should_be_pinned_by_default = yes
 }
 
-je_settle_the_steppe = { #Eastern Provinces
+je_settle_the_steppe = {
+	#Eastern Provinces
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
-	
 	complete = {
 		has_law = law_type:law_cultural_exclusion
 		s:STATE_SHENGJING.region_state:MCH = {
 			any_scope_building = {
 				is_building_type = building_urban_center
 				level >= 15
-			}				
+			}
 		}
 		s:STATE_SOUTHERN_MANCHURIA.region_state:MCH = {
 			any_scope_building = {
 				is_building_type = building_urban_center
 				level >= 15
-			}				
+			}
 		}
 		s:STATE_NORTHERN_MANCHURIA.region_state:MCH = {
 			any_scope_building = {
 				is_building_type = building_urban_center
 				level >= 15
-			}				
+			}
 		}
 	}
-	
 	on_complete = {
-	
 		add_primary_culture = cu:han
-	
 		add_modifier = {
 			name = modifier_qing_new_frontiers
 			months = 240
 			is_decaying = yes
 		}
-		
 		c:CHI = {
 			custom_tooltip = {
-			text = fragile_unity_minor_add_tt
+				text = fragile_unity_minor_add_tt
 				set_variable = je_settle_the_steppe_completed
 				# change_variable = {
 				# 	name = china_warlord_explosion
@@ -728,9 +634,9 @@ je_settle_the_steppe = { #Eastern Provinces
 	should_be_pinned_by_default = yes
 }
 
-je_pacify_and_settle_taiwan = { #Formosa
+je_pacify_and_settle_taiwan = {
+	#Formosa
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
-	
 	complete = {
 		pop_type_percent_country = {
 			pop_type = peasants
@@ -740,14 +646,13 @@ je_pacify_and_settle_taiwan = { #Formosa
 			any_scope_building = {
 				is_building_type = building_urban_center
 				level >= 10
-			}				
+			}
 		}
 		scope:journal_entry = {
 			is_goal_complete = yes
-		}		
+		}
 	}
-	
-	on_complete = {	
+	on_complete = {
 		add_modifier = {
 			name = modifier_qing_new_frontiers
 			months = 240
@@ -755,7 +660,7 @@ je_pacify_and_settle_taiwan = { #Formosa
 		}
 		c:CHI = {
 			custom_tooltip = {
-			text = fragile_unity_minor_remove_tt
+				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_and_settle_taiwan_completed
 				# change_variable = {
 				# 	name = china_warlord_explosion
@@ -767,11 +672,54 @@ je_pacify_and_settle_taiwan = { #Formosa
 	current_value = {
 		value = root.gdp
 	}
-
 	goal_add_value = {
 		value = root.gdp
 		multiply = 2
 	}
 	progressbar = yes
+	should_be_pinned_by_default = yes
+}
+
+je_pacify_highland_tribes = {
+	#Gansu
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	modifiers_while_active = {
+		modifier_weathered_march
+	}
+	complete = {
+		AND = {
+			institution_investment_level = {
+				institution = institution_home_defence
+				value >= 3
+			}
+			OR = {
+				has_law = law_type:law_national_guard
+				has_law = law_type:law_localized_garrisons
+			}
+			any_scope_state = {
+				count = all
+				custom_tooltip = {
+					text = tax_capacity_greater_than
+					tax_capacity >= tax_capacity_usage
+				}
+			}
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = modifier_silk_march
+		}
+		c:CHI = {
+			custom_tooltip = {
+				text = fragile_unity_minor_remove_tt
+				set_variable = je_pacify_highland_tribes_completed
+				# change_variable = {
+				# 	name = china_warlord_explosion
+				# 	add = -5
+				# }
+			}
+		}
+	}
+	weight = 5000
 	should_be_pinned_by_default = yes
 }
