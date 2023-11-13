@@ -229,15 +229,15 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 					is_congress_target = no
 					global_var:babylon_vienna_congress_session_initiator != this
 				}
-				# Weights have been divided into 3 pieces of 133;
-				# -200 : -65
-				# -65 : 65
-				# 65 : 200
-				# Dead zones are between +/-75 and +/-55, they will stay on their chosen stance, prevents flip-flopping
+				# Weights have been divided into 3 pieces
+				# --- : -35
+				# -35 : 35
+				# 35 : ---
+				# Dead zones are between +/-45 and +/-25, they will stay on their chosen stance, prevents flip-flopping
 				if = {
-					# If the voting weight is between above 75 (and you're not supporting)
+					# If the voting weight is between above 45 (and you're not supporting)
 					limit = {
-						babylon_discord_ai_voting_weight > 75
+						babylon_discord_ai_voting_weight > 45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_1
@@ -252,9 +252,9 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 					}
 				}
 				else_if = {
-					# Else if the voting weight is below -75 (and you're not opposing)
+					# Else if the voting weight is below -45 (and you're not opposing)
 					limit = {
-						babylon_discord_ai_voting_weight < -75
+						babylon_discord_ai_voting_weight < -45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_3
@@ -277,18 +277,18 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 									name = current_congress_members_on_stance_1
 									target = this
 								}
-								babylon_discord_ai_voting_weight < 55
+								babylon_discord_ai_voting_weight < 25
 							}
 							AND = {
-								babylon_discord_ai_voting_weight < 55
-								babylon_discord_ai_voting_weight > -55
+								babylon_discord_ai_voting_weight < 25
+								babylon_discord_ai_voting_weight > -25
 							}
 							AND = {
 								is_target_in_global_variable_list = {
 									name = current_congress_members_on_stance_3
 									target = this
 								}
-								babylon_discord_ai_voting_weight > -55
+								babylon_discord_ai_voting_weight > -25
 							}
 						}
 						NOT = {
