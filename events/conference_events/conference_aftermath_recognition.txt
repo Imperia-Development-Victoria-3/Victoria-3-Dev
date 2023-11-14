@@ -1,0 +1,143 @@
+﻿namespace = conference_aftermath_recognition
+conference_aftermath_recognition.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_recognition.1.t
+	desc = conference_aftermath_recognition.1.desc
+	flavor = conference_aftermath_recognition.1.flavor
+	duration = 3
+	immediate = {
+		global_var:babylon_vienna_congress_session_target = {
+			save_scope_as = target_scope
+		}
+	}
+	# When the recognition passed and you supported
+	option = {
+		name = conference_aftermath_recognition.1.a
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0
+			is_congress_supporter = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = 20
+		}
+	}
+	# When the recognition passed and you opposed
+	option = {
+		name = conference_aftermath_recognition.1.b
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0
+			is_congress_opposer = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = -20
+		}
+	}
+	# When the recognition passed and you didnt take a position
+	option = {
+		name = conference_aftermath_recognition.1.c
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0
+			NOR = {
+				is_congress_opposer = yes
+				is_congress_supporter = yes
+			}
+		}
+	}
+	# When the recognition didnt pass and you supported
+	option = {
+		name = conference_aftermath_recognition.1.d
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity <= 0
+			is_congress_supporter = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = 20
+		}
+	}
+	# When the recognition didnt pass and you opposed
+	option = {
+		name = conference_aftermath_recognition.1.e
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity <= 0
+			is_congress_opposer = yes
+		}
+		change_relations = {
+			country = scope:target_scope
+			value = -20
+		}
+	}
+	# When the recognition didnt pass and you didnt take a position
+	option = {
+		name = conference_aftermath_recognition.1.f
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity <= 0
+			NOR = {
+				is_congress_opposer = yes
+				is_congress_supporter = yes
+			}
+		}
+	}
+}
+
+conference_aftermath_recognition.2 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = conference_aftermath_recognition.2.t
+	desc = conference_aftermath_recognition.2.desc
+	flavor = conference_aftermath_recognition.2.flavor
+	duration = 3
+	immediate = {
+		if = {
+			# Redundancy check
+			limit = {
+				conference_sanctions_severity > 0
+			}
+			recognise_effect = yes
+		}
+	}
+	# When the recognition passed
+	option = {
+		name = conference_aftermath_recognition.2.a
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity > 0
+		}
+		show_as_tooltip = {
+			recognise_effect = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	# Too few to pass recognition
+	option = {
+		name = conference_aftermath_recognition.2.b
+		default_option = yes
+		trigger = {
+			conference_sanctions_severity <= 0
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+}

@@ -66,29 +66,25 @@ babylon_foreign_law_tip = {
 	}
 }
 
-is_naval_invasion = { 
+is_naval_invasion = {
 	type = state
 	random_valid = no
 	log_loc_errors = no
-	
 	text = {
 		trigger = {
 			has_modifier = modifier_incoming_naval_invasion
 		}
 		localization_key = "yes"
 	}
-	
 	text = {
 		localization_key = "no"
 	}
 }
 
-
-naval_invasion_state_tooltip = { 
+naval_invasion_state_tooltip = {
 	type = state
 	random_valid = no
 	log_loc_errors = no
-	
 	text = {
 		trigger = {
 			has_modifier = modifier_incoming_naval_invasion
@@ -213,5 +209,791 @@ babylon_discord_external_homeland_nationalism_modifier = {
 			always = yes
 		}
 		localization_key = babylon_discord_external_homeland_nationalism_modifier_no
+	}
+}
+
+babylon_vienna_congress_name_affix = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 1
+		}
+		localization_key = babylon_vienna_congress_name_affix_denouncement
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 2
+			exists = global_var:babylon_vienna_congress_session_target_single_state
+		}
+		localization_key = babylon_vienna_congress_name_affix_state_claim_single
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 2
+			exists = global_var:chosen_vienna_congress_target_region_or_culture_var
+			global_var:chosen_vienna_congress_target_region_or_culture_type = 1
+		}
+		localization_key = babylon_vienna_congress_name_affix_state_claim_strategic_region
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 2
+			exists = global_var:chosen_vienna_congress_target_region_or_culture_var
+			global_var:chosen_vienna_congress_target_region_or_culture_type = 2
+		}
+		localization_key = babylon_vienna_congress_name_affix_state_claim_culture
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 3
+		}
+		localization_key = babylon_vienna_congress_name_affix_embargo
+	}
+	text = {
+		trigger = {
+			global_var:babylon_vienna_congress_session_type = 4
+		}
+		localization_key = babylon_vienna_congress_name_affix_recognition
+	}
+}
+
+babylon_vienna_congress_end_event_not_enough = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			conference_supporters_percentage_value > 0.8
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_OVERWHELMING
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					conference_sanctions_severity < 0.6
+					conference_sanctions_severity > 0.4
+					global_var:babylon_vienna_congress_session_type != 4
+				}
+				AND = {
+					global_var:babylon_vienna_congress_session_type = 4
+					conference_sanctions_severity > 0
+				}
+			}
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_ENOUGH
+	}
+	text = {
+		trigger = {
+			conference_sanctions_severity <= 0
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_NOT_ENOUGH
+	}
+	text = {
+		trigger = {
+			conference_sanctions_severity < 0.8
+			conference_sanctions_severity > 0.6
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_A_CLEAR_MANDATE
+	}
+	text = {
+		trigger = {
+			conference_sanctions_severity < 0.4
+			conference_sanctions_severity > 0.2
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_JUST_ENOUGH
+	}
+}
+
+babylon_vienna_congress_end_event_support_oppose = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			conference_sanctions_severity > 0
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_SUPPORTERS
+	}
+	text = {
+		trigger = {
+			conference_sanctions_severity < 0
+		}
+		localization_key = BABYLON_VIENNA_CONGRESS_OPPOSED
+	}
+	text = {
+		fallback = yes
+		localization_key = BABYLON_VIENNA_CONGRESS_NO_VERDICT
+	}
+}
+
+babylon_vienna_congress_random_event_who_notices_you = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			# Meaning you are on the floor voting
+			is_congress_observer = no
+		}
+		localization_key = CONGRESS_EVERYONE_NOTICES
+	}
+	text = {
+		trigger = {
+			is_congress_observer = yes
+		}
+		localization_key = CONGRESS_ONLY_SOME_NOTICES
+	}
+}
+
+babylon_vienna_congress_random_event_4_a = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_a_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_A_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_b = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_b_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_B_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_c = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_c_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_C_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_d = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_d_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_D_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_e = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_e_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_E_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_f = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_f_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_F_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_g = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_g_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_G_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_h = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_h_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_H_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_i = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_i_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_I_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_j = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_j_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_J_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_k = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_k_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_K_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_vienna_congress_random_event_4_l = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = event_option_l_enabled
+		}
+		localization_key = CONGRESS_RANDOM_EVENT_4_L_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+masked_ball_budget_term = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:masked_ball_budget = 1
+		}
+		localization_key = "a mask"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_budget = 2
+		}
+		localization_key = "a very cheap costume"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_budget = 3
+		}
+		localization_key = "a cheap costume"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_budget = 4
+		}
+		localization_key = "a decent costume"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_budget = 5
+		}
+		localization_key = "a rich costume"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_budget = 6
+		}
+		localization_key = "an extravagant costume"
+	}
+}
+
+masked_ball_costume_term = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 1
+		}
+		localization_key = "a navigator"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 2
+		}
+		localization_key = "a Roman Emperor"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 3
+		}
+		localization_key = MASKED_BALL_CULTURAL_GARB
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 4
+		}
+		localization_key = "an old feudal ruler"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 5
+		}
+		localization_key = "a fairytale prince"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 6
+		}
+		localization_key = "an oriental prince"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 7
+		}
+		localization_key = "the military"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 8
+		}
+		localization_key = "a lion"
+	}
+	text = {
+		trigger = {
+			var:masked_ball_costume_direction = 9
+		}
+		localization_key = "a clown"
+	}
+}
+
+congress_parade_entry_synonym = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			global_var:entry_synonym = 1
+		}
+		localization_key = "Entry"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 2
+		}
+		localization_key = "Appearance"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 3
+		}
+		localization_key = "Arrival"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 4
+		}
+		localization_key = "Entrance"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 5
+		}
+		localization_key = "Ingress"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 6
+		}
+		localization_key = "Coming"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 7
+		}
+		localization_key = "Approach"
+	}
+	text = {
+		trigger = {
+			global_var:entry_synonym = 8
+		}
+		localization_key = "Introduction"
+	}
+}
+
+congress_parade_allied_synonym = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			global_var:allied_synonym = 1
+		}
+		localization_key = "Allied"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 2
+		}
+		localization_key = "Associated"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 3
+		}
+		localization_key = "United"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 4
+		}
+		localization_key = "Equal"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 5
+		}
+		localization_key = "Kindred"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 6
+		}
+		localization_key = "Undivided"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 7
+		}
+		localization_key = "Joined"
+	}
+	text = {
+		trigger = {
+			global_var:allied_synonym = 8
+		}
+		localization_key = "Unanimous"
+	}
+}
+
+congress_parade_ruler_synonym = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 1
+		}
+		localization_key = "Leaders"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 2
+		}
+		localization_key = "Sovereigns"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 3
+		}
+		localization_key = "Monarchs"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 4
+		}
+		localization_key = "Crowns"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 5
+		}
+		localization_key = "Commanders"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 6
+		}
+		localization_key = "Princes"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 7
+		}
+		localization_key = "Supremes"
+	}
+	text = {
+		trigger = {
+			global_var:ruler_synonym = 8
+		}
+		localization_key = "Suzerains"
+	}
+}
+
+congress_host_budget_sentence = {
+	type = country
+	text = {
+		trigger = {
+			# Very low
+			var:chosen_budget_level = 1
+		}
+		localization_key = "Only a handful of tattered flags of the host was present, with hardly any splendor."
+	}
+	text = {
+		trigger = {
+			# Low
+			var:chosen_budget_level = 2
+		}
+		localization_key = "Pennants and flags were placed along the route. Very spartan but it had its charm."
+	}
+	text = {
+		trigger = {
+			# Medium
+			var:chosen_budget_level = 3
+		}
+		localization_key = "Pennants and flags for the leads were placed along the route and around the city. An acceptable amount of decorations."
+	}
+	text = {
+		trigger = {
+			# High
+			var:chosen_budget_level = 4
+		}
+		localization_key = "Pennants and flags for the attendees were placed along the route and around the city. Ceremonial guards was on the sides, and entertainment for the peasants in the market squares. Quite fetching!"
+	}
+	text = {
+		trigger = {
+			# Very High
+			var:chosen_budget_level = 5
+		}
+		localization_key = "Pennants and flags for the attendees hung in the entiure country. Ceremonial guards was everywhere, as were entertainment! Absolutely dashing!"
+	}
+}
+
+congress_leads_budget_sentence = {
+	type = country
+	text = {
+		trigger = {
+			# Very low
+			congress_parade_average_budget_level_of_leads = 1
+		}
+		localization_key = "The 3 leads came riding on horses in normal attire."
+	}
+	text = {
+		trigger = {
+			# Low
+			congress_parade_average_budget_level_of_leads = 2
+		}
+		localization_key = "The 3 leads came in closed carriages, so who knows what they looked like."
+	}
+	text = {
+		trigger = {
+			# Medium
+			congress_parade_average_budget_level_of_leads = 3
+		}
+		localization_key = "The 3 leads came in open carriages wearing fancy outfits."
+	}
+	text = {
+		trigger = {
+			# High
+			congress_parade_average_budget_level_of_leads = 4
+		}
+		localization_key = "The 3 leads came in open carriages flanked by ceremonial guards, everyone wearing fancy outfits! Charming!"
+	}
+	text = {
+		trigger = {
+			# Very High
+			congress_parade_average_budget_level_of_leads = 5
+		}
+		localization_key = "The 3 leads came in riding white horses, with highly opulent outfits. Their diplomats and family in open carriages. Military formations of ceremonial guard came before and after them. Now that's a parade!"
+	}
+	text = {
+		fallback = yes
+		localization_key = "blurb not found"
+	}
+}
+
+congress_church_mass_possible_sentence = {
+	type = state
+	text = {
+		trigger = {
+			# yes to church
+			OR = {
+				any_scope_pop = {
+					religion = {
+						has_discrimination_trait = christian
+						root = {
+							religion_percent_state = {
+								target = prev
+								value >= 0.05
+							}
+						}
+					}
+				}
+				owner.religion = {
+					has_discrimination_trait = christian
+				}
+			}
+		}
+		localization_key = CONGRESS_CHURCH_MASS_SENTENCE
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+congress_cathedral_mass_possible_sentence = {
+	type = state
+	text = {
+		trigger = {
+			# yes to cathedral
+			OR = {
+				any_scope_pop = {
+					religion = {
+						has_discrimination_trait = christian
+						root = {
+							religion_percent_state = {
+								target = prev
+								value >= 0.2
+							}
+						}
+					}
+				}
+				owner.religion = {
+					has_discrimination_trait = christian
+				}
+			}
+		}
+		localization_key = CONGRESS_CATHEDRAL_MASS_SENTENCE
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
+babylon_congress_primary_culture_to_language = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = anglophone
+			}
+		}
+		localization_key = "English"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = francophone
+			}
+		}
+		localization_key = "French"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = german_speaking
+			}
+		}
+		localization_key = "German"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = italophone
+			}
+		}
+		localization_key = "Italian"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = jugoslav
+			}
+		}
+		localization_key = "Serbo-Croatian"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = hispanophone
+			}
+		}
+		localization_key = "Spanish"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = lusophone
+			}
+		}
+		localization_key = "Portuguese"
+	}
+	text = {
+		trigger = {
+			any_primary_culture = {
+				has_discrimination_trait = han_chinese
+			}
+		}
+		localization_key = "Chinese"
+	}
+	text = {
+		fallback = yes
+		localization_key = CONGRESS_CULTURE_NAME
 	}
 }
