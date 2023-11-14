@@ -149,13 +149,15 @@ mountain_commander = {
 	value = 2
 }
 
-# TO DO: Re-enable this by hooking it into Formation Composition rather than old Pms
 basic_artillery_commander = {
  	type = skill
 	texture = gfx/interface/icons/character_trait_icons/basic_artillery_commander.dds
 
  	command_modifier = {
- 		unit_offense_add = 5
+ 		unit_combat_unit_type_siege_artillery_offense_mult = 0.05
+		unit_combat_unit_type_shrapnel_artillery_offense_mult = 0.05
+		unit_combat_unit_type_cannon_artillery_mult = 0.05
+		unit_combat_unit_type_mobile_artillery_mult = 0.05
  		character_battle_condition_aggressive_maneuver_mult = 1
  		character_battle_condition_mud_mult = 0.5
  	}
@@ -174,46 +176,91 @@ basic_artillery_commander = {
 
  	weight = {
  		value = 2
-		#if = {
- 		#	limit = {
-		#		commander_pm_usage = {
- 		#			target = owner
- 		#			production_method = pm_cannon_artillery
- 		#			value > 0.5
- 		#		}
- 		#	}
- 		#	multiply = 2
- 		#}
- 		#else_if = {
- 		#	limit = {
- 		#		commander_pm_usage = {
- 		#			target = owner
- 		#			production_method = pm_mobile_artillery
- 		#			value > 0.5
- 		#		}
- 		#	}
- 		#	multiply = 5
-		#}
- 		#else_if = {
- 		#	limit = {
- 		#		commander_pm_usage = {
- 		#			target = owner
-		#			production_method = pm_shrapnel_artillery
- 		#			value > 0.5
- 		#		}
- 		#	}
- 		#	multiply = 10
- 		#}
- 		#else_if = {
- 		#	limit = {
- 		#		commander_pm_usage = {
- 		#			target = owner
- 		#			production_method = pm_siege_artillery
- 		#			value > 0.5
- 		#		}
- 		#	}
- 		#	multiply = 20
- 		#}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_cannon_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 2
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_mobile_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 5
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_shrapnel_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 10
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_siege_artillery
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 20
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_heavy_tank
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 50
+		}
  	}
 
  	replace = {
@@ -227,7 +274,10 @@ experienced_artillery_commander = {
 	texture =gfx/interface/icons/character_trait_icons/experienced_artillery_commander.dds
 
 	command_modifier = {
-		unit_offense_add = 10
+		unit_combat_unit_type_siege_artillery_offense_mult = 0.1
+		unit_combat_unit_type_shrapnel_artillery_offense_mult = 0.1
+		unit_combat_unit_type_cannon_artillery_mult = 0.1
+		unit_combat_unit_type_mobile_artillery_mult = 0.1
 		character_battle_condition_aggressive_maneuver_mult = 2
 		character_battle_condition_mud_mult = 0.5
 	}
@@ -239,36 +289,74 @@ experienced_artillery_commander = {
 
 	weight = {
 		value = 5
-		#if = {
-		#	limit = {
-		#		commander_pm_usage = {
-		#			target = owner
-					# production_method = pm_mobile_artillery
-					# value > 0.5
-				# }
-			# }
-			# multiply = 5
-		# }
-		# else_if = {
-			# limit = {
-				# commander_pm_usage = {
-					# target = owner
-					# production_method = pm_shrapnel_artillery
-					# value > 0.5
-				# }
-			# }
-			# multiply = 10
-		# }
-		# else_if = {
-			# limit = {
-				# commander_pm_usage = {
-					# target = owner
-					# production_method = pm_siege_artillery
-					# value > 0.5
-				# }
-			# }
-			# multiply = 20
-		# }
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_mobile_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 5
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_shrapnel_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 10
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_siege_artillery
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 20
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_heavy_tank
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 50
+		}
 	}
 
 	replace = {
@@ -283,7 +371,10 @@ expert_artillery_commander = {
 	texture =gfx/interface/icons/character_trait_icons/expert_artillery_commander.dds
 
 	command_modifier = {
-		unit_offense_add = 15
+		unit_combat_unit_type_siege_artillery_offense_mult = 0.15
+		unit_combat_unit_type_shrapnel_artillery_offense_mult = 0.15
+		unit_combat_unit_type_cannon_artillery_mult = 0.15
+		unit_combat_unit_type_mobile_artillery_mult = 0.15
 		character_battle_condition_aggressive_maneuver_mult = 3
 		character_battle_condition_mud_mult = 0.5
 	}
@@ -295,26 +386,57 @@ expert_artillery_commander = {
 
 	weight = {
 		value = 5
-		# if = {
-			# limit = {
-				# commander_pm_usage = {
-					# target = owner
-					# production_method = pm_shrapnel_artillery
-					# value > 0.5
-				# }
-			# }
-			# multiply = 10
-		# }
-		# else_if = {
-			# limit = {
-				# commander_pm_usage = {
-					# target = owner
-					# production_method = pm_siege_artillery
-					# value > 0.5
-				# }
-			# }
-			# multiply = 20
-		# }
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_shrapnel_artillery  
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 10
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_siege_artillery
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 20
+		}
+		if = {
+			limit = {
+				owner = {
+					any_military_formation = {
+						is_army = yes
+						any_scope_general = {
+							this = root
+						}
+						formation_army_unit_type_fraction = {  
+							target = unit_type:combat_unit_type_heavy_tank
+							value >= 0.20  
+						}  
+					}
+				}
+			}
+			multiply = 50
+		}
 	}
 
 	replace = {
@@ -680,6 +802,7 @@ convoy_raider_commander = {
 
 	command_modifier = {
 		unit_convoy_raiding_mult = 0.1
+		unit_combat_unit_type_submarine_offense_mult = 0.1
 	}
 
 	possible = {
@@ -720,6 +843,7 @@ experienced_convoy_raider = {
 
 	command_modifier = {
 		unit_convoy_raiding_mult = 0.5
+		unit_combat_unit_type_submarine_offense_mult = 0.15
 	}
 
 	possible = {
@@ -754,6 +878,7 @@ expert_convoy_raider = {
 
 	command_modifier = {
 		unit_convoy_raiding_mult = 1.5
+		unit_combat_unit_type_submarine_offense_mult = 0.25
 	}
 
 	possible = {
@@ -787,8 +912,8 @@ traditionalist_commander = {
 	texture = "gfx/interface/icons/character_trait_icons/traditionalist_commander.dds"
 
 	command_modifier = {
-		character_morale_cap_add = 5
-		character_command_limit_combat_unit_regular_add = 5
+		character_command_limit_mult = 0.1
+		unit_combat_unit_type_carrier_offense_mult = -0.1
 	}
 
 	# Reminder: this would only come into effect if this Commander is or becomes a Ruler

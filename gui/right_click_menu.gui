@@ -36,8 +36,8 @@ types right_click_menu_types {
 					raw_text = "#TODO Default Item Text#!"
 				}
 				align = left|nobaseline
-				fontsize_min = 12
 				using = fontsize_large
+				fontsize_min = 12
 				elide = right
 				margin = { 5 0 }
 			}
@@ -240,7 +240,10 @@ types right_click_menu_types {
 
 	type military_formation_right_click_item = button {
 		size = { 100% 100% }
-		using = default_button_action
+
+		block "default_button_template" {
+			using = default_button_action
+		}
 
 		block "tooltip" {}
 
@@ -256,8 +259,8 @@ types right_click_menu_types {
 				visible = "[MilitaryFormation.IsArmy]"
 				parentanchor = vcenter
 				size = { 50 50 }
-				#texture = "[MilitaryFormation.GetTexture]"
-				texture = "gfx/interface/icons/military_icons/military_formation_identity_icons/army_01.dds"
+				texture = "[MilitaryFormation.GetFlag]"
+				color = "[MilitaryFormation.GetFlagColor]"
 			}
 
 			### Remove this whole icon when the GetIcon/GetTexture function is in
@@ -265,7 +268,8 @@ types right_click_menu_types {
 				visible = "[MilitaryFormation.IsFleet]"
 				parentanchor = vcenter
 				size = { 50 50 }
-				texture = "gfx/interface/icons/military_icons/military_formation_identity_icons/fleet_01.dds"
+				texture = "[MilitaryFormation.GetFlag]"
+				color = "[MilitaryFormation.GetFlagColor]"
 			}
 
 			flowcontainer = {
@@ -273,19 +277,26 @@ types right_click_menu_types {
 				spacing = 5
 				parentanchor = vcenter
 
-				widget = {
-					size = { 235 30 }
+				flowcontainer = {
+					minimumsize = { 235 30 }
+					spacing = 5
 
 					textbox = {
 						parentanchor = vcenter
 						align = nobaseline
 						autoresize = yes
 						text = "[MilitaryFormation.GetName]"
+						elide = right
+						fontsize_min = 14
+
+						block "name_max_width" {
+							max_width = 160
+						}
 					}
 
 					flowcontainer = {
 						spacing = 5
-						parentanchor = right|vcenter
+						parentanchor = vcenter
 
 						### ARMY ICON
 						icon = {
@@ -341,20 +352,19 @@ types right_click_menu_types {
 			spacing = 5
 
 			icon = {
-				### Remove this visible state when the GetIcon/GetTexture function is in
 				visible = "[MilitaryFormation.IsArmy]"
 				parentanchor = vcenter
 				size = { 50 50 }
-				#texture = "[MilitaryFormation.GetTexture]"
-				texture = "gfx/interface/icons/military_icons/military_formation_identity_icons/army_01.dds"
+				texture = "[MilitaryFormation.GetFlag]"
+				color = "[MilitaryFormation.GetFlagColor]"
 			}
 
-			### Remove this whole icon when the GetIcon/GetTexture function is in
 			icon = {
 				visible = "[MilitaryFormation.IsFleet]"
 				parentanchor = vcenter
 				size = { 50 50 }
-				texture = "gfx/interface/icons/military_icons/military_formation_identity_icons/fleet_01.dds"
+				texture = "[MilitaryFormation.GetFlag]"
+				color = "[MilitaryFormation.GetFlagColor]"
 			}
 
 			flowcontainer = {
@@ -362,14 +372,21 @@ types right_click_menu_types {
 				spacing = 5
 				parentanchor = vcenter
 
-				widget = {
-					size = { 235 30 }
+				flowcontainer = {
+					minimumsize = { 235 30 }
+					spacing = 5
 
 					textbox = {
 						parentanchor = vcenter
 						align = nobaseline
 						autoresize = yes
 						text = "[MilitaryFormation.GetName]"
+						elide = right
+						fontsize_min = 14
+
+						block "name_max_width" {
+							max_width = 160
+						}
 					}
 
 					flowcontainer = {
@@ -428,149 +445,156 @@ right_click_menu = {
 		text = "BUILDING_RIGHT_CLICK_MENU_TITLE"
 	}
 	blockoverride "items" {
-		right_click_menu_item = {
 
-			blockoverride "texture" {
-				texture = "gfx/interface/buttons/button_icons/plus.dds"
-			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_EXPAND"
-			}
+		flowcontainer = {
+			visible = "[Not(Building.GetBuildingType.IsMilitaryBuilding)]"
+			direction = vertical
+			parentanchor = hcenter
 
-			blockoverride "margin" {
-				margin_left = 45
-			}
+			right_click_menu_item = {
 
-			blockoverride "properties" {
-				tooltip = "[Building.GetQueueConstructionTooltip]"
-				enabled = "[IsValid( Building.QueueConstruction )]"
-				visible = "[Building.IsExpandable]"
-				onclick = "[Execute( Building.QueueConstruction )]"
-			}
-		}
-		right_click_menu_item = {
-			
-			blockoverride "margin" {
-				margin_left = 45
-			}
+				blockoverride "texture" {
+					texture = "gfx/interface/buttons/button_icons/plus.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_EXPAND"
+				}
 
-			blockoverride "properties" {
-				visible = "[And(IsPotential( Building.ToggleAutoExpand ),Not(Building.IsAutoExpanding))]"
-				tooltip = [Building.GetAutoExpandTooltip]
-				enabled = "[IsValid( Building.ToggleAutoExpandOn )]"
-				onclick = "[Execute( Building.ToggleAutoExpandOn )]"
-			}
+				blockoverride "margin" {
+					margin_left = 45
+				}
 
-			blockoverride "texture" {
-				texture = "gfx/interface/production_methods/auto_expand.dds"
+				blockoverride "properties" {
+					tooltip = "[Building.GetQueueConstructionTooltip]"
+					enabled = "[IsValid( Building.QueueConstruction )]"
+					visible = "[Building.IsExpandable]"
+					onclick = "[Execute( Building.QueueConstruction )]"
+				}
 			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_AUTOEXPAND_ON"
-			}
-		}
+			right_click_menu_item = {
+				
+				blockoverride "margin" {
+					margin_left = 45
+				}
 
-		right_click_menu_item = {
-			
-			blockoverride "margin" {
-				margin_left = 45
-			}
-			blockoverride "properties" {
-				visible = "[And(IsPotential( Building.ToggleAutoExpand ),Building.IsAutoExpanding)]"				
-				tooltip = [Building.GetAutoExpandTooltip]
-				enabled = "[IsValid( Building.ToggleAutoExpandOff )]"
-				onclick = "[Execute( Building.ToggleAutoExpandOff )]"
+				blockoverride "properties" {
+					visible = "[And(IsPotential( Building.ToggleAutoExpand ),Not(Building.IsAutoExpanding))]"
+					tooltip = [Building.GetAutoExpandTooltip]
+					enabled = "[IsValid( Building.ToggleAutoExpandOn )]"
+					onclick = "[Execute( Building.ToggleAutoExpandOn )]"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/production_methods/auto_expand.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_AUTOEXPAND_ON"
+				}
 			}
 
-			blockoverride "texture" {
-				texture = "gfx/interface/production_methods/auto_expand_not.dds"
-			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_AUTOEXPAND_OFF"
-			}
-		}
+			right_click_menu_item = {
+				
+				blockoverride "margin" {
+					margin_left = 45
+				}
+				blockoverride "properties" {
+					visible = "[And(IsPotential( Building.ToggleAutoExpand ),Building.IsAutoExpanding)]"				
+					tooltip = [Building.GetAutoExpandTooltip]
+					enabled = "[IsValid( Building.ToggleAutoExpandOff )]"
+					onclick = "[Execute( Building.ToggleAutoExpandOff )]"
+				}
 
-		right_click_menu_item = {
-			
-			blockoverride "margin" {
-				margin_left = 45
-			}
-			blockoverride "properties" {
-				visible = "[And(Building.IsExpandable, IsValid( Building.QueueConstruction ))]"
-				onclick = "[Building.GetBuildingType.ActivateExpansionLens]"
-			}
-
-			blockoverride "texture" {
-				texture = "gfx/interface/buttons/button_icons/plus.dds"
-			}
-			
-			blockoverride = "text" {
-				text = "OPEN_EXPANSION_LENS"
-			}
-		}
-
-		right_click_menu_item = {
-			
-			blockoverride "margin" {
-				margin_left = 45
-			}
-			blockoverride "properties" {	
-				tooltip = "[Building.GetCancelConstructionTooltip]"
-				visible = "[IsValid( Building.CancelConstruction )]"
-				onclick = "[Execute( Building.CancelConstruction )]"
+				blockoverride "texture" {
+					texture = "gfx/interface/production_methods/auto_expand_not.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_AUTOEXPAND_OFF"
+				}
 			}
 
-			blockoverride "texture" {
-				texture = "gfx/interface/buttons/button_icons/minus.dds"
-			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_CANCEL_CONSTRUCTION"
-			}
-		}
+			right_click_menu_item = {
+				
+				blockoverride "margin" {
+					margin_left = 45
+				}
+				blockoverride "properties" {
+					visible = "[And(Building.IsExpandable, IsValid( Building.QueueConstruction ))]"
+					onclick = "[Building.GetBuildingType.ActivateExpansionLens]"
+				}
 
-		### DOWNSIZE
-		right_click_menu_item = {
-			
-			blockoverride "margin" {
-				margin_left = 45
-			}
-			blockoverride "properties" {
-				visible = "[And( And( Building.IsValid, Building.IsDownsizeable ), Not( ShouldAskConfirmation( Building.Downsize ) ) )]"
-				tooltip = "[Building.GetDownsizeTooltip]"
-				enabled = "[IsValid( Building.Downsize )]"
-				onclick = "[Execute( Building.Downsize )]"
+				blockoverride "texture" {
+					texture = "gfx/interface/buttons/button_icons/plus.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "OPEN_EXPANSION_LENS"
+				}
 			}
 
-			blockoverride "texture" {
-				texture = "gfx/interface/buttons/button_icons/minus.dds"
-			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_DOWNSIZE"
-			}
-		}
+			right_click_menu_item = {
+				
+				blockoverride "margin" {
+					margin_left = 45
+				}
+				blockoverride "properties" {	
+					tooltip = "[Building.GetCancelConstructionTooltip]"
+					visible = "[IsValid( Building.CancelConstruction )]"
+					onclick = "[Execute( Building.CancelConstruction )]"
+				}
 
-		### DOWNSIZE WITH CONFIRMATION
-		right_click_menu_item = {
-			blockoverride "margin" {
-				margin_left = 45
-			}
-			blockoverride "properties" {
-				visible = "[And( And( Building.IsValid, Building.IsDownsizeable ), ShouldAskConfirmation( Building.Downsize ) )]"
-				tooltip = "[Building.GetDownsizeTooltip]"
-				enabled = "[IsValid( Building.Downsize )]"
-				onclick = "[PopupManager.AskConfirmation( Building.Downsize )]"
+				blockoverride "texture" {
+					texture = "gfx/interface/buttons/button_icons/minus.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_CANCEL_CONSTRUCTION"
+				}
 			}
 
-			blockoverride "texture" {
-				texture = "gfx/interface/buttons/button_icons/minus.dds"
+			### DOWNSIZE
+			right_click_menu_item = {
+				
+				blockoverride "margin" {
+					margin_left = 45
+				}
+				blockoverride "properties" {
+					visible = "[And( And( Building.IsValid, Building.IsDownsizeable ), Not( ShouldAskConfirmation( Building.Downsize ) ) )]"
+					tooltip = "[Building.GetDownsizeTooltip]"
+					enabled = "[IsValid( Building.Downsize )]"
+					onclick = "[Execute( Building.Downsize )]"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/buttons/button_icons/minus.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_DOWNSIZE"
+				}
 			}
-			
-			blockoverride = "text" {
-				text = "BUILDING_RIGHT_CLICK_MENU_DOWNSIZE"
+
+			### DOWNSIZE WITH CONFIRMATION
+			right_click_menu_item = {
+				blockoverride "margin" {
+					margin_left = 45
+				}
+				blockoverride "properties" {
+					visible = "[And( And( Building.IsValid, Building.IsDownsizeable ), ShouldAskConfirmation( Building.Downsize ) )]"
+					tooltip = "[Building.GetDownsizeTooltip]"
+					enabled = "[IsValid( Building.Downsize )]"
+					onclick = "[PopupManager.AskConfirmation( Building.Downsize )]"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/buttons/button_icons/minus.dds"
+				}
+				
+				blockoverride = "text" {
+					text = "BUILDING_RIGHT_CLICK_MENU_DOWNSIZE"
+				}
 			}
 		}
 
@@ -624,7 +648,7 @@ right_click_menu = {
 			}
 			blockoverride "properties" {
 				onclick = "[Execute( Building.ResetProductionMethodsToStandard )]"
-				visible = "[IsValid( Building.ResetProductionMethodsToStandard )]"
+				enabled = "[IsValid( Building.ResetProductionMethodsToStandard )]"
 				tooltip = "[Building.GetResetProductionMethodsToStandardTooltip]"
 			}
 
@@ -643,7 +667,7 @@ right_click_menu = {
 			}
 			blockoverride "properties" {
 				onclick = "[Execute( Building.GetBuildingType.ResetProductionMethodsToStandard )]"
-				visible = "[IsValid( Building.GetBuildingType.ResetProductionMethodsToStandard )]"
+				enabled = "[IsValid( Building.GetBuildingType.ResetProductionMethodsToStandard )]"
 				tooltip = "[Building.GetBuildingType.GetResetProductionMethodsToStandardTooltip]"
 			}
 
@@ -672,7 +696,7 @@ right_click_menu = {
 				margin_left = 45
 			}
 			blockoverride "properties" {
-				visible = "[BuildingType.IsExpandable]"
+				visible = "[And(BuildingType.IsExpandable, Not(BuildingType.IsMilitaryBuilding))]"
 				onclick = "[BuildingType.ActivateExpansionLens]"
 			}
 
@@ -693,7 +717,7 @@ right_click_menu = {
 			}
 			blockoverride "properties" {
 				onclick = "[Execute( BuildingType.ResetProductionMethodsToStandard )]"
-				visible = "[IsValid( BuildingType.ResetProductionMethodsToStandard )]"
+				enabled = "[IsValid( BuildingType.ResetProductionMethodsToStandard )]"
 				tooltip = "[BuildingType.GetResetProductionMethodsToStandardTooltip]"
 			}
 
@@ -1017,11 +1041,32 @@ right_click_menu = {
 
 				blockoverride "texture" {
 					### PLACEHOLDER ICON
-					texture = "gfx/interface/icons/commander_order_icons/naval_invasion.dds"
+					texture = "gfx/interface/icons/formation_order_icons/naval_invasion.dds"
 				}
 
 				blockoverride = "text" {
 					text = "MILITARY_FORMATION_NAVAL_INVASION_LABEL"
+				}
+
+				blockoverride "size" {
+					size = { 260 44 }
+				}
+			}
+
+			right_click_menu_item = {		# Disband Formation
+				
+				blockoverride "properties" {
+					tooltip = "MILITARY_FORMATION_DISBAND_TOOLTIP"
+					onclick = "[PopupManager.AskConfirmation( MilitaryFormation.Disband )]"
+					enabled = "[IsValid( MilitaryFormation.Disband )]"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/military_icons/disband_formation.dds"
+				}
+
+				blockoverride = "text" {
+					text = "MILITARY_FORMATION_DISBAND"
 				}
 
 				blockoverride "size" {
@@ -1053,6 +1098,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_army_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsArmy]"
 
@@ -1064,8 +1113,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_ARMY"
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_ARMY"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1076,6 +1131,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1092,6 +1158,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_fleet_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsFleet]"
 
@@ -1103,8 +1173,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_FLEET"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_FLEET"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1115,6 +1191,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1145,6 +1232,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_army_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsArmy]"
 
@@ -1156,8 +1247,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_ARMY"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_ARMY"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1168,6 +1265,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1198,6 +1306,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_fleet_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsFleet]"
 
@@ -1209,8 +1321,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_FLEET"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_FLEET"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1221,6 +1339,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1251,6 +1380,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_army_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsArmy]"
 
@@ -1262,8 +1395,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_ARMY"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_ARMY"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1274,6 +1413,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1290,6 +1440,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_fleet_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsFleet]"
 
@@ -1301,8 +1455,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_FLEET"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_FLEET"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1313,6 +1473,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1343,6 +1514,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_army_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsArmy]"
 
@@ -1354,8 +1529,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_ARMY"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_ARMY"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1366,6 +1547,17 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1396,6 +1588,10 @@ right_click_menu = {
 					margin_left = 10
 				}
 
+				new_fleet_button = {
+					visible = no # todo PRCAL-30807 - Re-add this
+				}
+
 				dynamicgridbox = {
 					datamodel = "[AccessPlayer.GetMilitaryFormationsFleet]"
 
@@ -1407,8 +1603,14 @@ right_click_menu = {
 								visible = "[Not(TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf ))]"
 
 								blockoverride "tooltip" {
-									### Todo - Make sure the tooltip is stating all reasons why the button would be unclickable if unclickable
-						        	tooltip =  "TRANSFER_FORMATION_SELECT_FLEET"
+						        	tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "TRANSFER_FORMATION_SELECT_FLEET"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
 								}
 
 								blockoverride "onclick" {
@@ -1419,6 +1621,129 @@ right_click_menu = {
 
 							military_formation_right_click_item_selected = {
 								visible = "[TransferFormationPopup.IsFormationSelected( MilitaryFormation.AccessSelf )]"
+
+								blockoverride "tooltip" {
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {
+											blockoverride "text_before" {
+		                        				text =  "CURRENTLY_SELECTED"
+		                        				margin_bottom = 15
+		                        			}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "filter_unit_states_right_click_menu"
+
+	blockoverride "title_text" {
+		text = "SELECT_STATE_TO_FILTER_ON"
+	}
+
+	blockoverride "items" {
+
+		flowcontainer = {
+			direction = vertical
+
+			dynamicgridbox = {
+				#datamodel = "[MilitaryFormationUnitEntry.GetStates]"
+				datamodel = "[AccessPlayer.AccessStates]"
+
+
+				item = {
+					widget = {
+						size = { 460 44 }
+
+						right_click_menu_item = {
+							#visible = "[Not(MilitaryFormationUnitEntry.IsFilteredOnState(State.AccessSelf))]" # todo PRCAL-30099: Create a way to check if the units are already filtered on a specific State.
+
+							blockoverride "properties" {
+								#onclick = "[MilitaryFormationUnitEntry.FilterCombatUnitsOnState(State.AccessSelf)]" # todo PRCAL-30099: Make a filter for a specific State on the Unit Type Units.
+								onclick = "[GetVariableSystem.Set( Concatenate(MilitaryFormationUnitEntry.GetIDString, '_unit_type_filter'), 'specific_state' )]"
+								tooltip = "FILTER_UNITS_IN_STATE_TOOLTIP"
+							}
+							
+							blockoverride "text" {
+								text = "[State.GetName]"
+							}
+
+							blockoverride "right_text" {
+								textbox = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "UNIT_TYPE_UNITS_IN_STATE"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
+							}
+
+							blockoverride "icon" {
+								tiny_flag_no_interact = {
+									datacontext = "[State.GetCountry]"
+								}
+							}
+
+							blockoverride "margin" {
+								margin_left = 55
+							}
+						}
+
+						right_click_menu_item = {
+							#visible = "[MilitaryFormationUnitEntry.IsFilteredOnState(State.AccessSelf)]" # todo PRCAL-30099: Create a way to check if the units are already filtered on a specific State.
+							visible = no
+
+							background = {
+								using = paper_bg
+							}
+
+							blockoverride "button" {}
+
+							blockoverride "properties" {
+								#onclick = "[MilitaryFormationUnitEntry.FilterCombatUnitsOnState(State.AccessSelf)]" # todo PRCAL-30099: Make a filter for a specific State on the Unit Type Units.
+								onclick = "[GetVariableSystem.Set( Concatenate(MilitaryFormationUnitEntry.GetIDString, '_unit_type_filter'), 'specific_state' )]"
+								tooltip = "FILTER_UNITS_IN_STATE_TOOLTIP"
+							}
+							
+							blockoverride "text" {
+								text = "[State.GetName]"
+							}
+
+							blockoverride "right_text" {
+								textbox = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "UNIT_TYPE_UNITS_IN_STATE"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
+							}
+
+							blockoverride "icon" {
+								small_flag_no_interact = {
+									datacontext = "[State.GetCountry]"
+								}
+							}
+
+							blockoverride "margin" {
+								margin_left = 55
+							}
+
+							icon = {
+								using = highlighted_square_selection
 							}
 						}
 					}
@@ -1545,9 +1870,10 @@ right_click_menu = {
 
 right_click_menu = {
 	name = "add_fleet_naval_invasion_right_click_menu"
+	parentanchor = hcenter|bottom
 
 	blockoverride "title_text" {
-		text = "SELECT_FLEET_TO_SEND" # todo PRCAL-29752
+		text = "SELECT_FLEET_TO_SEND"
 	}
 
 	blockoverride "items" {
@@ -1561,15 +1887,14 @@ right_click_menu = {
 					size = { 320 80 }
 
 					military_formation_right_click_item = {
-						#visible = "[Not(NavalInvasion.IsMilitaryFormationPresentOrOnTheWayHere(MilitaryFormation.Self))]" # todo PRCAL-29752
+						visible = "[And(Not(MilitaryFormation.IsTargetSeaNode(NavalInvasion.GetSeaNode.Self)), Not(MilitaryFormation.IsCurrentSeaNode(NavalInvasion.GetSeaNode.Self)))]"
 
                         blockoverride "tooltip" {
                         	tooltipwidget = {
                         		FancyTooltip_MilitaryFormation = {
                         			blockoverride "text_before" {
-                        				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
-                        				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752 - this adds text at the top of the fancy tooltip for Formations
+                        				visible = "[Not(StringIsEmpty(GetDesc(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))))]"
+                        				text =  "[GetDesc(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))]"
                         				margin_bottom = 15
                         			}
                         		}
@@ -1577,24 +1902,23 @@ right_click_menu = {
 						}
 
 						blockoverride "onclick" {
-							#enabled = "[NavalInvasion.CanMilitaryFormationBeSelected(MilitaryFormation.Self)]" # todo PRCAL-29752
-							#onclick = "[NavalInvasion.OnSelectedFleet(MilitaryFormation.AccessSelf)]" # todo PRCAL-29752
+							enabled = "[IsValid(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))]"
+							onclick = "[Execute(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))]"
                         	onclick = "[RightClickMenuManager.Close]"
 						}
 					}
 
 					military_formation_right_click_item_selected = {
-						#visible = "[NavalInvasion.IsMilitaryFormationPresentOrOnTheWayHere(MilitaryFormation.Self)]" # todo PRCAL-29752
+						visible = "[Or(MilitaryFormation.IsTargetSeaNode(NavalInvasion.GetSeaNode.Self), MilitaryFormation.IsCurrentSeaNode(NavalInvasion.GetSeaNode.Self))]"
 
 						blockoverride "tooltip" {
 							tooltipwidget = {
                         		FancyTooltip_MilitaryFormation = {
                         			blockoverride "text_before" {
-                        				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
-                        				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752 - this adds text at the top of the fancy tooltip for Formations
-                        				margin_bottom = 15
-                        			}
+                                        visible = "[Not(StringIsEmpty(GetDesc(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))))]"
+                                        text =  "[GetDesc(NavalInvasion.DeployFleetToDefend(MilitaryFormation.Self))]"
+                                        margin_bottom = 15
+                                    }
                         		}
                         	}
 						}
@@ -1607,9 +1931,10 @@ right_click_menu = {
 
 right_click_menu = {
 	name = "add_army_naval_invasion_right_click_menu"
+	parentanchor = hcenter|bottom
 
 	blockoverride "title_text" {
-		text = "SELECT_ARMY_TO_SEND" # todo PRCAL-29752
+		text = "SELECT_ARMY_TO_SEND"
 	}
 
 	blockoverride "items" {
@@ -1623,15 +1948,14 @@ right_click_menu = {
 					size = { 320 80 }
 
 					military_formation_right_click_item = {
-						#visible = "[Not(NavalInvasion.IsMilitaryFormationPresent(MilitaryFormation.Self))]" # todo PRCAL-29752
+                        visible = "[Or(Not(MilitaryFormation.IsMobilized),And(Not(MilitaryFormation.IsTargetHQ(NavalInvasion.GetDefenderHQ.Self)), Not(MilitaryFormation.IsCurrentHQ(NavalInvasion.GetDefenderHQ.Self))))]"
 
                         blockoverride "tooltip" {
                         	tooltipwidget = {
                         		FancyTooltip_MilitaryFormation = {
                         			blockoverride "text_before" {
-                        				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
-                        				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752
+                        				visible = "[Not(StringIsEmpty(GetDesc(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))))]"
+                                        text =  "[GetDesc(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))]"
                         				margin_bottom = 15
                         			}
                         		}
@@ -1639,22 +1963,21 @@ right_click_menu = {
 						}
 
 						blockoverride "onclick" {
-							#enabled = "[NavalInvasion.CanMilitaryFormationBeSelected(MilitaryFormation.Self)]" # todo PRCAL-29752
-							#onclick = "[NavalInvasion.OnSelectedFleet(MilitaryFormation.AccessSelf)]" # todo PRCAL-29752
-                        	onclick = "[RightClickMenuManager.Close]"
+							enabled = "[IsValid(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))]"
+                            onclick = "[Execute(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))]"
+                            onclick = "[RightClickMenuManager.Close]"
 						}
 					}
 
 					military_formation_right_click_item_selected = {
-						#visible = "[NavalInvasion.IsMilitaryFormationPresent(MilitaryFormation.Self)]" # todo PRCAL-29752
+                        visible = "[And(Or(MilitaryFormation.IsTargetHQ(NavalInvasion.GetDefenderHQ.Self), MilitaryFormation.IsCurrentHQ(NavalInvasion.GetDefenderHQ.Self)), MilitaryFormation.IsMobilized)]"
 
 						blockoverride "tooltip" {
 							tooltipwidget = {
                         		FancyTooltip_MilitaryFormation = {
                         			blockoverride "text_before" {
-                        				#visible = "[Not(StringIsEmpty(NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)))]" # todo PRCAL-29752
-                        				visible = no
-                        				#text =  "[NavalInvasion.GetCanMilitaryFormationBeSelectedTooltip(MilitaryFormation.Self)]" # todo PRCAL-29752
+                        				visible = "[Not(StringIsEmpty(GetDesc(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))))]"
+                                        text =  "[GetDesc(NavalInvasion.DeployArmyToDefend(MilitaryFormation.Self))]"
                         				margin_bottom = 15
                         			}
                         		}
@@ -1677,6 +2000,7 @@ right_click_menu = {
 	blockoverride "items" {
 		flowcontainer = {
 			direction = vertical
+			spacing = 10
 
 			### ORDERS
 			dynamicgridbox = {
@@ -1690,8 +2014,8 @@ right_click_menu = {
 							blockoverride "properties" {
 								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
 								clicksound = "[CommanderOrderType.GetClickSound]"
-						        enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
-						        onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+						        enabled = "[IsValid(Character.SelectOrder( CommanderOrderType.Self ))]"
+						        onclick = "[Execute(Character.SelectOrder( CommanderOrderType.Self ))]"
 						        onclick = "[RightClickMenuManager.Close]"
 							}
 
@@ -1721,8 +2045,6 @@ right_click_menu = {
 								}
 							}
 						}
-
-						
 
 						widget = {
 							visible = "[And(Not(Character.GetNextOrderType.IsValid), Character.HasOrder( CommanderOrderType.Self ))]"
@@ -1815,6 +2137,134 @@ right_click_menu = {
 		                    icon = {
 		                    	using = highlighted_square_selection
 		                    }
+						}
+					}
+				}
+			}
+
+			flowcontainer = {
+				parentanchor = hcenter
+				direction = vertical
+
+				section_header_button = {
+					using = default_fade_in_out
+					parentanchor = hcenter
+					tooltip = "UNAVAILABLE_ORDERS_TOOLTIP"
+
+					block "section_header_size" {
+						size = { 360 44 }
+					}
+
+					blockoverride "arrow_position" {
+						position = { 2 0 }
+						parentanchor = left|vcenter
+					}
+
+					blockoverride "left_textbox_margin_left" {
+						margin_left = 30
+					}
+
+					blockoverride "left_text" {
+						text = "UNAVAILABLE_ORDERS"
+					}
+
+					blockoverride "right_text" {
+						flowcontainer = {
+							margin = { 5 0 }
+							spacing = 5
+
+							icon = {
+								visible = "[Character.HasUnavailableAdvanceOrders]"
+								size = { 35 35 }
+								texture = "gfx/interface/backgrounds/round_button_bg.dds"
+								parentanchor = vcenter
+
+								icon = {
+									size = { 75% 75% }
+									texture = "gfx/interface/icons/commander_order_icons/advance.dds"
+									parentanchor = center
+								}
+							}
+
+							icon = {
+								visible = "[Character.HasUnavailableDefendOrders]"
+								size = { 35 35 }
+								texture = "gfx/interface/backgrounds/round_button_bg.dds"
+								parentanchor = vcenter
+
+								icon = {
+									size = { 75% 75% }
+									texture = "gfx/interface/icons/commander_order_icons/defend.dds"
+									parentanchor = center
+								}
+							}
+
+							textbox = {
+								parentanchor = vcenter
+								autoresize = yes
+								align = nobaseline
+								default_format = "#v"
+								raw_text = "[GetDataModelSize(Character.AccessUnavailableOrders)]"
+							}
+						}
+					}
+					
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle('show_unavailable_orders')]"
+					}
+
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists('show_unavailable_orders'))]"
+					}
+
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists('show_unavailable_orders')]"
+					}
+				}
+
+				### ORDERS
+				dynamicgridbox = {
+					visible = "[GetVariableSystem.Exists('show_unavailable_orders')]"
+					datamodel = "[Character.AccessUnavailableOrders]"
+
+					item = {
+						flowcontainer = {
+							right_click_menu_item = {
+								
+								blockoverride "properties" {
+									tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
+									clicksound = "[CommanderOrderType.GetClickSound]"
+							        enabled = no
+							        onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+							        onclick = "[RightClickMenuManager.Close]"
+								}
+
+								blockoverride "texture" {
+									texture = "[CommanderOrderType.GetTexture]"
+								}
+
+								blockoverride "text" {
+									text = "[CommanderOrderType.GetName]"
+								}
+
+								blockoverride "size" {
+									size = { 360 44 }
+								}
+
+								blockoverride "right_text" {
+									textbox = {
+										visible = "[Character.HasOrder( CommanderOrderType.Self )]"
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										text = "CURRENT"
+										align = right|nobaseline
+										fontsize_min = 12
+										elide = right
+										margin = { 5 0 }
+										margin_right = 10
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1974,8 +2424,8 @@ right_click_menu = {
 							blockoverride "properties" {
 								tooltip = "COMMANDER_PANEL_ORDER_TOOLTIP"
 								clicksound = "[CommanderOrderType.GetClickSound]"
-						        enabled = "[Character.CanSelectOrder( CommanderOrderType.Self )]"
-						        onclick = "[Character.SelectOrder( CommanderOrderType.Self )]"
+						        enabled = "[IsValid(Character.SelectOrder( CommanderOrderType.Self ))]"
+						        onclick = "[Execute(Character.SelectOrder( CommanderOrderType.Self ))]"
 						        onclick = "[RightClickMenuManager.Close]"
 							}
 
@@ -2168,7 +2618,7 @@ right_click_menu = {
 
 							blockoverride "properties" {
 								tooltip = "IMPOSE_LAW_TOOLTIP"
-								enabled = "[Law.IsImpose]"
+								enabled = "[IsValid( Law.StartImposing )]"
 								onclick = "[Execute( Law.StartImposing )]"
 							}
 
@@ -2181,7 +2631,20 @@ right_click_menu = {
 							}
 
 							blockoverride "size" {
-								size = { 260 44 }
+								size = { 360 44 }
+							}
+							blockoverride "right_text" {
+								textbox = {
+									visible = "[Law.IsBeingEnacted]"
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "ENACTING"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
 							}
 						}
 						
@@ -2213,7 +2676,20 @@ right_click_menu = {
 							}
 
 							blockoverride "size" {
-								size = { 260 44 }
+								size = { 360 44 }
+							}
+							blockoverride "right_text"
+							{
+									textbox = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+									text = "CURRENT"
+									align = right|nobaseline
+									fontsize_min = 12
+									elide = right
+									margin = { 5 0 }
+									margin_right = 10
+								}
 							}
 						}
 					}
@@ -2369,6 +2845,7 @@ right_click_menu = {
 					}				
 
 					diplomatic_action_acceptance_icon = {
+						visible = "[Not(DiplomaticAction.GetType.CanSelectAnyState)]"
 						position = { -10 0 }
 					}
 
@@ -2719,6 +3196,7 @@ right_click_menu = {
 					}
 					
 					diplomatic_action_acceptance_icon = {
+						visible = "[Not(DiplomaticAction.GetType.CanSelectAnyState)]"						
 						position = { -10 0 }
 					}
 
