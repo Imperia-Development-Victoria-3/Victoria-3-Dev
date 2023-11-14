@@ -231,12 +231,21 @@ je_reform_the_banner_system_local = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	complete = {
 		AND = {
-			army_size >= 150
+			army_size >= 50
 			has_technology_researched = napoleonic_warfare
 			OR = {
 				has_law = law_type:law_national_guard
 				has_law = law_type:law_localized_garrisons
 				has_law = law_type:law_faith_orders
+			}
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					has_unit_type = unit_type:combat_unit_type_line_infantry
+				}
+				percent >= 0.75
 			}
 		}
 		scope:journal_entry = {
@@ -288,9 +297,17 @@ je_reform_the_banner_system_modern = {
 					OR = {
 						building_has_goods_shortage = yes
 						has_active_production_method = pm_no_organization
-						# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
 					}
 				}
+			}
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					has_unit_type = unit_type:combat_unit_type_skirmish_infantry
+				}
+				percent >= 0.75
 			}
 		}
 	}
