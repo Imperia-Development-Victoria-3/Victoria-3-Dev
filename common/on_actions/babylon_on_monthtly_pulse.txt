@@ -235,9 +235,9 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 				# 35 : ---
 				# Dead zones are between +/-45 and +/-25, they will stay on their chosen stance, prevents flip-flopping
 				if = {
-					# If the voting weight is between above 45 (and you're not supporting)
+					# If the voting weight is at or above 45 (and you're not supporting)
 					limit = {
-						babylon_discord_ai_voting_weight > 45
+						babylon_discord_ai_voting_weight >= 45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_1
@@ -252,9 +252,9 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 					}
 				}
 				else_if = {
-					# Else if the voting weight is below -45 (and you're not opposing)
+					# Else if the voting weight is at or below -45 (and you're not opposing)
 					limit = {
-						babylon_discord_ai_voting_weight < -45
+						babylon_discord_ai_voting_weight <= -45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_3
@@ -277,18 +277,18 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 									name = current_congress_members_on_stance_1
 									target = this
 								}
-								babylon_discord_ai_voting_weight < 25
+								babylon_discord_ai_voting_weight <= 25
 							}
 							AND = {
-								babylon_discord_ai_voting_weight < 25
-								babylon_discord_ai_voting_weight > -25
+								babylon_discord_ai_voting_weight <= 25
+								babylon_discord_ai_voting_weight >= -25
 							}
 							AND = {
 								is_target_in_global_variable_list = {
 									name = current_congress_members_on_stance_3
 									target = this
 								}
-								babylon_discord_ai_voting_weight > -25
+								babylon_discord_ai_voting_weight >= -25
 							}
 						}
 						NOT = {
