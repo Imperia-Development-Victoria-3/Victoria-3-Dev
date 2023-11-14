@@ -325,13 +325,13 @@ babylon_vienna_congress_end_event_not_enough = {
 		trigger = {
 			OR = {
 				AND = {
-					conference_supporters_percentage_value < 0.6
-					conference_supporters_percentage_value > 0.4
+					conference_sanctions_severity < 0.6
+					conference_sanctions_severity > 0.4
 					global_var:babylon_vienna_congress_session_type != 4
 				}
 				AND = {
 					global_var:babylon_vienna_congress_session_type = 4
-					has_enough_support_for_recognition = yes
+					conference_sanctions_severity > 0
 				}
 			}
 		}
@@ -339,30 +339,21 @@ babylon_vienna_congress_end_event_not_enough = {
 	}
 	text = {
 		trigger = {
-			OR = {
-				AND = {
-					conference_supporters_percentage_value < 0.2
-					global_var:babylon_vienna_congress_session_type != 4
-				}
-				AND = {
-					global_var:babylon_vienna_congress_session_type = 4
-					conference_supporters_percentage_value < 0.75
-				}
-			}
+			conference_sanctions_severity <= 0
 		}
 		localization_key = BABYLON_VIENNA_CONGRESS_NOT_ENOUGH
 	}
 	text = {
 		trigger = {
-			conference_supporters_percentage_value < 0.8
-			conference_supporters_percentage_value > 0.6
+			conference_sanctions_severity < 0.8
+			conference_sanctions_severity > 0.6
 		}
 		localization_key = BABYLON_VIENNA_CONGRESS_A_CLEAR_MANDATE
 	}
 	text = {
 		trigger = {
-			conference_supporters_percentage_value < 0.4
-			conference_supporters_percentage_value > 0.2
+			conference_sanctions_severity < 0.4
+			conference_sanctions_severity > 0.2
 		}
 		localization_key = BABYLON_VIENNA_CONGRESS_JUST_ENOUGH
 	}
@@ -373,16 +364,7 @@ babylon_vienna_congress_end_event_support_oppose = {
 	random_valid = no
 	text = {
 		trigger = {
-			OR = {
-				AND = {
-					conference_sanctions_severity > 0
-					global_var:babylon_vienna_congress_session_type != 4
-				}
-				AND = {
-					has_enough_support_for_recognition = yes
-					global_var:babylon_vienna_congress_session_type = 4
-				}
-			}
+			conference_sanctions_severity > 0
 		}
 		localization_key = BABYLON_VIENNA_CONGRESS_SUPPORTERS
 	}

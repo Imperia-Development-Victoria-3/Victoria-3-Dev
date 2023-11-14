@@ -1,4 +1,46 @@
-﻿babylon_ai_foreign_law_state_wargoal_weight = {
+﻿babylon_vienna_congress_denounce_severity_requirement = 0.2
+babylon_vienna_congress_state_claim_severity_requirement = 0.5
+babylon_vienna_congress_embargo_severity_requirement = 0.2
+babylon_vienna_congress_recognition_severity_requirement = 0.75
+babylon_vienna_congress_severity_max = 0.8
+babylon_vienna_congress_current_type_severity_requirement = {
+	if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 1
+		}
+		value = babylon_vienna_congress_denounce_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 2
+		}
+		value = babylon_vienna_congress_state_claim_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 3
+		}
+		value = babylon_vienna_congress_embargo_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:babylon_vienna_congress_session_type = 4
+		}
+		value = babylon_vienna_congress_recognition_severity_requirement
+	}
+}
+
+babylon_vienna_congress_current_type_severity_requirement_negative = {
+	value = babylon_vienna_congress_current_type_severity_requirement
+	multiply = -1
+}
+
+babylon_vienna_congress_severity_max_negative = {
+	value = babylon_vienna_congress_severity_max
+	multiply = -1
+}
+
+babylon_ai_foreign_law_state_wargoal_weight = {
 	value = 1
 	if = {
 		limit = {
@@ -865,27 +907,27 @@ conference_power_balance_percentage_value = {
 conference_sanctions_severity = {
 	if = {
 		limit = {
-			conference_power_balance_percentage_value < 0.2
+			conference_power_balance_percentage_value < babylon_vienna_congress_current_type_severity_requirement
 			conference_power_balance_percentage_value > 0
 		}
 		value = 0
 	}
 	else_if = {
 		limit = {
-			conference_power_balance_percentage_value > -0.2
+			conference_power_balance_percentage_value > babylon_vienna_congress_current_type_severity_requirement_negative
 			conference_power_balance_percentage_value < 0
 		}
 		value = 0
 	}
 	else_if = {
 		limit = {
-			conference_power_balance_percentage_value > 0.8
+			conference_power_balance_percentage_value > babylon_vienna_congress_severity_max
 		}
 		value = 1
 	}
 	else_if = {
 		limit = {
-			conference_power_balance_percentage_value < -0.8
+			conference_power_balance_percentage_value < babylon_vienna_congress_severity_max_negative
 		}
 		value = -1
 	}
@@ -1171,7 +1213,8 @@ babylon_discord_ai_voting_weight = {
 			# Subtract their relations, so if the AI has negative relations with the target they will support the motion
 			# Only if the motion is not recognition (a positive congress)
 			subtract = relations:root
-		} else = {
+		}
+		else = {
 			add = relations:root
 		}
 	}
