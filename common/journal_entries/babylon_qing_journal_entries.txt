@@ -1,5 +1,40 @@
 ##Qing Entries
-#je_establish_national_language
+je_chinese_national_identity = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
+
+	complete = {	
+		any_country = {
+			filter = {
+				OR = {
+					country_has_primary_culture = cu:han
+					country_has_primary_culture = cu:manchu				
+				}
+			}
+				has_technology_researched = nationalism	
+				percent >= 0.75
+		}
+
+		NOT = {
+			has_law = law_type:law_no_schools
+		}
+		institution_investment_level = {
+			institution = institution_schools
+			value >= 2
+		}
+	}
+	on_complete = {
+		custom_tooltip = {
+			text = linguistics_conference_tt
+			set_variable = je_chinese_national_identity_completed
+			# change_variable = {
+			# 	name = china_warlord_explosion
+			# 	add = -10
+			# }
+		}
+	}
+	weight = 1000
+}
 je_end_han_discrimination = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 	group = je_group_historical_content
@@ -499,7 +534,6 @@ je_promote_western_learning = {
 			months = 240
 			is_decaying = yes
 		}
-		remove_modifier = modifier_chinese_diglossia
 		custom_tooltip = {
 			text = fragile_unity_major_remove_tt
 			set_variable = je_promote_western_learning_completed
