@@ -286,14 +286,18 @@ sick_man.3 = {
 		name = sick_man.3.a
 		if = {
 			limit = {
+				is_subject = no
 				any_subject_or_below = {
-					limit = {
-						is_direct_subject_of = c:TUR
-						NOT = {
-							is_country_type = unrecognized
+					NOT = {
+						any_overlord_or_above = {
+							NOT = {
+								ROOT = this
+							}
 						}
 					}
-					make_independent = yes
+					NOT = {
+						is_country_type = unrecognized
+					}
 				}
 			}
 			every_subject_or_below = {
@@ -316,6 +320,10 @@ sick_man.3 = {
 				}
 				make_independent = yes
 			}
+		}
+		set_country_type = unrecognized
+		ruler = {
+			kill_character = yes
 		}
 		add_modifier = {
 			name = dead_man_of_europe
