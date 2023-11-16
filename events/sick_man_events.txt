@@ -178,7 +178,6 @@ sick_man.2 = {
 		default_option = yes
 		add_loyalists = {
 			value = 0.05
-			country = c:TUR
 		}
 		add_modifier = {
 			name = sick_man_liberal_constitution_new
@@ -287,14 +286,18 @@ sick_man.3 = {
 		name = sick_man.3.a
 		if = {
 			limit = {
+				is_subject = no
 				any_subject_or_below = {
-					limit = {
-						is_direct_subject_of = c:TUR
-						NOT = {
-							is_country_type = unrecognized
+					NOT = {
+						any_overlord_or_above = {
+							NOT = {
+								ROOT = this
+							}
 						}
 					}
-					make_independent = yes
+					NOT = {
+						is_country_type = unrecognized
+					}
 				}
 			}
 			every_subject_or_below = {
@@ -317,6 +320,10 @@ sick_man.3 = {
 				}
 				make_independent = yes
 			}
+		}
+		set_country_type = unrecognized
+		ruler = {
+			kill_character = yes
 		}
 		add_modifier = {
 			name = dead_man_of_europe
@@ -371,6 +378,7 @@ sick_man.4 = {
 		}
 	}
 	option = {
+		default_option = yes
 		name = sick_man.4.b
 		set_variable = absolute_tanzimat
 		add_journal_entry = {
