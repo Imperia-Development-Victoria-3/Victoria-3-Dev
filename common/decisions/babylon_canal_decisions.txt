@@ -1,0 +1,81 @@
+﻿kiel_survey_decision = {
+	is_shown = {
+		has_interest_marker_in_region = region_north_germany
+		NOT = { 
+			has_variable = survey_kiel_taken 
+			has_global_variable = kiel_canal_complete
+		}
+		OR = {
+			country_rank = rank_value:great_power
+			s:STATE_SCHLESWIG_HOLSTEIN  = {
+				any_scope_state = {
+					owner = ROOT
+				}
+			}
+		}
+		s:STATE_SCHLESWIG_HOLSTEIN = {
+			any_scope_state = {
+				NOT = {
+					any_scope_building = { 
+						is_building_type = building_kiel_canal 
+					}
+				}
+			}
+		}
+	}
+
+	possible = {
+		has_technology_researched = steel_frame_buildings
+		produced_bureaucracy > 500
+	}
+	
+	when_taken = {
+		set_variable = {
+			name = survey_kiel_taken
+			value = 0
+		}
+		add_modifier = {
+			name = modifier_surveying_kiel
+		}
+		add_journal_entry = {
+			type = je_kiel_survey
+		}
+	}
+
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = { produced_bureaucracy > 2500 }
+			add = 5
+		}
+		modifier = {
+			trigger = {
+				has_strategy = ai_strategy_armed_isolationism
+			}
+			add = -1000
+		}		
+		modifier = {
+			OR = {
+				is_diplomatic_play_committed_participant = yes
+				is_at_war = yes
+			}
+			add = -1000
+		}		
+	}
+}
+
+stop_kiel_survey_decision = {
+	is_shown = {
+		has_modifier = modifier_surveying_kiel
+	}
+	possible = {
+		has_modifier = modifier_surveying_kiel
+	}
+	when_taken = {
+		remove_variable = survey_kiel_taken
+		remove_modifier = modifier_surveying_kiel
+	}
+	ai_chance = {
+		base = 0
+	}
+}

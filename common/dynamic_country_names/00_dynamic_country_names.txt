@@ -103,6 +103,7 @@ DEFAULT = {
 					is_strongest_ig_in_government = yes
 					leader = {
 						OR = {
+							has_ideology = ideology:ideology_integralist
 							has_ideology = ideology:ideology_fascist
 							has_ideology = ideology:ideology_ethno_nationalist
 						}
@@ -431,6 +432,9 @@ DEFAULT = {
 			}
 		}
 	}
+
+
+
 	dynamic_country_name = {
 		name = discord_implosion_country_corporate
 		adjective = discord_implosion_country_corporate
@@ -473,7 +477,7 @@ DEFAULT = {
 			}
 		}
 	}
-	dynamic_country_name_basic = {
+	dynamic_country_name = {
 		name = discord_implosion_country_basic
 		adjective = discord_implosion_country_basic
 		is_revolutionary = no
@@ -481,6 +485,96 @@ DEFAULT = {
 		trigger = {
 			scope:actor = {
 				has_variable = is_discord_implosion_country
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_congo
+		adjective = colonial_admin_congo_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = congo_subject_var
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_zanj
+		adjective = colonial_admin_zanj_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = zanj_subject_var
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_ethiopia
+		adjective = colonial_admin_ethiopia_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = ethiopia_subject_var
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_southern_africa
+		adjective = colonial_admin_southern_africa_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = southern_africa_subject_var
+			}
+			NOT = {
+				scope:actor = {
+					c:SAF ?= this
+					c:GBR ?= this.overlord
+				}
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_niger
+		adjective = colonial_admin_niger_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = niger_subject_var
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = colonial_admin_senegal
+		adjective = colonial_admin_senegal_adj
+		use_overlord_prefix = yes
+		
+		priority = 100
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_variable = senegal_subject_var
 			}
 		}
 	}
@@ -763,23 +857,6 @@ BNJ = { # Banjar
 				owns_entire_state_region = STATE_WEST_BORNEO
 				owns_entire_state_region = STATE_EAST_BORNEO
 				owns_entire_state_region = STATE_NORTH_BORNEO
-			}
-		}
-	}
-}
-
-BOL = {
-	dynamic_country_name = {
-		name = dyn_c_peru_bolivia
-		adjective = dyn_c_peru_bolivia_adj
-		
-		is_main_tag_only = yes
-		priority = 1
-		
-		trigger = {
-			scope:actor = {
-				owns_entire_state_region = STATE_LA_PAZ
-				owns_entire_state_region = STATE_LIMA
 			}
 		}
 	}
@@ -1359,6 +1436,21 @@ KOR = { # Korea
 			scope:actor = { has_law = law_type:law_monarchy }
 		}
 	}
+	dynamic_country_name = { # Korean Empire
+		name = dyn_c_empire_of_korea
+		adjective = dyn_c_empire_of_korea_adj
+		
+		is_main_tag_only = yes
+		priority = 25
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = { 
+				has_variable = KOR_korean_empire_declared
+				has_law = law_type:law_monarchy 
+			}
+		}
+	}
 }
 
 LAN = { # Lanfang
@@ -1682,23 +1774,6 @@ PAP = { # Papal State, but the base name is technically Rome
 		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
-		}
-	}
-}
-
-PEU = {
-	dynamic_country_name = {
-		name = dyn_c_peru_bolivia
-		adjective = dyn_c_peru_bolivia_adj
-		
-		is_main_tag_only = yes
-		priority = 1
-		
-		trigger = {
-			scope:actor = {
-				owns_entire_state_region = STATE_LA_PAZ
-				owns_entire_state_region = STATE_LIMA
-			}
 		}
 	}
 }
@@ -2687,6 +2762,109 @@ HRE = {
 		}
 	}
 }
+CTR = { # Santa Catarina
+	dynamic_country_name = {
+		name = dyn_c_catharinense_republic
+		adjective = dyn_c_catharinese_republic_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+}
+
+PNI = { # Piratini
+	dynamic_country_name = {
+		name = dyn_c_riograndense_republic
+		adjective = dyn_c_riograndense_republic_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+}
+
+FND = { # Federation
+	dynamic_country_name = {
+		name = dyn_c_american_federation
+		adjective = dyn_c_american_federation_adj
+		
+		is_main_tag_only = yes
+		priority = 5
+		
+		trigger = {
+			scope:actor = {
+				OR = {
+					any_scope_state = {
+						NOT = { has_state_trait = state_trait_andes }
+						percent > 0.4
+					}
+					any_scope_state = {
+						is_incorporated = yes
+						OR = {
+							state_is_in_north_america = yes
+							state_is_in_central_america = yes
+						}
+						count > 1
+					}
+				}
+			}
+		}
+	}
+
+	dynamic_country_name = {
+		name = dyn_c_united_provinces_of_south_america
+		adjective = dyn_c_united_provinces_of_south_america_adj
+		
+		is_main_tag_only = yes
+		priority = 15
+		
+		trigger = {
+			scope:actor = {
+				OR = {
+					was_formed_from = PLT
+					was_formed_from = ARG
+					was_formed_from = URU
+					was_formed_from = PRG
+				}
+			}
+		}
+	}
+	
+	dynamic_country_name = {
+		name = dyn_c_united_provinces_of_america
+		adjective = dyn_c_united_provinces_of_america_adj
+		
+		is_main_tag_only = yes
+		priority = 25
+		
+		trigger = {
+			scope:actor = {
+				OR = {
+					was_formed_from = PLT
+					was_formed_from = ARG
+					was_formed_from = URU
+					was_formed_from = PRG
+				}
+				any_scope_state = {
+					is_incorporated = yes
+					OR = {
+						state_is_in_north_america = yes
+						state_is_in_central_america = yes
+					}
+					count > 1
+				}
+			}
+		}
+	}
+}
+
 WAL = { # Wallachia
 	dynamic_country_name = {
 		name = dyn_c_united_principalities
@@ -2732,6 +2910,22 @@ PLC = {
 		
 		trigger = {
 			scope:actor = { has_variable = greater_commonwealth_var }
+		}
+	}
+}
+
+TIS = { # Turtle Island
+	dynamic_country_name = {
+		name = dyn_c_great_turtle
+		adjective = dyn_c_great_turtle_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			scope:actor = {
+				was_formed_from = IRO
+			}
 		}
 	}
 }
