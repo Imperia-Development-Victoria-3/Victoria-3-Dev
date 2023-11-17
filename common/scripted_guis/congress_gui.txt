@@ -1,0 +1,420 @@
+﻿set_proposal_type = {
+	scope = country
+	saved_scopes = {
+		set_proposal_type
+	}
+	effect = {
+		set_variable = {
+			name = congress_proposal_type
+			value = scope:set_proposal_type
+		}
+	}
+}
+
+has_proposal_type = {
+	scope = country
+	saved_scopes = {
+		proposal_type
+	}
+	is_shown = {
+		has_variable = congress_proposal_type
+		var:congress_proposal_type = scope:proposal_type
+	}
+}
+
+set_congress_stance = {
+	scope = country
+	saved_scopes = {
+		congress_stance
+	}
+	effect = {
+		if = {
+			limit = {
+				scope:congress_stance = 1
+			}
+			set_congress_stance_effect = {
+				COUNTRY = root
+				STANCE = 1
+			}
+		}
+		if = {
+			limit = {
+				scope:congress_stance = 2
+			}
+			set_congress_stance_effect = {
+				COUNTRY = root
+				STANCE = 2
+			}
+		}
+		if = {
+			limit = {
+				scope:congress_stance = 3
+			}
+			set_congress_stance_effect = {
+				COUNTRY = root
+				STANCE = 3
+			}
+		}
+	}
+}
+
+has_congress_stance = {
+	scope = country
+	saved_scopes = {
+		congress_stance
+	}
+	is_shown = {
+		trigger_if = {
+			limit = {
+				scope:congress_stance = 1
+			}
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_1
+				target = root
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:congress_stance = 2
+			}
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_2
+				target = root
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:congress_stance = 3
+			}
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_3
+				target = root
+			}
+		}
+	}
+}
+
+is_congress_initiator = {
+	is_shown = {
+		THIS = global_var:babylon_vienna_congress_session_initiator
+	}
+}
+
+end_congress = {
+	effect = {
+		end_congress_scripted_effect = yes
+	}
+}
+
+end_congress_tooltip_effect = {
+	scope = country
+	effect = {
+		if = {
+			# Denounce
+			limit = {
+				global_var:babylon_vienna_congress_session_type = 1
+			}
+			global_var:babylon_vienna_congress_session_target = {
+				save_scope_as = target_country
+			}
+			denounce_target = yes
+			global_var:babylon_vienna_congress_session_target = {
+				denouncement_effect = yes
+			}
+		}
+		if = {
+			# State Claim
+			limit = {
+				global_var:babylon_vienna_congress_session_type = 2
+			}
+			global_var:babylon_vienna_congress_session_initiator = {
+				state_claim_effect_for_claimer = yes
+			}
+		}
+		if = {
+			# Embargo
+			limit = {
+				global_var:babylon_vienna_congress_session_type = 3
+			}
+			embargo_target = {
+				TARGET = global_var:babylon_vienna_congress_session_target
+			}
+			global_var:babylon_vienna_congress_session_target = {
+				embargo_effect = yes
+			}
+		}
+		if = {
+			# Recognition
+			limit = {
+				global_var:babylon_vienna_congress_session_type = 4
+			}
+			global_var:babylon_vienna_congress_session_target = {
+				recognise_effect = yes
+			}
+		}
+	}
+}
+
+set_strategic_region_target = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	effect = {
+		clear_variable_list ?= states_in_selected_strategic_region
+		clear_variable_list ?= countries_in_selected_strategic_region
+		if = {
+			# Country scope
+			limit = {
+				OR = {
+					var:congress_proposal_type = 1
+					var:congress_proposal_type = 3
+				}
+			}
+			scope:strategic_region = {
+				every_scope_state = {
+					limit = {
+						NOT = {
+							owner = root
+						}
+						NOT = {
+							owner = {
+								is_country_type = decentralized
+							}
+						}
+					}
+					owner = {
+						root = {
+							add_to_variable_list = {
+								name = countries_in_selected_strategic_region
+								target = prev
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			# State scope
+			limit = {
+				var:congress_proposal_type = 2
+			}
+			scope:strategic_region = {
+				every_scope_state = {
+					limit = {
+						NOT = {
+							owner = root
+						}
+						NOT = {
+							has_claim_by = root
+						}
+					}
+					root = {
+						add_to_variable_list = {
+							name = states_in_selected_strategic_region
+							target = prev
+						}
+					}
+				}
+			}
+		}
+		if = {
+			# Possible recognisable countries
+			limit = {
+				var:congress_proposal_type = 4
+			}
+			every_country = {
+				limit = {
+					NOT = {
+						this = root
+					}
+					is_country_type = unrecognized
+					any_scope_state = {
+						region = scope:strategic_region
+					}
+				}
+				root = {
+					add_to_variable_list = {
+						name = countries_in_selected_strategic_region
+						target = prev
+					}
+				}
+			}
+		}
+	}
+}
+
+has_strategic_region_target = {
+	scope = country
+	is_shown = {
+		has_variable_list = states_in_selected_strategic_region
+	}
+}
+
+clear_strategic_region_target = {
+	scope = country
+	effect = {
+		clear_variable_list ?= states_in_selected_strategic_region
+	}
+}
+
+any_valid_state_in_strategic_region = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	is_shown = {
+		trigger_if = {
+			# Hostile scope
+			limit = {
+				OR = {
+					var:congress_proposal_type = 1
+					var:congress_proposal_type = 2
+					var:congress_proposal_type = 3
+				}
+			}
+			scope:strategic_region = {
+				any_scope_state = {
+					count > 0
+					NOT = {
+						owner = root
+					}
+					trigger_if = {
+						limit = {
+							root.var:congress_proposal_type = 2
+						}
+						NOT = {
+							has_claim_by = root
+						}
+					}
+				}
+			}
+		}
+		trigger_if = {
+			# Unrecognised Country scope
+			limit = {
+				var:congress_proposal_type = 4
+			}
+			scope:strategic_region = {
+				any_scope_state = {
+					count > 0
+					owner = {
+						is_country_type = unrecognized
+					}
+				}
+			}
+		}
+	}
+}
+
+set_congress_target_country = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	effect = {
+		set_variable = {
+			name = set_congress_target_country
+			value = scope:target
+		}
+	}
+}
+
+has_congress_target_country = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	is_shown = {
+		is_target_in_variable_list = {
+			name = set_congress_target_country
+			target = scope:target
+		}
+	}
+}
+
+set_congress_target_state_basket = {
+	scope = country
+	saved_scopes = {
+		target_state
+	}
+	effect = {
+		add_to_variable_list = {
+			name = congress_target_state_basket
+			target = scope:target_state
+		}
+	}
+}
+
+unset_congress_target_state_basket = {
+	scope = country
+	saved_scopes = {
+		target_state
+	}
+	effect = {
+		remove_list_variable = {
+			name = congress_target_state_basket
+			target = scope:target_state
+		}
+	}
+}
+
+has_states_in_congress_basket = {
+	scope = country
+	is_shown = {
+		has_variable_list = congress_target_state_basket
+	}
+}
+
+start_congress = {
+	scope = country
+	effect = {
+		congress_start_conference = {
+			TYPE = var:congress_proposal_type
+			INITIATOR = root
+			TARGET = var:set_congress_target_country
+		}
+		remove_variable ?= set_congress_target_country
+		clear_variable_list ?= congress_target_state_basket
+	}
+}
+
+can_start_congress = {
+	scope = country
+	is_shown = {
+		is_at_war = no
+		NOR = {
+			is_diplomatic_play_committed_participant = yes
+			is_diplomatic_play_undecided_participant = yes
+		}
+		country_rank >= rank_value:great_power
+		NOT = {
+			has_global_variable = babylon_vienna_congress_in_session
+		}
+	}
+}
+
+state_is_in_selection = {
+	scope = country
+	saved_scopes = {
+		state
+	}
+	is_shown = {
+		OR = {
+			is_target_in_variable_list = {
+				name = congress_target_state_basket
+				target = scope:state
+			}
+			scope:state.state_region = {
+				any_scope_state = {
+					root = {
+						is_target_in_variable_list = {
+							name = congress_target_state_basket
+							target = prev
+						}
+					}
+				}
+			}
+		}
+	}
+}

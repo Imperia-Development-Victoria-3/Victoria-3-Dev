@@ -257,6 +257,7 @@ types country_panel_types
 				position = { 25 125 }
 				blockoverride "show_hat" {}
 				blockoverride "highlight" {}
+				blockoverride "commander_order_icon" {}
 			}
 			
 			#GOVERNMENT
@@ -617,7 +618,7 @@ types country_panel_types
 
 				##POLITICAL DISCORD
 				country_stats_entry = {
-					visible = "[Not(CountryPanel.GetCountry.IsPlayer)]"
+					visible = "[And(Not(CountryPanel.GetCountry.IsLocalPlayer), Not(GetMetaPlayer.IsObserver))]"
 					blockoverride "stats_tooltip" {
 						tooltip = "DISCORD_WITH_COUNTRY_BREAKDOWN_TOOLTIP"
 					}
@@ -629,7 +630,7 @@ types country_panel_types
 						raw_text = "[concept_political_discord] w/ target"
 					}
 					blockoverride "stats_value" {
-						raw_text = "#v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_fetch_value')]#!"
+						raw_text = "#v [GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('babylon_discord_fetch_value')]#!"
 					}
 				}
 				}
@@ -1540,6 +1541,7 @@ types war_panel
 		}
 
 		diplomatic_action_acceptance_icon = {
+			visible = "[Not(DiplomaticAction.GetType.CanSelectAnyState)]"											
 			position = { -10 0 }
 		}
 
