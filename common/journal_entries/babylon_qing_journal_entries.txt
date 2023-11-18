@@ -1,4 +1,4 @@
-##Qing Entries
+﻿##Qing Entries
 je_chinese_national_identity = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 	group = je_group_historical_content
@@ -27,10 +27,6 @@ je_chinese_national_identity = {
 		custom_tooltip = {
 			text = linguistics_conference_tt
 			set_variable = je_chinese_national_identity_completed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = -10
-			# }
 		}
 	}
 	weight = 1000
@@ -51,10 +47,6 @@ je_end_han_discrimination = {
 		custom_tooltip = {
 			text = fragile_unity_major_remove_tt
 			set_variable = je_end_han_discrimination_completed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = -10
-			# }
 		}
 	}
 	fail = {
@@ -68,10 +60,6 @@ je_end_han_discrimination = {
 		custom_tooltip = {
 			text = fragile_unity_major_add_tt
 			set_variable = je_end_han_discrimination_failed
-			# change_variable = {
-			# name = china_warlord_explosion
-			# add = 10
-			# }
 		}
 	}
 	on_monthly_pulse = {
@@ -104,10 +92,6 @@ je_qing_administrative_reform = {
 		custom_tooltip = {
 			text = fragile_unity_minor_remove_tt
 			set_variable = je_qing_administrative_reform_completed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = -5
-			# }
 		}
 	}
 	fail = {
@@ -120,10 +104,6 @@ je_qing_administrative_reform = {
 		custom_tooltip = {
 			text = fragile_unity_minor_add_tt
 			set_variable = je_qing_administrative_reform_failed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = 5
-			# }
 		}
 	}
 	on_monthly_pulse = {
@@ -192,10 +172,6 @@ je_rural_poverty_qing = {
 		custom_tooltip = {
 			text = fragile_unity_major_remove_tt
 			set_variable = je_rural_poverty_qing_completed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = -10
-			# }
 		}
 	}
 	fail = {
@@ -211,10 +187,6 @@ je_rural_poverty_qing = {
 		custom_tooltip = {
 			text = fragile_unity_major_add_tt
 			set_variable = je_rural_poverty_qing_failed
-			# change_variable = {
-			# name = china_warlord_explosion
-			# add = 10
-			# }
 		}
 	}
 	current_value = {
@@ -239,6 +211,10 @@ je_rural_poverty_qing = {
 	immediate = {
 		set_variable = {
 			name = var_rural_poverty_fail
+			value = 0
+		}
+		set_variable = {
+			name = rural_poverty_var
 			value = 0
 		}
 	}
@@ -331,6 +307,10 @@ je_reform_the_banner_system_local = {
 	}
 	goal_add_value = {
 		add = 4
+	}
+	immediate = {
+		set_variable = yong_ying_var
+		value = 0
 	}
 	progressbar = yes
 	weight = 1000
@@ -488,11 +468,16 @@ je_industrialize_china = {
 	complete = {
 		OR = {
 			any_scope_state = {
-				is_incorporated = yes
-				has_building = building_urban_center
-				percent >= 0.75
-				level >= 20
+				filter = {
+					is_incorporated = yes
+				}
+				any_scope_building = {
+					is_building_type = building_urban_center
+					level >= 20
+				}
+				percent > 0.75
 			}
+
 			pop_type_percent_country = {
 				pop_type = peasants
 				percent < 0.35
@@ -536,11 +521,6 @@ je_promote_western_learning = {
 		}
 		custom_tooltip = {
 			text = fragile_unity_major_remove_tt
-			set_variable = je_promote_western_learning_completed
-			# change_variable = {
-			# 	name = china_warlord_explosion
-			# 	add = -10
-			# }
 		}
 	}
 	weight = 1000
@@ -583,10 +563,6 @@ je_pacify_highland_tribes = {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_highland_tribes_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = -5
-				# }
 			}
 		}
 	}
@@ -628,10 +604,6 @@ je_gateway_to_the_west = {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_gateway_to_the_west_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = 5
-				# }
 			}
 		}
 	}
@@ -671,10 +643,6 @@ je_breadbasket_of_the_south = {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_breadbasket_of_the_south_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = 5
-				# }
 			}
 		}
 	}
@@ -719,10 +687,6 @@ je_settle_the_steppe = {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_settle_the_steppe_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = 5
-				# }
 			}
 		}
 	}
@@ -760,10 +724,6 @@ je_pacify_and_settle_taiwan = {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_and_settle_taiwan_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = -5
-				# }
 			}
 		}
 	}
@@ -814,10 +774,6 @@ je_silk_march = {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_silk_march_completed
-				# change_variable = {
-				# 	name = china_warlord_explosion
-				# 	add = -5
-				# }
 			}
 		}
 	}
