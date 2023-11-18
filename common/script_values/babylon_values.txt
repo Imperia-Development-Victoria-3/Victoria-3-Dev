@@ -791,6 +791,302 @@ babylon_player_construction_bonus_multiplier = {
 	}
 }
 
+babylon_qing_fragile_unity_value = {
+	value = 0
+	if = {
+		limit = {
+			# Being a subject yourself adds 20
+			is_subject = yes
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			# Taking loans adds 5
+			taking_loans = yes
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			# Being in default adds 10
+			in_default = yes
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			# Not being unrecognised, meaning you're recognised or.. Decentralised, technically, subtracts 20
+			NOT = {
+				is_country_type = unrecognized
+			}
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			# Not being a monarchy adds 20
+			NOT = {
+				has_law = law_type:law_monarchy
+			}
+		}
+		add = 20
+	}
+	every_country = {
+		# Every one of these tags that are NOT a subject adds 10
+		limit = {
+			OR = {
+				this = c:XIN
+				this = c:MGL
+				this = c:MCH
+				this = c:XIB
+				this = c:TIB
+				this = c:SIH
+				this = c:HNA
+				this = c:YUE
+			}
+			NOT = {
+				is_subject_of = ROOT
+			}
+		}
+		add = 10
+	}
+	every_country = {
+		# Every one of these tags that are NOT a subject adds 5
+		limit = {
+			OR = {
+				this = c:FRS
+				this = c:KOR
+			}
+			NOT = {
+				is_subject_of = ROOT
+			}
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			# All state regions that are manchu homelands must be owned by c:CHI or one of their subjects
+			any_state_region = {
+				count = all
+				limit = {
+					is_homeland = cu:manchu
+				}
+				root = {
+					country_or_subject_owns_entire_state_region = prev
+				}
+			}
+		}
+		subtract = 5
+	}
+	### JE completions
+	# je_end_han_discrimination
+	if = {
+		limit = {
+			has_variable = je_end_han_discrimination_completed
+		}
+		subtract = 10
+	}
+	else_if = {
+		limit = {
+			has_variable = je_end_han_discrimination_failed
+		}
+		add = 10
+	}
+	# je_qing_administrative_reform
+	if = {
+		limit = {
+			has_variable = je_qing_administrative_reform_completed
+		}
+		subtract = 5
+	}
+	else_if = {
+		limit = {
+			has_variable = je_qing_administrative_reform_failed
+		}
+		add = 5
+	}
+	# je_rural_poverty_qing
+	if = {
+		limit = {
+			has_variable = je_rural_poverty_qing_completed
+		}
+		subtract = 10
+	}
+	else_if = {
+		limit = {
+			has_variable = je_rural_poverty_qing_failed
+		}
+		add = 10
+	}
+	# je_pacify_highland_tribes : Sichuan
+	if = {
+		limit = {
+			has_variable = je_pacify_highland_tribes_completed
+		}
+		subtract = 5
+	}
+	# je_silk_march: Gansu
+	if = {
+		limit = {
+			has_variable = je_silk_march_completed
+		}
+		subtract = 5
+	}
+	# je_gateway_to_the_west : Liangguang
+	if = {
+		limit = {
+			has_variable = je_gateway_to_the_west_completed
+		}
+		subtract = 5
+	}
+	# je_breadbasket_of_the_south : Huguang
+	if = {
+		limit = {
+			has_variable = je_breadbasket_of_the_south_completed
+		}
+		subtract = 5
+	}
+	# je_settle_the_steppe : Eastern Provinces
+	if = {
+		limit = {
+			has_variable = je_settle_the_steppe_completed
+		}
+		subtract = 5
+	}
+	# je_pacify_and_settle_taiwan : Formosa
+	if = {
+		limit = {
+			has_variable = je_pacify_and_settle_taiwan_completed
+		}
+		subtract = 5
+	}
+	### Random JEs and events
+	# Banner System Completed
+	if = {
+		limit = {
+			has_variable = banner_system_new_army
+		}
+		subtract = 10
+	}
+	if = {
+		limit = {
+			has_variable = banner_system_yong_ying
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			has_variable = eight_banners_martial_tradition
+		}
+		add = 10
+	}
+	# Linguistics Conference outcome
+	if = {
+		limit = {
+			has_variable = qing_language_conference_beijing_victorious
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_sichuan_victorious
+		}
+		subtract = 10
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_liangguang_victorious
+		}
+		subtract = 5
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_huguang_victorious
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_formosa_victorious
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_no_winner
+		}
+		add = 20
+	}
+	# Opium wars  
+	if = {
+		limit = {
+			has_variable = opium_wars_china_win
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			has_variable = opium_wars_china_lost
+		}
+		add = 20
+	}
+	### Stuff from vanilla, that we havent ported over, goes here.
+	# Absolish monarchy
+	if = {
+		limit = {
+			has_variable = china_warlord_abolished_monarchy
+		}
+		subtract = 20
+	}
+	# Taiping was allowed to survive, and you're not at war with them (actually allows you to reconquer them to regain the points)
+	if = {
+		limit = {
+			exists = c:TPG
+			NOT = {
+				has_war_with = c:TPG
+			}
+		}
+		add = 20
+	}
+	# Is in revolution
+	if = {
+		limit = {
+			has_variable = china_warlord_explosion_revolution
+		}
+		add = 20
+	}
+	# Taiping appeared
+	if = {
+		limit = {
+			has_variable = babylon_taiping_appeared
+		}
+		add = 20
+	}
+	# Boxer rebvellion timed out
+	if = {
+		limit = {
+			has_variable = je_boxer_rebellion_timed_out
+		}
+		add = 20
+	}
+	# Treaty Ports
+	every_state_region = {
+		limit = {
+			OR = {
+				region = sr:region_north_china
+				region = sr:region_south_china
+				region = sr:region_manchuria
+			}
+			is_treaty_port = yes
+		}
+		add = 5
+	}
+	#These go last
+	min = 0
+	max = 100
+}
+
 random_rgb_color_decider = {
 	integer_range = {
 		min = 1
