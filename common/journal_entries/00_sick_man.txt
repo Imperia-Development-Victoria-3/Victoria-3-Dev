@@ -129,16 +129,27 @@ je_sick_man_army = {
 	group = je_group_historical_content
 	complete = {
 		army_size >= 150
-		NOT = {
+		OR = {
+			has_law = law_type:law_professional_army
+			has_law = law_type:law_mass_conscription
+		}
+		has_technology_researched = napoleonic_warfare
+		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks
+				is_building_type = building_barracks				
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_organization
-					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-					# has_active_production_method = pm_no_artillery
-					# has_active_production_method = pm_cannon_artillery
 				}
+			}
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				}
+				percent >= 0.10
 			}
 		}
 	}
@@ -175,16 +186,18 @@ je_sick_man_navy = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 	complete = {
-		navy_size >= 30
-		NOT = {
+		navy_size >= 55
+		OR = {
+			has_law = law_type:law_professional_army
+			has_law = law_type:law_mass_conscription
+		}
+		has_technology_researched = power_of_the_purse
+		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks
+				is_building_type = building_naval_base				
 				OR = {
 					building_has_goods_shortage = yes
-					has_active_production_method = pm_no_organization
-					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-					# has_active_production_method = pm_no_artillery
-					# has_active_production_method = pm_cannon_artillery
+					has_active_production_method = pm_no_naval_theory
 				}
 			}
 		}
