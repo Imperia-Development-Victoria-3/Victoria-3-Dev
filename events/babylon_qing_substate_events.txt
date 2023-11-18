@@ -21,18 +21,19 @@ babylon_qing_substates.1 = { #Sichuan - Setup Event
 	trigger = {
 	}
 	
-		option = {
-		name = babylon_qing_substates.1.a
-		default_option = yes
-			add_journal_entry = {
+	option = {
+	name = babylon_qing_substates.1.a
+	default_option = yes
+
+		add_journal_entry = {
 			type = je_pacify_highland_tribes
 		}
 		s:STATE_YUNNAN.region_state:SIH = {
-				add_modifier = modifier_highland_tribes
-			}
+			add_modifier = modifier_highland_tribes
+		}
 		s:STATE_GUIZHOU.region_state:SIH = {
-				add_modifier = modifier_highland_tribes
-			}
+			add_modifier = modifier_highland_tribes
+		}
 	}
 }
 
@@ -57,8 +58,9 @@ babylon_qing_substates.2 = { #Sichuan - Pacify Highland Tribes Complete
 	trigger = {
 	}
 	
-		option = {
-		name = babylon_qing_substates.2.a
+	option = {
+	name = babylon_qing_substates.2.a
+
 		default_option = yes
 		s:STATE_YUNNAN.region_state:SIH = {
 				remove_modifier = modifier_highland_tribes
@@ -73,8 +75,9 @@ babylon_qing_substates.2 = { #Sichuan - Pacify Highland Tribes Complete
 		}		
 	}
 	
-		option = {
-		name = babylon_qing_substates.2.b
+	option = {
+	name = babylon_qing_substates.2.b
+
 		s:STATE_YUNNAN.region_state:SIH = {
 				remove_modifier = modifier_highland_tribes
 			}
@@ -85,11 +88,12 @@ babylon_qing_substates.2 = { #Sichuan - Pacify Highland Tribes Complete
 		add_loyalists = {
 			culture = cu:yi
 			value = 0.2
-		}
+			}
 	}
 	
-		option = {
-		name = babylon_qing_substates.2.c
+	option = {
+	name = babylon_qing_substates.2.c
+
 		s:STATE_YUNNAN.region_state:SIH = {
 				remove_modifier = modifier_highland_tribes
 			}
@@ -125,8 +129,8 @@ babylon_qing_substates.3 = { # Sichuan - Tribal Conflict Event
 	trigger = {
 	}
 	
-		option = { #Let them fight
-		name = babylon_qing_substates.3.a
+	option = { #Let them fight
+	name = babylon_qing_substates.3.a
 
 		random_state = {
 			limit = {
@@ -138,9 +142,9 @@ babylon_qing_substates.3 = { # Sichuan - Tribal Conflict Event
 			}
 		}
 	}
-		option = { #Send in troops
-		name = babylon_qing_substates.3.b
-		default_option = yes
+	option = { #Send in troops
+	name = babylon_qing_substates.3.b
+	default_option = yes
 
 		random_state = {
 			limit = {
@@ -189,8 +193,8 @@ babylon_qing_substates.4 = { # Sichuan - Han Settlers Murdered
 	trigger = {
 	}
 	
-		option = { #Do nothing
-		name = babylon_qing_substates.4.a
+	option = { #Do nothing
+	name = babylon_qing_substates.4.a
 
 		random_state = {
 			limit = {
@@ -203,14 +207,14 @@ babylon_qing_substates.4 = { # Sichuan - Han Settlers Murdered
 		}
 	}
 
-		option = { #Send in troops
-		name = babylon_qing_substates.4.b
-		default_option = yes
+	option = { #Send in troops
+	name = babylon_qing_substates.4.b
+	default_option = yes
 
 		random_state = {
 			limit = {
 				has_modifier = modifier_highland_tribes
-				}
+			}
 			add_radicals_in_state = {
 				value = large_radicals
 				culture = cu:zhuang
@@ -257,19 +261,19 @@ babylon_qing_substates.5 = { # Sichuan - Highlanders Sinicized
 	trigger = {
 	}
 	
-		option = { #Let them fight
-		name = babylon_qing_substates.5.a
+	option = { #Let them fight
+	name = babylon_qing_substates.5.a
 
 		random_state = {
 			limit = {
 				has_modifier = modifier_highland_tribes
 				}
 			add_loyalists_in_state = {
-				value = 0.05
+					value = 0.05
 			}
-		add_modifier = {
-			name = modifier_successful_sinicization
-			months = 12
+			add_modifier = {
+				name = modifier_successful_sinicization
+				months = 12
 			}
 		}
 	}
@@ -437,16 +441,13 @@ babylon_qing_substates.8 = { #Linguistic conference - Announce positions
 			# The threshold to win is 50% + 1
 			set_variable = {
 				name = qing_language_conference_majority
-				value = var:qing_language_conference_voters_count
+				value = {
+				  add = var:qing_language_conference_voters_count
+				  divide = 2
+				  add = 1 
+			  	}
 			}
-			change_variable = {
-				name = qing_language_conference_majority
-				divide = 2
-			}
-			change_variable = {
-				name = qing_language_conference_majority
-				add = 1
-			}
+			round_variable = { name = qing_language_conference_majority nearest = 1 }  
 
 			# Moves the conference to the voting stage
 			trigger_event = { id = babylon_qing_substates.9 days =  91}
@@ -465,13 +466,6 @@ babylon_qing_substates.8 = { #Linguistic conference - Announce positions
 	# OK
 	option = {
 		name = babylon_qing_substates.8.a
-	}
-	# TEST
-	option = {
-		name = babylon_qing_substates.8.test
-		trigger = {
-			exists = scope:qing_language_conference_main_tag
-		}
 	}
 }
 
@@ -540,6 +534,7 @@ babylon_qing_substates.9 = { #Linguistic conference - Vote for a language.
 	# Beijing Dialect - always an option
 	option = {
 		name = babylon_qing_substates.9.a
+		default_option = yes
 		hidden_effect = {
 			remove_variable = qing_language_conference_can_vote
 			set_variable = qing_language_conference_voted_for_beijing
