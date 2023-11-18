@@ -1,0 +1,1124 @@
+﻿je_sick_man_main = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		remove_modifier ?= sick_man_of_europe
+		if = {
+			limit = {
+				has_variable = liberal_tanzimat
+			}
+			trigger_event = {
+				id = sick_man.2
+			}
+		}
+		if = {
+			limit = {
+				has_variable = absolute_tanzimat
+			}
+			trigger_event = {
+				id = sick_man.5
+			}
+		}
+	}
+	timeout = 17885
+	on_timeout = {
+		remove_modifier ?= sick_man_of_europe
+		trigger_event = {
+			id = sick_man.3
+		}
+	}
+	current_value = {
+		value = var:sick_man_var
+	}
+	on_monthly_pulse = {
+		events = {
+			sick_man.4
+		}
+	}
+	goal_add_value = {
+		add = 8
+	}
+	progressbar = yes
+	weight = 10000
+	should_be_pinned_by_default = yes
+}
+
+# Bureaucractic Reform
+je_sick_man_bureaucracy = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	group = je_group_historical_content
+	complete = {
+		NOR = {
+			has_law = law_type:law_hereditary_bureaucrats
+			has_law = law_type:law_land_based_taxation
+			has_law = law_type:law_consumption_based_taxation
+		}
+		bureaucracy >= 0
+		approaching_bureaucracy_shortage = no
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_tanzimat_bureaucracy
+			years = 10
+		}
+		remove_modifier ?= outmoded_bureaucracy
+	}
+	on_monthly_pulse = {
+		random_events = {
+			100 = 0
+			10 = tanzimat_events.9			# Land registration resisted
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5000
+}
+
+# Economic Reform
+je_sick_man_economy = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+	complete = {
+		in_default = no
+		any_scope_state = {
+			is_incorporated = yes
+			has_building = building_urban_center
+			percent >= 0.6
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_tanzimat_economy
+			years = 10
+		}
+		remove_modifier ?= stagnant_economy
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5001
+}
+
+# Army Reform
+je_sick_man_army = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	complete = {
+		army_size >= 150
+		NOT = {
+			any_scope_building = {
+				is_building_type = building_barracks
+				OR = {
+					building_has_goods_shortage = yes
+					has_active_production_method = pm_no_organization
+					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+					# has_active_production_method = pm_no_artillery
+					# has_active_production_method = pm_cannon_artillery
+				}
+			}
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_tanzimat_army
+			years = 10
+			is_decaying = yes
+		}
+		remove_modifier ?= janissary_legacy
+	}
+	on_monthly_pulse = {
+		events = {
+			tanzimat_events.10			# Tanzimat Draft Question
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5002
+}
+
+# Naval Reform
+je_sick_man_navy = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	complete = {
+		navy_size >= 30
+		NOT = {
+			any_scope_building = {
+				is_building_type = building_barracks
+				OR = {
+					building_has_goods_shortage = yes
+					has_active_production_method = pm_no_organization
+					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
+					# has_active_production_method = pm_no_artillery
+					# has_active_production_method = pm_cannon_artillery
+				}
+			}
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_tanzimat_navy
+			years = 10
+			is_decaying = yes
+		}
+		remove_modifier ?= rampant_piracy
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5003
+}
+
+# Kurdish Question
+je_sick_man_liberal_kurdish = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = sick_man_kurdish_liberal_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_diplomatic_pact = {
+			who = c:KUR
+			type = protectorate
+		}
+		is_at_war = no
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = ottoman_kurdish_liberal_reward
+			years = 5
+		}
+		c:KUR = {
+			add_loyalists = {
+				value = 0.3
+				culture = cu:kurdish
+			}
+			add_modifier = {
+				name = kurdish_liberal_reward
+				years = 5
+			}
+		}
+		remove_modifier ?= kurdish_question
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_kurdish_liberal_var
+	}
+	goal_add_value = {
+		add = 180
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_diplomatic_pact = {
+						who = c:KUR
+						type = protectorate
+					}
+					NOT = {
+						has_war_with = c:KUR
+					}
+				}
+				change_variable = {
+					name = sick_man_kurdish_liberal_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5004
+	progressbar = yes
+}
+
+je_sick_man_absolute_kurdish = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = sick_man_kurdish_absolute_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_diplomatic_pact = {
+			who = c:KUR
+			type = puppet
+		}
+		is_at_war = no
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_modifier = {
+			name = ottoman_kurdish_absolute_reward
+			years = 5
+		}
+		remove_modifier ?= kurdish_question
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_kurdish_absolute_var
+	}
+	goal_add_value = {
+		add = 180
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_diplomatic_pact = {
+						who = c:KUR
+						type = puppet
+					}
+					NOT = {
+						has_war_with = c:KUR
+					}
+				}
+				change_variable = {
+					name = sick_man_kurdish_absolute_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5004
+	progressbar = yes
+}
+
+# Nationalism
+je_sick_man_liberal_separatism = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	group = je_group_historical_content
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		highest_secession_progress < 0.75
+		any_scope_state = {
+			turmoil <= 0.6
+		}
+		has_law = law_type:law_no_migration_controls
+		has_law = law_type:law_cultural_exclusion
+	}
+	immediate = {
+		rel:catholic = {
+			save_scope_as = christian_religion
+		}
+		rel:jewish = {
+			save_scope_as = jewish_religion
+		}
+		rel:sunni = {
+			save_scope_as = sunni_religion
+		}
+	}
+	on_complete = {
+		custom_tooltip = {
+			text = christian_and_jews_5_percent_more_loyal_tt
+			add_loyalists = {
+				value = 0.05
+				culture = cu:greek
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:bulgarian
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:serb
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:armenian
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:croat
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:sephardic
+			}
+			add_loyalists = {
+				value = 0.05
+				culture = cu:georgian
+			}
+		}
+		custom_tooltip = {
+			text = sunnis_5_percent_more_radical_tt
+			add_radicals = {
+				value = 0.05
+				culture = cu:turkish
+			}
+			add_radicals = {
+				value = 0.05
+				culture = cu:albanian
+			}
+			add_radicals = {
+				value = 0.05
+				culture = cu:kurdish
+			}
+			add_radicals = {
+				value = 0.05
+				culture = cu:bosniak
+			}
+			add_radicals = {
+				value = 0.05
+				culture = cu:bedouin
+			}
+			add_radicals = {
+				culture = cu:mashriqi
+				value = 0.05
+			}
+		}
+		add_modifier = {
+			name = balkan_liberal_peace
+			years = 5
+		}
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier ?= balkan_disarray
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					highest_secession_progress < 0.75
+					any_scope_state = {
+						turmoil <= 0.6
+					}
+					has_law = law_type:law_no_migration_controls
+					has_law = law_type:law_cultural_exclusion
+				}
+				change_variable = {
+					name = sick_man_separatist_var
+					add = 1
+				}
+			}
+		}
+		random_events = {
+			100 = 0
+			10 = tanzimat_events.5			# Paranoia Event
+		}
+	}
+	current_value = {
+		value = var:sick_man_separatist_var
+	}
+	goal_add_value = {
+		add = 120
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5005
+	progressbar = yes
+}
+
+je_sick_man_absolute_separatism = {
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	group = je_group_historical_content
+	complete = {
+		has_law = law_type:law_faith_orders
+		NOT = {
+			has_law = law_type:law_no_migration_controls
+		}
+		institution_investment_level = {
+			institution = institution_police
+			value >= 2
+		}
+		has_diplomatic_pact = {
+			who = c:SER
+			type = dominion
+		}
+		OR = {
+			has_diplomatic_pact = {
+				who = c:WAL
+				type = dominion
+			}
+			has_diplomatic_pact = {
+				who = c:MOL
+				type = dominion
+			}
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = balkan_absolute_peace
+			years = 10
+		}
+		s:STATE_PELOPONNESE = {
+			add_claim = ROOT
+		}
+		s:STATE_ATTICA = {
+			add_claim = ROOT
+		}
+		s:STATE_WEST_AEGEAN_ISLANDS = {
+			add_claim = ROOT
+		}
+		s:STATE_IONIAN_ISLANDS = {
+			add_claim = ROOT
+		}
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier ?= balkan_disarray
+	}
+	on_monthly_pulse = {
+		random_events = {
+			100 = 0
+			10 = tanzimat_events.5			# Paranoia Event
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5005
+}
+
+# Literacy and Universities
+je_sick_man_liberal_education = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
+	complete = {
+		any_scope_building = {
+			is_building_type = building_university
+			occupancy > 0.9
+			level >= 5
+		}
+		OR = {
+			has_law = law_type:law_private_schools
+			has_law = law_type:law_public_schools
+		}
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = sick_man_liberal_education
+			years = 10
+		}
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier ?= imbalanced_education
+	}
+	current_value = {
+		value = root.literacy_rate
+	}
+	goal_add_value = {
+		add = 0.15
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5006
+	progressbar = yes
+}
+
+je_sick_man_absolute_education = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
+	complete = {
+		any_scope_building = {
+			is_building_type = building_university
+			occupancy > 0.9
+			level >= 5
+		}
+		OR = {
+			has_law = law_type:law_patriot_schools
+			has_law = law_type:law_religious_schools
+		}
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = sick_man_absolute_education
+			years = 10
+		}
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier ?= imbalanced_education
+	}
+	current_value = {
+		value = root.literacy_rate
+	}
+	goal_add_value = {
+		add = 0.15
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5006
+	progressbar = yes
+}
+
+# Liberalism
+je_sick_man_liberal_voting = {
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = sick_man_voting_liberal_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		OR = {
+			has_law = law_type:law_right_of_assembly
+			has_law = law_type:law_protected_speech
+		}
+		OR = {
+			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_universal_suffrage
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.1
+			strata = poor
+		}
+		add_radicals = {
+			value = 0.15
+			strata = rich
+		}
+		add_modifier = {
+			name = sick_man_liberal_voting
+			years = 10
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_voting_liberal_var
+	}
+	goal_add_value = {
+		add = 120
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_right_of_assembly
+						has_law = law_type:law_protected_speech
+					}
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+						has_law = law_type:law_universal_suffrage
+					}
+				}
+				change_variable = {
+					name = sick_man_voting_liberal_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5007
+	progressbar = yes
+}
+
+# Secularism
+je_sick_man_liberal_secularism = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	group = je_group_historical_content
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_law = law_type:law_guaranteed_liberties
+		has_law = law_type:law_total_separation
+		NOR = {
+			has_law = law_type:law_faith_orders
+			has_law = law_type:law_inquisition
+			has_law = law_type:law_religious_schools
+		}
+		calc_true_if = {
+			amount >= 8
+			country_or_subject_owns_entire_state_region = STATE_BOSNIA
+			country_or_subject_owns_entire_state_region = STATE_ALBANIA
+			country_or_subject_owns_entire_state_region = STATE_THESSALIA
+			country_or_subject_owns_entire_state_region = STATE_SKOPIA
+			country_or_subject_owns_entire_state_region = STATE_SOUTHERN_SERBIA
+			country_or_subject_owns_entire_state_region = STATE_MACEDONIA
+			country_or_subject_owns_entire_state_region = STATE_NORTHERN_SERBIA
+			country_or_subject_owns_entire_state_region = STATE_WALLACHIA
+			country_or_subject_owns_entire_state_region = STATE_BULGARIA
+			country_or_subject_owns_entire_state_region = STATE_NORTHERN_THRACE
+			country_or_subject_owns_entire_state_region = STATE_WESTERN_THRACE
+			country_or_subject_owns_entire_state_region = STATE_EASTERN_THRACE
+			any_scope_state = {
+				state_region = s:STATE_MONTENEGRO
+			}
+			any_scope_state = {
+				state_region = s:STATE_DOBRUDJA
+			}
+			any_subject_or_below = {
+				any_scope_state = {
+					state_region = s:STATE_MOLDAVIA
+				}
+			}
+		}
+	}
+	immediate = {
+		rel:catholic = {
+			save_scope_as = christian_religion
+		}
+		rel:jewish = {
+			save_scope_as = jewish_religion
+		}
+		rel:sunni = {
+			save_scope_as = sunni_religion
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		custom_tooltip = {
+			text = christian_and_jews_15_percent_more_loyal_tt
+			add_loyalists = {
+				culture = cu:greek
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:bulgarian
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:serb
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:armenian
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:croat
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:sephardic
+				value = 0.15
+			}
+			add_loyalists = {
+				culture = cu:georgian
+				value = 0.15
+			}
+		}
+		custom_tooltip = {
+			text = sunnis_15_percent_more_radical_tt
+			add_radicals = {
+				culture = cu:turkish
+				value = 0.15
+			}
+			add_radicals = {
+				culture = cu:albanian
+				value = 0.15
+			}
+			add_radicals = {
+				culture = cu:mashriqi
+				value = 0.15
+			}
+			add_radicals = {
+				culture = cu:kurdish
+				value = 0.15
+			}
+			add_radicals = {
+				culture = cu:bosniak
+				value = 0.15
+			}
+			add_radicals = {
+				culture = cu:bedouin
+				value = 0.15
+			}
+		}
+		add_modifier = {
+			name = sick_man_liberal_secularism
+			years = 10
+		}
+		remove_modifier ?= internal_strife
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5008
+}
+
+# Labor
+je_sick_man_liberal_labor = {
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		NOR = {
+			has_law = law_type:law_serfdom
+			has_law = law_type:law_tenant_farmers
+		}
+		OR = {
+			has_law = law_type:law_interventionism
+			has_law = law_type:law_laissez_faire
+		}
+		has_law = law_type:law_slavery_banned
+	}
+	on_complete = {
+		set_variable = completed_sick_man_bureaucracy_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_modifier = {
+			name = sick_man_liberal_labor
+			years = 10
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5009
+}
+
+# Syria & Egypt
+je_sick_man_syria = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	complete = {
+		owns_entire_state_region = STATE_ALEPPO
+		owns_entire_state_region = STATE_SYRIA
+		owns_entire_state_region = STATE_LEBANON
+		owns_entire_state_region = STATE_PALESTINE
+		owns_entire_state_region = STATE_TRANSJORDAN
+		owns_entire_state_region = STATE_ADANA
+		OR = {
+			has_law = law_type:law_agrarianism
+			has_law = law_type:law_interventionism
+		}
+		any_scope_state = {
+			count = all
+			custom_tooltip = {
+				text = tax_capacity_greater_than
+				tax_capacity >= tax_capacity_usage
+			}
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		s:STATE_SINAI = {
+			add_claim = ROOT
+		}
+		s:STATE_UPPER_EGYPT = {
+			add_claim = ROOT
+		}
+		s:STATE_MIDDLE_EGYPT = {
+			add_claim = ROOT
+		}
+		s:STATE_LOWER_EGYPT = {
+			add_claim = ROOT
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						exists = c:EGY
+						c:EGY = {
+							is_subject_of = ROOT
+						}
+					}
+					AND = {
+						owns_entire_state_region = STATE_SINAI
+						owns_entire_state_region = STATE_UPPER_EGYPT
+						owns_entire_state_region = STATE_MIDDLE_EGYPT
+						owns_entire_state_region = STATE_LOWER_EGYPT
+					}
+				}
+			}
+		}
+		custom_tooltip = sickman_syria_egypt
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	on_weekly_pulse = {
+		events = {
+			egyptian_crisis_events.1
+		}
+	}
+	transferable = no
+	weight = 5007
+}
+
+je_sick_man_egypt = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	complete = {
+		OR = {
+			AND = {
+				exists = c:EGY
+				c:EGY = {
+					is_subject_of = ROOT
+				}
+			}
+			AND = {
+				owns_entire_state_region = STATE_SINAI
+				owns_entire_state_region = STATE_UPPER_EGYPT
+				owns_entire_state_region = STATE_MIDDLE_EGYPT
+				owns_entire_state_region = STATE_LOWER_EGYPT
+			}
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = sick_man_absolute_egypt
+			years = 15
+			is_decaying = yes
+		}
+		remove_modifier ?= internal_strife
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	transferable = no
+	weight = 5008
+}
+
+# Islamism
+je_sick_man_absolute_islam = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = sick_man_absolute_tradition_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		AND = {
+			has_law = law_type:law_state_religion
+			has_law = law_type:law_inquisition
+			has_law = law_type:law_no_womens_rights
+			has_law = law_type:law_tenant_farmers
+		}
+		OR = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_technocracy
+			has_law = law_type:law_oligarchy
+			has_law = law_type:law_landed_voting
+		}
+	}
+	on_complete = {
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = sick_man_absolute_islamism
+			years = 5
+		}
+	}
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	current_value = {
+		value = var:sick_man_absolute_tradition_var
+	}
+	goal_add_value = {
+		add = 180
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					AND = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_inquisition
+						has_law = law_type:law_legal_guardianship
+						has_law = law_type:law_tenant_farmers
+					}
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_technocracy
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_landed_voting
+					}
+				}
+				change_variable = {
+					name = sick_man_absolute_tradition_var
+					add = 1
+				}
+			}
+		}
+	}
+	transferable = no
+	weight = 5009
+	progressbar = yes
+}

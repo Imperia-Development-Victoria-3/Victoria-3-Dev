@@ -1,64 +1,29 @@
-﻿transfer_state = {
-	requires_approval = no
-	should_notify_third_parties = yes
-	show_effect_in_tooltip = yes
-	show_confirmation_box = no
-
-	potential = {
-		NOT = { is_country_type = decentralized }
-		scope:target_country = {
-			NOT = { is_country_type = decentralized }
-		}
-		has_diplomatic_relevance = scope:target_country
-	}
-	
-	possible = {
-		is_at_war = no
-		is_diplomatic_play_committed_participant = no
-		NOT = {
-			has_modifier = modifier_transfer_state
-		}
-	}
-
-	accept_effect = {
-		trigger_event = { id = transfer_state_event.1 popup = yes }
-	}
-	
-	ai = {
-		will_propose = { 
-			always = no
-		}
-		accept_score = {
-			value = 1000
-		}
-	}
-}
-
-player_diplomatic_backlash = {
+﻿player_diplomatic_backlash = {
 	requires_approval = yes
 	should_notify_third_parties = yes
 	show_effect_in_tooltip = yes
 	show_confirmation_box = no
 	is_hostile = yes
-
 	potential = {
 		is_player = yes
-		NOT = { is_country_type = decentralized }
+		NOT = {
+			is_country_type = decentralized
+		}
 		scope:target_country = {
-			NOT = { is_country_type = decentralized }
+			NOT = {
+				is_country_type = decentralized
+			}
 			is_player = yes
 		}
 		has_diplomatic_relevance = scope:target_country
 	}
-
 	possible = {
 		always = yes
 		custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_COLD_OR_LESS_NOT
 			scope:target_country.relations:root > relations_threshold:cold
-		}	
+		}
 	}
-
 	accept_effect = {
 		change_relations = {
 			country = scope:target_country
@@ -68,9 +33,8 @@ player_diplomatic_backlash = {
 			}
 		}
 	}
-
 	ai = {
-		will_propose = { 
+		will_propose = {
 			always = no
 		}
 		accept_score = {
@@ -79,32 +43,32 @@ player_diplomatic_backlash = {
 	}
 }
 
-
 player_diplomatic_support = {
 	requires_approval = yes
 	should_notify_third_parties = yes
 	show_effect_in_tooltip = yes
 	show_confirmation_box = no
 	is_hostile = yes
-
 	potential = {
 		is_player = yes
-		NOT = { is_country_type = decentralized }
+		NOT = {
+			is_country_type = decentralized
+		}
 		scope:target_country = {
-			NOT = { is_country_type = decentralized }
+			NOT = {
+				is_country_type = decentralized
+			}
 			is_player = yes
 		}
 		has_diplomatic_relevance = scope:target_country
 	}
-
 	possible = {
 		always = yes
 		custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
 			scope:target_country.relations:root < relations_threshold:amicable
-		}	
+		}
 	}
-
 	accept_effect = {
 		change_relations = {
 			country = scope:target_country
@@ -114,9 +78,8 @@ player_diplomatic_support = {
 			}
 		}
 	}
-
 	ai = {
-		will_propose = { 
+		will_propose = {
 			always = no
 		}
 		accept_score = {
@@ -130,26 +93,48 @@ minor_war_reparations = {
 	should_notify_third_parties = no
 	can_select = no
 	can_select_to_break = no
-
 	potential = {
 		always = no
 	}
-	
-	pact = {	
+	pact = {
 		is_two_sided_pact = no
-		
 		income_transfer = 0.025
 		recipient_gets_income_transfer = no
 		income_transfer_based_on_recipient = yes
-	
 		should_auto_break = {
 			NOT = {
 				has_truce_with = scope:target_country
 			}
 		}
-	
 		should_invalidate = {
 			has_war_with = scope:target_country
-		}	
+		}
+	}
+}
+
+forced_embargo_pact = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	can_select = no
+	can_select_to_break = no
+	potential = {
+		always = no
+	}
+	pact = {
+		cost = 0
+		is_embargo = yes
+		is_two_sided_pact = no
+		relations_progress_per_day = -1		# At -100, -1 relations
+		should_auto_break = {
+			scope:target_country = {
+				NOT = {
+					has_modifier = forced_embargo
+				}
+			}
+		}
+		should_invalidate = {
+		}
+		break_effect = {
+		}
 	}
 }

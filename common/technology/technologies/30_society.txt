@@ -157,12 +157,13 @@ centralization = {
 }
 
 corporate_charters = {
-	era = era_1
+	era = era_2
 	texture = "gfx/interface/icons/invention_icons/corporate_charters.dds"
 	category = society
 	
 	modifier = {
 		country_max_companies_add = 1
+		state_market_access_price_impact = 0.05
 	}	
 	
 	unlocking_technologies = {
@@ -269,7 +270,7 @@ stock_exchange = {
 		country_trade_route_quantity_mult = 0.1
 		state_capitalists_investment_pool_efficiency_mult = 0.05
 		state_aristocrats_investment_pool_efficiency_mult = 0.05
-		state_market_access_price_impact = 0.1
+		state_market_access_price_impact = 0.05
 	}
 	unlocking_technologies = {
 		international_trade
@@ -496,6 +497,7 @@ joint_stock_companies = {
 	modifier = {
 		country_max_companies_add = 1
 		state_urbanization_per_level_mult = -0.1
+		state_capitalists_investment_pool_efficiency_mult = 0.05
 	}	
 	
 	unlocking_technologies = {
@@ -575,6 +577,19 @@ nationalism = {
 		mass_communication
 		international_relations
 	}
+
+	on_researched = {
+		if = {
+			limit = {
+				NOT = { has_variable = nationalism_researched }
+			}
+			custom_tooltip = {
+				text = unlock_national_agitation_tt
+				set_variable = nationalism_researched
+			}
+		}
+	}
+
 	ai_weight = {
 		value = 2		# Important in general
 		# Extra-important for major unifications
@@ -649,7 +664,7 @@ postal_savings = {
 	category = society
 	modifier = {
 		state_farmers_investment_pool_efficiency_mult = 0.15
-		state_shopkeepers_investment_pool_efficiency_mult = 0.15
+		state_shopkeepers_investment_pool_efficiency_mult = 0.1
 		building_cash_reserves_mult = 0.1
 		state_poor_standard_of_living_add = 0.5
 		country_trade_route_quantity_mult = 0.05
@@ -829,6 +844,19 @@ socialism = {
 		state_expected_sol_from_literacy = 1
 		country_institution_workplace_safety_max_investment_add = 2
 	}
+
+	on_researched = {
+		if = {
+			limit = {
+				NOT = { has_variable = socialism_researched }
+			}
+			set_variable = socialism_researched
+			ig:ig_trade_unions = {
+				add_ideology = ideology_socialist
+			}
+		}
+	}
+	
 	unlocking_technologies = {
 		labor_movement
 		dialectics
@@ -839,8 +867,8 @@ socialism = {
 			limit = {
 				has_strategy = ai_strategy_egalitarian_agenda
 			}
-			add = 1
-		}
+			add = -0.5
+		}	
 		if = {
 			limit = {
 				OR = {
@@ -848,7 +876,55 @@ socialism = {
 					has_strategy = ai_strategy_reactionary_agenda
 				}
 			}
+			add = 1
+		}
+	}
+}
+
+corporatism = {
+	era = era_3
+	texture = "gfx/interface/icons/invention_icons/corporatism.dds"
+	category = society
+
+	on_researched = {
+		if = {
+			limit = {
+				NOT = { has_variable = corporatism_researched }
+			}
+			set_variable = corporatism_researched
+			ig:ig_devout = {
+				remove_ideology = ideology_pious
+				add_ideology = ideology_corporatist
+			}
+		}
+	}
+	
+	modifier = {
+		state_radicals_from_sol_change_accepted_culture_mult = -0.10
+	}
+	
+	unlocking_technologies = {
+		labor_movement
+		nationalism
+	}
+	
+	ai_weight = {
+		value = 1
+		
+		if = {
+			limit = { 
+				has_strategy = ai_strategy_egalitarian_agenda
+			}
 			add = -0.5
+		}	
+		if = {
+			limit = { 
+				OR = {
+					has_strategy = ai_strategy_conservative_agenda
+					has_strategy = ai_strategy_reactionary_agenda
+				}			
+			}
+			add = 1.5
 		}
 	}
 }
@@ -913,6 +989,9 @@ investment_banks = {
 	modifier = {
 		country_max_companies_add = 1
 		state_urbanization_per_level_mult = -0.15
+		state_capitalists_investment_pool_efficiency_mult = 0.05
+		state_shopkeepers_investment_pool_efficiency_mult = 0.15
+		country_trade_route_competitiveness_mult = 0.05
 	}	
 	
 	unlocking_technologies = {
@@ -1085,6 +1164,7 @@ political_agitation = {
 		anarchism
 		socialism
 		reactionism
+		corporatism
 	}
 	ai_weight = {
 		value = 1
@@ -1136,6 +1216,7 @@ corporate_management = {
 	modifier = {
 		country_max_companies_add = 1
 		state_urbanization_per_level_mult = -0.25
+		country_company_throughput_bonus_add = 0.05
 	}	
 	
 	unlocking_technologies = {
