@@ -1,8 +1,6 @@
 ﻿je_autocracy = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
-
 	group = je_group_internal_affairs
-
 	is_shown_when_inactive = {
 		is_autocratic = yes
 	}
@@ -62,10 +60,19 @@
 		}
 	}
 	fail = {
-			is_autocratic = no
+		is_autocratic = no
 	}
 	current_value = {
-		value = root.var:autocracy_var
+		value = {
+			value = 0
+			# Simple var check here removes thousands of errors
+			if = {
+				limit = {
+					has_variable = autocracy_var
+				}
+				add = root.var:autocracy_var
+			}
+		}
 	}
 	goal_add_value = {
 		add = 360
