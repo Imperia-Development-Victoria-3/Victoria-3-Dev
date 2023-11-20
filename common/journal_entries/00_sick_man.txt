@@ -1,5 +1,6 @@
 ﻿je_sick_man_main = {
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -50,6 +51,7 @@
 # Bureaucractic Reform
 je_sick_man_bureaucracy = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	group = je_group_historical_content
 	complete = {
 		NOR = {
 			has_law = law_type:law_hereditary_bureaucrats
@@ -60,7 +62,6 @@ je_sick_man_bureaucracy = {
 		approaching_bureaucracy_shortage = no
 	}
 	on_complete = {
-		set_variable = completed_sick_man_bureaucracy_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
@@ -91,6 +92,7 @@ je_sick_man_bureaucracy = {
 # Economic Reform
 je_sick_man_economy = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
 	complete = {
 		in_default = no
 		any_scope_state = {
@@ -100,7 +102,6 @@ je_sick_man_economy = {
 		}
 	}
 	on_complete = {
-		set_variable = completed_sick_man_economy_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
@@ -125,23 +126,34 @@ je_sick_man_economy = {
 # Army Reform
 je_sick_man_army = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	complete = {
 		army_size >= 150
-		NOT = {
+		OR = {
+			has_law = law_type:law_professional_army
+			has_law = law_type:law_mass_conscription
+		}
+		has_technology_researched = napoleonic_warfare
+		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks
+				is_building_type = building_barracks				
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_organization
-					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-					# has_active_production_method = pm_no_artillery
-					# has_active_production_method = pm_cannon_artillery
 				}
+			}
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				}
+				percent >= 0.10
 			}
 		}
 	}
 	on_complete = {
-		set_variable = completed_sick_man_army_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
@@ -172,17 +184,20 @@ je_sick_man_army = {
 # Naval Reform
 je_sick_man_navy = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	complete = {
-		navy_size >= 30
-		NOT = {
+		navy_size >= 55
+		OR = {
+			has_law = law_type:law_professional_army
+			has_law = law_type:law_mass_conscription
+		}
+		has_technology_researched = power_of_the_purse
+		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks
+				is_building_type = building_naval_base				
 				OR = {
 					building_has_goods_shortage = yes
-					has_active_production_method = pm_no_organization
-					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-					# has_active_production_method = pm_no_artillery
-					# has_active_production_method = pm_cannon_artillery
+					has_active_production_method = pm_no_naval_theory
 				}
 			}
 		}
@@ -213,6 +228,7 @@ je_sick_man_navy = {
 # Kurdish Question
 je_sick_man_liberal_kurdish = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	immediate = {
 		set_variable = {
 			name = sick_man_kurdish_liberal_var
@@ -297,6 +313,7 @@ je_sick_man_liberal_kurdish = {
 
 je_sick_man_absolute_kurdish = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	immediate = {
 		set_variable = {
 			name = sick_man_kurdish_absolute_var
@@ -368,6 +385,7 @@ je_sick_man_absolute_kurdish = {
 # Nationalism
 je_sick_man_liberal_separatism = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	group = je_group_historical_content
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -453,7 +471,6 @@ je_sick_man_liberal_separatism = {
 			name = balkan_liberal_peace
 			years = 5
 		}
-		set_variable = completed_separatism_sick_man_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
@@ -502,6 +519,7 @@ je_sick_man_liberal_separatism = {
 
 je_sick_man_absolute_separatism = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	group = je_group_historical_content
 	complete = {
 		has_law = law_type:law_faith_orders
 		NOT = {
@@ -543,7 +561,6 @@ je_sick_man_absolute_separatism = {
 		s:STATE_IONIAN_ISLANDS = {
 			add_claim = ROOT
 		}
-		set_variable = completed_separatism_sick_man_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
@@ -570,6 +587,7 @@ je_sick_man_absolute_separatism = {
 # Literacy and Universities
 je_sick_man_liberal_education = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
 	complete = {
 		any_scope_building = {
 			is_building_type = building_university
@@ -589,12 +607,12 @@ je_sick_man_liberal_education = {
 			name = sick_man_liberal_education
 			years = 10
 		}
-		set_variable = completed_sick_man_education_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
 			add = 1
 		}
+		remove_modifier ?= imbalanced_education
 	}
 	current_value = {
 		value = root.literacy_rate
@@ -611,11 +629,11 @@ je_sick_man_liberal_education = {
 	transferable = no
 	weight = 5006
 	progressbar = yes
-	remove_modifier ?= imbalanced_education
 }
 
 je_sick_man_absolute_education = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
 	complete = {
 		any_scope_building = {
 			is_building_type = building_university
@@ -635,12 +653,12 @@ je_sick_man_absolute_education = {
 			name = sick_man_absolute_education
 			years = 10
 		}
-		set_variable = completed_sick_man_education_je
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
 			add = 1
 		}
+		remove_modifier ?= imbalanced_education
 	}
 	current_value = {
 		value = root.literacy_rate
@@ -657,12 +675,12 @@ je_sick_man_absolute_education = {
 	transferable = no
 	weight = 5006
 	progressbar = yes
-	remove_modifier ?= imbalanced_education
 }
 
 # Liberalism
 je_sick_man_liberal_voting = {
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	group = je_group_historical_content
 	immediate = {
 		set_variable = {
 			name = sick_man_voting_liberal_var
@@ -743,6 +761,7 @@ je_sick_man_liberal_voting = {
 # Secularism
 je_sick_man_liberal_secularism = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	group = je_group_historical_content
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -875,6 +894,7 @@ je_sick_man_liberal_secularism = {
 # Labor
 je_sick_man_liberal_labor = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -914,6 +934,7 @@ je_sick_man_liberal_labor = {
 # Syria & Egypt
 je_sick_man_syria = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	complete = {
 		owns_entire_state_region = STATE_ALEPPO
 		owns_entire_state_region = STATE_SYRIA
@@ -939,7 +960,6 @@ je_sick_man_syria = {
 			name = sick_man_var
 			add = 1
 		}
-		set_variable = completed_syria_je
 		s:STATE_SINAI = {
 			add_claim = ROOT
 		}
@@ -989,6 +1009,7 @@ je_sick_man_syria = {
 
 je_sick_man_egypt = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	complete = {
 		OR = {
 			AND = {
@@ -1035,6 +1056,7 @@ je_sick_man_egypt = {
 # Islamism
 je_sick_man_absolute_islam = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_historical_content
 	immediate = {
 		set_variable = {
 			name = sick_man_absolute_tradition_var

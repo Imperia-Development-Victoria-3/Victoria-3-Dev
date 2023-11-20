@@ -1,0 +1,401 @@
+﻿namespace = babylon_qing
+
+babylon_qing.1 = { #Qing set-up event
+	type = country_event
+	placement = root
+	title = babylon_qing.1.t
+	desc = babylon_qing.1.d
+	flavor = babylon_qing.1.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Troubling news
+	name = babylon_qing.1.a
+
+		add_journal_entry = {
+			type = je_end_han_discrimination
+		}
+		add_journal_entry = {
+			type = je_qing_administrative_reform
+		}
+		add_journal_entry = {
+			type = je_rural_poverty_qing
+		}
+		add_journal_entry = {
+			type = je_end_female_infanticide
+		}
+		add_journal_entry = {
+			type = je_promote_western_learning
+		}
+		add_journal_entry = {
+			type = je_investigate_military_reform
+		}
+		add_journal_entry = {
+			type = je_industrialize_china
+		}
+		add_journal_entry = {
+			type = je_chinese_national_identity
+		}
+	}
+}
+
+babylon_qing.2 = { #Anti-Manchu Sentiment
+	type = country_event
+	placement = root
+	title = babylon_qing.2.t
+	desc = babylon_qing.2.d
+	flavor = babylon_qing.2.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_union_leader.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Crack-down 
+	name = babylon_qing.2.a
+	
+		random_scope_state = { 
+			limit = {
+				exists = c:CHI
+				owner = c:CHI
+				
+				NOT = {
+					has_modifier = modifier_manchu_reprisal
+				}
+			}
+			add_radicals_in_state = {
+				value = small_radicals
+				culture = cu:han
+			}
+			add_modifier = { 
+			name = modifier_manchu_reprisal
+			months = 36
+			}
+		}
+	}
+	
+	option = { #Ignore it
+	name = babylon_qing.2.b
+	
+		random_scope_state = { 
+			limit = {
+				exists = c:CHI
+				owner = c:CHI
+				
+				NOT = {
+					has_modifier = modifier_manchu_reprisal
+				}
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:han
+			}
+		}
+	}
+}
+	
+babylon_qing.3 = { #Substate Set-up Event
+	type = country_event
+	placement = root
+	title = babylon_qing.3.t
+	desc = babylon_qing.3.d
+	flavor = babylon_qing.3.f
+
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}	
+	
+		option = { #Troubling news
+		name = babylon_qing.1.a
+
+			if = {
+				limit = {
+					has_modifier = modifier_rural_poverty
+				}
+					add_journal_entry = {
+						type = je_rural_poverty_substate
+			}
+		}
+			add_journal_entry = {
+			type = je_end_female_infanticide
+			}
+			add_journal_entry = {
+			type = je_promote_western_learning
+			}
+			if = {
+				limit = {
+					has_modifier = modifier_crumbling_banner_system
+				}
+					add_journal_entry = {
+						type = je_establish_local_armies
+			}
+		}
+		
+			if = {
+				limit = {
+					exists = c:FRS
+					c:FRS = ROOT
+				}
+				add_journal_entry = {
+					type = je_pacify_and_settle_taiwan
+				}
+			}
+			
+			add_journal_entry = {
+			type = je_industrialize_china
+			}
+	}
+}
+
+babylon_qing.4 = { #Result of Reforming Banner System
+	type = country_event
+	placement = root
+	title = babylon_qing.4.t
+	desc = babylon_qing.4.d
+	flavor = babylon_qing.4.f
+
+	duration = 3
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+
+	trigger = {
+	}	
+
+	option = { #New Army
+		name = babylon_qing.4.a
+
+		trigger = {
+			has_variable = chose_new_army
+		}
+		
+		add_modifier = modifier_new_army
+		ig:ig_armed_forces= {
+			set_interest_group_name = ig_new_army
+		}
+		
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
+		
+		custom_tooltip = {
+		text = fragile_unity_major_remove_tt
+			set_variable = banner_system_new_army
+			# change_variable = {
+			# 	name = china_warlord_explosion
+			# 	add = -10
+			# }
+		}
+	}
+	
+	option = { #Yong-Ying System
+		name = babylon_qing.4.b
+	
+		trigger = {
+		has_variable = chose_yong_ying
+		}
+		
+		add_modifier = modifier_yong_ying_system
+		ig:ig_armed_forces = {
+			set_interest_group_name = ig_beiyang_army
+		}
+		
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
+		custom_tooltip = {
+		text = fragile_unity_minor_add_tt
+			set_variable = banner_system_yong_ying
+			# change_variable = {
+			# 	name = china_warlord_explosion
+			# 	add = 5
+			# }
+		}
+		
+		c:SIH = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_sichuan_army
+			}	
+		}
+		c:XIB = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_gansu_army
+			}
+		}
+		c:MCH = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_manchuria_army
+			}
+		}
+		c:HNA = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_huguang_army
+			}
+		}
+		c:YUE = {
+			ig:ig_armed_forces = {
+				set_interest_group_name = ig_liangguang_army
+			}
+		}
+	}
+}
+
+babylon_qing.5 = { #Tyranny of the Eight Banners
+	type = country_event
+	placement = root
+	title = babylon_qing.5.t
+	desc = babylon_qing.5.d
+	flavor = babylon_qing.5.f
+
+	duration = 3
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	trigger = {
+	}
+	
+	immediate = {
+		remove_modifier = modifier_crumbling_banner_system
+				
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+				
+				OR = {
+					country_has_primary_culture = cu:han
+					c:MCH = this
+				}
+			}
+			remove_modifier = modifier_local_armies
+			remove_modifier = modifier_crumbling_banner_system
+		}
+	}
+	
+	option = { #A Return to Martial Tradition
+		name = babylon_qing.5.a
+		
+		add_modifier = {
+			name = modifier_crumbling_banner_system
+			years = 40
+			is_decaying = yes
+		}
+		
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+				
+				OR = {
+					country_has_primary_culture = cu:han
+					c:MCH = this
+				}
+			}
+			add_modifier = {
+				name = modifier_crumbling_banner_system
+				years = 40
+				is_decaying = yes
+			}
+		}
+		
+		set_variable = cant_discriminate_han
+		
+		
+		custom_tooltip = {
+		text = fragile_unity_major_add_tt
+		 set_variable = eight_banners_martial_tradition
+			# change_variable = {
+			# 	name = china_warlord_explosion
+			# 	add = 10
+			# }
+		}
+		ruler = {
+			kill_character = yes
+		}
+	}
+}
+
+babylon_qing.6 = { #Christian sects in China - Should set up Heavenly Kingdom
+	type = country_event
+	placement = root
+	title = babylon_qing.6.t
+	desc = babylon_qing.6.d
+	flavor = babylon_qing.6.f
+
+	duration = 3
+	
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	
+	event_image = {
+		video = "southamerica_christianity"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	trigger = {
+	}
+		
+	option = { #Troubling news
+		name = babylon_qing.6.a
+		
+		s:STATE_NANJING.region_state:CHI = {
+			convert_population = {
+				target = rel:protestant value = 0.1
+			}
+			add_radicals_in_state = {
+				value = 0.25
+			}
+		}
+	}
+}
+	

@@ -1,0 +1,284 @@
+﻿FRS = {
+	flag_definition = {
+		coa = FRS
+		subject_canton = FRS
+		priority = 100
+	}
+}
+
+HNA = {
+	flag_definition = {
+		coa = HNA
+		subject_canton = HNA
+		priority = 100
+	}
+}
+
+XIB = {
+	flag_definition = {
+		coa = XIB
+		subject_canton = XIB
+		priority = 100
+	}
+}
+
+SIH = {
+	flag_definition = {
+		coa = SIH
+		subject_canton = SIH
+		priority = 200
+		trigger = {
+			NOT = {
+			coa_def_republic_flag_trigger = yes
+			coa_def_dictatorship_flag_trigger = yes
+			}
+		}
+	}
+		flag_definition = {
+		coa = SIH_republic
+		subject_canton = SIH_republic
+		priority = 100
+		trigger = {
+			OR = {
+			coa_def_republic_flag_trigger = yes
+			coa_def_dictatorship_flag_trigger = yes
+			}
+			NOT = {
+			coa_def_subject_trigger = yes
+			}
+		}
+	}
+}
+
+YUE = {
+	flag_definition = {
+		coa = YUE
+		subject_canton = YUE
+		priority = 100
+		trigger = {
+			NOT = {
+			coa_def_republic_flag_trigger = yes
+			coa_def_dictatorship_flag_trigger = yes
+			}
+		}
+	}
+	
+	flag_definition = {
+	coa = YUE_republic
+	subject_canton = YUE_republic
+	priority = 200
+	trigger = {
+			OR = {
+			coa_def_republic_flag_trigger = yes
+			coa_def_dictatorship_flag_trigger = yes
+			}
+			NOT = {
+			coa_def_subject_trigger = yes
+			}
+		}
+	}
+}
+
+MCH = { # Manchuria
+	flag_definition = {
+		coa = MCH
+		allow_overlord_canton = no
+		subject_canton = MCH
+		priority = 1
+	}
+
+	flag_definition = {
+		coa = MCH_qing
+		priority = 2
+		trigger = {
+			exists = c:CHI
+			c:CHI = {
+				has_diplomatic_pact = {
+					who = c:MCH
+					type = vassal
+					is_initiator = yes
+				}
+			}
+		}
+	}		
+}
+
+MGL = { # Mongolia
+	flag_definition = {
+		coa = MGL
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = MGL_subject			
+		subject_canton = MGL
+		priority = 1
+	}
+	flag_definition = {
+		coa = MGL_qing
+		priority = 2
+		trigger = {
+			exists = c:CHI
+			c:CHI = {
+				has_diplomatic_pact = {
+					who = c:MGL
+					type = vassal
+					is_initiator = yes
+				}
+			}
+		}
+	}	
+	flag_definition = {
+		coa = MGL_republic
+		subject_canton = MGL_republic
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}		
+	flag_definition = {
+		coa = MGL_communist
+		priority = 1500
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+		}
+	}		
+}
+
+POL = { # Poland
+	flag_definition = {
+		coa = POL
+		subject_canton = POL
+		priority = 1
+	}	
+	flag_definition = {
+		coa = POL_republic
+		subject_canton = POL_republic
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = POL_oligarchy
+		subject_canton = POL_oligarchy
+		priority = 25
+		trigger = { 
+			coa_def_oligarchy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = POL_fascist
+		subject_canton = POL_fascist
+		priority = 1500
+		trigger = { 
+			coa_def_fascist_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = POL_dictatorship
+		subject_canton = POL_dictatorship
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = POL_republic
+		priority = 1500
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = CPL
+		subject_canton = CPL
+		priority = 2000
+		trigger = {
+			exists = c:RUS
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:POL
+					type = personal_union
+					is_initiator = yes
+				}
+			}
+		}
+	}	
+}
+
+GEO = { # Georgia
+	flag_definition = {
+		coa = GEO
+		allow_overlord_canton = yes				
+		subject_canton = GEO
+		priority = 1
+	}
+	flag_definition = {
+		coa = GEO_theocracy
+		subject_canton = GEO_theocracy
+		priority = 20
+		trigger = { 
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = GEO_rus
+		priority = 30
+		trigger = { 
+			exists = c:RUS
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:GEO
+					type = puppet
+					is_initiator = yes
+				}
+			}
+		}
+	}
+	flag_definition = {
+		coa = GEO_communist
+		priority = 1500
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+		}
+	}		
+}
+
+BUL = { # Bulgaria
+	flag_definition = {
+		coa = BUL
+		subject_canton = BUL	
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = BUL_subject			
+		priority = 1
+	}
+	flag_definition = {
+		coa = BUL_tur
+		priority = 2
+		trigger = {
+			exists = c:TUR
+			c:TUR = {
+				has_diplomatic_pact = {
+					who = c:BUL
+					type = puppet
+					is_initiator = yes
+				}
+			}
+		}
+	}
+}
+
+KUR = { #Kurdistan
+	flag_definition = {
+		coa = KUR
+		subject_canton = KUR			
+		priority = 1
+	}
+	flag_definition = {
+		coa = KUR_tur
+		subject_canton = KUR_tur
+		priority = 1000
+		trigger = {
+			coa_def_subject_trigger = yes
+		}
+	}
+}
+
