@@ -1,7 +1,6 @@
 ﻿customs_union = {
 	requires_approval = yes
 	can_use_obligations = yes
-	
 	unlocking_technologies = {
 		international_trade
 	}
@@ -146,14 +145,17 @@
 		relations_improvement_max = 80
 		subject_type = subject_type_customs_union		# A customs union is technically a type of subject, though it isn't presented this way in-game
 		weekly_effect = {
-			weekly_country_multiply_minting = {
-				DIVISOR = 0.6
-				COUNTRY = scope:target_country
+			scope:target_country = {
+				add_modifier = {
+					name = modifier_customs_union_payments_negative
+					multiplier = scope:target_country.babylon_weekly_customs_union_minting_cost
+					days = 7
+				}
 			}
 			add_modifier = {
 				name = modifier_customs_union_payments_positive
 				multiplier = {
-					subtract = scope:target_country.var:customs_mint_add_var
+					subtract = scope:target_country.babylon_weekly_customs_union_minting_cost
 				}
 				days = 7
 			}
@@ -276,14 +278,12 @@
 				desc = "DIPLOMATIC_ACCEPTANCE_SENIOR_PART"
 				value = 20
 			}
-			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
 				value = "scope:actor.ai_gdp_comparison(root)"
 				min = -10
 				max = 10
-			}			
-		
+			}
 			if = {
 				limit = {
 					"scope:actor.ai_ideological_opinion(root)" > 0
@@ -451,12 +451,10 @@
 				min = -20
 				max = 20
 			}
-					
 			if = {
 				limit = {
 					gdp >= 2000000
 				}
-				
 				subtract = {
 					desc = "DIPLOMATIC_ACCEPTANCE_HIGH_GDP"
 					value = gdp
@@ -465,8 +463,7 @@
 					min = 1
 					max = 100
 				}
-			}			
-			
+			}
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_MUTUAL_TRADE_ROUTES"
 				value = "scope:actor.num_mutual_trade_route_levels_with_country(root)"
@@ -650,8 +647,7 @@
 					}
 					value = -50
 				}
-			}	
-			
+			}
 			if = {
 				limit = {
 					scope:target_country = {
@@ -809,8 +805,8 @@ join_customs_union = {
 			limit = {
 				has_diplomatic_pact = {
 					who = scope:target_country
-		 			type = trade_agreement
-				}			
+					type = trade_agreement
+				}
 			}
 			remove_diplomatic_pact = {
 				country = scope:target_country
