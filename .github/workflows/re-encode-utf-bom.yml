@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - Babylon-on-action
-  pull_request:
-    branches:
-      - Babylon-on-action
+  # pull_request:
+  #   branches:
+  #     - Babylon-on-action
 
 jobs:
   reencode:
@@ -32,5 +32,4 @@ jobs:
         git config --local user.name "${{ github.actor }}"
         git add -u
         git commit -m "Re-encoded txt files to UTF-8 BOM" || echo "No changes to commit"
-        git push
-
+        git push origin "${{ github.ref }}"
