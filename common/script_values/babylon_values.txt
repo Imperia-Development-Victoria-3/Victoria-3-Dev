@@ -1435,8 +1435,18 @@ congress_parade_lowest_spent = {
 }
 
 congress_parade_multiplier = {
-	value = congress_parade_highest_spent
-	divide = congress_parade_lowest_spent
+	value = {
+		value = congress_parade_highest_spent
+		divide = congress_parade_lowest_spent
+	}
+	# Subtract 1 here to reduce the chances of excessive multipliers, and remove 1% prestige from otherwise completely even scenarios
+	subtract = 1
+	# Random number here to even out the finished multiplier
+	divide = 4
+	# Multiply by the average budget level of the parade; fancy parades have higher impact - both ways
+	multiply = congress_parade_average_budget_level_of_parade
+	min = 1
+	max = 20
 }
 
 congress_parade_average_budget_level_of_leads = {
@@ -1449,12 +1459,17 @@ congress_parade_average_budget_level_of_leads = {
 }
 
 congress_parade_average_budget_level_of_parade = {
+	# The parade host and the leads should have an "even" relationship between host and the combined budget of the leads
+	# means more weight to the host city in figuring out the overall splendor of the parade...
 	value = 0
 	add = global_var:babylon_vienna_congress_session_initiator.var:chosen_budget_level
-	add = global_var:congress_lead_1.var:chosen_budget_level
-	add = global_var:congress_lead_2.var:chosen_budget_level
-	add = global_var:congress_lead_3.var:chosen_budget_level
-	divide = 4
+	add = {
+		add = global_var:congress_lead_1.var:chosen_budget_level
+		add = global_var:congress_lead_2.var:chosen_budget_level
+		add = global_var:congress_lead_3.var:chosen_budget_level
+		divide = 3
+	}
+	divide = 2
 	round = yes
 }
 
