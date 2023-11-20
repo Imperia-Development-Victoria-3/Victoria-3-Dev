@@ -1544,19 +1544,33 @@ babylon_discord_ai_voting_weight = {
 	}
 }
 
-babylon_weekly_minting_without_customs = {
-	value = 500	#base minting add
-	add = {
-		value = gdp
-		divide = 1000
-	}
-}
-
 babylon_weekly_customs_union_minting_cost = {
-	value = babylon_weekly_minting_without_customs
+	if = {
+		limit = {
+			has_variable = previous_minting_cost
+		}
+		value = {
+			add = modifier:country_minting_add
+			subtract = var:previous_minting_cost
+		}
+	}
+	else = {
+		value = modifier:country_minting_add
+	}
 	divide = {
 		add = 1
 		divide = 0.6		# old $DIVISOR$ 
 	}
-	subtract = babylon_weekly_minting_without_customs
+	if = {
+		limit = {
+			has_variable = previous_minting_cost
+		}
+		subtract = {
+			add = modifier:country_minting_add
+			subtract = var:previous_minting_cost
+		}
+	}
+	else = {
+		subtract = modifier:country_minting_add
+	}
 }
