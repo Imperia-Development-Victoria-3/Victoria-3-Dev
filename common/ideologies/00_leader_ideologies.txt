@@ -3927,7 +3927,7 @@ ideology_land_reformer = {
 	}
 	
 	leader_weight = {
-		value = 100
+		value = 50
 		# more likely when issues are relevant
 		if = {
 			limit = {
@@ -4255,12 +4255,13 @@ ideology_liberal_leader = {
 				has_variable = chose_fascism
 				has_variable = chose_conservatism
 				has_variable = chose_ethno_nationalism
+				has_variable = chose_autocracy
 			}
 		}
 	}
 	
 	leader_weight = {
-		value = 100
+		value = 75
 		# not very relevant if issues are already addressed
 		if = {
 			limit = {
@@ -4274,7 +4275,7 @@ ideology_liberal_leader = {
 					has_law = law_type:law_elected_bureaucrats
 				}
 			}
-			add = -25
+			add = -50
 		}
 		# IGs will not sabotage their own dictatorships
 		if = {
@@ -4301,6 +4302,25 @@ ideology_liberal_leader = {
 				}
 			}
 			add = -75
+		}
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+						has_law = law_type:law_technocracy
+						has_law = law_type:law_single_party_state
+					}
+					OR = {
+						scope:interest_group = {
+							is_interest_group_type = ig_devout
+							is_interest_group_type = ig_armed_forces
+						}
+					}
+				}
+			}
+			add = -50
 		}
 		# More common in republics
 		if = {
