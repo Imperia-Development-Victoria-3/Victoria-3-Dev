@@ -836,14 +836,38 @@ babylon_qing_fragile_unity_value = {
 		# Every one of these tags that are NOT a subject adds 10
 		limit = {
 			OR = {
-				this = c:XIN
-				this = c:MGL
-				this = c:MCH
-				this = c:XIB
-				this = c:TIB
-				this = c:SIH
-				this = c:HNA
-				this = c:YUE
+				AND = {
+					exists = c:XIN
+					this = c:XIN
+				}
+				AND = {
+					exists = c:MGL
+					this = c:MGL
+				}
+				AND = {
+					exists = c:MCH
+					this = c:MCH
+				}
+				AND = {
+					exists = c:XIB
+					this = c:XIB
+				}
+				AND = {
+					exists = c:TIB
+					this = c:TIB
+				}
+				AND = {
+					exists = c:SIH
+					this = c:SIH
+				}
+				AND = {
+					exists = c:HNA
+					this = c:HNA
+				}
+				AND = {
+					exists = c:YUE
+					this = c:YUE
+				}
 			}
 			NOT = {
 				is_subject_of = ROOT
@@ -864,12 +888,93 @@ babylon_qing_fragile_unity_value = {
 		}
 		add = 5
 	}
+	# Each of these countries add 10 if they dont exists
+	if = {
+		limit = {
+			NOT = {
+				exists = c:XIN
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:MGL
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:MCH
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:XIB
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:TIB
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:SIH
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:HNA
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:YUE
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:FRS
+			}
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:KOR
+			}
+		}
+		add = 5
+	}
 	if = {
 		limit = {
 			# All state regions that are manchu homelands must be owned by c:CHI or one of their subjects
 			any_state_region = {
 				count = all
-				limit = {
+				filter = {
 					is_homeland = cu:manchu
 				}
 				root = {
@@ -1572,5 +1677,43 @@ babylon_weekly_customs_union_minting_cost = {
 	}
 	else = {
 		subtract = modifier:country_minting_add
+	}
+}
+
+babylon_china_infamy_penalty_value = {
+	value = 0
+	if = {
+		limit = {
+			root = {
+				NOR = {
+					country_has_primary_culture = cu:manchu
+					country_has_primary_culture = cu:mongol
+					country_has_primary_culture = cu:tibetan
+					any_primary_culture = {
+						has_discrimination_trait = han_chinese
+					}
+				}
+			}
+		}
+		every_state = {
+			limit = {
+				OR = {
+					owner = root
+					owner = {
+						any_overlord_or_above = {
+							this = root
+						}
+					}
+				}
+				is_treaty_port = no
+				state_region = {
+					is_homeland = cu:han
+					NOT = {
+						this = s:STATE_FORMOSA
+					}
+				}
+			}
+			add = 5
+		}
 	}
 }
