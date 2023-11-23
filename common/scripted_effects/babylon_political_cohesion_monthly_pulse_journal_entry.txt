@@ -39,19 +39,23 @@
 		}
 		save_scope_as = target_country
 		root = {
+			set_local_variable = {
+				name = var_babylon_discord_fetch_value
+				value = babylon_discord_fetch_value
+			}
 			if = {
 				limit = {
-					babylon_discord_fetch_value > 0
+					local_var:var_babylon_discord_fetch_value > 0
 				}
 				change_variable = {
 					name = theoretical_discord_add
-					add = babylon_discord_fetch_value
+					add = local_var:var_babylon_discord_fetch_value
 				}
 			}
 			else = {
 				change_variable = {
 					name = theoretical_discord_subtract
-					add = babylon_discord_fetch_value
+					add = local_var:var_babylon_discord_fetch_value
 				}
 			}
 		}
@@ -60,19 +64,23 @@
 	###############################
 	### INTERNAL CONSIDERATIONS ###
 	# First the ruler
+	set_local_variable = {
+		name = var_ruler_babylon_discord_character_law_calculation
+		value = ruler.babylon_discord_character_law_calculation
+	}
 	if = {
 		limit = {
-			ruler.babylon_discord_character_law_calculation > 0
+			local_var:var_ruler_babylon_discord_character_law_calculation > 0
 		}
 		change_variable = {
 			name = theoretical_discord_add
-			add = ruler.babylon_discord_character_law_calculation
+			add = local_var:var_ruler_babylon_discord_character_law_calculation
 		}
 	}
 	else = {
 		change_variable = {
 			name = theoretical_discord_subtract
-			add = ruler.babylon_discord_character_law_calculation
+			add = local_var:var_ruler_babylon_discord_character_law_calculation
 		}
 	}
 	# Then leaders of every government IG, along with the government IGs 
@@ -80,38 +88,46 @@
 		limit = {
 			is_in_government = yes
 		}
+		set_local_variable = {
+			name = var_gov_ig_babylon_discord_interest_group_law_calculation
+			value = babylon_discord_interest_group_law_calculation
+		}
 		root = {
 			if = {
 				limit = {
-					prev.babylon_discord_interest_group_law_calculation > 0
+					local_var:var_gov_ig_babylon_discord_interest_group_law_calculation > 0
 				}
 				change_variable = {
 					name = theoretical_discord_add
-					add = prev.babylon_discord_interest_group_law_calculation
+					add = local_var:var_gov_ig_babylon_discord_interest_group_law_calculation
 				}
 			}
 			else = {
 				change_variable = {
 					name = theoretical_discord_subtract
-					add = prev.babylon_discord_interest_group_law_calculation
+					add = local_var:var_gov_ig_babylon_discord_interest_group_law_calculation
 				}
 			}
 		}
 		leader = {
+			set_local_variable = {
+				name = var_gov_ig_leader_babylon_discord_character_law_calculation
+				value = babylon_discord_character_law_calculation
+			}
 			root = {
 				if = {
 					limit = {
-						prev.babylon_discord_character_law_calculation > 0
+						local_var:var_gov_ig_leader_babylon_discord_character_law_calculation > 0
 					}
 					change_variable = {
 						name = theoretical_discord_add
-						add = prev.babylon_discord_character_law_calculation
+						add = local_var:var_gov_ig_leader_babylon_discord_character_law_calculation
 					}
 				}
 				else = {
 					change_variable = {
 						name = theoretical_discord_subtract
-						add = prev.babylon_discord_character_law_calculation
+						add = local_var:var_gov_ig_leader_babylon_discord_character_law_calculation
 					}
 				}
 			}
@@ -135,38 +151,46 @@
 					}
 				}
 			}
+			set_local_variable = {
+				name = var_opp_ig_babylon_discord_democratic_opposition_law_calculation
+				value = babylon_discord_democratic_opposition_law_calculation
+			}
 			root = {
 				if = {
 					limit = {
-						prev.babylon_discord_democratic_opposition_law_calculation > 0
+						local_var:var_opp_ig_babylon_discord_democratic_opposition_law_calculation > 0
 					}
 					change_variable = {
 						name = theoretical_discord_add
-						add = prev.babylon_discord_democratic_opposition_law_calculation
+						add = local_var:var_opp_ig_babylon_discord_democratic_opposition_law_calculation
 					}
 				}
 				else = {
 					change_variable = {
 						name = theoretical_discord_subtract
-						add = prev.babylon_discord_democratic_opposition_law_calculation
+						add = local_var:var_opp_ig_babylon_discord_democratic_opposition_law_calculation
 					}
 				}
 			}
 			leader = {
+				set_local_variable = {
+					name = var_opp_leader_babylon_discord_democratic_opposition_character_law_calculation
+					value = babylon_discord_democratic_opposition_character_law_calculation
+				}
 				root = {
 					if = {
 						limit = {
-							prev.babylon_discord_democratic_opposition_character_law_calculation > 0
+							local_var:var_opp_leader_babylon_discord_democratic_opposition_character_law_calculation > 0
 						}
 						change_variable = {
 							name = theoretical_discord_add
-							add = prev.babylon_discord_democratic_opposition_character_law_calculation
+							add = local_var:var_opp_leader_babylon_discord_democratic_opposition_character_law_calculation
 						}
 					}
 					else = {
 						change_variable = {
 							name = theoretical_discord_subtract
-							add = prev.babylon_discord_democratic_opposition_character_law_calculation
+							add = local_var:var_opp_leader_babylon_discord_democratic_opposition_character_law_calculation
 						}
 					}
 				}
@@ -174,19 +198,23 @@
 		}
 	}
 	# Legitimacy also have an impact
+	set_local_variable = {
+		name = var_babylon_discord_legitimacy_offset_value
+		value = babylon_discord_legitimacy_offset_value
+	}
 	if = {
 		limit = {
-			babylon_discord_legitimacy_offset_value > 0
+			local_var:var_babylon_discord_legitimacy_offset_value > 0
 		}
 		change_variable = {
 			name = theoretical_discord_add
-			add = babylon_discord_legitimacy_offset_value
+			add = local_var:var_babylon_discord_legitimacy_offset_value
 		}
 	}
 	else = {
 		change_variable = {
 			name = theoretical_discord_subtract
-			add = babylon_discord_legitimacy_offset_value
+			add = local_var:var_babylon_discord_legitimacy_offset_value
 		}
 	}
 	# Cultural majority have an impact
@@ -194,19 +222,23 @@
 		limit = {
 			is_discord_cultural_internal_calc_active = yes
 		}
+		set_local_variable = {
+			name = var_babylon_discord_cultural_majority_value
+			value = babylon_discord_cultural_majority_value
+		}
 		if = {
 			limit = {
-				babylon_discord_cultural_majority_value > 0
+				local_var:var_babylon_discord_cultural_majority_value > 0
 			}
 			change_variable = {
 				name = theoretical_discord_add
-				add = babylon_discord_cultural_majority_value
+				add = local_var:var_babylon_discord_cultural_majority_value
 			}
 		}
 		else = {
 			change_variable = {
 				name = theoretical_discord_subtract
-				add = babylon_discord_cultural_majority_value
+				add = local_var:var_babylon_discord_cultural_majority_value
 			}
 		}
 	}
@@ -215,19 +247,23 @@
 		limit = {
 			is_discord_religious_internal_calc_active = yes
 		}
+		set_local_variable = {
+			name = var_babylon_discord_religious_majority_value
+			value = babylon_discord_religious_majority_value
+		}
 		if = {
 			limit = {
-				babylon_discord_religious_majority_value > 0
+				local_var:var_babylon_discord_religious_majority_value > 0
 			}
 			change_variable = {
 				name = theoretical_discord_add
-				add = babylon_discord_religious_majority_value
+				add = local_var:var_babylon_discord_religious_majority_value
 			}
 		}
 		else = {
 			change_variable = {
 				name = theoretical_discord_subtract
-				add = babylon_discord_religious_majority_value
+				add = local_var:var_babylon_discord_religious_majority_value
 			}
 		}
 	}
