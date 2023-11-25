@@ -1684,27 +1684,17 @@ babylon_china_infamy_penalty_value = {
 	value = 0
 	if = {
 		limit = {
-			root = {
-				NOR = {
-					country_has_primary_culture = cu:manchu
-					country_has_primary_culture = cu:mongol
-					country_has_primary_culture = cu:tibetan
-					any_primary_culture = {
-						has_discrimination_trait = han_chinese
-					}
+			NOR = {
+				country_has_primary_culture = cu:manchu
+				country_has_primary_culture = cu:mongol
+				country_has_primary_culture = cu:tibetan
+				any_primary_culture = {
+					has_discrimination_trait = han_chinese
 				}
 			}
 		}
-		every_state = {
+		every_scope_state = {
 			limit = {
-				OR = {
-					owner = root
-					owner = {
-						any_overlord_or_above = {
-							this = root
-						}
-					}
-				}
 				is_treaty_port = no
 				state_region = {
 					is_homeland = cu:han
@@ -1714,6 +1704,31 @@ babylon_china_infamy_penalty_value = {
 				}
 			}
 			add = 5
+		}
+		every_subject_or_below = {
+			limit = {
+				any_scope_state = {
+					is_treaty_port = no
+					state_region = {
+						is_homeland = cu:han
+						NOT = {
+							this = s:STATE_FORMOSA
+						}
+					}
+				}
+			}
+			every_scope_state = {
+				limit = {
+					is_treaty_port = no
+					state_region = {
+						is_homeland = cu:han
+						NOT = {
+							this = s:STATE_FORMOSA
+						}
+					}
+				}
+				add = 5
+			}
 		}
 	}
 }

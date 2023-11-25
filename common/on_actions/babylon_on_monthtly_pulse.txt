@@ -116,13 +116,17 @@
 		}
 		# Give infamy decay malus to China owners
 		remove_modifier ?= babylon_china_ownership_infamy
+		set_local_variable = {
+			name = tmp_babylon_china_infamy_penalty_value
+			value = babylon_china_infamy_penalty_value
+		}
 		if = {
 			limit = {
-				babylon_china_infamy_penalty_value != 0
+				local_var:tmp_babylon_china_infamy_penalty_value != 0
 			}
 			add_modifier = {
 				name = babylon_china_ownership_infamy
-				multiplier = babylon_china_infamy_penalty_value
+				multiplier = local_var:tmp_babylon_china_infamy_penalty_value
 			}
 		}
 	}
