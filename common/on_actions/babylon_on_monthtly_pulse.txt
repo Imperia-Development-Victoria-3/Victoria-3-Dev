@@ -153,47 +153,47 @@ on_babylon_monthly_pulse_store_infamy = {
 	}
 }
 
-on_babylon_monthly_pulse_allow_incorporation = {
+on_babylon_monthly_pulse_state = {
 	effect = {
+		babylon_arable_land_green_grass_effect = yes
+		### Dis/allow incorporation
 		if = {
 			limit = {
-				has_law = law_type:law_imperialism
+				is_incorporated = no
+				incorporation_progress = 0
 			}
-			every_scope_state = {
-				save_scope_as = current_state
+			if = {
 				limit = {
-					is_incorporated = no
-					is_being_incorporated = no
+					owner = {
+						has_law = law_type:law_imperialism
+					}
 				}
 				if = {
 					limit = {
 						any_scope_culture = {
 							NOT = {
-								culture_is_discriminated_in = root
+								culture_is_discriminated_in = prev.owner
 							}
-							has_homeland = scope:current_state
+							has_homeland = root
 						}
 					}
 					remove_modifier ?= modifier_state_disallow_incorporation
 				}
-				else = {
-					if = {
-						limit = {
-							NOT = {
-								has_modifier = modifier_state_disallow_incorporation
-							}
+				else_if = {
+					limit = {
+						NOT = {
+							has_modifier = modifier_state_disallow_incorporation
 						}
-						add_modifier = modifier_state_disallow_incorporation
+					}
+					add_modifier = {
+						name = modifier_state_disallow_incorporation
 					}
 				}
 			}
+			else = {
+				remove_modifier ?= modifier_state_disallow_incorporation
+			}
 		}
-	}
-}
-
-on_babylon_monthly_pulse_state = {
-	effect = {
-		babylon_arable_land_green_grass_effect = yes
 	}
 }
 
