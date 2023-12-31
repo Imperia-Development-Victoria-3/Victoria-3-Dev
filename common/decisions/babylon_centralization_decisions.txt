@@ -1,0 +1,140 @@
+open_centralization_laws_decision = {
+	is_shown = {
+		NOT = {
+			has_variable = opened_centralization_laws_var
+			has_modifier = centralization_laws_cooldown
+			has_law = law_type:law_feudalism
+		}
+	}
+	possible = {
+		NOT = {
+			has_variable = opened_centralization_laws_var
+			has_modifier = centralization_laws_cooldown		
+		}
+	}
+	when_taken = {
+		set_variable = opened_centralization_laws_var
+	}
+	ai_chance = {
+		base = 0
+	}
+}
+
+close_centralization_laws_decision = {
+	is_shown = {
+		has_variable = opened_centralization_laws_var
+	}
+	possible = {
+		has_variable = opened_centralization_laws_var
+	}
+	when_taken = {
+		remove_variable = opened_centralization_laws_var
+	}
+	ai_chance = {
+		base = 0
+	}
+}
+
+change_centralization_unitary_decision = {
+	is_shown = {
+		has_variable = opened_centralization_laws_var
+		NOT = {
+			has_law = law_type:law_unitary
+		}
+	}
+	possible = {
+		NOT = {
+			has_law = law_type:law_unitary
+			has_modifier = centralization_laws_cooldown
+		}
+	}
+	when_taken = {
+		activate_law = law_type:law_unitary
+		add_modifier = {
+			name = centralization_laws_cooldown
+			months = 60
+			is_decaying = yes
+		}
+	}
+	ai_chance = {
+		base = 0
+	}	
+}
+
+change_centralization_federalism_decision = {
+	is_shown = {
+		has_variable = opened_centralization_laws_var
+		NOT = {
+			has_law = law_type:law_federalism
+		}
+	}
+	possible = {
+		NOT = {
+			has_law = law_type:law_federalism
+			has_modifier = centralization_laws_cooldown
+		}
+	}
+	when_taken = {
+		activate_law = law_type:law_federalism
+		add_modifier = {
+			name = centralization_laws_cooldown
+			months = 60
+			is_decaying = yes
+		}
+	}
+	ai_chance = {
+		base = 0
+	}
+}
+
+change_centralization_confederalism_decision = {
+	is_shown = {
+		has_variable = opened_centralization_laws_var
+		NOT = {
+			has_law = law_type:law_confederalism
+		}
+	}
+	possible = {
+		NOT = {
+			has_law = law_type:law_confederalism
+			has_modifier = centralization_laws_cooldown
+		}
+	}
+	when_taken = {
+		activate_law = law_type:law_confederalism
+		add_modifier = {
+			name = centralization_laws_cooldown
+			months = 60
+			is_decaying = yes
+		}
+	}
+}
+
+abolish_feudalism_decision = {
+	is_shown = {
+		has_law = law_type:law_feudalism
+	}
+
+	possible = {
+		has_law = law_type:law_feudalism
+		NOT = {
+			has_law = law_type:law_serfdom
+			has_law = law_type:law_hereditary_bureaucrats
+			has_law = law_type:law_traditionalism
+		}
+	}	
+	when_taken = {
+		activate_law = law_type:law_unitary
+		add_radicals = {
+			value = large_radicals
+			pop_type = aristocrats
+		}
+		add_modifier = {
+			name = centralization_laws_cooldown
+			months = 60
+		}
+	}
+	ai_chance = {
+		base = 50
+	}
+}
