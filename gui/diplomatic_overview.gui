@@ -301,6 +301,52 @@ types diplomatic_panel
 						}	
 					}			
 				}
+
+				### Foreign Policy
+				container = {
+					minimumsize = { @panel_width_plus_20 -1 }
+					maximumsize = { @panel_width_plus_20 -1 }
+					visible = "[InformationPanel.IsTabSelected('foreign_policy')]"
+					using = default_content_fade
+					
+					empty_state = {
+						blockoverride "visible" {
+							visible = "[IsDataModelEmpty(AccessPlayer.AccessReleasableCountries)]"
+						}
+						blockoverride "text" {
+							text = "NO_RELEASABLE_COUNTRIES"
+						}
+					}	
+					
+					flowcontainer = {
+						parentanchor = hcenter
+						direction = vertical
+						visible = "[Not(IsDataModelEmpty(AccessPlayer.AccessReleasableCountries))]"		
+						spacing = 10
+
+						default_header = {
+							blockoverride = "text" {
+								text = "RELEASABLE_COUNTRIES"
+							}
+						}
+
+						flowcontainer = {
+							parentanchor = hcenter
+							direction = vertical
+                    		datamodel = "[GetGlobalList('diplomatic_stance_laws')]"
+							spacing = 5
+						
+							item = {
+								flowcontainer = {
+									margin_bottom = 15
+									enactable_generic_law = {
+										datacontext = "[Scope.AccessLaw]"
+									}	
+								}
+							}
+						}	
+					}			
+				}
 			}
 		}
 
