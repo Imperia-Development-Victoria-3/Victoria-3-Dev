@@ -8,6 +8,7 @@
 	}
 	upkeep_modifier = {
 		goods_input_grain_add = 1	#0.5
+		goods_input_meat_add = 0.1
 	}
 	upkeep_modifier_unscaled = {
         goods_input_small_arms_mult = 0.15
@@ -63,6 +64,7 @@ mobilization_option_extra_supplies = {
 	
 	upkeep_modifier = {
 		goods_input_groceries_add = 1
+		goods_input_meat_add = 0.2
 	}
 	upkeep_modifier_unscaled = {
         goods_input_small_arms_mult = 0.25
@@ -75,7 +77,6 @@ mobilization_option_extra_supplies = {
 		gooods_input_luxury_clothes_mult = 0.25
 		goods_input_grain_mult = 0.25
 		goods_input_groceries_mult = 0.25
-		goods_input_fruit_mult = 0.25
 		goods_input_meat_mult = 0.25
 	}	
 	
@@ -123,7 +124,8 @@ mobilization_option_luxurious_supplies = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_meat_add = 1
+		goods_input_meat_add = 0.7
+		goods_input_fruit_add = 0.5
 		goods_input_wine_add = 1
 	}
 	upkeep_modifier_unscaled = {
@@ -137,7 +139,6 @@ mobilization_option_luxurious_supplies = {
 		gooods_input_luxury_clothes_mult = 0.35
 		goods_input_grain_mult = 0.35
 		goods_input_groceries_mult = 0.35
-		goods_input_fruit_mult = 0.35
 		goods_input_meat_mult = 0.35
 	}	
 	
@@ -145,6 +146,7 @@ mobilization_option_luxurious_supplies = {
 		unit_morale_loss_mult = -0.1
 		unit_offense_mult = 0.15
 		unit_defense_mult = 0.15
+		unit_recovery_rate_add = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -498,11 +500,11 @@ mobilization_option_machinegunners = {
 	}
 	upkeep_modifier = {
 		goods_input_small_arms_add = 1
-		goods_input_ammunition_add = 2	#1
+		goods_input_ammunition_add = 3	#1
 	}
 	unit_modifier = {
 		unit_offense_add = 5
-		unit_defense_add = 25	#10
+		unit_defense_add = 30	#10
 	}
 	ai_weight = {
 		value = 1
@@ -546,12 +548,14 @@ mobilization_option_chemical_weapons = {
 		chemical_warfare
 	}
 	upkeep_modifier = {
-		goods_input_artillery_add = 1 #0
+		goods_input_artillery_add = 1.5 #0
 		goods_input_fertilizer_add = 4	#2
+		goods_input_oil_add = 0.25
 	}
 	unit_modifier = {
 		unit_offense_add = 50	#20
 		unit_kill_rate_add = 0.5
+		unit_devastation_mult = 0.65
 		unit_recovery_rate_add = -0.2
 	}
 	ai_weight = {
@@ -596,12 +600,14 @@ mobilization_option_flamethrowers = {
 		flamethrowers
 	}
 	upkeep_modifier = {
-		goods_input_oil_add = 1
+		goods_input_oil_add = 0.75
+		goods_input_steel_add = 0.1
+		goods_input_small_arms_add = 0.25
 	}
 	unit_modifier = {
 		unit_offense_add = 25 #15 #to match machine gunners defense
 		unit_kill_rate_add = 0.15 #0
-		unit_devastation_mult = 0.5
+		unit_devastation_mult = 0.35
 		unit_morale_damage_mult = 0.1
 	}
 	ai_weight = {
@@ -633,6 +639,17 @@ mobilization_option_motorized_recon = {
 	texture = "gfx/interface/icons/mobilization_options/motorized_reconaissance.dds"
 
 	possible = {
+		NOR = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_infantry_recon
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_cavalry_recon
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_no_recon
+			}
+		}
 		market ?= {
 			mg:automobiles ?= {
 				market_goods_sell_orders > 0
@@ -674,7 +691,10 @@ mobilization_option_motorized_recon = {
 		unit_occupation_mult = 0.5
 		military_formation_movement_speed_mult = 0.3
 		character_battle_condition_surprise_maneuver_mult = 0.5
-	}
+		character_battle_condition_lost_mult = -0.2
+		character_battle_condition_controlled_retreat_mult = 0.1
+		character_charted_terrain_mult = 0.15
+		}
 	ai_weight = {
 		value = 1
 	}
