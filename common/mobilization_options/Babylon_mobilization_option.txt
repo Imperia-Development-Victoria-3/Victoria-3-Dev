@@ -486,3 +486,187 @@ mobilization_option_aerial_combat = {
 
 	group = aerial_support
 }
+
+mobilization_option_basic_uniforms = {
+	texture = "gfx/interface/icons/babylon_mobilization_options/small_arms_flintlocks.dds"
+	can_be_turned_off = {
+		custom_tooltip = {
+		    text = mobilization_option_basic_uniforms_can_be_turned_off_tt
+			always = no
+		}
+	}
+	upkeep_modifier = {
+		goods_input_clothes_add = 0.5
+	}
+	unit_modifier = {
+		unit_recovery_rate_add = 0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = uniforms
+}
+
+mobilization_option_dress_uniforms = {
+	texture = "gfx/interface/icons/babylon_mobilization_options/small_arms_flintlocks.dds"
+	unlocking_technologies = {
+		line_infantry
+	}
+	possible = {
+		NOT = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_camouflaged_uniforms
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_drab_uniforms
+			}
+		}
+		market = {
+			mg:luxury_clothes = {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	upkeep_modifier = {
+		goods_input_luxury_clothes_add = 0.5
+	}
+	unit_modifier = {
+		character_battle_condition_blunder_mult = -0.05
+		character_battle_condition_camouflaged_mult = -0.1
+		unit_morale_damage_mult = 0.10
+		unit_morale_loss_mult = -0.05
+		unit_recovery_rate_add = -0.1
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = uniforms
+}
+
+mobilization_option_camouflaged_uniforms = {
+	texture = "gfx/interface/icons/babylon_mobilization_options/small_arms_flintlocks.dds"
+	unlocking_technologies = {
+		flying_columns
+	}
+	possible = {
+		NOR = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_dress_uniforms
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_drab_uniforms
+			}
+		}
+		market = {
+			mg:luxury_clothes = {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	upkeep_modifier = {
+		goods_input_clothes_add = 0.5
+		goods_input_dye_add = 0.5
+	}
+	unit_modifier = {
+		character_battle_condition_blunder_mult = 0.05
+		character_battle_condition_camouflaged_mult = 0.15
+		unit_morale_damage_mult = 0.15
+		unit_recovery_rate_add = -0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = uniforms
+}
+
+mobilization_option_drab_uniforms = {
+	texture = "gfx/interface/icons/babylon_mobilization_options/small_arms_flintlocks.dds"
+	unlocking_technologies = {
+		trench_works
+	}
+	possible = {
+		NOT = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_dress_uniforms
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_camouflaged_uniforms
+			}
+		}
+		market = {
+			mg:clothes = {
+				market_goods_sell_orders > 0
+			}
+			mg:steel = {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_armaments_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	upkeep_modifier = {
+		goods_input_clothes_add = 0.5
+		goods_input_steel_add = 0.1
+	}
+	unit_modifier = {
+		unit_defense_add = 5
+		unit_morale_loss_mult = 0.10
+		unit_recovery_rate_add = 0.10
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = uniforms
+}
