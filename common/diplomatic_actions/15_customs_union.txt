@@ -225,11 +225,24 @@
 					subtract = scope:target_country.babylon_weekly_customs_union_minting_cost
 				}
 
+				# if high enough assume that there are still other countries with a customs union.
+				if = {
+					limit = {
+						var:total_customs_union_payment_positive > 100
+					}
+					add_modifier = {
+						name = modifier_customs_union_payments_positive
+						multiplier = {
+							subtract = root.var:total_customs_union_payment_positive
+						}
+					}
+				}
+				
 				scope:target_country = {
 					remove_modifier ?= modifier_customs_union_payments_negative
 					remove_variable = previous_minting_cost
 				}
-				
+
 				# AI may not take leaving their customs union well...
 				if = {
 					limit = {
