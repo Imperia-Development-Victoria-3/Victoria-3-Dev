@@ -1,0 +1,40 @@
+namespace = lignitediscovered
+
+lignite.1 = { #lignite discovered in state
+	type = state_event
+	placement = ROOT
+	title = lignite.1.t
+	desc = lignite.1.d
+	flavor = lignite.1.f
+
+	duration = 3
+
+	event_image = {
+		video = "europenorthamerica_gold_prospectors"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	trigger = {
+		has_building = building_lignite_mine
+		NOT = { has_modifier = state_lignite_discovered }
+	}
+
+	immediate = {
+		save_scope_as = state_lignite_discovered
+	}
+
+	option = { #wooh lignite
+		name = lignite.1.a
+		default_option = yes
+		}
+	
+	option = { #the children yearn for the mines
+		name = lignite.1.b
+		limit = {
+			has_law = law_child_labor_allowed
+		}
+	}
+}
