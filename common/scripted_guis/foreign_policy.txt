@@ -22,12 +22,37 @@
 		}
 	}
 
-	is_shown = {
+	is_valid = {
 		scope:country = {
 			NOT = {
 				has_law = prev.type
 			}
 		}
 
+		trigger_if = {
+			limit = {
+				type = law_type:law_anti_imperialist
+			}
+			scope:country = {
+				has_law != law_colonial_exploitation
+				has_law != law_colonial_resettlement	
+			}
+		}
+
+		trigger_if = {
+			limit = {
+				type = law_type:law_pacifist
+			}
+			scope:country = {
+				has_law != law_professional_army
+				has_law != law_national_guard
+				has_law != law_militarized_police
+			}
+		}
+	}
+
+
+	is_shown = {
+		type != law_type:law_true_neutrality
 	}
 }
