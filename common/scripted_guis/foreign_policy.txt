@@ -12,12 +12,15 @@
 						has_law = prev.type
 					}
 				}
-				start_enactment = prev.type
-				add_enactment_phase = 2 # is capped so just to make sure it remains functional if paradox changes anything
-				add_law_progress = 0.9
-				add_enactment_modifier = {
-					name = law_enactment_chance
-				}				#activate_law = prev.type
+				custom_tooltip = {
+					text = EXECUTIVE_ORDER_DESC
+					start_enactment = prev.type
+					add_enactment_phase = 2 # is capped so just to make sure it remains functional if paradox changes anything
+					add_law_progress = 0.9
+					add_enactment_modifier = {
+						name = law_enactment_chance
+					}				#activate_law = prev.type
+				}
 			}
 		}
 	}
@@ -34,8 +37,12 @@
 				type = law_type:law_anti_imperialist
 			}
 			scope:country = {
-				has_law != law_colonial_exploitation
-				has_law != law_colonial_resettlement	
+				NOT = {
+					OR = {
+						has_law = law_type:law_colonial_exploitation
+						has_law = law_type:law_colonial_resettlement	
+					}
+				}
 			}
 		}
 
@@ -44,13 +51,16 @@
 				type = law_type:law_pacifist
 			}
 			scope:country = {
-				has_law != law_professional_army
-				has_law != law_national_guard
-				has_law != law_militarized_police
+				NOT = {
+					OR = {
+						has_law = law_type:law_professional_army
+						has_law = law_type:law_national_guard
+						has_law = law_type:law_militarized_police
+					}
+				}
 			}
 		}
 	}
-
 
 	is_shown = {
 		type != law_type:law_true_neutrality
