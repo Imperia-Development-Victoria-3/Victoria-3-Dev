@@ -138,23 +138,50 @@
 		subject_type = subject_type_customs_union		# A customs union is technically a type of subject, though it isn't presented this way in-game
 		weekly_effect = {
 			scope:target_country = {
+				remove_modifier ?= modifier_customs_union_payments_negative
 				add_modifier = {
 					name = modifier_customs_union_payments_negative
 					multiplier = scope:target_country.babylon_weekly_customs_union_minting_cost
-					days = 7
 				}
+			}
+
+			if = {
+				limit = {
+					has_variable = total_customs_union_payment_positive
+				}
+				change_variable = {
+					name = total_customs_union_payment_positive
+					add = {
+						subtract = scope:target_country.var:previous_minting_cost
+						add = scope:target_country.babylon_weekly_customs_union_minting_cost
+					}
+				}
+			} 
+			else = {
+				set_variable = {
+					name = total_customs_union_payment_positive
+					value = {
+						add = {
+							subtract = scope:target_country.var:previous_minting_cost
+							add = scope:target_country.babylon_weekly_customs_union_minting_cost
+						}
+					}
+				}
+			}
+			
+			scope:target_country = {
 				set_variable = {
 					name = previous_minting_cost
 					value = scope:target_country.babylon_weekly_customs_union_minting_cost
-					days = 8
 				}
 			}
+
+			remove_modifier ?= modifier_customs_union_payments_positive
 			add_modifier = {
 				name = modifier_customs_union_payments_positive
 				multiplier = {
-					subtract = scope:target_country.babylon_weekly_customs_union_minting_cost
+					subtract = root.var:total_customs_union_payment_positive
 				}
-				days = 7
 			}
 		}
 		is_about_to_auto_break = {
@@ -190,8 +217,33 @@
 				country = scope:target_country
 				value = -30
 			}
-			# AI may not take leaving their customs union well...
 			hidden_effect = {
+				remove_modifier ?= modifier_customs_union_payments_positive
+
+				change_variable = {
+					name = total_customs_union_payment_positive
+					subtract = scope:target_country.babylon_weekly_customs_union_minting_cost
+				}
+
+				# if high enough assume that there are still other countries with a customs union.
+				if = {
+					limit = {
+						var:total_customs_union_payment_positive > 100
+					}
+					add_modifier = {
+						name = modifier_customs_union_payments_positive
+						multiplier = {
+							subtract = root.var:total_customs_union_payment_positive
+						}
+					}
+				}
+				
+				scope:target_country = {
+					remove_modifier ?= modifier_customs_union_payments_negative
+					remove_variable = previous_minting_cost
+				}
+
+				# AI may not take leaving their customs union well...
 				if = {
 					limit = {
 						scope:target_country.country_rank > root.country_rank
