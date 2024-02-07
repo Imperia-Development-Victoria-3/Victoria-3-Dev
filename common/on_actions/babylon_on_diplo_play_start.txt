@@ -1,34 +1,4 @@
 ﻿# Root = Diplomatic Play
-on_babylon_liberate_subject_diplo_play_start = {
-	effect = {
-		if = {
-			limit = {
-				#Is liberate subject
-				is_diplomatic_play_type = dp_liberate_subject
-				#And target is an applicant
-				target = {
-					has_variable = babylon_new_customs_union_applicant
-				}
-			}
-			#Iterate through overlords backers (located in target, AKA applicant..)
-			target = {
-				every_in_list = {
-					variable = custom_union_overlord_backers
-					#And add them to the new play
-					root = {
-						add_target_backers = {
-							prev
-						}
-					}
-				}
-				#Then get rid of the list
-				clear_variable_list = custom_union_overlord_backers
-			}
-		}
-	}
-}
-
-# Root = Diplomatic Play
 on_babylon_true_neutral_diplo_play_start = {
 	effect = {
 		if = {
