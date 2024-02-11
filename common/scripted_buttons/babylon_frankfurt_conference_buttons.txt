@@ -1,16 +1,236 @@
 ﻿je_frankfurt_conference_vote_republic_button = {
-
-
+	name = "je_frankfurt_conference_vote_republic_button"
+	desc = "je_frankfurt_conference_vote_republic_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 1
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_governance_principle
+			var:frankfurt_conference_current_vote = 1
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_republic
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_republic
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_republic
+		## Remove this voting var (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_monarchy
+		custom_tooltip = {
+			text = frankfurt_votes_for_republic_tt
+		}
+	}
 }
-
 
 je_frankfurt_conference_vote_monarchy_button = {
-
-
+	name = "je_frankfurt_conference_vote_monarchy_button"
+	desc = "je_frankfurt_conference_vote_monarchy_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 1
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_governance_principle
+			var:frankfurt_conference_current_vote = 1
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_monarchy
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_monarchy
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_monarchy
+		## Remove this voting var (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_republic
+		custom_tooltip = {
+			text = frankfurt_votes_for_monarchy_tt
+		}
+	}
 }
 
+je_frankfurt_conference_vote_oligarchy_button = {
+	name = "je_frankfurt_conference_vote_oligarchy_button"
+	desc = "je_frankfurt_conference_vote_oligarchy_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 2
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_power_distribution
+			var:frankfurt_conference_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_oligarchy
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_oligarchy
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_oligarchy
+		## Remove these voting vars (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_wealth_suffrage
+		remove_variable ?= frankfurt_conference_voted_universal_suffrage
+		custom_tooltip = {
+			text = frankfurt_votes_for_oligarchy_tt
+		}
+	}
+}
+
+je_frankfurt_conference_vote_wealth_button = {
+	name = "je_frankfurt_conference_vote_wealth_button"
+	desc = "je_frankfurt_conference_vote_wealth_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 2
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_power_distribution
+			var:frankfurt_conference_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_wealth_suffrage
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_wealth_suffrage
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_wealth_suffrage
+		## Remove these voting vars (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_oligarchy
+		remove_variable ?= frankfurt_conference_voted_universal_suffrage
+		custom_tooltip = {
+			text = frankfurt_votes_for_wealth_voting_tt
+		}
+	}
+}
+
+je_frankfurt_conference_vote_universal_button = {
+	name = "je_frankfurt_conference_vote_universal_button"
+	desc = "je_frankfurt_conference_vote_universal_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 2
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_power_distribution
+			var:frankfurt_conference_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_universal_suffrage
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_universal_suffrage
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_universal_suffrage
+		## Remove these voting vars (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_oligarchy
+		remove_variable ?= frankfurt_conference_voted_wealth_suffrage
+		custom_tooltip = {
+			text = frankfurt_votes_for_universal_suffrage_tt
+		}
+	}
+}
+
+je_frankfurt_conference_vote_presidential_button = {
+	name = "je_frankfurt_conference_vote_presidential_button"
+	desc = "je_frankfurt_conference_vote_presidential_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 3
+		frankfurt_conference_has_majority_for_republic = yes
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_republican_form
+			var:frankfurt_conference_current_vote = 3
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_presidential
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_presidential
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_presidential
+		## Remove these voting vars (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_parliamentary
+		custom_tooltip = {
+			text = frankfurt_votes_for_presidential_republic_tt
+		}
+	}
+}
+
+je_frankfurt_conference_vote_parliamentary_button = {
+	name = "je_frankfurt_conference_vote_parliamentary_button"
+	desc = "je_frankfurt_conference_vote_parliamentary_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 3
+		frankfurt_conference_has_majority_for_republic = yes
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_republican_form
+			var:frankfurt_conference_current_vote = 3
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voted_parliamentary
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voted_parliamentary
+	}
+	effect = {
+		set_variable = frankfurt_conference_voted_parliamentary
+		## Remove these voting vars (if it exists, thats what the ?= means)
+		remove_variable ?= frankfurt_conference_voted_presidential
+		custom_tooltip = {
+			text = frankfurt_votes_for_parliamentary_republic_tt
+		}
+	}
+}
 
 je_frankfurt_conference_leave_button = {
-
-
+	name = "je_frankfurt_conference_leave_button"
+	desc = "je_frankfurt_conference_leave_button_desc"
+	visible = {
+		always = yes
+	}
+	possible = {
+		custom_tooltip = {
+			text = does_not_own_frankfurt_city_tt
+			p:x11C0A0 = {
+				owner != root
+			}
+		}
+	}
+	effect = {
+		# The leaving variable should fail the JE automatically
+		# Sets a variable called 'left_frankfurt_conference' to 'true' (the default when using set_variable this way)
+		custom_tooltip = frankfurt_conference_leaves_tt
+		set_variable = left_frankfurt_conference
+	}
 }

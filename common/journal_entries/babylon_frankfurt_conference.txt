@@ -1,36 +1,105 @@
-﻿	# Content Added to Mod
-	# Catto6's Section
-	je_babylon_frankfurt_conference = {
-		icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-		group = je_group_historical_content
-	
-		# Voting Starting Options
-	
-		scripted_button = je_frankfurt_conference_vote_republic_button
-		scripted_button = je_frankfurt_conference_vote_monarchy_button
-		# Austria / Prussia leaves voting
-		scripted_button = je_frankfurt_conference_leave_button
-	
-		is_shown_when_inactive = {
-			OR = {
-				country_has_primary_culture = cu:north_german
-				country_has_primary_culture = cu:south_german
-			}
+﻿# Content Added to Mod
+# Catto6's Section
+je_babylon_frankfurt_conference = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	# Voting Starting Options
+	scripted_button = je_frankfurt_conference_vote_republic_button
+	scripted_button = je_frankfurt_conference_vote_monarchy_button
+	# Who gets to vote in Germany?
+	scripted_button = je_frankfurt_conference_vote_oligarchy_button
+	scripted_button = je_frankfurt_conference_vote_wealth_button
+	scripted_button = je_frankfurt_conference_vote_universal_button
+	# Optional round - presidential or parliamentary republic
+	scripted_button = je_frankfurt_conference_vote_presidential_button
+	scripted_button = je_frankfurt_conference_vote_parliamentary_button
+	# Austria / Prussia leaves voting
+	scripted_button = je_frankfurt_conference_leave_button
+	is_shown_when_inactive = {
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:south_german
 		}
-	
-		possible = {
-			any_country = {
-				filter = {
-					OR = {
-						country_has_primary_culture = cu:north_german
-						country_has_primary_culture = cu:south_german				
+	}
+	possible = {
+		any_country = {
+			filter = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+			}
+			has_technology_researched = nationalism
+			percent >= 0.75
+		}
+	}
+	immediate = {
+		# This section pops at the start of the Conference. Used to initialise stuff, like variables
+		set_variable = {
+			name = frankfurt_conference_voting_period
+			value = 0
+		}
+		set_variable = {
+			name = frankfurt_conference_current_vote
+			value = 1
+		}
+	}
+	fail = {
+		custom_tooltip = {
+			text = left_frankfurt_conference_tt
+			has_variable = left_frankfurt_conference
+		}
+	}
+	on_fail = {
+		### The vote variables should be removed here
+		### Using ?= means the variable is only removed if it exists, to avoid errors
+		remove_variable ?= frankfurt_conference_voted_republic
+		remove_variable ?= frankfurt_conference_voted_monarchy
+	}
+	current_value = {
+		value = var:frankfurt_conference_voting_period
+	}
+	on_weekly_pulse = {
+		effect = {
+			change_variable = {
+				name = frankfurt_conference_voting_period
+				add = 1
+			}
+			## If the voting has run for 12 weeks, start over with a new vote category
+			if = {
+				limit = {
+					var:frankfurt_conference_voting_period >= 12
+				}
+				set_variable = {
+					name = frankfurt_conference_voting_period
+					value = 0
+				}
+				change_variable = {
+					name = frankfurt_conference_current_vote
+					add = 1
+				}
+				if = {
+					limit = {
+						# The presidential/parliamentary debate only takes place if republic and wealth voting won
+						OR = {
+							frankfurt_conference_has_majority_for_republic = no
+							frankfurt_conference_has_majority_for_wealth = no
+						}
+						var:frankfurt_conference_current_vote = 3
+					}
+					# Skip it if those 2 are NOT true
+					change_variable = {
+						name = frankfurt_conference_current_vote
+						add = 1
 					}
 				}
-				has_technology_researched = nationalism	
-				percent >= 0.75
-			}		
-		}	
-	
-		weight = 5000
-		should_be_pinned_by_default = yes
+			}
+		}
 	}
+	goal_add_value = {
+		add = 12
+	}
+	progressbar = yes
+	weight = 5000
+	should_be_pinned_by_default = yes
+}

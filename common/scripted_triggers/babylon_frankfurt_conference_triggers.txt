@@ -1,0 +1,125 @@
+﻿frankfurt_conference_has_majority_for_republic = {
+	OR = {
+		# Either theres more republic voters and monarchy voters
+		babylon_frankfurt_conference_republic_voters_value > babylon_frankfurt_conference_monarchy_voters_value
+		AND = {
+			# Or the two are equal
+			babylon_frankfurt_conference_republic_voters_value = babylon_frankfurt_conference_monarchy_voters_value
+			# But the owner of Frankfurt is voting republican
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_republic
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_oligarchy = {
+    # Either...
+	OR = {
+        # Oligarchy beat the 2 others
+		AND = {
+			babylon_frankfurt_conference_oligarchy_voters_value > babylon_frankfurt_conference_wealth_voters_value
+			babylon_frankfurt_conference_oligarchy_voters_value > babylon_frankfurt_conference_universal_voters_value
+		}
+        # Or oligarchy didnt lose, and Frankfurt voted for it
+        # (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				babylon_frankfurt_conference_oligarchy_voters_value < babylon_frankfurt_conference_wealth_voters_value
+			}
+			NOT = {
+				babylon_frankfurt_conference_oligarchy_voters_value < babylon_frankfurt_conference_universal_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_oligarchy
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_wealth = {
+    # Either...
+	OR = {
+        # wealth beat the 2 others
+		AND = {
+			babylon_frankfurt_conference_wealth_voters_value > babylon_frankfurt_conference_oligarchy_voters_value
+			babylon_frankfurt_conference_wealth_voters_value > babylon_frankfurt_conference_universal_voters_value
+		}
+        # Or wealth didnt lose, and Frankfurt voted for it
+        # (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				babylon_frankfurt_conference_wealth_voters_value < babylon_frankfurt_conference_oligarchy_voters_value
+			}
+			NOT = {
+				babylon_frankfurt_conference_wealth_voters_value < babylon_frankfurt_conference_universal_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_wealth_suffrage
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_universal = {
+    # Either...
+	OR = {
+        # universal suffrage beat the 2 others
+		AND = {
+			babylon_frankfurt_conference_universal_voters_value > babylon_frankfurt_conference_oligarchy_voters_value
+			babylon_frankfurt_conference_universal_voters_value > babylon_frankfurt_conference_wealth_voters_value
+		}
+        # Or universal suffrage didnt lose, and Frankfurt voted for it
+        # (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				babylon_frankfurt_conference_universal_voters_value < babylon_frankfurt_conference_oligarchy_voters_value
+			}
+			NOT = {
+				babylon_frankfurt_conference_universal_voters_value < babylon_frankfurt_conference_wealth_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_universal_suffrage
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_presidential_republic = {
+    frankfurt_conference_has_majority_for_republic = yes
+    OR = {
+        babylon_frankfurt_conference_presidential_voters_value > babylon_frankfurt_conference_parliamentary_voters_value
+        AND = {
+            babylon_frankfurt_conference_presidential_voters_value = babylon_frankfurt_conference_parliamentary_voters_value
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_presidential
+				}
+			}
+        }
+        frankfurt_conference_has_majority_for_oligarchy = yes
+    }
+}
+frankfurt_conference_has_majority_for_parliamentary_republic = {
+    frankfurt_conference_has_majority_for_republic = yes
+    OR = {
+        babylon_frankfurt_conference_parliamentary_voters_value > babylon_frankfurt_conference_presidential_voters_value
+        AND = {
+            babylon_frankfurt_conference_parliamentary_voters_value = babylon_frankfurt_conference_presidential_voters_value
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_parliamentary
+				}
+			}
+        }
+        frankfurt_conference_has_majority_for_universal = yes
+    }
+}
