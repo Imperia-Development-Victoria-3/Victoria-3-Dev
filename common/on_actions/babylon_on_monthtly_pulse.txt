@@ -338,3 +338,158 @@ on_babylon_monthly_pulse_ai_congress_voting = {
 		}
 	}
 }
+
+
+on_babylon_monthly_pulse_ai_executive_decisions = {
+	effect = {
+		if = {
+			limit = {
+				is_player = no
+			}
+			set_local_variable = {
+				name = prefers_expansionsism
+				value = 0
+			}
+			set_local_variable = {
+				name = prefers_imperialism
+				value = 0
+			}
+			set_local_variable = {
+				name = prefers_armed_neutrality
+				value = 0
+			}
+			set_local_variable = {
+				name = prefers_pacifist
+				value = 0
+			}
+			set_local_variable = {
+				name = prefers_anti_imperialist
+				value = 0
+			}
+
+			every_interest_group = {
+				if = {
+					limit = {
+						is_in_government = yes
+						prefers_law = {
+							law = law_type:law_expansionism
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+						}
+					}
+					change_local_variable = {
+						name = prefers_expansionsism
+						add = 1
+					}
+				}
+				if = {
+					limit = {
+						is_in_government = yes
+						prefers_law = {
+							law = law_type:law_imperialism
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+						}
+					}
+					change_local_variable = {
+						name = prefers_imperialism
+						add = 1
+					}
+				}
+				if = {
+					limit = {
+						is_in_government = yes
+						prefers_law = {
+							law = law_type:law_armed_neutrality
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+						}
+					}
+					change_local_variable = {
+						name = prefers_armed_neutrality
+						add = 1
+					}
+				}
+				if = {
+					limit = {
+						is_in_government = yes
+						prefers_law = {
+							law = law_type:law_pacifist
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+						}
+					}
+					change_local_variable = {
+						name = prefers_pacifist
+						add = 1
+					}
+				}
+				if = {
+					limit = {
+						is_in_government = yes
+						prefers_law = {
+							law = law_type:law_anti_imperialist
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+						}
+					}
+					change_local_variable = {
+						name = prefers_anti_imperialist
+						add = 1
+					}
+				}
+			}
+			if = {
+				limit = {
+					law_type:law_true_neutrality != root.active_law:lawgroup_diplomatic_stance.type
+				}
+		
+				if = {
+					limit = {
+						law_type:law_expansionism != root.active_law:lawgroup_diplomatic_stance.type
+						local_var:prefers_expansionsism > local_var:prefers_imperialism
+						local_var:prefers_expansionsism > local_var:prefers_armed_neutrality
+						local_var:prefers_expansionsism > local_var:prefers_pacifist
+						local_var:prefers_expansionsism > local_var:prefers_anti_imperialist
+					}
+					activate_law = law_type:law_expansionism
+				} 
+				else_if = {
+					limit = {
+						law_type:law_imperialism != root.active_law:lawgroup_diplomatic_stance.type
+						local_var:prefers_imperialism > local_var:prefers_expansionsism
+						local_var:prefers_imperialism > local_var:prefers_armed_neutrality
+						local_var:prefers_imperialism > local_var:prefers_pacifist
+						local_var:prefers_imperialism > local_var:prefers_anti_imperialist
+					}
+					activate_law = law_type:law_imperialism
+				}
+				else_if = {
+					limit = {
+						law_type:law_armed_neutrality != root.active_law:lawgroup_diplomatic_stance.type
+						local_var:prefers_armed_neutrality > local_var:prefers_expansionsism
+						local_var:prefers_armed_neutrality > local_var:prefers_imperialism
+						local_var:prefers_armed_neutrality > local_var:prefers_pacifist
+						local_var:prefers_armed_neutrality > local_var:prefers_anti_imperialist
+					}
+					activate_law = law_type:law_armed_neutrality
+				}
+				else_if = {
+					limit = {
+						law_type:law_pacifist != root.active_law:lawgroup_diplomatic_stance.type
+						local_var:prefers_pacifist > local_var:prefers_expansionsism
+						local_var:prefers_pacifist > local_var:prefers_armed_neutrality
+						local_var:prefers_pacifist > local_var:prefers_imperialism
+						local_var:prefers_pacifist > local_var:prefers_anti_imperialist
+					}
+					activate_law = law_type:law_pacifist
+				}
+				else_if = {
+					limit = {
+						law_type:law_anti_imperialist != root.active_law:lawgroup_diplomatic_stance.type
+						local_var:prefers_anti_imperialist > local_var:prefers_expansionsism
+						local_var:prefers_anti_imperialist > local_var:prefers_armed_neutrality
+						local_var:prefers_anti_imperialist > local_var:prefers_pacifist
+						local_var:prefers_anti_imperialist > local_var:prefers_imperialism
+					}
+					activate_law = law_type:law_anti_imperialist
+				} 
+			}
+		}
+	}
+}
