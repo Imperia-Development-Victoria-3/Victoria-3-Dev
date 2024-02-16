@@ -37,41 +37,6 @@
 	on_war_end = {}
 }
 
-dp_babylon_customs_union = {
-	war_goal = humiliation
-	initiator_can_add_war_goals = no
-    target_can_add_war_goals = no
-	texture = "gfx/interface/icons/war_goals/open_market.dds"
-	possible = {
-		always = no
-	}
-	on_weekly_pulse = {
-		#Ensures this diplo play never reaches war directly
-		#Should be diplo play scope
-		if = {
-			limit = { 
-				escalation >= 60
-			}
-			initiator = {
-				#Initiator is overlord
-				remove_list_variable = {
-					name = babylon_new_customs_union_overlord
-					target = root.target
-				}
-			}
-			target = {
-				#target is applicant
-				remove_variable = babylon_new_customs_union_applicant
-			}
-			end_play = yes
-		}
-	}
-	on_war_begins = {
-	}
-	on_war_end = {
-	}
-}
-
 dp_babylon_colonial_war = {
 	war_goal = humiliation
 	texture = "gfx/interface/icons/war_goals/humiliation.dds"
