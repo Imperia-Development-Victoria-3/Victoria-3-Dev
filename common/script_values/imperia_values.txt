@@ -1,0 +1,1731 @@
+﻿imperia_vienna_congress_denounce_severity_requirement = 0.2
+imperia_vienna_congress_state_claim_severity_requirement = 0.5
+imperia_vienna_congress_embargo_severity_requirement = 0.2
+imperia_vienna_congress_recognition_severity_requirement = 0.75
+imperia_vienna_congress_severity_max = 0.8
+imperia_vienna_congress_current_type_severity_requirement = {
+	if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_type = 1
+		}
+		value = imperia_vienna_congress_denounce_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_type = 2
+		}
+		value = imperia_vienna_congress_state_claim_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_type = 3
+		}
+		value = imperia_vienna_congress_embargo_severity_requirement
+	}
+	else_if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_type = 4
+		}
+		value = imperia_vienna_congress_recognition_severity_requirement
+	}
+}
+
+imperia_vienna_congress_current_type_severity_requirement_negative = {
+	value = imperia_vienna_congress_current_type_severity_requirement
+	multiply = -1
+}
+
+imperia_vienna_congress_severity_max_negative = {
+	value = imperia_vienna_congress_severity_max
+	multiply = -1
+}
+
+imperia_ai_foreign_law_state_wargoal_weight = {
+	value = 1
+	if = {
+		limit = {
+			has_law = law_type:law_expansionism
+			scope:target_state = {
+				region = {
+					NOR = {
+						any_scope_state = {
+							owner = root
+							is_incorporated = yes
+						}
+						any_neighbouring_state = {
+							owner = root
+							is_incorporated = yes
+						}
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_imperialism
+			scope:target_country = {
+				NOT = {
+					is_country_type = unrecognized
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_armed_neutrality
+			scope:target_country = {
+				NOT = {
+					any_primary_culture = {
+						shares_heritage_and_other_trait_with_any_primary_culture = root
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_anti_imperialist
+			scope:target_country = {
+				OR = {
+					has_law = law_type:law_no_colonial_affairs
+					NOT = {
+						any_primary_culture = {
+							shares_heritage_and_other_trait_with_any_primary_culture = root
+						}
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_pacifist
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_true_neutrality
+		}
+		multiply = 0
+	}
+}
+
+imperia_ai_foreign_law_country_wargoal_weight = {
+	value = 1
+	if = {
+		limit = {
+			has_law = law_type:law_expansionism
+			scope:target_country = {
+				NOT = {
+					any_neighbouring_state = {
+						owner = root
+						is_incorporated = yes
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_imperialism
+			scope:target_country = {
+				NOT = {
+					is_country_type = unrecognized
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_armed_neutrality
+			scope:target_country = {
+				NOT = {
+					any_primary_culture = {
+						shares_heritage_and_other_trait_with_any_primary_culture = root
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_anti_imperialist
+			scope:target_country = {
+				OR = {
+					has_law = law_type:law_no_colonial_affairs
+					NOT = {
+						any_primary_culture = {
+							shares_heritage_and_other_trait_with_any_primary_culture = root
+						}
+					}
+				}
+			}
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_pacifist
+		}
+		multiply = 0
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_true_neutrality
+		}
+		multiply = 0
+	}
+}
+
+imperia_get_primary_culture_fraction_rough = {
+	value = 0
+	every_scope_culture = {
+		limit = {
+			is_primary_culture_of = root
+		}
+		root = {
+			if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value = 1
+					}
+				}
+				add = 1
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.95
+					}
+				}
+				add = 0.95
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.9
+					}
+				}
+				add = 0.9
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.85
+					}
+				}
+				add = 0.85
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.8
+					}
+				}
+				add = 0.8
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.75
+					}
+				}
+				add = 0.75
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.7
+					}
+				}
+				add = 0.7
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.65
+					}
+				}
+				add = 0.65
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.6
+					}
+				}
+				add = 0.6
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.55
+					}
+				}
+				add = 0.55
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.5
+					}
+				}
+				add = 0.5
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.45
+					}
+				}
+				add = 0.45
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.4
+					}
+				}
+				add = 0.4
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.35
+					}
+				}
+				add = 0.35
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.3
+					}
+				}
+				add = 0.3
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.25
+					}
+				}
+				add = 0.25
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.2
+					}
+				}
+				add = 0.2
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.15
+					}
+				}
+				add = 0.15
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.1
+					}
+				}
+				add = 0.1
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.075
+					}
+				}
+				add = 0.075
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.05
+					}
+				}
+				add = 0.05
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.04
+					}
+				}
+				add = 0.04
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.03
+					}
+				}
+				add = 0.03
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.02
+					}
+				}
+				add = 0.02
+			}
+			else_if = {
+				limit = {
+					culture_percent_country = {
+						target = prev
+						value >= 0.01
+					}
+				}
+				add = 0.01
+			}
+		}
+	}
+}
+
+imperia_get_primary_culture_percentage_refined = {
+	value = imperia_get_primary_culture_fraction_rough
+	multiply = 100
+}
+
+imperia_get_state_religion_fraction_rough = {
+	value = 0
+	if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value = 1
+			}
+		}
+		add = 1
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.95
+			}
+		}
+		add = 0.95
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.9
+			}
+		}
+		add = 0.9
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.85
+			}
+		}
+		add = 0.85
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.8
+			}
+		}
+		add = 0.8
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.75
+			}
+		}
+		add = 0.75
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.7
+			}
+		}
+		add = 0.7
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.65
+			}
+		}
+		add = 0.65
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.6
+			}
+		}
+		add = 0.6
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.55
+			}
+		}
+		add = 0.55
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.5
+			}
+		}
+		add = 0.5
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.45
+			}
+		}
+		add = 0.45
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.4
+			}
+		}
+		add = 0.4
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.35
+			}
+		}
+		add = 0.35
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.3
+			}
+		}
+		add = 0.3
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.25
+			}
+		}
+		add = 0.25
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.2
+			}
+		}
+		add = 0.2
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.15
+			}
+		}
+		add = 0.15
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.1
+			}
+		}
+		add = 0.1
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.075
+			}
+		}
+		add = 0.075
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.05
+			}
+		}
+		add = 0.05
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.04
+			}
+		}
+		add = 0.04
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.03
+			}
+		}
+		add = 0.03
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.02
+			}
+		}
+		add = 0.02
+	}
+	else_if = {
+		limit = {
+			religion_percent_country = {
+				target = root.religion
+				value >= 0.01
+			}
+		}
+		add = 0.01
+	}
+}
+
+imperia_get_state_religion_percentage_refined = {
+	value = imperia_get_state_religion_fraction_rough
+	multiply = 100
+}
+
+imperia_infamy_multiplier = {
+	if = {
+		limit = {
+			infamy > 20
+		}
+		add = root.infamy
+		subtract = 20		# Remove 'excess' infamy from calculations
+		divide = 80		# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
+	}
+	else = {
+		value = 0
+	}
+}
+
+pariah_infamy_SCOPE_VALUE_MULT_VAR_trigger = {
+	value = infamy_threshold:pariah
+	multiply = scope:mult_var
+}
+
+get_total_released_COUNTRY_infamy_worth_vassal = {
+	value = total_population
+	divide = 10000
+	multiply = 0.03
+	multiply = 3
+	multiply = -1
+	min = -50
+	max = 50
+}
+
+get_total_released_COUNTRY_infamy_worth_annex = {
+	value = total_population
+	divide = 10000
+	multiply = 0.03
+	multiply = 5
+	multiply = -1
+	min = -50
+	max = 50
+}
+
+imperia_player_construction_bonus_multiplier = {
+	if = {
+		limit = {
+			has_game_rule = disable_player_construction_bonus
+		}
+		value = 0
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_player_construction_bonus_15
+		}
+		value = 15
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_player_construction_bonus_0_5_10_15
+		}
+		if = {
+			limit = {
+				country_rank = rank_value:great_power
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:major_power
+					country_rank = rank_value:unrecognized_major_power
+				}
+			}
+			value = 5
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:minor_power
+					country_rank = rank_value:unrecognized_regional_power
+				}
+			}
+			value = 10
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:insignificant_power
+					country_rank = rank_value:unrecognized_power
+				}
+			}
+			value = 15
+		}
+	}
+	else_if = {
+		limit = {
+			has_game_rule = enable_player_construction_bonus_0_2_4_7
+		}
+		if = {
+			limit = {
+				country_rank = rank_value:great_power
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:major_power
+					country_rank = rank_value:unrecognized_major_power
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:minor_power
+					country_rank = rank_value:unrecognized_regional_power
+				}
+			}
+			value = 4
+		}
+		else_if = {
+			limit = {
+				OR = {
+					country_rank = rank_value:insignificant_power
+					country_rank = rank_value:unrecognized_power
+				}
+			}
+			value = 7
+		}
+	}
+}
+
+imperia_qing_fragile_unity_value = {
+	value = 0
+	if = {
+		limit = {
+			# Being a subject yourself adds 20
+			is_subject = yes
+		}
+		add = 20
+	}
+	if = {
+		limit = {
+			# Taking loans adds 5
+			taking_loans = yes
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			# Being in default adds 10
+			in_default = yes
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			# Not being unrecognised, meaning you're recognised or.. Decentralised, technically, subtracts 20
+			NOT = {
+				is_country_type = unrecognized
+			}
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			# Not being a monarchy adds 20
+			NOT = {
+				has_law = law_type:law_monarchy
+			}
+		}
+		add = 20
+	}
+	every_country = {
+		# Every one of these tags that are NOT a subject adds 10
+		limit = {
+			OR = {
+				AND = {
+					exists = c:XIN
+					this = c:XIN
+				}
+				AND = {
+					exists = c:MGL
+					this = c:MGL
+				}
+				AND = {
+					exists = c:MCH
+					this = c:MCH
+				}
+				AND = {
+					exists = c:XIB
+					this = c:XIB
+				}
+				AND = {
+					exists = c:TIB
+					this = c:TIB
+				}
+				AND = {
+					exists = c:SIH
+					this = c:SIH
+				}
+				AND = {
+					exists = c:HNA
+					this = c:HNA
+				}
+				AND = {
+					exists = c:YUE
+					this = c:YUE
+				}
+			}
+			NOT = {
+				is_subject_of = ROOT
+			}
+		}
+		add = 10
+	}
+	every_country = {
+		# Every one of these tags that are NOT a subject adds 5
+		limit = {
+			OR = {
+				this = c:FRS
+				this = c:KOR
+			}
+			NOT = {
+				is_subject_of = ROOT
+			}
+		}
+		add = 5
+	}
+	# Each of these countries add 10 if they dont exists
+	if = {
+		limit = {
+			NOT = {
+				exists = c:XIN
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:MGL
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:MCH
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:XIB
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:TIB
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:SIH
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:HNA
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:YUE
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:FRS
+			}
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			NOT = {
+				exists = c:KOR
+			}
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			# All state regions that are manchu homelands must be owned by c:CHI or one of their subjects
+			# Hardcoded for now
+			country_or_subject_owns_entire_state_region = STATE_SHENGJING
+			country_or_subject_owns_entire_state_region = STATE_OUTER_MANCHURIA
+			country_or_subject_owns_entire_state_region = STATE_SOUTHERN_MANCHURIA
+			country_or_subject_owns_entire_state_region = STATE_NORTHERN_MANCHURIA
+			country_or_subject_owns_entire_state_region = STATE_TRANS_BAIKAL
+		}
+		subtract = 5
+	}
+	### JE completions
+	# je_end_han_discrimination
+	if = {
+		limit = {
+			has_variable = je_end_han_discrimination_completed
+		}
+		subtract = 10
+	}
+	else_if = {
+		limit = {
+			has_variable = je_end_han_discrimination_failed
+		}
+		add = 10
+	}
+	# je_qing_administrative_reform
+	if = {
+		limit = {
+			has_variable = je_qing_administrative_reform_completed
+		}
+		subtract = 5
+	}
+	else_if = {
+		limit = {
+			has_variable = je_qing_administrative_reform_failed
+		}
+		add = 5
+	}
+	# je_rural_poverty_qing
+	if = {
+		limit = {
+			has_variable = je_rural_poverty_qing_completed
+		}
+		subtract = 10
+	}
+	else_if = {
+		limit = {
+			has_variable = je_rural_poverty_qing_failed
+		}
+		add = 10
+	}
+	# je_pacify_highland_tribes : Sichuan
+	if = {
+		limit = {
+			has_variable = je_pacify_highland_tribes_completed
+		}
+		subtract = 5
+	}
+	# je_silk_march: Gansu
+	if = {
+		limit = {
+			has_variable = je_silk_march_completed
+		}
+		subtract = 5
+	}
+	# je_gateway_to_the_west : Liangguang
+	if = {
+		limit = {
+			has_variable = je_gateway_to_the_west_completed
+		}
+		subtract = 5
+	}
+	# je_breadbasket_of_the_south : Huguang
+	if = {
+		limit = {
+			has_variable = je_breadbasket_of_the_south_completed
+		}
+		subtract = 5
+	}
+	# je_settle_the_steppe : Eastern Provinces
+	if = {
+		limit = {
+			has_variable = je_settle_the_steppe_completed
+		}
+		subtract = 5
+	}
+	# je_pacify_and_settle_taiwan : Formosa
+	if = {
+		limit = {
+			has_variable = je_pacify_and_settle_taiwan_completed
+		}
+		subtract = 5
+	}
+	### Random JEs and events
+	# Banner System Completed
+	if = {
+		limit = {
+			has_variable = banner_system_new_army
+		}
+		subtract = 10
+	}
+	if = {
+		limit = {
+			has_variable = banner_system_yong_ying
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			has_variable = eight_banners_martial_tradition
+		}
+		add = 10
+	}
+	# Linguistics Conference outcome
+	if = {
+		limit = {
+			has_variable = qing_language_conference_beijing_victorious
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_sichuan_victorious
+		}
+		subtract = 10
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_liangguang_victorious
+		}
+		subtract = 5
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_huguang_victorious
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_formosa_victorious
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			has_variable = qing_language_conference_no_winner
+		}
+		add = 20
+	}
+	# Opium wars  
+	if = {
+		limit = {
+			has_variable = opium_wars_china_win
+		}
+		subtract = 20
+	}
+	if = {
+		limit = {
+			has_variable = opium_wars_china_lost
+		}
+		add = 20
+	}
+	### Stuff from vanilla, that we havent ported over, goes here.
+	# Absolish monarchy
+	if = {
+		limit = {
+			has_variable = china_warlord_abolished_monarchy
+		}
+		subtract = 20
+	}
+	# Taiping was allowed to survive, and you're not at war with them (actually allows you to reconquer them to regain the points)
+	if = {
+		limit = {
+			exists = c:TPG
+			NOT = {
+				has_war_with = c:TPG
+			}
+		}
+		add = 20
+	}
+	# Is in revolution
+	if = {
+		limit = {
+			has_variable = china_warlord_explosion_revolution
+		}
+		add = 20
+	}
+	# Taiping appeared
+	if = {
+		limit = {
+			has_variable = imperia_taiping_appeared
+		}
+		add = 20
+	}
+	# Boxer rebvellion timed out
+	if = {
+		limit = {
+			has_variable = je_boxer_rebellion_timed_out
+		}
+		add = 20
+	}
+	# Treaty Ports
+	every_state_region = {
+		limit = {
+			OR = {
+				region = sr:region_north_china
+				region = sr:region_south_china
+				region = sr:region_manchuria
+			}
+			any_scope_state = {
+				is_treaty_port = yes
+			}
+		}
+		add = 5
+	}
+	#These go last
+	min = 0
+	max = 100
+}
+
+random_rgb_color_decider = {
+	integer_range = {
+		min = 1
+		max = 29
+	}
+}
+
+imperia_num_of_great_powers = {
+	value = 0
+	every_country = {
+		limit = {
+			country_rank = rank_value:great_power
+		}
+		add = 1
+	}
+}
+
+imperia_num_of_major_powers = {
+	value = 0
+	every_country = {
+		limit = {
+			country_rank = rank_value:major_power
+		}
+		add = 1
+	}
+}
+
+imperia_num_of_congress_attendees = {
+	value = 0
+	every_country = {
+		limit = {
+			is_congress_attendee = yes
+		}
+		add = 1
+	}
+}
+
+total_prestige_of_voting_conference_members = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_variable = voting_conference_member
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_1
+					target = this
+				}
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_2
+					target = this
+				}
+				is_target_in_global_variable_list = {
+					name = current_congress_members_on_stance_3
+					target = this
+				}
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_supporters_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_1
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_neutral_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_2
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_opposers_prestige_value = {
+	value = 0
+	every_country = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = current_congress_members_on_stance_3
+				target = this
+			}
+		}
+		add = prestige
+	}
+}
+
+conference_supporters_percentage_value = {
+	value = conference_supporters_prestige_value
+	divide = total_prestige_of_voting_conference_members
+}
+
+conference_neutral_percentage_value = {
+	value = conference_neutral_prestige_value
+	divide = total_prestige_of_voting_conference_members
+}
+
+conference_opposers_percentage_value = {
+	value = conference_opposers_prestige_value
+	divide = total_prestige_of_voting_conference_members
+}
+
+conference_power_balance_percentage_value = {
+	value = conference_supporters_percentage_value
+	subtract = conference_opposers_percentage_value
+}
+
+conference_sanctions_severity = {
+	if = {
+		limit = {
+			conference_power_balance_percentage_value < imperia_vienna_congress_current_type_severity_requirement
+			conference_power_balance_percentage_value > 0
+		}
+		value = 0
+	}
+	else_if = {
+		limit = {
+			conference_power_balance_percentage_value > imperia_vienna_congress_current_type_severity_requirement_negative
+			conference_power_balance_percentage_value < 0
+		}
+		value = 0
+	}
+	else_if = {
+		limit = {
+			conference_power_balance_percentage_value > imperia_vienna_congress_severity_max
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			conference_power_balance_percentage_value < imperia_vienna_congress_severity_max_negative
+		}
+		value = -1
+	}
+	else = {
+		value = {
+			value = conference_power_balance_percentage_value
+			subtract = 0.2
+			multiply = 1.6667
+		}
+		max = 1
+	}
+}
+
+abs_conference_sanctions_severity = {
+	value = 0
+	if = {
+		limit = {
+			conference_sanctions_severity > 0
+		}
+		add = conference_sanctions_severity
+	}
+	else = {
+		subtract = conference_sanctions_severity
+	}
+}
+
+imperia_vienna_congress_session_target_region_strategic_fraction = {
+	value = {
+		every_in_global_list = {
+			variable = imperia_vienna_congress_session_target_states
+			limit = {
+				local_var:strategic_region = this.region
+			}
+			add = 1
+		}
+	}
+	divide = {
+		every_in_global_list = {
+			variable = imperia_vienna_congress_session_target_states
+			add = 1
+		}
+	}
+}
+
+imperia_vienna_congress_session_target_region_culture_fraction = {
+	value = {
+		every_in_global_list = {
+			variable = imperia_vienna_congress_session_target_states
+			limit = {
+				local_var:culture_var = {
+					has_homeland = prev
+				}
+			}
+			add = 1
+		}
+	}
+	divide = {
+		every_in_global_list = {
+			variable = imperia_vienna_congress_session_target_states
+			add = 1
+		}
+	}
+}
+
+imperia_vienna_congress_monthly_chance_for_random_event = {
+	value = imperia_num_of_congress_attendees
+	divide = 100	# For each x amount of people
+	multiply = 5	# x events will pop each month
+}
+
+whist_opinion_value = {
+	if = {
+		# Team 1
+		limit = {
+			OR = {
+				scope:player_1 = this
+				scope:player_3 = this
+			}
+		}
+		add = {
+			value = var:team_1_points
+			if = {
+				limit = {
+					scope:player_1 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_1 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+		}
+	}
+	if = {
+		# Team 2
+		limit = {
+			OR = {
+				scope:player_2 = this
+				scope:player_4 = this
+			}
+		}
+		add = {
+			value = var:team_2_points
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_4 = {
+						has_variable = plays_whist_honorably
+					}
+				}
+				multiply = 1.3
+			}
+			if = {
+				limit = {
+					scope:player_2 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+			if = {
+				limit = {
+					scope:player_4 = {
+						has_variable = plays_whist_communicating
+					}
+				}
+				multiply = 0.7
+			}
+		}
+	}
+}
+
+random_costume_choice = {
+	integer_range = {
+		min = 1
+		max = 9
+	}
+}
+
+average_congress_parade_lead_budget = {
+	# basically adds 1 to the final number to avoid div/0 errors
+	value = 3
+	add = global_var:congress_lead_1.var:chosen_budget_amount
+	add = global_var:congress_lead_2.var:chosen_budget_amount
+	add = global_var:congress_lead_3.var:chosen_budget_amount
+	divide = 3
+}
+
+congress_parade_highest_spent = {
+	if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount >= average_congress_parade_lead_budget
+		}
+		value = global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount
+	}
+	else = {
+		value = average_congress_parade_lead_budget
+	}
+}
+
+congress_parade_lowest_spent = {
+	if = {
+		limit = {
+			global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount < average_congress_parade_lead_budget
+		}
+		value = global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount
+	}
+	else = {
+		value = average_congress_parade_lead_budget
+	}
+}
+
+congress_parade_multiplier = {
+	value = {
+		value = congress_parade_highest_spent
+		divide = congress_parade_lowest_spent
+	}
+	# Subtract 1 here to reduce the chances of excessive multipliers, and remove 1% prestige from otherwise completely even scenarios
+	subtract = 1
+	# Random number here to even out the finished multiplier
+	divide = 4
+	# Multiply by the average budget level of the parade; fancy parades have higher impact - both ways
+	multiply = congress_parade_average_budget_level_of_parade
+	min = 1
+	max = 20
+}
+
+congress_parade_average_budget_level_of_leads = {
+	value = 0
+	add = global_var:congress_lead_1.var:chosen_budget_level
+	add = global_var:congress_lead_2.var:chosen_budget_level
+	add = global_var:congress_lead_3.var:chosen_budget_level
+	divide = 3
+	round = yes
+}
+
+congress_parade_average_budget_level_of_parade = {
+	# The parade host and the leads should have an "even" relationship between host and the combined budget of the leads
+	# means more weight to the host city in figuring out the overall splendor of the parade...
+	value = 0
+	add = global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_level
+	add = {
+		add = global_var:congress_lead_1.var:chosen_budget_level
+		add = global_var:congress_lead_2.var:chosen_budget_level
+		add = global_var:congress_lead_3.var:chosen_budget_level
+		divide = 3
+	}
+	divide = 2
+	round = yes
+}
+
+congress_total_prestige_of_attendees = {
+	value = 0
+	every_country = {
+		limit = {
+			is_congress_attendee = yes
+		}
+		add = prestige
+	}
+}
+
+congress_fraction_of_prestige_who_accepted_language = {
+	value = {
+		every_country = {
+			limit = {
+				is_congress_attendee = yes
+				has_variable = have_accepted_official_language_of_congress
+			}
+			add = prestige
+		}
+	}
+	divide = congress_total_prestige_of_attendees
+}
+
+weekly_net_income = {
+	value = income
+	subtract = expenses
+}
+
+masked_ball_max_afford = {
+	value = gold_reserves
+	divide = {
+		value = 100
+		# percentage of reserves to spend at max
+		divide = 10
+	}
+	divide = {
+		# ticks in a month
+		value = 4
+		#months this will apply for
+		multiply = 6
+	}
+}
+
+# scope : AI voting country
+imperia_discord_ai_voting_weight = {
+	value = 0
+	# Positive value = set to support
+	# Negative value = set to oppose
+	# First find every target
+	every_country = {
+		limit = {
+			is_congress_target = yes
+		}
+		if = {
+			limit = {
+				global_var:imperia_vienna_congress_session_type != 4
+			}
+			# Subtract their relations, so if the AI has negative relations with the target they will support the motion
+			# Only if the motion is not recognition (a positive congress)
+			subtract = relations:root
+		}
+		else = {
+			add = relations:root
+		}
+	}
+	global_var:imperia_vienna_congress_session_initiator = {
+		# For the initiator a simple add is made; AI will support the initiator if they like them, oppose if they dislike
+		add = relations:root
+	}
+}
+
+imperia_weekly_customs_union_minting_cost = {
+	if = {
+		limit = {
+			has_variable = previous_minting_cost
+		}
+		value = {
+			add = modifier:country_minting_add
+			subtract = var:previous_minting_cost
+		}
+	}
+	else = {
+		value = modifier:country_minting_add
+	}
+	divide = {
+		add = 1
+		divide = 0.6		# old $DIVISOR$ 
+	}
+	if = {
+		limit = {
+			has_variable = previous_minting_cost
+		}
+		subtract = {
+			add = modifier:country_minting_add
+			subtract = var:previous_minting_cost
+		}
+	}
+	else = {
+		subtract = modifier:country_minting_add
+	}
+}
+
+imperia_china_infamy_penalty_value = {
+	value = 0
+	if = {
+		limit = {
+			NOR = {
+				country_has_primary_culture = cu:manchu
+				country_has_primary_culture = cu:mongol
+				country_has_primary_culture = cu:tibetan
+				any_primary_culture = {
+					has_discrimination_trait = han_chinese
+				}
+			}
+		}
+		every_scope_state = {
+			limit = {
+				is_treaty_port = no
+				state_region = {
+					is_homeland = cu:han
+					NOT = {
+						this = s:STATE_FORMOSA
+					}
+				}
+			}
+			add = 6
+		}
+		every_subject_or_below = {
+			limit = {
+				any_scope_state = {
+					is_treaty_port = no
+					state_region = {
+						is_homeland = cu:han
+						NOT = {
+							this = s:STATE_FORMOSA
+						}
+					}
+				}
+			}
+			every_scope_state = {
+				limit = {
+					is_treaty_port = no
+					state_region = {
+						is_homeland = cu:han
+						NOT = {
+							this = s:STATE_FORMOSA
+						}
+					}
+				}
+				add = 6
+			}
+		}
+	}
+}

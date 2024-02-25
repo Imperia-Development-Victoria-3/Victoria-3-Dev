@@ -1,0 +1,73 @@
+﻿je_kiel_survey = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	group = je_group_internal_affairs
+	on_monthly_pulse = {
+		effect = {
+			change_variable = {
+				name = survey_kiel_taken
+				add = 1
+			}
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		remove_modifier = modifier_surveying_kiel
+		set_variable = kiel_survey_complete
+		trigger_event = {
+			id = imperia_canal_events.1
+		}
+	}
+	current_value = {
+		value = root.var:survey_kiel_taken
+	}
+	goal_add_value = {
+		value = 12
+	}
+	invalid = {
+		OR = {
+			hidden_trigger = {
+				NOT = {
+					has_variable = survey_kiel_taken
+				}
+			}
+			any_state = {
+				state_region = s:STATE_SCHLESWIG_HOLSTEIN
+				NOT = {
+					owner = ROOT
+				}
+				any_scope_building = {
+					is_building_type = building_kiel_canal
+				}
+			}
+		}
+	}
+	on_invalid = {
+		remove_variable = survey_kiel_taken
+		remove_modifier = modifier_surveying_kiel
+	}
+	progressbar = yes
+	weight = 10
+	should_be_pinned_by_default = yes
+}
+
+je_kiel_canal_construction = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	group = je_group_internal_affairs
+	complete = {
+		any_scope_state = {
+			state_region = s:STATE_SCHLESWIG_HOLSTEIN
+			any_scope_building = {
+				is_building_type = building_kiel_canal
+				occupancy >= 0.9
+			}
+		}
+	}
+	on_complete = {
+		set_global_variable = kiel_canal_complete
+	}
+	should_be_pinned_by_default = yes
+}
