@@ -1,6 +1,6 @@
-# Babylon Roleplay
+# Imperia Roleplay
 ![Map overview](/.assets/images/mapoverview.png)
-Babylon Roleplay is a mod for Victoria 3 aimed at multiplayer playthroughs by compiling multiple mods, adding unique flavor, and balancing mechanics with the goal of enhancing historically accurate story-driven gameplay. It is the main mod for the Victoria 3 community of the Babylon Roleplay community founded by youtuber and streamer Hammurabae.
+Imperia Roleplay is a mod for Victoria 3 aimed at multiplayer playthroughs by compiling multiple mods, adding unique flavor, and balancing mechanics with the goal of enhancing historically accurate story-driven gameplay. It is the main mod for the Victoria 3 community of the Imperia Roleplay community founded by youtuber and streamer Hammurabae.
 
 Main features of the mod:
 -	**Roleplay primers** which give a summary of a nation’s history at game start.
@@ -53,5 +53,5 @@ Former modders:
 -	banana9050 | supermax9839 | quasarkaese
 
 Links:
--	[Babylon RP Development Discord](https://discord.gg/zkTQnVd82e)
--	[Babylon RP Community](https://discord.gg/babylonrp)
+-	[Imperia RP Development Discord](https://discord.gg/zkTQnVd82e)
+-	[Imperia RP Community](https://discord.gg/imperiarp)
