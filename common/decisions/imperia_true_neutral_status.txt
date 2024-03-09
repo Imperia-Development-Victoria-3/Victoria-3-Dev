@@ -1,0 +1,107 @@
+﻿ask_for_true_neutral_status = {
+	is_shown = {
+		has_law = law_type:law_armed_neutrality
+		NOT = {
+			has_journal_entry = je_imperia_true_neutral_status
+		}
+	}
+	possible = {
+		#Cant have any infamy
+		infamy = 0
+		#Cant be in a war
+		is_at_war = no
+		#Cant have ANY rivals
+		any_rival_country = {
+			count = 0
+		}
+		#Has to be below major power
+		country_rank < rank_value:major_power
+		#Cant be unrecognised
+		NOT = {
+			is_country_type = unrecognized
+		}
+		#Cant have overlords or subjects, or be part of a market
+		any_overlord_or_above = {
+			count = 0
+		}
+		any_subject_or_below = {
+			count = 0
+		}
+	}
+	when_taken = {
+		#Initialise the (amount of) current signers var
+		set_variable = {
+			name = true_neutral_current_signers_var
+			value = 0
+		}
+		#Initialise required signers
+		set_variable = {
+			name = true_neutral_required_signers_var
+			value = 0
+		}
+		every_country = {
+			limit = {
+				#fetch great powers and neighbours
+				OR = {
+					country_rank >= rank_value:great_power
+					is_adjacent_to_country = root
+				}
+				NOR = {
+					is_country_type = unrecognized
+					is_country_type = decentralized
+				}
+			}
+			#give them an event that notifies them
+			trigger_event = {
+				id = imperia_true_neutral_status.1
+				days = 3
+			}
+			#Add a required signer to the true neutral applicant
+			root = {
+				change_variable = {
+					name = true_neutral_required_signers_var
+					add = 1
+				}
+				add_to_variable_list = {
+					name = true_neutral_applicant_signee_list
+					target = prev
+				}
+			}
+			imperia_update_unsigned = yes
+		}
+		custom_tooltip = {
+			text = add_journal_neutrality_treaty_tt
+			add_journal_entry = {
+				type = je_imperia_true_neutral_status
+			}
+		}
+	}
+	ai_chance = {
+		base = 0
+	}
+}
+
+consider_true_neutral_status = {
+	is_shown = {
+		#Show this decision if theres any applicants for true neutral status
+		has_variable_list = true_neutral_applicants_consideration
+	}
+	possible = {
+		hidden_trigger = {
+			variable_list_size = {
+				name = true_neutral_applicants_consideration
+				value >= 1
+			}
+		}
+		is_at_war = no
+	}
+	when_taken = {
+		trigger_event = {
+			id = imperia_true_neutral_status.2
+			popup = yes
+		}
+	}
+	ai_chance = {
+		base = 1
+	}
+}
