@@ -8,7 +8,6 @@
 		NOT = {
 			has_law = law_type:law_true_neutrality
 		}
-
 		NOR = {
 			is_country_type = decentralized
 			has_law = law_type:law_isolationism
@@ -20,8 +19,30 @@
 				has_law = law_type:law_true_neutrality
 			}
 		}
+		is_revolutionary = no
+		scope:target_country = {
+			is_revolutionary = no
+		}
 	}
 	possible = {
+		custom_tooltip = {
+			text = DIPLO_ACTION_MARKET_CONNECTION_REQUIRED
+			OR = {
+				AND = {
+					market = {
+						has_port = yes
+					}
+					scope:target_country.market = {
+						has_port = yes
+					}
+				}
+				market = {
+					any_scope_country = {
+						is_adjacent_to_country = scope:target_country
+					}
+				}
+			}
+		}
 		#either...
 		OR = {
 			AND = {
@@ -64,27 +85,17 @@
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
 			scope:target_country.relations:root >= relations_threshold:cordial
 		}
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+		}
 		is_revolutionary = no
 		scope:target_country = {
 			is_revolutionary = no
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_MARKET_CONNECTION_REQUIRED
-			OR = {
-				AND = {
-					market = {
-						has_port = yes
-					}
-					scope:target_country.market = {
-						has_port = yes
-					}
-				}
-				market = {
-					any_scope_country = {
-						is_adjacent_to_country = scope:target_country
-					}
-				}
-			}
 		}
 	}
 	accept_effect = {
@@ -119,7 +130,6 @@
 					multiplier = scope:target_country.imperia_weekly_customs_union_minting_cost
 				}
 			}
-
 			if = {
 				limit = {
 					has_variable = total_customs_union_payment_positive
@@ -131,7 +141,7 @@
 						add = scope:target_country.imperia_weekly_customs_union_minting_cost
 					}
 				}
-			} 
+			}
 			else = {
 				set_variable = {
 					name = total_customs_union_payment_positive
@@ -143,14 +153,12 @@
 					}
 				}
 			}
-			
 			scope:target_country = {
 				set_variable = {
 					name = previous_minting_cost
 					value = scope:target_country.imperia_weekly_customs_union_minting_cost
 				}
 			}
-
 			remove_modifier ?= modifier_customs_union_payments_positive
 			add_modifier = {
 				name = modifier_customs_union_payments_positive
@@ -159,47 +167,117 @@
 				}
 			}
 		}
-		is_about_to_auto_break = {
-			scope:target_country.relations:root < 23			# this is: cordial + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root < relations_threshold:cordial
+		requirement_to_maintain = {
+			trigger = {
+				OR = {
+					AND = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+						scope:target_country = {
+							OR = {
+								is_country_type = recognized
+								is_country_type = colonial
+							}
+						}
+					}
+					AND = {
+						is_country_type = unrecognized
+						scope:target_country = {
+							is_country_type = unrecognized
+						}
+					}
+				}
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
 				}
-				is_subject_of = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				is_subject = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
 				scope:target_country = {
-					is_subject_of = root
+					is_subject = no
 				}
-				is_junior_in_customs_union = yes
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
+					scope:target_country.relations:root >= relations_threshold:cordial
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= 23				# this is: cordial + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
 					has_law = law_type:law_isolationism
 				}
-				has_law = law_type:law_isolationism
 			}
 		}
-		break_effect = {
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
+					scope:target_country = {
+						has_law = law_type:law_isolationism
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				is_junior_in_customs_union = no
+			}
+		}
+		manual_break_effect = {
 			change_relations = {
 				country = scope:target_country
 				value = -30
 			}
+			# AI may not take leaving their customs union well...
 			hidden_effect = {
 				remove_modifier ?= modifier_customs_union_payments_positive
-
 				change_variable = {
 					name = total_customs_union_payment_positive
 					subtract = scope:target_country.imperia_weekly_customs_union_minting_cost
 				}
-
 				# if high enough assume that there are still other countries with a customs union.
 				if = {
 					limit = {
@@ -212,12 +290,10 @@
 						}
 					}
 				}
-				
 				scope:target_country = {
 					remove_modifier ?= modifier_customs_union_payments_negative
 					remove_variable = previous_minting_cost
 				}
-
 				# AI may not take leaving their customs union well...
 				if = {
 					limit = {
@@ -256,6 +332,8 @@
 					}
 				}
 			}
+		}
+		auto_break_effect = {
 		}
 	}
 	ai = {
@@ -742,7 +820,6 @@ join_customs_union = {
 		NOT = {
 			is_country_type = decentralized
 		}
-
 		scope:target_country = {
 			NOR = {
 				has_law = law_type:law_isolationism
@@ -857,7 +934,6 @@ change_customs_union = {
 		NOT = {
 			is_country_type = decentralized
 		}
-
 		is_junior_in_customs_union = no
 		scope:target_country = {
 			NOR = {

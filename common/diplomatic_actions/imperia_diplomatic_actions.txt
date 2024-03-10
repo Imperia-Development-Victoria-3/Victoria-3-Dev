@@ -101,13 +101,17 @@ minor_war_reparations = {
 		income_transfer = 0.025
 		recipient_gets_income_transfer = no
 		income_transfer_based_on_recipient = yes
-		should_auto_break = {
-			NOT = {
+		requirement_to_maintain = {
+			trigger = {
 				has_truce_with = scope:target_country
 			}
 		}
-		should_invalidate = {
-			has_war_with = scope:target_country
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
+					has_war_with = scope:target_country
+				}
+			}
 		}
 	}
 }
@@ -125,16 +129,12 @@ forced_embargo_pact = {
 		is_embargo = yes
 		is_two_sided_pact = no
 		relations_progress_per_day = -1		# At -100, -1 relations
-		should_auto_break = {
-			scope:target_country = {
-				NOT = {
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
 					has_modifier = forced_embargo
 				}
 			}
-		}
-		should_invalidate = {
-		}
-		break_effect = {
 		}
 	}
 }
