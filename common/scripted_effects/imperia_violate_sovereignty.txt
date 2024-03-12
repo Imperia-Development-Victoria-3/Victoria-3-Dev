@@ -1,0 +1,58 @@
+﻿imperia_violate_sovereignty_join = {
+	$VIOLATOR$ = {
+		random_scope_war = {
+			limit = {
+				is_warleader = prev
+			}
+			diplomatic_play = {
+				save_scope_as = diplomatic_play_scope
+			}
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					scope:diplomatic_play_scope = {
+						initiator_is = $VIOLATOR$
+					}
+					$JOIN_VIOLATOR$ = yes
+				}
+				AND = {
+					scope:diplomatic_play_scope = {
+						target_is = $VIOLATOR$
+					}
+					$JOIN_VIOLATOR$ = no
+				}
+			}
+		}
+		scope:diplomatic_play_scope = {
+			add_initiator_backers = {
+				$TARGET$
+			}
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					scope:diplomatic_play_scope = {
+						initiator_is = $VIOLATOR$
+					}
+					$JOIN_VIOLATOR$ = no
+				}
+				AND = {
+					scope:diplomatic_play_scope = {
+						target_is = $VIOLATOR$
+					}
+					$JOIN_VIOLATOR$ = yes
+				}
+			}
+		}
+		scope:diplomatic_play_scope = {
+			add_target_backers = {
+				$TARGET$
+			}
+		}
+	}
+}

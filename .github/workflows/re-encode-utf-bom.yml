@@ -1,0 +1,31 @@
+﻿name: Re-encode to UTF-8 BOM
+
+on:
+  push:
+    branches-ignore:
+      - Imperia-Core
+
+jobs:
+  reencode:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set github checkout
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
+
+    - name: Re-encode txt files
+      run: |
+        # Add your script here to check and convert file encoding
+        python encode_to_bom.py
+
+    - name: Commit and push if changes are made
+      run: |
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git add -u
+        git diff-index --quiet HEAD || (git commit -m "Re-encoded txt files to UTF-8 BOM" && git push origin "${{ github.ref }}")

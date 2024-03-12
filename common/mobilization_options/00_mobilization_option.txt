@@ -3,22 +3,28 @@
 	can_be_turned_off = {
 		custom_tooltip = {
 		    text = mobilization_option_basic_supplies_can_be_turned_off_tt
-			error_check = {
-				severity = fail
-				always = no
-			}
+			always = no
 		}
 	}
 	upkeep_modifier = {
 		goods_input_grain_add = 1	#0.5
+		goods_input_meat_add = 0.1
 	}
 	upkeep_modifier_unscaled = {
-        goods_input_small_arms_mult = 0.25
-        goods_input_artillery_mult = 0.25
-		goods_input_ammunition_mult = 0.25
-        goods_input_oil_mult = 0.25
-        goods_input_radios_mult = 0.25
-        goods_input_tanks_mult = 0.25
+        goods_input_small_arms_mult = 0.15
+        goods_input_artillery_mult = 0.15
+		goods_input_ammunition_mult = 0.15
+        goods_input_oil_mult = 0.15
+        goods_input_radios_mult = 0.15
+        goods_input_tanks_mult = 0.15
+		goods_input_tools_mult = 0.15
+		goods_input_fabric_mult = 0.15
+		goods_input_clothes_mult = 0.15
+		goods_input_luxury_clothes_mult = 0.15
+		goods_input_grain_mult = 0.15
+		goods_input_groceries_mult = 0.15
+		goods_input_fruit_mult = 0.15
+		goods_input_meat_mult = 0.15
 	}
 	
 	unit_modifier = {
@@ -35,12 +41,16 @@ mobilization_option_extra_supplies = {
 	texture = "gfx/interface/icons/mobilization_options/extra_supplies.dds"
 
 	possible = {
-		market = {
-			mg:groceries = {
+		market ?= {
+			mg:groceries ?= {
 				market_goods_sell_orders > 0
 			}
 		}
 	}
+	
+	unlocking_technologies = {
+		army_reserves
+	}	
 	
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
@@ -55,10 +65,29 @@ mobilization_option_extra_supplies = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_groceries_add = 1	#.75
+		goods_input_groceries_add = 1
+		goods_input_meat_add = 0.2
 	}
+	upkeep_modifier_unscaled = {
+        goods_input_small_arms_mult = 0.25
+        goods_input_artillery_mult = 0.25
+		goods_input_ammunition_mult = 0.25
+        goods_input_oil_mult = 0.25
+        goods_input_radios_mult = 0.25
+        goods_input_tanks_mult = 0.25
+		goods_input_tools_mult = 0.25
+		goods_input_fabric_mult = 0.25
+		goods_input_clothes_mult = 0.25
+		goods_input_luxury_clothes_mult = 0.25
+		goods_input_grain_mult = 0.25
+		goods_input_groceries_mult = 0.25
+		goods_input_meat_mult = 0.25
+	}	
+	
 	unit_modifier = {
-		unit_morale_loss_mult = -0.1
+		unit_morale_loss_mult = -0.05
+		unit_offense_mult = 0.1
+		unit_defense_mult = 0.1
 	}
 	ai_weight = {
 		value = 1
@@ -71,14 +100,12 @@ mobilization_option_luxurious_supplies = {
 	texture = "gfx/interface/icons/mobilization_options/luxurious_supplies.dds"
 
 	possible = {
-		market = {
-			mg:meat = {
+		scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_extra_supplies }
+		market ?= {
+			mg:meat ?= {
 				market_goods_sell_orders > 0
 			}
-			mg:groceries = {
-				market_goods_sell_orders > 0
-			}
-			mg:wine = {
+			mg:wine ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -101,13 +128,31 @@ mobilization_option_luxurious_supplies = {
 	}
 	
 	upkeep_modifier = {
-		goods_input_meat_add = 0.75	#0.5
-		goods_input_groceries_add = 0.75	#0.5
-		goods_input_wine_add = 0.15	#0.1
+		goods_input_meat_add = 0.7
+		goods_input_fruit_add = 0.5
+		goods_input_wine_add = 1
 	}
+	upkeep_modifier_unscaled = {
+        goods_input_small_arms_mult = 0.35
+        goods_input_artillery_mult = 0.35
+		goods_input_ammunition_mult = 0.35
+        goods_input_oil_mult = 0.35
+        goods_input_radios_mult = 0.35
+        goods_input_tanks_mult = 0.35
+		goods_input_tools_mult = 0.35
+		goods_input_fabric_mult = 0.35
+		goods_input_clothes_mult = 0.35
+		goods_input_luxury_clothes_mult = 0.35
+		goods_input_grain_mult = 0.35
+		goods_input_groceries_mult = 0.35
+		goods_input_meat_mult = 0.35
+	}	
+	
 	unit_modifier = {
-		unit_offense_mult = 0.05
-		unit_defense_mult = 0.05
+		unit_morale_loss_mult = -0.1
+		unit_offense_mult = 0.15
+		unit_defense_mult = 0.15
+		unit_recovery_rate_add = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -120,12 +165,25 @@ mobilization_option_chocolate = {
 	texture = "gfx/interface/icons/mobilization_options/chocolate.dds"
 
 	possible = {
-		market = {
-			mg:sugar = {
+		market ?= {
+			mg:sugar ?= {
 				market_goods_sell_orders > 0
 			}
 		}
 	}
+
+	on_deactivate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
+			every_combat_unit = {
+				add_morale = {
+					value = morale
+					multiply = -0.5
+				}
+			}
+		}
+	}
+
 	upkeep_modifier = {
 		goods_input_sugar_add = 1.25
 	}
@@ -143,8 +201,8 @@ mobilization_option_tobacco = {
 	texture = "gfx/interface/icons/mobilization_options/tobacco.dds"
 
 	possible = {
-		market = {
-			mg:tobacco = {
+		market ?= {
+			mg:tobacco ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -179,8 +237,8 @@ mobilization_option_liquor = {
 	texture = "gfx/interface/icons/mobilization_options/liquor.dds"
 
 	possible = {
-		market = {
-			mg:liquor = {
+		market ?= {
+			mg:liquor ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -216,8 +274,8 @@ mobilization_option_opium = {
 	texture = "gfx/interface/icons/mobilization_options/opium.dds"
 
 	possible = {
-		market = {
-			mg:opium = {
+		market ?= {
+			mg:opium ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -240,9 +298,8 @@ mobilization_option_opium = {
 	}
 	unit_modifier = {
 		unit_morale_recovery_mult = 0.1
-		unit_recovery_rate_add = 0.05	#0
-		unit_offense_mult = -0.05	#0
-		unit_defense_mult = -0.05	#0
+		unit_recovery_rate_add = 0.10	#0
+		character_battle_condition_blunder_mult = 0.10
 	}
 	ai_weight = {
 		value = 1
@@ -279,8 +336,8 @@ mobilization_option_forced_march = {
 		# empty on purpose - this has no cost and is just a toggle with its own tradeoffs
 	}
 	unit_modifier = {
-		military_formation_travel_speed_mult = 0.1
-		unit_mobilization_speed_mult = 0.25
+		military_formation_movement_speed_mult = 0.1
+		military_formation_mobilization_speed_mult = 0.25
 		unit_morale_loss_mult = 0.1
 	}
 	ai_weight = {
@@ -315,8 +372,8 @@ mobilization_option_truck_transport = {
 				has_mobilization_option = mobilization_option:mobilization_option_rail_transport
 			}
 		}
-		market = {
-			mg:automobiles = {
+		market ?= {
+			mg:automobiles ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -349,8 +406,8 @@ mobilization_option_truck_transport = {
 		goods_input_automobiles_add = 0.5
 	}
 	unit_modifier = {
-		military_formation_travel_speed_mult = 0.3
-		unit_mobilization_speed_mult = 0.4
+		military_formation_movement_speed_mult = 0.3
+		military_formation_mobilization_speed_mult = 0.4
 	}
 	ai_weight = {
 		value = 1
@@ -369,8 +426,8 @@ mobilization_option_rail_transport = {
 				has_mobilization_option = mobilization_option:mobilization_option_truck_transport
 			}
 		}
-		market = {
-			mg:engines = {
+		market ?= {
+			mg:engines ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -403,8 +460,7 @@ mobilization_option_rail_transport = {
 		goods_input_engines_add = 0.5
 	}
 	unit_modifier = {
-		military_formation_travel_speed_mult = 0.2
-		unit_mobilization_speed_from_railways_mult = 0.5
+		military_formation_movement_speed_mult = 0.2
 	}
 	ai_weight = {
 		value = 1
@@ -413,12 +469,65 @@ mobilization_option_rail_transport = {
     group = transport
 }
 
+mobilization_option_grenades = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	possible = {
+		market ?= {
+			mg:explosives ?= {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	
+	unlocking_technologies = {
+		nitroglycerin
+		skirmisher_cavalry
+	}
+	upkeep_modifier = {
+		goods_input_explosives_add = 1
+		goods_input_tools_add = 0.25
+	}
+	unit_modifier = {
+		unit_offense_add = 10
+		unit_defense_add = 5
+		unit_kill_rate_add = 0.10
+		unit_devastation_mult = 0.05
+		unit_recovery_rate_add = -0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+
+    group = special_weapons
+}
+
 mobilization_option_machinegunners = {
 	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
 
 	possible = {
-		market = {
-			mg:ammunition = {
+		market ?= {
+			mg:ammunition ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -449,11 +558,11 @@ mobilization_option_machinegunners = {
 	}
 	upkeep_modifier = {
 		goods_input_small_arms_add = 1
-		goods_input_ammunition_add = 2	#1
+		goods_input_ammunition_add = 3	#1
 	}
 	unit_modifier = {
 		unit_offense_add = 5
-		unit_defense_add = 25	#10
+		unit_defense_add = 30	#10
 	}
 	ai_weight = {
 		value = 1
@@ -466,8 +575,8 @@ mobilization_option_chemical_weapons = {
 	texture = "gfx/interface/icons/mobilization_options/chemical_weapons.dds"
 
 	possible = {
-		market = {
-			mg:fertilizer = {
+		market ?= {
+			mg:fertilizer ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -497,12 +606,14 @@ mobilization_option_chemical_weapons = {
 		chemical_warfare
 	}
 	upkeep_modifier = {
-		goods_input_artillery_add = 1 #0
+		goods_input_artillery_add = 1.5 #0
 		goods_input_fertilizer_add = 4	#2
+		goods_input_oil_add = 0.25
 	}
 	unit_modifier = {
 		unit_offense_add = 50	#20
 		unit_kill_rate_add = 0.5
+		unit_devastation_mult = 0.65
 		unit_recovery_rate_add = -0.2
 	}
 	ai_weight = {
@@ -516,8 +627,8 @@ mobilization_option_flamethrowers = {
 	texture = "gfx/interface/icons/mobilization_options/flamethrowers.dds"
 
 	possible = {
-		market = {
-			mg:oil = {
+		market ?= {
+			mg:oil ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -547,11 +658,14 @@ mobilization_option_flamethrowers = {
 		flamethrowers
 	}
 	upkeep_modifier = {
-		goods_input_oil_add = 1
+		goods_input_oil_add = 0.8
+		goods_input_steel_add = 0.1
+		goods_input_small_arms_add = 0.5
 	}
 	unit_modifier = {
-		unit_offense_add = 30	#15
-		unit_devastation_mult = 0.5
+		unit_offense_add = 25 #15 #to match machine gunners defense
+		unit_kill_rate_add = 0.15 #0
+		unit_devastation_mult = 0.35
 		unit_morale_damage_mult = 0.1
 	}
 	ai_weight = {
@@ -560,6 +674,65 @@ mobilization_option_flamethrowers = {
 
     group = special_weapons
 }
+
+
+mobilization_option_modern_fortifications = {
+	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+
+	possible = {
+		market ?= {
+			mg:steel ?= {
+				market_goods_sell_orders > 0
+			}
+			mg:sulfur ?= {
+				market_goods_sell_orders > 0
+			}
+			mg:tools ?= {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.75
+			}
+		}
+	}
+	
+	unlocking_technologies = {
+		concrete_fortifications
+	}
+	upkeep_modifier = {
+		goods_input_steel_add = 1
+		goods_input_tools_add = 2
+		goods_input_sulfur_add = 0.25
+	}
+	unit_modifier = {
+		unit_army_defense_mult = 0.20
+		unit_morale_loss_mult = -0.10
+		character_battle_condition_dug_in_mult = 0.2
+	}
+	ai_weight = {
+		value = 1
+	}
+
+    group = special_weapons
+}
+
 
 # mobilization_option_landing_crafts = {
 # 	texture = "gfx/interface/icons/production_method_icons/flamethrower_company.dds"
@@ -579,15 +752,141 @@ mobilization_option_flamethrowers = {
 #     group = special_weapons
 # }
 
+mobilization_option_infantry_recon = {
+	texture = "gfx/interface/icons/mobilization_options/forced_march.dds"
+	possible = {
+		NOR = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_cavalry_recon
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_motorized_recon
+			}
+		}
+		market ?= {
+			mg:tools ?= {
+				market_goods_sell_orders > 0
+			}
+			mg:meat ?= {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	unlocking_technologies = {
+		military_drill
+	}
+	upkeep_modifier = {
+		goods_input_grain_add = 0.25
+		goods_input_meat_add = 0.05
+		goods_input_tools_add = 0.15
+	}
+	unit_modifier = {
+		unit_occupation_mult = 0.05
+		military_formation_movement_speed_mult = 0.05
+		character_battle_condition_lost_mult = -0.05
+		character_battle_condition_mud_mult = -0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = reconnaissance
+}
+
+mobilization_option_cavalry_recon = {
+	texture = "gfx/interface/icons/production_method_icons/cavalry.dds"
+	possible = {
+		NOR = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_infantry_recon
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_motorized_recon
+			}
+		}
+		market ?= {
+			mg:tools ?= {
+				market_goods_sell_orders > 0
+			}
+			mg:meat ?= {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
+			add_organization = {
+				value = organization
+				multiply = -0.5
+			}
+		}
+	}
+	unlocking_technologies = {
+		modern_cavalry_tactics
+	}
+	upkeep_modifier = {
+		goods_input_grain_add = 0.5
+		goods_input_meat_add = 0.05
+		goods_input_tools_add = 0.3
+		goods_input_clothes_add = 0.1
+	}
+	unit_modifier = {
+		unit_occupation_mult = 0.1
+		military_formation_movement_speed_mult = 0.1
+		character_battle_condition_lost_mult = -0.1
+		character_battle_condition_mud_mult = -0.1
+		character_battle_condition_charted_terrain_mult = 0.05
+	}
+	ai_weight = {
+		value = 1
+	}
+	group = reconnaissance
+}
+
 mobilization_option_motorized_recon = {
 	texture = "gfx/interface/icons/mobilization_options/motorized_reconaissance.dds"
 
 	possible = {
-		market = {
-			mg:automobiles = {
+		NOR = {
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_infantry_recon
+			}
+			scope:military_formation = {
+				has_mobilization_option = mobilization_option:mobilization_option_cavalry_recon
+			}
+		}
+		market ?= {
+			mg:automobiles ?= {
 				market_goods_sell_orders > 0
 			}
-			mg:oil = {
+			mg:oil ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -619,70 +918,22 @@ mobilization_option_motorized_recon = {
 	upkeep_modifier = {
 		goods_input_automobiles_add = 1
 		goods_input_oil_add = 0.5
+		goods_input_tools_add = 0.75
+		goods_input_clothes_add = 0.2
 	}
 	unit_modifier = {
 		unit_occupation_mult = 0.5
-		military_formation_travel_speed_mult = 0.3
+		military_formation_movement_speed_mult = 0.3
 		character_battle_condition_surprise_maneuver_mult = 0.5
-	}
+		character_battle_condition_lost_mult = -0.2
+		character_battle_condition_mud_mult = -0.1
+		character_battle_condition_charted_terrain_mult = 0.15
+		}
 	ai_weight = {
 		value = 1
 	}
 
     group = reconnaissance
-}
-
-mobilization_option_aerial_recon = {
-	texture = "gfx/interface/icons/mobilization_options/aerial_reconaissance.dds"
-
-	possible = {
-		market = {
-			mg:aeroplanes = {
-				market_goods_sell_orders > 0
-			}
-			mg:oil = {
-				market_goods_sell_orders > 0
-			}
-		}
-	}
-	
-	on_activate_while_mobilized = {
-		custom_tooltip = {
-			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
-			add_organization = {
-				value = organization
-				multiply = -0.5
-			}
-		}
-	}
-	
-	on_deactivate = {
-		custom_tooltip = {
-			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
-			add_organization = {
-				value = organization
-				multiply = -0.5
-			}
-		}
-	}
-	
-	unlocking_technologies = {
-		military_aviation
-	}
-	upkeep_modifier = {
-		goods_input_aeroplanes_add = 1
-		goods_input_oil_add = 0.5
-	}
-	unit_modifier = {
-		unit_occupation_mult = 1
-		character_battle_condition_rapid_advance_mult = 1
-		character_battle_condition_lost_mult = -0.5
-	}
-	ai_weight = {
-		value = 1
-	}
-
-	group = reconnaissance
 }
 
 mobilization_option_first_aid = {
@@ -692,11 +943,12 @@ mobilization_option_first_aid = {
 	}
 	possible = {
 		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_field_hospitals } }
-		market = {
-			mg:fabric = {
+		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_great_war_medicine } }
+		market ?= {
+			mg:fabric ?= {
 				market_goods_sell_orders > 0
 			}
-			mg:liquor = {
+			mg:liquor ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -751,11 +1003,12 @@ mobilization_option_field_hospitals = {
 	}
 	possible = {
 		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_first_aid } }
-		market = {
-			mg:opium = {
+		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_great_war_medicine } }
+		market ?= {
+			mg:opium ?= {
 				market_goods_sell_orders > 0
 			}
-			mg:tools = {
+			mg:tools ?= {
 				market_goods_sell_orders > 0
 			}
 		}
@@ -788,9 +1041,71 @@ mobilization_option_field_hospitals = {
 	upkeep_modifier = {
 		goods_input_opium_add = 2
 		goods_input_tools_add = 1.5
+		goods_input_fabric_add = 2.5
+		goods_input_liquor_add = 1
 	}
 	unit_modifier = {
 		unit_recovery_rate_add = 0.45	
+	}
+	ai_weight = {
+		value = 1
+	}
+
+    group = medic_support
+}
+
+mobilization_option_great_war_medicine = {
+	texture = "gfx/interface/icons/mobilization_options/field_hospitals.dds"
+
+	unlocking_technologies = {
+		antiseptic_and_amputations
+	}
+	possible = {
+		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_first_aid } }
+		NOT = { scope:military_formation = { has_mobilization_option = mobilization_option:mobilization_option_field_hospitals } }
+		market ?= {
+			mg:opium ?= {
+				market_goods_sell_orders > 0
+			}
+			mg:tools ?= {
+				market_goods_sell_orders > 0
+			}
+		}
+	}
+	on_activate_while_mobilized = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_organization_to_add_medic_support_tt
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	
+	on_deactivate = {
+		custom_tooltip = {
+			text = mobilization_option_it_hurts_morale_and_organization_when_you_remove_medic_support_tt
+			every_combat_unit = {
+				add_morale = {
+					value = morale
+					multiply = -0.5
+				}
+			}
+			add_organization = {
+				value = organization
+				multiply = -0.25
+			}
+		}
+	}
+	upkeep_modifier = {
+		goods_input_opium_add = 3
+		goods_input_tools_add = 3
+		goods_input_fabric_add = 4
+		goods_input_liquor_add = 1.5
+		goods_input_automobiles_add = 0.5
+	}
+	unit_modifier = {
+		unit_recovery_rate_add = 0.80	
 	}
 	ai_weight = {
 		value = 1

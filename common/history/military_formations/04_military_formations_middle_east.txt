@@ -1,9 +1,9 @@
 ﻿MILITARY_FORMATIONS = {
-	c:TUR = {
+	c:TUR ?= {
 		create_military_formation = {
 			type = army
 			hq_region = sr:region_balkans
-			name = "Hassa Ordusu"
+			name = Hassa_Ordusu
 
 			combat_unit = {
 				type = unit_type:combat_unit_type_irregular_infantry
@@ -22,12 +22,37 @@
 				state_region = s:STATE_NORTHERN_THRACE
 				count = 5
 			}
+			save_scope_as = hassa_ordusu
 		}
+
+		create_character = { # TUR, General
+			is_general = yes
+			first_name = Omer_Lutfi
+			last_name = Pasha
+			historical = yes
+			culture = cu:serb
+			religion = sunni
+			interest_group = ig_armed_forces
+			ideology = ideology_royalist
+			birth_date = 1806.9.24
+			commander_rank = commander_rank_2
+			hq = region_arabic
+			traits = {
+				meticulous
+				charismatic
+				experienced_offensive_planner
+			}
+			save_scope_as = lutfi_gen
+		}
+
+		scope:lutfi_gen = {
+			transfer_to_formation = scope:hassa_ordusu
+		}		
 
 		create_military_formation = {
 			type = army
 			hq_region = sr:region_balkans
-			name = "Rumeli Ordusu"
+			name = Rumeli_Ordusu
 
 			combat_unit = {
 				type = unit_type:combat_unit_type_line_infantry
@@ -70,12 +95,34 @@
 				state_region = s:STATE_SKOPIA
 				count = 2
 			}
+
+			save_scope_as = rumeli_ordusu
+		}
+
+		create_character = { # TUR, General
+			is_general = yes
+			first_name = Hafiz_Osman
+			last_name = Pasha
+			historical = yes
+			interest_group = ig_armed_forces
+			ideology = ideology_royalist
+			birth_date = 1790.2.11 # Unsure of birth date, approxiamate age based on portraits.
+			hq = region_caucasus
+			traits = {
+				reckless
+				basic_defensive_strategist
+			}
+			save_scope_as = hafiz_gen
+		}
+
+		scope:hafiz_gen = {
+			transfer_to_formation = scope:rumeli_ordusu
 		}
 
 		create_military_formation = {
 			type = army
 			hq_region = sr:region_anatolia
-			name = "Konstantiniyye Ordusu"
+			name = Konstantiniyye_Ordusu
 
 			combat_unit = {
 				type = unit_type:combat_unit_type_line_infantry
@@ -93,7 +140,7 @@
 		create_military_formation = {
 			type = army
 			hq_region = sr:region_anatolia
-			name = "Anadolu Ordusu"
+			name = Anadolu_Ordusu
 
 			combat_unit = {
 				type = unit_type:combat_unit_type_irregular_infantry
@@ -141,7 +188,7 @@
 		create_military_formation = {
 			type = fleet
 			hq_region = sr:region_anatolia
-			name = "Donanma-yı Humâyûn"
+			name = Donanmay_Humyn
 
 			combat_unit = {
 				type = unit_type:combat_unit_type_man_o_war
@@ -187,11 +234,11 @@
 		}
 	}
 
-	c:OMA = {
+	c:OMA ?= {
 		create_military_formation = { # If somebody can explain the reason behind these whacky ship names, please give me a call
 			type = fleet
 			hq_region = sr:region_arabic
-			name = "Bahriat al-Masqat"
+			name = Bahriat_alMasqat
 
 			combat_unit = { # Liverpool (?)
 				type = unit_type:combat_unit_type_man_o_war

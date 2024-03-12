@@ -1,0 +1,668 @@
+types imperia_vienna_congress 
+{
+    ### COUNTRIES TAB
+	type imperia_vienna_congress_overview = flowcontainer {
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical = expanding
+        #spacing = -50
+
+        #size = { 100% 100% }
+        #margin_left = 100
+        align = top
+        margin_top = 20
+        direction = vertical
+        flowcontainer = {
+            spacing = 5
+            margin_top = 20
+            direction = vertical
+            parentanchor = hcenter|top
+            flowcontainer = { # Great Powers
+                spacing = 5
+                margin_top = 20
+                direction = vertical
+                parentanchor = hcenter
+                textbox = {
+                    autoresize = yes
+                    text = "CONGRESS_GREAT_POWERS"
+                    using = header_font_fancy
+                    using = fontsize_mega
+                }
+                divider_decorative = {}
+                
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('imperia_congress_great_powers'))]"
+                    autoresize = yes
+                    text = "CONGRESS_PLEASE_RUN_THE_GAME_FOR_A_BIT"
+                }
+                fixedgridbox = {
+                    addcolumn = 120
+                    addrow = 95
+                    datamodel_wrap = 4
+                    flipdirection = yes
+                    datamodel = "[GetGlobalList('imperia_congress_great_powers')]"
+                    item = {
+                        large_flag = {
+                            using = tooltip_above
+                            datacontext = "[Scope.AccessCountry]"						
+                            blockoverride "flag_tooltip" {
+                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                            }
+                            textbox = {
+                                autoresize = yes
+                                margin_top = 65
+                                margin_left = 35
+                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                align = center
+                            }
+                        }			
+                    }
+                }
+            }
+            divider_clean = {}
+            
+            flowcontainer = { # Major Powers
+                spacing = 5
+                direction = vertical
+                textbox = {
+                    autoresize = yes
+                    text = "CONGRESS_MAJOR_POWERS"
+                    using = header_font_fancy
+                    using = fontsize_xxl
+                    align = left
+                }
+                divider_clean = {}
+                
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('imperia_congress_major_powers'))]"
+                    autoresize = yes
+                    text = "CONGRESS_PLEASE_RUN_THE_GAME_FOR_A_BIT"
+                }
+                fixedgridbox = {
+                    addcolumn = 80
+                    addrow = 60
+                    datamodel_wrap = 5
+                    flipdirection = yes
+                    datamodel = "[GetGlobalList('imperia_congress_major_powers')]"
+                    item = {
+
+                        small_flag = {
+                            parentanchor = vcenter
+                            using = tooltip_above
+                            datacontext = "[Scope.AccessCountry]"
+                            blockoverride "flag_tooltip" {
+                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                            }
+                            textbox = {
+                                autoresize = yes
+                                margin_top = 30
+                                margin_left = 15
+                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                align = center
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ### CURRENT CONFERENCE TAB
+    type imperia_vienna_congress_current_conference =  flowcontainer {
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical = expanding
+        #spacing = -50
+
+        #size = { 100% 100% }
+        direction = vertical
+        align = top
+        #margin_left = 100
+        margin_top = 20
+        
+        flowcontainer = {
+            spacing = 20
+            direction = vertical
+            parentanchor = center|top
+            flowcontainer = {	
+                margin_top = 20
+                parentanchor = hcenter
+                direction = vertical
+                flowcontainer = {
+                    parentanchor = center|top
+                    direction = horizontal
+                    textbox = {
+                        text = "CONGRESS_CURRENT_CONFERENCE"
+                        autoresize = yes
+                        using = header_font_fancy
+                        using = fontsize_mega
+                    }
+                }
+                divider_decorative = {}
+                flowcontainer = {
+                    visible = "[GetGlobalVariable('imperia_vienna_congress_in_session').IsSet]"
+                    direction = vertical
+                    flowcontainer = {
+                        direction = horizontal
+                        parentanchor = center|top
+                        textbox = {
+                            autoresize = yes
+                            text = "CURRENT_CONFERENCE_NAME"
+                            using = header_font_fancy
+                            using = fontsize_mega
+                            default_format = "#tooltippable_concept"
+                            tooltip = "IMPERIA_POLITICAL_CONGRESS_EFFECTS_TOOLTIP"
+                        }
+                    }
+                    divider_decorative = {}
+                    # benches
+                    flowcontainer = {
+                        direction = horizontal
+                        # Left observer bench
+                        # Oppose observers
+                        flowcontainer = {
+                            direction = vertical
+                            parentanchor = vcenter
+                            margin_right = 20
+                            fixedgridbox = {
+                                addcolumn = 40
+                                addrow = 30
+                                flipdirection = no
+                                datamodel_wrap = 15
+                                spacing = 5
+                                datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_3')]"
+                                item = {
+                                    tiny_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                    }			
+                                }
+                            }
+                        }
+                        vertical_divider = {
+                        }
+                        # Left bench
+                        # Oppose section
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                text = "CONGRESS_OPPOSING"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            button = {
+                                using = default_button
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)3')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                parentanchor = center|top
+                                textbox = {
+                                    resizeparent = yes
+                                    text = "CONGRESS_OPPOSE"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_opposers_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_3')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
+                                }
+                            }
+                        }
+                        vertical_divider = {}
+                        # Middle bench
+                        # Abstain section
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                text = "CONGRESS_ABSTAINING"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            button = {
+                                using = default_button
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)2')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                parentanchor = center|top
+                                textbox = {
+                                    resizeparent = yes
+                                    text = "CONGRESS_ABSTAIN"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_neutral_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_2')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
+                                }
+                            }
+                        }
+                        vertical_divider = {}
+                        # Right Bench
+                        # Support section
+                        flowcontainer = {
+                            direction = vertical
+                            textbox = {
+                                autoresize = yes
+                                text = "CONGRESS_SUPPORTERS"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            button = {
+                                using = default_button
+                                onclick = "[GetScriptedGui('set_congress_stance').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)]"
+                                enabled = "[And(Not(GetScriptedGui('has_congress_stance').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('congress_stance', MakeScopeValue('(CFixedPoint)1')).End)),GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('voting_conference_member').IsSet)]"
+                                parentanchor = center|top
+                                textbox = {
+                                    resizeparent = yes
+                                    text = "CONGRESS_SUPPORT"
+                                    align = center|nobaseline
+                                    autoresize = yes
+                                    maximumsize = { 250 -1 }
+                                    minimumsize = { 250 -1 }
+                                    margin = { 10 10 }
+                                    parentanchor = center
+                                }
+                            }
+                            divider_decorative = {}
+                            textbox = {
+                                autoresize = yes
+                                raw_text = "#v [GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_supporters_prestige_value')]#!"
+                                using = header_font_fancy
+                                using = fontsize_mega
+                                margin_bottom = 5
+                                parentanchor = center|top
+                            }
+                            divider_decorative = {}
+                            flowcontainer = {
+                                margin_left = 20
+                                margin_top = 20
+                                fixedgridbox = {
+                                    addcolumn = 120
+                                    addrow = 95
+                                    datamodel_wrap = 4
+                                    flipdirection = no
+                                    datamodel = "[GetGlobalList('current_congress_members_on_stance_1')]"
+                                    item = {
+                                        large_flag = {
+                                            using = tooltip_above
+                                            datacontext = "[Scope.AccessCountry]"						
+                                            blockoverride "flag_tooltip" {
+                                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                            }
+                                            textbox = {
+                                                autoresize = yes
+                                                margin_top = 65
+                                                margin_left = 35
+                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                align = center
+                                            }
+                                        }			
+                                    }
+                                }
+                            }
+                        }
+                        vertical_divider = {}
+                        # Right observers
+                        # Support observers
+                        flowcontainer = {
+                            direction = vertical
+                            parentanchor = vcenter
+                            margin_left = 20
+                            fixedgridbox = {
+                                addcolumn = 40
+                                addrow = 30
+                                flipdirection = no
+                                datamodel_wrap = 15
+                                spacing = 5
+                                datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_1')]"
+                                item = {
+                                    tiny_flag = {
+                                        using = tooltip_above
+                                        datacontext = "[Scope.AccessCountry]"						
+                                        blockoverride "flag_tooltip" {
+                                            tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                        }
+                                    }			
+                                }
+                            }
+                        }
+                    }
+                    divider_decorative = {}
+                    # Power bar
+                    flowcontainer = {
+                        direction = horizontal
+                        parentanchor = center|top
+                        margin_top = 5
+                        margin_bottom = 5
+                        double_direction_progressbar_gold = {
+                            size =  { 360 30 }
+                            #position = { 40 -3 }
+                            parentanchor = bottom
+
+                            blockoverride "value_left" {
+                                value = "[FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
+                            }
+                            blockoverride "value_right" {
+                                value = "[FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))]"
+                            }
+                            textbox = {
+                                raw_text = "#v [FixedPointToProgressbarValue(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('conference_power_balance_percentage_value'))|v1]%#!"
+                                parentanchor = center|top
+                                autoresize = yes
+                            }
+                        }
+                    }
+                    # End congress button
+                    button = {
+                        using = default_button
+                        onclick = "[GetVariableSystem.Toggle('end_congress_confirmation')]"
+                        enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End), Not(GetGlobalVariable('imperia_vienna_congress_minimum_time').IsSet))]"
+                        parentanchor = center|top
+                        margin_top = 20
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_END_CONGRESS"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                    # Middle observer bench
+                    flowcontainer = {
+                        direction = vertical
+                        parentanchor = hcenter
+                        margin_top = 20
+                        fixedgridbox = {
+                            addcolumn = 40
+                            addrow = 30
+                            flipdirection = yes
+                            datamodel_wrap = 21
+                            spacing = 5
+                            datamodel = "[GetGlobalList('current_congress_members_on_observer_bench_stance_2')]"
+                            item = {
+                                tiny_flag = {
+                                    using = tooltip_above
+                                    datacontext = "[Scope.AccessCountry]"						
+                                    blockoverride "flag_tooltip" {
+                                        tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                    }
+                                }			
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    # PROPOSALS TAB
+    type imperia_vienna_congress_proposals =  flowcontainer {
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical = expanding
+        #direction = horizontal
+        margin_left = 100
+        margin_top = 20
+        datacontext = "[GetPlayer]"
+        flowcontainer = {
+            spacing = 5
+            direction = horizontal
+            flowcontainer = {	
+                spacing = 5
+                margin_top = 20
+                margin_right = 90	
+                direction = vertical
+                max_width = 250
+                textbox = {
+                    autoresize = yes
+                    text = "CONGRESS_POSSIBLE_PROPOSALS"
+                    using = header_font_fancy
+                    using = fontsize_mega
+                    align = center
+                    parentanchor = center|top
+                }
+                divider_decorative = {}
+                textbox = {
+                    visible = "[IsDataModelEmpty(GetGlobalList('imperia_congress_great_powers'))]"
+                    autoresize = yes
+                    text = "CONGRESS_PLEASE_RUN_THE_GAME_FOR_A_BIT"
+                }
+                textbox = {
+                    visible = "[Not(GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
+                    autoresize = yes
+                    text = "CANNOT_START_CONGRESS"
+                    max_width = 250
+                    multiline = yes
+                }
+                flowcontainer = {	
+                    direction = vertical
+                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('imperia_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
+                    button = {
+                        using = default_button
+
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)1')).End))]"
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_DENOUNCEMENT"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                    button = {
+                        using = default_button
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
+
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End))]"
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_STATE_CLAIM"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                    button = {
+                        using = default_button
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
+
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)3')).End))]"
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_EMBARGO"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                    button = {
+                        using = default_button
+                        onclick = "[GetScriptedGui('set_proposal_type').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('set_proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
+
+						enabled = "[Not(GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End))]"
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_RECOGNITION"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                    divider_decorative = {}
+                }
+                flowcontainer = {
+                    visible = "[And( Not( IsDataModelEmpty( GetGlobalList('imperia_congress_great_powers') ) ),GetScriptedGui('can_start_congress').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]"
+
+                    button = {
+                        using = default_button
+                        onclick = "[InformationPanelBar.ClosePanel]"
+						onclick = "[GetVariableSystem.Toggle('imperia_vienna_congress_state_selector_open')]"
+                        onclick = "[GetVariableSystem.Set('state_selector_mode','strategic_region')]"
+                        onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_open')]"
+                        enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.Var('congress_proposal_type').IsSet]"
+                        textbox = {
+                            resizeparent = yes
+                            text = "CONGRESS_SELECT_TARGET"
+                            align = center|nobaseline
+                            autoresize = yes
+                            maximumsize = { 250 -1 }
+                            minimumsize = { 250 -1 }
+                            margin = { 10 10 }
+                            parentanchor = center
+                        }
+                    }
+                }
+            }
+            vertical_divider = {
+                visible = "[And(Not(IsDataModelEmpty(GetGlobalList('imperia_congress_great_powers'))), Not(GetGlobalVariable('imperia_vienna_congress_in_session').IsSet))]"
+            }
+            flowcontainer = {
+                margin_top = 20
+                visible = "[And(Not(IsDataModelEmpty(GetGlobalList('imperia_congress_great_powers'))), Not(GetGlobalVariable('imperia_vienna_congress_in_session').IsSet))]"
+                textbox = {
+                    text = "CONGRESS_HOW_TO_DESCRIPTION"
+                    max_width = 600
+                    autoresize = yes
+                    multiline = yes
+                }
+            }
+            vertical_divider = {
+                visible = "[And( GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('congress_proposal_type').IsSet , Not( GetGlobalVariable('imperia_vienna_congress_in_session').IsSet ) )]"
+            }
+
+            flowcontainer = {
+                visible = "[And(  GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('congress_proposal_type').IsSet, Not( GetGlobalVariable('imperia_vienna_congress_in_session').IsSet ) )]"
+                spacing = 5
+                direction = vertical
+                margin_top = 20
+                margin_right = 90
+                textbox = {
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)1')).End)]"
+                    text = "DENOUNCEMENT_DESCRIPTION"
+                    max_width = 600
+                    autoresize = yes
+                    multiline = yes
+                }
+                textbox = {
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End)]"
+                    text = "STATE_CLAIM_DESCRIPTION"
+                    max_width = 600
+                    autoresize = yes
+                    multiline = yes
+                }
+                textbox = {
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)3')).End)]"
+                    text = "EMBARGO_DESCRIPTION"
+                    max_width = 600
+                    autoresize = yes
+                    multiline = yes
+                }
+                textbox = {
+                    visible = "[GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End)]"
+                    text = "RECOGNITION_DESCRIPTION"
+                    max_width = 600
+                    autoresize = yes
+                    multiline = yes
+                }
+            }
+        }
+    }
+}
