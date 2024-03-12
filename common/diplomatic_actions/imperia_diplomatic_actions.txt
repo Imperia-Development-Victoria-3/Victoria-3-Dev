@@ -150,7 +150,7 @@ overlord_bankroll_protectorate = {
 			NOT = {
 				is_country_type = decentralized
 			}
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_protectorate
 		}
 	}
@@ -164,7 +164,7 @@ overlord_bankroll_protectorate = {
 		}
 		in_default = no
 		scope:target_country = {
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_protectorate
 		}
 	}
@@ -178,33 +178,69 @@ overlord_bankroll_protectorate = {
 		income_transfer = 0.025		# Half of protectorates 0.05
 		recipient_gets_income_transfer = yes
 		income_transfer_based_on_recipient = yes
-		is_about_to_auto_break = {
-			scope:target_country.relations:root <= -17			# this: poor + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root <= relations_threshold:poor
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
 				}
-				in_default = yes
-				scope:target_country = {
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
 					NOT = {
-						is_subject_of = root
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = {
-						is_subject_type = subject_type_protectorate
+						has_war_with = scope:target_country
 					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_protectorate
 				}
 			}
 		}
@@ -222,7 +258,7 @@ overlord_bankroll_puppet = {
 			NOT = {
 				is_country_type = decentralized
 			}
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_puppet
 		}
 	}
@@ -236,7 +272,7 @@ overlord_bankroll_puppet = {
 		}
 		in_default = no
 		scope:target_country = {
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_puppet
 		}
 	}
@@ -250,33 +286,69 @@ overlord_bankroll_puppet = {
 		income_transfer = 0.15		# Half of puppets 0.3
 		recipient_gets_income_transfer = yes
 		income_transfer_based_on_recipient = yes
-		is_about_to_auto_break = {
-			scope:target_country.relations:root <= -17			# this: poor + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root <= relations_threshold:poor
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
 				}
-				in_default = yes
-				scope:target_country = {
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
 					NOT = {
-						is_subject_of = root
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = {
-						is_subject_type = subject_type_puppet
+						has_war_with = scope:target_country
 					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_puppet
 				}
 			}
 		}
@@ -294,7 +366,7 @@ overlord_bankroll_dominion = {
 			NOT = {
 				is_country_type = decentralized
 			}
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_dominion
 		}
 	}
@@ -308,7 +380,7 @@ overlord_bankroll_dominion = {
 		}
 		in_default = no
 		scope:target_country = {
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_dominion
 		}
 	}
@@ -322,33 +394,69 @@ overlord_bankroll_dominion = {
 		income_transfer = 0.125		# Half of dominions 0.25
 		recipient_gets_income_transfer = yes
 		income_transfer_based_on_recipient = yes
-		is_about_to_auto_break = {
-			scope:target_country.relations:root <= -17			# this: poor + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root <= relations_threshold:poor
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
 				}
-				in_default = yes
-				scope:target_country = {
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
 					NOT = {
-						is_subject_of = root
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = {
-						is_subject_type = subject_type_dominion
+						has_war_with = scope:target_country
 					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_dominion
 				}
 			}
 		}
@@ -366,7 +474,7 @@ overlord_bankroll_vassal = {
 			NOT = {
 				is_country_type = decentralized
 			}
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_vassal
 		}
 	}
@@ -380,7 +488,7 @@ overlord_bankroll_vassal = {
 		}
 		in_default = no
 		scope:target_country = {
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_vassal
 		}
 	}
@@ -394,33 +502,69 @@ overlord_bankroll_vassal = {
 		income_transfer = 0.15		# Half of vassals 0.3
 		recipient_gets_income_transfer = yes
 		income_transfer_based_on_recipient = yes
-		is_about_to_auto_break = {
-			scope:target_country.relations:root <= -17			# this: poor + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root <= relations_threshold:poor
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
 				}
-				in_default = yes
-				scope:target_country = {
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
 					NOT = {
-						is_subject_of = root
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = {
-						is_subject_type = subject_type_vassal
+						has_war_with = scope:target_country
 					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_vassal
 				}
 			}
 		}
@@ -438,7 +582,7 @@ overlord_bankroll_tributary = {
 			NOT = {
 				is_country_type = decentralized
 			}
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_tributary
 		}
 	}
@@ -452,7 +596,7 @@ overlord_bankroll_tributary = {
 		}
 		in_default = no
 		scope:target_country = {
-			is_subject_of = root
+			is_direct_subject_of = root
 			is_subject_type = subject_type_tributary
 		}
 	}
@@ -466,33 +610,69 @@ overlord_bankroll_tributary = {
 		income_transfer = 0.1		# Half of tributary 0.2
 		recipient_gets_income_transfer = yes
 		income_transfer_based_on_recipient = yes
-		is_about_to_auto_break = {
-			scope:target_country.relations:root <= -17			# this: poor + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root <= relations_threshold:poor
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
 				}
-				in_default = yes
-				scope:target_country = {
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
 					NOT = {
-						is_subject_of = root
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = {
-						is_subject_type = subject_type_tributary
+						has_war_with = scope:target_country
 					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_tributary
 				}
 			}
 		}
