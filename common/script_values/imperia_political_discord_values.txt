@@ -1,0 +1,1248 @@
+﻿political_discord_change_miniscule = 1
+political_discord_change_small = 2
+political_discord_change_medium = 3
+political_discord_change_large = 4
+political_discord_change_xl = 5
+political_discord_change_huge = 10
+political_discord_change_massive = 20
+miniscule_discord_gain = 1
+minor_discord_gain = 20
+medium_discord_gain = 40
+major_discord_gain = 60
+massive_discord_gain = 100
+monumental_discord_gain = 150
+miniscule_discord_loss = -5
+minor_discord_loss = -10
+medium_discord_loss = -20
+major_discord_loss = -40
+massive_discord_loss = -60
+monumental_discord_loss = -100
+political_discord_defensive_pact_mult = 1.25
+political_discord_alliance_pact_mult = 1.5
+political_discord_trade_pact_mult = 1
+political_discord_customs_union_pact_mult = 1.1
+political_discord_rivalry_pact_mult = 1.5
+democratic_opposition_division_value = 2.5
+cultural_majority_same_culture_overlord_midpoint_fraction = 0.35
+cultural_majority_normal_midpoint_fraction = 0.65
+serfs_per_aristocrat = 20
+slave_percent_to_discord = 2
+radical_percent_to_discord = 2
+political_discord_approve = 1
+political_discord_strongly_approve = {
+	value = political_discord_approve
+	multiply = 2
+}
+
+political_discord_disapprove = 4
+political_discord_strongly_disapprove = {
+	value = political_discord_disapprove
+	multiply = 2
+}
+
+imperia_discord_fetch_value = {
+	# Another country should be saved as scope:target_country
+	# This is called from the GUI, with a MakeScope setting the target_country
+	# And also from the journal entry
+	value = 0
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = defensive_pact
+			}
+		}
+		add = {
+			value = imperia_discord_external_calculation
+			multiply = political_discord_defensive_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = alliance
+			}
+		}
+		add = {
+			value = imperia_discord_external_calculation
+			multiply = political_discord_alliance_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = trade_agreement
+			}
+		}
+		add = {
+			value = imperia_discord_external_calculation
+			multiply = political_discord_trade_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = customs_union
+			}
+		}
+		add = {
+			value = imperia_discord_external_calculation
+			multiply = political_discord_customs_union_pact_mult
+		}
+	}
+	if = {
+		limit = {
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = rivalry
+			}
+		}
+		subtract = {
+			value = imperia_discord_external_calculation
+			multiply = political_discord_rivalry_pact_mult
+		}
+	}
+}
+
+imperia_discord_character_law_calculation = {
+	# scope = character
+	value = 0
+	save_temporary_scope_as = character_scope
+	owner = {
+		# scope to country
+		every_law = {
+			# start iterating through laws
+			limit = {
+				# but
+				owner = {
+					# only laws the country has
+					has_law = prev.type
+				}
+			}
+			save_temporary_scope_as = law_scope
+			scope:character_scope = {
+				if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = strongly_disapprove
+						}
+					}
+					add = political_discord_strongly_disapprove
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = disapprove
+						}
+					}
+					add = political_discord_disapprove
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = approve
+						}
+					}
+					subtract = political_discord_approve
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = strongly_approve
+						}
+					}
+					subtract = political_discord_strongly_approve
+				}
+			}
+		}
+	}
+	if = {
+		# If character is a ruler theres a multiplier of 2, he got a big influence on politics
+		limit = {
+			is_ruler = yes
+			NOT = {
+				has_ideology = ideology:ideology_moderate
+			}
+		}
+		multiply = 2
+	}
+	else_if = {
+		# Unless hes a moderate, then he takes his position from his IG, halved
+		limit = {
+			is_ruler = yes
+			has_ideology = ideology:ideology_moderate
+		}
+		owner = {
+			every_interest_group = {
+				limit = {
+					any_scope_character = {
+						is_ruler = yes
+					}
+				}
+				add = imperia_discord_interest_group_law_calculation
+			}
+		}
+		divide = 2
+	}
+	else = {
+		# Else its the ig clout% + 1, e.g. 1.23x for a 23% ig
+		multiply = {
+			value = interest_group.ig_clout
+			add = 1
+		}
+	}
+	multiply = {
+		# After that popularity is taken into account...
+		# -25 popularity would be a 0.75x multiplier, people care less about him; reduced ability to influence politics
+		# +50 popularity would be a 1.5x multiplier, people care more about him; increased ability to influence politics
+		value = popularity
+		add = 100
+		divide = 100
+	}
+	if = {
+		limit = {
+			is_ruler = yes
+		}
+		add = {
+			value = popularity
+			multiply = -1
+		}
+	}
+}
+
+imperia_discord_interest_group_law_calculation_pre = {
+	value = 0
+	save_temporary_scope_as = ig_scope
+	owner = {
+		# scope to country
+		every_law = {
+			# start iterating through laws
+			limit = {
+				# but
+				owner = {
+					# only laws the country has
+					has_law = prev.type
+				}
+			}
+			save_temporary_scope_as = law_scope
+			scope:ig_scope = {
+				if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = strongly_disapprove
+						}
+					}
+					add = political_discord_strongly_disapprove
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = disapprove
+						}
+					}
+					add = political_discord_disapprove
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = approve
+						}
+					}
+					subtract = political_discord_strongly_approve
+				}
+				else_if = {
+					limit = {
+						law_stance = {
+							law = scope:law_scope.type
+							value = strongly_approve
+						}
+					}
+					subtract = political_discord_approve
+				}
+			}
+		}
+	}
+}
+
+imperia_discord_interest_group_law_calculation = {
+	# scope = some interest group within the country
+	value = imperia_discord_interest_group_law_calculation_pre
+	multiply = ig_clout
+	add = {
+		value = imperia_discord_interest_group_law_calculation_pre
+		if = {
+			limit = {
+				imperia_discord_interest_group_law_calculation_pre > 0
+			}
+			divide = 2
+		}
+		else = {
+			divide = 4
+		}
+	}
+}
+
+imperia_discord_democratic_opposition_law_calculation = {
+	value = 0
+	add = {
+		value = imperia_discord_interest_group_law_calculation
+		divide = democratic_opposition_division_value
+	}
+}
+
+imperia_discord_democratic_opposition_character_law_calculation = {
+	value = 0
+	add = {
+		value = imperia_discord_character_law_calculation
+		divide = democratic_opposition_division_value
+	}
+}
+
+imperia_discord_legitimacy_offset_value = {
+	# Get the legitimacy, 80 for example
+	value = government_legitimacy
+	# Subtract by 75, so 5 now
+	subtract = 75
+	# Do this and you get the value, just with the other sign (-/+)
+	multiply = -1
+	# A government at 0 legit. will get 75 discord
+	# -||- at 75 legit. wont get any bonus, or malus
+	# -||- at 100 will get -25 discord
+}
+
+imperia_discord_cultural_majority_value = {
+	# Same logic as in the legitimacy calculation.
+	# If roughly 75% of the country are primary culture, and rest is discriminated against...
+	value = imperia_get_primary_culture_fraction_rough
+	# The percentage is given as a fraction, so 0.75 here
+	multiply = 100
+	#Now its 75
+	if = {
+		limit = {
+			is_subject = yes
+			overlord = {
+				any_primary_culture = {
+					OR = {
+						is_primary_culture_of = root
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+				}
+			}
+		}
+		# 35 is the midpoint, if you're a subject with a same-culture('ish) overlord
+		subtract = {
+			value = cultural_majority_same_culture_overlord_midpoint_fraction
+			multiply = 100
+		}
+	}
+	else = {
+		# else 65 is the midpoint
+		subtract = {
+			value = cultural_majority_normal_midpoint_fraction
+			multiply = 100
+		}
+	}
+	# So since our imaginary country just had 65 removed
+	# Its now 10
+	multiply = -1
+	# Then if you have above that that midpoint; a discord loss
+	# You halve the loss
+	if = {
+		limit = {
+			OR = {
+				imperia_get_primary_culture_fraction_rough > cultural_majority_normal_midpoint_fraction
+				AND = {
+					is_subject = yes
+					overlord = {
+						any_primary_culture = {
+							OR = {
+								is_primary_culture_of = root
+								shares_non_heritage_trait_with_any_primary_culture = root
+							}
+						}
+					}
+					imperia_get_primary_culture_fraction_rough > cultural_majority_same_culture_overlord_midpoint_fraction
+				}
+			}
+		}
+		divide = 2
+	}
+	# If you would gain discord; double it
+	else = {
+		multiply = 2
+	}
+	# Reverse the sign, so..
+	# A 75% primary_culture'd nation would have 5 discord removed.
+}
+
+imperia_discord_religious_majority_value = {
+	value = imperia_get_state_religion_fraction_rough
+	multiply = 100
+	if = {
+		limit = {
+			is_subject = yes
+			overlord.religion = root.religion
+		}
+		subtract = 30
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_theocracy
+		}
+		subtract = 80
+	}
+	else = {
+		subtract = 60
+	}
+	multiply = -1
+}
+
+imperia_discord_homeland_ownership_value = {
+	value = 0
+	scope:target_country = {
+		every_scope_state = {
+			save_temporary_scope_as = temp_state_scope
+			if = {
+				limit = {
+					root = {
+						any_primary_culture = {
+							culture_is_discriminated_in = scope:target_country
+							has_homeland = scope:temp_state_scope
+						}
+					}
+				}
+				add = 1
+			}
+		}
+	}
+}
+
+imperia_discord_homeland_nationalism_value = {
+	value = 0
+	if = {
+		limit = {
+			has_technology_researched = nationalism
+			exists = scope:target_country
+		}
+		add = imperia_discord_homeland_ownership_value
+		multiply = 3
+	}
+}
+
+imperia_discord_average_turmoil_in_country_value = {
+	value = 0
+	every_scope_state = {
+		add = {
+			value = turmoil
+			if = {
+				limit = {
+					is_incorporated = no
+				}
+				divide = 2
+			}
+		}
+	}
+	divide = {
+		value = 0
+		every_scope_state = {
+			add = 1
+		}
+	}
+	multiply = 100
+}
+
+imperia_get_slave_pop_fraction_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.175
+			}
+		}
+		value = 0.175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.125
+			}
+		}
+		value = 0.125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.075
+			}
+		}
+		value = 0.075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = slaves
+				percent >= 0.005
+			}
+		}
+		value = 0.005
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_get_slave_pop_percentage_refined = {
+	value = imperia_get_slave_pop_fraction_rough
+	multiply = 100
+}
+
+imperia_discord_slave_contribution_value = {
+	value = imperia_get_slave_pop_percentage_refined
+	multiply = slave_percent_to_discord
+}
+
+imperia_discord_radicals_percentage_refined = {
+	value = radical_fraction
+	multiply = 100
+}
+
+imperia_discord_radicals_value = {
+	value = imperia_discord_radicals_percentage_refined
+	multiply = radical_percent_to_discord
+}
+
+imperia_get_aristocrat_pop_fraction_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.02
+			}
+		}
+		value = 0.02
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0175
+			}
+		}
+		value = 0.0175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.015
+			}
+		}
+		value = 0.015
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0125
+			}
+		}
+		value = 0.0125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0075
+			}
+		}
+		value = 0.0075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.005
+			}
+		}
+		value = 0.005
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = aristocrats
+				percent >= 0.0025
+			}
+		}
+		value = 0.0025
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_get_peasant_pop_fraction_rough = {
+	if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 1
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.95
+			}
+		}
+		value = 0.95
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.9
+			}
+		}
+		value = 0.9
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.85
+			}
+		}
+		value = 0.85
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.8
+			}
+		}
+		value = 0.8
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.75
+			}
+		}
+		value = 0.75
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.7
+			}
+		}
+		value = 0.7
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.65
+			}
+		}
+		value = 0.65
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.6
+			}
+		}
+		value = 0.6
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.55
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.5
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.45
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.4
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.35
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.3
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.25
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.2
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.175
+			}
+		}
+		value = 0.175
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.15
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.125
+			}
+		}
+		value = 0.125
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.1
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.075
+			}
+		}
+		value = 0.075
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.05
+			}
+		}
+		value = 0.05
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.025
+			}
+		}
+		value = 0.025
+	}
+	else_if = {
+		limit = {
+			pop_type_percent_country = {
+				pop_type = peasants
+				percent >= 0.01
+			}
+		}
+		value = 0.01
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_get_peasant_pop_fraction_refined = {
+	value = imperia_get_peasant_pop_fraction_rough
+	multiply = 100
+}
+
+imperia_get_serf_potency = {
+	value = imperia_get_aristocrat_pop_fraction_rough
+	# This 20 should be tied aristocrat SoL, but doesnt seem possible with the current targets available...
+	multiply = serfs_per_aristocrat
+}
+
+imperia_get_serf_pop_percentage_refined = {
+	value = imperia_get_peasant_pop_fraction_rough
+	max = imperia_get_serf_potency
+	multiply = 100
+}
+
+imperia_discord_serf_contribution_value = {
+	value = imperia_get_serf_pop_percentage_refined
+	if = {
+		limit = {
+			has_law = law_type:law_serfdom
+		}
+		multiply = 2
+	}
+	max = imperia_get_peasant_pop_fraction_refined
+}
