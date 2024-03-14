@@ -152,9 +152,18 @@ je_rural_poverty_qing = {
 	group = je_group_historical_content
 
 	complete = {
-		average_sol >= 10
-		NOT = {
-			has_law = law_type:law_serfdom
+		OR = {
+			AND = {
+				average_sol >= 10
+				OR = {
+					has_law = law_type:law_tenant_farmers
+					has_law = law_type:law_commercialized_agriculture	
+				}
+			}
+			OR = {
+				has_law = law_type:law_homesteading
+				has_law = law_type:law_collectivized_agriculture
+			}
 		}
 		NOR = {
 			has_law = law_type:law_consumption_based_taxation
@@ -174,20 +183,16 @@ je_rural_poverty_qing = {
 			set_variable = je_rural_poverty_qing_completed
 		}
 	}
-	fail = {
-		custom_tooltip = {
-			text = rural_poverty_fail_tt
-			var:var_rural_poverty_fail > 420
-		}
-	}
-	on_fail = {
+
+	timeout = 14600
+	on_timeout = {
 		add_radicals = {
 			value = 0.1
 		}
 		custom_tooltip = {
 			text = fragile_unity_major_add_tt
 			set_variable = je_rural_poverty_qing_failed
-		}
+		}	
 	}
 	current_value = {
 		value = var:rural_poverty_var
@@ -195,24 +200,7 @@ je_rural_poverty_qing = {
 	goal_add_value = {
 		add = 3
 	}
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = {
-					average_sol < 10
-				}
-				change_variable = {
-					name = var_rural_poverty_fail
-					add = 1
-				}
-			}
-		}
-	}
 	immediate = {
-		set_variable = {
-			name = var_rural_poverty_fail
-			value = 0
-		}
 		set_variable = {
 			name = rural_poverty_var
 			value = 0
@@ -438,7 +426,6 @@ je_rural_poverty_substate = {
 	group = je_group_historical_content
 
 	complete = {
-		average_sol >= 10
 		NOT = {
 			has_law = law_type:law_serfdom
 		}
