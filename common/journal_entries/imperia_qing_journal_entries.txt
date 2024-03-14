@@ -402,7 +402,7 @@ je_establish_local_armies = {
 			limit = {
 				is_subject_of = c:CHI
 			}
-			c:CHI = {
+			c:CHI ?= {
 				change_variable = {
 					name = yong_ying_var
 					add = 1
@@ -414,13 +414,21 @@ je_establish_local_armies = {
 		}
 		else = {
 			remove_modifier = modifier_crumbling_banner_system
-			c:CHI = {
+			c:CHI ?= {
 				change_variable = {
 					name = yong_ying_var
 					add = 1
 				}
 			}
 		}
+	}
+	fail = {
+		NOT = {
+			exists = c:CHI
+		}
+	}
+	on_fail = {
+		remove_modifier = modifier_crumbling_banner_system
 	}
 	weight = 1000
 }
