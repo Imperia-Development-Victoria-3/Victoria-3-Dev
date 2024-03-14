@@ -141,7 +141,7 @@ forced_embargo_pact = {
 
 overlord_bankroll_protectorate = {
 	requires_approval = no
-	should_notify_third_parties = no
+	should_notify_third_parties = yes
 	potential = {
 		NOT = {
 			is_country_type = decentralized
@@ -155,25 +155,13 @@ overlord_bankroll_protectorate = {
 		}
 	}
 	possible = {
-		NOT = {
-			has_war_with = scope:target_country
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
-		in_default = no
-		scope:target_country = {
-			is_direct_subject_of = root
-			is_subject_type = subject_type_protectorate
-		}
 	}
 	pact = {
 		cost = 50
 		is_two_sided_pact = no
 		show_in_outliner = yes
 		can_be_used_in_sway_offers = no
-		relations_progress_per_day = 3		# At 100, +1 relations
+		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		income_transfer = 0.025		# Half of protectorates 0.05
 		recipient_gets_income_transfer = yes
@@ -245,11 +233,214 @@ overlord_bankroll_protectorate = {
 			}
 		}
 	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking if root wants a bankroll
+		accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = 5
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				max = 20
+				min = -20
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 30
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 20
+					min = 1
+				}
+			}
+		}
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking for a bankroll from root
+		junior_accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = -10
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			subtract = {
+				value = 10
+				multiply = scope:actor.num_income_transfer_pacts
+			}
+			subtract = {
+				value = 10
+				multiply = num_income_transfer_pacts
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				add = 2
+				multiply = -10
+				min = -100
+				max = 0
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 100
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 25
+					min = 1
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}
+			}
+			OR = {
+				root = {
+					owes_obligation_to = scope:target_country
+				}
+				NOT = {
+					scope:target_country = {
+						owes_obligation_to = root
+					}
+				}
+				AND = {
+					is_at_war = no
+					scope:target_country = {
+						is_at_war = yes
+					}
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0
+						is_at_war = yes
+					}
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000
+						income < 300000
+					}
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000
+						income < 500000
+					}
+				}
+				NOR = {
+					root = {
+						owes_obligation_to = scope:target_country
+					}
+					NOT = {
+						scope:target_country = {
+							owes_obligation_to = root
+						}
+					}
+					AND = {
+						is_at_war = no
+						scope:target_country = {
+							is_at_war = yes
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 overlord_bankroll_puppet = {
 	requires_approval = no
-	should_notify_third_parties = no
+	should_notify_third_parties = yes
 	potential = {
 		NOT = {
 			is_country_type = decentralized
@@ -263,25 +454,13 @@ overlord_bankroll_puppet = {
 		}
 	}
 	possible = {
-		NOT = {
-			has_war_with = scope:target_country
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
-		in_default = no
-		scope:target_country = {
-			is_direct_subject_of = root
-			is_subject_type = subject_type_puppet
-		}
 	}
 	pact = {
 		cost = 50
 		is_two_sided_pact = no
 		show_in_outliner = yes
 		can_be_used_in_sway_offers = no
-		relations_progress_per_day = 3		# At 100, +1 relations
+		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		income_transfer = 0.15		# Half of puppets 0.3
 		recipient_gets_income_transfer = yes
@@ -353,11 +532,214 @@ overlord_bankroll_puppet = {
 			}
 		}
 	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking if root wants a bankroll
+		accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = 5
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				max = 20
+				min = -20
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 30
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 20
+					min = 1
+				}
+			}
+		}
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking for a bankroll from root
+		junior_accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = -10
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			subtract = {
+				value = 10
+				multiply = scope:actor.num_income_transfer_pacts
+			}
+			subtract = {
+				value = 10
+				multiply = num_income_transfer_pacts
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				add = 2
+				multiply = -10
+				min = -100
+				max = 0
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 100
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 25
+					min = 1
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}
+			}
+			OR = {
+				root = {
+					owes_obligation_to = scope:target_country
+				}
+				NOT = {
+					scope:target_country = {
+						owes_obligation_to = root
+					}
+				}
+				AND = {
+					is_at_war = no
+					scope:target_country = {
+						is_at_war = yes
+					}
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0
+						is_at_war = yes
+					}
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000
+						income < 300000
+					}
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000
+						income < 500000
+					}
+				}
+				NOR = {
+					root = {
+						owes_obligation_to = scope:target_country
+					}
+					NOT = {
+						scope:target_country = {
+							owes_obligation_to = root
+						}
+					}
+					AND = {
+						is_at_war = no
+						scope:target_country = {
+							is_at_war = yes
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 overlord_bankroll_dominion = {
 	requires_approval = no
-	should_notify_third_parties = no
+	should_notify_third_parties = yes
 	potential = {
 		NOT = {
 			is_country_type = decentralized
@@ -371,25 +753,13 @@ overlord_bankroll_dominion = {
 		}
 	}
 	possible = {
-		NOT = {
-			has_war_with = scope:target_country
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
-		in_default = no
-		scope:target_country = {
-			is_direct_subject_of = root
-			is_subject_type = subject_type_dominion
-		}
 	}
 	pact = {
 		cost = 50
 		is_two_sided_pact = no
 		show_in_outliner = yes
 		can_be_used_in_sway_offers = no
-		relations_progress_per_day = 3		# At 100, +1 relations
+		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		income_transfer = 0.125		# Half of dominions 0.25
 		recipient_gets_income_transfer = yes
@@ -461,11 +831,214 @@ overlord_bankroll_dominion = {
 			}
 		}
 	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking if root wants a bankroll
+		accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = 5
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				max = 20
+				min = -20
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 30
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 20
+					min = 1
+				}
+			}
+		}
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking for a bankroll from root
+		junior_accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = -10
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			subtract = {
+				value = 10
+				multiply = scope:actor.num_income_transfer_pacts
+			}
+			subtract = {
+				value = 10
+				multiply = num_income_transfer_pacts
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				add = 2
+				multiply = -10
+				min = -100
+				max = 0
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 100
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 25
+					min = 1
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}
+			}
+			OR = {
+				root = {
+					owes_obligation_to = scope:target_country
+				}
+				NOT = {
+					scope:target_country = {
+						owes_obligation_to = root
+					}
+				}
+				AND = {
+					is_at_war = no
+					scope:target_country = {
+						is_at_war = yes
+					}
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0
+						is_at_war = yes
+					}
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000
+						income < 300000
+					}
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000
+						income < 500000
+					}
+				}
+				NOR = {
+					root = {
+						owes_obligation_to = scope:target_country
+					}
+					NOT = {
+						scope:target_country = {
+							owes_obligation_to = root
+						}
+					}
+					AND = {
+						is_at_war = no
+						scope:target_country = {
+							is_at_war = yes
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 overlord_bankroll_vassal = {
 	requires_approval = no
-	should_notify_third_parties = no
+	should_notify_third_parties = yes
 	potential = {
 		NOT = {
 			is_country_type = decentralized
@@ -479,25 +1052,13 @@ overlord_bankroll_vassal = {
 		}
 	}
 	possible = {
-		NOT = {
-			has_war_with = scope:target_country
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
-		in_default = no
-		scope:target_country = {
-			is_direct_subject_of = root
-			is_subject_type = subject_type_vassal
-		}
 	}
 	pact = {
 		cost = 50
 		is_two_sided_pact = no
 		show_in_outliner = yes
 		can_be_used_in_sway_offers = no
-		relations_progress_per_day = 3		# At 100, +1 relations
+		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		income_transfer = 0.15		# Half of vassals 0.3
 		recipient_gets_income_transfer = yes
@@ -569,11 +1130,214 @@ overlord_bankroll_vassal = {
 			}
 		}
 	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking if root wants a bankroll
+		accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = 5
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				max = 20
+				min = -20
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 30
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 20
+					min = 1
+				}
+			}
+		}
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking for a bankroll from root
+		junior_accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = -10
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			subtract = {
+				value = 10
+				multiply = scope:actor.num_income_transfer_pacts
+			}
+			subtract = {
+				value = 10
+				multiply = num_income_transfer_pacts
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				add = 2
+				multiply = -10
+				min = -100
+				max = 0
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 100
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 25
+					min = 1
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}
+			}
+			OR = {
+				root = {
+					owes_obligation_to = scope:target_country
+				}
+				NOT = {
+					scope:target_country = {
+						owes_obligation_to = root
+					}
+				}
+				AND = {
+					is_at_war = no
+					scope:target_country = {
+						is_at_war = yes
+					}
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0
+						is_at_war = yes
+					}
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000
+						income < 300000
+					}
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000
+						income < 500000
+					}
+				}
+				NOR = {
+					root = {
+						owes_obligation_to = scope:target_country
+					}
+					NOT = {
+						scope:target_country = {
+							owes_obligation_to = root
+						}
+					}
+					AND = {
+						is_at_war = no
+						scope:target_country = {
+							is_at_war = yes
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 overlord_bankroll_tributary = {
 	requires_approval = no
-	should_notify_third_parties = no
+	should_notify_third_parties = yes
 	potential = {
 		NOT = {
 			is_country_type = decentralized
@@ -587,25 +1351,13 @@ overlord_bankroll_tributary = {
 		}
 	}
 	possible = {
-		NOT = {
-			has_war_with = scope:target_country
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
-		in_default = no
-		scope:target_country = {
-			is_direct_subject_of = root
-			is_subject_type = subject_type_tributary
-		}
 	}
 	pact = {
 		cost = 50
 		is_two_sided_pact = no
 		show_in_outliner = yes
 		can_be_used_in_sway_offers = no
-		relations_progress_per_day = 3		# At 100, +1 relations
+		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		income_transfer = 0.1		# Half of tributary 0.2
 		recipient_gets_income_transfer = yes
@@ -673,6 +1425,209 @@ overlord_bankroll_tributary = {
 			trigger = {
 				scope:target_country = {
 					is_subject_type = subject_type_tributary
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking if root wants a bankroll
+		accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = 5
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				max = 20
+				min = -20
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 30
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 20
+					min = 1
+				}
+			}
+		}
+		# This is only used for determining the value of a bankroll in sways, so it follows different logic from normal action acceptance
+		# The format here is as if scope:actor was asking for a bankroll from root
+		junior_accept_score = {
+			value = 0
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+				value = -10
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank > root.country_rank
+						}
+					}
+					value = -5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							country_rank < root.country_rank
+						}
+					}
+					value = 5
+				}
+			}
+			subtract = {
+				value = 10
+				multiply = scope:actor.num_income_transfer_pacts
+			}
+			subtract = {
+				value = 10
+				multiply = num_income_transfer_pacts
+			}
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_GDP"
+				value = "scope:actor.ai_gdp_comparison(root)"
+				add = 2
+				multiply = -10
+				min = -100
+				max = 0
+			}
+			if = {
+				limit = {
+					scaled_debt >= 0.05
+				}
+				subtract = {
+					desc = "DIPLOMATIC_ACCEPTANCE_DEBT"
+					value = scaled_debt
+					multiply = 100
+					min = 1
+				}
+			}
+			else_if = {
+				limit = {
+					scaled_gold_reserves >= 0.05
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES"
+					value = scaled_gold_reserves
+					multiply = 25
+					min = 1
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			scaled_debt <= 0
+			is_at_war = no
+			weekly_net_fixed_income > 0
+			OR = {
+				num_income_transfer_pacts < 1
+				AND = {
+					num_income_transfer_pacts < 2
+					income >= 200000
+				}
+				AND = {
+					num_income_transfer_pacts < 3
+					income >= 400000
+				}
+			}
+			OR = {
+				root = {
+					owes_obligation_to = scope:target_country
+				}
+				NOT = {
+					scope:target_country = {
+						owes_obligation_to = root
+					}
+				}
+				AND = {
+					is_at_war = no
+					scope:target_country = {
+						is_at_war = yes
+					}
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				scaled_debt > 0.25
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < 0
+						is_at_war = yes
+					}
+				}
+				num_income_transfer_pacts > 3
+				AND = {
+					num_income_transfer_pacts > 1
+					OR = {
+						weekly_net_fixed_income < -10000
+						income < 300000
+					}
+				}
+				AND = {
+					num_income_transfer_pacts > 2
+					OR = {
+						weekly_net_fixed_income < -5000
+						income < 500000
+					}
+				}
+				NOR = {
+					root = {
+						owes_obligation_to = scope:target_country
+					}
+					NOT = {
+						scope:target_country = {
+							owes_obligation_to = root
+						}
+					}
+					AND = {
+						is_at_war = no
+						scope:target_country = {
+							is_at_war = yes
+						}
+					}
 				}
 			}
 		}
