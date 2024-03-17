@@ -94,39 +94,12 @@ je_qing_administrative_reform = {
 			set_variable = je_qing_administrative_reform_completed
 		}
 	}
-	fail = {
-		custom_tooltip = {
-			text = qing_administrative_fail_tt
-			var:var_qing_administrative_fail > 480
-		}
-	}
-	on_fail = {
+	timeout = 14600
+	on_timeout = {
 		custom_tooltip = {
 			text = fragile_unity_minor_add_tt
 			set_variable = je_qing_administrative_reform_failed
-		}
-	}
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = {
-					OR = {
-						bureaucracy < 0
-						has_law = law_type:law_traditionalism
-					}
-				}
-				change_variable = {
-					name = var_qing_administrative_fail
-					add = 1
-				}
-			}
-		}
-	}
-	immediate = {
-		set_variable = {
-			name = var_qing_administrative_fail
-			value = 0
-		}
+		}	
 	}
 	weight = 1000
 }
@@ -152,9 +125,18 @@ je_rural_poverty_qing = {
 	group = je_group_historical_content
 
 	complete = {
-		average_sol >= 10
-		NOT = {
-			has_law = law_type:law_serfdom
+		OR = {
+			AND = {
+				average_sol >= 10
+				OR = {
+					has_law = law_type:law_tenant_farmers
+					has_law = law_type:law_commercialized_agriculture	
+				}
+			}
+			OR = {
+				has_law = law_type:law_homesteading
+				has_law = law_type:law_collectivized_agriculture
+			}
 		}
 		NOR = {
 			has_law = law_type:law_consumption_based_taxation
@@ -174,20 +156,16 @@ je_rural_poverty_qing = {
 			set_variable = je_rural_poverty_qing_completed
 		}
 	}
-	fail = {
-		custom_tooltip = {
-			text = rural_poverty_fail_tt
-			var:var_rural_poverty_fail > 420
-		}
-	}
-	on_fail = {
+
+	timeout = 14600
+	on_timeout = {
 		add_radicals = {
 			value = 0.1
 		}
 		custom_tooltip = {
 			text = fragile_unity_major_add_tt
 			set_variable = je_rural_poverty_qing_failed
-		}
+		}	
 	}
 	current_value = {
 		value = var:rural_poverty_var
@@ -195,24 +173,7 @@ je_rural_poverty_qing = {
 	goal_add_value = {
 		add = 3
 	}
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = {
-					average_sol < 10
-				}
-				change_variable = {
-					name = var_rural_poverty_fail
-					add = 1
-				}
-			}
-		}
-	}
 	immediate = {
-		set_variable = {
-			name = var_rural_poverty_fail
-			value = 0
-		}
 		set_variable = {
 			name = rural_poverty_var
 			value = 0
@@ -393,9 +354,6 @@ je_establish_local_armies = {
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_organization
-					# TO DO: Hook this whole part into Formation composition rather than old barracks PM 
-					# has_active_production_method = pm_no_artillery
-					# has_active_production_method = pm_cannon_artillery
 				}
 			}
 		}
@@ -403,6 +361,7 @@ je_establish_local_armies = {
 	on_complete = {
 		if = {
 			limit = {
+				exists = c:CHI
 				is_subject_of = c:CHI
 			}
 			c:CHI = {
@@ -417,13 +376,21 @@ je_establish_local_armies = {
 		}
 		else = {
 			remove_modifier = modifier_crumbling_banner_system
-			c:CHI = {
+			c:CHI ?= {
 				change_variable = {
 					name = yong_ying_var
 					add = 1
 				}
 			}
 		}
+	}
+	fail = {
+		NOT = {
+			exists = c:CHI
+		}
+	}
+	on_fail = {
+		remove_modifier = modifier_crumbling_banner_system
 	}
 	weight = 1000
 }
@@ -433,7 +400,6 @@ je_rural_poverty_substate = {
 	group = je_group_historical_content
 
 	complete = {
-		average_sol >= 10
 		NOT = {
 			has_law = law_type:law_serfdom
 		}
@@ -449,6 +415,7 @@ je_rural_poverty_substate = {
 		}
 		if = {
 			limit = {
+				exists = c:CHI
 				is_subject_of = c:CHI
 			}
 			c:CHI = {
@@ -560,7 +527,7 @@ je_pacify_highland_tribes = {
 		trigger_event = {
 			id = imperia_qing_substates.2
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_highland_tribes_completed
@@ -601,7 +568,7 @@ je_gateway_to_the_west = {
 		add_modifier = {
 			name = modifier_gateway_to_the_west
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_gateway_to_the_west_completed
@@ -640,7 +607,7 @@ je_breadbasket_of_the_south = {
 			remove_ideology = ideology_huguang_agrarian_idyll
 			add_ideology = ideology_scholar_paternalistic
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_breadbasket_of_the_south_completed
@@ -684,7 +651,7 @@ je_settle_the_steppe = {
 			months = 240
 			is_decaying = yes
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
 				set_variable = je_settle_the_steppe_completed
@@ -721,7 +688,7 @@ je_pacify_and_settle_taiwan = {
 			months = 240
 			is_decaying = yes
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_pacify_and_settle_taiwan_completed
@@ -771,7 +738,7 @@ je_silk_march = {
 		add_modifier = {
 			name = modifier_silk_march
 		}
-		c:CHI = {
+		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_silk_march_completed
