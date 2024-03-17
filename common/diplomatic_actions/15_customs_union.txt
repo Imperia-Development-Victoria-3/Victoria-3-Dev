@@ -134,22 +134,48 @@
 				limit = {
 					has_variable = total_customs_union_payment_positive
 				}
-				change_variable = {
-					name = total_customs_union_payment_positive
-					add = {
-						subtract = scope:target_country.var:previous_minting_cost
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = previous_minting_cost
+						}
+					}
+					change_variable = {
+						name = total_customs_union_payment_positive
+						add = {
+							subtract = scope:target_country.var:previous_minting_cost
+							add = scope:target_country.imperia_weekly_customs_union_minting_cost
+						}
+					}
+				}
+				else = {
+					change_variable = {
+						name = total_customs_union_payment_positive
 						add = scope:target_country.imperia_weekly_customs_union_minting_cost
 					}
 				}
 			}
 			else = {
-				set_variable = {
-					name = total_customs_union_payment_positive
-					value = {
-						add = {
-							subtract = scope:target_country.var:previous_minting_cost
-							add = scope:target_country.imperia_weekly_customs_union_minting_cost
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = previous_minting_cost
 						}
+					}
+					set_variable = {
+						name = total_customs_union_payment_positive
+						value = {
+							add = {
+								subtract = scope:target_country.var:previous_minting_cost
+								add = scope:target_country.imperia_weekly_customs_union_minting_cost
+							}
+						}
+					}
+				}
+				else = {
+					set_variable = {
+						name = total_customs_union_payment_positive
+						value = scope:target_country.imperia_weekly_customs_union_minting_cost
 					}
 				}
 			}
