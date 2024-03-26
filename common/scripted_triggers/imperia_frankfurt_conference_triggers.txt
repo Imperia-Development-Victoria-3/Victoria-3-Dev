@@ -16,15 +16,15 @@
 }
 
 frankfurt_conference_has_majority_for_oligarchy = {
-    # Either...
+	# Either...
 	OR = {
-        # Oligarchy beat the 2 others
+		# Oligarchy beat the 2 others
 		AND = {
 			imperia_frankfurt_conference_oligarchy_voters_value > imperia_frankfurt_conference_wealth_voters_value
 			imperia_frankfurt_conference_oligarchy_voters_value > imperia_frankfurt_conference_universal_voters_value
 		}
-        # Or oligarchy didnt lose, and Frankfurt voted for it
-        # (means a tie happened with at least one of them, possibly both)
+		# Or oligarchy didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
 		AND = {
 			NOT = {
 				imperia_frankfurt_conference_oligarchy_voters_value < imperia_frankfurt_conference_wealth_voters_value
@@ -42,15 +42,15 @@ frankfurt_conference_has_majority_for_oligarchy = {
 }
 
 frankfurt_conference_has_majority_for_wealth = {
-    # Either...
+	# Either...
 	OR = {
-        # wealth beat the 2 others
+		# wealth beat the 2 others
 		AND = {
 			imperia_frankfurt_conference_wealth_voters_value > imperia_frankfurt_conference_oligarchy_voters_value
 			imperia_frankfurt_conference_wealth_voters_value > imperia_frankfurt_conference_universal_voters_value
 		}
-        # Or wealth didnt lose, and Frankfurt voted for it
-        # (means a tie happened with at least one of them, possibly both)
+		# Or wealth didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
 		AND = {
 			NOT = {
 				imperia_frankfurt_conference_wealth_voters_value < imperia_frankfurt_conference_oligarchy_voters_value
@@ -68,15 +68,15 @@ frankfurt_conference_has_majority_for_wealth = {
 }
 
 frankfurt_conference_has_majority_for_universal = {
-    # Either...
+	# Either...
 	OR = {
-        # universal suffrage beat the 2 others
+		# universal suffrage beat the 2 others
 		AND = {
 			imperia_frankfurt_conference_universal_voters_value > imperia_frankfurt_conference_oligarchy_voters_value
 			imperia_frankfurt_conference_universal_voters_value > imperia_frankfurt_conference_wealth_voters_value
 		}
-        # Or universal suffrage didnt lose, and Frankfurt voted for it
-        # (means a tie happened with at least one of them, possibly both)
+		# Or universal suffrage didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
 		AND = {
 			NOT = {
 				imperia_frankfurt_conference_universal_voters_value < imperia_frankfurt_conference_oligarchy_voters_value
@@ -94,32 +94,111 @@ frankfurt_conference_has_majority_for_universal = {
 }
 
 frankfurt_conference_has_majority_for_presidential_republic = {
-    frankfurt_conference_has_majority_for_republic = yes
-    OR = {
-        imperia_frankfurt_conference_presidential_voters_value > imperia_frankfurt_conference_parliamentary_voters_value
-        AND = {
-            imperia_frankfurt_conference_presidential_voters_value = imperia_frankfurt_conference_parliamentary_voters_value
+	frankfurt_conference_has_majority_for_republic = yes
+	OR = {
+		imperia_frankfurt_conference_presidential_voters_value > imperia_frankfurt_conference_parliamentary_voters_value
+		AND = {
+			imperia_frankfurt_conference_presidential_voters_value = imperia_frankfurt_conference_parliamentary_voters_value
 			p:x11C0A0 = {
 				owner = {
 					has_variable = frankfurt_conference_voted_presidential
 				}
 			}
-        }
-        frankfurt_conference_has_majority_for_oligarchy = yes
-    }
+		}
+		frankfurt_conference_has_majority_for_oligarchy = yes
+	}
 }
+
 frankfurt_conference_has_majority_for_parliamentary_republic = {
-    frankfurt_conference_has_majority_for_republic = yes
-    OR = {
-        imperia_frankfurt_conference_parliamentary_voters_value > imperia_frankfurt_conference_presidential_voters_value
-        AND = {
-            imperia_frankfurt_conference_parliamentary_voters_value = imperia_frankfurt_conference_presidential_voters_value
+	frankfurt_conference_has_majority_for_republic = yes
+	OR = {
+		imperia_frankfurt_conference_parliamentary_voters_value > imperia_frankfurt_conference_presidential_voters_value
+		AND = {
+			imperia_frankfurt_conference_parliamentary_voters_value = imperia_frankfurt_conference_presidential_voters_value
 			p:x11C0A0 = {
 				owner = {
 					has_variable = frankfurt_conference_voted_parliamentary
 				}
 			}
-        }
-        frankfurt_conference_has_majority_for_universal = yes
-    }
+		}
+		frankfurt_conference_has_majority_for_universal = yes
+	}
+}
+
+frankfurt_conference_has_majority_for_lesser_germany = {
+	# Either...
+	OR = {
+		# Lesser Germany beat the 2 others
+		AND = {
+			imperia_frankfurt_conference_lesser_germany_voters_value > imperia_frankfurt_conference_greater_germany_voters_value
+			imperia_frankfurt_conference_lesser_germany_voters_value > imperia_frankfurt_conference_greater_austria_voters_value
+		}
+		# Or lesser germany didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_conference_lesser_germany_voters_value < imperia_frankfurt_conference_greater_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_conference_lesser_germany_voters_value < imperia_frankfurt_conference_greater_austria_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_lesser_germany
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_greater_germany = {
+	# Either...
+	OR = {
+		# greater Germany beat the 2 others
+		AND = {
+			imperia_frankfurt_conference_greater_germany_voters_value > imperia_frankfurt_conference_lesser_germany_voters_value
+			imperia_frankfurt_conference_greater_germany_voters_value > imperia_frankfurt_conference_greater_austria_voters_value
+		}
+		# Or greater germany didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_conference_greater_germany_voters_value < imperia_frankfurt_conference_lesser_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_conference_greater_germany_voters_value < imperia_frankfurt_conference_greater_austria_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_greater_germany
+				}
+			}
+		}
+	}
+}
+
+frankfurt_conference_has_majority_for_greater_austria = {
+	# Either...
+	OR = {
+		# greater austria beat the 2 others
+		AND = {
+			imperia_frankfurt_conference_greater_austria_voters_value > imperia_frankfurt_conference_lesser_germany_voters_value
+			imperia_frankfurt_conference_greater_austria_voters_value > imperia_frankfurt_conference_greater_germany_voters_value
+		}
+		# Or greater austria didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_conference_greater_austria_voters_value < imperia_frankfurt_conference_lesser_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_conference_greater_austria_voters_value < imperia_frankfurt_conference_greater_germany_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_conference_voted_greater_austria
+				}
+			}
+		}
+	}
 }

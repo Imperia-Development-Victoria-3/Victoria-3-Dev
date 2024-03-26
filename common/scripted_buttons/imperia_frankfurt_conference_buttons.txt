@@ -236,7 +236,7 @@ je_frankfurt_conference_lesser_germany_button = {
 	effect = {
 		set_variable = frankfurt_conference_voted_lesser_germany
 		remove_variable ?= frankfurt_conference_voted_greater_germany
-		remove_variable ?= frankfurt_conference_voted_central_powers_germany
+		remove_variable ?= frankfurt_conference_voted_greater_austria
 		custom_tooltip = {
 			text = frankfurt_votes_for_lesser_german_solution_tt
 		}
@@ -266,16 +266,16 @@ je_frankfurt_conference_greater_germany_button = {
 	effect = {
 		set_variable = frankfurt_conference_voted_greater_germany
 		remove_variable ?= frankfurt_conference_voted_lesser_germany
-		remove_variable ?= frankfurt_conference_voted_central_powers_germany
+		remove_variable ?= frankfurt_conference_voted_greater_austria
 		custom_tooltip = {
 			text = frankfurt_votes_for_greater_german_solution_tt
 		}
 	}
 }
 
-je_frankfurt_conference_central_powers_button = {
-	name = "je_frankfurt_conference_central_powers_button"
-	desc = "je_frankfurt_conference_central_powers_button_desc"
+je_frankfurt_conference_greater_austria_button = {
+	name = "je_frankfurt_conference_greater_austria_button"
+	desc = "je_frankfurt_conference_greater_austria_button_desc"
 	visible = {
 		var:frankfurt_conference_current_vote = 4
 	}
@@ -286,25 +286,56 @@ je_frankfurt_conference_central_powers_button = {
 		}
 		hidden_trigger = {
 			NOT = {
-				has_variable = frankfurt_conference_voted_central_powers_germany
+				has_variable = frankfurt_conference_voted_greater_austria
 			}
 		}
 	}
 	selected = {
-		has_variable = frankfurt_conference_voted_central_powers_germany
+		has_variable = frankfurt_conference_voted_greater_austria
 	}
 	effect = {
-		set_variable = frankfurt_conference_voted_central_powers_germany
+		set_variable = frankfurt_conference_voted_greater_austria
 		remove_variable ?= frankfurt_conference_voted_greater_germany
 		remove_variable ?= frankfurt_conference_voted_lesser_germany
 		custom_tooltip = {
-			text = frankfurt_votes_for_central_powers_german_solution_tt
+			text = frankfurt_votes_for_greater_austria_german_solution_tt
 		}
 	}
 }
-je_frankfurt_conference_spread_the_revolution_button = {
-	name = "je_frankfurt_conference_spread_the_revolution_button"
-	desc = "je_frankfurt_conference_spread_the_revolution_button_desc"
+je_frankfurt_conference_internal_focus_button = {
+	name = "je_frankfurt_conference_internal_focus_button"
+	desc = "je_frankfurt_conference_internal_focus_button_desc"
+	visible = {
+		var:frankfurt_conference_current_vote = 5
+		# republic won
+		# universal suffrage won
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_conference_voting_internal_focus
+			var:frankfurt_conference_current_vote = 5
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_conference_voting_internal_focus
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_conference_voting_internal_focus
+	}
+	effect = {
+		set_variable = frankfurt_conference_voting_internal_focus
+		remove_variable ?= frankfurt_conference_voted_revolution_germany
+		# remove other var
+		custom_tooltip = {
+			text = frankfurt_votes_for_internal_focus_tt
+		}
+	}
+}
+je_frankfurt_conference_external_focus_button = {
+	name = "je_frankfurt_conference_external_focus_button"
+	desc = "je_frankfurt_conference_external_focus_button_desc"
 	visible = {
 		var:frankfurt_conference_current_vote = 5
 		# republic won
@@ -326,7 +357,7 @@ je_frankfurt_conference_spread_the_revolution_button = {
 	}
 	effect = {
 		set_variable = frankfurt_conference_voted_revolution_germany
-		# remove other var
+		remove_variable ?= frankfurt_conference_voting_internal_focus
 		custom_tooltip = {
 			text = frankfurt_votes_for_revolution_tt
 		}
