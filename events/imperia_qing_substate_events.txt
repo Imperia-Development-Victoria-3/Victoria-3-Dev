@@ -1,0 +1,822 @@
+﻿namespace = imperia_qing_substates
+
+imperia_qing_substates.1 = { #Sichuan - Setup Event
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.1.t
+	desc = imperia_qing_substates.1.d
+	flavor = imperia_qing_substates.1.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = {
+	name = imperia_qing_substates.1.a
+	default_option = yes
+
+		add_journal_entry = {
+			type = je_pacify_highland_tribes
+		}
+		s:STATE_YUNNAN.region_state:SIH = {
+			add_modifier = modifier_highland_tribes
+		}
+		s:STATE_GUIZHOU.region_state:SIH = {
+			add_modifier = modifier_highland_tribes
+		}
+	}
+}
+
+imperia_qing_substates.2 = { #Sichuan - Pacify Highland Tribes Complete
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.2.t
+	desc = imperia_qing_substates.2.d
+	flavor = imperia_qing_substates.2.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = {
+	name = imperia_qing_substates.2.a
+
+		default_option = yes
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:zhuang
+		add_loyalists = {
+			culture = cu:zhuang
+			value = 0.2
+		}		
+	}
+	
+	option = {
+	name = imperia_qing_substates.2.b
+
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:yi
+		add_loyalists = {
+			culture = cu:yi
+			value = 0.2
+			}
+	}
+	
+	option = {
+	name = imperia_qing_substates.2.c
+
+		s:STATE_YUNNAN.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		s:STATE_GUIZHOU.region_state:SIH = {
+				remove_modifier = modifier_highland_tribes
+			}
+		add_primary_culture = cu:miao
+		add_loyalists = {
+			culture = cu:miao
+			value = 0.2
+		}
+	}
+}
+
+imperia_qing_substates.3 = { # Sichuan - Tribal Conflict Event 
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.3.t
+	desc = imperia_qing_substates.3.d
+	flavor = imperia_qing_substates.3.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_before_the_battle.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Let them fight
+	name = imperia_qing_substates.3.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_modifier = {
+				name = modifier_tribal_conflicts
+				months = 12
+			}
+		}
+	}
+	option = { #Send in troops
+	name = imperia_qing_substates.3.b
+	default_option = yes
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:zhuang
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:miao
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = cu:yi
+			}
+		}
+		add_modifier = { 
+			name = deploying_the_army
+			multiplier = money_amount_multiplier_very_small
+			months = 12
+		}
+	}
+}
+
+imperia_qing_substates.4 = { # Sichuan - Han Settlers Murdered
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.4.t
+	desc = imperia_qing_substates.4.d
+	flavor = imperia_qing_substates.4.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/unspecific_devastation.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Do nothing
+	name = imperia_qing_substates.4.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:han
+			}
+		}
+	}
+
+	option = { #Send in troops
+	name = imperia_qing_substates.4.b
+	default_option = yes
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:zhuang
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:miao
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+				culture = cu:yi
+			}
+			add_loyalists_in_state = {
+				value = 0.05
+				culture = cu:han
+			}
+		}
+		add_modifier = { 
+			name = deploying_the_army
+			multiplier = money_amount_multiplier_very_small
+			months = 3
+		}
+	}
+}
+
+imperia_qing_substates.5 = { # Sichuan - Highlanders Sinicized
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.5.t
+	desc = imperia_qing_substates.5.d
+	flavor = imperia_qing_substates.5.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_poor_people_moving.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	option = { #Let them fight
+	name = imperia_qing_substates.5.a
+
+		random_state = {
+			limit = {
+				has_modifier = modifier_highland_tribes
+				}
+			add_loyalists_in_state = {
+					value = 0.05
+			}
+			add_modifier = {
+				name = modifier_successful_sinicization
+				months = 12
+			}
+		}
+	}
+}
+
+imperia_qing_substates.6 = { #Linguistic conference - Prepare in the capital
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.6.t
+	desc = imperia_qing_substates.6.d
+	flavor = imperia_qing_substates.6.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	immediate = {
+		set_variable = qing_language_conference_local_dialect # Qing will always advocate for Beijing Mandarin
+		set_variable = has_called_chinese_language_conference
+	}
+
+	# OK
+	option = {
+		name = imperia_qing_substates.6.a
+		c:YUE = { trigger_event = imperia_qing_substates.7 }
+		c:SIH = { trigger_event = imperia_qing_substates.7 }
+		c:HNA = { trigger_event = imperia_qing_substates.7 }
+		c:FRS = { trigger_event = imperia_qing_substates.7 }
+		c:XIB = { trigger_event = imperia_qing_substates.7 }
+		c:MCH = { trigger_event = imperia_qing_substates.7 }
+		
+
+		hidden_effect = {
+			trigger_event = { id = imperia_qing_substates.8 days = 91 } 
+			c:YUE = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+			c:SIH = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+			c:HNA = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+			c:FRS = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+			c:XIB = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+			c:MCH = { trigger_event = { id = imperia_qing_substates.8 days = 91} }
+		}
+	}
+}
+
+imperia_qing_substates.7 = { #Linguistic conference - Ask the substates about their intentions
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.7.t
+	desc = imperia_qing_substates.7.d
+	flavor = imperia_qing_substates.7.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+	
+	# Vote and advocate for local dialect
+	option = {
+		# Only these tags get to advocate for their dialect. Qing will always advocate for theirs, and they do not get this event
+		trigger = { 
+			OR = {
+				c:YUE = THIS
+				c:SIH = THIS
+				c:HNA = THIS
+				c:FRS = THIS
+			}
+		}
+		name = imperia_qing_substates.7.a
+		set_variable = qing_language_conference_local_dialect
+
+		ai_chance = {
+			base = 1
+		}
+	}
+	# Just vote
+	option = {
+		name = imperia_qing_substates.7.b
+		set_variable = qing_language_conference_just_voting
+		default_option = yes
+
+		ai_chance = {
+			base = 50
+		}
+	}
+	# Don't attend
+	option = {
+		name = imperia_qing_substates.7.c
+		
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+# TODO: Substates don't see the variable numbers correctly, so the localisation needs to be adjusted
+imperia_qing_substates.8 = { #Linguistic conference - Announce positions
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.8.t
+	desc = imperia_qing_substates.8.d
+	flavor = imperia_qing_substates.8.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+
+	# Set up on Qing
+	immediate = {
+		# This is a slightly hacky way to reference qing's variables in the loc for other tags
+		c:CHI = { save_scope_as = qing_language_conference_main_tag }
+		if = {
+			limit = {
+				c:CHI = THIS
+			}
+			set_variable = {
+				name = qing_language_conference_voters_count
+				value = 1
+			}
+			# Count the number of subjects that are voting
+			every_subject_or_below = {
+				if = {
+					limit = { 
+						OR = {
+							has_variable = qing_language_conference_local_dialect
+							has_variable = qing_language_conference_just_voting
+						}
+					}
+					c:CHI = {
+						change_variable = {
+							name = qing_language_conference_voters_count
+							add = 1
+						}
+					}
+				}
+			}
+			# The threshold to win is 50% + 1
+			set_variable = {
+				name = qing_language_conference_majority
+				value = {
+				  add = var:qing_language_conference_voters_count
+				  divide = 2
+				  add = 1 
+			  	}
+			}
+			round_variable = { name = qing_language_conference_majority nearest = 1 }  
+
+			# Moves the conference to the voting stage
+			trigger_event = { id = imperia_qing_substates.9 days =  91}
+			every_subject_or_below = { 
+				limit = { 
+					OR = {
+						has_variable = qing_language_conference_just_voting
+						has_variable = qing_language_conference_local_dialect
+					}
+			 	} 
+				trigger_event = { id = imperia_qing_substates.9 days =  91}
+			} 
+		}
+	}
+	
+	# OK
+	option = {
+		name = imperia_qing_substates.8.a
+	}
+}
+
+imperia_qing_substates.9 = { #Linguistic conference - Vote for a language.
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.9.title
+	desc = imperia_qing_substates.9.desc
+	flavor = imperia_qing_substates.9.flavour
+	
+	duration = 1
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	# Hide event if substate is not voting
+	trigger = {
+		OR = {
+			has_variable = qing_language_conference_local_dialect
+			has_variable = qing_language_conference_just_voting
+		}
+	}
+	
+	immediate = {
+		set_variable = qing_language_conference_can_vote # Having this variable indicates whether or not a country can vote.
+		
+		# init a tracker variable for each language that we can tally the votes
+		if = {
+			limit = {
+				c:CHI = THIS
+			}
+			set_variable = {
+				name = qing_language_conference_beijing_votes
+				value = 0
+			}
+			set_variable = {
+				name = qing_language_conference_sichuan_votes
+				value = 0
+			}
+			set_variable = {
+				name = qing_language_conference_liangguang_votes
+				value = 0
+			}
+			set_variable = {
+				name = qing_language_conference_huguang_votes
+				value = 0
+			}
+			set_variable = {
+				name = qing_language_conference_formosa_votes
+				value = 0
+			}
+			 # This is the fail event. It won't appear if a victor is chosen
+			trigger_event = {
+				id = imperia_qing_substates.11
+				days = 91
+			}
+		}
+	}
+	
+	# Beijing Dialect - always an option
+	option = {
+		name = imperia_qing_substates.9.a
+		default_option = yes
+		hidden_effect = {
+			remove_variable = qing_language_conference_can_vote
+			set_variable = qing_language_conference_voted_for_beijing
+			c:CHI = {
+				change_variable = {
+					name = qing_language_conference_beijing_votes
+					add = 1
+				}
+				if = {
+					limit = {
+						var:qing_language_conference_beijing_votes = var:qing_language_conference_majority
+					}
+					set_variable = qing_language_conference_beijing_victorious
+					# Announce the victor
+					every_country = { 
+						limit = { 
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+								has_modifier = modifier_chinese_diglossia
+							}
+						 } 
+						trigger_event = { id = imperia_qing_substates.10 days = 1}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+	# Sichuan Dialect
+	option = {
+		name = imperia_qing_substates.9.b
+		trigger = {
+			c:SIH = {
+				has_variable = qing_language_conference_local_dialect
+			}
+		}
+		hidden_effect = {
+			remove_variable = qing_language_conference_can_vote
+			set_variable = qing_language_conference_voted_for_sichuan
+			c:CHI = {
+				change_variable = {
+					name = qing_language_conference_sichuan_votes
+					add = 1
+				}
+				if = {
+					limit = {
+						var:qing_language_conference_sichuan_votes = var:qing_language_conference_majority
+					}
+					set_variable = qing_language_conference_sichuan_victorious
+					# Announce the victor
+					every_country = { 
+						limit = { 
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+								has_modifier = modifier_chinese_diglossia
+							}
+						 } 
+						trigger_event = { id = imperia_qing_substates.10 days = 1}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+	# Liangguang Dialect
+	option = {
+		name = imperia_qing_substates.9.c
+		trigger = {
+			c:YUE = {
+				has_variable = qing_language_conference_local_dialect
+			}
+		}		
+		hidden_effect = {
+			remove_variable = qing_language_conference_can_vote
+			set_variable = qing_language_conference_voted_for_liangguang
+			c:CHI = {
+				change_variable = {
+					name = qing_language_conference_liangguang_votes
+					add = 1
+				}
+				if = {
+					limit = {
+						var:qing_language_conference_liangguang_votes = var:qing_language_conference_majority
+					}
+					set_variable = qing_language_conference_liangguang_victorious
+					# Announce the victor
+					every_country = { 
+						limit = { 
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+								has_modifier = modifier_chinese_diglossia
+							}
+						 } 
+						trigger_event = { id = imperia_qing_substates.10 days = 1}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+	# Huguang Dialect
+	option = {
+		name = imperia_qing_substates.9.d
+		trigger = {
+			c:HNA = {
+				has_variable = qing_language_conference_local_dialect
+			}
+		}
+		hidden_effect = {
+			remove_variable = qing_language_conference_can_vote
+			set_variable = qing_language_conference_voted_for_huguang
+			c:CHI = {
+				change_variable = {
+					name = qing_language_conference_huguang_votes
+					add = 1
+				}
+				if = {
+					limit = {
+						var:qing_language_conference_huguang_votes = var:qing_language_conference_majority
+					}
+					set_variable = qing_language_conference_huguang_victorious
+					# Announce the victor
+					every_country = { 
+						limit = { 
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+								has_modifier = modifier_chinese_diglossia
+							}
+						 } 
+						trigger_event = { id = imperia_qing_substates.10 days = 1}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+	# Formosa Dialect
+	option = {
+		name = imperia_qing_substates.9.e
+		trigger = {
+			c:FRS = {
+				has_variable = qing_language_conference_local_dialect
+			}
+		}
+		hidden_effect = {
+			remove_variable = qing_language_conference_can_vote
+			set_variable = qing_language_conference_voted_for_formosa
+			c:CHI = {
+				change_variable = {
+					name = qing_language_conference_formosa_votes
+					add = 1
+				}
+				if = {
+					limit = {
+						var:qing_language_conference_formosa_votes = var:qing_language_conference_majority
+					}
+					set_variable = qing_language_conference_formosa_victorious
+					# Announce the victor
+					every_country = { 
+						limit = { 
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+								has_modifier = modifier_chinese_diglossia
+							}
+						 } 
+						trigger_event = { id = imperia_qing_substates.10 days = 1}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+}
+
+imperia_qing_substates.10 = { #Linguistic conference - Announce the victor
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.10.t
+	desc = imperia_qing_substates.10.d
+	flavor = imperia_qing_substates.10.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+	}
+
+	# Our language was victorious
+	option = {
+		name = imperia_qing_substates.10.a
+		trigger = { imperia_qing_proposed_winning_dialect = yes }
+		remove_modifier = modifier_chinese_diglossia
+		add_modifier = { name = modifier_prestige_dialect }
+	}
+
+	# We voted for the winning language
+	option = {
+		name = imperia_qing_substates.10.b
+		trigger = { imperia_qing_voted_for_winning_dialect = yes }
+		remove_modifier = modifier_chinese_diglossia
+		add_modifier = { name = modifier_accepted_prestige_dialect }
+	}
+
+	# We didn't vote or backed the wrong horse 
+	option = {
+		name = imperia_qing_substates.10.c
+		trigger = { 
+			AND = {
+				imperia_qing_proposed_winning_dialect = no
+				imperia_qing_voted_for_winning_dialect = no
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = modifier_chinese_diglossia }
+				remove_modifier = modifier_chinese_diglossia
+				add_modifier = {
+					name = modifier_chinese_diglossia
+					is_decaying = yes
+					years = 25
+				}
+			}
+		}
+	}
+}
+
+imperia_qing_substates.11 = { #Linguistic conference - No winner
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.11.t
+	desc = imperia_qing_substates.11.d
+	flavor = imperia_qing_substates.11.f
+	
+	duration = 3
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	trigger = {
+		c:CHI = {
+			NOR = {
+				has_variable = qing_language_conference_beijing_victorious
+				has_variable = qing_language_conference_sichuan_victorious
+				has_variable = qing_language_conference_liangguang_victorious
+				has_variable = qing_language_conference_huguang_victorious
+				has_variable = qing_language_conference_formosa_victorious
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				c:CHI = THIS
+			}
+		set_variable = qing_language_conference_no_winner
+		}
+	}
+	
+	option = {
+		name = imperia_qing_substates.11.a
+		custom_tooltip = {
+			text = fragile_unity_significant_add_tt
+		}
+	}
+}

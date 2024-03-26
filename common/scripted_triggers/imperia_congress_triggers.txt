@@ -1,0 +1,201 @@
+﻿is_congress_supporter = {
+	is_target_in_global_variable_list = {
+		name = current_congress_members_on_stance_1
+		target = this
+	}
+}
+
+is_congress_abstainer = {
+	is_target_in_global_variable_list = {
+		name = current_congress_members_on_stance_2
+		target = this
+	}
+}
+
+is_congress_opposer = {
+	is_target_in_global_variable_list = {
+		name = current_congress_members_on_stance_3
+		target = this
+	}
+}
+
+is_congress_observer = {
+	is_target_in_global_variable_list = {
+		name = current_congress_members_on_stance_4
+		target = this
+	}
+}
+
+is_congress_target = {
+	OR = {
+		this = global_var:imperia_vienna_congress_session_target
+		is_target_in_global_variable_list = {
+			name = imperia_vienna_congress_session_target_state_owners
+			target = this
+		}
+	}
+	this != global_var:imperia_vienna_congress_session_initiator
+}
+
+is_congress_attendee = {
+	OR = {
+		is_congress_supporter = yes
+		is_congress_abstainer = yes
+		is_congress_opposer = yes
+		is_congress_observer = yes
+	}
+}
+
+whist_ended_in_grand_slam_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points = 13
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points = 13
+		}
+	}
+}
+
+whist_ended_in_small_slam_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points = 12
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points = 12
+		}
+	}
+}
+
+whist_ended_in_win_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points >= 7
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points >= 7
+		}
+	}
+}
+
+whist_ended_in_loss_for_us = {
+	OR = {
+		AND = {
+			OR = {
+				this = scope:player_1
+				this = scope:player_3
+			}
+			var:team_1_points < 7
+		}
+		AND = {
+			OR = {
+				this = scope:player_2
+				this = scope:player_4
+			}
+			var:team_2_points < 7
+		}
+	}
+}
+
+whist_we_got_caught_cheating = {
+	OR = {
+		scope:player_1 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_2 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_3 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_4 = {
+			this = root
+			has_variable = caught_cheating_in_whist
+		}
+	}
+}
+
+whist_someone_got_caught_cheating = {
+	OR = {
+		scope:player_1 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_2 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_3 = {
+			has_variable = caught_cheating_in_whist
+		}
+		scope:player_4 = {
+			has_variable = caught_cheating_in_whist
+		}
+	}
+}
+
+is_in_game_of_whist = {
+	has_variable = whist_player
+}
+
+random_congress_random_event_10_OPTION_enabled = {
+	OR = {
+		scope:costume_choice_1 ?= scope:temporary_event_10_option
+		scope:costume_choice_2 ?= scope:temporary_event_10_option
+		scope:costume_choice_3 ?= scope:temporary_event_10_option
+		scope:costume_choice_4 ?= scope:temporary_event_10_option
+		scope:costume_choice_5 ?= scope:temporary_event_10_option
+	}
+}
+
+is_congress_parade_ready = {
+	global_var:imperia_vienna_congress_session_initiator = {
+		has_variable = chosen_budget_level
+		has_variable = chosen_budget_amount
+	}
+	any_country = {
+		count >= 3
+		has_variable = congress_lead_accepted
+		has_variable = chosen_budget_level
+		has_variable = chosen_budget_amount
+	}
+}
+
+congress_parade_is_poor = {
+	congress_parade_average_budget_level_of_parade < 2.66
+}
+
+congress_parade_is_normal = {
+	congress_parade_average_budget_level_of_parade > 2.66
+	congress_parade_average_budget_level_of_parade < 3.33
+}
+
+congress_parade_is_rich = {
+	congress_parade_average_budget_level_of_parade > 3.33
+}

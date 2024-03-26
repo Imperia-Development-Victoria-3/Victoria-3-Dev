@@ -1,0 +1,162 @@
+types imperia_vienna_congress
+{
+	type imperia_vienna_congress = fullscreen_block_window {
+		name = "imperia_vienna_congress"
+		enabled = yes
+		visible = "[GetVariableSystem.Exists('imperia_vienna_congress_open')]"
+		blockoverride "back_button_fullscreen" {
+			back_button_large = {
+				position = { 11 15 }
+				parentanchor = top|left
+				onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_open')]"
+				input_action = "back"
+			}
+		}
+
+		blockoverride "close_button_onclick" {
+			onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_open')]"
+		}
+
+		blockoverride "window_header_name" {
+			margin_left = 20
+			text = "CONGRESS_CONGRESS_OF_VIENNA"
+		}
+
+		blockoverride "fixed_top" {
+			### TABS
+			tab_buttons_fullscreen = {
+
+				# Overview
+				blockoverride "first_button" {
+					text = "OVERVIEW"
+				}
+				blockoverride "first_button_tooltip" {
+					tooltip = "OVERVIEW"
+				}
+				blockoverride "first_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Orange
+						alpha = 0.5
+					}
+				}
+				blockoverride "first_button_click" {
+					onclick = "[GetVariableSystem.Set('imperia_vienna_congress_tab_selected','overview')]"
+				}
+				blockoverride "first_button_visibility" {
+					visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','overview')]"
+				}
+				blockoverride "first_button_visibility_checked" {
+					visible = "[Not( GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','overview') )]"
+				}
+				blockoverride "first_button_selected" {
+					text = "OVERVIEW"
+				}
+
+				blockoverride "first_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Orange
+						alpha = 0.5
+					}
+				}
+
+				# Current Conference
+				blockoverride "second_button" {
+					text = "CONGRESS_CURRENT_CONFERENCE"
+				}
+				blockoverride "second_button_tooltip" {
+					text = "CONGRESS_CURRENT_CONFERENCE"
+				}
+				blockoverride "second_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Red
+						alpha = 0.15
+					}
+				}
+				blockoverride "second_button_click" {
+					onclick = "[GetVariableSystem.Set('imperia_vienna_congress_tab_selected','current_conference')]"
+				}
+				blockoverride "second_button_visibility" {
+					visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','current_conference')]"
+				}
+				blockoverride "second_button_visibility_checked" {
+					visible = "[Not( GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','current_conference') )]"
+				}
+				blockoverride "second_button_selected" {
+					text = "CONGRESS_CURRENT_CONFERENCE"
+				}
+				blockoverride "second_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Red
+						alpha = 0.15
+					}
+				}
+
+				# Proposals
+				blockoverride "third_button" {
+					text = "CONGRESS_PROPOSALS"
+				}
+				blockoverride "third_button_tooltip" {
+					tooltip = "CONGRESS_PROPOSALS"
+				}
+				blockoverride "third_button_background" {
+					background = {
+						margin = { 0 -2 }
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Purple
+						alpha = 0.5
+					}
+				}
+				blockoverride "third_button_click" {
+					onclick = "[GetVariableSystem.Set('imperia_vienna_congress_tab_selected','proposals')]"
+				}
+				blockoverride "third_button_visibility" {
+					visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','proposals')]"
+				}
+				blockoverride "third_button_visibility_checked" {
+					visible = "[Not( GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','proposals') )]"
+				}
+				blockoverride "third_button_selected" {
+					text = "CONGRESS_PROPOSALS"
+				}
+				blockoverride "third_button_background_selected" {
+					background = {
+						using = fade_bottom_entry_fancy_header_colored
+						using = Color_Purple
+						alpha = 0.5
+					}
+				}
+			}
+		}
+		blockoverride "entire_content_area" {
+			imperia_vienna_congress_overview = {
+				visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','overview')]"
+				# 1st page (overview) 
+				using = default_fade_in_out
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+			}
+			
+			imperia_vienna_congress_current_conference = {
+				visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','current_conference')]"
+				# 2nd page (current conference)
+				using = default_fade_in_out
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+			}
+			
+			imperia_vienna_congress_proposals = {
+				visible = "[GetVariableSystem.HasValue('imperia_vienna_congress_tab_selected','proposals')]"
+				# 3rd page (proposals)
+				using = default_fade_in_out
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+			}
+		}
+	}
+}

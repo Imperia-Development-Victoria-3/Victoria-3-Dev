@@ -1,0 +1,825 @@
+﻿player_diplomatic_backlash = {
+	requires_approval = yes
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	show_confirmation_box = no
+	is_hostile = yes
+	potential = {
+		is_player = yes
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_player = yes
+		}
+		has_diplomatic_relevance = scope:target_country
+	}
+	possible = {
+		always = yes
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_COLD_OR_LESS_NOT
+			scope:target_country.relations:root > relations_threshold:cold
+		}
+	}
+	accept_effect = {
+		change_relations = {
+			country = scope:target_country
+			value = {
+				add = relations_threshold:cold
+				subtract = scope:target_country.relations:root
+			}
+		}
+	}
+	ai = {
+		will_propose = {
+			always = no
+		}
+		accept_score = {
+			value = -1000
+		}
+	}
+}
+
+player_diplomatic_support = {
+	requires_approval = yes
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	show_confirmation_box = no
+	is_hostile = yes
+	potential = {
+		is_player = yes
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_player = yes
+		}
+		has_diplomatic_relevance = scope:target_country
+	}
+	possible = {
+		always = yes
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
+			scope:target_country.relations:root < relations_threshold:amicable
+		}
+	}
+	accept_effect = {
+		change_relations = {
+			country = scope:target_country
+			value = {
+				add = relations_threshold:amicable
+				subtract = scope:target_country.relations:root
+			}
+		}
+	}
+	ai = {
+		will_propose = {
+			always = no
+		}
+		accept_score = {
+			value = -1000
+		}
+	}
+}
+
+minor_war_reparations = {
+	requires_approval = no
+	should_notify_third_parties = no
+	can_select = no
+	can_select_to_break = no
+	potential = {
+		always = no
+	}
+	pact = {
+		is_two_sided_pact = no
+		income_transfer = 0.025
+		recipient_gets_income_transfer = no
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_truce_with = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
+					has_war_with = scope:target_country
+				}
+			}
+		}
+	}
+}
+
+forced_embargo_pact = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	can_select = no
+	can_select_to_break = no
+	potential = {
+		always = no
+	}
+	pact = {
+		cost = 0
+		is_embargo = yes
+		is_two_sided_pact = no
+		relations_progress_per_day = -1		# At -100, -1 relations
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					has_modifier = forced_embargo
+				}
+			}
+		}
+	}
+}
+
+overlord_bankroll_protectorate = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_direct_subject_of = root
+			is_subject_type = subject_type_protectorate
+		}
+	}
+	possible = {
+	}
+	pact = {
+		cost = 50
+		is_two_sided_pact = no
+		show_in_outliner = yes
+		can_be_used_in_sway_offers = no
+		relations_progress_per_day = 1		# At 100, +1 relations
+		relations_improvement_max = 80
+		income_transfer = 0.025		# Half of protectorates 0.05
+		recipient_gets_income_transfer = yes
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_protectorate
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		check_acceptance_for_will_break = no
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			always = no
+			scaled_debt <= 0
+			weekly_net_fixed_income > 5000
+			scope:target_country = {
+				OR = {
+					weekly_net_fixed_income < 0
+					scaled_debt > 0.15
+				}
+				NOT = {
+					scaled_gold_reserves > 0.15
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				AND = {
+					scaled_gold_reserves < 0.25
+					weekly_net_fixed_income < -5000
+				}
+				scaled_debt > 0.25
+				scope:target_country = {
+					weekly_net_fixed_income > 0
+					scaled_debt < 0.1
+				}
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < -5000
+						is_at_war = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+overlord_bankroll_puppet = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_direct_subject_of = root
+			is_subject_type = subject_type_puppet
+		}
+	}
+	possible = {
+	}
+	pact = {
+		cost = 50
+		is_two_sided_pact = no
+		show_in_outliner = yes
+		can_be_used_in_sway_offers = no
+		relations_progress_per_day = 1		# At 100, +1 relations
+		relations_improvement_max = 80
+		income_transfer = 0.15		# Half of puppets 0.3
+		recipient_gets_income_transfer = yes
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_puppet
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		check_acceptance_for_will_break = no
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			always = no
+			scaled_debt <= 0
+			weekly_net_fixed_income > 5000
+			scope:target_country = {
+				OR = {
+					weekly_net_fixed_income < 0
+					scaled_debt > 0.15
+				}
+				NOT = {
+					scaled_gold_reserves > 0.15
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				AND = {
+					scaled_gold_reserves < 0.25
+					weekly_net_fixed_income < -5000
+				}
+				scaled_debt > 0.25
+				scope:target_country = {
+					weekly_net_fixed_income > 0
+					scaled_debt < 0.1
+				}
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < -5000
+						is_at_war = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+overlord_bankroll_dominion = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_direct_subject_of = root
+			is_subject_type = subject_type_dominion
+		}
+	}
+	possible = {
+	}
+	pact = {
+		cost = 50
+		is_two_sided_pact = no
+		show_in_outliner = yes
+		can_be_used_in_sway_offers = no
+		relations_progress_per_day = 1		# At 100, +1 relations
+		relations_improvement_max = 80
+		income_transfer = 0.125		# Half of dominions 0.25
+		recipient_gets_income_transfer = yes
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_dominion
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		check_acceptance_for_will_break = no
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			always = no
+			scaled_debt <= 0
+			weekly_net_fixed_income > 5000
+			scope:target_country = {
+				OR = {
+					weekly_net_fixed_income < 0
+					scaled_debt > 0.15
+				}
+				NOT = {
+					scaled_gold_reserves > 0.15
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				AND = {
+					scaled_gold_reserves < 0.25
+					weekly_net_fixed_income < -5000
+				}
+				scaled_debt > 0.25
+				scope:target_country = {
+					weekly_net_fixed_income > 0
+					scaled_debt < 0.1
+				}
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < -5000
+						is_at_war = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+overlord_bankroll_vassal = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_direct_subject_of = root
+			is_subject_type = subject_type_vassal
+		}
+	}
+	possible = {
+	}
+	pact = {
+		cost = 50
+		is_two_sided_pact = no
+		show_in_outliner = yes
+		can_be_used_in_sway_offers = no
+		relations_progress_per_day = 1		# At 100, +1 relations
+		relations_improvement_max = 80
+		income_transfer = 0.15		# Half of vassals 0.3
+		recipient_gets_income_transfer = yes
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_vassal
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		check_acceptance_for_will_break = no
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			always = no
+			scaled_debt <= 0
+			weekly_net_fixed_income > 5000
+			scope:target_country = {
+				OR = {
+					weekly_net_fixed_income < 0
+					scaled_debt > 0.15
+				}
+				NOT = {
+					scaled_gold_reserves > 0.15
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				AND = {
+					scaled_gold_reserves < 0.25
+					weekly_net_fixed_income < -5000
+				}
+				scaled_debt > 0.25
+				scope:target_country = {
+					weekly_net_fixed_income > 0
+					scaled_debt < 0.1
+				}
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < -5000
+						is_at_war = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+overlord_bankroll_tributary = {
+	requires_approval = no
+	should_notify_third_parties = yes
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_direct_subject_of = root
+			is_subject_type = subject_type_tributary
+		}
+	}
+	possible = {
+	}
+	pact = {
+		cost = 50
+		is_two_sided_pact = no
+		show_in_outliner = yes
+		can_be_used_in_sway_offers = no
+		relations_progress_per_day = 1		# At 100, +1 relations
+		relations_improvement_max = 80
+		income_transfer = 0.1		# Half of tributary 0.2
+		recipient_gets_income_transfer = yes
+		income_transfer_based_on_recipient = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= -17				# this is: poor + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				country_rank >= scope:target_country.country_rank
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				in_default = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_subject_type = subject_type_tributary
+				}
+			}
+		}
+	}
+	ai = {
+		max_influence_spending_fraction = 0.2
+		check_acceptance_for_will_break = no
+		propose_score = {
+			value = 10
+		}
+		will_propose = {
+			always = no
+			scaled_debt <= 0
+			weekly_net_fixed_income > 5000
+			scope:target_country = {
+				OR = {
+					weekly_net_fixed_income < 0
+					scaled_debt > 0.15
+				}
+				NOT = {
+					scaled_gold_reserves > 0.15
+				}
+			}
+		}
+		will_break = {
+			OR = {
+				AND = {
+					scaled_gold_reserves < 0.25
+					weekly_net_fixed_income < -5000
+				}
+				scaled_debt > 0.25
+				scope:target_country = {
+					weekly_net_fixed_income > 0
+					scaled_debt < 0.1
+				}
+				AND = {
+					scaled_debt > 0
+					OR = {
+						weekly_net_fixed_income < -5000
+						is_at_war = yes
+					}
+				}
+			}
+		}
+	}
+}

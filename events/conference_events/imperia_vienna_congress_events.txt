@@ -1,0 +1,96 @@
+﻿namespace = imperia_vienna_congress
+imperia_vienna_congress.2 = {
+	# Invitation to GPs + MPs
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_vienna_congress.2.t
+	desc = imperia_vienna_congress.2.d
+	flavor = imperia_vienna_congress.2.f
+	duration = 1
+	option = {
+		# Attend
+		default_option = yes
+		name = imperia_vienna_congress.2.a
+		custom_tooltip = attend_congress_as_voter_tt
+		set_variable = voting_conference_member
+		if = {
+			limit = {
+				is_congress_target = yes
+			}
+			set_congress_stance_effect = {
+				COUNTRY = this
+				STANCE = 3
+			}
+		}
+		else = {
+			set_congress_stance_effect = {
+				COUNTRY = this
+				STANCE = 2
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		# Observe
+		name = imperia_vienna_congress.2.b
+		custom_tooltip = attend_congress_as_observer_tt
+		set_congress_stance_effect = {
+			COUNTRY = this
+			STANCE = 2
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	option = {
+		# Decline
+		name = imperia_vienna_congress.2.c
+		custom_tooltip = decline_congress_invitation_tt
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+imperia_vienna_congress.3 = {
+	# Invitation to recognised countries to observe
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_vienna_congress.3.t
+	desc = imperia_vienna_congress.3.d
+	flavor = imperia_vienna_congress.3.f
+	duration = 1
+	option = {
+		# Observe
+		default_option = yes
+		name = imperia_vienna_congress.3.a
+		custom_tooltip = attend_congress_as_observer_tt
+		set_congress_stance_effect = {
+			COUNTRY = this
+			STANCE = 4
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		# Decline
+		name = imperia_vienna_congress.3.b
+		custom_tooltip = decline_congress_invitation_tt
+		ai_chance = {
+			base = 0
+		}
+	}
+}

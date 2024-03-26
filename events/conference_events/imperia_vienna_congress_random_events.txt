@@ -1,0 +1,3583 @@
+﻿namespace = congress_random_event
+# Shoe throwing event
+congress_random_event.1 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/shoe_throwable.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.1.t
+	desc = congress_random_event.1.d
+	flavor = congress_random_event.1.f
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		# Should only throw a shoe if you're on the benches
+		has_global_variable = imperia_vienna_congress_in_session
+		is_congress_observer = yes
+		any_country = {
+			is_congress_attendee = yes
+			NOT = {
+				has_variable = shoe_thrown_at_recently
+			}
+			relations:root <= relations_threshold:poor
+		}
+	}
+	immediate = {
+		root = {
+			save_scope_as = shoe_thrower
+		}
+		random_country = {
+			limit = {
+				# Should only throw shoes at attendees they have bad relations with
+				is_congress_attendee = yes
+				NOT = {
+					has_variable = shoe_thrown_at_recently
+				}
+				relations:root <= relations_threshold:poor
+			}
+			save_scope_as = shoe_target
+		}
+	}
+	option = {
+		# Throw the shoe
+		name = congress_random_event.1.a
+		random_list = {
+			50 = {
+				# Miss
+				custom_tooltip = shoe_miss_tt
+				change_relations = {
+					country = scope:shoe_target
+					value = -5
+				}
+				post_notification = shoe_miss_for_thrower
+				scope:shoe_target = {
+					post_notification = shoe_miss_for_target
+				}
+			}
+			50 = {
+				# Hit!
+				custom_tooltip = shoe_hit_tt
+				change_relations = {
+					country = scope:shoe_target
+					value = -10
+				}
+				scope:shoe_target = {
+					trigger_event = {
+						id = congress_random_event.2
+						popup = yes
+					}
+					show_as_tooltip = {
+						add_modifier = {
+							name = imperia_vienna_congress_scaling_negative_prestige_modifier
+							years = 1
+							is_decaying = yes
+							multiplier = 5
+						}
+					}
+				}
+				post_notification = shoe_hit_for_thrower
+				if = {
+					# If the target is actually on the floor everyone notices
+					limit = {
+						scope:shoe_target = {
+							is_congress_observer = no
+						}
+					}
+					custom_tooltip = {
+						text = everyone_notices_your_hijinks_tt
+						every_country = {
+							limit = {
+								is_congress_attendee = yes
+								this != scope:shoe_target
+								this != scope:shoe_thrower
+							}
+							trigger_event = {
+								id = congress_random_event.3
+							}
+						}
+					}
+				}
+				else = {
+					# Else theres a 15% chance that people notices
+					custom_tooltip = {
+						text = observers_might_notice_your_hijinks_tt
+						every_country = {
+							limit = {
+								is_congress_observer = yes
+								this != scope:shoe_target
+								this != scope:shoe_thrower
+							}
+							random = {
+								chance = 15
+								trigger_event = {
+									id = congress_random_event.3
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_vienna_congress_scaling_negative_prestige_modifier
+			years = 1
+			is_decaying = yes
+			multiplier = 5
+		}
+		scope:shoe_target = {
+			# A 2 month cooldown to being thrown shoes at
+			set_variable = {
+				name = shoe_thrown_at_recently
+				days = 60
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	option = {
+		# Behave
+		default_option = yes
+		name = congress_random_event.1.b
+		ai_chance = {
+			base = 80
+		}
+	}
+}
+
+# Shoe throwing event - direct hit!
+congress_random_event.2 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/shoe_throwable.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.2.t
+	desc = congress_random_event.2.d
+	flavor = congress_random_event.2.f
+	duration = 1
+	trigger = {
+		is_congress_attendee = yes
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		add_modifier = {
+			name = imperia_vienna_congress_scaling_negative_prestige_modifier
+			years = 1
+			is_decaying = yes
+			multiplier = 5
+		}
+	}
+	option = {
+		# Someone just threw a shoe at us!
+		name = congress_random_event.2.a
+		show_as_tooltip = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_negative_prestige_modifier
+				years = 1
+				is_decaying = yes
+				multiplier = 5
+			}
+		}
+	}
+}
+
+# Shoe throwing event - audience broadcast
+congress_random_event.3 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/shoe_throwable.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.3.t
+	desc = congress_random_event.3.d
+	flavor = congress_random_event.3.f
+	duration = 1
+	trigger = {
+		is_congress_attendee = yes
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	option = {
+		# Someone just threw a shoe! Awesome!
+		name = congress_random_event.3.a
+		change_relations = {
+			country = scope:shoe_target
+			value = -10
+		}
+		change_relations = {
+			country = scope:shoe_thrower
+			value = 10
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		# Someone just threw a shoe!
+		name = congress_random_event.3.b
+		default_option = yes
+		ai_chance = {
+			base = 80
+		}
+	}
+	option = {
+		# Someone just threw a shoe! Awful
+		name = congress_random_event.3.c
+		change_relations = {
+			country = scope:shoe_target
+			value = 10
+		}
+		change_relations = {
+			country = scope:shoe_thrower
+			value = -10
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# Dinner event
+congress_random_event.4 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/upper_class_dinner.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.4.t
+	desc = congress_random_event.4.desc
+	flavor = congress_random_event.4.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		is_congress_attendee = yes
+		is_congress_observer = yes
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		enable_random_congress_random_event_4_option = yes
+		enable_random_congress_random_event_4_option = yes
+		enable_random_congress_random_event_4_option = yes
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				is_congress_observer = no
+				this != root
+			}
+			save_scope_as = notable_attendee_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = notable_attendee_scope_var
+					value = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				this != root
+				is_subject = no
+			}
+			save_scope_as = observer_1_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = observer_1_scope_var
+					value = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				this != root
+				is_subject = no
+				scope:observer_1_scope != this
+			}
+			save_scope_as = observer_2_scope
+			root = {
+				set_variable = {
+					# For custom loc in descriptions...
+					name = observer_2_scope_var
+					value = prev
+				}
+			}
+		}
+	}
+	option = {
+		name = congress_random_event.4.a
+		trigger = {
+			has_variable = event_option_a_enabled
+		}
+		change_relations = {
+			country = global_var:imperia_vienna_congress_session_initiator
+			value = 10
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.b
+		trigger = {
+			has_variable = event_option_b_enabled
+		}
+		global_var:imperia_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 1
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.c
+		trigger = {
+			has_variable = event_option_c_enabled
+		}
+		add_modifier = {
+			name = imperia_vienna_congress_scaling_positive_prestige_modifier
+			multiplier = 2
+			years = 1
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.d
+		trigger = {
+			has_variable = event_option_d_enabled
+		}
+		random_country = {
+			limit = {
+				this != root
+				is_congress_attendee = yes
+				is_congress_observer = no
+			}
+			ruler = {
+				add_modifier = {
+					name = imperia_ruler_popularity
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.e
+		trigger = {
+			has_variable = event_option_e_enabled
+		}
+		global_var:imperia_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 1
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.f
+		trigger = {
+			has_variable = event_option_f_enabled
+		}
+		var:notable_attendee_scope_var = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 5
+				years = 1
+				is_decaying = yes
+			}
+			ruler = {
+				add_modifier = {
+					name = imperia_ruler_popularity
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.g
+		trigger = {
+			has_variable = event_option_g_enabled
+		}
+		every_country = {
+			limit = {
+				is_congress_target = yes
+			}
+			if = {
+				limit = {
+					can_research = analytical_philosophy
+				}
+				add_technology_progress = {
+					progress = 1000
+					technology = analytical_philosophy
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = psychoanalysis
+				}
+				add_technology_progress = {
+					progress = 825
+					technology = psychoanalysis
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = philosophical_pragmatism
+				}
+				add_technology_progress = {
+					progress = 650
+					technology = philosophical_pragmatism
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = psychiatry
+				}
+				add_technology_progress = {
+					progress = 500
+					technology = psychiatry
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = empiricism
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = empiricism
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = academia
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = academia
+				}
+			}
+			else_if = {
+				limit = {
+					can_research = rationalism
+				}
+				add_technology_progress = {
+					progress = 375
+					technology = rationalism
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.h
+		trigger = {
+			has_variable = event_option_h_enabled
+		}
+		scope:observer_1_scope = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 10
+				years = 1
+				is_decaying = yes
+			}
+		}
+		scope:observer_2_scope = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 10
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.i
+		trigger = {
+			has_variable = event_option_i_enabled
+		}
+		if = {
+			limit = {
+				can_research = analytical_philosophy
+			}
+			add_technology_progress = {
+				progress = 1000
+				technology = analytical_philosophy
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = psychoanalysis
+			}
+			add_technology_progress = {
+				progress = 825
+				technology = psychoanalysis
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = philosophical_pragmatism
+			}
+			add_technology_progress = {
+				progress = 650
+				technology = philosophical_pragmatism
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = psychiatry
+			}
+			add_technology_progress = {
+				progress = 500
+				technology = psychiatry
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = empiricism
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = empiricism
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = academia
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = academia
+			}
+		}
+		else_if = {
+			limit = {
+				can_research = rationalism
+			}
+			add_technology_progress = {
+				progress = 375
+				technology = rationalism
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.j
+		trigger = {
+			has_variable = event_option_j_enabled
+		}
+		global_var:imperia_vienna_congress_session_initiator = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = 1
+				years = 1
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.k
+		trigger = {
+			has_variable = event_option_k_enabled
+		}
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+			}
+			change_relations = {
+				country = root
+				value = 10
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = congress_random_event.4.l
+		trigger = {
+			has_variable = event_option_l_enabled
+		}
+		every_country = {
+			limit = {
+				capital.region = global_var:imperia_vienna_congress_session_target.capital.region
+				this != root
+				is_congress_target = no
+			}
+			root = {
+				change_relations = {
+					country = prev
+					value = 5
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	after = {
+		clear_congress_random_event_4_option_variables = yes
+	}
+}
+
+### Whist
+# Setting up the whist table...
+congress_random_event.5 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		is_congress_observer = yes
+		has_global_variable = imperia_vienna_congress_in_session
+		is_in_game_of_whist = no
+		any_country = {
+			count >= 4
+			is_congress_observer = yes
+			is_in_game_of_whist = no
+		}
+	}
+	immediate = {
+		save_scope_as = player_1
+		set_variable = {
+			name = players_selected_playstyle
+			value = 0
+		}
+		set_variable = {
+			name = points_team_1
+			value = 0
+		}
+		set_variable = {
+			name = points_team_2
+			value = 0
+		}
+		set_variable = whist_player
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				is_in_game_of_whist = no
+				this != scope:player_1
+			}
+			save_scope_as = player_2
+			set_variable = whist_player
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				is_in_game_of_whist = no
+				this != scope:player_1
+				this != scope:player_2
+			}
+			save_scope_as = player_3
+			set_variable = whist_player
+		}
+		random_country = {
+			limit = {
+				is_congress_observer = yes
+				is_in_game_of_whist = no
+				this != scope:player_1
+				this != scope:player_2
+				this != scope:player_3
+			}
+			save_scope_as = player_4
+			set_variable = whist_player
+		}
+		scope:player_1 = {
+			trigger_event = {
+				id = congress_random_event.6
+				popup = yes
+			}
+		}
+		scope:player_2 = {
+			trigger_event = {
+				id = congress_random_event.6
+				popup = yes
+			}
+		}
+		scope:player_3 = {
+			trigger_event = {
+				id = congress_random_event.6
+				popup = yes
+			}
+		}
+		scope:player_4 = {
+			trigger_event = {
+				id = congress_random_event.6
+				popup = yes
+			}
+		}
+	}
+}
+
+# Everyone decides their playstyle
+congress_random_event.6 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/game_of_cards.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.6.t
+	desc = congress_random_event.6.desc
+	flavor = congress_random_event.6.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	option = {
+		# Play honorably
+		# More bonus relations points from winning
+		name = congress_random_event.6.a
+		set_variable = plays_whist_honorably
+		custom_tooltip = whist_honorable_tt
+		default_option = yes
+		ai_chance = {
+			base = 45
+		}
+	}
+	option = {
+		# Play smart
+		# Higher chance of winning points
+		name = congress_random_event.6.b
+		set_variable = plays_whist_smart
+		custom_tooltip = whist_smart_tt
+		ai_chance = {
+			base = 45
+		}
+	}
+	option = {
+		# try to communicate
+		# Even higher chance of winning; less points with your partner
+		name = congress_random_event.6.c
+		set_variable = plays_whist_communicating
+		custom_tooltip = whist_communicating_tt
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		# Cheat
+		# Highest chance of winning, risk of getting caught costing you relations with everyone involved
+		name = congress_random_event.6.d
+		set_variable = plays_whist_cheating
+		custom_tooltip = whist_cheating_tt
+		random = {
+			chance = 50
+			custom_tooltip = whist_gets_caught_tt
+			set_variable = caught_cheating_in_whist
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	after = {
+		scope:player_1 = {
+			change_variable = {
+				name = players_selected_playstyle
+				add = 1
+			}
+			trigger_event = {
+				id = congress_random_event.7
+			}
+		}
+	}
+}
+
+# Actual play round - hidden
+congress_random_event.7 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		var:players_selected_playstyle >= 4
+	}
+	immediate = {
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		play_whist_round = yes
+		scope:player_1 = {
+			trigger_event = {
+				id = congress_random_event.8
+				popup = yes
+				days = 7
+			}
+		}
+		scope:player_2 = {
+			trigger_event = {
+				id = congress_random_event.8
+				popup = yes
+				days = 7
+			}
+		}
+		scope:player_3 = {
+			trigger_event = {
+				id = congress_random_event.8
+				popup = yes
+				days = 7
+			}
+		}
+		scope:player_4 = {
+			trigger_event = {
+				id = congress_random_event.8
+				popup = yes
+				days = 7
+			}
+		}
+	}
+}
+
+# Whist results
+congress_random_event.8 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/game_of_cards.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/capitalists_meeting"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.8.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				# We got caught cheating!
+				desc = congress_random_event.8.d0
+				trigger = {
+					whist_we_got_caught_cheating = yes
+				}
+			}
+			triggered_desc = {
+				# Someone cheated!
+				desc = congress_random_event.8.desc
+				trigger = {
+					whist_someone_got_caught_cheating = yes
+				}
+			}
+			triggered_desc = {
+				# grand slam: 13 points
+				desc = congress_random_event.8.d2
+				trigger = {
+					whist_ended_in_grand_slam_for_us = yes
+				}
+			}
+			triggered_desc = {
+				# small slam: 13 points
+				desc = congress_random_event.8.d3
+				trigger = {
+					whist_ended_in_small_slam_for_us = yes
+				}
+			}
+			triggered_desc = {
+				# won!
+				desc = congress_random_event.8.d4
+				trigger = {
+					whist_ended_in_win_for_us = yes
+				}
+			}
+			triggered_desc = {
+				# lost!
+				desc = congress_random_event.8.d5
+				trigger = {
+					whist_ended_in_loss_for_us = yes
+				}
+			}
+		}
+	}
+	flavor = congress_random_event.8.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					scope:player_1 = {
+						this != root
+						has_variable = caught_cheating_in_whist
+					}
+					scope:player_2 = {
+						this != root
+						has_variable = caught_cheating_in_whist
+					}
+					scope:player_3 = {
+						this != root
+						has_variable = caught_cheating_in_whist
+					}
+					scope:player_4 = {
+						this != root
+						has_variable = caught_cheating_in_whist
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					has_variable = caught_cheating_in_whist
+					this != root
+					OR = {
+						scope:player_1 = this
+						scope:player_2 = this
+						scope:player_3 = this
+						scope:player_4 = this
+					}
+				}
+				save_scope_as = cheating_country_other
+			}
+		}
+		if = {
+			limit = {
+				this = scope:player_1
+			}
+			scope:player_3 = {
+				save_scope_as = whist_teammate
+			}
+			scope:player_2 = {
+				save_scope_as = whist_opponent_1
+			}
+			scope:player_4 = {
+				save_scope_as = whist_opponent_2
+			}
+		}
+		else_if = {
+			limit = {
+				this = scope:player_2
+			}
+			scope:player_4 = {
+				save_scope_as = whist_teammate
+			}
+			scope:player_1 = {
+				save_scope_as = whist_opponent_1
+			}
+			scope:player_3 = {
+				save_scope_as = whist_opponent_2
+			}
+		}
+		else_if = {
+			limit = {
+				this = scope:player_3
+			}
+			scope:player_1 = {
+				save_scope_as = whist_teammate
+			}
+			scope:player_2 = {
+				save_scope_as = whist_opponent_1
+			}
+			scope:player_4 = {
+				save_scope_as = whist_opponent_2
+			}
+		}
+		else_if = {
+			limit = {
+				this = scope:player_4
+			}
+			scope:player_2 = {
+				save_scope_as = whist_teammate
+			}
+			scope:player_1 = {
+				save_scope_as = whist_opponent_1
+			}
+			scope:player_3 = {
+				save_scope_as = whist_opponent_2
+			}
+		}
+		set_variable = {
+			name = team_1_points
+			value = scope:player_1.var:points_team_1
+		}
+		set_variable = {
+			name = team_2_points
+			value = scope:player_1.var:points_team_2
+		}
+	}
+	option = {
+		# grand slam
+		name = congress_random_event.8.a
+		trigger = {
+			whist_ended_in_grand_slam_for_us = yes
+			whist_someone_got_caught_cheating = no
+		}
+		end_whist_game = yes
+	}
+	option = {
+		# small slam
+		name = congress_random_event.8.b
+		trigger = {
+			whist_ended_in_small_slam_for_us = yes
+			whist_someone_got_caught_cheating = no
+		}
+		end_whist_game = yes
+	}
+	option = {
+		# won
+		name = congress_random_event.8.c
+		trigger = {
+			whist_ended_in_win_for_us = yes
+			whist_someone_got_caught_cheating = no
+		}
+		end_whist_game = yes
+	}
+	option = {
+		# loss
+		name = congress_random_event.8.d
+		trigger = {
+			whist_ended_in_loss_for_us = yes
+			whist_someone_got_caught_cheating = no
+		}
+		end_whist_game = yes
+	}
+	option = {
+		# Someone cheated!
+		name = congress_random_event.8.e
+		trigger = {
+			whist_someone_got_caught_cheating = yes
+			whist_we_got_caught_cheating = no
+		}
+		end_whist_game_cheater = yes
+	}
+	option = {
+		# You cheated and got caught
+		name = congress_random_event.8.f
+		trigger = {
+			whist_we_got_caught_cheating = yes
+		}
+		end_whist_game_cheater = yes
+	}
+	after = {
+		whist_variable_cleanup = yes
+	}
+}
+
+### Masked Ball
+# Masked Ball preparations
+congress_random_event.9 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		this = global_var:imperia_vienna_congress_session_initiator
+		has_global_variable = imperia_vienna_congress_in_session
+		NOT = {
+			has_global_variable = masked_ball_held
+		}
+	}
+	immediate = {
+		set_global_variable = masked_ball_held
+		set_global_variable = {
+			name = ready_for_masked_ball
+			value = 0
+		}
+		set_global_variable = {
+			name = masked_ball_went_home
+			value = 0
+		}
+		set_global_variable = {
+			name = masked_ball_over
+			value = 0
+		}
+		every_country = {
+			limit = {
+				is_congress_attendee = yes
+			}
+			trigger_event = {
+				id = congress_random_event.10
+				popup = yes
+			}
+		}
+	}
+}
+
+# Pick a costume
+congress_random_event.10 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.10.t
+	desc = congress_random_event.10.desc
+	flavor = congress_random_event.10.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		# Choose 5 costumes randomly
+		save_scope_value_as = {
+			name = costume_choice_1
+			value = random_costume_choice
+		}
+		save_scope_value_as = {
+			name = costume_choice_2
+			value = random_costume_choice
+		}
+		save_scope_value_as = {
+			name = costume_choice_3
+			value = random_costume_choice
+		}
+		save_scope_value_as = {
+			name = costume_choice_4
+			value = random_costume_choice
+		}
+		save_scope_value_as = {
+			name = costume_choice_5
+			value = random_costume_choice
+		}
+	}
+	# Chris Columbus
+	option = {
+		name = congress_random_event.10.a
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 1
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 1
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Roman Emperor
+	option = {
+		name = congress_random_event.10.b
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 2
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 2
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Cultural garb
+	option = {
+		name = congress_random_event.10.c
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 3
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 3
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Old medieval emperor
+	option = {
+		name = congress_random_event.10.d
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 4
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 4
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Fairy-tale - prince charming
+	option = {
+		name = congress_random_event.10.e
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 5
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 5
+		}
+	}
+	# Oriental Prince
+	option = {
+		name = congress_random_event.10.f
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 6
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 6
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Military Uniform
+	option = {
+		name = congress_random_event.10.g
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 7
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 7
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Animal - lion
+	option = {
+		name = congress_random_event.10.h
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 8
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 8
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Pierrot
+	option = {
+		name = congress_random_event.10.i
+		trigger = {
+			save_temporary_scope_value_as = {
+				name = temporary_event_10_option
+				value = 9
+			}
+			random_congress_random_event_10_OPTION_enabled = yes
+		}
+		set_variable = {
+			name = masked_ball_costume_direction
+			value = 9
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		trigger_event = {
+			id = congress_random_event.11
+			popup = yes
+			days = 2
+		}
+	}
+}
+
+# Select budget
+congress_random_event.11 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.11.t
+	desc = congress_random_event.11.desc
+	flavor = congress_random_event.11.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	# mask Only
+	option = {
+		name = congress_random_event.11.a
+		trigger = {
+			masked_ball_max_afford < 555
+		}
+
+		set_variable = {
+			name = masked_ball_budget
+			value = 1
+		}
+		custom_tooltip = masked_ball_no_budget_tt
+	}
+	# very low
+	option = {
+		name = congress_random_event.11.b
+		trigger = {
+			masked_ball_max_afford > 156
+			masked_ball_max_afford < 1110
+		}
+		set_variable = {
+			name = masked_ball_budget
+			value = 2
+		}
+		custom_tooltip = masked_ball_very_low_budget_tt
+	}
+	# low
+	option = {
+		name = congress_random_event.11.c
+		trigger = {
+			masked_ball_max_afford > 312
+			masked_ball_max_afford < 2222
+		}
+		set_variable = {
+			name = masked_ball_budget
+			value = 3
+		}
+		custom_tooltip = masked_ball_low_budget_tt
+	}
+	# medium
+	option = {
+		name = congress_random_event.11.d
+		trigger = {
+			masked_ball_max_afford > 625
+			masked_ball_max_afford < 4444
+		}
+		set_variable = {
+			name = masked_ball_budget
+			value = 4
+		}
+		custom_tooltip = masked_ball_medium_budget_tt
+	}
+	# high
+	option = {
+		name = congress_random_event.11.e
+		trigger = {
+			masked_ball_max_afford > 1250
+			masked_ball_max_afford < 8888
+		}
+		set_variable = {
+			name = masked_ball_budget
+			value = 5
+		}
+		custom_tooltip = masked_ball_high_budget_tt
+	}
+	# very high
+	option = {
+		name = congress_random_event.11.f
+		trigger = {
+			masked_ball_max_afford > 2500
+		}
+		set_variable = {
+			name = masked_ball_budget
+			value = 6
+		}
+		custom_tooltip = masked_ball_very_high_budget_tt
+	}
+	after = {
+		change_global_variable = {
+			name = ready_for_masked_ball
+			add = 1
+		}
+		if = {
+			limit = {
+				global_var:ready_for_masked_ball >= imperia_num_of_congress_attendees
+			}
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				trigger_event = {
+					id = congress_random_event.12
+					popup = yes
+					days = 7
+				}
+			}
+		}
+	}
+}
+
+# Met mysterious person
+congress_random_event.12 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.12.t
+	desc = congress_random_event.12.desc
+	flavor = congress_random_event.12.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+			}
+			root = {
+				set_variable = {
+					name = mysterious_person
+					value = prev
+				}
+			}
+			save_scope_as = mysterious_person
+		}
+	}
+	option = {
+		name = congress_random_event.12.a
+	}
+	after = {
+		change_global_variable = {
+			name = masked_ball_went_home
+			add = 1
+		}
+		if = {
+			limit = {
+				global_var:masked_ball_went_home = imperia_num_of_congress_attendees
+			}
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				trigger_event = {
+					id = congress_random_event.13
+					popup = yes
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+# Who was it?
+congress_random_event.13 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.13.t
+	desc = congress_random_event.13.desc
+	flavor = congress_random_event.13.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != root.var:mysterious_person
+			}
+			root = {
+				add_to_variable_list = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != root.var:mysterious_person
+				NOT = {
+					root = {
+						is_target_in_variable_list = {
+							name = masked_ball_possible_mysterio
+							target = prev
+						}
+					}
+				}
+			}
+			root = {
+				add_to_variable_list = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != root.var:mysterious_person
+				NOT = {
+					root = {
+						is_target_in_variable_list = {
+							name = masked_ball_possible_mysterio
+							target = prev
+						}
+					}
+				}
+			}
+			root = {
+				add_to_variable_list = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != root.var:mysterious_person
+				NOT = {
+					root = {
+						is_target_in_variable_list = {
+							name = masked_ball_possible_mysterio
+							target = prev
+						}
+					}
+				}
+			}
+			root = {
+				add_to_variable_list = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		add_to_variable_list = {
+			name = masked_ball_possible_mysterio
+			target = root.var:mysterious_person
+		}
+		random_in_list = {
+			variable = masked_ball_possible_mysterio
+			save_scope_as = mysterio_1
+			root = {
+				remove_list_variable = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_in_list = {
+			variable = masked_ball_possible_mysterio
+			save_scope_as = mysterio_2
+			root = {
+				remove_list_variable = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_in_list = {
+			variable = masked_ball_possible_mysterio
+			save_scope_as = mysterio_3
+			root = {
+				remove_list_variable = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_in_list = {
+			variable = masked_ball_possible_mysterio
+			save_scope_as = mysterio_4
+			root = {
+				remove_list_variable = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		random_in_list = {
+			variable = masked_ball_possible_mysterio
+			save_scope_as = mysterio_5
+			root = {
+				remove_list_variable = {
+					name = masked_ball_possible_mysterio
+					target = prev
+				}
+			}
+		}
+		# clear_variable_list = masked_ball_possible_mysterio
+	}
+	# Person 1
+	option = {
+		name = congress_random_event.13.a
+		default_option = yes
+		hidden_effect = {
+			if = {
+				# A bingo!
+				limit = {
+					scope:mysterio_1 = var:mysterious_person
+				}
+				change_relations = {
+					country = var:mysterious_person
+					value = {
+						value = var:masked_ball_budget
+						multiply = var:mysterious_person.var:masked_ball_budget
+					}
+				}
+				post_notification = found_mysterio
+			}
+			else = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+				post_notification = mysterio_got_away
+			}
+		}
+	}
+	# Person 2
+	option = {
+		name = congress_random_event.13.b
+		hidden_effect = {
+			if = {
+				# A bingo!
+				limit = {
+					scope:mysterio_2 = var:mysterious_person
+				}
+				change_relations = {
+					country = var:mysterious_person
+					value = {
+						value = var:masked_ball_budget
+						multiply = var:mysterious_person.var:masked_ball_budget
+					}
+				}
+				post_notification = found_mysterio
+			}
+			else = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+				post_notification = mysterio_got_away
+			}
+		}
+	}
+	# Person 3
+	option = {
+		name = congress_random_event.13.c
+		hidden_effect = {
+			if = {
+				# A bingo!
+				limit = {
+					scope:mysterio_3 = var:mysterious_person
+				}
+				change_relations = {
+					country = var:mysterious_person
+					value = {
+						value = var:masked_ball_budget
+						multiply = var:mysterious_person.var:masked_ball_budget
+					}
+				}
+				post_notification = found_mysterio
+			}
+			else = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+				post_notification = mysterio_got_away
+			}
+		}
+	}
+	# Person 4
+	option = {
+		name = congress_random_event.13.d
+		hidden_effect = {
+			if = {
+				# A bingo!
+				limit = {
+					scope:mysterio_4 = var:mysterious_person
+				}
+				change_relations = {
+					country = var:mysterious_person
+					value = {
+						value = var:masked_ball_budget
+						multiply = var:mysterious_person.var:masked_ball_budget
+					}
+				}
+				post_notification = found_mysterio
+			}
+			else = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+				post_notification = mysterio_got_away
+			}
+		}
+	}
+	# Person 5
+	option = {
+		name = congress_random_event.13.e
+		hidden_effect = {
+			if = {
+				# A bingo!
+				limit = {
+					scope:mysterio_5 = var:mysterious_person
+				}
+				change_relations = {
+					country = var:mysterious_person
+					value = {
+						value = var:masked_ball_budget
+						multiply = var:mysterious_person.var:masked_ball_budget
+					}
+				}
+				post_notification = found_mysterio
+			}
+			else = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					multiplier = 5
+					years = 1
+					is_decaying = yes
+				}
+				post_notification = mysterio_got_away
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = masked_ball_over
+			add = 1
+		}
+		if = {
+			limit = {
+				global_var:masked_ball_over = imperia_num_of_congress_attendees
+			}
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				if = {
+					limit = {
+						var:masked_ball_budget = 2
+					}
+					add_modifier = {
+						name = masked_ball_budget_modifier
+						multiplier = 500
+						months = 6
+					}
+				}
+				else_if = {
+					limit = {
+						var:masked_ball_budget = 3
+					}
+					add_modifier = {
+						name = masked_ball_budget_modifier
+						multiplier = 1000
+						months = 6
+					}
+				}
+				else_if = {
+					limit = {
+						var:masked_ball_budget = 4
+					}
+					add_modifier = {
+						name = masked_ball_budget_modifier
+						multiplier = 2000
+						months = 6
+					}
+				}
+				else_if = {
+					limit = {
+						var:masked_ball_budget = 5
+					}
+					add_modifier = {
+						name = masked_ball_budget_modifier
+						multiplier = 4000
+						months = 6
+					}
+				}
+				else_if = {
+					limit = {
+						var:masked_ball_budget = 6
+					}
+					add_modifier = {
+						name = masked_ball_budget_modifier
+						multiplier = 8000
+						months = 6
+					}
+				}
+				remove_variable ?= masked_ball_costume_direction
+				remove_variable ?= masked_ball_budget
+				remove_global_variable ?= ready_for_masked_ball
+				remove_global_variable ?= masked_ball_went_home
+				remove_variable ?= mysterious_person
+				remove_global_variable ?= masked_ball_over
+			}
+		}
+	}
+}
+
+### Parade
+# Start of parade chain - host budget
+congress_random_event.14 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.14.t
+	desc = congress_random_event.14.desc
+	flavor = congress_random_event.14.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 3
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+		this = global_var:imperia_vienna_congress_session_initiator
+		NOR = {
+			# One of these would be true if the event has been fired this congress round...
+			has_variable = very_low_budget_amount
+			has_variable = chosen_budget_level
+			has_variable = chosen_budget_amount
+		}
+	}
+	immediate = {
+		set_variable = {
+			name = very_low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.15
+			}
+		}
+		set_variable = {
+			name = low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.3
+			}
+		}
+		set_variable = {
+			name = medium_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.45
+			}
+		}
+		set_variable = {
+			name = high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.6
+			}
+		}
+		set_variable = {
+			name = very_high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.75
+			}
+		}
+		congress_parade_invite_lead = yes
+		congress_parade_invite_lead = yes
+		congress_parade_invite_lead = yes
+	}
+	# Very low budget
+	option = {
+		name = congress_random_event.14.a
+		set_variable = {
+			name = chosen_budget_level
+			value = 1
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Low budget
+	option = {
+		name = congress_random_event.14.b
+		set_variable = {
+			name = chosen_budget_level
+			value = 2
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Satisfactory/medium budget
+	option = {
+		default_option = yes
+		name = congress_random_event.14.c
+		set_variable = {
+			name = chosen_budget_level
+			value = 3
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:medium_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:medium_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+	# High budget
+	option = {
+		name = congress_random_event.14.d
+		set_variable = {
+			name = chosen_budget_level
+			value = 4
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# very high budget
+	option = {
+		name = congress_random_event.14.e
+		set_variable = {
+			name = chosen_budget_level
+			value = 5
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		remove_variable = very_low_budget_amount
+		remove_variable = low_budget_amount
+		remove_variable = medium_budget_amount
+		remove_variable = high_budget_amount
+		remove_variable = very_high_budget_amount
+		if = {
+			limit = {
+				is_congress_parade_ready = yes
+			}
+			congress_parade_start = yes
+		}
+	}
+}
+
+#Invitation to be lead
+congress_random_event.15 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.15.t
+	desc = congress_random_event.15.desc
+	flavor = congress_random_event.15.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		set_variable = congress_lead_invitee
+	}
+	option = {
+		# Accept the lead invite
+		default_option = yes
+		name = congress_random_event.15.a
+		remove_variable = congress_lead_invitee
+		set_variable = congress_lead_accepted
+		trigger_event = {
+			id = congress_random_event.16
+			popup = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		# Decline the lead invite
+		name = congress_random_event.15.b
+		remove_variable = congress_lead_invitee
+		set_variable = congress_lead_declined
+		congress_parade_invite_lead = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				any_country = {
+					count = 0
+					is_congress_attendee = yes
+					is_congress_observer = no
+					is_congress_target = no
+					this != global_var:imperia_vienna_congress_session_initiator
+					NOR = {
+						has_variable = congress_lead_invitee
+						has_variable = congress_lead_accepted
+						has_variable = congress_lead_declined
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				post_notification = parade_cancelled
+				set_global_variable = congress_random_events_enabled
+			}
+		}
+	}
+}
+
+# lead budget selection
+congress_random_event.16 = {
+	type = country_event
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.16.t
+	desc = congress_random_event.16.desc
+	flavor = congress_random_event.16.flavor
+	placement = capital
+	duration = 1
+	trigger = {
+		has_variable = congress_lead_accepted
+		NOR = {
+			# One of these would be true if the event has been fired this congress round...
+			has_variable = very_low_budget_amount
+			has_variable = chosen_budget_level
+			has_variable = chosen_budget_amount
+		}
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		set_variable = {
+			name = very_low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.15
+			}
+		}
+		set_variable = {
+			name = low_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.3
+			}
+		}
+		set_variable = {
+			name = medium_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.45
+			}
+		}
+		set_variable = {
+			name = high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.6
+			}
+		}
+		set_variable = {
+			name = very_high_budget_amount
+			value = {
+				value = weekly_net_fixed_income
+				multiply = 0.75
+			}
+		}
+	}
+	# Very low budget
+	option = {
+		name = congress_random_event.16.a
+		set_variable = {
+			name = chosen_budget_level
+			value = 1
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Low budget
+	option = {
+		name = congress_random_event.16.b
+		set_variable = {
+			name = chosen_budget_level
+			value = 2
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:low_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:low_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Satisfactory/medium budget
+	option = {
+		default_option = yes
+		name = congress_random_event.16.c
+		set_variable = {
+			name = chosen_budget_level
+			value = 3
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:medium_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:medium_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+	# High budget
+	option = {
+		name = congress_random_event.16.d
+		set_variable = {
+			name = chosen_budget_level
+			value = 4
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# very high budget
+	option = {
+		name = congress_random_event.16.e
+		set_variable = {
+			name = chosen_budget_level
+			value = 5
+		}
+		set_variable = {
+			name = chosen_budget_amount
+			value = var:very_high_budget_amount
+		}
+		custom_tooltip = would_happen_tt
+		show_as_tooltip = {
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:very_high_budget_amount
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		remove_variable = very_low_budget_amount
+		remove_variable = low_budget_amount
+		remove_variable = medium_budget_amount
+		remove_variable = high_budget_amount
+		remove_variable = very_high_budget_amount
+		if = {
+			limit = {
+				is_congress_parade_ready = yes
+			}
+			congress_parade_start = yes
+		}
+	}
+}
+
+# Actual parade
+congress_random_event.17 = {
+	type = country_event
+	event_image = {
+		trigger = {
+			congress_parade_is_poor = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_poor.dds"
+	}
+	event_image = {
+		trigger = {
+			congress_parade_is_normal = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_normal.dds"
+	}
+	event_image = {
+		trigger = {
+			congress_parade_is_rich = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_rich.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.17.t
+	desc = congress_random_event.17.desc
+	flavor = congress_random_event.17.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		NOT = {
+			has_variable = parade_seen
+		}
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		set_variable = parade_seen
+		global_var:congress_lead_1 = {
+			save_scope_as = congress_lead_1_scope
+		}
+		global_var:congress_lead_2 = {
+			save_scope_as = congress_lead_2_scope
+		}
+		global_var:congress_lead_3 = {
+			save_scope_as = congress_lead_3_scope
+		}
+	}
+	# Hurrah!
+	option = {
+		default_option = yes
+		name = congress_random_event.17.a
+		trigger_event = {
+			id = congress_random_event.18
+			popup = yes
+			days = 3
+		}
+	}
+}
+
+# Arrival at palace
+congress_random_event.18 = {
+	type = country_event
+	event_image = {
+		trigger = {
+			congress_parade_is_poor = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_poor.dds"
+	}
+	event_image = {
+		trigger = {
+			congress_parade_is_normal = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_normal.dds"
+	}
+	event_image = {
+		trigger = {
+			congress_parade_is_rich = yes
+		}
+		texture = "gfx/event_pictures/congress_parade_rich.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.18.t
+	desc = congress_random_event.18.desc
+	flavor = congress_random_event.18.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	# Host spent most
+	option = {
+		default_option = yes
+		name = congress_random_event.18.a
+		trigger = {
+			global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount >= average_congress_parade_lead_budget
+		}
+		if = {
+			limit = {
+				this = global_var:imperia_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = increases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:imperia_vienna_congress_session_initiator
+						value = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_negative_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = decreases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:imperia_vienna_congress_session_initiator
+						value = {
+							value = -5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				global_var:imperia_vienna_congress_session_initiator = {
+					add_modifier = {
+						name = imperia_vienna_congress_scaling_positive_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+				}
+				change_relations = {
+					country = global_var:imperia_vienna_congress_session_initiator
+					value = {
+						value = 5
+						multiply = congress_parade_multiplier
+					}
+				}
+				every_country = {
+					limit = {
+						has_variable = congress_lead_accepted
+					}
+					add_modifier = {
+						name = imperia_vienna_congress_scaling_negative_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+					root = {
+						change_relations = {
+							country = prev
+							value = {
+								value = -5
+								multiply = congress_parade_multiplier
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	# Leads spent more
+	option = {
+		default_option = yes
+		name = congress_random_event.18.b
+		trigger = {
+			global_var:imperia_vienna_congress_session_initiator.var:chosen_budget_amount < average_congress_parade_lead_budget
+		}
+		if = {
+			limit = {
+				this = global_var:imperia_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_negative_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = decreases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:imperia_vienna_congress_session_initiator
+						value = {
+							value = -5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 5
+					multiply = congress_parade_multiplier
+				}
+				years = 3
+				is_decaying = yes
+			}
+			custom_tooltip = {
+				text = increases_relations_with_attendees_tt
+				every_country = {
+					limit = {
+						is_congress_attendee = yes
+						this != root
+					}
+					change_relations = {
+						country = global_var:imperia_vienna_congress_session_initiator
+						value = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+					}
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				global_var:imperia_vienna_congress_session_initiator = {
+					add_modifier = {
+						name = imperia_vienna_congress_scaling_negative_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+				}
+				change_relations = {
+					country = global_var:imperia_vienna_congress_session_initiator
+					value = {
+						value = -5
+						multiply = congress_parade_multiplier
+					}
+				}
+				every_country = {
+					limit = {
+						has_variable = congress_lead_accepted
+					}
+					add_modifier = {
+						name = imperia_vienna_congress_scaling_positive_prestige_modifier
+						multiplier = {
+							value = 5
+							multiply = congress_parade_multiplier
+						}
+						years = 3
+						is_decaying = yes
+					}
+					root = {
+						change_relations = {
+							country = prev
+							value = {
+								value = 5
+								multiply = congress_parade_multiplier
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = parade_over_num
+			add = 1
+		}
+		if = {
+			limit = {
+				this = global_var:imperia_vienna_congress_session_initiator
+			}
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:chosen_budget_amount
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = congress_lead_accepted
+			}
+			add_modifier = {
+				name = parade_budget_modifier
+				multiplier = var:chosen_budget_amount
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				global_var:parade_over_num >= imperia_num_of_congress_attendees
+			}
+			set_global_variable = congress_random_events_enabled
+			remove_global_variable ?= congress_lead_1
+			remove_global_variable ?= congress_lead_2
+			remove_global_variable ?= congress_lead_3
+			remove_global_variable ?= parade_over_num
+			every_country = {
+				limit = {
+					is_congress_attendee = yes
+				}
+				remove_variable ?= parade_seen
+				remove_variable ?= congress_lead_accepted
+				remove_variable ?= chosen_budget_amount
+				remove_variable ?= chosen_budget_level
+			}
+			global_var:imperia_vienna_congress_session_initiator = {
+				random = {
+					chance = 5
+					trigger_event = {
+						# Hot air balloon crashes the conference
+						id = congress_random_event.20
+						days = 3
+					}
+				}
+			}
+		}
+	}
+}
+
+# Church mass
+congress_random_event.19 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/chapel_in_city.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/southamerica/christianity"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.19.t
+	desc = congress_random_event.19.desc
+	flavor = congress_random_event.19.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		is_congress_observer = yes
+		religion = {
+			has_discrimination_trait = christian
+		}
+		OR = {
+			global_var:imperia_vienna_congress_session_initiator = {
+				any_scope_pop = {
+					state = owner.capital
+					religion = {
+						has_discrimination_trait = christian
+					}
+				}
+			}
+			global_var:imperia_vienna_congress_session_initiator.religion = {
+				has_discrimination_trait = christian
+			}
+		}
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				religion = {
+					has_discrimination_trait = christian
+				}
+			}
+			save_scope_as = chapel_goer
+		}
+	}
+	# Visit Chapel
+	option = {
+		name = congress_random_event.19.a
+		default_option = yes
+		random_list = {
+			75 = {
+				custom_tooltip = {
+					text = chapel_is_empty_tt
+					post_notification = chapel_empty
+					ruler = {
+						add_modifier = {
+							name = imperia_ruler_popularity
+							multiplier = 5
+							years = 5
+							is_decaying = yes
+						}
+					}
+				}
+			}
+			25 = {
+				custom_tooltip = {
+					text = someone_is_there_tt
+					post_notification = chapel_occupied_prayed_together
+					change_relations = {
+						country = scope:chapel_goer
+						value = 15
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	# Visit Church
+	option = {
+		name = congress_random_event.19.b
+		trigger = {
+			# only if christian community is 10%+ in size; or if state religion of host is Christian
+			OR = {
+				global_var:imperia_vienna_congress_session_initiator.capital = {
+					any_scope_pop = {
+						religion = {
+							has_discrimination_trait = christian
+							global_var:imperia_vienna_congress_session_initiator.capital = {
+								religion_percent_state = {
+									target = prev
+									value >= 0.1
+								}
+							}
+						}
+					}
+				}
+				global_var:imperia_vienna_congress_session_initiator.religion = {
+					has_discrimination_trait = christian
+				}
+			}
+		}
+		random_list = {
+			# 2 countries
+			1 = {
+				custom_tooltip = {
+					text = increase_relations_with_2_other_christian_countries_tt
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 3
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 3
+						}
+					}
+				}
+			}
+			# 3 countries
+			1 = {
+				custom_tooltip = {
+					text = increase_relations_with_3_other_christian_countries_tt
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 3
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 3
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 3
+						}
+					}
+				}
+			}
+			# 4 countries
+			1 = {
+				custom_tooltip = {
+					text = increase_relations_with_4_other_christian_countries_tt
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+				}
+			}
+			# 5 countries
+			1 = {
+				custom_tooltip = {
+					text = increase_relations_with_5_other_christian_countries_tt
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+					random_country = {
+						limit = {
+							is_congress_attendee = yes
+							religion = {
+								has_discrimination_trait = christian
+							}
+						}
+						change_relations = {
+							country = root
+							value = 2
+						}
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	# Visit Cathedral
+	option = {
+		name = congress_random_event.19.c
+		trigger = {
+			# only if christian community is 25%+ in size; or if state religion of host is Christian
+			OR = {
+				global_var:imperia_vienna_congress_session_initiator.capital = {
+					any_scope_pop = {
+						religion = {
+							has_discrimination_trait = christian
+							global_var:imperia_vienna_congress_session_initiator.capital = {
+								religion_percent_state = {
+									target = prev
+									value >= 0.25
+								}
+							}
+						}
+					}
+				}
+				global_var:imperia_vienna_congress_session_initiator.religion = {
+					has_discrimination_trait = christian
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_vienna_congress_scaling_positive_prestige_modifier
+			multiplier = 5
+			years = 5
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+}
+
+# Hot air balloon host perspective
+congress_random_event.20 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/hot_air_balloon_crash.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/destruction"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.20.t
+	desc = congress_random_event.20.desc
+	flavor = congress_random_event.20.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		global_var:imperia_vienna_congress_session_initiator = root
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+			}
+			save_scope_as = congress_crasher
+		}
+	}
+	option = {
+		# Forgive the congress crasher
+		name = congress_random_event.20.a
+		scope:congress_crasher = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_negative_prestige_modifier
+				years = 1
+				is_decaying = yes
+				multiplier = 5
+			}
+		}
+		add_modifier = {
+			name = imperia_vienna_congress_scaling_negative_prestige_modifier
+			years = 1
+			is_decaying = yes
+			multiplier = 5
+		}
+		change_relations = {
+			country = scope:congress_crasher
+			value = 20
+		}
+		save_scope_value_as = {
+			name = forgave_congress_crasher
+			value = yes
+		}
+		scope:congress_crasher = {
+			trigger_event = congress_random_event.21
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+	option = {
+		# Punish the congress crasher
+		default_option = yes
+		name = congress_random_event.20.b
+		scope:congress_crasher = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_negative_prestige_modifier
+				years = 1
+				is_decaying = yes
+				multiplier = 20
+			}
+		}
+		change_relations = {
+			country = scope:congress_crasher
+			value = -20
+		}
+		save_scope_value_as = {
+			name = forgave_congress_crasher
+			value = no
+		}
+		scope:congress_crasher = {
+			trigger_event = congress_random_event.21
+		}
+		ai_chance = {
+			base = 70
+		}
+	}
+	after = {
+		every_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != root
+				this != scope:congress_crasher
+			}
+			trigger_event = {
+				id = congress_random_event.22
+			}
+		}
+	}
+}
+
+# Hot air balloon crasher perspective
+congress_random_event.21 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/hot_air_balloon_crash.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/destruction"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.21.t
+	desc = congress_random_event.21.desc
+	flavor = congress_random_event.21.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	# Not really a choice just informing the player
+	option = {
+		default_option = yes
+		name = congress_random_event.21.a
+		if = {
+			limit = {
+				scope:forgave_congress_crasher = no
+			}
+			show_as_tooltip = {
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					years = 1
+					is_decaying = yes
+					multiplier = 20
+				}
+				change_relations = {
+					country = global_var:imperia_vienna_congress_session_initiator
+					value = -20
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				scope:congress_crasher = {
+					add_modifier = {
+						name = imperia_vienna_congress_scaling_negative_prestige_modifier
+						years = 1
+						is_decaying = yes
+						multiplier = 5
+					}
+				}
+				add_modifier = {
+					name = imperia_vienna_congress_scaling_negative_prestige_modifier
+					years = 1
+					is_decaying = yes
+					multiplier = 5
+				}
+				change_relations = {
+					country = global_var:imperia_vienna_congress_session_initiator
+					value = 20
+				}
+			}
+		}
+	}
+}
+
+# Hot air balloon bystander perspective
+congress_random_event.22 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/hot_air_balloon_crash.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/destruction"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.22.t
+	desc = congress_random_event.22.desc
+	flavor = congress_random_event.22.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	# Not really a choice just informing the player
+	option = {
+		default_option = yes
+		name = congress_random_event.22.a
+	}
+}
+
+# Host decides language
+congress_random_event.23 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/congress_meeting.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.23.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = congress_random_event.23.desc1
+				trigger = {
+					any_primary_culture = {
+						OR = {
+							has_discrimination_trait = francophone
+							has_discrimination_trait = anglophone
+						}
+					}
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.23.desc2
+				trigger = {
+					any_primary_culture = {
+						count = all
+						NOR = {
+							has_discrimination_trait = francophone
+							has_discrimination_trait = anglophone
+						}
+					}
+				}
+			}
+		}
+	}
+	flavor = congress_random_event.23.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+		global_var:imperia_vienna_congress_session_initiator = root
+	}
+	immediate = {
+		if = {
+			limit = {
+				any_primary_culture = {
+					count = all
+					NOR = {
+						has_discrimination_trait = francophone
+						has_discrimination_trait = anglophone
+					}
+				}
+			}
+			random_primary_culture = {
+				save_scope_as = third_language_option
+			}
+		}
+	}
+	# Use English
+	option = {
+		name = congress_random_event.23.a
+		custom_tooltip = popular_language_note_english_tt
+		set_global_variable = {
+			name = congress_language_spoken
+			value = cu:british
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = {
+					any_primary_culture = {
+						has_discrimination_trait = anglophone
+					}
+				}
+				add = 50
+			}
+		}
+	}
+	# Use French
+	option = {
+		default_option = yes
+		name = congress_random_event.23.b
+		custom_tooltip = popular_language_note_french_tt
+		set_global_variable = {
+			name = congress_language_spoken
+			value = cu:french
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				trigger = {
+					any_primary_culture = {
+						has_discrimination_trait = francophone
+					}
+				}
+				add = 50
+			}
+			modifier = {
+				trigger = {
+					any_primary_culture = {
+						has_discrimination_trait = anglophone
+					}
+				}
+				add = -100
+			}
+		}
+	}
+	# Use own
+	option = {
+		trigger = {
+			any_primary_culture = {
+				count = all
+				NOR = {
+					has_discrimination_trait = francophone
+					has_discrimination_trait = anglophone
+				}
+			}
+		}
+		default_option = yes
+		name = congress_random_event.23.c
+		custom_tooltip = own_language_warning_tt
+		custom_tooltip = own_language_reward_tt
+		set_global_variable = {
+			name = congress_language_spoken
+			value = scope:third_language_option
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		set_global_variable = {
+			name = num_countries_that_have_responded_to_official_language
+			value = 1
+		}
+		set_variable = have_accepted_official_language_of_congress
+		every_country = {
+			limit = {
+				is_congress_attendee = yes
+				this != global_var:imperia_vienna_congress_session_initiator
+			}
+			trigger_event = {
+				id = congress_random_event.24
+			}
+		}
+	}
+}
+
+# Language debate - attendee perspective
+congress_random_event.24 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/congress_meeting.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.24.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = congress_random_event.24.desc1
+				trigger = {
+					global_var:congress_language_spoken = {
+						has_discrimination_trait = anglophone
+					}
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.24.desc2
+				trigger = {
+					global_var:congress_language_spoken = {
+						has_discrimination_trait = francophone
+					}
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.24.desc3
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+	flavor = congress_random_event.24.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	# Use the preferred language of the host
+	option = {
+		name = congress_random_event.24.a
+		default_option = yes
+		set_variable = have_accepted_official_language_of_congress
+		custom_tooltip = congress_language_scaling_prestige_for_host_tt
+		change_relations = {
+			country = global_var:imperia_vienna_congress_session_initiator
+			value = 10
+		}
+		ai_chance = {
+			base = 19
+			modifier = {
+				trigger = {
+					global_var:congress_language_spoken = {
+						NOR = {
+							has_discrimination_trait = anglophone
+							has_discrimination_trait = francophone
+						}
+					}
+				}
+				# 50:50 to accept instead of 95:5 if the language chosen is not English or French
+				add = -19
+			}
+		}
+	}
+	# Use Own national language
+	option = {
+		name = congress_random_event.24.b
+		trigger = {
+			NOT = {
+				global_var:congress_language_spoken = {
+					shares_non_heritage_trait_with_any_primary_culture = root
+				}
+			}
+		}
+		change_relations = {
+			country = global_var:imperia_vienna_congress_session_initiator
+			value = -10
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						any_primary_culture = {
+							has_discrimination_trait = francophone
+						}
+						any_primary_culture = {
+							has_discrimination_trait = anglophone
+						}
+					}
+				}
+				# English and French speakers are more likely to choose this option. By a lot.
+				add = 19
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = num_countries_that_have_responded_to_official_language
+			add = 1
+		}
+		if = {
+			limit = {
+				global_var:num_countries_that_have_responded_to_official_language >= imperia_num_of_congress_attendees
+			}
+			global_var:imperia_vienna_congress_session_initiator = {
+				trigger_event = {
+					id = congress_random_event.25
+					days = 3
+					popup = yes
+				}
+			}
+		}
+	}
+}
+
+# Language debate - host prestige bonus
+congress_random_event.25 = {
+	type = country_event
+	event_image = {
+		texture = "gfx/event_pictures/congress_meeting.dds"
+	}
+	on_opened_soundeffect = "event:/SFX/Events/asia/politician_parliament_motion"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/imperia/vienna_congress.dds"
+	title = congress_random_event.25.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = congress_random_event.25.desc1
+				trigger = {
+					congress_fraction_of_prestige_who_accepted_language > 0.9
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.25.desc2
+				trigger = {
+					congress_fraction_of_prestige_who_accepted_language > 0.8
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.25.desc3
+				trigger = {
+					congress_fraction_of_prestige_who_accepted_language > 0.7
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.25.desc4
+				trigger = {
+					congress_fraction_of_prestige_who_accepted_language > 0.6
+				}
+			}
+			triggered_desc = {
+				desc = congress_random_event.25.desc5
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+	flavor = congress_random_event.25.flavor
+	placement = global_var:imperia_vienna_congress_session_initiator.capital
+	duration = 1
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	option = {
+		name = congress_random_event.25.a
+		default_option = yes
+		if = {
+			limit = {
+				global_var:congress_language_spoken = {
+					NOR = {
+						has_discrimination_trait = anglophone
+						has_discrimination_trait = francophone
+					}
+				}
+			}
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 20
+					multiply = congress_fraction_of_prestige_who_accepted_language
+				}
+				years = 3
+				is_decaying = yes
+			}
+		}
+		else = {
+			add_modifier = {
+				name = imperia_vienna_congress_scaling_positive_prestige_modifier
+				multiplier = {
+					value = 10
+					multiply = congress_fraction_of_prestige_who_accepted_language
+				}
+				years = 3
+				is_decaying = yes
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
