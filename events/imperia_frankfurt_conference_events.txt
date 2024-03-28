@@ -1,21 +1,519 @@
-﻿# Frankfurt Conference Events that unite germany depending on outcome
-fc_monarchy = {
+﻿namespace = frankfurt_conference
+frankfurt_conference.1 = {
+	# For for the recipient of the Gutter Crown
 	type = country_event
-	placement = root
-	title = fc_monarchy_title
-	desc = fc_monarchy_desc
-	flavor = fc_monarchy_flavor
-
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_conference.1.t
+	desc = frankfurt_conference.1.d
+	flavor = frankfurt_conference.1.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
 	duration = 3
-
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		p:x11C0A0.state = {
+			save_scope_as = frankfurt_location_scope
+		}
+		# Set the 3 chosen countries as scopes
+		random_country = {
+			limit = {
+				has_variable = first_candidate_german_leader
+			}
+			save_scope_as = first_candidate_scope
+		}
+		random_country = {
+			limit = {
+				has_variable = second_candidate_german_leader
+			}
+			save_scope_as = second_candidate_scope
+		}
+		random_country = {
+			limit = {
+				has_variable = third_candidate_german_leader
+			}
+			save_scope_as = third_candidate_scope
+		}
+	}
+	option = {
+		default_option = yes
+		name = frankfurt_conference.1.a
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_1
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = frankfurt_conference.1.b
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_2
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = frankfurt_conference.1.c
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_3
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader
+			add = 1
+		}
+		if = {
+			limit = {
+				# If Everyone has voted
+				global_var:frankfurt_eligible_german_leader_voters = global_var:frankfurt_has_voted_for_german_leader
+			}
+			if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_1 > global_var:frankfurt_has_voted_for_german_leader_2
+					global_var:frankfurt_has_voted_for_german_leader_1 > global_var:frankfurt_has_voted_for_german_leader_3
+				}
+				scope:first_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_conference.2
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_2 > global_var:frankfurt_has_voted_for_german_leader_1
+					global_var:frankfurt_has_voted_for_german_leader_2 > global_var:frankfurt_has_voted_for_german_leader_3
+				}
+				scope:second_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_conference.2
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_3 > global_var:frankfurt_has_voted_for_german_leader_1
+					global_var:frankfurt_has_voted_for_german_leader_3 > global_var:frankfurt_has_voted_for_german_leader_2
+				}
+				scope:third_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_conference.2
+					}
+				}
+			}
+		}
+	}
 }
-fc_republic = {
+
+frankfurt_conference.2 = {
+	# Gutter Crown is offered to a prominent German prince...
 	type = country_event
-	placement = root
-	title = fc_republic_title
-	desc = fc_republic_desc
-	flavor = fc_republic_flavor
-
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_conference.2.t
+	desc = frankfurt_conference.2.d
+	flavor = frankfurt_conference.2.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
 	duration = 3
-
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		p:x11C0A0.state = {
+			save_scope_as = frankfurt_location_scope
+		}
+	}
+	option = {
+		# Accept the Gutter Crown
+		set_variable = accepted_gutter_crown
+		if = {
+			limit = {
+				frankfurt_conference_has_majority_for_republic = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						frankfurt_conference_has_majority_for_oligarchy = yes
+						frankfurt_conference_has_majority_for_presidential_republic = yes
+					}
+				}
+				activate_law = law_type:law_presidential_republic
+			}
+			else_if = {
+				limit = {
+					OR = {
+						frankfurt_conference_has_majority_for_universal = yes
+						frankfurt_conference_has_majority_for_parliamentary_republic = yes
+					}
+				}
+				activate_law = law_type:law_parliamentary_republic
+			}
+		}
+		else = {
+			activate_law = law_type:law_monarchy
+		}
+		if = {
+			limit = {
+				frankfurt_conference_has_majority_for_oligarchy = yes
+			}
+			activate_law = law_type:law_oligarchy
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_wealth = yes
+			}
+			activate_law = law_type:law_wealth_voting
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_universal = yes
+			}
+			activate_law = law_type:law_universal_suffrage
+		}
+		if = {
+			limit = {
+				frankfurt_conference_has_majority_for_lesser_germany = yes
+			}
+			# Vanilla scripted effect; perfect for this use case. Is normally popped on German Unification.
+			give_claims_on_germany = yes
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_germany = yes
+			}
+			every_state = {
+				limit = {
+					NOT = {
+						owner = root
+					}
+					# Does not give claims on Alemannic states; Switzerland was not part of the Frankfurt Greater Germany definition
+					OR = {
+						any_primary_culture = cu:north_german
+						any_primary_culture = cu:south_german
+					}
+				}
+				state_region = {
+					add_claim = root
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_austria = yes
+			}
+			every_state = {
+				limit = {
+					NOT = {
+						owner = root
+					}
+					# Gives claims on all states where the owner has a German culture. Includes Switzerland because why the hell not at this point...
+					owner = {
+						OR = {
+							country_has_primary_culture = cu:north_german
+							country_has_primary_culture = cu:south_german
+							country_has_primary_culture = cu:alemannic
+						}
+					}
+				}
+				state_region = {
+					add_claim = root
+				}
+			}
+		}
+		if = {
+			limit = {
+				# Will only ever be true if it was voted for
+				frankfurt_conference_has_majority_for_internal_focus = yes
+			}
+			change_infamy = 40
+			activate_law = law_type:law_armed_neutrality
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_external_focus = yes
+			}
+			change_infamy = 80
+			activate_law = law_type:law_expansionism
+		}
+		else = {
+			# Gives a base amount of infamy to anyone who accepts the Gutter Crown
+			change_infamy = 40
+		}
+		if = {
+			limit = {
+				frankfurt_conference_has_majority_for_lesser_germany = yes
+			}
+			every_country = {
+				limit = {
+					this != root
+					this != c:AUS
+					this != SWI
+					country_is_in_europe = yes
+					OR = {
+						any_primary_culture = cu:north_german
+						any_primary_culture = cu:south_german
+					}
+				}
+				trigger_event = {
+					# Subjugation demand
+					id = frankfurt_conference.3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_germany = yes
+			}
+			every_country = {
+				limit = {
+					this != root
+					this != SWI
+					country_is_in_europe = yes
+					OR = {
+						any_primary_culture = cu:north_german
+						any_primary_culture = cu:south_german
+					}
+				}
+				trigger_event = {
+					# Subjugation demand
+					id = frankfurt_conference.3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_austria = yes
+			}
+			every_country = {
+				limit = {
+					this != root
+					country_is_in_europe = yes
+					OR = {
+						any_primary_culture = cu:north_german
+						any_primary_culture = cu:south_german
+						any_primary_culture = cu:alemannic
+					}
+				}
+				trigger_event = {
+					# Subjugation demand
+					id = frankfurt_conference.3
+				}
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					# The Frankfurt owner should accept the crown, but only if they're small.
+					p:x11C0A0.owner = this
+					country_rank <= rank_value:insignificant_power
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		# Decline
+		default_option = yes
+		set_variable = declined_gutter_crown
+		if = {
+			# First re-offers to the great German Princes
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						has_variable = first_candidate_german_leader
+						has_variable = second_candidate_german_leader
+						has_variable = third_candidate_german_leader
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						has_variable = first_candidate_german_leader
+						has_variable = second_candidate_german_leader
+						has_variable = third_candidate_german_leader
+					}
+				}
+				trigger_event = {
+					id = frankfurt_conference.2
+				}
+			}
+		}
+		else_if = {
+			# Else it offers to the Frankfurt owner (Probably Frankfurt City?) if they havent declined already...
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					p:x11C0A0.owner = this
+				}
+			}
+			p:x11C0A0.owner = {
+				trigger_event = {
+					id = frankfurt_conference.2
+				}
+			}
+		}
+		else_if = {
+			# Else it offers to a non-declining German Country. Really desperate.
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				trigger_event = {
+					id = frankfurt_conference.2
+				}
+			}
+		}
+		else = {
+			# Make toast announcing NOBODY wants the Gutter Crown...
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					# The Frankfurt owner should accept the crown, but only if they're small.
+					p:x11C0A0.owner = this
+					country_rank <= rank_value:insignificant_power
+				}
+				add = -100
+			}
+		}
+	}
 }

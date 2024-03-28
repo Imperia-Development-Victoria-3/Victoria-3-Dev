@@ -42,13 +42,25 @@ je_imperia_frankfurt_conference = {
 	}
 	immediate = {
 		# This section pops at the start of the Conference. Used to initialise stuff, like variables
-		set_variable = {
-			name = frankfurt_conference_voting_period
-			value = 0
-		}
-		set_variable = {
-			name = frankfurt_conference_current_vote
-			value = 1
+		# Only does so for the owner of Frankfurt, just to be sure
+		if = {
+			limit = {
+				this = p:x11C0A0.owner
+			}
+			set_global_variable = {
+				name = frankfurt_conference_voting_period
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_conference_current_vote
+				value = 1
+			}
+			# This one is just initialised here, will be "populated" on completion
+			set_global_variable = {
+				name = frankfurt_eligible_german_leader_voters
+				value = 0
+			}
+			
 		}
 	}
 	fail = {
@@ -57,59 +69,133 @@ je_imperia_frankfurt_conference = {
 			has_variable = left_frankfurt_conference
 		}
 	}
-	on_fail = {
-		### The vote variables should be removed here
-		### Using ?= means the variable is only removed if it exists, to avoid errors
-		remove_variable ?= frankfurt_conference_voted_republic
-		remove_variable ?= frankfurt_conference_voted_monarchy
-		remove_variable ?= frankfurt_conference_voted_oligarchy
-		remove_variable ?= frankfurt_conference_voted_wealth_suffrage
-		remove_variable ?= frankfurt_conference_voted_universal_suffrage
-		remove_variable ?= frankfurt_conference_voted_presidential
-		remove_variable ?= frankfurt_conference_voted_parliamentary
-		remove_variable ?= frankfurt_conference_voted_lesser_germany
-		remove_variable ?= frankfurt_conference_voted_greater_germany
-		remove_variable ?= frankfurt_conference_voted_greater_austria
-		remove_variable ?= frankfurt_conference_voted_revolution_germany
-	}
 	current_value = {
-		value = var:frankfurt_conference_voting_period
+		value = global_var:frankfurt_conference_voting_period
 	}
 	on_weekly_pulse = {
 		effect = {
-			change_variable = {
-				name = frankfurt_conference_voting_period
-				add = 1
-			}
-			## If the voting has run for 12 weeks, start over with a new vote category
 			if = {
 				limit = {
-					var:frankfurt_conference_voting_period >= 12
+					this = p:x11C0A0.owner
 				}
-				set_variable = {
+				change_global_variable = {
 					name = frankfurt_conference_voting_period
-					value = 0
-				}
-				change_variable = {
-					name = frankfurt_conference_current_vote
 					add = 1
 				}
+				## If the voting has run for 12 weeks, start over with a new vote category
 				if = {
 					limit = {
-						# The presidential/parliamentary debate only takes place if republic and wealth voting won
-						OR = {
-							frankfurt_conference_has_majority_for_republic = no
-							frankfurt_conference_has_majority_for_wealth = no
-						}
-						var:frankfurt_conference_current_vote = 3
+						global_var:frankfurt_conference_voting_period >= 12
 					}
-					# Skip it if those 2 are NOT true
-					change_variable = {
+					set_global_variable = {
+						name = frankfurt_conference_voting_period
+						value = 0
+					}
+					change_global_variable = {
 						name = frankfurt_conference_current_vote
 						add = 1
 					}
+					if = {
+						limit = {
+							# The presidential/parliamentary debate only takes place if republic and wealth voting won
+							OR = {
+								frankfurt_conference_has_majority_for_republic = no
+								frankfurt_conference_has_majority_for_wealth = no
+							}
+							global_var:frankfurt_conference_current_vote = 3
+						}
+						# Skip it if those 2 are NOT true
+						change_global_variable = {
+							name = frankfurt_conference_current_vote
+							add = 1
+						}
+					}
+					if = {
+						limit = {
+							# The revolutionary focus debate only takes place if republic and universal voting won
+							OR = {
+								frankfurt_conference_has_majority_for_republic = no
+								frankfurt_conference_has_majority_for_universal = no
+							}
+							global_var:frankfurt_conference_current_vote = 5
+						}
+						# Skip it if those 2 are NOT true
+						change_global_variable = {
+							name = frankfurt_conference_current_vote
+							add = 1
+						}
+					}
 				}
 			}
+		}
+	}
+	complete = {
+		# Complete on voting round 7, round 6 is the last chance for countries to leave
+		custom_tooltip = {
+			text = frankfurt_conference_is_over_tt
+			global_var:frankfurt_conference_current_vote = 7
+		}
+	}
+	on_complete = {
+		change_global_variable = {
+			name = frankfurt_eligible_german_leader_voters
+			add = 1
+		}
+		
+		p:x11C0A0.owner = {
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_1
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_2
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_3
+				value = 0
+			}
+			# Get 3 big German powers, probably Prussia, Austria and Bavaria
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				order_by = country_rank
+				position = 1
+				set_variable = first_candidate_german_leader
+			}
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				order_by = country_rank
+				position = 2
+				set_variable = second_candidate_german_leader
+			}
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				order_by = country_rank
+				position = 3
+				set_variable = third_candidate_german_leader
+			}
+		}
+		trigger_event = {
+			id = frankfurt_conference.1
 		}
 	}
 	goal_add_value = {
