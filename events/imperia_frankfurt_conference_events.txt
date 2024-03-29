@@ -187,6 +187,7 @@ frankfurt_conference.1 = {
 				scope:first_candidate_scope = {
 					trigger_event = {
 						id = frankfurt_conference.2
+						popup = yes
 					}
 				}
 			}
@@ -198,6 +199,7 @@ frankfurt_conference.1 = {
 				scope:second_candidate_scope = {
 					trigger_event = {
 						id = frankfurt_conference.2
+						popup = yes
 					}
 				}
 			}
@@ -209,6 +211,46 @@ frankfurt_conference.1 = {
 				scope:third_candidate_scope = {
 					trigger_event = {
 						id = frankfurt_conference.2
+						popup = yes
+					}
+				}
+			}
+			else = {
+				# If this vote is tied, give it to the highest scored candidate, I guess
+				if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_1 >= global_var:frankfurt_has_voted_for_german_leader_2
+						global_var:frankfurt_has_voted_for_german_leader_1 >= global_var:frankfurt_has_voted_for_german_leader_3
+					}
+					scope:first_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_conference.2
+							popup = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_2> = global_var:frankfurt_has_voted_for_german_leader_1
+						global_var:frankfurt_has_voted_for_german_leader_2 >= global_var:frankfurt_has_voted_for_german_leader_3
+					}
+					scope:second_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_conference.2
+							popup = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_3 >= global_var:frankfurt_has_voted_for_german_leader_1
+						global_var:frankfurt_has_voted_for_german_leader_3 >= global_var:frankfurt_has_voted_for_german_leader_2
+					}
+					scope:third_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_conference.2
+							popup = yes
+						}
 					}
 				}
 			}
@@ -236,7 +278,16 @@ frankfurt_conference.2 = {
 	}
 	option = {
 		# Accept the Gutter Crown
+		name = frankfurt_conference.2.a
 		set_variable = accepted_gutter_crown
+		# If the Gutter king is a subject, make them independent. Just to be sure they get a proper ranking...
+		if = {
+			limit = { 
+				is_subject = yes
+			}
+			make_independent = yes
+		}
+		# Monarchy vs republic laws
 		if = {
 			limit = {
 				frankfurt_conference_has_majority_for_republic = yes
@@ -263,6 +314,7 @@ frankfurt_conference.2 = {
 		else = {
 			activate_law = law_type:law_monarchy
 		}
+		# Voting laws
 		if = {
 			limit = {
 				frankfurt_conference_has_majority_for_oligarchy = yes
@@ -281,56 +333,75 @@ frankfurt_conference.2 = {
 			}
 			activate_law = law_type:law_universal_suffrage
 		}
+		# Claims
 		if = {
 			limit = {
 				frankfurt_conference_has_majority_for_lesser_germany = yes
 			}
-			# Vanilla scripted effect; perfect for this use case. Is normally popped on German Unification.
-			give_claims_on_germany = yes
+			every_state_region = {
+				limit = {
+					any_scope_state = {
+						owner != root
+						owner = {
+							country_is_in_europe = yes
+						}
+					}
+					any_scope_state = {
+						owner != c:AUS
+					}
+					OR = {
+						is_homeland = north_german
+						is_homeland = south_german
+					}
+				}
+				add_claim = root
+			}
 		}
 		else_if = {
 			limit = {
 				frankfurt_conference_has_majority_for_greater_germany = yes
 			}
-			every_state = {
+			every_state_region = {
 				limit = {
-					NOT = {
-						owner = root
+					any_scope_state = {
+						owner != root
+						owner = {
+							country_is_in_europe = yes
+						}
 					}
 					# Does not give claims on Alemannic states; Switzerland was not part of the Frankfurt Greater Germany definition
 					OR = {
-						any_primary_culture = cu:north_german
-						any_primary_culture = cu:south_german
+						is_homeland = north_german
+						is_homeland = south_german
 					}
 				}
-				state_region = {
-					add_claim = root
-				}
+				add_claim = root
 			}
 		}
 		else_if = {
 			limit = {
 				frankfurt_conference_has_majority_for_greater_austria = yes
 			}
-			every_state = {
+			every_state_region = {
 				limit = {
-					NOT = {
-						owner = root
-					}
-					# Gives claims on all states where the owner has a German culture. Includes Switzerland because why the hell not at this point...
-					owner = {
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-							country_has_primary_culture = cu:alemannic
+					any_scope_state = {
+						owner != root
+						owner = {
+							country_is_in_europe = yes
 						}
 					}
+					# Gives claims on all states where the (European) owner has a German culture. Includes Switzerland because why the hell not at this point...
+					OR = {
+						is_homeland = north_german
+						is_homeland = south_german
+						is_homeland = alemannic
+					}
 				}
-				state_region = {
-					add_claim = root
-				}
+				add_claim = root
 			}
 		}
+		# foreign laws, only for liberal republican germany
+		# Also adds infamy here
 		if = {
 			limit = {
 				# Will only ever be true if it was voted for
@@ -350,6 +421,7 @@ frankfurt_conference.2 = {
 			# Gives a base amount of infamy to anyone who accepts the Gutter Crown
 			change_infamy = 40
 		}
+		# Subjugation demands
 		if = {
 			limit = {
 				frankfurt_conference_has_majority_for_lesser_germany = yes
@@ -358,16 +430,21 @@ frankfurt_conference.2 = {
 				limit = {
 					this != root
 					this != c:AUS
-					this != SWI
+					this != c:SWI
 					country_is_in_europe = yes
 					OR = {
-						any_primary_culture = cu:north_german
-						any_primary_culture = cu:south_german
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
 					}
 				}
 				trigger_event = {
 					# Subjugation demand
 					id = frankfurt_conference.3
+					popup = yes
 				}
 			}
 		}
@@ -381,13 +458,18 @@ frankfurt_conference.2 = {
 					this != SWI
 					country_is_in_europe = yes
 					OR = {
-						any_primary_culture = cu:north_german
-						any_primary_culture = cu:south_german
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
 					}
 				}
 				trigger_event = {
 					# Subjugation demand
 					id = frankfurt_conference.3
+					popup = yes
 				}
 			}
 		}
@@ -400,14 +482,19 @@ frankfurt_conference.2 = {
 					this != root
 					country_is_in_europe = yes
 					OR = {
-						any_primary_culture = cu:north_german
-						any_primary_culture = cu:south_german
-						any_primary_culture = cu:alemannic
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+						country_has_primary_culture = cu:alemannic
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
 					}
 				}
 				trigger_event = {
 					# Subjugation demand
 					id = frankfurt_conference.3
+					popup = yes
 				}
 			}
 		}
@@ -426,6 +513,7 @@ frankfurt_conference.2 = {
 	option = {
 		# Decline
 		default_option = yes
+		name = frankfurt_conference.2.b
 		set_variable = declined_gutter_crown
 		if = {
 			# First re-offers to the great German Princes
@@ -454,6 +542,7 @@ frankfurt_conference.2 = {
 				}
 				trigger_event = {
 					id = frankfurt_conference.2
+					popup = yes
 				}
 			}
 		}
@@ -470,6 +559,7 @@ frankfurt_conference.2 = {
 			p:x11C0A0.owner = {
 				trigger_event = {
 					id = frankfurt_conference.2
+					popup = yes
 				}
 			}
 		}
@@ -498,11 +588,17 @@ frankfurt_conference.2 = {
 				}
 				trigger_event = {
 					id = frankfurt_conference.2
+					popup = yes
 				}
 			}
 		}
 		else = {
-			# Make toast announcing NOBODY wants the Gutter Crown...
+			every_country = {
+				limit = {
+					has_diplomatic_relevance = root
+				}
+				post_notification = nobody_wants_gutter_crown
+			}
 		}
 		ai_chance = {
 			base = 100
@@ -513,6 +609,69 @@ frankfurt_conference.2 = {
 					country_rank <= rank_value:insignificant_power
 				}
 				add = -100
+			}
+		}
+	}
+}
+
+frankfurt_conference.3 = {
+	# Gutter King demands subjugation
+	type = country_event
+	placement = scope:gutter_king_scope.capital
+	title = frankfurt_conference.3.t
+	desc = frankfurt_conference.3.d
+	flavor = frankfurt_conference.3.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = accepted_gutter_crown
+			}
+			save_scope_as = gutter_king_scope
+		}
+	}
+	option = {
+		# accept
+		default_option = yes
+		name = frankfurt_conference.3.a
+		scope:gutter_king_scope = {
+			create_diplomatic_pact = {
+				country = root
+				type = dominion
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				# Dont accept if the wannabe-subject has a higher rank than the wannabe-king
+				# If the ranks are equal, accept
+				trigger = {
+					scope:gutter_king_scope.country_rank < country_rank
+				}
+				add = -100
+			}
+		}
+	}
+	option = {
+		# decline
+		name = frankfurt_conference.3.b
+		set_relations = {
+			country = scope:gutter_king_scope
+			value = -50
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				# Decline if the wannabe-subject has a higher rank than the wannabe-king
+				trigger = {
+					scope:gutter_king_scope.country_rank < country_rank
+				}
+				add = 100
 			}
 		}
 	}
