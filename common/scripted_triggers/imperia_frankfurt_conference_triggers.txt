@@ -214,3 +214,36 @@ frankfurt_conference_has_majority_for_external_focus = {
 	frankfurt_conference_has_majority_for_universal = yes
 	imperia_frankfurt_conference_internal_focus_voters_value < imperia_frankfurt_conference_external_focus_voters_value
 }
+
+frankfurt_conference_prince_will_join_gutter_king = {
+	# scope = GUTTER KING
+	# root = PRINCE
+	OR = {
+		country_rank = rank_value:great_power
+		AND = {
+			country_rank = rank_value:major_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:minor_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:insignificant_power
+			root.country_rank <= rank_value:minor_power
+			# Special mention for Bavaria and Hanover, who didnt join the Frankfurt-led German empire...
+			trigger_if = {
+				limit = { 
+					exists = c:BAV
+				}
+				root != c:BAV
+			}
+			trigger_if = {
+				limit = { 
+					exists = c:HAN
+				}
+				root != c:HAN
+			}
+		}
+	}
+}

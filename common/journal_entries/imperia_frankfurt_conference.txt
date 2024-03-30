@@ -1,6 +1,4 @@
-﻿# Content Added to Mod
-# Catto6's Section
-je_imperia_frankfurt_conference = {
+﻿je_imperia_frankfurt_conference = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
 	# Voting Starting Options
@@ -20,7 +18,7 @@ je_imperia_frankfurt_conference = {
 	# Optional round - revolution? Only for universal suffrage republics
 	scripted_button = je_frankfurt_conference_internal_focus_button
 	scripted_button = je_frankfurt_conference_external_focus_button
-	# Austria / Prussia leaves voting
+	# Leave the conference, need practical meaning
 	scripted_button = je_frankfurt_conference_leave_button
 	is_shown_when_inactive = {
 		OR = {
@@ -60,7 +58,6 @@ je_imperia_frankfurt_conference = {
 				name = frankfurt_eligible_german_leader_voters
 				value = 0
 			}
-			
 		}
 	}
 	fail = {
@@ -167,7 +164,7 @@ je_imperia_frankfurt_conference = {
 					}
 				}
 				order_by = gdp
-				position = 1
+				position = 0
 				set_variable = first_candidate_german_leader
 			}
 			ordered_country = {
@@ -178,7 +175,7 @@ je_imperia_frankfurt_conference = {
 					}
 				}
 				order_by = gdp
-				position = 2
+				position = 1
 				set_variable = second_candidate_german_leader
 			}
 			ordered_country = {
@@ -189,7 +186,7 @@ je_imperia_frankfurt_conference = {
 					}
 				}
 				order_by = gdp
-				position = 3
+				position = 2
 				set_variable = third_candidate_german_leader
 			}
 		}
@@ -202,6 +199,125 @@ je_imperia_frankfurt_conference = {
 		add = 12
 	}
 	progressbar = yes
+	weight = 5000
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_german_consolidation_gutter_king = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	possible = {
+		has_variable = accepted_gutter_crown
+	}
+	complete = {
+		trigger_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_lesser_germany = yes
+			}
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_non_austrian_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+						any_scope_state = {
+							NOT = {
+								owner ?= c:AUS
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		trigger_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_germany = yes
+			}
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		trigger_if = {
+			limit = {
+				frankfurt_conference_has_majority_for_greater_austria = yes
+			}
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_owned_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+							is_homeland = cu:alemannic
+							any_state = {
+								owner = {
+									OR = {
+										country_has_primary_culture = cu:north_german
+										country_has_primary_culture = cu:south_german
+										country_has_primary_culture = cu:alemannic
+									}
+									country_is_in_europe = yes
+								}
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+	}
 	weight = 5000
 	should_be_pinned_by_default = yes
 }
