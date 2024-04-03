@@ -280,9 +280,12 @@ frankfurt_conference.2 = {
 		# Accept the Gutter Crown
 		name = frankfurt_conference.2.a
 		set_variable = accepted_gutter_crown
+		add_journal_entry = {
+			type = je_imperia_frankfurt_german_consolidation_gutter_king
+		}
 		# If the Gutter king is a subject, make them independent. Just to be sure they get a proper ranking...
 		if = {
-			limit = { 
+			limit = {
 				is_subject = yes
 			}
 			make_independent = yes
@@ -333,71 +336,74 @@ frankfurt_conference.2 = {
 			}
 			activate_law = law_type:law_universal_suffrage
 		}
+		custom_tooltip = frankfurt_conference_add_german_claims_tt
 		# Claims
-		if = {
-			limit = {
-				frankfurt_conference_has_majority_for_lesser_germany = yes
-			}
-			every_state_region = {
+		hidden_effect = {
+			if = {
 				limit = {
-					any_scope_state = {
-						owner != root
-						owner = {
-							country_is_in_europe = yes
+					frankfurt_conference_has_majority_for_lesser_germany = yes
+				}
+				every_state_region = {
+					limit = {
+						any_scope_state = {
+							owner != root
+							owner = {
+								country_is_in_europe = yes
+							}
+						}
+						any_scope_state = {
+							owner != c:AUS
+						}
+						OR = {
+							is_homeland = north_german
+							is_homeland = south_german
 						}
 					}
-					any_scope_state = {
-						owner != c:AUS
-					}
-					OR = {
-						is_homeland = north_german
-						is_homeland = south_german
-					}
+					add_claim = root
 				}
-				add_claim = root
 			}
-		}
-		else_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_germany = yes
-			}
-			every_state_region = {
+			else_if = {
 				limit = {
-					any_scope_state = {
-						owner != root
-						owner = {
-							country_is_in_europe = yes
+					frankfurt_conference_has_majority_for_greater_germany = yes
+				}
+				every_state_region = {
+					limit = {
+						any_scope_state = {
+							owner != root
+							owner = {
+								country_is_in_europe = yes
+							}
+						}
+						# Does not give claims on Alemannic states; Switzerland was not part of the Frankfurt Greater Germany definition
+						OR = {
+							is_homeland = north_german
+							is_homeland = south_german
 						}
 					}
-					# Does not give claims on Alemannic states; Switzerland was not part of the Frankfurt Greater Germany definition
-					OR = {
-						is_homeland = north_german
-						is_homeland = south_german
-					}
+					add_claim = root
 				}
-				add_claim = root
 			}
-		}
-		else_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_austria = yes
-			}
-			every_state_region = {
+			else_if = {
 				limit = {
-					any_scope_state = {
-						owner != root
-						owner = {
-							country_is_in_europe = yes
+					frankfurt_conference_has_majority_for_greater_austria = yes
+				}
+				every_state_region = {
+					limit = {
+						any_scope_state = {
+							owner != root
+							owner = {
+								country_is_in_europe = yes
+							}
+						}
+						# Gives claims on all states where the (European) owner has a German culture. Includes Switzerland because why the hell not at this point...
+						OR = {
+							is_homeland = north_german
+							is_homeland = south_german
+							is_homeland = alemannic
 						}
 					}
-					# Gives claims on all states where the (European) owner has a German culture. Includes Switzerland because why the hell not at this point...
-					OR = {
-						is_homeland = north_german
-						is_homeland = south_german
-						is_homeland = alemannic
-					}
+					add_claim = root
 				}
-				add_claim = root
 			}
 		}
 		# foreign laws, only for liberal republican germany
@@ -422,79 +428,109 @@ frankfurt_conference.2 = {
 			change_infamy = 40
 		}
 		# Subjugation demands
-		if = {
-			limit = {
-				frankfurt_conference_has_majority_for_lesser_germany = yes
-			}
-			every_country = {
+		custom_tooltip = frankfurt_conference_german_minor_get_subjugation_demand_tt
+		hidden_effect = {
+			if = {
 				limit = {
-					this != root
-					this != c:AUS
-					this != c:SWI
-					country_is_in_europe = yes
-					OR = {
-						country_has_primary_culture = cu:north_german
-						country_has_primary_culture = cu:south_german
+					frankfurt_conference_has_majority_for_lesser_germany = yes
+				}
+				every_country = {
+					limit = {
+						this != root
+						this != c:AUS
+						this != c:SWI
+						country_is_in_europe = yes
+						OR = {
+							country_has_primary_culture = cu:north_german
+							country_has_primary_culture = cu:south_german
+						}
+						OR = {
+							is_subject = no
+							is_subject_type = subject_type_customs_union
+						}
 					}
-					OR = {
-						is_subject = no
-						is_subject_type = subject_type_customs_union
+					if = {
+						limit = {
+							is_subject = yes
+						}
+						set_variable = {
+							name = frankfurt_conference_original_overlord
+							value = overlord
+						}
+					}
+					trigger_event = {
+						# Subjugation demand
+						id = frankfurt_conference.3
+						popup = yes
 					}
 				}
-				trigger_event = {
-					# Subjugation demand
-					id = frankfurt_conference.3
-					popup = yes
-				}
 			}
-		}
-		else_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_germany = yes
-			}
-			every_country = {
+			else_if = {
 				limit = {
-					this != root
-					this != SWI
-					country_is_in_europe = yes
-					OR = {
-						country_has_primary_culture = cu:north_german
-						country_has_primary_culture = cu:south_german
+					frankfurt_conference_has_majority_for_greater_germany = yes
+				}
+				every_country = {
+					limit = {
+						this != root
+						this != SWI
+						country_is_in_europe = yes
+						OR = {
+							country_has_primary_culture = cu:north_german
+							country_has_primary_culture = cu:south_german
+						}
+						OR = {
+							is_subject = no
+							is_subject_type = subject_type_customs_union
+						}
 					}
-					OR = {
-						is_subject = no
-						is_subject_type = subject_type_customs_union
+					if = {
+						limit = {
+							is_subject = yes
+						}
+						set_variable = {
+							name = frankfurt_conference_original_overlord
+							value = overlord
+						}
+					}
+					trigger_event = {
+						# Subjugation demand
+						id = frankfurt_conference.3
+						popup = yes
 					}
 				}
-				trigger_event = {
-					# Subjugation demand
-					id = frankfurt_conference.3
-					popup = yes
-				}
 			}
-		}
-		else_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_austria = yes
-			}
-			every_country = {
+			else_if = {
 				limit = {
-					this != root
-					country_is_in_europe = yes
-					OR = {
-						country_has_primary_culture = cu:north_german
-						country_has_primary_culture = cu:south_german
-						country_has_primary_culture = cu:alemannic
-					}
-					OR = {
-						is_subject = no
-						is_subject_type = subject_type_customs_union
-					}
+					frankfurt_conference_has_majority_for_greater_austria = yes
 				}
-				trigger_event = {
-					# Subjugation demand
-					id = frankfurt_conference.3
-					popup = yes
+				every_country = {
+					limit = {
+						this != root
+						country_is_in_europe = yes
+						OR = {
+							country_has_primary_culture = cu:north_german
+							country_has_primary_culture = cu:south_german
+							country_has_primary_culture = cu:alemannic
+						}
+						OR = {
+							is_subject = no
+							is_subject_type = subject_type_customs_union
+						}
+					}
+					if = {
+						limit = {
+							is_subject = yes
+						}
+						set_variable = {
+							name = frankfurt_conference_original_overlord
+							value = overlord
+						}
+					}
+					trigger_event = {
+						# Subjugation demand
+						id = frankfurt_conference.3
+						popup = yes
+					}
 				}
 			}
 		}
@@ -627,6 +663,15 @@ frankfurt_conference.3 = {
 	}
 	duration = 3
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		OR = {
+			# To fire, must either have stayed in the conference OR be a great power
+			NOT = {
+				has_variable = left_frankfurt_conference
+			}
+			country_rank >= rank_value:great_power
+		}
+	}
 	immediate = {
 		random_country = {
 			limit = {
@@ -634,11 +679,30 @@ frankfurt_conference.3 = {
 			}
 			save_scope_as = gutter_king_scope
 		}
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		else = {
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_minor
+			}
+		}
 	}
 	option = {
 		# accept
 		default_option = yes
 		name = frankfurt_conference.3.a
+		trigger = {
+			# Only those who stayed can join at this point
+			NOT = {
+				has_variable = left_frankfurt_conference
+			}
+		}
 		scope:gutter_king_scope = {
 			create_diplomatic_pact = {
 				country = root
@@ -660,10 +724,6 @@ frankfurt_conference.3 = {
 	option = {
 		# decline
 		name = frankfurt_conference.3.b
-		set_relations = {
-			country = scope:gutter_king_scope
-			value = -50
-		}
 		ai_chance = {
 			base = 100
 			modifier = {

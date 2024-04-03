@@ -18,7 +18,7 @@
 	# Optional round - revolution? Only for universal suffrage republics
 	scripted_button = je_frankfurt_conference_internal_focus_button
 	scripted_button = je_frankfurt_conference_external_focus_button
-	# Leave the conference, need practical meaning
+	# Leave the conference, wont be pressed to join the new Germany
 	scripted_button = je_frankfurt_conference_leave_button
 	is_shown_when_inactive = {
 		OR = {
@@ -206,118 +206,275 @@
 je_imperia_frankfurt_german_consolidation_gutter_king = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-	possible = {
-		has_variable = accepted_gutter_crown
+	scripted_button = je_frankfurt_gutter_king_sway_button
+	immediate = {
+		# Initialise the JE value; hit 0 for failure and 100 for success (For Gutter King)
+		set_variable = {
+			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+			value = 50
+		}
 	}
-	complete = {
-		trigger_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_lesser_germany = yes
-			}
-			any_state_region = {
-				filter = {
-					custom_tooltip = {
-						text = state_is_non_austrian_german_confederation_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-						}
-						this != s:STATE_ALSACE_LORRAINE
-						this != s:STATE_POSEN
-						this != s:STATE_WEST_PRUSSIA
-						this != s:STATE_EAST_PRUSSIA
-						this != s:STATE_TRANSDANUBIA
-						any_scope_state = {
-							NOT = {
-								owner ?= c:AUS
-							}
-						}
-					}
+	on_weekly_pulse = {
+		effect = {
+			# lesser Germany checks
+			if = {
+				limit = {
+					frankfurt_conference_has_majority_for_lesser_germany = yes
 				}
-				any_scope_state = {
-					owner = {
-						OR = {
-							this = root
-							this = {
-								is_subject_of = root
-							}
-						}
-					}
-				}
-				percent >= 0.75
-			}
-		}
-		trigger_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_germany = yes
-			}
-			any_state_region = {
-				filter = {
-					custom_tooltip = {
-						text = state_is_german_confederation_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-						}
-						this != s:STATE_ALSACE_LORRAINE
-						this != s:STATE_POSEN
-						this != s:STATE_WEST_PRUSSIA
-						this != s:STATE_EAST_PRUSSIA
-						this != s:STATE_TRANSDANUBIA
-					}
-				}
-				any_scope_state = {
-					owner = {
-						OR = {
-							this = root
-							this = {
-								is_subject_of = root
-							}
-						}
-					}
-				}
-				percent >= 0.75
-			}
-		}
-		trigger_if = {
-			limit = {
-				frankfurt_conference_has_majority_for_greater_austria = yes
-			}
-			any_state_region = {
-				filter = {
-					custom_tooltip = {
-						text = state_is_german_owned_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-							is_homeland = cu:alemannic
-							any_state = {
-								owner = {
+				if = {
+					limit = {
+						any_state_region = {
+							filter = {
+								custom_tooltip = {
+									text = state_is_non_austrian_german_confederation_tt
 									OR = {
-										country_has_primary_culture = cu:north_german
-										country_has_primary_culture = cu:south_german
-										country_has_primary_culture = cu:alemannic
+										is_homeland = cu:north_german
+										is_homeland = cu:south_german
 									}
-									country_is_in_europe = yes
+									this != s:STATE_ALSACE_LORRAINE
+									this != s:STATE_POSEN
+									this != s:STATE_WEST_PRUSSIA
+									this != s:STATE_EAST_PRUSSIA
+									this != s:STATE_TRANSDANUBIA
+									any_scope_state = {
+										NOT = {
+											owner ?= c:AUS
+										}
+									}
 								}
 							}
-						}
-					}
-				}
-				any_scope_state = {
-					owner = {
-						OR = {
-							this = root
-							this = {
-								is_subject_of = root
+							any_scope_state = {
+								owner = {
+									OR = {
+										this = root
+										this = {
+											is_subject_of = root
+										}
+									}
+								}
 							}
+							percent >= 0.75
 						}
 					}
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						add = 1
+					}
 				}
-				percent >= 0.75
+				else = {
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						subtract = 1
+					}
+				}
+			}
+			# Greater germany checks
+			if = {
+				limit = {
+					frankfurt_conference_has_majority_for_greater_germany = yes
+				}
+				if = {
+					limit = {
+						any_state_region = {
+							filter = {
+								custom_tooltip = {
+									text = state_is_german_confederation_tt
+									OR = {
+										is_homeland = cu:north_german
+										is_homeland = cu:south_german
+									}
+									this != s:STATE_ALSACE_LORRAINE
+									this != s:STATE_POSEN
+									this != s:STATE_WEST_PRUSSIA
+									this != s:STATE_EAST_PRUSSIA
+									this != s:STATE_TRANSDANUBIA
+								}
+							}
+							any_scope_state = {
+								owner = {
+									OR = {
+										this = root
+										this = {
+											is_subject_of = root
+										}
+									}
+								}
+							}
+							percent >= 0.75
+						}
+					}
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						add = 1
+					}
+				}
+				else = {
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						subtract = 1
+					}
+				}
+			}
+			# Greater Austria checks
+			if = {
+				limit = {
+					frankfurt_conference_has_majority_for_greater_austria = yes
+				}
+				if = {
+					limit = {
+						any_state_region = {
+							filter = {
+								custom_tooltip = {
+									text = state_is_german_owned_tt
+									OR = {
+										is_homeland = cu:north_german
+										is_homeland = cu:south_german
+										is_homeland = cu:alemannic
+										any_state = {
+											owner = {
+												OR = {
+													country_has_primary_culture = cu:north_german
+													country_has_primary_culture = cu:south_german
+													country_has_primary_culture = cu:alemannic
+												}
+												country_is_in_europe = yes
+											}
+										}
+									}
+								}
+							}
+							any_scope_state = {
+								owner = {
+									OR = {
+										this = root
+										this = {
+											is_subject_of = root
+										}
+									}
+								}
+							}
+							percent >= 0.75
+						}
+					}
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						add = 1
+					}
+				}
+				else = {
+					change_variable = {
+						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+						subtract = 1
+					}
+				}
 			}
 		}
 	}
+	complete = {
+		root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+	}
+	on_complete = {
+		every_subject_or_below = {
+			root = {
+				annex = prev
+			}
+		}
+	}
+	fail = {
+		root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+	}
+	on_fail = {
+		every_subject_or_below = {
+			limit = {
+				is_direct_subject_of = root
+			}
+			make_independent = yes
+			# ... And then add to their original customs union.
+			# Will need checks before the sway game to make sure they get in their respective spheres
+		}
+	}
+	current_value = {
+		value = root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
+	}
+	goal_add_value = {
+		add = 50
+	}
+	on_timeout = {
+		every_subject_or_below = {
+			limit = {
+				is_direct_subject_of = root
+			}
+			make_independent = yes
+			# ... And then add to their original customs union.
+			# Will need checks before the sway game to make sure they get in their respective spheres
+		}
+	}
+	# JE will run for 5 years, if balance is still maintained at that point.. Fail it
+	progressbar = yes
+	timeout = 1826
 	weight = 5000
 	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_german_consolidation_german_major = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_frankfurt_german_major_sway_button
+	immediate = {
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+			save_scope_as = gutter_king_scope
+		}
+		set_relations = {
+			country = scope:gutter_king_scope
+			value = -50
+		}
+	}
+	complete = {
+		scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+		scope:gutter_king_scope = {
+			NOT = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
+	fail = {
+		scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+		scope:gutter_king_scope = {
+			NOT = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
+}
+
+je_imperia_frankfurt_german_consolidation_german_minor = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	immediate = {
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+			save_scope_as = gutter_king_scope
+		}
+	}
+	complete = {
+		scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+		scope:gutter_king_scope = {
+			NOT = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
+	fail = {
+		scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+		scope:gutter_king_scope = {
+			NOT = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
 }

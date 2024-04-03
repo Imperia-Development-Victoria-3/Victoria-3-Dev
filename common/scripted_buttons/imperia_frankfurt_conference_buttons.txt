@@ -584,3 +584,118 @@ je_frankfurt_conference_leave_button = {
 		set_variable = left_frankfurt_conference
 	}
 }
+
+je_frankfurt_gutter_king_sway_button = {
+	name = "je_frankfurt_gutter_king_sway_button"
+	desc = "je_frankfurt_gutter_king_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 1000
+	}
+	possible = {
+		prestige >= 5
+		NOT = {
+			has_variable = je_frankfurt_gutter_king_sway_button_cooldown
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			NOT = {
+				is_subject_of = root
+			}
+			NOT = {
+				has_modifier = german_major_prestige_positive
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_gutter_king_sway_button_cooldown
+			days = 14
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				NOT = {
+					is_subject_of = root
+				}
+				NOT = {
+					has_modifier = german_major_prestige_positive
+				}
+			}
+			root = {
+				create_diplomatic_pact = {
+					country = prev
+					type = dominion
+				}
+			}
+			add_modifier = {
+				name = gutter_king_prestige_positive
+				months = 60
+			}
+		}
+		add_modifier = {
+			name = gutter_king_prestige_negative
+			months = 60
+		}
+	}
+}
+
+je_frankfurt_german_major_sway_button = {
+	name = "je_frankfurt_german_major_sway_button"
+	desc = "je_frankfurt_german_major_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 1000
+	}
+	possible = {
+		prestige >= 10
+		NOT = {
+			has_variable = je_frankfurt_german_major_sway_button_cooldown
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			NOT = {
+				has_modifier = german_major_prestige_positive
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_german_major_sway_button_cooldown
+			days = 28
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				NOT = {
+					has_modifier = german_major_prestige_positive
+				}
+			}
+			remove_modifier ?= gutter_king_prestige_positive
+			add_modifier = {
+				name = german_major_prestige_positive
+				months = 60
+			}
+			make_independent = yes
+			if = {
+				limit = {
+					has_variable = frankfurt_conference_original_overlord
+				}
+				var:frankfurt_conference_original_overlord = {
+					create_diplomatic_pact = {
+						country = prev
+						type = customs_union
+					}
+				}
+			}
+		}
+		add_modifier = {
+			name = german_major_prestige_negative
+			months = 60
+		}
+	}
+}
