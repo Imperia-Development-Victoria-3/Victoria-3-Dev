@@ -233,16 +233,122 @@ frankfurt_conference_prince_will_join_gutter_king = {
 			root.country_rank <= rank_value:minor_power
 			# Special mention for Bavaria and Hanover, who didnt join the Frankfurt-led German empire...
 			trigger_if = {
-				limit = { 
+				limit = {
 					exists = c:BAV
 				}
 				root != c:BAV
 			}
 			trigger_if = {
-				limit = { 
+				limit = {
 					exists = c:HAN
 				}
 				root != c:HAN
+			}
+		}
+	}
+}
+
+frankfurt_conference_gutter_king_is_consolidating = {
+	OR = {
+		AND = {
+			frankfurt_conference_has_majority_for_lesser_germany = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_non_austrian_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+						any_scope_state = {
+							NOT = {
+								owner ?= c:AUS
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		AND = {
+			frankfurt_conference_has_majority_for_greater_germany = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		AND = {
+			frankfurt_conference_has_majority_for_greater_austria = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_owned_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+							is_homeland = cu:alemannic
+							any_state = {
+								owner = {
+									OR = {
+										country_has_primary_culture = cu:north_german
+										country_has_primary_culture = cu:south_german
+										country_has_primary_culture = cu:alemannic
+									}
+									country_is_in_europe = yes
+								}
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
 			}
 		}
 	}

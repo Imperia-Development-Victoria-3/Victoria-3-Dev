@@ -449,15 +449,6 @@ frankfurt_conference.2 = {
 							is_subject_type = subject_type_customs_union
 						}
 					}
-					if = {
-						limit = {
-							is_subject = yes
-						}
-						set_variable = {
-							name = frankfurt_conference_original_overlord
-							value = overlord
-						}
-					}
 					trigger_event = {
 						# Subjugation demand
 						id = frankfurt_conference.3
@@ -483,15 +474,6 @@ frankfurt_conference.2 = {
 							is_subject_type = subject_type_customs_union
 						}
 					}
-					if = {
-						limit = {
-							is_subject = yes
-						}
-						set_variable = {
-							name = frankfurt_conference_original_overlord
-							value = overlord
-						}
-					}
 					trigger_event = {
 						# Subjugation demand
 						id = frankfurt_conference.3
@@ -515,15 +497,6 @@ frankfurt_conference.2 = {
 						OR = {
 							is_subject = no
 							is_subject_type = subject_type_customs_union
-						}
-					}
-					if = {
-						limit = {
-							is_subject = yes
-						}
-						set_variable = {
-							name = frankfurt_conference_original_overlord
-							value = overlord
 						}
 					}
 					trigger_event = {
@@ -681,6 +654,21 @@ frankfurt_conference.3 = {
 		}
 		if = {
 			limit = {
+				OR = {
+					is_subject = yes
+					is_subject_type = subject_type_customs_union
+				}
+			}
+			overlord = {
+				save_scope_as = overlord_scope
+			}
+			set_variable = {
+				name = frankfurt_conference_original_overlord
+				value = scope:overlord_scope
+			}
+		}
+		if = {
+			limit = {
 				country_rank >= rank_value:great_power
 			}
 			add_journal_entry = {
@@ -701,6 +689,11 @@ frankfurt_conference.3 = {
 			# Only those who stayed can join at this point
 			NOT = {
 				has_variable = left_frankfurt_conference
+			}
+		}
+		if = {
+			limit = {
+				is_subject = yes
 			}
 		}
 		scope:gutter_king_scope = {

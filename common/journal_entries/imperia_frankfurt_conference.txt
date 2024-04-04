@@ -40,10 +40,12 @@
 	}
 	immediate = {
 		# This section pops at the start of the Conference. Used to initialise stuff, like variables
-		# Only does so for the owner of Frankfurt, just to be sure
+		# Only does so once
 		if = {
 			limit = {
-				this = p:x11C0A0.owner
+				NOT = {
+					exists = global_var:frankfurt_conference_voting_period
+				}
 			}
 			set_global_variable = {
 				name = frankfurt_conference_voting_period
@@ -216,156 +218,19 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	}
 	on_weekly_pulse = {
 		effect = {
-			# lesser Germany checks
 			if = {
 				limit = {
-					frankfurt_conference_has_majority_for_lesser_germany = yes
+					frankfurt_conference_gutter_king_is_consolidating = yes
 				}
-				if = {
-					limit = {
-						any_state_region = {
-							filter = {
-								custom_tooltip = {
-									text = state_is_non_austrian_german_confederation_tt
-									OR = {
-										is_homeland = cu:north_german
-										is_homeland = cu:south_german
-									}
-									this != s:STATE_ALSACE_LORRAINE
-									this != s:STATE_POSEN
-									this != s:STATE_WEST_PRUSSIA
-									this != s:STATE_EAST_PRUSSIA
-									this != s:STATE_TRANSDANUBIA
-									any_scope_state = {
-										NOT = {
-											owner ?= c:AUS
-										}
-									}
-								}
-							}
-							any_scope_state = {
-								owner = {
-									OR = {
-										this = root
-										this = {
-											is_subject_of = root
-										}
-									}
-								}
-							}
-							percent >= 0.75
-						}
-					}
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						add = 1
-					}
-				}
-				else = {
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						subtract = 1
-					}
+				change_variable = {
+					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+					add = 1
 				}
 			}
-			# Greater germany checks
-			if = {
-				limit = {
-					frankfurt_conference_has_majority_for_greater_germany = yes
-				}
-				if = {
-					limit = {
-						any_state_region = {
-							filter = {
-								custom_tooltip = {
-									text = state_is_german_confederation_tt
-									OR = {
-										is_homeland = cu:north_german
-										is_homeland = cu:south_german
-									}
-									this != s:STATE_ALSACE_LORRAINE
-									this != s:STATE_POSEN
-									this != s:STATE_WEST_PRUSSIA
-									this != s:STATE_EAST_PRUSSIA
-									this != s:STATE_TRANSDANUBIA
-								}
-							}
-							any_scope_state = {
-								owner = {
-									OR = {
-										this = root
-										this = {
-											is_subject_of = root
-										}
-									}
-								}
-							}
-							percent >= 0.75
-						}
-					}
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						add = 1
-					}
-				}
-				else = {
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						subtract = 1
-					}
-				}
-			}
-			# Greater Austria checks
-			if = {
-				limit = {
-					frankfurt_conference_has_majority_for_greater_austria = yes
-				}
-				if = {
-					limit = {
-						any_state_region = {
-							filter = {
-								custom_tooltip = {
-									text = state_is_german_owned_tt
-									OR = {
-										is_homeland = cu:north_german
-										is_homeland = cu:south_german
-										is_homeland = cu:alemannic
-										any_state = {
-											owner = {
-												OR = {
-													country_has_primary_culture = cu:north_german
-													country_has_primary_culture = cu:south_german
-													country_has_primary_culture = cu:alemannic
-												}
-												country_is_in_europe = yes
-											}
-										}
-									}
-								}
-							}
-							any_scope_state = {
-								owner = {
-									OR = {
-										this = root
-										this = {
-											is_subject_of = root
-										}
-									}
-								}
-							}
-							percent >= 0.75
-						}
-					}
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						add = 1
-					}
-				}
-				else = {
-					change_variable = {
-						name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-						subtract = 1
-					}
+			else = {
+				change_variable = {
+					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+					subtract = 1
 				}
 			}
 		}
@@ -374,9 +239,12 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
 	}
 	on_complete = {
-		every_subject_or_below = {
-			root = {
-				annex = prev
+		custom_tooltip = {
+			text = frankfurt_germany_consolidates_tt
+			every_subject_or_below = {
+				root = {
+					annex = prev
+				}
 			}
 		}
 	}
@@ -384,13 +252,26 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
 	}
 	on_fail = {
-		every_subject_or_below = {
-			limit = {
-				is_direct_subject_of = root
+		custom_tooltip = {
+			text = frankfurt_return_to_old_status_tt
+			every_subject_or_below = {
+				limit = {
+					is_direct_subject_of = root
+				}
+				remove_modifier = gutter_king_prestige_positive
+				make_independent = yes
+				if = {
+					limit = {
+						has_variable = frankfurt_conference_original_overlord
+					}
+					var:frankfurt_conference_original_overlord = {
+						create_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+					}
+				}
 			}
-			make_independent = yes
-			# ... And then add to their original customs union.
-			# Will need checks before the sway game to make sure they get in their respective spheres
 		}
 	}
 	current_value = {
@@ -400,13 +281,26 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		add = 50
 	}
 	on_timeout = {
-		every_subject_or_below = {
-			limit = {
-				is_direct_subject_of = root
+		custom_tooltip = {
+			text = frankfurt_return_to_old_status_tt
+			every_subject_or_below = {
+				limit = {
+					is_direct_subject_of = root
+				}
+				remove_modifier = gutter_king_prestige_positive
+				make_independent = yes
+				if = {
+					limit = {
+						has_variable = frankfurt_conference_original_overlord
+					}
+					var:frankfurt_conference_original_overlord = {
+						create_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+					}
+				}
 			}
-			make_independent = yes
-			# ... And then add to their original customs union.
-			# Will need checks before the sway game to make sure they get in their respective spheres
 		}
 	}
 	# JE will run for 5 years, if balance is still maintained at that point.. Fail it
@@ -448,6 +342,13 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 			}
 		}
 	}
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_imperia_frankfurt_german_consolidation_german_major_status
+			}
+		}
+	}
 }
 
 je_imperia_frankfurt_german_consolidation_german_minor = {
@@ -474,6 +375,13 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		scope:gutter_king_scope = {
 			NOT = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_imperia_frankfurt_german_consolidation_german_minor_status
 			}
 		}
 	}
