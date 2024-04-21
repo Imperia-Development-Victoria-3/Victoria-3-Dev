@@ -327,11 +327,26 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 					NOT = {
 						has_global_variable = imperia_vienna_congress_minimum_time
 					}
+					imperia_vienna_congress_in_session = yes
 				}
 				# Have a 20% chance of ending it
 				random = {
 					chance = 20
 					end_congress_scripted_effect = yes
+				}
+			}
+			if = {
+				limit = {
+					imperia_vienna_congress_in_session = yes
+					not = {
+						exists = global_var:imperia_vienna_congress_session_initiator
+					}
+				}
+				remove_global_variable = imperia_vienna_congress_in_session
+				remove_global_variable = congress_random_events_enabled
+				set_variable = {
+					name = 	imperia_vienna_congress_in_session
+					value = no
 				}
 			}
 		}
