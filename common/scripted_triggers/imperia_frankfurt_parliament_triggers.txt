@@ -1,0 +1,355 @@
+﻿frankfurt_parliament_has_majority_for_republic = {
+	OR = {
+		# Either theres more republic voters and monarchy voters
+		imperia_frankfurt_parliament_republic_voters_value > imperia_frankfurt_parliament_monarchy_voters_value
+		AND = {
+			# Or the two are equal
+			imperia_frankfurt_parliament_republic_voters_value = imperia_frankfurt_parliament_monarchy_voters_value
+			# But the owner of Frankfurt is voting republican
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_republic
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_oligarchy = {
+	# Either...
+	OR = {
+		# Oligarchy beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_oligarchy_voters_value > imperia_frankfurt_parliament_wealth_voters_value
+			imperia_frankfurt_parliament_oligarchy_voters_value > imperia_frankfurt_parliament_universal_voters_value
+		}
+		# Or oligarchy didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_oligarchy_voters_value < imperia_frankfurt_parliament_wealth_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_oligarchy_voters_value < imperia_frankfurt_parliament_universal_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_oligarchy
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_wealth = {
+	# Either...
+	OR = {
+		# wealth beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_oligarchy_voters_value
+			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
+		}
+		# Or wealth didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_wealth_voters_value < imperia_frankfurt_parliament_oligarchy_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_wealth_voters_value < imperia_frankfurt_parliament_universal_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_universal = {
+	# Either...
+	OR = {
+		# universal suffrage beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_oligarchy_voters_value
+			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
+		}
+		# Or universal suffrage didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_universal_voters_value < imperia_frankfurt_parliament_oligarchy_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_universal_voters_value < imperia_frankfurt_parliament_wealth_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_presidential_republic = {
+	frankfurt_parliament_has_majority_for_republic = yes
+	OR = {
+		imperia_frankfurt_parliament_presidential_voters_value > imperia_frankfurt_parliament_parliamentary_voters_value
+		AND = {
+			imperia_frankfurt_parliament_presidential_voters_value = imperia_frankfurt_parliament_parliamentary_voters_value
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_presidential
+				}
+			}
+		}
+		frankfurt_parliament_has_majority_for_oligarchy = yes
+	}
+}
+
+frankfurt_parliament_has_majority_for_parliamentary_republic = {
+	frankfurt_parliament_has_majority_for_republic = yes
+	OR = {
+		imperia_frankfurt_parliament_parliamentary_voters_value > imperia_frankfurt_parliament_presidential_voters_value
+		AND = {
+			imperia_frankfurt_parliament_parliamentary_voters_value = imperia_frankfurt_parliament_presidential_voters_value
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_parliamentary
+				}
+			}
+		}
+		frankfurt_parliament_has_majority_for_universal = yes
+	}
+}
+
+frankfurt_parliament_has_majority_for_lesser_germany = {
+	# Either...
+	OR = {
+		# Lesser Germany beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_lesser_germany_voters_value > imperia_frankfurt_parliament_greater_germany_voters_value
+			imperia_frankfurt_parliament_lesser_germany_voters_value > imperia_frankfurt_parliament_greater_austria_voters_value
+		}
+		# Or lesser germany didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_lesser_germany_voters_value < imperia_frankfurt_parliament_greater_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_lesser_germany_voters_value < imperia_frankfurt_parliament_greater_austria_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_lesser_germany
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_greater_germany = {
+	# Either...
+	OR = {
+		# greater Germany beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_greater_germany_voters_value > imperia_frankfurt_parliament_lesser_germany_voters_value
+			imperia_frankfurt_parliament_greater_germany_voters_value > imperia_frankfurt_parliament_greater_austria_voters_value
+		}
+		# Or greater germany didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_greater_germany_voters_value < imperia_frankfurt_parliament_lesser_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_greater_germany_voters_value < imperia_frankfurt_parliament_greater_austria_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_greater_germany
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_greater_austria = {
+	# Either...
+	OR = {
+		# greater austria beat the 2 others
+		AND = {
+			imperia_frankfurt_parliament_greater_austria_voters_value > imperia_frankfurt_parliament_lesser_germany_voters_value
+			imperia_frankfurt_parliament_greater_austria_voters_value > imperia_frankfurt_parliament_greater_germany_voters_value
+		}
+		# Or greater austria didnt lose, and Frankfurt voted for it
+		# (means a tie happened with at least one of them, possibly both)
+		AND = {
+			NOT = {
+				imperia_frankfurt_parliament_greater_austria_voters_value < imperia_frankfurt_parliament_lesser_germany_voters_value
+			}
+			NOT = {
+				imperia_frankfurt_parliament_greater_austria_voters_value < imperia_frankfurt_parliament_greater_germany_voters_value
+			}
+			p:x11C0A0 = {
+				owner = {
+					has_variable = frankfurt_parliament_voted_greater_austria
+				}
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_internal_focus = {
+	frankfurt_parliament_has_majority_for_republic = yes
+	frankfurt_parliament_has_majority_for_universal = yes
+	imperia_frankfurt_parliament_internal_focus_voters_value > imperia_frankfurt_parliament_external_focus_voters_value
+}
+
+frankfurt_parliament_has_majority_for_external_focus = {
+	frankfurt_parliament_has_majority_for_republic = yes
+	frankfurt_parliament_has_majority_for_universal = yes
+	imperia_frankfurt_parliament_internal_focus_voters_value < imperia_frankfurt_parliament_external_focus_voters_value
+}
+
+frankfurt_parliament_prince_will_join_gutter_king = {
+	# scope = GUTTER KING
+	# root = PRINCE
+	OR = {
+		country_rank = rank_value:great_power
+		AND = {
+			country_rank = rank_value:major_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:minor_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:insignificant_power
+			root.country_rank <= rank_value:minor_power
+			# Special mention for Bavaria and Hanover, who didnt join the Frankfurt-led German empire...
+			trigger_if = {
+				limit = {
+					exists = c:BAV
+				}
+				root != c:BAV
+			}
+			trigger_if = {
+				limit = {
+					exists = c:HAN
+				}
+				root != c:HAN
+			}
+		}
+	}
+}
+
+frankfurt_parliament_gutter_king_is_consolidating = {
+	OR = {
+		AND = {
+			frankfurt_parliament_has_majority_for_lesser_germany = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_non_austrian_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+						any_scope_state = {
+							NOT = {
+								owner ?= c:AUS
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		AND = {
+			frankfurt_parliament_has_majority_for_greater_germany = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_confederation_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+						}
+						this != s:STATE_ALSACE_LORRAINE
+						this != s:STATE_POSEN
+						this != s:STATE_WEST_PRUSSIA
+						this != s:STATE_EAST_PRUSSIA
+						this != s:STATE_TRANSDANUBIA
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+		AND = {
+			frankfurt_parliament_has_majority_for_greater_austria = yes
+			any_state_region = {
+				filter = {
+					custom_tooltip = {
+						text = state_is_german_owned_tt
+						OR = {
+							is_homeland = cu:north_german
+							is_homeland = cu:south_german
+							is_homeland = cu:alemannic
+							any_state = {
+								owner = {
+									OR = {
+										country_has_primary_culture = cu:north_german
+										country_has_primary_culture = cu:south_german
+										country_has_primary_culture = cu:alemannic
+									}
+									country_is_in_europe = yes
+								}
+							}
+						}
+					}
+				}
+				any_scope_state = {
+					owner = {
+						OR = {
+							this = root
+							this = {
+								is_subject_of = root
+							}
+						}
+					}
+				}
+				percent >= 0.75
+			}
+		}
+	}
+}

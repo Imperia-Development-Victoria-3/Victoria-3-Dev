@@ -1,25 +1,25 @@
-﻿je_imperia_frankfurt_conference = {
+﻿je_imperia_frankfurt_parliament = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
 	# Voting Starting Options
-	scripted_button = je_frankfurt_conference_vote_republic_button
-	scripted_button = je_frankfurt_conference_vote_monarchy_button
+	scripted_button = je_frankfurt_parliament_vote_republic_button
+	scripted_button = je_frankfurt_parliament_vote_monarchy_button
 	# Who gets to vote in Germany?
-	scripted_button = je_frankfurt_conference_vote_oligarchy_button
-	scripted_button = je_frankfurt_conference_vote_wealth_button
-	scripted_button = je_frankfurt_conference_vote_universal_button
+	scripted_button = je_frankfurt_parliament_vote_oligarchy_button
+	scripted_button = je_frankfurt_parliament_vote_wealth_button
+	scripted_button = je_frankfurt_parliament_vote_universal_button
 	# Optional round - presidential or parliamentary republic
-	scripted_button = je_frankfurt_conference_vote_presidential_button
-	scripted_button = je_frankfurt_conference_vote_parliamentary_button
+	scripted_button = je_frankfurt_parliament_vote_presidential_button
+	scripted_button = je_frankfurt_parliament_vote_parliamentary_button
 	# Claims
-	scripted_button = je_frankfurt_conference_lesser_germany_button
-	scripted_button = je_frankfurt_conference_greater_germany_button
-	scripted_button = je_frankfurt_conference_greater_austria_button
+	scripted_button = je_frankfurt_parliament_lesser_germany_button
+	scripted_button = je_frankfurt_parliament_greater_germany_button
+	scripted_button = je_frankfurt_parliament_greater_austria_button
 	# Optional round - revolution? Only for universal suffrage republics
-	scripted_button = je_frankfurt_conference_internal_focus_button
-	scripted_button = je_frankfurt_conference_external_focus_button
+	scripted_button = je_frankfurt_parliament_internal_focus_button
+	scripted_button = je_frankfurt_parliament_external_focus_button
 	# Leave the conference, wont be pressed to join the new Germany
-	scripted_button = je_frankfurt_conference_leave_button
+	scripted_button = je_frankfurt_parliament_leave_button
 	is_shown_when_inactive = {
 		OR = {
 			country_has_primary_culture = cu:north_german
@@ -44,15 +44,15 @@
 		if = {
 			limit = {
 				NOT = {
-					exists = global_var:frankfurt_conference_voting_period
+					exists = global_var:frankfurt_parliament_voting_period
 				}
 			}
 			set_global_variable = {
-				name = frankfurt_conference_voting_period
+				name = frankfurt_parliament_voting_period
 				value = 0
 			}
 			set_global_variable = {
-				name = frankfurt_conference_current_vote
+				name = frankfurt_parliament_current_vote
 				value = 1
 			}
 			# This one is just initialised here, will be "populated" on completion
@@ -64,12 +64,12 @@
 	}
 	fail = {
 		custom_tooltip = {
-			text = left_frankfurt_conference_tt
-			has_variable = left_frankfurt_conference
+			text = left_frankfurt_parliament_tt
+			has_variable = left_frankfurt_parliament
 		}
 	}
 	current_value = {
-		value = global_var:frankfurt_conference_voting_period
+		value = global_var:frankfurt_parliament_voting_period
 	}
 	on_weekly_pulse = {
 		effect = {
@@ -78,34 +78,34 @@
 					this = p:x11C0A0.owner
 				}
 				change_global_variable = {
-					name = frankfurt_conference_voting_period
+					name = frankfurt_parliament_voting_period
 					add = 1
 				}
 				## If the voting has run for 12 weeks, start over with a new vote category
 				if = {
 					limit = {
-						global_var:frankfurt_conference_voting_period >= 12
+						global_var:frankfurt_parliament_voting_period >= 12
 					}
 					set_global_variable = {
-						name = frankfurt_conference_voting_period
+						name = frankfurt_parliament_voting_period
 						value = 0
 					}
 					change_global_variable = {
-						name = frankfurt_conference_current_vote
+						name = frankfurt_parliament_current_vote
 						add = 1
 					}
 					if = {
 						limit = {
 							# The presidential/parliamentary debate only takes place if republic and wealth voting won
 							OR = {
-								frankfurt_conference_has_majority_for_republic = no
-								frankfurt_conference_has_majority_for_wealth = no
+								frankfurt_parliament_has_majority_for_republic = no
+								frankfurt_parliament_has_majority_for_wealth = no
 							}
-							global_var:frankfurt_conference_current_vote = 3
+							global_var:frankfurt_parliament_current_vote = 3
 						}
 						# Skip it if those 2 are NOT true
 						change_global_variable = {
-							name = frankfurt_conference_current_vote
+							name = frankfurt_parliament_current_vote
 							add = 1
 						}
 					}
@@ -113,14 +113,14 @@
 						limit = {
 							# The revolutionary focus debate only takes place if republic and universal voting won
 							OR = {
-								frankfurt_conference_has_majority_for_republic = no
-								frankfurt_conference_has_majority_for_universal = no
+								frankfurt_parliament_has_majority_for_republic = no
+								frankfurt_parliament_has_majority_for_universal = no
 							}
-							global_var:frankfurt_conference_current_vote = 5
+							global_var:frankfurt_parliament_current_vote = 5
 						}
 						# Skip it if those 2 are NOT true
 						change_global_variable = {
-							name = frankfurt_conference_current_vote
+							name = frankfurt_parliament_current_vote
 							add = 1
 						}
 					}
@@ -131,8 +131,8 @@
 	complete = {
 		# Complete on voting round 7, round 6 is the last chance for countries to leave
 		custom_tooltip = {
-			text = frankfurt_conference_is_over_tt
-			global_var:frankfurt_conference_current_vote = 7
+			text = frankfurt_parliament_is_over_tt
+			global_var:frankfurt_parliament_current_vote = 7
 		}
 	}
 	on_complete = {
@@ -193,7 +193,7 @@
 			}
 		}
 		trigger_event = {
-			id = frankfurt_conference.1
+			id = frankfurt_parliament.1
 			days = 3
 		}
 	}
@@ -220,7 +220,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		effect = {
 			if = {
 				limit = {
-					frankfurt_conference_gutter_king_is_consolidating = yes
+					frankfurt_parliament_gutter_king_is_consolidating = yes
 				}
 				change_variable = {
 					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
@@ -264,9 +264,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				make_independent = yes
 				if = {
 					limit = {
-						has_variable = frankfurt_conference_original_overlord
+						has_variable = frankfurt_parliament_original_overlord
 					}
-					var:frankfurt_conference_original_overlord = {
+					var:frankfurt_parliament_original_overlord = {
 						create_diplomatic_pact = {
 							country = prev
 							type = customs_union
@@ -293,9 +293,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				make_independent = yes
 				if = {
 					limit = {
-						has_variable = frankfurt_conference_original_overlord
+						has_variable = frankfurt_parliament_original_overlord
 					}
-					var:frankfurt_conference_original_overlord = {
+					var:frankfurt_parliament_original_overlord = {
 						create_diplomatic_pact = {
 							country = prev
 							type = customs_union
