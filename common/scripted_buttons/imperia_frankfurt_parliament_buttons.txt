@@ -596,8 +596,11 @@ je_frankfurt_gutter_king_sway_button = {
 	}
 	possible = {
 		prestige >= 5
-		NOT = {
-			has_variable = je_frankfurt_gutter_king_sway_button_cooldown
+		custom_tooltip = {
+			text = frankfurt_been_14_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_king_sway_button_cooldown
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
@@ -624,20 +627,30 @@ je_frankfurt_gutter_king_sway_button = {
 					has_modifier = german_major_prestige_positive
 				}
 			}
-			root = {
-				create_diplomatic_pact = {
-					country = prev
-					type = dominion
+			trigger_event = {
+				id = frankfurt_parliament.5
+				popup = yes
+			}
+			custom_label = obligation_events.a.tt
+			show_as_tooltip = {
+				root = {
+					create_diplomatic_pact = {
+						country = prev
+						type = dominion
+					}
+				}
+				add_modifier = {
+					name = gutter_king_prestige_positive
+					months = 60
+				}
+				root = {
+					add_modifier = {
+						name = gutter_king_prestige_negative
+						months = 60
+					}
 				}
 			}
-			add_modifier = {
-				name = gutter_king_prestige_positive
-				months = 60
-			}
-		}
-		add_modifier = {
-			name = gutter_king_prestige_negative
-			months = 60
+			custom_label = obligation_events.b.tt
 		}
 	}
 }
@@ -653,8 +666,11 @@ je_frankfurt_german_major_sway_button = {
 	}
 	possible = {
 		prestige >= 10
-		NOT = {
-			has_variable = je_frankfurt_german_major_sway_button_cooldown
+		custom_tooltip = {
+			text = frankfurt_been_28_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_german_major_sway_button_cooldown
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
@@ -675,27 +691,37 @@ je_frankfurt_german_major_sway_button = {
 					has_modifier = german_major_prestige_positive
 				}
 			}
-			remove_modifier ?= gutter_king_prestige_positive
-			add_modifier = {
-				name = german_major_prestige_positive
-				months = 60
+			trigger_event = {
+				id = frankfurt_parliament.6
+				popup = yes
 			}
-			make_independent = yes
-			if = {
-				limit = {
-					has_variable = frankfurt_parliament_original_overlord
+			custom_label = obligation_events.a.tt
+			show_as_tooltip = {
+				remove_modifier ?= gutter_king_prestige_positive
+				add_modifier = {
+					name = german_major_prestige_positive
+					months = 60
 				}
-				var:frankfurt_parliament_original_overlord = {
-					create_diplomatic_pact = {
-						country = prev
-						type = customs_union
+				make_independent = yes
+				if = {
+					limit = {
+						has_variable = frankfurt_parliament_original_overlord
+					}
+					var:frankfurt_parliament_original_overlord = {
+						create_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+					}
+				}
+				root = {
+					add_modifier = {
+						name = german_major_prestige_negative
+						months = 60
 					}
 				}
 			}
-		}
-		add_modifier = {
-			name = german_major_prestige_negative
-			months = 60
+			custom_label = obligation_events.b.tt
 		}
 	}
 }
