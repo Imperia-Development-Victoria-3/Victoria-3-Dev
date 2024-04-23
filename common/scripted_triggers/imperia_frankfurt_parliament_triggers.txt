@@ -256,20 +256,7 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 				filter = {
 					custom_tooltip = {
 						text = state_is_non_austrian_german_confederation_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-						}
-						this != s:STATE_ALSACE_LORRAINE
-						this != s:STATE_POSEN
-						this != s:STATE_WEST_PRUSSIA
-						this != s:STATE_EAST_PRUSSIA
-						this != s:STATE_TRANSDANUBIA
-						any_scope_state = {
-							NOT = {
-								owner ?= c:AUS
-							}
-						}
+						frankfurt_parliament_state_is_gutter_german = yes
 					}
 				}
 				any_scope_state = {
@@ -291,15 +278,7 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 				filter = {
 					custom_tooltip = {
 						text = state_is_german_confederation_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-						}
-						this != s:STATE_ALSACE_LORRAINE
-						this != s:STATE_POSEN
-						this != s:STATE_WEST_PRUSSIA
-						this != s:STATE_EAST_PRUSSIA
-						this != s:STATE_TRANSDANUBIA
+						frankfurt_parliament_state_is_gutter_german = yes
 					}
 				}
 				any_scope_state = {
@@ -321,21 +300,7 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 				filter = {
 					custom_tooltip = {
 						text = state_is_german_owned_tt
-						OR = {
-							is_homeland = cu:north_german
-							is_homeland = cu:south_german
-							is_homeland = cu:alemannic
-							any_state = {
-								owner = {
-									OR = {
-										country_has_primary_culture = cu:north_german
-										country_has_primary_culture = cu:south_german
-										country_has_primary_culture = cu:alemannic
-									}
-									country_is_in_europe = yes
-								}
-							}
-						}
+						frankfurt_parliament_state_is_gutter_german = yes
 					}
 				}
 				any_scope_state = {
@@ -351,5 +316,127 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 				percent >= 0.75
 			}
 		}
+	}
+}
+
+frankfurt_parliament_state_is_gutter_german = {
+	trigger_if = {
+		limit = {
+			frankfurt_parliament_has_majority_for_lesser_germany = yes
+		}
+		# "Traditional" german states, Kleindeutschland
+		this = {
+			OR = {
+				state_region = s:STATE_HESSE
+				state_region = s:STATE_HANNOVER
+				state_region = s:STATE_BRUNSWICK
+				state_region = s:STATE_ELBE
+				state_region = s:STATE_SCHLESWIG_HOLSTEIN
+				state_region = s:STATE_POMERANIA
+				state_region = s:STATE_MECKLENBURG
+				state_region = s:STATE_BRANDENBURG
+				state_region = s:STATE_ANHALT
+				state_region = s:STATE_SAXONY
+				state_region = s:STATE_GELRE
+				state_region = s:STATE_RHINELAND
+				state_region = s:STATE_NORTH_RHINE
+				state_region = s:STATE_WESTPHALIA
+				state_region = s:STATE_RUHR
+				state_region = s:STATE_FRANCONIA
+				state_region = s:STATE_BAVARIA
+				state_region = s:STATE_WURTTEMBERG
+				state_region = s:STATE_BADEN
+				state_region = s:STATE_POSEN
+				state_region = s:STATE_SILESIA
+				state_region = s:STATE_WEST_PRUSSIA
+				state_region = s:STATE_EAST_PRUSSIA
+			}
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			frankfurt_parliament_has_majority_for_greater_germany = yes
+		}
+		# German Confederation states, historically the option chossen by the Parliament (no Prussian-Polish lands + German Austria/Bohemia)
+		this = {
+			OR = {
+				state_region = s:STATE_HESSE
+				state_region = s:STATE_HANNOVER
+				state_region = s:STATE_BRUNSWICK
+				state_region = s:STATE_ELBE
+				state_region = s:STATE_SCHLESWIG_HOLSTEIN
+				state_region = s:STATE_POMERANIA
+				state_region = s:STATE_MECKLENBURG
+				state_region = s:STATE_BRANDENBURG
+				state_region = s:STATE_ANHALT
+				state_region = s:STATE_SAXONY
+				state_region = s:STATE_GELRE
+				state_region = s:STATE_RHINELAND
+				state_region = s:STATE_NORTH_RHINE
+				state_region = s:STATE_WESTPHALIA
+				state_region = s:STATE_RUHR
+				state_region = s:STATE_FRANCONIA
+				state_region = s:STATE_BAVARIA
+				state_region = s:STATE_WURTTEMBERG
+				state_region = s:STATE_BADEN
+				state_region = s:STATE_SILESIA
+				state_region = s:STATE_TYROL
+				state_region = s:STATE_SOUTH_TYROL
+				state_region = s:STATE_STYRIA
+				state_region = s:STATE_AUSTRIA
+				state_region = s:STATE_MORAVIA
+				state_region = s:STATE_BOHEMIA
+			}
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			frankfurt_parliament_has_majority_for_greater_austria = yes
+		}
+		# Highly hypothetical Greater, Greater German Empire, asked for by some Austrian members. Included *all* of Austria besides everything else.any_scope_state = {
+		# Also includes Switzerland, because why the hell not at this point..
+		this = {
+			OR = {
+				state_region = s:STATE_HESSE
+				state_region = s:STATE_HANNOVER
+				state_region = s:STATE_BRUNSWICK
+				state_region = s:STATE_ELBE
+				state_region = s:STATE_SCHLESWIG_HOLSTEIN
+				state_region = s:STATE_POMERANIA
+				state_region = s:STATE_MECKLENBURG
+				state_region = s:STATE_BRANDENBURG
+				state_region = s:STATE_ANHALT
+				state_region = s:STATE_SAXONY
+				state_region = s:STATE_GELRE
+				state_region = s:STATE_RHINELAND
+				state_region = s:STATE_NORTH_RHINE
+				state_region = s:STATE_WESTPHALIA
+				state_region = s:STATE_RUHR
+				state_region = s:STATE_FRANCONIA
+				state_region = s:STATE_BAVARIA
+				state_region = s:STATE_WURTTEMBERG
+				state_region = s:STATE_BADEN
+				state_region = s:STATE_SILESIA
+				state_region = s:STATE_TYROL
+				state_region = s:STATE_SOUTH_TYROL
+				state_region = s:STATE_STYRIA
+				state_region = s:STATE_AUSTRIA
+				state_region = s:STATE_MORAVIA
+				state_region = s:STATE_BOHEMIA
+				AND = {
+					# If it's not on the German Confederation list it can pass if its owned by Austria, Prussia or Switzerland if the state is European
+					state_is_in_europe = yes
+					OR = {
+						owner ?= c:AUS
+						owner ?= c:PRU
+						owner ?= c:SWI
+					}
+				}
+			}
+		}
+	}
+	trigger_else = {
+		# If no consensus has been reached (yet) then there's no states to claim
+		always = no
 	}
 }

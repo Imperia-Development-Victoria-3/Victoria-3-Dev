@@ -339,71 +339,11 @@ frankfurt_parliament.2 = {
 		custom_tooltip = frankfurt_parliament_add_german_claims_tt
 		# Claims
 		hidden_effect = {
-			if = {
+			every_state_region = {
 				limit = {
-					frankfurt_parliament_has_majority_for_lesser_germany = yes
+					frankfurt_parliament_state_is_gutter_german = yes
 				}
-				every_state_region = {
-					limit = {
-						any_scope_state = {
-							owner != root
-							owner = {
-								country_is_in_europe = yes
-							}
-						}
-						any_scope_state = {
-							owner != c:AUS
-						}
-						OR = {
-							is_homeland = north_german
-							is_homeland = south_german
-						}
-					}
-					add_claim = root
-				}
-			}
-			else_if = {
-				limit = {
-					frankfurt_parliament_has_majority_for_greater_germany = yes
-				}
-				every_state_region = {
-					limit = {
-						any_scope_state = {
-							owner != root
-							owner = {
-								country_is_in_europe = yes
-							}
-						}
-						# Does not give claims on Alemannic states; Switzerland was not part of the Frankfurt Greater Germany definition
-						OR = {
-							is_homeland = north_german
-							is_homeland = south_german
-						}
-					}
-					add_claim = root
-				}
-			}
-			else_if = {
-				limit = {
-					frankfurt_parliament_has_majority_for_greater_austria = yes
-				}
-				every_state_region = {
-					limit = {
-						any_scope_state = {
-							owner != root
-							owner = {
-								country_is_in_europe = yes
-							}
-						}
-						# Gives claims on all states where the (European) owner has a German culture. Includes Switzerland because why the hell not at this point...
-						OR = {
-							is_homeland = north_german
-							is_homeland = south_german
-							is_homeland = alemannic
-						}
-					}
-					add_claim = root
-				}
+				add_claim = root
 			}
 		}
 		# foreign laws, only for liberal republican germany
