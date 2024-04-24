@@ -95,6 +95,106 @@
 						name = frankfurt_parliament_voting_period
 						value = 0
 					}
+					# Save result to a global var, performance enhancing code
+					if = {
+						# monarchy vs republic
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 1
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_republic_var
+						}
+						else = {
+							set_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+						}
+					}
+					if = {
+						# voting laws
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 2
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_oligarchy = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_wealth = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_wealth_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_universal = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_universal_var
+						}
+					}
+					if = {
+						# parliamentary vs presidential republic - conditional
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 3
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_presidential_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_parliamentary_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_parliamentary_republic_var
+						}
+					}
+					if = {
+						# What is the German fatherland?
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 4
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_lesser_germany = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_greater_germany = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_greater_austria = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+						}
+					}
+					if = {
+						# internal vs external focus - only for radical republics
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 5
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_internal_focus = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_external_focus = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+						}
+					}
 					change_global_variable = {
 						name = frankfurt_parliament_current_vote
 						add = 1
@@ -103,8 +203,10 @@
 						limit = {
 							# The presidential/parliamentary debate only takes place if republic and wealth voting won
 							OR = {
-								frankfurt_parliament_has_majority_for_republic = no
-								frankfurt_parliament_has_majority_for_wealth = no
+								has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+								NOT = {
+									has_global_variable = frankfurt_parliament_has_majority_for_wealth_var
+								}
 							}
 							global_var:frankfurt_parliament_current_vote = 3
 						}
@@ -118,8 +220,8 @@
 						limit = {
 							# The revolutionary focus debate only takes place if republic and universal voting won
 							OR = {
-								frankfurt_parliament_has_majority_for_republic = no
-								frankfurt_parliament_has_majority_for_universal = no
+								has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+								NOT = {has_global_variable = frankfurt_parliament_has_majority_for_universal_var}
 							}
 							global_var:frankfurt_parliament_current_vote = 5
 						}
@@ -287,19 +389,19 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				exists = var:gutter_king_old_lawgroup_governance_principles
 			}
 			activate_law = var:gutter_king_old_lawgroup_governance_principles
 		}
 		if = {
-			limit = { 
+			limit = {
 				exists = var:gutter_king_old_lawgroup_distribution_of_power
 			}
 			activate_law = var:gutter_king_old_lawgroup_distribution_of_power
 		}
 		if = {
-			limit = { 
+			limit = {
 				exists = var:gutter_king_old_lawgroup_diplomatic_stance
 			}
 			activate_law = var:gutter_king_old_lawgroup_diplomatic_stance
