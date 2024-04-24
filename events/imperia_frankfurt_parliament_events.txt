@@ -291,6 +291,10 @@ frankfurt_parliament.2 = {
 			make_independent = yes
 		}
 		# Monarchy vs republic laws
+		set_variable = {
+			name = gutter_king_old_lawgroup_governance_principles
+			value = active_law:lawgroup_governance_principles.type
+		}
 		if = {
 			limit = {
 				frankfurt_parliament_has_majority_for_republic = yes
@@ -318,6 +322,10 @@ frankfurt_parliament.2 = {
 			activate_law = law_type:law_monarchy
 		}
 		# Voting laws
+		set_variable = {
+			name = gutter_king_old_lawgroup_distribution_of_power
+			value = active_law:lawgroup_distribution_of_power.type
+		}
 		if = {
 			limit = {
 				frankfurt_parliament_has_majority_for_oligarchy = yes
@@ -341,13 +349,27 @@ frankfurt_parliament.2 = {
 		hidden_effect = {
 			every_state_region = {
 				limit = {
-					frankfurt_parliament_state_is_gutter_german = yes
+					any_scope_state = {
+						frankfurt_parliament_state_is_gutter_german = yes
+					}
 				}
 				add_claim = root
 			}
 		}
 		# foreign laws, only for liberal republican germany
 		# Also adds infamy here
+		if = {
+			limit = {
+				OR = {
+					frankfurt_parliament_has_majority_for_internal_focus = yes
+					frankfurt_parliament_has_majority_for_external_focus = yes
+				}
+			}
+			set_variable = {
+				name = gutter_king_old_lawgroup_diplomatic_stance
+				value = active_law:lawgroup_diplomatic_stance.type
+			}
+		}
 		if = {
 			limit = {
 				# Will only ever be true if it was voted for
@@ -370,80 +392,21 @@ frankfurt_parliament.2 = {
 		# Subjugation demands
 		custom_tooltip = frankfurt_parliament_german_minor_get_subjugation_demand_tt
 		hidden_effect = {
-			if = {
+			every_country = {
 				limit = {
-					frankfurt_parliament_has_majority_for_lesser_germany = yes
-				}
-				every_country = {
-					limit = {
-						this != root
-						this != c:AUS
-						this != c:SWI
-						country_is_in_europe = yes
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-						}
-						OR = {
-							is_subject = no
-							is_subject_type = subject_type_customs_union
-						}
+					this != root
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = yes
 					}
-					trigger_event = {
-						# Subjugation demand
-						id = frankfurt_parliament.3
-						popup = yes
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
 					}
 				}
-			}
-			else_if = {
-				limit = {
-					frankfurt_parliament_has_majority_for_greater_germany = yes
-				}
-				every_country = {
-					limit = {
-						this != root
-						this != SWI
-						country_is_in_europe = yes
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-						}
-						OR = {
-							is_subject = no
-							is_subject_type = subject_type_customs_union
-						}
-					}
-					trigger_event = {
-						# Subjugation demand
-						id = frankfurt_parliament.3
-						popup = yes
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					frankfurt_parliament_has_majority_for_greater_austria = yes
-				}
-				every_country = {
-					limit = {
-						this != root
-						country_is_in_europe = yes
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-							country_has_primary_culture = cu:alemannic
-						}
-						OR = {
-							is_subject = no
-							is_subject_type = subject_type_customs_union
-						}
-					}
-					trigger_event = {
-						# Subjugation demand
-						id = frankfurt_parliament.3
-						popup = yes
-					}
+				trigger_event = {
+					# Subjugation demand
+					id = frankfurt_parliament.3
+					popup = yes
 				}
 			}
 		}
