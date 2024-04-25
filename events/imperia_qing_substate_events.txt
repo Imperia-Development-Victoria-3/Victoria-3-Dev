@@ -820,3 +820,138 @@ imperia_qing_substates.11 = { #Linguistic conference - No winner
 		}
 	}
 }
+
+imperia_qing_substates.12 = { #Manchuria Attract Migrants Button
+type = country_event
+placement = scope:migration_target_state
+
+title = imperia_qing_substates.12.t
+desc = imperia_qing_substates.12.d
+flavor = imperia_qing_substates.12.f
+
+event_image = {
+	video = "gfx/event_pictures/asia_farmers_market.bk2"
+}
+
+on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+duration = 3
+
+trigger = {
+	# triggered by southamerica_migration_button
+}
+
+immediate = {
+	# Note that this closely reflects triggers in the button. Do not change one without changing both
+	random_country = {
+		limit = {
+			country_has_primary_culture = cu:han
+		}
+		save_scope_as = migration_country
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				any_scope_culture = {
+					has_homeland = PREV
+					culture_can_have_mass_migration_to_country = ROOT
+				}
+			}
+			save_scope_as = migration_state
+		}
+
+	}
+	ordered_scope_state = {
+		limit = {
+			OR = {
+				region = sr:region_manchuria
+				region = sr:region_north_china
+			}
+			state_is_eligible_as_mass_migration_target = yes
+		}
+		order_by = migration_pull
+		save_scope_as = migration_target_state
+	}
+}
+
+	option = {
+		name = imperia_qing_substates.12.a
+		add_modifier = {
+			name = modifier_active_manchuria_migration
+			months = normal_modifier_time
+		}
+		scope:migration_target_state = {
+			create_mass_migration = {
+				origin = scope:migration_country
+				culture = cu:han
+			}
+		}
+	}
+}
+
+imperia_qing_substates.13 = { #Choice between Manchu or Han primary culture
+	type = country_event
+	placement = root
+
+	title = imperia_qing_substates.13.t
+	desc = imperia_qing_substates.13.d
+	flavor = imperia_qing_substates.13.f
+
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	duration = 3
+
+	trigger = {
+
+	}
+
+	option = {
+		name = imperia_qing_substates.13.a
+
+		add_primary_culture = cu:han
+		remove_primary_culture = cu:manchu
+
+		s:STATE_NORTHERN_MANCHURIA = {
+			add_homeland = cu:han
+			remove_homeland = cu:manchu
+		}
+		s:STATE_SHENGJING = {
+			remove_homeland = cu:manchu
+		}
+		s:STATE_SOUTHERN_MANCHURIA = {
+			add_homeland = cu:han
+		}
+		s:STATE_GANDO = {
+			add_homeland = cu:han
+			remove_homeland = cu:manchu
+		}
+
+		add_modifier = {
+			name = modifier_manchu_sinicization
+			months = 240
+		}
+
+	}
+
+	option = {
+		name = imperia_qing_substates.13.b
+
+		s:STATE_SHENGJING = {
+			remove_homeland = cu:han
+		}
+		s:STATE_SOUTHERN_MANCHURIA = {
+			remove_homeland = cu:korean
+		}
+
+		add_modifier = {
+			name = modifier_never_fade_away
+		}
+	}
+}

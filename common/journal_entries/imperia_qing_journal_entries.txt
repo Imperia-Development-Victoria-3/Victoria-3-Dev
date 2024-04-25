@@ -636,35 +636,40 @@ je_settle_the_steppe = {
 	#Eastern Provinces
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
+	scripted_button = manchuria_migration_button
+
+	modifiers_while_active = {
+		modifier_chuang_guandong
+	}
 
 	complete = {
+		total_population > 12000000
 		has_law = law_type:law_cultural_exclusion
+
 		s:STATE_SHENGJING.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 		s:STATE_SOUTHERN_MANCHURIA.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 		s:STATE_NORTHERN_MANCHURIA.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 	}
 	on_complete = {
-		add_primary_culture = cu:han
-		add_modifier = {
-			name = modifier_qing_new_frontiers
-			months = 240
-			is_decaying = yes
+		trigger_event = {
+			id = imperia_qing_substates.13
 		}
+
 		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt
