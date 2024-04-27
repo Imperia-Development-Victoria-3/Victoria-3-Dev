@@ -1,5 +1,5 @@
 ﻿namespace = frankfurt_parliament
-# Vote for your favourite gutter prince
+# Vote for your favourite German prince
 frankfurt_parliament.1 = {
 	type = country_event
 	placement = scope:frankfurt_location_scope
@@ -255,6 +255,7 @@ frankfurt_parliament.1 = {
 				}
 			}
 		}
+		remove_variable ?= frankfurt_parliament_voting_for_gutter_king
 	}
 }
 
@@ -272,6 +273,7 @@ frankfurt_parliament.2 = {
 	duration = 3
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	immediate = {
+		set_variable = frankfurt_parliament_considering_gutter_crown
 		p:x11C0A0.state = {
 			save_scope_as = frankfurt_location_scope
 		}
@@ -410,6 +412,7 @@ frankfurt_parliament.2 = {
 				}
 			}
 		}
+		remove_global_variable ?= frankfurt_eligible_german_leader_voters
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -422,6 +425,7 @@ frankfurt_parliament.2 = {
 			}
 			modifier = {
 				trigger = {
+					# Austria accepts gladly if the parliament voted to allow all of Austria into Gutter German
 					root ?= c:AUS
 					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
 				}
@@ -530,6 +534,9 @@ frankfurt_parliament.2 = {
 				add = -100
 			}
 		}
+	}
+	after = {
+		remove_variable ?= frankfurt_parliament_considering_gutter_crown
 	}
 }
 
