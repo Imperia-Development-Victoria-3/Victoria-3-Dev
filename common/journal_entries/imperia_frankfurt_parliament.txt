@@ -320,7 +320,15 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		# Initialise the JE value; hit 0 for failure and 100 for success (For Gutter King)
 		set_variable = {
 			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-			value = 50
+			value = 0
+		}
+		trigger_event = {
+			# The _initialised variable is set in this event; allows for the possible failure
+			# Also sets the _value variable to 50, so its effectively in the middle from the start
+			# Well, 1 day after the JE fires anyways. Janky, but couldnt see other options for the implementation I wanted
+			# - Danarca
+			id = frankfurt_parliament.7
+			days = 1
 		}
 	}
 	on_weekly_pulse = {
@@ -333,11 +341,21 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
 					add = 1
 				}
+				# Set a global variable for localisation, performance enhancing code
+				set_global_variable = {
+					name = frankfurt_parliament_gutter_king_is_consolidating_var
+					value = 1
+				}
 			}
 			else = {
 				change_variable = {
 					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
 					subtract = 1
+				}
+				# Set a global variable for localisation, performance enhancing code
+				set_global_variable = {
+					name = frankfurt_parliament_gutter_king_is_consolidating_var
+					value = 0
 				}
 			}
 		}
@@ -357,9 +375,13 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				}
 			}
 			change_tag = GER
-			set_variable = gutter_germany			# Sets the flag to be the Black-Red-Gold
+			# Sets the flag to be the Black-Red-Gold
+			# Should NOT be cleaned
+			set_variable = gutter_germany
 		}
 		every_state_region = {
+			# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
+			# Add a claim on them. Only for states in the gutter german definition
 			limit = {
 				any_scope_state = {
 					frankfurt_parliament_state_is_gutter_german = yes
@@ -375,6 +397,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		custom_tooltip = {
 			text = frankfurt_germany_fully_stamped_out_tt
 			root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+			has_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
 		}
 	}
 	on_fail = {
@@ -422,7 +445,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		value = root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
 	}
 	goal_add_value = {
-		add = 50
+		add = 100
 	}
 	on_timeout = {
 		custom_tooltip = {
@@ -447,7 +470,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			}
 		}
 	}
-	# JE will run for 5 years, if balance is still maintained at that point.. Fail it
+	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Fail it
 	progressbar = yes
 	timeout = 1826
 	weight = 5000

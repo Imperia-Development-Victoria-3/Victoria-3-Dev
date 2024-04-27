@@ -1,6 +1,6 @@
 ﻿namespace = frankfurt_parliament
+# Vote for your favourite gutter prince
 frankfurt_parliament.1 = {
-	# For for the recipient of the Gutter Crown
 	type = country_event
 	placement = scope:frankfurt_location_scope
 	title = frankfurt_parliament.1.t
@@ -258,8 +258,8 @@ frankfurt_parliament.1 = {
 	}
 }
 
+# Gutter Crown is offered to a prominent German prince...
 frankfurt_parliament.2 = {
-	# Gutter Crown is offered to a prominent German prince...
 	type = country_event
 	placement = scope:frankfurt_location_scope
 	title = frankfurt_parliament.2.t
@@ -420,6 +420,13 @@ frankfurt_parliament.2 = {
 				}
 				add = 100
 			}
+			modifier = {
+				trigger = {
+					root ?= c:AUS
+					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+				}
+				add = 1000
+			}
 		}
 	}
 	option = {
@@ -526,8 +533,8 @@ frankfurt_parliament.2 = {
 	}
 }
 
+# Gutter King demands subjugation
 frankfurt_parliament.3 = {
-	# Gutter King demands subjugation
 	type = country_event
 	placement = scope:gutter_king_scope.capital
 	title = frankfurt_parliament.3.t
@@ -570,19 +577,6 @@ frankfurt_parliament.3 = {
 				value = scope:overlord_scope
 			}
 		}
-		if = {
-			limit = {
-				country_rank >= rank_value:great_power
-			}
-			add_journal_entry = {
-				type = je_imperia_frankfurt_german_consolidation_german_major
-			}
-		}
-		else = {
-			add_journal_entry = {
-				type = je_imperia_frankfurt_german_consolidation_german_minor
-			}
-		}
 	}
 	option = {
 		# accept
@@ -605,6 +599,9 @@ frankfurt_parliament.3 = {
 				type = dominion
 			}
 		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_german_consolidation_german_minor
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -620,6 +617,14 @@ frankfurt_parliament.3 = {
 	option = {
 		# decline
 		name = frankfurt_parliament.3.b
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
 		ai_chance = {
 			base = 100
 			modifier = {
@@ -634,8 +639,8 @@ frankfurt_parliament.3 = {
 	}
 }
 
+# Frankfurt Parliament Opening announcement
 frankfurt_parliament.4 = {
-	# Frankfurt Parliament Opening announcement
 	type = country_event
 	placement = scope:frankfurt_location_scope
 	title = frankfurt_parliament.4.t
@@ -656,7 +661,6 @@ frankfurt_parliament.4 = {
 		default_option = yes
 		name = frankfurt_parliament.4.a
 		custom_tooltip = frankfurt_we_can_now_vote_through_journal_tt
-		custom_label = following_has_happened_tt
 		show_as_tooltip = {
 			add_journal_entry = {
 				type = je_imperia_frankfurt_parliament
@@ -665,8 +669,8 @@ frankfurt_parliament.4 = {
 	}
 }
 
+# Gutter King asks for sway
 frankfurt_parliament.5 = {
-	# Gutter King asks for sway
 	type = country_event
 	placement = scope:gutter_king_scope.capital
 	title = frankfurt_parliament.5.t
@@ -717,8 +721,8 @@ frankfurt_parliament.5 = {
 	}
 }
 
+# German Major asks for sway
 frankfurt_parliament.6 = {
-	# German Major asks for sway
 	type = country_event
 	placement = from.capital
 	title = frankfurt_parliament.6.t
@@ -773,5 +777,18 @@ frankfurt_parliament.6 = {
 	}
 	after = {
 		remove_variable = considering_frankfurt_sway_offer
+	}
+}
+
+# Set the progress bar for the gutter king to be in the middle
+frankfurt_parliament.7 = {
+	type = country_event
+	hidden = yes
+	immediate = {
+		change_variable = {
+			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+			add = 50
+		}
+		set_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
 	}
 }
