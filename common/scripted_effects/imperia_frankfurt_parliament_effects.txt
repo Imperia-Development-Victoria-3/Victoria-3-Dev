@@ -51,3 +51,326 @@
 	# Gutter germany princes variables
 	remove_variable ?= frankfurt_parliament_original_overlord
 }
+
+imperia_frankfurt_parliament_shatter_austria = {
+	# Can be used anywhere, will scope to Austria anyways
+	# Removes non-gutter-german states and makes them free
+	if = {
+		limit = {
+			exists = c:AUS
+		}
+		c:AUS = {
+			every_scope_state = {
+				limit = {
+					frankfurt_parliament_state_is_gutter_german = no
+				}
+				random_scope_pop = {
+					limit = {
+						prev.state_region = {
+							is_homeland = prev.culture
+						}
+						NOR = {
+							this = cu:north_german
+							this = cu:south_german
+						}
+						prev = {
+							culture_percent_state = {
+								target = prev.culture
+								value >= 0.2
+							}
+						}
+					}
+					# Hungarian lands to Hungary
+					if = {
+						limit = { 
+							has_pop_culture = hungarian
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:HUN }
+							}
+							create_country = {
+								tag = HUN
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:HUN
+								set_state_type = incorporated
+							}
+						}
+					}
+					# North Italian lands to Venice
+					if = {
+						limit = { 
+							has_pop_culture = north_italian
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:VEN }
+							}
+							create_country = {
+								tag = VEN
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:VEN
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Slovak to Slovakia
+					if = {
+						limit = { 
+							has_pop_culture = slovak
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:SLV }
+							}
+							create_country = {
+								tag = SLV
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:SLV
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Polish and Ukrainian to Galicia-Lodomeria
+					if = {
+						limit = { 
+							OR = {
+								has_pop_culture = polish
+								has_pop_culture = ukrainian
+							}
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:GAL }
+							}
+							create_country = {
+								tag = GAL
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:GAL
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Slovenes to Slovenia
+					if = {
+						limit = { 
+							has_pop_culture = slovene
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:SLO }
+							}
+							create_country = {
+								tag = SLO
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:SLO
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Romanians to Transylvania
+					if = {
+						limit = { 
+							has_pop_culture = romanian
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:TRS }
+							}
+							create_country = {
+								tag = TRS
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:TRS
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Croatians to Croatia
+					if = {
+						limit = { 
+							has_pop_culture = croat
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:CRO }
+							}
+							create_country = {
+								tag = CRO
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:CRO
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Bosnians to Bosnia
+					if = {
+						limit = { 
+							has_pop_culture = bosniak
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:BOS }
+							}
+							create_country = {
+								tag = BOS
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:BOS
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Serbians to Serbia
+					if = {
+						limit = { 
+							has_pop_culture = serb
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:SER }
+							}
+							create_country = {
+								tag = SER
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:SER
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Albanians to Albania
+					if = {
+						limit = { 
+							has_pop_culture = albanian
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:ALB }
+							}
+							create_country = {
+								tag = ALB
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:ALB
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Bulgarians to Bulgaria
+					if = {
+						limit = { 
+							has_pop_culture = bulgarian
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:BUL }
+							}
+							create_country = {
+								tag = BUL
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:BUL
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Greeks to Greece
+					if = {
+						limit = { 
+							has_pop_culture = greek
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:GRE }
+							}
+							create_country = {
+								tag = GRE
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:GRE
+								set_state_type = incorporated
+							}
+						}
+					}
+					# Turks to Turkey (or probably the Ottomans, although who knows if it gets this far)
+					if = {
+						limit = { 
+							has_pop_culture = turkish
+						}
+						if = {
+							limit = { 
+								NOT = { exists = c:TUR }
+							}
+							create_country = {
+								tag = TUR
+								origin = c:AUS
+								state = prev
+							}
+						}
+						else = {
+							prev = {
+								set_state_owner = c:TUR
+								set_state_type = incorporated
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

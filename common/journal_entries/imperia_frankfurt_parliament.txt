@@ -221,7 +221,9 @@
 							# The revolutionary focus debate only takes place if republic and universal voting won
 							OR = {
 								has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
-								NOT = {has_global_variable = frankfurt_parliament_has_majority_for_universal_var}
+								NOT = {
+									has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+								}
 							}
 							global_var:frankfurt_parliament_current_vote = 5
 						}
@@ -265,12 +267,24 @@
 				name = frankfurt_has_voted_for_german_leader_3
 				value = 0
 			}
-			# Get 3 big German powers, probably Prussia, Austria and Bavaria?
+			# Get 3 big (independent) German powers, probably Prussia, Austria and Bavaria?
+			# Austria wont be selected if Lesser Germany wins
 			ordered_country = {
 				limit = {
 					OR = {
 						country_has_primary_culture = cu:north_german
 						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							exists = c:AUS
+						}
+						c:AUS != this
 					}
 				}
 				order_by = gdp
@@ -283,6 +297,17 @@
 						country_has_primary_culture = cu:north_german
 						country_has_primary_culture = cu:south_german
 					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							exists = c:AUS
+						}
+						c:AUS != this
+					}
 				}
 				order_by = gdp
 				position = 1
@@ -293,6 +318,17 @@
 					OR = {
 						country_has_primary_culture = cu:north_german
 						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							exists = c:AUS
+						}
+						c:AUS != this
 					}
 				}
 				order_by = gdp
@@ -369,6 +405,21 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 	}
 	on_complete = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+					exists = c:AUS
+					OR = {
+						c:AUS = root
+						c:AUS = {
+							is_subject_of = root
+						}
+					}
+				}
+				imperia_frankfurt_parliament_shatter_austria = yes
+			}
+		}
 		custom_tooltip = {
 			text = frankfurt_germany_consolidates_tt
 			every_subject_or_below = {
