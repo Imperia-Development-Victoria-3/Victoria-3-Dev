@@ -1307,7 +1307,7 @@ types budget
 
 				default_header = {
 					blockoverride "text" {
-						text = "Money Transfer"
+						raw_text = "Money Transfer"
 					}
 				}
 
@@ -1586,18 +1586,49 @@ types budget
 						
 					}
 				}
-                divider_decorative = {}
-				button = {
-					using = default_button_action
-					size = { 250 75 }
-					parentanchor = center
+                divider_clean = {}
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = top|left
+					back_button_large = {
+						position = { 11 15 }
+						parentanchor = top|left
+						onclick = "[GetScriptedGui('clear_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+						input_action = "back"
+					}
 					textbox = {
-						text = "TRANSFER_MONEY_SEND_MONEY"
-						align = center|nobaseline
-						margin = { 10 10 }
-						parentanchor = center
+						raw_text = "#b Select Strategic Region of Recipient#!"
+						autoresize = yes
+						parentanchor = top|center
 					}
 				}
+				flowcontainer = {
+					align = center
+					parentanchor = hcenter
+					dynamicgridbox = {
+						datamodel = "[GetGlobalList('strategic_region_list')]"
+						datacontext = "[Scope.AccessStrategicRegion]"
+						visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
+						datamodel_wrap = 2
+						flipdirection = yes
+						item = {
+							button = {
+								using = default_button
+								size = { 210 70 }
+								onclick = "[GetScriptedGui('set_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
+								enabled = "[GetScriptedGui('any_valid_money_transfer_country_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
+								textbox = {
+									autoresize = yes
+									text = "[Scope.AccessStrategicRegion.GetName]"
+									align = center|nobaseline
+									using = fontsize_large
+									parentanchor = center
+								}
+							}
+						}
+					}
+				}
+				
 			}
 		}
 	}

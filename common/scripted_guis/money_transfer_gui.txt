@@ -67,3 +67,65 @@ can_transfer_money = {
 		}
 	}
 }
+
+set_strategic_region_transfer_money_target = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	effect = {
+		clear_variable_list ?= countries_in_selected_strategic_region_money_transfer
+		scope:strategic_region = {
+			every_scope_state = {
+				limit = {
+					NOT = {
+						owner = root
+					}
+					NOT = {
+						owner = {
+							is_country_type = decentralized
+						}
+					}
+				}
+				owner = {
+					root = {
+						add_to_variable_list = {
+							name = countries_in_selected_strategic_region_money_transfer
+							target = prev
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+any_valid_money_transfer_country_in_strategic_region = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	is_shown = {
+		scope:strategic_region = {
+			any_scope_state = {
+				count > 0
+				NOT = {
+					owner = root
+				}
+				NOT = {
+					owner = {
+						is_country_type = decentralized
+					}
+				}
+			}
+		}
+	}
+}
+
+
+clear_strategic_region_transfer_money_target = {
+	scope = country
+	effect = {
+		clear_variable_list ?= countries_in_selected_strategic_region_money_transfer
+	}
+}
