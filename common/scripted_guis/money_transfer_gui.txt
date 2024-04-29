@@ -23,7 +23,7 @@
 	}
 }
 
-can_transfer_money = {
+can_press_money_transfer_down_button = {
 	scope = country
 	saved_scopes = {
 		up
@@ -65,6 +65,17 @@ can_transfer_money = {
 			}
 			var:imperia_money_transfer_amount >= 1000
 		}
+	}
+}
+
+can_send_money_to_recipient = {
+	scope = country
+	saved_scopes = {
+		target
+		amount
+	}
+	is_shown = {
+		gold_reserves >= scope:amount
 	}
 }
 
@@ -122,10 +133,22 @@ any_valid_money_transfer_country_in_strategic_region = {
 	}
 }
 
-
 clear_strategic_region_transfer_money_target = {
 	scope = country
 	effect = {
 		clear_variable_list ?= countries_in_selected_strategic_region_money_transfer
+	}
+}
+
+set_money_transfer_target_country = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	effect = {
+		set_variable = {
+			name = set_money_transfer_target_country
+			value = scope:target
+		}
 	}
 }

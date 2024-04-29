@@ -1353,7 +1353,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End)]"
-								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End))]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1400,7 +1400,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End)]"
-								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End))]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1464,7 +1464,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End)]"
-								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End))]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1511,7 +1511,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End)]"
-								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End))]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1558,7 +1558,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End)]"
-								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End))]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1594,21 +1594,36 @@ types budget
 						position = { 11 15 }
 						parentanchor = top|left
 						onclick = "[GetScriptedGui('clear_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+						onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
 						input_action = "back"
+						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 					}
 					textbox = {
 						raw_text = "#b Select Strategic Region of Recipient#!"
+						using = fontsize_large
 						autoresize = yes
-						parentanchor = top|center
+						align = center
+						parentanchor = top|hcenter
+						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
+					}
+					textbox = {
+						raw_text = "#b Select Recipient#!"
+						using = fontsize_large
+						autoresize = yes
+						align = center
+						parentanchor = top|hcenter
+						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 					}
 				}
+				money_transfer_send_money_confirmation = {}
+				# Strategic Region listing
 				flowcontainer = {
 					align = center
 					parentanchor = hcenter
+					visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
 					dynamicgridbox = {
 						datamodel = "[GetGlobalList('strategic_region_list')]"
 						datacontext = "[Scope.AccessStrategicRegion]"
-						visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
 						datamodel_wrap = 2
 						flipdirection = yes
 						item = {
@@ -1628,7 +1643,34 @@ types budget
 						}
 					}
 				}
-				
+				# Countries in selected strategic region listing
+				flowcontainer = {
+					align = center
+					parentanchor = hcenter
+					visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
+					dynamicgridbox = {
+						datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')]"
+						datacontext = "[Scope.AccessCountry]"
+						datamodel_wrap = 2
+						flipdirection = yes
+						item = {
+							button = {
+								using = default_button
+								size = { 210 70 }
+								onclick = "[GetScriptedGui('set_money_transfer_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
+								onclick = "[GetVariableSystem.Toggle('money_transfer_send_money_confirmation')]"
+								enabled = "[GteScriptedGui('').IsShown]"
+								tooltip = "[GetPlayer.GetTaxLevelDescVeryHigh]"
+								textbox = {
+									autoresize = yes
+									raw_text = "[Scope.AccessCountry.GetName]"
+									align = center|nobaseline
+									parentanchor = center
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

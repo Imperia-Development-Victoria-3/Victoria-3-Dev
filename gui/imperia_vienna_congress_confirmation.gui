@@ -87,4 +87,29 @@ types confirmation_widgets
             onclick = "[GetVariableSystem.Toggle('imperia_vienna_congress_state_selector_open')]"
         } 
     }
+
+    type money_transfer_send_money_confirmation = default_confirmation_widget {
+        name = "money_transfer_send_money_confirmation"
+		parentanchor = center|center
+        layer = top
+        using = clickthrough_blocker
+        alwaystransparent = no
+        size = { 380 100 }
+        visible = "[GetVariableSystem.Exists('money_transfer_send_money_confirmation')]"
+        textbox = {
+            parentanchor = top|hcenter
+            using = header_font_fancy
+            using = fontsize_xxl
+            text = "MONEY_TRANSFER_REALLY_SEND_MONEY"
+            autoresize = yes
+        }
+        blockoverride "answer_yes_handler" {
+            onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
+            onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
+        }
+        blockoverride "answer_ho_handler" {
+            onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
+            onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
+        }
+    }
 }
