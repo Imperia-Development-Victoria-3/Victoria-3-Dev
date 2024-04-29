@@ -135,6 +135,34 @@ types budget
 				blockoverride "third_button_name" {
 					name = "tutorial_highlight_assets"
 				}
+
+				
+				blockoverride "fourth_button"
+				{
+					text = "BUDGET_TAB_MONEY_TRANSFER"
+				}
+				blockoverride "fourth_button_tooltip" {
+					tooltip = "BUDGET_TAB_MONEY_TRANSFER"
+				}
+				blockoverride "fourth_button_click"
+				{
+					onclick = "[InformationPanel.SelectTab('money_transfer')]"
+				}
+				blockoverride "fourth_button_visibility"
+				{
+					visible = "[InformationPanel.IsTabSelected('money_transfer')]"
+				}
+				blockoverride "fourth_button_visibility_checked"
+				{
+					visible = "[Not( InformationPanel.IsTabSelected('money_transfer') )]"
+				}
+				blockoverride "fourth_button_selected"
+				{
+					text = "BUDGET_TAB_MONEY_TRANSFER"
+				}
+				blockoverride "fourth_button_name" {
+					name = "tutorial_highlight_money_transfer"
+				}
 			}
 			
 			widget = { size = { 1 10 }}
@@ -1264,6 +1292,310 @@ types budget
 						parentanchor = right|vcenter
 						align = right|nobaseline
 						margin_right = 20
+					}
+				}
+			}
+
+			
+			### MONEY TRANSFER
+			flowcontainer = {
+				visible = "[InformationPanel.IsTabSelected('money_transfer')]"			
+				using = default_content_fade
+				direction = vertical
+				using = default_list_position
+				spacing = 30
+
+				default_header = {
+					blockoverride "text" {
+						text = "Money Transfer"
+					}
+				}
+
+				flowcontainer = {
+					spacing = 30
+					direction = horizontal
+					using = default_list_position
+					
+					
+					# Ten million
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)1')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End)]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/selected_arrow.dds"
+									parentanchor = center
+								}
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							textbox = {
+                                raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_ten_million_counter'))]#!"
+								align = center
+								using = fontsize_large
+								autoresize = yes
+								margin = { 10 10 }
+								parentanchor = center
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End)]"
+								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End))]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/arrow_down.dds"
+									parentanchor = center
+								}
+							}
+						}
+					}
+					# One million
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)1')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End)]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/selected_arrow.dds"
+									parentanchor = center
+								}
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							textbox = {
+                                raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_million_counter'))]#!"
+								align = center
+								using = fontsize_large
+								autoresize = yes
+								margin = { 10 10 }
+								parentanchor = center
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End)]"
+								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End))]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/arrow_down.dds"
+									parentanchor = center
+								}
+							}
+						}
+					}
+					# Million designator
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						textbox = {
+							margin_top = 200
+							resizeparent = yes
+							raw_text = "M"
+							align = center
+							using = header_font_fancy
+							using = fontsize_mega
+							parentanchor = center
+						}
+						
+					}
+					# One hundred k
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)1')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End)]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/selected_arrow.dds"
+									parentanchor = center
+								}
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							textbox = {
+                                raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_hundred_k_counter'))]#!"
+								align = center
+								using = fontsize_large
+								autoresize = yes
+								margin = { 10 10 }
+								parentanchor = center
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End)]"
+								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End))]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/arrow_down.dds"
+									parentanchor = center
+								}
+							}
+						}
+					}
+					# Ten k
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)1')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End)]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/selected_arrow.dds"
+									parentanchor = center
+								}
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							textbox = {
+                                raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_ten_k_counter'))]#!"
+								align = center
+								using = fontsize_large
+								autoresize = yes
+								margin = { 10 10 }
+								parentanchor = center
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End)]"
+								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End))]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/arrow_down.dds"
+									parentanchor = center
+								}
+							}
+						}
+					}
+					# One k
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)1')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End)]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/selected_arrow.dds"
+									parentanchor = center
+								}
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							textbox = {
+                                raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_k_counter'))]#!"
+								align = center
+								using = fontsize_large
+								autoresize = yes
+								margin = { 10 10 }
+								parentanchor = center
+							}
+						}
+						flowcontainer = {
+							spacing = 30
+							button = {
+								using = default_button
+								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End)]"
+								enabled = "[GetScriptedGui('can_transfer_money').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End))]"
+								resizeparent = yes
+								minimumsize = { 50 50 }
+								icon = {
+									resizeparent = yes
+									texture = "gfx/interface/main_hud/arrow_down.dds"
+									parentanchor = center
+								}
+							}
+						}
+					}
+					# Kilo designator
+					flowcontainer = {
+						spacing = 30
+						direction = vertical
+						using = default_list_position
+						textbox = {
+							margin_top = 200
+							resizeparent = yes
+							raw_text = "K"
+							align = center
+							using = header_font_fancy
+							using = fontsize_mega
+							parentanchor = center
+						}
+						
+					}
+				}
+                divider_decorative = {}
+				button = {
+					using = default_button_action
+					size = { 250 75 }
+					parentanchor = center
+					textbox = {
+						text = "TRANSFER_MONEY_SEND_MONEY"
+						align = center|nobaseline
+						margin = { 10 10 }
+						parentanchor = center
 					}
 				}
 			}

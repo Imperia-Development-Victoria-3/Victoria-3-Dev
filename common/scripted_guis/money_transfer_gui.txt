@@ -1,0 +1,69 @@
+﻿change_money_transfer_amount = {
+	scope = country
+	saved_scopes = {
+		up
+		amount
+	}
+	effect = {
+		if = {
+			limit = {
+				scope:up = 1
+			}
+			change_variable = {
+				name = imperia_money_transfer_amount
+				add = scope:amount
+			}
+		}
+		else = {
+			change_variable = {
+				name = imperia_money_transfer_amount
+				subtract = scope:amount
+			}
+		}
+	}
+}
+
+can_transfer_money = {
+	scope = country
+	saved_scopes = {
+		up
+		amount
+	}
+	is_shown = {
+		trigger_if = {
+			limit = {
+				scope:amount = 10000000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 10000000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 1000000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 1000000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 100000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 100000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 10000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 10000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 1000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 1000
+		}
+	}
+}
