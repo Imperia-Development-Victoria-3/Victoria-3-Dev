@@ -15,11 +15,11 @@ je_the_opium_dilemma = { 	#Sichuan
 	}
 
 	on_complete = {
-		#c:CHI ?= {
-		#	trigger_event = { #Notification event
-		#		id = imperia_china_opium.1
-		#	}
-		#}
+		c:CHI ?= {
+			trigger_event = { #Notification event
+				id = imperia_china_opium.1
+			}
+		}
 
 		add_journal_entry = {
 			type = je_chinese_opium_trade
@@ -34,6 +34,9 @@ je_opium_trade_participation = {	#For Substates once Sichuan initializes
 
 	possible = {
 		has_global_variable = chinese_opium_trade
+		NOT = {
+			has_global_variable = opium_epidemic_resolved
+		}
 	}
 	complete = {
 		any_scope_building = {
@@ -49,7 +52,12 @@ je_opium_trade_participation = {	#For Substates once Sichuan initializes
 		add_journal_entry = {
 			type = je_chinese_opium_trade
 		}
-
+	}
+	invalid = {
+		OR = {
+			has_global_variable = china_shatters	
+			has_global_variable = opium_epidemic_resolved		
+		}
 	}
 }
 
@@ -82,7 +90,10 @@ je_chinese_opium_trade = {		#JE w/modifier to denote participation in the Chines
 		}
 	}
 	invalid = {
-		has_global_variable = china_shatters
+		OR = {
+			has_global_variable = china_shatters	
+			has_global_variable = opium_epidemic_resolved		
+		}
 	}
 
 }
@@ -133,6 +144,9 @@ je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
 		#trigger_event = { #Opium Ascendant
 		#	id = imperia_china_opium.3
 		#}
+		custom_tooltip = {
+			text = fragile_unity_major_add_tt
+		}
 	}
 
 	on_monthly_pulse = {
