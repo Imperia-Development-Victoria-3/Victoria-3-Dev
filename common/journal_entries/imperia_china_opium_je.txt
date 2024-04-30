@@ -1,0 +1,181 @@
+#Opium Epidemic JEs
+
+je_the_opium_dilemma = { 	#Sichuan
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+
+	complete = {
+		any_scope_building = {
+			is_building_type = building_opium_plantation
+			cash_reserves_ratio > 0.5
+			weekly_profit > 0
+			occupancy >= 0.75
+			level >= 10
+		}
+	}
+
+	on_complete = {
+		#c:CHI ?= {
+		#	trigger_event = { #Notification event
+		#		id = imperia_china_opium.1
+		#	}
+		#}
+
+		add_journal_entry = {
+			type = je_chinese_opium_trade
+		}
+		set_global_variable = chinese_opium_trade
+	}
+}
+
+je_opium_trade_participation = {	#For Substates once Sichuan initializes
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+
+	possible = {
+		has_global_variable = chinese_opium_trade
+	}
+	complete = {
+		any_scope_building = {
+			is_building_type = building_opium_plantation
+			cash_reserves_ratio > 0.5
+			weekly_profit > 0
+			occupancy >= 0.75
+			level >= 10
+		}	
+	}
+
+	on_complete = {
+		add_journal_entry = {
+			type = je_chinese_opium_trade
+		}
+
+	}
+}
+
+je_chinese_opium_trade = {		#JE w/modifier to denote participation in the Chinese Opium Trade
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+
+	modifiers_while_active = {
+		modifier_opium_profits
+	}
+	complete = {
+		any_scope_building = {
+			is_building_type = building_opium_plantation
+			level <= 5
+		}		
+	}
+
+	on_complete = {
+		add_journal_entry = {
+			type = je_opium_trade_participation
+		}
+	}
+
+	fail = {
+		c:CHI ?= {
+			OR = {
+			has_modifier = modifier_opium_ascendant
+			has_modifier = modifier_opium_eradicated
+			}
+		}
+	}
+	invalid = {
+		has_global_variable = china_shatters
+	}
+
+}
+
+je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	group = je_group_historical_content
+
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		any_subject_or_below = {
+			NOT = {
+				has_modifier = modifier_opium_profits
+			}
+		}
+		NOT = {
+			has_law = law_type:law_free_trade
+			any_market = {
+				NOT = { owner = root }
+				any_trade_route = {
+					exporter.owner = root
+					goods = g:opium
+				}
+				owner = {
+					any_primary_culture = {
+						NOT = {
+							has_cultural_obsession = opium
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_complete = {
+		#trigger_event = { #Opium Eradicated
+		#	id = imperia_china_opium.2
+		#}
+		custom_tooltip = {
+			text = fragile_unity_major_remove_tt
+		}
+	}
+
+	timeout = 16425
+	on_timeout = {
+		#trigger_event = { #Opium Ascendant
+		#	id = imperia_china_opium.3
+		#}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					any_subject_or_below = {
+						NOT = {
+							has_modifier = modifier_opium_profits
+						}
+					}
+					NOT = {
+						has_law = law_type:law_free_trade
+						any_market = {
+							NOT = { owner = root }
+							any_trade_route = {
+								exporter.owner = root
+								goods = g:opium
+							}
+							owner = {
+								any_primary_culture = {
+									NOT = {
+										has_cultural_obsession = opium
+									}
+								}
+							}
+						}
+					}
+				}
+				change_variable = {
+					name = opium_struggle_var
+					add = 1
+				}
+			}
+		}
+	}
+	current_value = {
+		value = var:opium_struggle_var
+	}
+	goal_add_value = {
+		add = 60
+	}		
+	invalid = {
+		has_global_variable = china_shatters
+	}
+}
