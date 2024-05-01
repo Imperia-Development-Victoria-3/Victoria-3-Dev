@@ -1793,6 +1793,7 @@ imperia_money_transfer_one_million_counter = {
 		floor = 1
 	}
 }
+
 imperia_money_transfer_one_hundred_k_counter = {
 	value = 0
 	add = {
@@ -1802,6 +1803,7 @@ imperia_money_transfer_one_hundred_k_counter = {
 		floor = 1
 	}
 }
+
 imperia_money_transfer_ten_k_counter = {
 	value = 0
 	add = {
@@ -1811,6 +1813,7 @@ imperia_money_transfer_ten_k_counter = {
 		floor = 1
 	}
 }
+
 imperia_money_transfer_one_k_counter = {
 	value = 0
 	add = {
@@ -1819,4 +1822,27 @@ imperia_money_transfer_one_k_counter = {
 		modulo = 10
 		floor = 1
 	}
+}
+
+imperia_remaining_credits_value = {
+	value = credit
+	subtract = imperia_current_debt_value
+}
+
+imperia_current_debt_value = {
+	value = credit
+	multiply = scaled_debt
+}
+
+imperia_current_transferable_money_value = {
+	value = 0
+	add = gold_reserves
+	add = imperia_remaining_credits_value
+}
+
+imperia_current_max_of_recievable_money_value = {
+	value = 0
+	add = gold_reserves_limit
+	add = imperia_current_debt_value
+	subtract = gold_reserves
 }
