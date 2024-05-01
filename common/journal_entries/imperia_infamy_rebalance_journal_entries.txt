@@ -4,21 +4,15 @@
 	group = je_group_crises
 	possible = {
 		any_country = {
-			NOT = {
-				this = root
-			}
+			this != root
 			infamy >= infamy_threshold:pariah
 			has_strategic_adjacency = root
 		}
 	}
 	is_shown_when_inactive = {
 		any_country = {
-			AND = {
-				NOT = {
-					this = root
-				}
-				infamy >= infamy_threshold:notorious
-			}
+			this != root
+			infamy >= infamy_threshold:notorious
 		}
 	}
 	immediate = {
@@ -27,9 +21,7 @@
 		}
 		random_country = {
 			limit = {
-				NOT = {
-					this = root
-				}
+				this != root
 				infamy >= infamy_threshold:pariah
 			}
 			save_scope_as = target
@@ -46,7 +38,7 @@
 		}
 	}
 	on_complete = {
-		remove_modifier = modifier_pariah_neighbour
+		remove_modifier ?= modifier_pariah_neighbour
 	}
 	on_monthly_pulse = {
 		random_events = {
@@ -69,7 +61,7 @@
 		}
 	}
 	on_invalid = {
-		remove_modifier = modifier_pariah_neighbour
+		remove_modifier ?= modifier_pariah_neighbour
 	}
 	progressbar = no
 	should_be_pinned_by_default = yes
@@ -91,24 +83,9 @@ je_is_pariah = {
 		infamy < infamy_threshold:pariah
 	}
 	on_complete = {
-		if = {
-			limit = {
-				has_modifier = modifier_international_pariah
-			}
-			remove_modifier = modifier_international_pariah
-		}
-		if = {
-			limit = {
-				has_modifier = modifier_pariah_economic_sanctions
-			}
-			remove_modifier = modifier_pariah_economic_sanctions
-		}
-		if = {
-			limit = {
-				has_modifier = modifier_pariah_international_isolation
-			}
-			remove_modifier = modifier_pariah_international_isolation
-		}
+		remove_modifier ?= modifier_international_pariah
+		remove_modifier ?= modifier_pariah_economic_sanctions
+		remove_modifier ?= modifier_pariah_international_isolation
 	}
 	on_monthly_pulse = {
 		events = {
