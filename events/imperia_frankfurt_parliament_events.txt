@@ -231,7 +231,7 @@ frankfurt_parliament.1 = {
 				}
 				else_if = {
 					limit = {
-						global_var:frankfurt_has_voted_for_german_leader_2> = global_var:frankfurt_has_voted_for_german_leader_1
+						global_var:frankfurt_has_voted_for_german_leader_2 >= global_var:frankfurt_has_voted_for_german_leader_1
 						global_var:frankfurt_has_voted_for_german_leader_2 >= global_var:frankfurt_has_voted_for_german_leader_3
 					}
 					scope:second_candidate_scope = {
@@ -285,17 +285,25 @@ frankfurt_parliament.2 = {
 		add_journal_entry = {
 			type = je_imperia_frankfurt_german_consolidation_gutter_king
 		}
-		# If the Gutter king is a subject, make them independent. Just to be sure they get a proper ranking...
-		if = {
-			limit = {
-				is_subject = yes
-			}
-			make_independent = yes
-		}
 		# Monarchy vs republic laws
 		set_variable = {
 			name = gutter_king_old_lawgroup_governance_principles
 			value = active_law:lawgroup_governance_principles.type
+		}
+		if = {
+			limit = {
+				OR = {
+					is_subject = yes
+					is_subject_type = subject_type_customs_union
+				}
+			}
+			overlord = {
+				save_scope_as = overlord_scope
+			}
+			set_variable = {
+				name = frankfurt_parliament_original_overlord
+				value = scope:overlord_scope
+			}
 		}
 		if = {
 			limit = {
@@ -413,7 +421,7 @@ frankfurt_parliament.2 = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				root ?= c:AUS
 				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
 			}
@@ -602,6 +610,12 @@ frankfurt_parliament.3 = {
 				has_variable = left_frankfurt_parliament
 			}
 		}
+		add_modifier = {
+			name = gutter_king_solid_sway
+		}
+		add_modifier = {
+			name = german_major_start_sway
+		}
 		if = {
 			limit = {
 				is_subject = yes
@@ -618,7 +632,7 @@ frankfurt_parliament.3 = {
 			type = je_imperia_frankfurt_german_consolidation_german_minor
 		}
 		if = {
-			limit = { 
+			limit = {
 				root ?= c:AUS
 				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
 			}
@@ -645,6 +659,14 @@ frankfurt_parliament.3 = {
 			}
 			add_journal_entry = {
 				type = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		else = {
+			add_modifier = {
+				name = german_major_complete_sway
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_minor
 			}
 		}
 		ai_chance = {
@@ -688,117 +710,6 @@ frankfurt_parliament.4 = {
 				type = je_imperia_frankfurt_parliament
 			}
 		}
-	}
-}
-
-# Gutter King asks for sway
-frankfurt_parliament.5 = {
-	type = country_event
-	placement = scope:gutter_king_scope.capital
-	title = frankfurt_parliament.5.t
-	desc = frankfurt_parliament.5.d
-	flavor = frankfurt_parliament.5.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		video = "unspecific_signed_contract"
-	}
-	duration = 1
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		random_country = {
-			limit = {
-				has_variable = accepted_gutter_crown
-			}
-			save_scope_as = gutter_king_scope
-		}
-		set_variable = considering_frankfurt_sway_offer
-	}
-	option = {
-		# Yes
-		default_option = yes
-		name = frankfurt_parliament.5.a
-		scope:gutter_king_scope = {
-			create_diplomatic_pact = {
-				country = root
-				type = dominion
-			}
-		}
-		add_modifier = {
-			name = gutter_king_prestige_positive
-			months = 60
-		}
-		ai_chance = {
-			base = 99
-		}
-	}
-	option = {
-		# No
-		name = frankfurt_parliament.5.b
-		ai_chance = {
-			base = 1
-		}
-	}
-	after = {
-		remove_variable = considering_frankfurt_sway_offer
-	}
-}
-
-# German Major asks for sway
-frankfurt_parliament.6 = {
-	type = country_event
-	placement = from.capital
-	title = frankfurt_parliament.6.t
-	desc = frankfurt_parliament.6.d
-	flavor = frankfurt_parliament.6.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		video = "unspecific_signed_contract"
-	}
-	duration = 2
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		set_variable = considering_frankfurt_sway_offer
-	}
-	option = {
-		# Yes
-		default_option = yes
-		name = frankfurt_parliament.6.a
-		remove_modifier ?= gutter_king_prestige_positive
-		add_modifier = {
-			name = german_major_prestige_positive
-			months = 60
-		}
-		make_independent = yes
-		if = {
-			limit = {
-				has_variable = frankfurt_parliament_original_overlord
-			}
-			var:frankfurt_parliament_original_overlord = {
-				create_diplomatic_pact = {
-					country = root
-					type = customs_union
-				}
-			}
-		}
-		from = {
-			add_modifier = {
-				name = german_major_prestige_negative
-				months = 60
-			}
-		}
-		ai_chance = {
-			base = 99
-		}
-	}
-	option = {
-		# No
-		name = frankfurt_parliament.6.b
-		ai_chance = {
-			base = 1
-		}
-	}
-	after = {
-		remove_variable = considering_frankfurt_sway_offer
 	}
 }
 

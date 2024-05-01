@@ -1016,143 +1016,365 @@ je_frankfurt_parliament_leave_button = {
 	}
 }
 
-je_frankfurt_gutter_king_sway_button = {
-	name = "je_frankfurt_gutter_king_sway_button"
-	desc = "je_frankfurt_gutter_king_sway_button_desc"
+je_frankfurt_gutter_king_start_sway_button = {
+	name = "je_frankfurt_gutter_king_start_sway_button"
+	desc = "je_frankfurt_gutter_king_start_sway_button_desc"
 	visible = {
 		always = yes
 	}
 	ai_chance = {
-		base = 1000
+		base = 120
 	}
 	possible = {
-		prestige >= 5
+		authority >= 50
 		custom_tooltip = {
 			text = frankfurt_been_14_days_since_last_sway_tt
 			NOT = {
-				has_variable = je_frankfurt_gutter_king_sway_button_cooldown
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
 			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = german_major_complete_sway
 			NOT = {
-				is_subject_of = root
-			}
-			NOT = {
-				has_modifier = german_major_prestige_positive
+				has_variable = je_frankfurt_minor_recently_swayed
 			}
 		}
 	}
 	effect = {
 		set_variable = {
-			name = je_frankfurt_gutter_king_sway_button_cooldown
+			name = je_frankfurt_gutter_major_sway_button_cooldown
 			days = 14
 		}
 		random_country = {
 			limit = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = german_major_complete_sway
 				NOT = {
-					is_subject_of = root
-				}
-				NOT = {
-					has_modifier = german_major_prestige_positive
+					has_variable = je_frankfurt_minor_recently_swayed
 				}
 			}
-			trigger_event = {
-				id = frankfurt_parliament.5
-				popup = yes
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
 			}
-			custom_label = obligation_events.a.tt
-			show_as_tooltip = {
-				root = {
-					create_diplomatic_pact = {
-						country = prev
-						type = dominion
-					}
-				}
-				add_modifier = {
-					name = gutter_king_prestige_positive
-					months = 60
-				}
-				root = {
-					add_modifier = {
-						name = gutter_king_prestige_negative
-						months = 60
-					}
-				}
+			remove_modifier ?= german_major_complete_sway
+			add_modifier = {
+				name = german_major_solid_sway
 			}
-			custom_label = obligation_events.b.tt
+			add_modifier = {
+				name = gutter_king_start_sway
+			}
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
 		}
 	}
 }
 
-je_frankfurt_german_major_sway_button = {
-	name = "je_frankfurt_german_major_sway_button"
-	desc = "je_frankfurt_german_major_sway_button_desc"
+je_frankfurt_gutter_king_solidify_sway_button = {
+	name = "je_frankfurt_gutter_king_solidify_sway_button"
+	desc = "je_frankfurt_gutter_king_solidify_sway_button_desc"
 	visible = {
 		always = yes
 	}
 	ai_chance = {
-		base = 1000
+		base = 150
 	}
 	possible = {
-		prestige >= 10
+		authority >= 50
 		custom_tooltip = {
-			text = frankfurt_been_28_days_since_last_sway_tt
+			text = frankfurt_been_14_days_since_last_sway_tt
 			NOT = {
-				has_variable = je_frankfurt_german_major_sway_button_cooldown
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
 			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = gutter_king_start_sway
 			NOT = {
-				has_modifier = german_major_prestige_positive
+				has_variable = je_frankfurt_minor_recently_swayed
 			}
 		}
 	}
 	effect = {
 		set_variable = {
-			name = je_frankfurt_german_major_sway_button_cooldown
-			days = 28
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 14
 		}
 		random_country = {
 			limit = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = gutter_king_start_sway
 				NOT = {
-					has_modifier = german_major_prestige_positive
+					has_variable = je_frankfurt_minor_recently_swayed
 				}
 			}
-			trigger_event = {
-				id = frankfurt_parliament.6
-				popup = yes
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
 			}
-			custom_label = obligation_events.a.tt
-			show_as_tooltip = {
-				remove_modifier ?= gutter_king_prestige_positive
-				add_modifier = {
-					name = german_major_prestige_positive
-					months = 60
-				}
+			remove_modifier ?= german_major_solid_sway
+			remove_modifier ?= gutter_king_start_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+			}
+			add_modifier = {
+				name = german_major_start_sway
+			}
+			hidden_effect = {
 				make_independent = yes
-				if = {
-					limit = {
-						has_variable = frankfurt_parliament_original_overlord
-					}
-					var:frankfurt_parliament_original_overlord = {
-						create_diplomatic_pact = {
-							country = prev
-							type = customs_union
-						}
-					}
+			}
+			root = {
+				create_diplomatic_pact = {
+					country = prev
+					type = dominion
 				}
-				root = {
-					add_modifier = {
-						name = german_major_prestige_negative
-						months = 60
+			}
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
+		}
+	}
+}
+
+je_frankfurt_gutter_king_complete_sway_button = {
+	name = "je_frankfurt_gutter_king_complete_sway_button"
+	desc = "je_frankfurt_gutter_king_complete_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 100
+	}
+	possible = {
+		authority >= 50
+		custom_tooltip = {
+			text = frankfurt_been_14_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
+			}
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = gutter_king_solid_sway
+			NOT = {
+				has_variable = je_frankfurt_minor_recently_swayed
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 14
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = gutter_king_solid_sway
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
+			}
+			remove_modifier ?= german_major_start_sway
+			remove_modifier ?= gutter_king_solid_sway
+			add_modifier = {
+				name = gutter_king_complete_sway
+			}
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
+		}
+	}
+}
+
+je_frankfurt_german_major_start_sway_button = {
+	name = "je_frankfurt_german_major_start_sway_button"
+	desc = "je_frankfurt_german_major_start_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 120
+	}
+	possible = {
+		authority >= 50
+		custom_tooltip = {
+			text = frankfurt_been_14_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
+			}
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = gutter_king_complete_sway
+			NOT = {
+				has_variable = je_frankfurt_minor_recently_swayed
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 14
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = gutter_king_complete_sway
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
+			}
+			remove_modifier ?= gutter_king_complete_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+			}
+			add_modifier = {
+				name = german_major_start_sway
+			}
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
+		}
+	}
+}
+
+je_frankfurt_german_major_solidify_sway_button = {
+	name = "je_frankfurt_german_major_solidify_sway_button"
+	desc = "je_frankfurt_german_major_solidify_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 150
+	}
+	possible = {
+		authority >= 50
+		custom_tooltip = {
+			text = frankfurt_been_14_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
+			}
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = german_major_start_sway
+			NOT = {
+				has_variable = je_frankfurt_minor_recently_swayed
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 14
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = german_major_start_sway
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
+			}
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= german_major_start_sway
+			add_modifier = {
+				name = gutter_king_start_sway
+			}
+			add_modifier = {
+				name = german_major_solid_sway
+			}
+			if = {
+				limit = {
+					has_variable = frankfurt_parliament_original_overlord
+				}
+				hidden_effect = {
+					make_independent = yes
+				}
+				var:frankfurt_parliament_original_overlord = {
+					create_diplomatic_pact = {
+						country = prev
+						type = customs_union
 					}
 				}
 			}
-			custom_label = obligation_events.b.tt
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
+		}
+	}
+}
+
+je_frankfurt_german_major_complete_sway_button = {
+	name = "je_frankfurt_german_major_complete_sway_button"
+	desc = "je_frankfurt_german_major_complete_sway_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 100
+	}
+	possible = {
+		authority >= 50
+		custom_tooltip = {
+			text = frankfurt_been_14_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
+			}
+		}
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			has_modifier = german_major_solid_sway
+			NOT = {
+				has_variable = je_frankfurt_minor_recently_swayed
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 14
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_modifier = german_major_solid_sway
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
+			set_variable = {
+				name = je_frankfurt_minor_recently_swayed
+				months = 1
+			}
+			remove_modifier ?= gutter_king_start_sway
+			remove_modifier ?= german_major_solid_sway
+			add_modifier = {
+				name = german_major_complete_sway
+			}
+		}
+		add_modifier = {
+			name = gutter_major_promises
+			years = 1
 		}
 	}
 }

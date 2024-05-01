@@ -353,7 +353,9 @@
 je_imperia_frankfurt_german_consolidation_gutter_king = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-	scripted_button = je_frankfurt_gutter_king_sway_button
+	scripted_button = je_frankfurt_gutter_king_start_sway_button
+	scripted_button = je_frankfurt_gutter_king_solidify_sway_button
+	scripted_button = je_frankfurt_gutter_king_complete_sway_button
 	immediate = {
 		# Initialise the JE value; hit 0 for failure and 100 for success (For Gutter King)
 		set_variable = {
@@ -423,6 +425,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		custom_tooltip = {
 			text = frankfurt_germany_consolidates_tt
 			every_subject_or_below = {
+				limit = {
+					country_has_primary_culture = cu:north_german
+				}
 				root = {
 					annex = prev
 				}
@@ -431,6 +436,11 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			# Sets the flag to be the Black-Red-Gold
 			# Should NOT be cleaned
 			set_variable = gutter_germany
+		}
+		add_modifier = {
+			name = crown_from_the_gutter
+			years = 20
+			is_decaying = yes
 		}
 		every_state_region = {
 			# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
@@ -460,7 +470,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				limit = {
 					is_direct_subject_of = root
 				}
-				remove_modifier = gutter_king_prestige_positive
+				remove_modifier = gutter_king_start_sway
 				make_independent = yes
 				if = {
 					limit = {
@@ -507,7 +517,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				limit = {
 					is_direct_subject_of = root
 				}
-				remove_modifier = gutter_king_prestige_positive
+				remove_modifier ?= gutter_king_start_sway
 				make_independent = yes
 				if = {
 					limit = {
@@ -533,7 +543,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 je_imperia_frankfurt_german_consolidation_german_major = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-	scripted_button = je_frankfurt_german_major_sway_button
+	scripted_button = je_frankfurt_german_major_start_sway_button
+	scripted_button = je_frankfurt_german_major_solidify_sway_button
+	scripted_button = je_frankfurt_german_major_complete_sway_button
 	immediate = {
 		random_country = {
 			limit = {
@@ -596,6 +608,74 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		scope:gutter_king_scope = {
 			NOT = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+	}
+	on_complete = {
+		if = {
+			limit = { 
+				has_modifier = gutter_king_start_sway
+			}
+			remove_modifier = gutter_king_start_sway
+			add_modifier = {
+				name = gutter_king_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = gutter_king_solid_sway
+			}
+			remove_modifier = gutter_king_solid_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = gutter_king_complete_sway
+			}
+			remove_modifier = gutter_king_complete_sway
+			add_modifier = {
+				name = gutter_king_complete_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = german_major_start_sway
+			}
+			remove_modifier = german_major_start_sway
+			add_modifier = {
+				name = german_major_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = german_major_solid_sway
+			}
+			remove_modifier = german_major_solid_sway
+			add_modifier = {
+				name = german_major_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_modifier = german_major_complete_sway
+			}
+			remove_modifier = german_major_complete_sway
+			add_modifier = {
+				name = german_major_complete_sway
+				years = 5
+				is_decaying = yes
 			}
 		}
 	}
