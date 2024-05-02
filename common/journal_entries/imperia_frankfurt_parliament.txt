@@ -281,7 +281,7 @@
 					}
 					trigger_if = {
 						limit = {
-							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
 							exists = c:AUS
 						}
 						c:AUS != this
@@ -303,7 +303,7 @@
 					}
 					trigger_if = {
 						limit = {
-							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
 							exists = c:AUS
 						}
 						c:AUS != this
@@ -325,7 +325,7 @@
 					}
 					trigger_if = {
 						limit = {
-							has_global_variable = frankfurt_parliament_voted_lesser_germany
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
 							exists = c:AUS
 						}
 						c:AUS != this
@@ -379,7 +379,11 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				}
 				change_variable = {
 					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-					add = 1
+					add = {
+						value = gutter_king_ratio_over_gutter_german_claims
+						subtract = 0.75
+						multiply = 4
+					}
 				}
 				# Set a global variable for localisation, performance enhancing code
 				set_global_variable = {
@@ -390,13 +394,25 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			else = {
 				change_variable = {
 					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-					subtract = 1
+					# Add since the resulting number is negative
+					add = {
+						value = gutter_king_ratio_over_gutter_german_claims
+						# Ratio is always between 0 and .75 here
+						subtract = 0.75
+						# So now its MAX zero
+						multiply = 1.333
+						# This was found through.. Too many spreadsheets. Needs more 3's on the end, but it works well enough
+					}
 				}
 				# Set a global variable for localisation, performance enhancing code
 				set_global_variable = {
 					name = frankfurt_parliament_gutter_king_is_consolidating_var
 					value = 0
 				}
+			}
+			round_variable = {
+				name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+				nearest = 0.05
 			}
 		}
 	}
@@ -424,12 +440,30 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 		custom_tooltip = {
 			text = frankfurt_germany_consolidates_tt
-			every_subject_or_below = {
+			if = {
 				limit = {
 					country_has_primary_culture = cu:north_german
 				}
-				root = {
-					annex = prev
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:north_german
+					}
+					root = {
+						annex = prev
+					}
+				}
+			}
+			if = {
+				limit = {
+					country_has_primary_culture = cu:south_german
+				}
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:south_german
+					}
+					root = {
+						annex = prev
+					}
 				}
 			}
 			change_tag = GER
@@ -464,45 +498,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 	}
 	on_fail = {
-		custom_tooltip = {
-			text = frankfurt_return_to_old_status_tt
-			every_subject_or_below = {
-				limit = {
-					is_direct_subject_of = root
-				}
-				remove_modifier = gutter_king_start_sway
-				make_independent = yes
-				if = {
-					limit = {
-						has_variable = frankfurt_parliament_original_overlord
-					}
-					var:frankfurt_parliament_original_overlord = {
-						create_diplomatic_pact = {
-							country = prev
-							type = customs_union
-						}
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				exists = var:gutter_king_old_lawgroup_governance_principles
-			}
-			activate_law = var:gutter_king_old_lawgroup_governance_principles
-		}
-		if = {
-			limit = {
-				exists = var:gutter_king_old_lawgroup_distribution_of_power
-			}
-			activate_law = var:gutter_king_old_lawgroup_distribution_of_power
-		}
-		if = {
-			limit = {
-				exists = var:gutter_king_old_lawgroup_diplomatic_stance
-			}
-			activate_law = var:gutter_king_old_lawgroup_diplomatic_stance
-		}
+		imperia_frankfurt_parliament_dissolve_gutter_germany = yes
 	}
 	current_value = {
 		value = root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
@@ -511,27 +507,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		add = 100
 	}
 	on_timeout = {
-		custom_tooltip = {
-			text = frankfurt_return_to_old_status_tt
-			every_subject_or_below = {
-				limit = {
-					is_direct_subject_of = root
-				}
-				remove_modifier ?= gutter_king_start_sway
-				make_independent = yes
-				if = {
-					limit = {
-						has_variable = frankfurt_parliament_original_overlord
-					}
-					var:frankfurt_parliament_original_overlord = {
-						create_diplomatic_pact = {
-							country = prev
-							type = customs_union
-						}
-					}
-				}
-			}
-		}
+		imperia_frankfurt_parliament_dissolve_gutter_germany = yes
 	}
 	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Fail it
 	progressbar = yes
@@ -552,10 +528,6 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
 			}
 			save_scope_as = gutter_king_scope
-		}
-		set_relations = {
-			country = scope:gutter_king_scope
-			value = -50
 		}
 	}
 	complete = {
@@ -613,7 +585,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 	}
 	on_complete = {
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = gutter_king_start_sway
 			}
 			remove_modifier = gutter_king_start_sway
@@ -624,7 +596,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = gutter_king_solid_sway
 			}
 			remove_modifier = gutter_king_solid_sway
@@ -635,7 +607,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = gutter_king_complete_sway
 			}
 			remove_modifier = gutter_king_complete_sway
@@ -646,7 +618,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = german_major_start_sway
 			}
 			remove_modifier = german_major_start_sway
@@ -657,7 +629,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = german_major_solid_sway
 			}
 			remove_modifier = german_major_solid_sway
@@ -668,7 +640,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_modifier = german_major_complete_sway
 			}
 			remove_modifier = german_major_complete_sway

@@ -1893,3 +1893,36 @@ imperia_frankfurt_parliament_external_focus_voters_value = {
 		add = 1
 	}
 }
+
+gutter_german_claimed_states_amount = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				frankfurt_parliament_state_is_gutter_german = yes
+			}
+		}
+		add = 1
+	}
+}
+
+gutter_king_ratio_over_gutter_german_claims = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				frankfurt_parliament_state_is_gutter_german = yes
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						overlord = {
+							has_variable = accepted_gutter_crown
+						}
+					}
+				}
+			}
+		}
+		add = 1
+	}
+	divide = gutter_german_claimed_states_amount
+}
