@@ -24,7 +24,7 @@
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -110,7 +110,7 @@ je_frankfurt_parliament_vote_monarchy_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -194,7 +194,7 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -275,7 +275,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -288,7 +288,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -369,7 +369,7 @@ je_frankfurt_parliament_vote_universal_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -382,7 +382,7 @@ je_frankfurt_parliament_vote_universal_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -464,7 +464,7 @@ je_frankfurt_parliament_vote_presidential_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -545,7 +545,7 @@ je_frankfurt_parliament_vote_parliamentary_button = {
 					}
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -621,7 +621,7 @@ je_frankfurt_parliament_lesser_germany_button = {
 					capital.region = sr:region_rhine
 				}
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -695,7 +695,7 @@ je_frankfurt_parliament_greater_germany_button = {
 				capital.region = sr:region_south_germany
 				this != c:AUS
 			}
-			add = 100
+			add = 75
 		}
 		modifier = {
 			trigger = {
@@ -1036,8 +1036,11 @@ je_frankfurt_gutter_king_start_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = german_major_complete_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1050,20 +1053,27 @@ je_frankfurt_gutter_king_start_sway_button = {
 			limit = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 				has_modifier = german_major_complete_sway
-				NOT = {
-					has_variable = je_frankfurt_minor_recently_swayed
+				custom_tooltip = {
+					text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+					NOT = {
+						has_variable = je_frankfurt_minor_recently_swayed
+					}
 				}
 			}
 			set_variable = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= german_major_complete_sway
-			add_modifier = {
-				name = german_major_solid_sway
-			}
-			add_modifier = {
-				name = gutter_king_start_sway
+			custom_tooltip = {
+				text = start_swaying_country_tt
+				subject = this
+				remove_modifier ?= german_major_complete_sway
+				add_modifier = {
+					name = german_major_solid_sway
+				}
+				add_modifier = {
+					name = gutter_king_start_sway
+				}
 			}
 		}
 		add_modifier = {
@@ -1093,8 +1103,11 @@ je_frankfurt_gutter_king_solidify_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = gutter_king_start_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1107,21 +1120,28 @@ je_frankfurt_gutter_king_solidify_sway_button = {
 			limit = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 				has_modifier = gutter_king_start_sway
-				NOT = {
-					has_variable = je_frankfurt_minor_recently_swayed
+				custom_tooltip = {
+					text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+					NOT = {
+						has_variable = je_frankfurt_minor_recently_swayed
+					}
 				}
 			}
 			set_variable = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= german_major_solid_sway
-			remove_modifier ?= gutter_king_start_sway
-			add_modifier = {
-				name = gutter_king_solid_sway
-			}
-			add_modifier = {
-				name = german_major_start_sway
+			custom_tooltip = {
+				text = solidify_swaying_country_tt
+				subject = this
+				remove_modifier ?= german_major_solid_sway
+				remove_modifier ?= gutter_king_start_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
+				add_modifier = {
+					name = german_major_start_sway
+				}
 			}
 			hidden_effect = {
 				make_independent = yes
@@ -1160,8 +1180,11 @@ je_frankfurt_gutter_king_complete_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = gutter_king_solid_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1182,10 +1205,14 @@ je_frankfurt_gutter_king_complete_sway_button = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= german_major_start_sway
-			remove_modifier ?= gutter_king_solid_sway
-			add_modifier = {
-				name = gutter_king_complete_sway
+			custom_tooltip = {
+				text = complete_swaying_country_tt
+				subject = this
+				remove_modifier ?= german_major_start_sway
+				remove_modifier ?= gutter_king_solid_sway
+				add_modifier = {
+					name = gutter_king_complete_sway
+				}
 			}
 		}
 		add_modifier = {
@@ -1215,8 +1242,11 @@ je_frankfurt_german_major_start_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = gutter_king_complete_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1237,12 +1267,16 @@ je_frankfurt_german_major_start_sway_button = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= gutter_king_complete_sway
-			add_modifier = {
-				name = gutter_king_solid_sway
-			}
-			add_modifier = {
-				name = german_major_start_sway
+			custom_tooltip = {
+				text = start_swaying_country_tt
+				subject = this
+				remove_modifier ?= gutter_king_complete_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
+				add_modifier = {
+					name = german_major_start_sway
+				}
 			}
 		}
 		add_modifier = {
@@ -1272,8 +1306,11 @@ je_frankfurt_german_major_solidify_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = german_major_start_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1294,13 +1331,17 @@ je_frankfurt_german_major_solidify_sway_button = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= gutter_king_solid_sway
-			remove_modifier ?= german_major_start_sway
-			add_modifier = {
-				name = gutter_king_start_sway
-			}
-			add_modifier = {
-				name = german_major_solid_sway
+			custom_tooltip = {
+				text = solidify_swaying_country_tt
+				subject = this
+				remove_modifier ?= gutter_king_solid_sway
+				remove_modifier ?= german_major_start_sway
+				add_modifier = {
+					name = gutter_king_start_sway
+				}
+				add_modifier = {
+					name = german_major_solid_sway
+				}
 			}
 			if = {
 				limit = {
@@ -1344,8 +1385,11 @@ je_frankfurt_german_major_complete_sway_button = {
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 			has_modifier = german_major_solid_sway
-			NOT = {
-				has_variable = je_frankfurt_minor_recently_swayed
+			custom_tooltip = {
+				text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
 			}
 		}
 	}
@@ -1366,10 +1410,14 @@ je_frankfurt_german_major_complete_sway_button = {
 				name = je_frankfurt_minor_recently_swayed
 				months = 1
 			}
-			remove_modifier ?= gutter_king_start_sway
-			remove_modifier ?= german_major_solid_sway
-			add_modifier = {
-				name = german_major_complete_sway
+			custom_tooltip = {
+				text = complete_swaying_country_tt
+				subject = this
+				remove_modifier ?= gutter_king_start_sway
+				remove_modifier ?= german_major_solid_sway
+				add_modifier = {
+					name = german_major_complete_sway
+				}
 			}
 		}
 		add_modifier = {
