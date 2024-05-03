@@ -3,16 +3,43 @@
 	group = je_group_foreign_affairs
 	on_weekly_pulse = {
 		effect = {
+			set_local_variable = {
+				name = true_neutral_applicant_signee_list_counter
+				value = 0
+			}
 			every_in_list = {
 				variable = true_neutral_applicant_signee_list
 				imperia_update_unsigned = yes
+				# Start counting actual countries left
+				change_local_variable = {
+					name = true_neutral_applicant_signee_list_counter
+					add = 1
+				}
+			}
+			# Kinda dirty fix, since we cannot check for the existance of dynamic, non-specific countries
+			if = {
+				limit = {
+					local_var:true_neutral_applicant_signee_list_counter < imperia_true_neutral_remaining_signers_value
+				}
+				# If theres more remaining signers (on paper) than there are actual existing countries on the list, reduce the list by 1
+				change_variable = {
+					name = true_neutral_required_signers_var
+					subtract = 1
+				}
 			}
 		}
 	}
 	complete = {
 		#Complete when everyone has signed the treaty
-		scope:journal_entry = {
-			is_goal_complete = yes
+		OR = {
+			scope:journal_entry = {
+				is_goal_complete = yes
+			}
+			# Since we cannot change the goal value on the fly, sneakily check if the variables are the same!
+			# .. Or, if the worlds gone to shit, if theres more signers than required ones. Just to be safe.
+			hidden_trigger = {
+				var:true_neutral_current_signers_var >= var:true_neutral_required_signers_var
+			}
 		}
 		show_unsigned_trigger_NUM = {
 			NUM = 1
@@ -49,7 +76,7 @@
 		value = var:true_neutral_current_signers_var
 	}
 	goal_add_value = {
-		add = var:true_neutral_required_signers_var
+		value = var:true_neutral_required_signers_var
 	}
 	progressbar = yes
 	on_complete = {
@@ -57,7 +84,12 @@
 		imperia_clean_true_neutrality_treaty_je_variables = yes
 	}
 	fail = {
-		is_at_war = yes
+		OR = {
+			is_at_war = yes
+			NOT = {
+				has_law = law_type:law_armed_neutrality
+			}
+		}
 	}
 	on_fail = {
 		imperia_clean_true_neutrality_treaty_je_variables = yes
