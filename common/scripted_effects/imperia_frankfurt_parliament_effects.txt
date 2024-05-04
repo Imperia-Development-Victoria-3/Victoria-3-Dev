@@ -411,7 +411,6 @@ imperia_frankfurt_parliament_dissolve_gutter_germany = {
 			limit = {
 				is_direct_subject_of = root
 			}
-			remove_modifier ?= gutter_king_start_sway
 			remove_modifier ?= gutter_king_solid_sway
 			remove_modifier ?= gutter_king_complete_sway
 			make_independent = yes
@@ -454,5 +453,151 @@ imperia_frankfurt_parliament_dissolve_gutter_germany = {
 			}
 		}
 		activate_law = var:gutter_king_old_lawgroup_diplomatic_stance
+	}
+}
+
+imperia_frankfurt_parliament_spawn_rhineland = {
+	custom_tooltip = {
+		text = imperia_frankfurt_parliament_spawn_rhineland_tt
+		every_state = {
+			limit = {
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						has_variable = gutter_germany
+						any_overlord_or_above = {
+							OR = {
+								has_variable = accepted_gutter_crown
+								has_variable = gutter_germany
+							}
+						}
+					}
+				}
+				OR = {
+					state_region = s:STATE_RHINELAND
+					state_region = s:STATE_NORTH_RHINE
+					state_region = s:STATE_RUHR
+					state_region = s:STATE_WESTPHALIA
+					state_region = s:STATE_HESSE
+				}
+			}
+			add_to_local_variable_list = {
+				name = rhine_states
+				target = this
+			}
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							is_target_in_local_variable_list = {
+								name = rhine_owners
+								target = this
+							}
+						}
+					}
+					add_to_local_variable_list = {
+						name = rhine_owners
+						target = this
+					}
+				}
+			}
+		}
+		ordered_in_local_list = {
+			variable = rhine_owners
+			limit = {
+				capital = {
+					is_target_in_local_variable_list = {
+						name = rhine_states
+						target = this
+					}
+				}
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = rhineland_originator
+		}
+		if = {
+			limit = {
+				exists = scope:rhineland_originator
+			}
+			scope:rhineland_originator = {
+				change_tag = RHE
+			}
+		}
+		every_in_local_list = {
+			variable = rhine_states
+			set_state_owner = c:RHE
+		}
+	}
+}
+
+imperia_frankfurt_parliament_spawn_south_german_federation = {
+	custom_tooltip = {
+		text = imperia_frankfurt_parliament_spawn_south_german_federation_tt
+		every_state = {
+			limit = {
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						has_variable = gutter_germany
+						any_overlord_or_above = {
+							OR = {
+								has_variable = accepted_gutter_crown
+								has_variable = gutter_germany
+							}
+						}
+					}
+				}
+				state_region = {
+					is_homeland = cu:south_german
+				}
+			}
+			add_to_local_variable_list = {
+				name = south_german_states
+				target = this
+			}
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							is_target_in_local_variable_list = {
+								name = south_german_owners
+								target = this
+							}
+						}
+					}
+					add_to_local_variable_list = {
+						name = south_german_owners
+						target = this
+					}
+				}
+			}
+		}
+		ordered_in_local_list = {
+			variable = south_german_owners
+			limit = {
+				capital = {
+					is_target_in_local_variable_list = {
+						name = south_german_states
+						target = this
+					}
+				}
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = south_german_originator
+		}
+		if = {
+			limit = {
+				exists = scope:south_german_originator
+			}
+			scope:south_german_originator = {
+				change_tag = SGF
+			}
+		}
+		every_in_local_list = {
+			variable = south_german_states
+			set_state_owner = c:SGF
+		}
 	}
 }

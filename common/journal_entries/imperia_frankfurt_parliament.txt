@@ -86,10 +86,10 @@
 					name = frankfurt_parliament_voting_period
 					add = 1
 				}
-				## If the voting has run for 12 weeks, start over with a new vote category
+				## If the voting has run for 16 weeks, start over with a new vote category
 				if = {
 					limit = {
-						global_var:frankfurt_parliament_voting_period >= 12
+						global_var:frankfurt_parliament_voting_period >= 16
 					}
 					set_global_variable = {
 						name = frankfurt_parliament_voting_period
@@ -343,7 +343,8 @@
 		}
 	}
 	goal_add_value = {
-		add = 12
+		# Should be the same as the voting_period max; currently 16
+		add = 16
 	}
 	progressbar = yes
 	weight = 5000
@@ -471,6 +472,12 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			# Should NOT be cleaned
 			set_variable = gutter_germany
 		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+			}
+			imperia_frankfurt_parliament_spawn_rhineland = yes
+		}
 		add_modifier = {
 			name = crown_from_the_gutter
 			years = 20
@@ -592,14 +599,15 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 		}
 	}
+	# Completion = gutter germany dissolved
 	on_complete = {
 		if = {
 			limit = {
-				has_modifier = gutter_king_start_sway
+				has_modifier = german_major_solid_sway
 			}
-			remove_modifier = gutter_king_start_sway
+			remove_modifier = german_major_solid_sway
 			add_modifier = {
-				name = gutter_king_start_sway
+				name = german_major_solid_sway
 				years = 5
 				is_decaying = yes
 			}
@@ -610,7 +618,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			}
 			remove_modifier = gutter_king_solid_sway
 			add_modifier = {
-				name = gutter_king_solid_sway
+				name = german_major_start_sway
 				years = 5
 				is_decaying = yes
 			}
@@ -620,11 +628,6 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 				has_modifier = gutter_king_complete_sway
 			}
 			remove_modifier = gutter_king_complete_sway
-			add_modifier = {
-				name = gutter_king_complete_sway
-				years = 5
-				is_decaying = yes
-			}
 		}
 		if = {
 			limit = {
@@ -669,6 +672,70 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			NOT = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
 			}
+		}
+	}
+	# failure = gutter germany consolidated
+	on_fail = {
+		if = {
+			limit = {
+				has_modifier = german_major_solid_sway
+			}
+			remove_modifier = german_major_solid_sway
+			add_modifier = {
+				name = gutter_king_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_king_solid_sway
+			}
+			remove_modifier = gutter_king_solid_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_king_complete_sway
+			}
+			remove_modifier = gutter_king_complete_sway
+			add_modifier = {
+				name = gutter_king_complete_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = german_major_start_sway
+			}
+			remove_modifier = german_major_start_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = german_major_solid_sway
+			}
+			remove_modifier = german_major_solid_sway
+			add_modifier = {
+				name = gutter_king_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = german_major_complete_sway
+			}
+			remove_modifier = german_major_complete_sway
 		}
 	}
 	status_desc = {
