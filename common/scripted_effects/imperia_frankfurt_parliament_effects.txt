@@ -2,9 +2,12 @@
 	# Scope: any country in the world
 	# Called from on_actions if certain conditions are met (basically if the thing is over)
 	### ### ###
-	# Vote variables
+	# General Variables
+	remove_variable ?= frankfurt_parliament_joined_parliament
+	remove_variable ?= left_frankfurt_parliament
 	remove_global_variable ?= frankfurt_parliament_voting_period
 	remove_global_variable ?= frankfurt_parliament_current_vote
+	# Vote variables
 	remove_variable ?= frankfurt_parliament_voted_republic
 	remove_variable ?= frankfurt_parliament_voted_monarchy
 	remove_variable ?= frankfurt_parliament_voted_oligarchy
@@ -599,5 +602,31 @@ imperia_frankfurt_parliament_spawn_south_german_federation = {
 			variable = south_german_states
 			set_state_owner = c:SGF
 		}
+	}
+}
+
+imperia_frankfurt_parliament_grant_external_focus_claims = {
+	# Grants claims to all states which would permit the [HRE/United States of Europe] formation
+	# At least under the plausible nation formation rule
+	every_state_region = {
+		limit = {
+			OR = {
+				is_homeland = cu:north_german
+				is_homeland = cu:south_german
+				is_homeland = cu:alemannic
+				is_homeland = cu:czech
+				is_homeland = cu:dutch
+				is_homeland = cu:flemish
+				is_homeland = cu:wallonian
+				is_homeland = cu:north_italian
+				is_homeland = cu:slovene
+			}
+			NOT = {
+				any_scope_state = {
+					has_claim_by = root
+				}
+			}
+		}
+		add_claim = root
 	}
 }

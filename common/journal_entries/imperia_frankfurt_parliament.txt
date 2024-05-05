@@ -1,6 +1,7 @@
 ﻿je_imperia_frankfurt_parliament = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
+	scripted_button = je_frankfurt_parliament_join_parliament_button
 	# Voting Starting Options
 	scripted_button = je_frankfurt_parliament_vote_republic_button
 	scripted_button = je_frankfurt_parliament_vote_monarchy_button
@@ -58,7 +59,7 @@
 			}
 			set_global_variable = {
 				name = frankfurt_parliament_current_vote
-				value = 1
+				value = 0
 			}
 			# This one is just initialised here, will be "populated" on completion
 			set_global_variable = {
@@ -468,7 +469,10 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			}
 			if = {
 				limit = {
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+					}
 				}
 				imperia_frankfurt_parliament_spawn_rhineland = yes
 			}
@@ -505,6 +509,15 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				}
 			}
 			add_claim = root
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+			}
+			custom_tooltip = {
+				text = imperia_frankfurt_parliament_grant_external_focus_claims_tt
+				imperia_frankfurt_parliament_grant_external_focus_claims = yes
+			}
 		}
 	}
 	fail = {

@@ -1129,6 +1129,13 @@ imperia_frankfurt_parliament_current_vote = {
 	text = {
 		trigger = {
 			has_global_variable = frankfurt_parliament_current_vote
+			global_var:frankfurt_parliament_current_vote = 0
+		}
+		localization_key = IMPERIA_FRANKFURT_PARLIAMENT_CURRENT_VOTE_EXPLANATION_ROUND
+	}
+	text = {
+		trigger = {
+			has_global_variable = frankfurt_parliament_current_vote
 			global_var:frankfurt_parliament_current_vote = 1
 		}
 		localization_key = IMPERIA_FRANKFURT_PARLIAMENT_CURRENT_VOTE_GOVERNANCE_PRINCIPLE
@@ -1174,6 +1181,20 @@ imperia_frankfurt_parliament_current_vote = {
 	}
 }
 
+imperia_frankfurt_parliament_explanation = {
+	type = country
+	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 0
+		}
+		localization_key = FRANKFURT_PARLIAMENT_EXPLANATION
+	}
+	text = {
+		fallback = yes
+		localization_key = EMPTY
+	}
+}
+
 imperia_frankfurt_governance_result = {
 	type = country
 	text = {
@@ -1189,6 +1210,12 @@ imperia_frankfurt_governance_result = {
 			has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
 		}
 		localization_key = FRANKFURT_PARLIAMENT_MONARCHY_WON
+	}
+	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 1			# The vote on governance has to be over
+		}
+		localization_key = FRANKFURT_PARLIAMENT_GOVERNANCE_EXPLANATION
 	}
 	text = {
 		fallback = yes
@@ -1220,6 +1247,20 @@ imperia_frankfurt_power_distribution_result = {
 		localization_key = FRANKFURT_PARLIAMENT_UNIVERSAL_SUFFRAGE_WON
 	}
 	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 2
+			has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+		}
+		localization_key = FRANKFURT_PARLIAMENT_REPUBLICAN_SUFFRAGE_EXPLANATION
+	}
+	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 2
+			has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+		}
+		localization_key = FRANKFURT_PARLIAMENT_MONARCHIC_SUFFRAGE_EXPLANATION
+	}
+	text = {
 		fallback = yes
 		localization_key = EMPTY
 	}
@@ -1240,6 +1281,12 @@ imperia_frankfurt_republican_form_result = {
 			has_global_variable = frankfurt_parliament_has_majority_for_parliamentary_republic_var
 		}
 		localization_key = FRANKFURT_PARLIAMENT_PARLIAMENTARY_WON
+	}
+	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 3
+		}
+		localization_key = FRANKFURT_PARLIAMENT_REPUBLICAN_FORM_EXPLANATION
 	}
 	text = {
 		fallback = yes
@@ -1269,6 +1316,12 @@ imperia_frankfurt_german_form_result = {
 			has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
 		}
 		localization_key = FRANKFURT_PARLIAMENT_GREATER_AUSTRIA_WON
+	}
+	text = {
+		trigger = {
+			global_var:frankfurt_parliament_current_vote = 4
+		}
+		localization_key = FRANKFURT_PARLIAMENT_GERMAN_FORM_EXPLANATION
 	}
 	text = {
 		fallback = yes

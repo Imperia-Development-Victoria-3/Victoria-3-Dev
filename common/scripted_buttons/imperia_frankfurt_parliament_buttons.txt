@@ -1,4 +1,37 @@
-﻿je_frankfurt_parliament_vote_republic_button = {
+﻿je_frankfurt_parliament_join_parliament_button = {
+	name = "je_frankfurt_parliament_join_parliament_button"
+	desc = "je_frankfurt_parliament_join_parliament_button_desc"
+	visible = {
+		has_global_variable = frankfurt_parliament_current_vote
+		global_var:frankfurt_parliament_current_vote = 0
+	}
+	ai_chance = {
+		base = 100
+	}
+	possible = {
+		custom_tooltip = {
+			text = frankfurt_parliament_voting_governance_principle
+			global_var:frankfurt_parliament_current_vote = 0
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_joined_parliament
+			}
+		}
+	}
+	selected = {
+		has_variable = frankfurt_parliament_joined_parliament
+	}
+	effect = {
+		custom_tooltip = {
+			text = frankfurt_joins_the_parliament_tt
+			set_variable = frankfurt_parliament_joined_parliament
+			remove_variable ?= left_frankfurt_parliament
+		}
+	}
+}
+
+je_frankfurt_parliament_vote_republic_button = {
 	name = "je_frankfurt_parliament_vote_republic_button"
 	desc = "je_frankfurt_parliament_vote_republic_button_desc"
 	visible = {
@@ -1007,12 +1040,21 @@ je_frankfurt_parliament_leave_button = {
 				owner != root
 			}
 		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = left_frankfurt_parliament
+			}
+		}
+	}
+	selected = {
+		has_variable = left_frankfurt_parliament
 	}
 	effect = {
 		# The leaving variable should fail the JE automatically
 		# Sets a variable called 'left_frankfurt_parliament' to 'true' (the default when using set_variable this way)
 		custom_tooltip = frankfurt_parliament_leaves_tt
 		set_variable = left_frankfurt_parliament
+		remove_variable ?= frankfurt_parliament_joined_parliament
 	}
 }
 
