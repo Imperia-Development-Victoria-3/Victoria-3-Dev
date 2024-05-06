@@ -36,7 +36,7 @@
 				}
 			}
 			has_technology_researched = nationalism
-			percent >= 0.75
+			percent >= 0.65
 		}
 	}
 	immediate = {
@@ -79,6 +79,16 @@
 	}
 	on_weekly_pulse = {
 		effect = {
+			# If you didnt join the parliament (for whatever reason), and the proper voting is happening, kick you out
+			if = {
+				limit = {
+					NOT = {
+						has_variable = frankfurt_parliament_joined_parliament
+					}
+					global_var:frankfurt_parliament_current_vote >= 1
+				}
+				set_variable = left_frankfurt_parliament
+			}
 			if = {
 				limit = {
 					this = p:x11C0A0.owner
@@ -494,7 +504,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			is_decaying = yes
 		}
 		if = {
-			limit = { 
+			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
 				has_global_variable = frankfurt_parliament_has_majority_for_universal_var
 			}
