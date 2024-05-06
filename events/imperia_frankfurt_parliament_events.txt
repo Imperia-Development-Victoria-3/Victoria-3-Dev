@@ -396,7 +396,7 @@ frankfurt_parliament.2 = {
 			activate_law = law_type:law_expansionism
 		}
 		else_if = {
-			limit = { 
+			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
 			}
 			change_infamy = 60
@@ -432,27 +432,27 @@ frankfurt_parliament.2 = {
 				}
 			}
 		}
-			# If the Gutter King is a Great power (Probably Austria or Prussia), the other great germans will oppose
-			if = {
-				limit = { 
+		# If the Gutter King is a Great power (Probably Austria or Prussia), the other great germans will oppose
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			every_country = {
+				limit = {
+					this != root
 					country_rank >= rank_value:great_power
-				}
-				every_country = {
-					limit = {
-						this != root
-						country_rank >= rank_value:great_power
-						capital = {
-							frankfurt_parliament_state_is_gutter_german = no
-						}
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-						}
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = no
 					}
-					trigger_event = {
-						id = frankfurt_parliament.5
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
 					}
 				}
+				trigger_event = {
+					id = frankfurt_parliament.5
+				}
+			}
 		}
 		custom_tooltip = would_happen_upon_consolidation_tt
 		if = {
@@ -653,7 +653,6 @@ frankfurt_parliament.3 = {
 	}
 	option = {
 		# accept
-		default_option = yes
 		name = frankfurt_parliament.3.a
 		trigger = {
 			# Only those who stayed can join at this point
@@ -726,6 +725,38 @@ frankfurt_parliament.3 = {
 					}
 				}
 				add = -100
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				is_player = yes
+			}
+			set_variable = frankfurt_considered_bending_the_knee
+		}
+		if = {
+			limit = {
+				any_country = {
+					is_player = yes
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = yes
+					}
+					NOT = {
+						has_variable = frankfurt_considered_bending_the_knee
+					}
+					count = 0
+				}
+			}
+			scope:gutter_king_scope = {
+				trigger_event = {
+					# The _initialised variable is set in this event; allows for the possible failure
+					# Also sets the _value variable to 50, so its effectively in the middle from the start
+					# Well, 1 day after the last player clicks an option. Janky, but couldnt see other options for the implementation I wanted
+					# - Danarca
+					id = frankfurt_parliament.7
+					days = 1
+				}
 			}
 		}
 	}
@@ -812,9 +843,9 @@ frankfurt_parliament.7 = {
 	type = country_event
 	hidden = yes
 	immediate = {
-		change_variable = {
+		set_variable = {
 			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
-			add = 50
+			value = 50
 		}
 		set_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
 	}

@@ -61,6 +61,7 @@
 				name = frankfurt_parliament_current_vote
 				value = 0
 			}
+			set_global_variable = frankfurt_parliament_held
 			# This one is just initialised here, will be "populated" on completion
 			set_global_variable = {
 				name = frankfurt_eligible_german_leader_voters
@@ -374,14 +375,6 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
 			value = 0
 		}
-		trigger_event = {
-			# The _initialised variable is set in this event; allows for the possible failure
-			# Also sets the _value variable to 50, so its effectively in the middle from the start
-			# Well, 1 day after the JE fires anyways. Janky, but couldnt see other options for the implementation I wanted
-			# - Danarca
-			id = frankfurt_parliament.7
-			days = 1
-		}
 	}
 	on_weekly_pulse = {
 		effect = {
@@ -545,6 +538,8 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		custom_tooltip = {
 			text = frankfurt_germany_fully_stamped_out_tt
 			root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+			# This variable gets initialised once a great power has taken stock of the option to bend the knee
+			# Hopefully sets the progressbar for everyone?
 			has_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
 		}
 	}
