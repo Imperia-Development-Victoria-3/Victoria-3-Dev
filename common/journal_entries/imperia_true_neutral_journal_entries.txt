@@ -19,12 +19,15 @@
 			# Kinda dirty fix, since we cannot check for the existance of dynamic, non-specific countries
 			if = {
 				limit = {
-					local_var:true_neutral_applicant_signee_list_counter < imperia_true_neutral_remaining_signers_value
+					local_var:true_neutral_applicant_signee_list_counter != imperia_true_neutral_remaining_signers_value
 				}
-				# If theres more remaining signers (on paper) than there are actual existing countries on the list, reduce the list by 1
-				change_variable = {
+				# If theres a different amount of remaining signers (on paper) than there are actual existing countries on the list, re-set it
+				set_variable = {
 					name = true_neutral_required_signers_var
-					subtract = 1
+					value = {
+						value = local_var:true_neutral_applicant_signee_list_counter
+						add = var:true_neutral_current_signers_var
+					}
 				}
 			}
 		}
