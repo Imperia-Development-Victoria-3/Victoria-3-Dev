@@ -1341,9 +1341,10 @@ types budget
 							textbox = {
                                 raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_ten_million_counter'))]#!"
 								align = center
-								using = fontsize_large
+								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
+								align = center
 								parentanchor = center
 							}
 						}
@@ -1388,9 +1389,10 @@ types budget
 							textbox = {
                                 raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_million_counter'))]#!"
 								align = center
-								using = fontsize_large
+								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
+								align = center
 								parentanchor = center
 							}
 						}
@@ -1415,14 +1417,13 @@ types budget
 						spacing = 30
 						direction = vertical
 						using = default_list_position
-
+						margin_top = 120
 						textbox = {
-							margin_top = 200
 							resizeparent = yes
 							raw_text = "M"
 							align = center
 							using = header_font_fancy
-							using = fontsize_mega
+							fontsize = 60
 							parentanchor = center
 						}
 						
@@ -1452,9 +1453,10 @@ types budget
 							textbox = {
                                 raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_hundred_k_counter'))]#!"
 								align = center
-								using = fontsize_large
+								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
+								align = center
 								parentanchor = center
 							}
 						}
@@ -1499,9 +1501,10 @@ types budget
 							textbox = {
                                 raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_ten_k_counter'))]#!"
 								align = center
-								using = fontsize_large
+								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
+								align = center
 								parentanchor = center
 							}
 						}
@@ -1546,9 +1549,10 @@ types budget
 							textbox = {
                                 raw_text = "#v [FixedPointToFloat(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.ScriptValue('imperia_money_transfer_one_k_counter'))]#!"
 								align = center
-								using = fontsize_large
+								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
+								align = center
 								parentanchor = center
 							}
 						}
@@ -1573,13 +1577,13 @@ types budget
 						spacing = 30
 						direction = vertical
 						using = default_list_position
+						margin_top = 120
 						textbox = {
-							margin_top = 200
 							resizeparent = yes
 							raw_text = "K"
 							align = center
 							using = header_font_fancy
-							using = fontsize_mega
+							fontsize = 60
 							parentanchor = center
 						}
 						
@@ -1587,82 +1591,89 @@ types budget
 				}
                 divider_clean = {}
 				flowcontainer = {
-					direction = horizontal
-					parentanchor = top|hcenter
-					back_button_large = {
-						position = { 11 15 }
-						parentanchor = top|left
-						onclick = "[GetScriptedGui('clear_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
-						onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
-						input_action = "back"
-						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
-					}
-					textbox = {
-						raw_text = "#b Select Strategic Region of Recipient#!"
-						using = fontsize_large
-						autoresize = yes
-						align = right
-						parentanchor = top|hcenter
-						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
-					}
-					textbox = {
-						raw_text = "#b Select Recipient#!"
-						using = fontsize_large
-						autoresize = yes
-						align = center
-						parentanchor = top|hcenter
-						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
-					}
-				}
-				money_transfer_send_money_confirmation = {}
-				# Strategic Region listing
-				flowcontainer = {
+					direction = vertical
 					align = center
 					parentanchor = hcenter
-					visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
-					dynamicgridbox = {
-						datamodel = "[GetGlobalList('strategic_region_list')]"
-						datacontext = "[Scope.AccessStrategicRegion]"
-						datamodel_wrap = 2
-						flipdirection = yes
-						item = {
-							button = {
-								using = default_button
-								size = { 210 70 }
-								onclick = "[GetScriptedGui('set_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
-								enabled = "[GetScriptedGui('any_valid_money_transfer_country_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
-								textbox = {
-									autoresize = yes
-									text = "[Scope.AccessStrategicRegion.GetName]"
-									align = center|nobaseline
-									using = fontsize_large
-									parentanchor = center
+					spacing = 20
+					flowcontainer = {
+						direction = horizontal
+						align = center
+						parentanchor = top|hcenter
+						textbox = {
+							raw_text = "#b Select Strategic Region of Recipient#!"
+							using = fontsize_large
+							autoresize = yes
+							align = center
+							parentanchor = left
+							visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
+						}
+						back_button_large = {
+							position = { 11 15 }
+							parentanchor = top|left
+							onclick = "[GetScriptedGui('clear_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+							onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
+							input_action = "back"
+							visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
+						}
+						textbox = {
+							raw_text = "#b Select Recipient#!"
+							using = fontsize_large
+							autoresize = yes
+							align = center
+							parentanchor = top|hcenter
+							visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
+						}
+					}
+					money_transfer_send_money_confirmation = {}
+					# Strategic Region listing
+					flowcontainer = {
+						align = center
+						parentanchor = hcenter
+						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
+						dynamicgridbox = {
+							datamodel = "[GetGlobalList('strategic_region_list')]"
+							datacontext = "[Scope.AccessStrategicRegion]"
+							datamodel_wrap = 2
+							flipdirection = yes
+							item = {
+								button = {
+									using = default_button
+									size = { 210 70 }
+									onclick = "[GetScriptedGui('set_strategic_region_transfer_money_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
+									enabled = "[GetScriptedGui('any_valid_money_transfer_country_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
+									textbox = {
+										autoresize = yes
+										text = "[Scope.AccessStrategicRegion.GetName]"
+										align = center|nobaseline
+										using = fontsize_large
+										parentanchor = center
+									}
 								}
 							}
 						}
 					}
-				}
-				# Countries in selected strategic region listing
-				flowcontainer = {
-					align = center
-					parentanchor = hcenter
-					visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
-					dynamicgridbox = {
-						datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')]"
-						datacontext = "[Scope.AccessCountry]"
-						datamodel_wrap = 2
-						flipdirection = yes
-						item = {
-							button = {
-								using = default_button
-								size = { 210 70 }
-								onclick = "[GetScriptedGui('set_money_transfer_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
-								onclick = "[GetVariableSystem.Toggle('money_transfer_send_money_confirmation')]"
-								textbox = {
-									autoresize = yes
-									raw_text = "[Scope.AccessCountry.GetName]"
-									align = center|nobaseline
-									parentanchor = center
+					# Countries in selected strategic region listing
+					flowcontainer = {
+						align = center
+						parentanchor = hcenter
+						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
+						dynamicgridbox = {
+							datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')]"
+							datacontext = "[Scope.AccessCountry]"
+							datamodel_wrap = 2
+							flipdirection = yes
+							item = {
+								button = {
+									using = default_button
+									size = { 210 70 }
+									onclick = "[GetScriptedGui('set_money_transfer_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
+									onclick = "[GetVariableSystem.Toggle('money_transfer_send_money_confirmation')]"
+									textbox = {
+										autoresize = yes
+										raw_text = "[Scope.AccessCountry.GetName]"
+										align = center|nobaseline
+										parentanchor = center
+									}
 								}
 							}
 						}
