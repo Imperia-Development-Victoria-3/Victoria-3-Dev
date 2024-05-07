@@ -3,27 +3,26 @@
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 	group = je_group_crises
 	possible = {
-		any_country = {
-			this != root
-			infamy >= infamy_threshold:pariah
+		# Pop the journal entry if theres a current pariah with strategic adjacency to you, and you're not the pariah, of course
+		hidden_trigger = {
+			exists = global_var:current_pariah
+			global_var:current_pariah != this
+		}
+		global_var:current_pariah = {
 			has_strategic_adjacency = root
 		}
 	}
 	is_shown_when_inactive = {
-		any_country = {
-			this != root
-			infamy >= infamy_threshold:notorious
+		hidden_trigger = {
+			exists = global_var:current_pariah
+			global_var:current_pariah != this
 		}
 	}
 	immediate = {
 		add_modifier = {
 			name = modifier_pariah_neighbour
 		}
-		random_country = {
-			limit = {
-				this != root
-				infamy >= infamy_threshold:pariah
-			}
+		global_var:current_pariah = {
 			save_scope_as = target
 		}
 	}
@@ -78,6 +77,17 @@ je_is_pariah = {
 		infamy >= infamy_threshold:notorious
 	}
 	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					exists = global_var:current_pariah
+				}
+			}
+			set_global_variable = {
+				name = current_pariah
+				value = this
+			}
+		}
 	}
 	complete = {
 		infamy < infamy_threshold:pariah
@@ -86,8 +96,50 @@ je_is_pariah = {
 		remove_modifier ?= modifier_international_pariah
 		remove_modifier ?= modifier_pariah_economic_sanctions
 		remove_modifier ?= modifier_pariah_international_isolation
+		# If theres still another pariah on completion, set the next pariah to be the highest infamy pariah available..
+		if = {
+			limit = {
+				any_country = {
+					has_journal_entry = je_is_pariah
+					this != root
+				}
+			}
+			ordered_country = {
+				limit = {
+					has_journal_entry = je_is_pariah
+					this != root
+				}
+				order_by = infamy
+				position = 0
+				set_global_variable = {
+					name = current_pariah
+					value = this
+				}
+			}
+		}
+		# Else, just clean the variable
+		else_if = {
+			limit = {
+				global_var:current_pariah ?= this
+			}
+			remove_global_variable ?= current_pariah
+		}
 	}
 	on_monthly_pulse = {
+		effect = {
+			# If the current pariah gets snapped to oblivion, set the owner to be the current pariah
+			if = {
+				limit = {
+					NOT = {
+						exists = global_var:current_pariah
+					}
+				}
+				set_global_variable = {
+					name = current_pariah
+					value = this
+				}
+			}
+		}
 		events = {
 			infamy_rebalance.10			#Economic sanctions
 			infamy_rebalance.11			#Price of infamy
