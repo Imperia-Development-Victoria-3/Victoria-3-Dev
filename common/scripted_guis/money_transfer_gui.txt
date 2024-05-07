@@ -1,0 +1,179 @@
+﻿change_money_transfer_amount = {
+	scope = country
+	saved_scopes = {
+		up
+		amount
+	}
+	effect = {
+		if = {
+			limit = {
+				scope:up = 1
+			}
+			change_variable = {
+				name = imperia_money_transfer_amount
+				add = scope:amount
+			}
+		}
+		else = {
+			change_variable = {
+				name = imperia_money_transfer_amount
+				subtract = scope:amount
+			}
+		}
+	}
+}
+
+can_press_money_transfer_down_button = {
+	scope = country
+	saved_scopes = {
+		up
+		amount
+	}
+	is_valid = {
+		trigger_if = {
+			limit = {
+				scope:amount = 10000000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 10000000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 1000000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 1000000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 100000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 100000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 10000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 10000
+		}
+		trigger_if = {
+			limit = {
+				scope:amount = 1000
+				scope:up = 0
+			}
+			var:imperia_money_transfer_amount >= 1000
+		}
+	}
+}
+
+can_send_money_to_recipient = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	is_valid = {
+		can_send_money_to_recipient_trigger = yes
+	}
+}
+
+set_strategic_region_transfer_money_target = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	effect = {
+		clear_variable_list ?= countries_in_selected_strategic_region_money_transfer
+		scope:strategic_region = {
+			every_scope_state = {
+				limit = {
+					NOT = {
+						owner = root
+					}
+					NOT = {
+						owner = {
+							is_country_type = decentralized
+						}
+					}
+				}
+				owner = {
+					root = {
+						add_to_variable_list = {
+							name = countries_in_selected_strategic_region_money_transfer
+							target = prev
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+any_valid_money_transfer_country_in_strategic_region = {
+	scope = country
+	saved_scopes = {
+		strategic_region
+	}
+	is_valid = {
+		scope:strategic_region = {
+			any_scope_state = {
+				count > 0
+				NOT = {
+					owner = root
+				}
+				NOT = {
+					owner = {
+						is_country_type = decentralized
+					}
+				}
+			}
+		}
+	}
+}
+
+clear_strategic_region_transfer_money_target = {
+	scope = country
+	effect = {
+		clear_variable_list ?= countries_in_selected_strategic_region_money_transfer
+	}
+}
+
+set_money_transfer_target_country = {
+	scope = country
+	saved_scopes = {
+		target
+	}
+	effect = {
+		set_variable = {
+			name = money_transfer_target_country
+			value = scope:target
+		}
+	}
+}
+
+send_money_to_target = {
+	scope = country
+	effect = {
+		var:money_transfer_target_country = {
+			save_scope_as = target
+		}
+		add_treasury = {
+			value = var:imperia_money_transfer_amount
+			multiply = -1
+		}
+		save_scope_as = money_sender
+		save_scope_value_as = {
+			name = money_amount
+			value = var:imperia_money_transfer_amount
+		}
+		post_notification = imperia_sent_money
+		var:money_transfer_target_country = {
+			add_treasury = root.var:imperia_money_transfer_amount
+			post_notification = imperia_received_money
+		}
+	}
+	is_valid = {
+		can_send_money_to_recipient_trigger = yes
+	}
+}
