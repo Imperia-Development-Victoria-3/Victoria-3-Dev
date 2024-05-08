@@ -20,22 +20,7 @@ types state_selectors
 				using = default_list_position
 				spacing = 10
 				direction = vertical
-				# textbox = {
-				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
-				# 	text = "strategic region"
-				# }
-				# textbox = {
-				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','states')]"
-				# 	text = "states"
-				# }
-				# textbox = {
-				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','countries')]"
-				# 	text = "countries"
-				# }
-				# textbox = {
-				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','liberation')]"
-				# 	text = "liberation"
-				# }
+				# Strategic region selection (for congress)
 				scrollarea = {
 					name = "state_selector_strategic_region_output"
 					visible = "[GetVariableSystem.HasValue('state_selector_mode','strategic_region')]"
@@ -60,8 +45,6 @@ types state_selectors
 									onclick = "[GetVariableSystem.SetIf('state_selector_mode','states',GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)2')).End))]"
 									onclick = "[GetVariableSystem.SetIf('state_selector_mode','countries',GetScriptedGui('has_proposal_type').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('proposal_type', MakeScopeValue('(CFixedPoint)4')).End))]"
 									enabled = "[GetScriptedGui('any_valid_state_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
-									#onclick = "[StrategicRegion.]"
-									# Needs to set the strategic region in a scope associated with the player PSEUDO CODE: Player.variablename = StrategicRegion.Makescope
 									textbox = {
 										autoresize = yes
 										text = "[Scope.AccessStrategicRegion.GetName]"
@@ -121,16 +104,6 @@ types state_selectors
 											}
 										}
 									}
-			
-								#	textbox = {
-								#		visible = "[InDebugMode]"
-								#		autoresize = yes
-								#		raw_text = "DEBUG ID: [Location.GetID]"
-								#		parentanchor = right|vcenter
-								#		widgetanchor = right|vcenter
-								#		align = right|nobaseline
-								#		position = { -10 0 }
-								#	}
 								}
 							}
 						}
@@ -181,30 +154,6 @@ types state_selectors
 												onclick = "[GetScriptedGui('set_congress_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetState.GetOwner.MakeScope).End)]"
 												onclick = "[GetScriptedGui('set_congress_target_state_basket').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
 			
-												# onclick = "[GetVariableSystem.Toggle('start_congress_confirmation_states')]"
-			
-												# onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
-												
-												# flowcontainer = {
-												# 	parentanchor = vcenter
-												# 	direction = horizontal
-												# 	margin_left = 15
-												# 	tiny_flag = {
-												# 		using = tooltip_above
-												# 		datacontext = "[Scope.AccessState.AccessOwner]"
-												# 		align = left|vcenter
-												# 		blockoverride "flag_tooltip" {
-												# 			tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-												# 		}
-												# 	}
-												# 	textbox = {
-												# 		autoresize = yes
-												# 		raw_text = "[Scope.AccessState.GetName]"
-												# 		align = right|vcenter
-												# 		using = fontsize_large
-												# 	}
-												# }
-												
 												textbox = {
 													autoresize = yes
 													raw_text = "Select"
@@ -280,10 +229,6 @@ types state_selectors
 
 												onclick = "[GetScriptedGui('unset_congress_target_state_basket').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
 			
-												# onclick = "[GetVariableSystem.Toggle('start_congress_confirmation_states')]"
-			
-												# onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
-												
 												textbox = {
 													autoresize = yes
 													raw_text = "Unselect"
@@ -323,59 +268,6 @@ types state_selectors
 						}
 					}
 				}
-				# Liberation
-				# scrollarea = {
-				# 	name = "state_selector_liberation_output"
-
-				# 	visible = "[GetVariableSystem.HasValue('state_selector_mode','liberation')]"					
-				# 	size = { 640 420 }
-				# 	scrollbarpolicy_horizontal = always_off
-				# 	scrollwidget = {
-				# 		fixedgridbox = {
-				# 			datamodel = "[AccessPlayer.AccessReleasableCountries]"
-				# 			datacontext = "[CountryCreation.GetDefinition]"
-				# 			# .MakeScope.GetList('releaseables_in_selected_strategic_region')
-				# 			addcolumn = 210
-				# 			addrow = 70
-
-				# 			datamodel_wrap = 3
-                #    			flipdirection = yes
-									
-				# 			item = {
-				# 				releasable_country_button = {}
-				# 				# button = {
-				# 				# 	using = default_button
-				# 				# 	size = { 210 70 }
-				# 				# 	#onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetState.GetOwner.MakeScope).AddScope('target_state', Scope.GetState.MakeScope).End)]"
-									
-				# 				# 	#nclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
-
-				# 				# 	#onclick = "[GetVariableSystem.Toggle('imperia_vienna_congress_open')]"
-				# 				# 	#onclick = "[GetVariableSystem.Set('imperia_vienna_congress_tab_selected','current_conference')]"
-
-				# 				# 	flowcontainer = {
-				# 				# 		parentanchor = vcenter
-				# 				# 		direction = horizontal
-				# 				# 		margin_left = 15
-				# 				# 		textbox = {
-				# 				# 			autoresize = yes
-				# 				# 			raw_text = "[Scope.AccessCountry.GetName]"
-				# 				# 			align = left|nobaseline
-				# 				# 			using = fontsize_large
-				# 				# 			using = tooltip_above
-				# 				# 			blockoverride "flag_tooltip" {
-				# 				# 				tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-				# 				# 			}
-				# 				# 		}
-				# 				# 	}
-				# 				# }
-				# 			}
-				# 		}
-				# 	}
-				# 	scrollbar_vertical = {
-				# 		using = vertical_scrollbar
-				# 	}
-				# }
 				# Start congress button
 				button = {
 					using = default_button
@@ -403,10 +295,7 @@ types state_selectors
 	}
 	type state_selector_container = default_popup_static {
 		visible = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
-		# movable = no
-		# resizable = no
 		parentanchor = hcenter
-		# position = { 0 -285 }
 		maximumsize = { 710 570 }
 		layer = top
 		state_selector = {
