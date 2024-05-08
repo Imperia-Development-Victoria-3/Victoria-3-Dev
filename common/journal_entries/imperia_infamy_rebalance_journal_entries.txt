@@ -77,16 +77,9 @@ je_is_pariah = {
 		infamy >= infamy_threshold:notorious
 	}
 	immediate = {
-		if = {
-			limit = {
-				NOT = {
-					exists = global_var:current_pariah
-				}
-			}
-			set_global_variable = {
-				name = current_pariah
-				value = this
-			}
+		set_global_variable = {
+			name = current_pariah
+			value = this
 		}
 	}
 	complete = {
@@ -96,29 +89,7 @@ je_is_pariah = {
 		remove_modifier ?= modifier_international_pariah
 		remove_modifier ?= modifier_pariah_economic_sanctions
 		remove_modifier ?= modifier_pariah_international_isolation
-		# If theres still another pariah on completion, set the next pariah to be the highest infamy pariah available..
 		if = {
-			limit = {
-				any_country = {
-					has_journal_entry = je_is_pariah
-					this != root
-				}
-			}
-			ordered_country = {
-				limit = {
-					has_journal_entry = je_is_pariah
-					this != root
-				}
-				order_by = infamy
-				position = 0
-				set_global_variable = {
-					name = current_pariah
-					value = this
-				}
-			}
-		}
-		# Else, just clean the variable
-		else_if = {
 			limit = {
 				global_var:current_pariah ?= this
 			}
@@ -127,7 +98,7 @@ je_is_pariah = {
 	}
 	on_monthly_pulse = {
 		effect = {
-			# If the current pariah gets snapped to oblivion, set the owner to be the current pariah
+			# If the current pariah gets snapped to oblivion, set the JE owner to be the current pariah
 			if = {
 				limit = {
 					NOT = {
