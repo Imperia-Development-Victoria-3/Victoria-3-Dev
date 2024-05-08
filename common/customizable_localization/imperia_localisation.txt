@@ -1175,6 +1175,37 @@ imperia_frankfurt_parliament_current_vote = {
 		}
 		localization_key = IMPERIA_FRANKFURT_PARLIAMENT_LAST_CHANCE_TO_LEAVE
 	}
+}
+
+imperia_cant_send_money_explanation = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			# Needs a duplicate here from the 'can_send_money_to_recipient_trigger' scripted trigger
+			# Wont work with the scripted trigger for some reason
+			var:imperia_money_transfer_amount >= 1000
+			var:imperia_money_transfer_amount <= imperia_current_transferable_money_value
+			has_variable = money_transfer_target_country
+			var:money_transfer_target_country.imperia_current_max_of_recievable_money_value >= var:imperia_money_transfer_amount
+		}
+		localization_key = CAN_SEND_MONEY_EXPLANATION_DESC
+	}
+	text = {
+		fallback = yes
+		localization_key = CANT_SEND_MONEY_EXPLANATION_DESC
+	}
+}
+
+imperia_cant_send_money_too_little_cash_on_hand = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:imperia_money_transfer_amount >= imperia_current_transferable_money_value
+		}
+		localization_key = CANT_SEND_MONEY_TOO_LITTLE_CASH_ON_HAND
+	}
 	text = {
 		fallback = yes
 		localization_key = EMPTY
@@ -1188,6 +1219,17 @@ imperia_frankfurt_parliament_explanation = {
 			global_var:frankfurt_parliament_current_vote = 0
 		}
 		localization_key = FRANKFURT_PARLIAMENT_EXPLANATION
+	}
+}
+
+imperia_cant_send_money_too_little_space_in_target = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:money_transfer_target_country.imperia_current_max_of_recievable_money_value <= var:imperia_money_transfer_amount
+		}
+		localization_key = CANT_SEND_MONEY_TOO_LITTLE_SPACE_IN_TARGET
 	}
 	text = {
 		fallback = yes
@@ -1216,6 +1258,17 @@ imperia_frankfurt_governance_result = {
 			global_var:frankfurt_parliament_current_vote = 1			# The vote on governance has to be over
 		}
 		localization_key = FRANKFURT_PARLIAMENT_GOVERNANCE_EXPLANATION
+	}
+}
+
+imperia_cant_send_money_must_send_money = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			var:imperia_money_transfer_amount < 1000
+		}
+		localization_key = CANT_SEND_MONEY_MUST_SEND_MONEY
 	}
 	text = {
 		fallback = yes
@@ -1358,7 +1411,6 @@ imperia_frankfurt_revolutionary_focus_result = {
 }
 
 imperia_frankfurt_gutter_king_consolidation = {
-	# Should be used in the Gutter Kings scope
 	type = country
 	text = {
 		trigger = {
