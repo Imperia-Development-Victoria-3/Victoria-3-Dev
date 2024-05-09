@@ -1,0 +1,1073 @@
+﻿imperia_frankfurt_parliament_current_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_journal_entry = je_imperia_frankfurt_parliament
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_republic_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_republic
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_monarchy_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_monarchy
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_oligarchy_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_oligarchy
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_wealth_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_wealth_suffrage
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_universal_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_universal_suffrage
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_presidential_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_presidential
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_parliamentary_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_parliamentary
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_lesser_germany_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_lesser_germany
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_greater_germany_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_greater_germany
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_greater_austria_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_greater_austria
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_internal_focus_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voting_internal_focus
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_external_focus_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voting_external_focus
+		}
+		add = 1
+	}
+}
+
+gutter_german_claimed_states_amount = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				frankfurt_parliament_state_is_gutter_german = yes
+			}
+		}
+		add = 1
+	}
+}
+
+gutter_king_ratio_over_gutter_german_claims = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				frankfurt_parliament_state_is_gutter_german = yes
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						overlord = {
+							has_variable = accepted_gutter_crown
+						}
+					}
+				}
+			}
+		}
+		add = 1
+	}
+	divide = gutter_german_claimed_states_amount
+}
+
+imperia_frankfurt_left_influence_value = {
+	# scope : IG / character ONLY
+	value = 0
+	### Governance
+	# Check Monarchy sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_approve
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = approve
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = disapprove
+			}
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_disapprove
+			}
+		}
+		add = 50
+	}
+	else = {
+		# Counts for neutral and no opinion both
+		add = 10
+	}
+	# Check Presidential sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_approve
+			}
+		}
+		add = 40
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = approve
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = disapprove
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_disapprove
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else = {
+		add = 10
+	}
+	# Check Parliamentary sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_approve
+			}
+		}
+		add = 50
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = approve
+			}
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = disapprove
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_disapprove
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else = {
+		add = 10
+	}
+	### Suffrage
+	# oligarchy sympathy
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_approve
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = approve
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = disapprove
+			}
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_disapprove
+			}
+		}
+		add = 60
+	}
+	else = {
+		add = 10
+	}
+	# Check wealth voting sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_approve
+			}
+		}
+		add = 50
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = approve
+			}
+		}
+		add = 30
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = disapprove
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_disapprove
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else = {
+		add = 25
+	}
+	# Check universal sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_approve
+			}
+		}
+		add = 100
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = approve
+			}
+		}
+		add = 65
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = disapprove
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_disapprove
+			}
+		}
+		# ^ Remove this section ^
+	}
+	else = {
+		add = 30
+	}
+}
+
+imperia_frankfurt_parliament_left_faction_interest_group_influence = {
+	# scope : interest group in a (Gutter German) country
+	value = imperia_frankfurt_left_influence_value
+	multiply = {
+		value = ig_clout
+		add = 1
+	}
+	# If the IG is in the government
+	if = {
+		limit = {
+			is_in_government = yes
+		}
+		multiply = 1.5
+	}
+	# If the IG belongs to the rulers IG
+	if = {
+		limit = {
+			root.ruler.interest_group = this
+		}
+		multiply = 1.5
+	}
+}
+
+imperia_frankfurt_parliament_left_faction_leader_influence = {
+	# scope : leader of an interest group in Gutter Germany
+	value = interest_group.imperia_frankfurt_left_influence_value
+	# If the character is the ruler of the country
+	if = {
+		limit = {
+			root.ruler = this
+		}
+		multiply = 3
+	}
+	if = {
+		limit = {
+			# Characters cannot have more than 1 ideology, so an OR is used
+			OR = {
+				has_ideology = ideology:ideology_atheist
+				has_ideology = ideology:ideology_republican_leader
+				has_ideology = ideology:ideology_radical
+				has_ideology = ideology:ideology_feminist
+				has_ideology = ideology:ideology_social_democrat
+				has_ideology = ideology:ideology_liberal_leader
+			}
+		}
+		multiply = 3
+	}
+	if = {
+		limit = {
+			OR = {
+				has_ideology = ideology:ideology_royalist
+				has_ideology = ideology:ideology_authoritarian
+			}
+		}
+		divide = 3
+	}
+}
+
+imperia_frankfurt_center_influence_value = {
+	# scope : IG / character ONLY
+	value = 0
+	### Governance
+	# Check Monarchy sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_approve
+			}
+		}
+		add = 60
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = approve
+			}
+		}
+		add = 60
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 65
+	}
+	# Check Presidential sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_approve
+			}
+		}
+		add = 30
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = approve
+			}
+		}
+		add = 40
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 65
+	}
+	# Check Parliamentary sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_approve
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = approve
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 65
+	}
+	### Suffrage
+	# oligarchy sympathy
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_approve
+			}
+		}
+		add = 50
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = approve
+			}
+		}
+		add = 75
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 100
+	}
+	# Check wealth voting sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_approve
+			}
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = approve
+			}
+		}
+		add = 50
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 100
+	}
+	# Check universal sympathies
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_approve
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = approve
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_disapprove
+			}
+		}
+		add = 10
+	}
+	else = {
+		add = 100
+	}
+}
+
+imperia_frankfurt_parliament_center_faction_interest_group_influence = {
+	# scope : interest group in a (Gutter German) country
+	value = imperia_frankfurt_center_influence_value
+	multiply = {
+		value = ig_clout
+		add = 1
+	}
+	if = {
+		limit = {
+			is_in_government = yes
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			root.ruler.interest_group = this
+		}
+		multiply = 1.5
+	}
+}
+
+imperia_frankfurt_parliament_center_faction_leader_influence = {
+	# scope : leader of an interest group in Gutter Germany
+	value = interest_group.imperia_frankfurt_center_influence_value
+	multiply = {
+		value = popularity
+		divide = 100
+		add = 1
+	}
+	# If the character is the ruler of the country
+	if = {
+		limit = {
+			root.ruler = this
+		}
+		multiply = 3
+	}
+	if = {
+		limit = {
+			# Characters cannot have more than 1 ideology, so an OR is used
+			OR = {
+				has_ideology = ideology:ideology_moderate
+				has_ideology = ideology:ideology_reformer
+				has_ideology = ideology:ideology_land_reformer
+				has_ideology = ideology:ideology_humanitarian_royalist
+			}
+		}
+		multiply = 3
+	}
+}
+
+imperia_frankfurt_right_influence_value = {
+	# scope : IG / character ONLY
+	value = 0
+	### Governance
+	# Check Monarchy sympathies in the IG
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_approve
+			}
+		}
+		add = 50
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = approve
+			}
+		}
+		add = 40
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = disapprove
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_monarchy
+				value = strongly_disapprove
+			}
+		}
+		# ^ delete above ^
+	}
+	else = {
+		add = 30
+	}
+	# Check Presidential sympathies in the IG
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_approve
+			}
+		}
+		add = 15
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = approve
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = disapprove
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_presidential_republic
+				value = strongly_disapprove
+			}
+		}
+		# ^ delete above ^
+	}
+	else = {
+		add = 10
+	}
+	# Check Parliamentary sympathies in the IG
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_approve
+			}
+		}
+		# ^ delete above ^
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = approve
+			}
+		}
+		add = 10
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = disapprove
+			}
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_parliamentary_republic
+				value = strongly_disapprove
+			}
+		}
+		add = 30
+	}
+	else = {
+		add = 15
+	}
+	### Suffrage
+	# oligarchy sympathy
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_approve
+			}
+		}
+		add = 80
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = approve
+			}
+		}
+		add = 45
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = disapprove
+			}
+		}
+		add = 20
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_oligarchy
+				value = strongly_disapprove
+			}
+		}
+		add = 5
+	}
+	else = {
+		add = 35
+	}
+	# Check wealth voting sympathies in the IG
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_approve
+			}
+		}
+		add = 0
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = approve
+			}
+		}
+		add = 0
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = disapprove
+			}
+		}
+		add = 40
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_wealth_voting
+				value = strongly_disapprove
+			}
+		}
+		add = 65
+	}
+	else = {
+		add = 10
+	}
+	# Check universal sympathies in the IG
+	if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_approve
+			}
+		}
+		add = 0
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = approve
+			}
+		}
+		add = 5
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = disapprove
+			}
+		}
+		add = 40
+	}
+	else_if = {
+		limit = {
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value = strongly_disapprove
+			}
+		}
+		add = 65
+	}
+	else = {
+		add = 10
+	}
+}
+
+imperia_frankfurt_parliament_right_faction_interest_group_influence = {
+	# scope : interest group in a (Gutter German) country
+	value = imperia_frankfurt_right_influence_value
+	multiply = {
+		value = ig_clout
+		add = 1
+	}
+	if = {
+		limit = {
+			is_in_government = yes
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			root.ruler.interest_group = this
+		}
+		multiply = 1.5
+	}
+}
+
+imperia_frankfurt_parliament_right_faction_leader_influence = {
+	# scope : leader of an interest group in Gutter Germany
+	value = interest_group.imperia_frankfurt_right_influence_value
+	multiply = {
+		value = popularity
+		divide = 100
+		add = 1
+	}
+	if = {
+		limit = {
+			# Characters cannot have more than 1 ideology, so an OR is used
+			OR = {
+				has_ideology = ideology:ideology_traditionalist
+				has_ideology = ideology:ideology_jingoist_leader
+				has_ideology = ideology:ideology_royalist
+				has_ideology = ideology:ideology_theocrat
+				has_ideology = ideology:ideology_authoritarian
+			}
+		}
+		multiply = 3
+	}
+	if = {
+		limit = {
+			OR = {
+				has_ideology = ideology:ideology_republican_leader
+				has_ideology = ideology:ideology_radical
+				has_ideology = ideology:ideology_liberal_leader
+			}
+		}
+		divide = 3
+	}
+	# If the character is the ruler of the country
+	if = {
+		limit = {
+			root.ruler = this
+		}
+		multiply = 3
+	}
+}

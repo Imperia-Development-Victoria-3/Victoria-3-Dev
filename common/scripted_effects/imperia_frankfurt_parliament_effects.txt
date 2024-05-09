@@ -651,3 +651,54 @@ imperia_frankfurt_parliament_grant_external_focus_claims = {
 		add_claim = root
 	}
 }
+
+imperia_frankfurt_parliament_update_club_influence = {
+	# scope : country
+	# Left faction = Deutcher Hof; radical democrats
+	set_variable = {
+		name = frankfurt_parliament_left_faction_influence
+		value = 0
+	}
+	# Center faction = Casino; federal monarchist; should be the largest one
+	set_variable = {
+		name = frankfurt_parliament_center_faction_influence
+		value = 0
+	}
+	# Right faction = Steinernes Haus; absolute monarchy
+	set_variable = {
+		name = frankfurt_parliament_right_faction_influence
+		value = 0
+	}
+	every_interest_group = {
+		root = {
+			change_variable = {
+				name = frankfurt_parliament_left_faction_influence
+				add = prev.imperia_frankfurt_parliament_left_faction_interest_group_influence
+			}
+			change_variable = {
+				name = frankfurt_parliament_center_faction_influence
+				add = prev.imperia_frankfurt_parliament_center_faction_interest_group_influence
+			}
+			change_variable = {
+				name = frankfurt_parliament_right_faction_influence
+				add = prev.imperia_frankfurt_parliament_right_faction_interest_group_influence
+			}
+		}
+		leader = {
+			root = {
+				change_variable = {
+					name = frankfurt_parliament_left_faction_influence
+					add = prev.imperia_frankfurt_parliament_left_faction_leader_influence
+				}
+				change_variable = {
+					name = frankfurt_parliament_center_faction_influence
+					add = prev.imperia_frankfurt_parliament_center_faction_leader_influence
+				}
+				change_variable = {
+					name = frankfurt_parliament_right_faction_influence
+					add = prev.imperia_frankfurt_parliament_right_faction_leader_influence
+				}
+			}
+		}
+	}
+}
