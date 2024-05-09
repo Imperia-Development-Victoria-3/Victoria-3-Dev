@@ -16,7 +16,7 @@ tur_set_dead_man_variables = {
 		limit = {
 			game_date < 1836.2.1 #Why? Because ruler scope doesn't exist the first time this script is executed.
 		}
-		set_variable = { name = theocracy_progress value = 25 } #This is done because the theocracys have an advantage the first time the script is executed, but do not necessarily have that advantage if the JE is activated elsewhere.
+		set_variable = { name = theocracy_progress value = 25 } #This is done because the theocracy has an advantage the first time the script is executed, but do not necessarily have that advantage if the JE is activated elsewhere.
 	}
 	else = {
 		set_variable = { name = theocracy_progress value = 10 }
@@ -46,7 +46,14 @@ fra_weekly_pulse_republican_progress = { #Effects like these are run three times
 	#From Characters
 	every_scope_character = {
 		limit = {
-			has_ideology = ideology:ideology_republican
+			OR = {
+				has_ideology = ideology:ideology_republican
+				has_ideology = ideology:ideology_radical
+				has_ideology = ideology:ideology_nihilist
+				has_ideology = ideology:ideology_liberal_leader
+				has_ideology = ideology:ideology_positivist
+				has_ideology = ideology:ideology_market_liberal
+			}
 		}
 		ROOT = {
 			change_variable = { name = republican_progress_from_characters add = prev.popularity } #for_each loop. For each character of ideology_republican, add that character's popularity to republican_progress_from_characters.
@@ -102,7 +109,13 @@ fra_weekly_pulse_theocracy_progress = { #See republican progress to see how this
 	#From Characters
 	every_scope_character = {
 		limit = {
-			has_ideology = ideology:ideology_theocracy
+			OR = {
+				has_ideology = ideology:ideology_theocrat
+				has_ideology = ideology:ideology_traditionalist
+				has_ideology = ideology:ideology_authoritarian
+				has_ideology = ideology:ideology_slaver
+				has_ideology = ideology:ideology_corporatist
+			}
 		}
 		ROOT = {
 			change_variable = { name = theocracy_progress_from_characters add = prev.popularity }
@@ -158,7 +171,13 @@ fra_weekly_pulse_communist_progress = { #See communist progress to see how this 
 	#From Characters
 	every_scope_character = {
 		limit = {
-			has_ideology = ideology:ideology_communist
+			OR = {
+				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_vanguardist
+				has_ideology = ideology:ideology_anarchist
+				has_ideology = ideology:ideology_social_democrat
+				has_ideology = ideology:ideology_humanitarian
+			}
 		}
 		ROOT = {
 			change_variable = { name = communist_progress_from_characters add = prev.popularity }
