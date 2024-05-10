@@ -8,7 +8,7 @@ frankfurt_parliament.1 = {
 	flavor = frankfurt_parliament.1.f
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
 	}
 	duration = 3
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -268,7 +268,7 @@ frankfurt_parliament.2 = {
 	flavor = frankfurt_parliament.2.f
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
 	}
 	duration = 3
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -615,7 +615,7 @@ frankfurt_parliament.3 = {
 	flavor = frankfurt_parliament.3.f
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
 	}
 	duration = 3
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -774,7 +774,7 @@ frankfurt_parliament.4 = {
 	flavor = frankfurt_parliament.4.f
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
 	}
 	duration = 2
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -815,7 +815,7 @@ frankfurt_parliament.5 = {
 	flavor = frankfurt_parliament.5.f
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	event_image = {
-		video = "unspecific_signed_contract"
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
 	}
 	duration = 2
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -838,6 +838,64 @@ frankfurt_parliament.5 = {
 				type = je_imperia_frankfurt_german_consolidation_german_major
 			}
 		}
+	}
+}
+
+# Player chooses which Club to support
+frankfurt_parliament.6 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament.6.t
+	desc = frankfurt_parliament.6.desc
+	flavor = frankfurt_parliament.6.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		p:x11C0A0.state = {
+			save_scope_as = frankfurt_location_scope
+		}
+		remove_variable ?= frankfurt_parliament_supports_left_club
+		remove_variable ?= frankfurt_parliament_supports_center_club
+		remove_variable ?= frankfurt_parliament_supports_right_club
+		set_variable = frankfurt_parliament_considered_a_club
+	}
+	trigger = {
+		is_player = yes
+		NOR = {
+			has_variable = frankfurt_parliament_supports_left_club
+			has_variable = frankfurt_parliament_supports_center_club
+			has_variable = frankfurt_parliament_supports_right_club
+			has_variable = frankfurt_parliament_considered_a_club
+		}
+	}
+	# Left wing; radical democrats
+	option = {
+		name = frankfurt_parliament.6.a
+		custom_tooltip = frankfurt_parliament_support_the_left_tt
+		set_variable = frankfurt_parliament_supports_left_club
+	}
+	# Centre wing; federal monarchists
+	option = {
+		default_option = yes
+		name = frankfurt_parliament.6.b
+		custom_tooltip = frankfurt_parliament_support_the_center_tt
+		set_variable = frankfurt_parliament_supports_center_club
+	}
+	# Right wing; absolute monarchists
+	option = {
+		name = frankfurt_parliament.6.c
+		custom_tooltip = frankfurt_parliament_support_the_right_tt
+		set_variable = frankfurt_parliament_supports_right_club
+	}
+	# Dont choose right now
+	option = {
+		name = frankfurt_parliament.6.d
+		# TODO
+		# remove the cooldown variable set through the choose button
 	}
 }
 

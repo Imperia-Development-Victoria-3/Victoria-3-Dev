@@ -714,3 +714,250 @@ imperia_frankfurt_parliament_update_club_influence = {
 		nearest = 1
 	}
 }
+
+imperia_frankfurt_parliament_BOOST_club = {
+	# scope : country being boosted
+	# root : player country
+	# If the player is left leaning
+	imperia_frankfurt_parliament_initialise_club_variables = yes
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is centre leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_center_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_center_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+}
+
+imperia_frankfurt_parliament_SABOTAGE_club = {
+	# scope : country being sabotaged
+	# root : player country
+	# If the player is left leaning
+	imperia_frankfurt_parliament_initialise_club_variables = yes
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = frankfurt_parliament_left_club_boost
+				subtract = {
+					value = frankfurt_parliament_left_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = frankfurt_parliament_right_club_boost
+				subtract = {
+					value = frankfurt_parliament_right_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
+	# scope : country being influenced
+	# root : player country
+	# If the player is left leaning
+	imperia_frankfurt_parliament_initialise_club_variables = yes
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = frankfurt_parliament_left_club_boost
+				subtract = {
+					value = frankfurt_parliament_left_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = frankfurt_parliament_right_club_boost
+				subtract = {
+					value = frankfurt_parliament_right_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_initialise_club_variables = {
+	if = {
+		limit = {
+			NOT = {
+				has_variable = frankfurt_parliament_center_club_boost
+			}
+		}
+		set_variable = {
+			name = frankfurt_parliament_center_club_boost
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_variable = frankfurt_parliament_center_club_boost
+			}
+		}
+		set_variable = {
+			name = frankfurt_parliament_left_club_boost
+			value = 1
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_variable = frankfurt_parliament_right_club_boost
+			}
+		}
+		set_variable = {
+			name = frankfurt_parliament_right_club_boost
+			value = 1
+		}
+	}
+}
