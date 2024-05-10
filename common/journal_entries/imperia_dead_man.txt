@@ -89,10 +89,6 @@
 		effect = {
 			if = {
 				limit = {
-					NOT = {
-						has_variable = fra_divided_monarchists_freeze #This variable stops iteration, and is granted by reaching 360 with one dynasty. It's reset when this JE is completed, or when je_cement_the_rightful_dynasty fails.
-					}
-				}
 				tur_weekly_pulse_communist_progress = yes #Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
 				tur_weekly_pulse_theocracy_progress = yes  #Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
 				tur_weekly_pulse_republican_progress = yes  #Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
@@ -104,11 +100,6 @@
 	on_monthly_pulse = {
 		effect = {
 			if = {
-				limit = {
-					NOT = {
-						has_variable = fra_divided_monarchists_freeze
-					}
-				}
 				change_variable = { name = republican_progress add = var:republican_progress_next } #On the monthly tick, the value calculated in the fra_weekly_pulse_republican_progress effect is added to the master progress variable.
 				change_variable = { name = theocracy_progress add = var:theocracy_progress_next }
 				change_variable = { name = communist_progress add = var:communist_progress_next }
@@ -143,12 +134,6 @@
 	}
 
 	on_invalid = {
-		if = {
-			limit = {
-				has_variable = fra_divided_monarchists_freeze
-			}
-			remove_variable = fra_divided_monarchists_freeze #Clears the freeze variable so that progress can be made if this JE is somehow activated again.
-		}
 		fra_clear_divided_monarchist_variables = yes #It should not be possible for this JE to somehow be deleted without these variables being cleared.
 	}
 
