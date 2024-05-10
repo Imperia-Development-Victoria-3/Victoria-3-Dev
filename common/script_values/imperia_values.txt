@@ -1849,3 +1849,73 @@ imperia_true_neutral_remaining_signers_value = {
 	value = var:true_neutral_required_signers_var
 	subtract = var:true_neutral_current_signers_var
 }
+
+imperia_dead_man_republican_laws_value = {
+	# scope : country, specifically Dead Man Turkey/Ottomans
+	# value is set to 0 first, that way we will just add to it down the line
+	value = 0
+	# First off, if the country has either of the voting laws, increase the value by 1
+	# Could be split up, if you want different values for the two
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+			}
+		}
+		add = 1
+	}
+	# If you do split them up, they should look like the following
+	if = {
+		limit = {
+			has_law = law_type:law_cultural_exclusion
+		}
+		add = 1
+	}
+	# ... And so forth
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_freedom_of_conscience
+				has_law = law_type:law_total_separation
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_guaranteed_liberties
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_private_paramilitaries
+				has_law = law_type:law_emergency_relief_services
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_commercialized_agriculture
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_private_schools
+				has_law = law_type:law_public_schools
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_private_health_insurance
+		}
+		add = 1
+	}
+}

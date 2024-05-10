@@ -42,6 +42,7 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 	set_variable = { name = republican_progress_from_characters value = 0 } #All of these variables are ephemeral and should never be manually set to anything.
 	set_variable = { name = republican_progress_from_igs value = 0 }
 	set_variable = { name = republican_progress_from_legitimacy value = root.government_legitimacy } #Government legitimacy is a single constant, and so this variable is set immediately rather than needing a calculation.
+	set_variable = { name = republican_progress_from_laws value = imperia_dead_man_republican_laws_value } # The laws calculation is handled over in a scripted_value, so this can be set immediately
 	set_variable = { name = republican_progress_next value = 0 }
 	#From Characters
 	every_scope_character = {
@@ -49,7 +50,7 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 			OR = {
 				has_ideology = ideology:ideology_republican
 				has_ideology = ideology:ideology_radical
-				has_ideology = ideology:ideology_nihilist
+				has_ideology = ideology:ideology_atheist # nihilist
 				has_ideology = ideology:ideology_liberal_leader
 				has_ideology = ideology:ideology_positivist
 				has_ideology = ideology:ideology_market_liberal
@@ -68,7 +69,7 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 					OR = {
 						has_ideology = ideology:ideology_republican
 						has_ideology = ideology:ideology_radical
-						has_ideology = ideology:ideology_nihilist
+						has_ideology = ideology:ideology_atheist # nihilist
 						has_ideology = ideology:ideology_liberal_leader
 						has_ideology = ideology:ideology_positivist
 						has_ideology = ideology:ideology_market_liberal
@@ -103,11 +104,11 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 		}
 		change_variable = { name = republican_progress_from_legitimacy multiply = -0.5 } #If the ruler is not republican, they benefit from low legitimacy and suffer from high legitimacy.
 	}
-
 	#Final Compilation
 	change_variable = { name = republican_progress_next add = var:republican_progress_from_characters } #All sub-variables are added to republican_progress_next here. At this point, all of the component variables are calculated properly, and converted to a decimal scale.
 	change_variable = { name = republican_progress_next add = var:republican_progress_from_igs }
 	change_variable = { name = republican_progress_next add = var:republican_progress_from_legitimacy }
+	change_variable = { name = republican_progress_next add = var:republican_progress_from_laws } # And then just insert the laws calc down here
 	change_variable = { name = republican_progress_next add = var:republican_progress_from_effects }
 }
 
