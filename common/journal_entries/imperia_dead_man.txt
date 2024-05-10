@@ -84,7 +84,7 @@
 
 	on_weekly_pulse = {
 		events = {
-			french_pretenders.5
+			dead_man.1
 		}
 		effect = {
 			if = {
@@ -93,11 +93,11 @@
 						has_variable = fra_divided_monarchists_freeze #This variable stops iteration, and is granted by reaching 360 with one dynasty. It's reset when this JE is completed, or when je_cement_the_rightful_dynasty fails.
 					}
 				}
-				fra_weekly_pulse_communist_progress = yes #Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
-				fra_weekly_pulse_theocracy_progress = yes  #Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
-				fra_weekly_pulse_republican_progress = yes  #Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
+				tur_weekly_pulse_communist_progress = yes #Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
+				tur_weekly_pulse_theocracy_progress = yes  #Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
+				tur_weekly_pulse_republican_progress = yes  #Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
 			}
-			fra_define_leading_dynasty = yes 	#The progress bar in this JE is always equivalent to the progress of the dynasty that's currently doing best. This scripted effect determines which dynasty that is, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable.
+			tur_leading_government = yes 	#The progress bar in this JE is always equivalent to the progress of the dynasty that's currently doing best. This scripted effect determines which dynasty that is, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable.
 		}
 	}
 
@@ -112,64 +112,7 @@
 				change_variable = { name = republican_progress add = var:republican_progress_next } #On the monthly tick, the value calculated in the fra_weekly_pulse_republican_progress effect is added to the master progress variable.
 				change_variable = { name = theocracy_progress add = var:theocracy_progress_next }
 				change_variable = { name = communist_progress add = var:communist_progress_next }
-				fra_define_leading_dynasty = yes	#See above - this ensures that the monthly tick will not momentarily send the status loc out of sync with what the bar is representing.
-			}
-			if = {
-				limit = {
-					has_law = law_type:law_monarchy
-					scope:journal_entry = {
-						is_goal_complete = yes
-					}
-					NOT = {
-						has_variable = fra_divided_monarchists_freeze
-					}
-				}
-				if = { #Fires the event to enthrone the pretender - 1 if contextualised as coup, 10 if contextualised as reinforcement.
-					limit = {
-						var:republican_progress > var:communist_progress
-						var:republican_progress > var:theocracy_progress
-					} 
-					if = {
-						limit = {
-							ruler_is_republican = yes
-						}
-						trigger_event = { id = french_pretenders.10 popup = yes} #Reinforcement event - fires if the leading dynasty is the one in power.
-					}
-					else = {
-						trigger_event = { id = french_pretenders.1 popup = yes} #Coup event - fires if the leading dynasty is not the one in power.
-					}
-				}
-				else_if = {
-					limit = {
-						var:theocracy_progress > var:communist_progress
-						var:theocracy_progress > var:republican_progress
-					}
-					if = {
-						limit = {
-							ruler_is_theocrat = yes
-						}
-						trigger_event = { id = french_pretenders.10 popup = yes}
-					}
-					else = {
-						trigger_event = { id = french_pretenders.1 popup = yes}
-					}
-				}
-				else_if = {
-					limit = {
-						var:communist_progress > var:theocracy_progress
-						var:communist_progress > var:republican_progress
-					}
-					if = {
-						limit = {
-							ruler_is_communist = yes
-						}
-						trigger_event = { id = french_pretenders.10 popup = yes}
-					}
-					else = {
-						trigger_event = { id = french_pretenders.1 popup = yes}
-					}
-				}
-				fra_freeze_divided_monarchist_progress = yes #Freezes the bars so that they no longer accumulate progress on the monthly tick, and stay as they are. In the case that Cement the Rightful Dynasty fails, the bars will be set back.
+				tur_leading_government = yes	#See above - this ensures that the monthly tick will not momentarily send the status loc out of sync with what the bar is representing.
 			}
 		}
 		random_events = {
@@ -187,43 +130,10 @@
 			10 = french_pretenders_pulse.18
 		}
 	}
+
 	on_yearly_pulse = {
 		random_events = {
-			
 		}
-	}
-
-	fail = {
-		any_interest_group = {
-			is_marginal = no
-			law_stance = {
-				law = law_type:law_presidential_republic
-				value > neutral
-			}
-		}
-		capital = {
-			turmoil >= 0.25
-		}
-		OR = {
-			has_journal_entry = je_springtime_of_the_peoples
-			radical_fraction = {
-				value >= 0.25
-			}
-			any_civil_war = {
-				civil_war_progress > 0.75
-			}
-		}
-	}
-
-	on_fail = {
-		trigger_event = { id = french_pretenders.6 popup = yes }
-		if = {
-			limit = {
-				has_variable = fra_divided_monarchists_freeze
-			}
-			remove_variable = fra_divided_monarchists_freeze #Clears the freeze variable so that progress can be made if this JE is somehow activated again.
-		}
-		fra_clear_divided_monarchist_variables = yes #Removes all variables used for math in this JE, to save memory and performance.
 	}
 
 	invalid = { 
@@ -245,261 +155,14 @@
 	weight = 100
 	
 	current_value = {
-		value = root.var:tur_leading_government_progress #Set to always be equal to the leading dynasty's progress by the fra_define_leading_dynasty effect.
+		value = root.var:tur_leading_government_progress #Set to always be equal to the leading dynasty's progress by the tur_leading_government effect.
 	}
 
 	goal_add_value = {
-		value = 360
+		value = 480
 	}
 
 	progressbar = yes
-
-	should_be_pinned_by_default = yes
-}
-
-je_cement_the_rightful_dynasty = {
-	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
-
-	group = je_group_historical_content
-
-	immediate = {
-		set_variable = {
-			name = french_dynastic_primary_progress_var
-			value = 0
-		}
-
-		if = {
-			limit = {
-				any_scope_character = { ### This is load-bearing cursed script. Do NOT change this to ruler = { } ###
-					is_ruler = yes
-					has_variable = communist_leader
-				}
-			}
-			set_variable = {
-				name = communist_restoration_var
-			}
-		}
-		else_if = {
-			limit = {
-				any_scope_character = {
-					is_ruler = yes
-					has_variable = theocracy_leader
-				}
-			}
-			set_variable = {
-				name = theocracy_restoration_var
-			}
-		}
-		else_if = {
-			limit = {
-				any_scope_character = {
-					is_ruler = yes
-					has_variable = republican_leader
-				}
-			}
-			set_variable = {
-				name = republican_restoration_var
-			}
-		}
-	}
-	
-	is_progressing = {
-		NOT = {
-			any_civil_war = {
-				civil_war_progress > 0.10
-			}
-		}
-		government_legitimacy >= 50
-	}
-	
-	progress_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_cement_the_rightful_dynasty_progressing_fast
-				trigger = {
-					scope:journal_entry = {
-						is_progressing = yes
-					}
-					government_legitimacy >= 90
-				}
-			}
-			triggered_desc = {
-				desc = je_cement_the_rightful_dynasty_progressing_normal
-				trigger = {
-					scope:journal_entry = {
-						is_progressing = yes
-					}
-					government_legitimacy >= 75
-				}
-			}
-			triggered_desc = {
-				desc = je_cement_the_rightful_dynasty_progressing_slow
-				trigger = {
-					scope:journal_entry = {
-						is_progressing = yes
-					}
-				}
-			}
-			triggered_desc = {
-				desc = je_cement_the_rightful_dynasty_progressing_civil_war
-				trigger = {
-					any_civil_war = {
-						civil_war_progress > 0.10
-					}
-				}
-			}
-			desc = je_cement_the_rightful_dynasty_progressing_low_legitimacy
-		}
-	}
-	
-	complete = {
-		scope:journal_entry = {
-			is_goal_complete = yes
-		}
-		NOT = {
-			any_civil_war = {
-				civil_war_progress > 0.10
-			}
-		}
-	}
-
-	on_complete = {
-		trigger_event = { id = french_pretenders_pulse.5 popup = yes }
-		set_variable = {
-			name = one_true_french_dynasty
-		}
-	}
-
-	fail = {
-		OR = {
-			NOT = { has_law = law_type:law_monarchy }
-			custom_tooltip = {
-				text = je_divided_monarchists_02_fail_tt
-				OR = {
-					AND = {
-						has_variable = theocracy_restoration_var
-						OR = {
-							ruler = {
-								OR = {
-									has_variable = communist_leader
-									has_variable = republican_leader
-								}
-							}
-						}
-					}
-					AND = {
-						has_variable = communist_restoration_var
-						OR = {
-							ruler = {
-								OR = {
-									has_variable = theocracy_leader
-									has_variable = republican_leader
-								}
-							} 
-						}
-					}
-					AND = {
-						has_variable = republican_restoration_var
-						OR = {
-							ruler = {
-								OR = {
-									has_variable = theocracy_leader
-									has_variable = communist_leader
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	on_fail = {
-		remove_variable = french_dynastic_primary_progress_var
-		if = {
-			limit = {
-				has_variable = fra_divided_monarchists_freeze
-			}
-			remove_variable = fra_divided_monarchists_freeze
-		}
-		if = {
-			limit = {
-				has_variable = theocracy_restoration_var
-			}
-			remove_variable = theocracy_restoration_var
-		}
-		if = {
-			limit = {
-				has_variable = communist_restoration_var
-			}
-			remove_variable = communist_restoration_var
-		}
-		if = {
-			limit = {
-				has_variable = republican_restoration_var
-			}
-			remove_variable = republican_restoration_var
-		}
-		change_variable = { name = republican_progress subtract = 300 }
-		change_variable = { name = communist_progress subtract = 300 }
-		change_variable = { name = theocracy_progress subtract = 300 }
-		clamp_variable = { name = republican_progress max = 360 min = 0 }
-		clamp_variable = { name = communist_progress max = 360 min = 0 }
-		clamp_variable = { name = theocracy_progress max = 360 min = 0 }
-	}
-
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = {
-					scope:journal_entry = {
-						is_progressing = yes
-					}
-				}
-				if = {
-					limit = {
-						government_legitimacy >= 90
-					}
-					change_variable = {
-						name = french_dynastic_primary_progress_var
-						add = 2
-					}
-				}
-				else_if = {
-					limit = {
-						government_legitimacy >= 75
-					}
-					change_variable = {
-						name = french_dynastic_primary_progress_var
-						add = 1
-					}
-				}
-				else = {
-					change_variable = {
-						name = french_dynastic_primary_progress_var
-						add = 0.5
-					}
-				}
-			}
-		}
-		random_events = {
-			90 = 0
-			10 = french_pretenders_pulse.1
-			5 = french_pretenders_pulse.4
-		}
-	}
-
-	current_value = {
-		value = root.var:french_dynastic_primary_progress_var
-	}
-
-	goal_add_value = {
-		value = 120
-	}
-
-	progressbar = yes
-
-	weight = 100
 
 	should_be_pinned_by_default = yes
 }
