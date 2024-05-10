@@ -11,33 +11,85 @@ dead_man.1 = {
 		video = "unspecific_factory_closed"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"	
+	cooldown = { months = normal_modifier_time }
 	trigger = {
+		NOT = { has_variable = dead_man_startup_var }
 	}
 	immediate = {
-		set_variable = {
-			name = dead_man_republic_var
-			value = 0
-		}
-		set_variable = {
-			name = dead_man_theocracy_var
-			value = 0
-		}
-		set_variable = {
-			name = dead_man_communism_var
-			value = 0
-		}
+		set_variable = dead_man_startup_var
 	}
-	option = {
+	option = { # Support Republican
 		name = dead_man.1.a
-		add_journal_entry = {
-			type = je_dead_man_republic
+		set_variable = chose_initial_turk_government
+		custom_tooltip = {
+			text = supporting_republican_tt
 		}
-		add_journal_entry = {
-			type = je_dead_man_theocracy
+		if = {
+			limit = {
+				has_variable = supporting_theocracy_var
+			}
+			remove_variable = supporting_theocracy_var
 		}
-		add_journal_entry = {
-			type = je_dead_man_communism
+		if = {
+			limit = {
+				has_variable = supporting_communist_var
+			}
+			remove_variable = supporting_communist_var
 		}
+		custom_tooltip = {
+			text = republican_progress_increase_10_tt
+			change_variable = { name = republican_progress add = 15 }
+		}
+		set_variable = supporting_republican_var
+	}
+	option = { # Support Theocracy
+		name = dead_man.1.b
+		default_option = yes
+		set_variable = chose_initial_turk_government
+		custom_tooltip = {
+			text = supporting_orleanism_tt
+		}
+		if = {
+			limit = {
+				has_variable = supporting_republican_var
+			}
+			remove_variable = supporting_republican_var
+		}
+		if = {
+			limit = {
+				has_variable = supporting_communist_var
+			}
+			remove_variable = supporting_communist_var
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_10_tt
+			change_variable = { name = theocracy_progress add = 15 }
+		}
+		set_variable = supporting_theocracy_var
+	}
+	option = { # Support Communist
+		name = dead_man.1.c
+		set_variable = chose_initial_turk_government
+		custom_tooltip = {
+			text = supporting_communists_tt
+		}
+		if = {
+			limit = {
+				has_variable = supporting_republican_var
+			}
+			remove_variable = supporting_republican_var
+		}
+		if = {
+			limit = {
+				has_variable = supporting_theocracy_var
+			}
+			remove_variable = supporting_theocracy_var
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = { name = communist_progress add = 15 }
+		}
+		set_variable = supporting_communist_var
 	}
 }

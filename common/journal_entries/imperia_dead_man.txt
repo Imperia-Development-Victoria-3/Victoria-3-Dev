@@ -7,25 +7,17 @@
 	immediate = {
 		set_variable = { name = tur_leading_government_progress value = 0 }
 		tur_set_dead_man_variables = yes
-		random_law = {
-			limit = { type = law_type:law_monarchy }
-			save_scope_as = monarchy_scope
-		}
 	}
 
 	complete = {
-		has_law = law_type:law_monarchy
-		custom_tooltip = {
-			text = je_divided_monarchists_02_tt
-			has_variable = one_true_french_dynasty #Can only ever complete upon finishing the Cement the Rightful Dynasty journal entry.
+		scope:journal_entry = {
+			is_goal_complete = yes
 		}
 	}
 
 	on_complete = {
-		custom_tooltip = {
-			text = je_divided_monarchists_03_tt
-			fra_clear_divided_monarchist_variables = yes #Removes all variables used for math in this JE, to save memory and performance.
-		}
+		trigger_event = id=dead_man.7
+		tur_clear_dead_man_variables = yes
 	}
 
 	scripted_button = tur_republican_button
