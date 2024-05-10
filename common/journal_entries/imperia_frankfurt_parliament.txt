@@ -19,6 +19,8 @@
 	# Optional round - revolution? Only for universal suffrage republics
 	scripted_button = je_frankfurt_parliament_internal_focus_button
 	scripted_button = je_frankfurt_parliament_external_focus_button
+	# Change/choose Club
+	scripted_button = je_frankfurt_parliament_choose_club_button
 	# Leave the conference, wont be pressed to join the new Germany
 	scripted_button = je_frankfurt_parliament_leave_button
 	is_shown_when_inactive = {
@@ -47,6 +49,14 @@
 			id = frankfurt_parliament.4
 			popup = yes
 		}
+		# Choose a club!
+		# Only for the player, through the triggers on the event
+		trigger_event = {
+			id = frankfurt_parliament.6
+			popup = yes
+			days = 14
+		}
+		imperia_frankfurt_parliament_update_club_influence = yes
 		if = {
 			limit = {
 				NOT = {
@@ -340,14 +350,14 @@
 		}
 	}
 	on_monthly_pulse = {
-		events = {
-			# Players gets to choose a club, if they havent already
-			frankfurt_parliament.6
+		effect = {
+			imperia_frankfurt_parliament_update_club_influence = yes
 		}
 		random_events = {
 			1 = frankfurt_parliament_clubs.1
 			1 = frankfurt_parliament_clubs.2
 			1 = frankfurt_parliament_clubs.3
+			1 = frankfurt_parliament_clubs.4
 		}
 	}
 	complete = {

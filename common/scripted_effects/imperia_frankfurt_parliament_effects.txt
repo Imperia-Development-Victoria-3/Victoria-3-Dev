@@ -701,6 +701,33 @@ imperia_frankfurt_parliament_update_club_influence = {
 			}
 		}
 	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			multiply = frankfurt_parliament_left_club_boost
+		}
+	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_center_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			multiply = frankfurt_parliament_center_club_boost
+		}
+	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_right_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_faction_influence
+			multiply = frankfurt_parliament_right_club_boost
+		}
+	}
 	round_variable = {
 		name = frankfurt_parliament_left_faction_influence
 		nearest = 1
@@ -855,8 +882,8 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 	# scope : country being influenced
 	# root : player country
-	# If the player is left leaning
 	imperia_frankfurt_parliament_initialise_club_variables = yes
+	# If the player is left leaning
 	if = {
 		limit = {
 			root = {
@@ -871,7 +898,7 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 					value = frankfurt_parliament_left_club_boost
 					divide = {
 						value = 1
-						add = $SABOTAGE$
+						add = $INFLUENCE$
 					}
 				}
 			}
@@ -880,7 +907,7 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 			name = frankfurt_parliament_left_club_boost
 			divide = {
 				value = 1
-				add = $SABOTAGE$
+				add = $INFLUENCE$
 			}
 		}
 		round_variable = {
@@ -903,7 +930,7 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 					value = frankfurt_parliament_right_club_boost
 					divide = {
 						value = 1
-						add = $SABOTAGE$
+						add = $INFLUENCE$
 					}
 				}
 			}
@@ -912,7 +939,77 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 			name = frankfurt_parliament_right_club_boost
 			divide = {
 				value = 1
-				add = $SABOTAGE$
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
+	# scope : country being influenced
+	# root : player country
+	imperia_frankfurt_parliament_initialise_club_variables = yes
+	# Pop this section if LEFT = 1; meaning its trying to influence the left
+	if = {
+		limit = {
+			$LEFT$ = 1
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			add = {
+				value = frankfurt_parliament_center_club_boost
+				subtract = {
+					value = frankfurt_parliament_center_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is "borrowing" from the right
+	if = {
+		limit = {
+			$LEFT$ = 0
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			add = {
+				value = frankfurt_parliament_center_club_boost
+				subtract = {
+					value = frankfurt_parliament_center_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
 			}
 		}
 		round_variable = {
