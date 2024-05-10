@@ -307,27 +307,27 @@ tur_clear_dead_man_variables = { #Clears all variables, to save memory/performan
 	remove_variable = ig_weight 
 }
 
-fra_define_leading_dynasty = { #This scripted effect determines which dynasty is the most powerful one, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable. This allows the bar to work, and much easier calculation to take place.
+tur_leading_government = { #This scripted effect determines which dynasty is the most powerful one, and sets tur_leading_government_progress to be equal to that dynasty's progress variable. This allows the bar to work, and much easier calculation to take place.
 	if = {
 		limit = {
 			var:republican_progress > var:communist_progress
 			var:republican_progress > var:theocracy_progress
 		}
-		set_variable = { name = fra_leading_dynasty_progress value = var:republican_progress }
+		set_variable = { name = tur_leading_government_progress value = var:republican_progress }
 	}
 	else_if = {
 		limit = {
 			var:theocracy_progress > var:communist_progress
 			var:theocracy_progress > var:republican_progress
 		}
-		set_variable = { name = fra_leading_dynasty_progress value = var:theocracy_progress }
+		set_variable = { name = tur_leading_government_progress value = var:theocracy_progress }
 	}
 	else_if = {
 		limit = {
 			var:communist_progress > var:theocracy_progress
 			var:communist_progress > var:republican_progress
 		}
-		set_variable = { name = fra_leading_dynasty_progress value = var:communist_progress }
+		set_variable = { name = tur_leading_government_progress value = var:communist_progress }
 	}
-	clamp_variable = { name = fra_leading_dynasty_progress max = 480 min = 0 }  #These variables cannot exceed 480 or 0, to prevent bad and ugly displays.
+	clamp_variable = { name = tur_leading_government_progress max = 480 min = 0 }  #These variables cannot exceed 480 or 0, to prevent bad and ugly displays.
 }
