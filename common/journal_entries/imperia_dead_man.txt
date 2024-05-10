@@ -45,19 +45,19 @@
 				trigger = {
 					OR = {
 						AND = {
-							ruler_is_orleanist = yes
-							var:orleanist_progress > var:legitimist_progress
-							var:orleanist_progress > var:bonapartist_progress
+							ruler_is_theocracy = yes
+							var:theocracy_progress > var:communist_progress
+							var:theocracy_progress > var:republican_progress
 						}
 						AND = {
-							ruler_is_bonapartist = yes
-							var:bonapartist_progress > var:legitimist_progress
-							var:bonapartist_progress > var:orleanist_progress
+							ruler_is_republican = yes
+							var:republican_progress > var:communist_progress
+							var:republican_progress > var:theocracy_progress
 						}
 						AND = {
-							ruler_is_legitimist = yes
-							var:legitimist_progress > var:bonapartist_progress
-							var:legitimist_progress > var:orleanist_progress
+							ruler_is_communist = yes
+							var:communist_progress > var:republican_progress
+							var:communist_progress > var:theocracy_progress
 						}
 					}
 				}
@@ -67,16 +67,16 @@
 				trigger = {
 					OR = {
 						AND = {
-							var:orleanist_progress > var:legitimist_progress
-							var:orleanist_progress > var:bonapartist_progress
+							var:theocracy_progress > var:communist_progress
+							var:theocracy_progress > var:republican_progress
 						}
 						AND = {
-							var:bonapartist_progress > var:legitimist_progress
-							var:bonapartist_progress > var:orleanist_progress
+							var:republican_progress > var:communist_progress
+							var:republican_progress > var:theocracy_progress
 						}
 						AND = {
-							var:legitimist_progress > var:bonapartist_progress
-							var:legitimist_progress > var:orleanist_progress
+							var:communist_progress > var:republican_progress
+							var:communist_progress > var:theocracy_progress
 						}
 					}
 				}
@@ -101,9 +101,9 @@
 						has_variable = fra_divided_monarchists_freeze #This variable stops iteration, and is granted by reaching 360 with one dynasty. It's reset when this JE is completed, or when je_cement_the_rightful_dynasty fails.
 					}
 				}
-				fra_weekly_pulse_legitimist_progress = yes #Calculates how much the Legitimists will get next month. Updates weekly, but is not added until the monthly.
-				fra_weekly_pulse_orleanist_progress = yes  #Calculates how much the Orleanists will get next month. Updates weekly, but is not added until the monthly.
-				fra_weekly_pulse_bonapartist_progress = yes  #Calculates how much the Bonapartists will get next month. Updates weekly, but is not added until the monthly.
+				fra_weekly_pulse_communist_progress = yes #Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
+				fra_weekly_pulse_theocracy_progress = yes  #Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
+				fra_weekly_pulse_republican_progress = yes  #Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
 			}
 			fra_define_leading_dynasty = yes 	#The progress bar in this JE is always equivalent to the progress of the dynasty that's currently doing best. This scripted effect determines which dynasty that is, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable.
 		}
@@ -117,9 +117,9 @@
 						has_variable = fra_divided_monarchists_freeze
 					}
 				}
-				change_variable = { name = bonapartist_progress add = var:bonapartist_progress_next } #On the monthly tick, the value calculated in the fra_weekly_pulse_bonapartist_progress effect is added to the master progress variable.
-				change_variable = { name = orleanist_progress add = var:orleanist_progress_next }
-				change_variable = { name = legitimist_progress add = var:legitimist_progress_next }
+				change_variable = { name = republican_progress add = var:republican_progress_next } #On the monthly tick, the value calculated in the fra_weekly_pulse_republican_progress effect is added to the master progress variable.
+				change_variable = { name = theocracy_progress add = var:theocracy_progress_next }
+				change_variable = { name = communist_progress add = var:communist_progress_next }
 				fra_define_leading_dynasty = yes	#See above - this ensures that the monthly tick will not momentarily send the status loc out of sync with what the bar is representing.
 			}
 			if = {
@@ -134,12 +134,12 @@
 				}
 				if = { #Fires the event to enthrone the pretender - 1 if contextualised as coup, 10 if contextualised as reinforcement.
 					limit = {
-						var:bonapartist_progress > var:legitimist_progress
-						var:bonapartist_progress > var:orleanist_progress
+						var:republican_progress > var:communist_progress
+						var:republican_progress > var:theocracy_progress
 					} 
 					if = {
 						limit = {
-							ruler_is_bonapartist = yes
+							ruler_is_republican = yes
 						}
 						trigger_event = { id = french_pretenders.10 popup = yes} #Reinforcement event - fires if the leading dynasty is the one in power.
 					}
@@ -149,12 +149,12 @@
 				}
 				else_if = {
 					limit = {
-						var:orleanist_progress > var:legitimist_progress
-						var:orleanist_progress > var:bonapartist_progress
+						var:theocracy_progress > var:communist_progress
+						var:theocracy_progress > var:republican_progress
 					}
 					if = {
 						limit = {
-							ruler_is_orleanist = yes
+							ruler_is_theocracy = yes
 						}
 						trigger_event = { id = french_pretenders.10 popup = yes}
 					}
@@ -164,12 +164,12 @@
 				}
 				else_if = {
 					limit = {
-						var:legitimist_progress > var:orleanist_progress
-						var:legitimist_progress > var:bonapartist_progress
+						var:communist_progress > var:theocracy_progress
+						var:communist_progress > var:republican_progress
 					}
 					if = {
 						limit = {
-							ruler_is_legitimist = yes
+							ruler_is_communist = yes
 						}
 						trigger_event = { id = french_pretenders.10 popup = yes}
 					}
@@ -280,33 +280,33 @@ je_cement_the_rightful_dynasty = {
 			limit = {
 				any_scope_character = { ### This is load-bearing cursed script. Do NOT change this to ruler = { } ###
 					is_ruler = yes
-					has_variable = legitimist_leader
+					has_variable = communist_leader
 				}
 			}
 			set_variable = {
-				name = legitimist_restoration_var
+				name = communist_restoration_var
 			}
 		}
 		else_if = {
 			limit = {
 				any_scope_character = {
 					is_ruler = yes
-					has_variable = orleanist_leader
+					has_variable = theocracy_leader
 				}
 			}
 			set_variable = {
-				name = orleanist_restoration_var
+				name = theocracy_restoration_var
 			}
 		}
 		else_if = {
 			limit = {
 				any_scope_character = {
 					is_ruler = yes
-					has_variable = bonapartist_leader
+					has_variable = republican_leader
 				}
 			}
 			set_variable = {
-				name = bonapartist_restoration_var
+				name = republican_restoration_var
 			}
 		}
 	}
@@ -385,34 +385,34 @@ je_cement_the_rightful_dynasty = {
 				text = je_divided_monarchists_02_fail_tt
 				OR = {
 					AND = {
-						has_variable = orleanist_restoration_var
+						has_variable = theocracy_restoration_var
 						OR = {
 							ruler = {
 								OR = {
-									has_variable = legitimist_leader
-									has_variable = bonapartist_leader
+									has_variable = communist_leader
+									has_variable = republican_leader
 								}
 							}
 						}
 					}
 					AND = {
-						has_variable = legitimist_restoration_var
+						has_variable = communist_restoration_var
 						OR = {
 							ruler = {
 								OR = {
-									has_variable = orleanist_leader
-									has_variable = bonapartist_leader
+									has_variable = theocracy_leader
+									has_variable = republican_leader
 								}
 							} 
 						}
 					}
 					AND = {
-						has_variable = bonapartist_restoration_var
+						has_variable = republican_restoration_var
 						OR = {
 							ruler = {
 								OR = {
-									has_variable = orleanist_leader
-									has_variable = legitimist_leader
+									has_variable = theocracy_leader
+									has_variable = communist_leader
 								}
 							}
 						}
@@ -432,28 +432,28 @@ je_cement_the_rightful_dynasty = {
 		}
 		if = {
 			limit = {
-				has_variable = orleanist_restoration_var
+				has_variable = theocracy_restoration_var
 			}
-			remove_variable = orleanist_restoration_var
+			remove_variable = theocracy_restoration_var
 		}
 		if = {
 			limit = {
-				has_variable = legitimist_restoration_var
+				has_variable = communist_restoration_var
 			}
-			remove_variable = legitimist_restoration_var
+			remove_variable = communist_restoration_var
 		}
 		if = {
 			limit = {
-				has_variable = bonapartist_restoration_var
+				has_variable = republican_restoration_var
 			}
-			remove_variable = bonapartist_restoration_var
+			remove_variable = republican_restoration_var
 		}
-		change_variable = { name = bonapartist_progress subtract = 300 }
-		change_variable = { name = legitimist_progress subtract = 300 }
-		change_variable = { name = orleanist_progress subtract = 300 }
-		clamp_variable = { name = bonapartist_progress max = 360 min = 0 }
-		clamp_variable = { name = legitimist_progress max = 360 min = 0 }
-		clamp_variable = { name = orleanist_progress max = 360 min = 0 }
+		change_variable = { name = republican_progress subtract = 300 }
+		change_variable = { name = communist_progress subtract = 300 }
+		change_variable = { name = theocracy_progress subtract = 300 }
+		clamp_variable = { name = republican_progress max = 360 min = 0 }
+		clamp_variable = { name = communist_progress max = 360 min = 0 }
+		clamp_variable = { name = theocracy_progress max = 360 min = 0 }
 	}
 
 	on_monthly_pulse = {
