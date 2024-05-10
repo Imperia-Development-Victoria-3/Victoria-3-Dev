@@ -4,25 +4,19 @@
 # Refer to comments here and in 02_french_monarchism to get an idea as to how this works.
 tur_set_dead_man_variables = {
 	#Republican Variables
-	set_variable = { name = republican_progress value = 10 } #Master progress variable. This is incremented by the other variables, and corresponds to the progress bar if the republicans are in the lead.
+	set_variable = { name = republican_progress value = 20 } #Master progress variable. This is incremented by the other variables, and corresponds to the progress bar if the republicans are in the lead.
 	set_variable = { name = republican_progress_from_characters value = 0 } #Progress-from-character component. This updates with the combined popularities of every republican character later on, and is used to calculate republican_progress_next.
 	set_variable = { name = republican_progress_from_igs value = 0 } #Progress-from-IG component. This updates with the combined clout of every republican IG later on, and is used to calculate republican_progress_next.
+	set_variable = { name = republican_progress_from_laws value = 0 } #Progress from laws component. Each law that fits gives a corresponding value
 	set_variable = { name = republican_progress_from_legitimacy value = 0 } #Progress-from-legitimacy component. This updates with the current government legitimacy, and is also used to calculate republican_progress_next.
 	set_variable = { name = republican_progress_from_effects value = 0 } #Final element in republican_progress_next. This is defined by various effects, and is based solely on scripted effects. This is how designers can manually grant ticking bonuses or maluses to this mechanic.
 	set_variable = { name = republican_progress_next value = 0 } #This variable is an incrementor - it is calculated by the previous five variables on a weekly basis, and is added to republican_progress on the monthly. This is used in localisation to tell the player what the current rate of change for republican_progress is.
 	
 	#Theocracy Variables
-	if = {
-		limit = {
-			game_date < 1836.2.1 #Why? Because ruler scope doesn't exist the first time this script is executed.
-		}
-		set_variable = { name = theocracy_progress value = 25 } #This is done because the theocracy has an advantage the first time the script is executed, but do not necessarily have that advantage if the JE is activated elsewhere.
-	}
-	else = {
-		set_variable = { name = theocracy_progress value = 10 }
-	}
+	set_variable = { name = theocracy_progress value = 20 }
 	set_variable = { name = theocracy_progress_from_characters value = 0 } 
 	set_variable = { name = theocracy_progress_from_igs value = 0 }
+	set_variable = { name = theocracy_progress_from_laws value = 0 }
 	set_variable = { name = theocracy_progress_from_legitimacy value = 0 }
 	set_variable = { name = theocracy_progress_from_effects value = 0 }
 	set_variable = { name = theocracy_progress_next value = 0 }
@@ -31,6 +25,7 @@ tur_set_dead_man_variables = {
 	set_variable = { name = communist_progress value = 10 }
 	set_variable = { name = communist_progress_from_characters value = 0 }
 	set_variable = { name = communist_progress_from_igs value = 0 }
+	set_variable = { name = communist_progress_from_laws value = 0 }
 	set_variable = { name = communist_progress_from_legitimacy value = 0 }
 	set_variable = { name = communist_progress_from_effects value = 0 }
 	set_variable = { name = communist_progress_next value = 0 }
@@ -70,7 +65,7 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 						has_ideology = ideology:ideology_republican
 						has_ideology = ideology:ideology_radical
 						has_ideology = ideology:ideology_atheist # nihilist
-						has_ideology = ideology:ideology_liberal_leader
+						has_ideology = ideology:ideology_liberal_leader #democrat
 						has_ideology = ideology:ideology_positivist
 						has_ideology = ideology:ideology_market_liberal
 					}
@@ -81,6 +76,8 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 						NOR = {
 							has_ideology = ideology:ideology_communist
 							has_ideology = ideology:ideology_anarchist
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
 						}
 					}
 				}
@@ -123,6 +120,7 @@ tur_weekly_pulse_republican_progress = { #Effects like these are run three times
 tur_weekly_pulse_theocracy_progress = { #See republican progress to see how this works.
 	set_variable = { name = theocracy_progress_from_characters value = 0 }
 	set_variable = { name = theocracy_progress_from_igs value = 0 }
+	set_variable = { name = theocracy_progress_from_laws value = imperia_dead_man_theocracy_laws_value }
 	set_variable = { name = theocracy_progress_from_legitimacy value = root.government_legitimacy }
 	set_variable = { name = theocracy_progress_next value = 0 }
 	#From Characters
@@ -154,7 +152,16 @@ tur_weekly_pulse_theocracy_progress = { #See republican progress to see how this
 						has_ideology = ideology:ideology_corporatist
 					}
 				}
-				interest_group = ig_devout
+				AND = {
+					this = ig:ig_devout
+					leader = {
+						NOR = {
+							has_ideology = ideology:ideology_atheist #nihilist
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+						}
+					}
+				}
 			}
 		}
 		ROOT = {
@@ -187,6 +194,7 @@ tur_weekly_pulse_theocracy_progress = { #See republican progress to see how this
 	#Final Compilation
 	change_variable = { name = theocracy_progress_next add = var:theocracy_progress_from_characters }
 	change_variable = { name = theocracy_progress_next add = var:theocracy_progress_from_igs }
+	change_variable = { name = theocracy_progress_next add = var:theocracy_progress_from_laws }
 	change_variable = { name = theocracy_progress_next add = var:theocracy_progress_from_legitimacy }
 	change_variable = { name = theocracy_progress_next add = var:theocracy_progress_from_effects }
 }
@@ -194,6 +202,7 @@ tur_weekly_pulse_theocracy_progress = { #See republican progress to see how this
 tur_weekly_pulse_communist_progress = { #See communist progress to see how this works.
 	set_variable = { name = communist_progress_from_characters value = 0 }
 	set_variable = { name = communist_progress_from_igs value = 0 }
+	set_variable = { name = communist_progress_from_laws value = imperia_dead_man_communist_laws_value }
 	set_variable = { name = communist_progress_from_legitimacy value = root.government_legitimacy }
 	set_variable = { name = communist_progress_next value = 0 }
 	#From Characters
@@ -225,7 +234,17 @@ tur_weekly_pulse_communist_progress = { #See communist progress to see how this 
 						has_ideology = ideology:ideology_humanitarian
 					}
 				}
-				interest_group = ig_trade_unions
+				AND = {
+					this = ig:ig_trade_unions
+					leader = {
+						NOR = {
+							has_ideology = ideology:ideology_atheist #nihilist
+							has_ideology = ideology:ideology_radical
+							has_ideology = ideology:ideology_republican
+							has_ideology = ideology:ideology_liberal_leader #democrat
+						}
+					}
+				}
 			}
 		}
 		ROOT = {
@@ -258,6 +277,7 @@ tur_weekly_pulse_communist_progress = { #See communist progress to see how this 
 	#Final Compilation
 	change_variable = { name = communist_progress_next add = var:communist_progress_from_characters }
 	change_variable = { name = communist_progress_next add = var:communist_progress_from_igs }
+	change_variable = { name = communist_progress_next add = var:communist_progress_from_laws }
 	change_variable = { name = communist_progress_next add = var:communist_progress_from_legitimacy }
 	change_variable = { name = communist_progress_next add = var:communist_progress_from_effects }
 }
