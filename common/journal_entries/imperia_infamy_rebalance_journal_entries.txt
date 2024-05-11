@@ -3,35 +3,26 @@
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 	group = je_group_crises
 	possible = {
-		any_country = {
-			NOT = {
-				this = root
-			}
-			infamy >= infamy_threshold:pariah
+		# Pop the journal entry if theres a current pariah with strategic adjacency to you, and you're not the pariah, of course
+		hidden_trigger = {
+			exists = global_var:current_pariah
+			global_var:current_pariah != this
+		}
+		global_var:current_pariah = {
 			has_strategic_adjacency = root
 		}
 	}
 	is_shown_when_inactive = {
-		any_country = {
-			AND = {
-				NOT = {
-					this = root
-				}
-				infamy >= infamy_threshold:notorious
-			}
+		hidden_trigger = {
+			exists = global_var:current_pariah
+			global_var:current_pariah != this
 		}
 	}
 	immediate = {
 		add_modifier = {
 			name = modifier_pariah_neighbour
 		}
-		random_country = {
-			limit = {
-				NOT = {
-					this = root
-				}
-				infamy >= infamy_threshold:pariah
-			}
+		global_var:current_pariah = {
 			save_scope_as = target
 		}
 	}
@@ -46,7 +37,7 @@
 		}
 	}
 	on_complete = {
-		remove_modifier = modifier_pariah_neighbour
+		remove_modifier ?= modifier_pariah_neighbour
 	}
 	on_monthly_pulse = {
 		random_events = {
@@ -69,7 +60,7 @@
 		}
 	}
 	on_invalid = {
-		remove_modifier = modifier_pariah_neighbour
+		remove_modifier ?= modifier_pariah_neighbour
 	}
 	progressbar = no
 	should_be_pinned_by_default = yes
@@ -86,31 +77,40 @@ je_is_pariah = {
 		infamy >= infamy_threshold:notorious
 	}
 	immediate = {
+		set_global_variable = {
+			name = current_pariah
+			value = this
+		}
 	}
 	complete = {
 		infamy < infamy_threshold:pariah
 	}
 	on_complete = {
+		remove_modifier ?= modifier_international_pariah
+		remove_modifier ?= modifier_pariah_economic_sanctions
+		remove_modifier ?= modifier_pariah_international_isolation
 		if = {
 			limit = {
-				has_modifier = modifier_international_pariah
+				global_var:current_pariah ?= this
 			}
-			remove_modifier = modifier_international_pariah
-		}
-		if = {
-			limit = {
-				has_modifier = modifier_pariah_economic_sanctions
-			}
-			remove_modifier = modifier_pariah_economic_sanctions
-		}
-		if = {
-			limit = {
-				has_modifier = modifier_pariah_international_isolation
-			}
-			remove_modifier = modifier_pariah_international_isolation
+			remove_global_variable ?= current_pariah
 		}
 	}
 	on_monthly_pulse = {
+		effect = {
+			# If the current pariah gets snapped to oblivion, set the JE owner to be the current pariah
+			if = {
+				limit = {
+					NOT = {
+						exists = global_var:current_pariah
+					}
+				}
+				set_global_variable = {
+					name = current_pariah
+					value = this
+				}
+			}
+		}
 		events = {
 			infamy_rebalance.10			#Economic sanctions
 			infamy_rebalance.11			#Price of infamy
