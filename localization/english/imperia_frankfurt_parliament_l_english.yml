@@ -1,7 +1,7 @@
 ﻿l_english:
  je_imperia_frankfurt_parliament: "Frankfurt Parliament"
  je_imperia_frankfurt_parliament_status: "[GetPlayer.GetCustom('imperia_frankfurt_parliament_current_vote')]"
- je_imperia_frankfurt_parliament_reason: "[SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_parliament_explanation')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_governance_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_power_distribution_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_republican_form_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_german_form_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_revolutionary_focus_result')]"
+ je_imperia_frankfurt_parliament_reason: "Currently supported Club: #b [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_our_chosen_club')]#!\n[SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_parliament_explanation')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_governance_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_power_distribution_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_republican_form_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_german_form_result')][SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_revolutionary_focus_result')]"
 
  frankfurt_parliament_joining_parliament: "We are currently gathering in Frankfurt"
 
@@ -22,8 +22,8 @@
  frankfurt_votes_for_monarchy_tt: "A vote is cast for the #b Monarchy#!"
 
  FRANKFURT_PARLIAMENT_GOVERNANCE_EXPLANATION: "#yellow First we must decide on the Basic Form of the Government; #b Republic#! or #b Monarchy#!.#!\n\n#red We should be aware that a #b Republic#! is a #b very#! radical choice here!#!"
- FRANKFURT_PARLIAMENT_REPUBLIC_WON: "\n\nThe new German state will be a #b Republic#!.$FRANKFURT_PARLIAMENT_GOVERNANCE_VOTE_COUNT$"
- FRANKFURT_PARLIAMENT_MONARCHY_WON: "\n\nThe new German state will be a #b Monarchy#!.$FRANKFURT_PARLIAMENT_GOVERNANCE_VOTE_COUNT$"
+ FRANKFURT_PARLIAMENT_REPUBLIC_WON: "\nThe new German state will be a #b Republic#!.$FRANKFURT_PARLIAMENT_GOVERNANCE_VOTE_COUNT$"
+ FRANKFURT_PARLIAMENT_MONARCHY_WON: "\nThe new German state will be a #b Monarchy#!.$FRANKFURT_PARLIAMENT_GOVERNANCE_VOTE_COUNT$"
  FRANKFURT_PARLIAMENT_GOVERNANCE_VOTE_COUNT: "\n#lore There were #variable [GetGlobalVariable('imperia_frankfurt_parliament_republic_voters_var').GetValue]#! votes for Republic, #variable [GetGlobalVariable('imperia_frankfurt_parliament_monarchy_voters_var').GetValue]#! votes for Monarchy, #variable [GetGlobalVariable('imperia_frankfurt_parliament_governance_abstentions_var').GetValue]#! abstentions.#!"
 
  frankfurt_parliament_voting_power_distribution: "We are voting on the Power Distribution system"
@@ -191,6 +191,7 @@
 
  je_frankfurt_parliament_choose_club_button: "Promote a Club"
  je_frankfurt_parliament_choose_club_button_desc: "We can choose to promote a club to better our chances of success in Parliament."
+ 
  frankfurt_germany_consolidates_tt: "#b A new Germany is born!#!"
  frankfurt_return_to_old_status_tt: "The #b German Princes#! return to their old master, if they had one."
  frankfurt_germany_fully_consolidated_tt: "The new Germany has consolidated"
@@ -219,35 +220,65 @@
 
  supported_club_in_other_country: "Supported Club"
 
- will_increase_club_support_by_big_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_our_chosen_club')] by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
- will_increase_club_support_by_medium_boost:"#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_our_chosen_club')] by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
- will_increase_club_support_by_small_boost:"#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_our_chosen_club')] by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
+ CURRENT_SUPPORT_OF_LEFT: "(Currently at #yellow [THIS.GetCountry.MakeScope.ScriptValue('imperia_frankfurt_parliament_left_faction_percent_of_influence')|0]%#!)"
+ CURRENT_SUPPORT_OF_CENTER: "(Currently at #blue [THIS.GetCountry.MakeScope.ScriptValue('imperia_frankfurt_parliament_center_faction_percent_of_influence')|0]%#!)"
+ CURRENT_SUPPORT_OF_RIGHT: "(Currently at #debug [THIS.GetCountry.MakeScope.ScriptValue('imperia_frankfurt_parliament_right_faction_percent_of_influence')|0]%#!)"
 
- will_decrease_nemesis_club_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_chosen_clubs_nemesis')] by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
- will_decrease_nemesis_club_support_by_medium_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_chosen_clubs_nemesis')] by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
- will_decrease_nemesis_club_support_by_small_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_chosen_clubs_nemesis')] by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
+ ### Increase clubs influence
+ # Left
+ will_increase_left_support_by_big_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_increase_left_support_by_medium_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_increase_left_support_by_small_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
 
- will_increase_center_club_support_by_big_boost: "#bold Will #yellow increase#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
- will_increase_center_club_support_by_medium_boost:"#bold Will #yellow increase#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value!#!"
- will_increase_center_club_support_by_small_boost:"#bold Will #yellow increase#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+ # Center
+ will_increase_center_support_by_big_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_increase_center_support_by_medium_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_increase_center_support_by_small_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
 
- will_decrease_center_club_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
- will_decrease_center_club_support_by_medium_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value!#!"
- will_decrease_center_club_support_by_small_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+ # Right
+ will_increase_right_support_by_big_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_increase_right_support_by_medium_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_increase_right_support_by_small_boost: "#bold Will #green increase#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
 
- will_decrease_left_club_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ by #v the above value#!#!"
- will_decrease_left_club_support_by_medium_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ by #v the above value!#!"
- will_decrease_left_club_support_by_small_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ by #v the above value#!#!"
+ ### Decrease clubs influence (NEMESIS)
+ # Left
+ will_decrease_left_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_decrease_left_support_by_medium_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_decrease_left_support_by_small_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $LEFT_FACTION_NAME$ $CURRENT_SUPPORT_OF_LEFT$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
 
- will_decrease_right_club_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ by #v the above value#!#!"
- will_decrease_right_club_support_by_medium_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ by #v the above value!#!"
- will_decrease_right_club_support_by_small_boost:"#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ by #v the above value#!#!"
+ # Center
+ will_decrease_center_support_by_big_boost: "#bold Will #yellow decrease#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_decrease_center_support_by_medium_boost: "#bold Will #yellow decrease#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_decrease_center_support_by_small_boost: "#bold Will #yellow decrease#! [THIS.GetCountry.GetAdjective] support of the $CENTER_FACTION_NAME$ $CURRENT_SUPPORT_OF_CENTER$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
+
+ # Right
+ will_decrease_right_support_by_big_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('big_boost')|0v]%#!#!"
+ will_decrease_right_support_by_medium_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('medium_boost')|0v]%#!#!"
+ will_decrease_right_support_by_small_boost: "#bold Will #green decrease#! [THIS.GetCountry.GetAdjective] support of $RIGHT_FACTION_NAME$ $CURRENT_SUPPORT_OF_RIGHT$ by #v [SCOPE.GetValue('small_boost')|0v]%#!#!"
+
+ # Center-specific boosts
+ will_increase_center_club_support_by_big_boost: "#bold Will #yellow increase#! their support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+ will_increase_center_club_support_by_medium_boost:"#bold Will #yellow increase#! their support of $CENTER_FACTION_NAME$ by #v the above value!#!"
+ will_increase_center_club_support_by_small_boost:"#bold Will #yellow increase#! their support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+
+ will_decrease_center_club_support_by_big_boost: "#bold Will #green decrease#! their support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+ will_decrease_center_club_support_by_medium_boost:"#bold Will #green decrease#! their support of $CENTER_FACTION_NAME$ by #v the above value!#!"
+ will_decrease_center_club_support_by_small_boost:"#bold Will #green decrease#! their support of $CENTER_FACTION_NAME$ by #v the above value#!#!"
+
+ # Wing-specific decreases
+ will_decrease_left_club_support_by_big_boost: "#bold Will #green decrease#! their support of $LEFT_FACTION_NAME$ by #v the above value#!#!"
+ will_decrease_left_club_support_by_medium_boost:"#bold Will #green decrease#! their support of $LEFT_FACTION_NAME$ by #v the above value!#!"
+ will_decrease_left_club_support_by_small_boost:"#bold Will #green decrease#! their support of $LEFT_FACTION_NAME$ by #v the above value#!#!"
+
+ will_decrease_right_club_support_by_big_boost: "#bold Will #green decrease#! their support of $RIGHT_FACTION_NAME$ by #v the above value#!#!"
+ will_decrease_right_club_support_by_medium_boost:"#bold Will #green decrease#! their support of $RIGHT_FACTION_NAME$ by #v the above value!#!"
+ will_decrease_right_club_support_by_small_boost:"#bold Will #green decrease#! their support of $RIGHT_FACTION_NAME$ by #v the above value#!#!"
 
  LEFT_FACTION_NAME: "#yellow Deutscher Hof#!"
  CENTER_FACTION_NAME: "#blue Casino Club#!"
  RIGHT_FACTION_NAME: "#debug Steinernes Haus#!"
 
- frankfurt_parliament_clubs.1.t: "Cross-border Influence"
+ frankfurt_parliament_clubs.1.t: "Self-Improvement"
  frankfurt_parliament_clubs.1.desc: "We are faced with an opportunity of influencing cross-border representatives towards [SCOPE.GetRootScope.GetCountry.GetCustom('imperia_frankfurt_our_chosen_club')].\nA few bribes and promises is all it takes of strengthening their position, and thus ours..."
  frankfurt_parliament_clubs.1.f: "By increasing the Clubs influence over there, we will increase Our common strength in the parliament!"
  frankfurt_parliament_clubs.1.a: "We should focus our influence to a single country"
@@ -270,3 +301,27 @@
  frankfurt_parliament_clubs.3.b: "These ones are misguided"
  frankfurt_parliament_clubs.3.c: "I want to paint the map!"
  frankfurt_parliament_clubs.3.d: "I have no more shoes to smack the table with, unfortunately"
+
+ frankfurt_parliament_clubs.4.t: "Influencing the Democrats"
+ frankfurt_parliament_clubs.4.desc: "We are faced with an opportunity of swaying cross-border members of $LEFT_FACTION_NAME$ towards the $CENTER_FACTION_NAME$.\nCertain members of their Club have shown themselves to be open to compromise, we can use this common sense of theirs to make them see reason."
+ frankfurt_parliament_clubs.4.f: "A compromise is the art of dividing a cake in such a way that everyone believes he has the biggest piece."
+ frankfurt_parliament_clubs.4.a: "This country is in dire need of help"
+ frankfurt_parliament_clubs.4.b: "These ones are misguided"
+ frankfurt_parliament_clubs.4.c: "I want to paint the map!"
+ frankfurt_parliament_clubs.4.d: "I wont compromise on compromising!"
+
+ frankfurt_parliament_clubs.5.t: "Influencing the Right"
+ frankfurt_parliament_clubs.5.desc: "We are faced with an opportunity of swaying cross-border members of $RIGHT_FACTION_NAME$ towards the $CENTER_FACTION_NAME$.\nCertain members of their Club have shown themselves to be partial to the plight of the Princes, and can be swayed towards a more open Germany."
+ frankfurt_parliament_clubs.5.f: "A compromise is the art of dividing a cake in such a way that everyone believes he has the biggest piece."
+ frankfurt_parliament_clubs.5.a: "This country could be in better shape"
+ frankfurt_parliament_clubs.5.b: "These ones are misguided"
+ frankfurt_parliament_clubs.5.c: "I want to paint the map!"
+ frankfurt_parliament_clubs.5.d: "Let them have their opinions in peace, the poor sods"
+
+ frankfurt_parliament_clubs.6.t: "Educating our Lessers"
+ frankfurt_parliament_clubs.6.desc: "The $CENTER_FACTION_NAME$ are filled with small Princes partial to the ways of democracy.\nYet there are those amongst them who is open to the glory of a powerful German Kaiser... We can sway these members towards $RIGHT_FACTION_NAME$, educate them properly."
+ frankfurt_parliament_clubs.6.f: "In an autocracy, one person has his way; in an aristocracy, a few people have their way; in a democracy, no one has his way."
+ frankfurt_parliament_clubs.6.a: "This country could be in better shape"
+ frankfurt_parliament_clubs.6.b: "These ones are misguided"
+ frankfurt_parliament_clubs.6.c: "I want to paint the map!"
+ frankfurt_parliament_clubs.6.d: "There's no saving them"

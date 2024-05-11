@@ -1053,3 +1053,57 @@ imperia_frankfurt_parliament_right_faction_leader_influence = {
 		multiply = 3
 	}
 }
+
+imperia_frankfurt_parliament_left_faction_percent_of_influence = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+		}
+		value = var:frankfurt_parliament_left_faction_influence
+		divide = {
+			value = var:frankfurt_parliament_left_faction_influence
+			add = var:frankfurt_parliament_center_faction_influence
+			add = var:frankfurt_parliament_right_faction_influence
+		}
+		multiply = 100
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_frankfurt_parliament_center_faction_percent_of_influence = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = var:frankfurt_parliament_center_faction_influence
+		divide = {
+			value = var:frankfurt_parliament_left_faction_influence
+			add = var:frankfurt_parliament_center_faction_influence
+			add = var:frankfurt_parliament_right_faction_influence
+		}
+		multiply = 100
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_frankfurt_parliament_right_faction_percent_of_influence = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_right_faction_influence
+		}
+		value = var:frankfurt_parliament_right_faction_influence
+		divide = {
+			value = var:frankfurt_parliament_left_faction_influence
+			add = var:frankfurt_parliament_center_faction_influence
+			add = var:frankfurt_parliament_right_faction_influence
+		}
+		multiply = 100
+	}
+	else = {
+		value = 0
+	}
+}

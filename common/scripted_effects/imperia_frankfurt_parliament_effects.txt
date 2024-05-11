@@ -7,6 +7,16 @@
 	remove_variable ?= left_frankfurt_parliament
 	remove_global_variable ?= frankfurt_parliament_voting_period
 	remove_global_variable ?= frankfurt_parliament_current_vote
+	# Club variables
+	remove_variable ?= frankfurt_parliament_left_faction_influence
+	remove_variable ?= frankfurt_parliament_center_faction_influence
+	remove_variable ?= frankfurt_parliament_right_faction_influence
+	remove_variable ?= frankfurt_parliament_supports_left_club
+	remove_variable ?= frankfurt_parliament_supports_center_club
+	remove_variable ?= frankfurt_parliament_supports_right_club
+	remove_variable ?= frankfurt_parliament_left_club_boost
+	remove_variable ?= frankfurt_parliament_center_club_boost
+	remove_variable ?= frankfurt_parliament_right_club_boost
 	# Vote variables
 	remove_variable ?= frankfurt_parliament_voted_republic
 	remove_variable ?= frankfurt_parliament_voted_monarchy
@@ -621,6 +631,9 @@ imperia_frankfurt_parliament_spawn_south_german_federation = {
 		}
 		every_in_local_list = {
 			variable = south_german_states
+			limit = {
+				owner != c:SGF
+			}
 			set_state_owner = c:SGF
 		}
 	}
@@ -707,7 +720,7 @@ imperia_frankfurt_parliament_update_club_influence = {
 		}
 		change_variable = {
 			name = frankfurt_parliament_left_faction_influence
-			multiply = frankfurt_parliament_left_club_boost
+			multiply = var:frankfurt_parliament_left_club_boost
 		}
 	}
 	if = {
@@ -716,7 +729,7 @@ imperia_frankfurt_parliament_update_club_influence = {
 		}
 		change_variable = {
 			name = frankfurt_parliament_center_faction_influence
-			multiply = frankfurt_parliament_center_club_boost
+			multiply = var:frankfurt_parliament_center_club_boost
 		}
 	}
 	if = {
@@ -725,7 +738,7 @@ imperia_frankfurt_parliament_update_club_influence = {
 		}
 		change_variable = {
 			name = frankfurt_parliament_right_faction_influence
-			multiply = frankfurt_parliament_right_club_boost
+			multiply = var:frankfurt_parliament_right_club_boost
 		}
 	}
 	round_variable = {
@@ -819,9 +832,9 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 		change_variable = {
 			name = frankfurt_parliament_center_club_boost
 			add = {
-				value = frankfurt_parliament_left_club_boost
+				value = var:frankfurt_parliament_left_club_boost
 				subtract = {
-					value = frankfurt_parliament_left_club_boost
+					value = var:frankfurt_parliament_left_club_boost
 					divide = {
 						value = 1
 						add = $SABOTAGE$
@@ -851,9 +864,9 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 		change_variable = {
 			name = frankfurt_parliament_center_club_boost
 			add = {
-				value = frankfurt_parliament_right_club_boost
+				value = var:frankfurt_parliament_right_club_boost
 				subtract = {
-					value = frankfurt_parliament_right_club_boost
+					value = var:frankfurt_parliament_right_club_boost
 					divide = {
 						value = 1
 						add = $SABOTAGE$
@@ -893,9 +906,9 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 		change_variable = {
 			name = frankfurt_parliament_center_club_boost
 			add = {
-				value = frankfurt_parliament_left_club_boost
+				value = var:frankfurt_parliament_left_club_boost
 				subtract = {
-					value = frankfurt_parliament_left_club_boost
+					value = var:frankfurt_parliament_left_club_boost
 					divide = {
 						value = 1
 						add = $INFLUENCE$
@@ -925,9 +938,9 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 		change_variable = {
 			name = frankfurt_parliament_center_club_boost
 			add = {
-				value = frankfurt_parliament_right_club_boost
+				value = var:frankfurt_parliament_right_club_boost
 				subtract = {
-					value = frankfurt_parliament_right_club_boost
+					value = var:frankfurt_parliament_right_club_boost
 					divide = {
 						value = 1
 						add = $INFLUENCE$
@@ -965,9 +978,9 @@ imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 		change_variable = {
 			name = frankfurt_parliament_left_club_boost
 			add = {
-				value = frankfurt_parliament_center_club_boost
+				value = var:frankfurt_parliament_center_club_boost
 				subtract = {
-					value = frankfurt_parliament_center_club_boost
+					value = var:frankfurt_parliament_center_club_boost
 					divide = {
 						value = 1
 						add = $INFLUENCE$
@@ -995,9 +1008,9 @@ imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 		change_variable = {
 			name = frankfurt_parliament_right_club_boost
 			add = {
-				value = frankfurt_parliament_center_club_boost
+				value = var:frankfurt_parliament_center_club_boost
 				subtract = {
-					value = frankfurt_parliament_center_club_boost
+					value = var:frankfurt_parliament_center_club_boost
 					divide = {
 						value = 1
 						add = $INFLUENCE$
@@ -1055,6 +1068,108 @@ imperia_frankfurt_parliament_initialise_club_variables = {
 		set_variable = {
 			name = frankfurt_parliament_right_club_boost
 			value = 1
+		}
+	}
+}
+
+imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+	# scope : random country being influenced
+	# CLUB: 1 = left; 2 = center; 3 = right
+	# BOOST: 1 = small; 2 = medium; 3 = big
+	switch = {
+		trigger = $CLUB$
+		1 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_left_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_left_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_left_support_by_big_boost
+				}
+			}
+		}
+		2 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_center_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_center_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_center_support_by_big_boost
+				}
+			}
+		}
+		3 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_right_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_right_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_right_support_by_big_boost
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+	# scope : random country being influenced
+	# CLUB: 1 = left; 2 = center; 3 = right
+	# SABOTAGE: 1 = small; 2 = medium; 3 = big
+	switch = {
+		trigger = $CLUB$
+		1 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_left_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_left_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_left_support_by_big_boost
+				}
+			}
+		}
+		2 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_center_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_center_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_center_support_by_big_boost
+				}
+			}
+		}
+		3 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_right_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_right_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_right_support_by_big_boost
+				}
+			}
 		}
 	}
 }
