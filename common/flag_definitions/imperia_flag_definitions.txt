@@ -4,6 +4,36 @@
 		subject_canton = FRS
 		priority = 100
 	}
+
+	flag_definition = {
+		coa = FRS_jap
+		priority = 200
+		trigger = {
+			exists = c:JAP
+			exists = c:FRS
+			c:FRS = {
+				is_subject_of = c:JAP
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = FRS_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:FRS
+			c:FRS = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
 }
 
 HNA = {
@@ -12,6 +42,24 @@ HNA = {
 		subject_canton = HNA
 		priority = 100
 	}
+
+	flag_definition = {
+		coa = HNA_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:HNA
+			c:HNA = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
 }
 
 XIB = {
@@ -19,6 +67,24 @@ XIB = {
 		coa = XIB
 		subject_canton = XIB
 		priority = 100
+	}
+
+	flag_definition = {
+		coa = XIB_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:XIB
+			c:XIB = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
 	}
 }
 
@@ -34,10 +100,10 @@ SIH = {
 			}
 		}
 	}
-		flag_definition = {
-		coa = SIH_republic
-		subject_canton = SIH_republic
-		priority = 100
+	flag_definition = {
+	coa = SIH_republic
+	subject_canton = SIH_republic
+	priority = 100
 		trigger = {
 			OR = {
 			coa_def_republic_flag_trigger = yes
@@ -45,6 +111,24 @@ SIH = {
 			}
 			NOT = {
 			coa_def_subject_trigger = yes
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = SIH_qing
+		priority = 300
+		trigger = {
+			exists = c:CHI
+			exists = c:SIH
+			c:SIH = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
 			}
 		}
 	}
@@ -59,6 +143,49 @@ YUE = {
 			NOT = {
 			coa_def_republic_flag_trigger = yes
 			coa_def_dictatorship_flag_trigger = yes
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = YUE_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = YUE_gbr
+		priority = 200
+		trigger = {
+			exists = c:GBR
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:GBR
+			}
+		}
+	}
+
+	
+	flag_definition = {
+		coa = YUE_por
+		priority = 200
+		trigger = {
+			exists = c:POR
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:POR
 			}
 		}
 	}
@@ -93,15 +220,30 @@ MCH = { # Manchuria
 		trigger = {
 			exists = c:CHI
 			exists = c:MCH
+			c:MCH = {
+				is_subject_of = c:CHI
+			}
 			c:CHI = {
-				has_diplomatic_pact = {
-					who = c:MCH
-					type = vassal
-					is_initiator = yes
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
 				}
 			}
 		}
 	}
+
+	flag_definition = {
+		coa = MCH_jap
+		priority = 2
+		trigger = {
+			exists = c:JAP
+			exists = c:MCH
+			c:MCH = {
+				is_subject_of = c:JAP
+			}
+		}
+	}
+
 	flag_definition = {
 		coa = MCH_rus
 		priority = 2
@@ -129,11 +271,13 @@ MGL = { # Mongolia
 		trigger = {
 			exists = c:CHI
 			exists = c:MGL
+			c:MGL = {
+				is_subject_of = c:CHI
+			}
 			c:CHI = {
-				has_diplomatic_pact = {
-					who = c:MGL
-					type = vassal
-					is_initiator = yes
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
 				}
 			}
 		}
@@ -190,6 +334,24 @@ XIN = { # Xinjiang
 			exists = c:XIN
 			c:XIN = {
 				is_subject_of = c:RUS
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = XIN_qing
+		priority = 100
+		trigger = {
+			exists = c:CHI
+			exists = c:XIN
+			c:XIN = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
 			}
 		}
 	}
