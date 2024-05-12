@@ -1,0 +1,265 @@
+﻿namespace = ideology_break_3_2_event
+# Ideological break for level 3 reached
+ideology_break_3_2_event.1 = {
+	# Coup de grace
+	type = country_event
+	title = ideology_break_3_2_event.1.t
+	desc = ideology_break_3_2_event.1.d
+	flavor = ideology_break_3_2_event.1.f
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_before_the_battle.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	option = {
+		name = ideology_break_3_2_event.1.a
+		# draw a line
+		default_option = yes
+		random_list = {
+			33 = {
+				trigger_event = {
+					# Good
+					id = ideology_break_3_2_event.2
+					days = 0
+					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					add_modifier = {
+						name = imperia_discord_stopped_coup
+						months = 12
+					}
+					change_discord = {
+						VALUE = -50
+					}
+				}
+			}
+			66 = {
+				trigger_event = {
+					# Bad
+					id = ideology_break_3_2_event.3
+					days = 0
+					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					ruler = {
+						kill_character = yes
+					}
+					add_modifier = {
+						name = imperia_discord_revolutionary_government
+						months = 12
+					}
+					change_discord = {
+						VALUE = -100
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ideology_break_3_2_event.1.b
+		# flee the city
+		trigger = {
+			# Needs 2 or more states in country to fire civil war...
+			any_scope_state = {
+				count >= 2
+			}
+		}
+		random_list = {
+			33 = {
+				trigger_event = {
+					id = ideology_break_3_2_event.4
+					days = 0
+					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					custom_tooltip = civil_war_starts_tt
+				}
+			}
+			33 = {
+				trigger_event = {
+					id = ideology_break_3_2_event.5
+					days = 0
+					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					add_modifier = {
+						name = imperia_discord_stopped_coup
+						months = 12
+					}
+					change_discord = {
+						VALUE = -50
+					}
+				}
+			}
+			33 = {
+				trigger_event = {
+					id = ideology_break_3_2_event.6
+					days = 0
+					popup = yes
+				}
+				custom_tooltip = would_happen_tt
+				show_as_tooltip = {
+					ruler = {
+						kill_character = yes
+					}
+					add_modifier = {
+						name = imperia_discord_revolutionary_government
+						months = 12
+					}
+					change_discord = {
+						VALUE = -100
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ideology_break_3_2_event.1.c
+		ruler = {
+			kill_character = yes
+		}
+		add_modifier = {
+			name = imperia_discord_revolutionary_government
+			months = 12
+		}
+		change_discord = {
+			VALUE = -200
+		}
+	}
+}
+
+ideology_break_3_2_event.2 = {
+	# draw a line - succesful resistance
+	type = country_event
+	title = ideology_break_3_2_event.2.t
+	desc = ideology_break_3_2_event.2.d
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	option = {
+		name = ideology_break_3_2_event.2.a
+		default_option = yes
+		add_modifier = {
+			name = imperia_discord_stopped_coup
+			months = 12
+		}
+		change_discord = {
+			VALUE = -50
+		}
+	}
+}
+
+ideology_break_3_2_event.3 = {
+	# draw a line - succesful coup
+	type = country_event
+	title = ideology_break_3_2_event.3.t
+	desc = ideology_break_3_2_event.3.d
+	flavor = ideology_break_3_2_event.3.f
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_political_extremism.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	option = {
+		name = ideology_break_3_2_event.3.a
+		ruler = {
+			kill_character = yes
+		}
+		add_modifier = {
+			name = imperia_discord_revolutionary_government
+			months = 12
+		}
+		change_discord = {
+			VALUE = -100
+		}
+		default_option = yes
+	}
+}
+
+ideology_break_3_2_event.4 = {
+	# Flee the city - civil war fires
+	type = country_event
+	title = ideology_break_3_2_event.4.t
+	desc = ideology_break_3_2_event.4.d
+	flavor = ideology_break_3_2_event.4.f
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_before_the_battle.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	immediate = {
+		instant_civil_war = {
+			STREMGTH = 50
+		}
+	}
+	option = {
+		name = ideology_break_3_2_event.4.a
+		default_option = yes
+		change_discord = {
+			VALUE = -100
+		}
+	}
+}
+
+ideology_break_3_2_event.5 = {
+	# Flee the city - Battle won!
+	type = country_event
+	title = ideology_break_3_2_event.5.t
+	desc = ideology_break_3_2_event.5.d
+	flavor = ideology_break_3_2_event.5.f
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	option = {
+		name = ideology_break_3_2_event.5.a
+		default_option = yes
+		add_modifier = {
+			name = imperia_discord_stopped_coup
+			months = 12
+		}
+		change_discord = {
+			VALUE = -50
+		}
+	}
+}
+
+ideology_break_3_2_event.6 = {
+	# Flee the city - Revolution!
+	type = country_event
+	title = ideology_break_3_2_event.6.t
+	desc = ideology_break_3_2_event.6.d
+	flavor = ideology_break_3_2_event.6.f
+	event_image = {
+		video = "gfx/event_pictures/europenorthamerica_political_extremism.bk2"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	option = {
+		name = ideology_break_3_2_event.6.a
+		default_option = yes
+		ruler = {
+			kill_character = yes
+		}
+		add_modifier = {
+			name = imperia_discord_revolutionary_government
+			months = 12
+		}
+		change_discord = {
+			VALUE = -100
+		}
+	}
+}

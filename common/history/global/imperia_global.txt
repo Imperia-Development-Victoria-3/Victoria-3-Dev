@@ -1,0 +1,77 @@
+﻿GLOBAL = {
+	### Infamy setup ###
+	every_country = {
+		set_variable = {
+			name = infamy_on_month_start
+			value = infamy
+		}
+	}
+
+	### POLITICAL DISCORD ###
+	every_country = {
+		limit = {
+			NOT = {
+				is_country_type = decentralized
+			}
+		}
+        set_variable = {
+            name = political_discord
+            value = 0
+        }
+		trigger_event = {
+			id = imperia_political_discord.1
+			popup = yes
+			days = 5
+		}
+	}
+
+	### SEA ADJACENCY ###
+    every_state_region = {
+        limit = {
+            is_state_region_land = no
+        }
+        every_neighbouring_state = {
+            set_variable = {
+                name = sea_region
+                value = prev
+            }
+        }
+    }
+	### STRATEGIC REGIONS LIST FOR VIENNA CONGRESS ###
+	make_strategic_region_list = yes
+	
+    ### TECHNOLOGIES ###
+    every_country = {
+		if = {
+			limit = {
+				any_state = {
+					is_coastal = yes
+				}
+			}
+			add_technology_researched = age_of_sail
+		}
+		if = {
+			limit = {
+				has_technology_researched = screw_frigate
+			}
+			add_technology_researched = propellers
+		}
+	}
+
+	### GAME START BUREAUCURACY BONUS ###
+	every_country = {
+		add_modifier = {
+			name = game_start_bureaucracy_bonus
+			is_decaying = yes
+			months = 121
+		}
+	}
+
+	### MONEY TRANSFER ###
+	every_country = {
+		set_variable = {
+			name = imperia_money_transfer_amount
+			value = 0
+		}
+	}
+}

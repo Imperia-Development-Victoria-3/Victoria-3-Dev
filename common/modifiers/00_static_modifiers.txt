@@ -3,7 +3,7 @@
 # Effects are fully scriptable here.
 #these names can NOT be removed or changed, as the code uses them....
 
-# Babylon additions
+# Imperia additions
 # Infamy Rebalance - Changed max diplo to being 10% infamy reduction instead of 25%. Add trade route competitiveness multiplier to infamy levels. Bureaucracy multiplier on infamy levels.
 
 # Global Static Modifiers
@@ -13,7 +13,7 @@ base_values = {
 	country_tech_spread_add = 30
 	country_tech_research_speed_mult = -0.05
 
-	# CATEGORY BALANCING SCRIPT FOR CALCULATION IS LOCATED AT: https://github.com/Babylon-Development-Victoria-3/Victoria-3-dev-utilities/blob/main/data_formats/technologies.py
+	# CATEGORY BALANCING SCRIPT FOR CALCULATION IS LOCATED AT: https://github.com/Imperia-Development-Victoria-3/Victoria-3-dev-utilities/blob/main/data_formats/technologies.py
 	country_society_tech_spread_mult = 0.059
 	country_society_tech_research_speed_mult = 0.059
 	country_production_tech_spread_mult = -0.091
@@ -37,6 +37,7 @@ base_values = {
 
 	state_tax_capacity_add = 100
 	state_infrastructure_add = 3
+	state_infrastructure_from_automobiles_consumption_add = 0.25
 	
 	state_poor_expected_sol = 5
 	state_middle_expected_sol = 10
@@ -67,7 +68,7 @@ base_values = {
 	
 	country_free_trade_routes_add = 5
 	
-	military_formation_organization_gain_add = 0.5 # 200 days to get max organization
+	military_formation_organization_gain_add = 0.1 #0.5 1000 vs 200 days to get max organization
 	
 	state_urbanization_per_level_add = 100
 	
@@ -106,10 +107,12 @@ working_conditions = {
 	building_group_bg_mining_laborers_mortality_mult = 0.1
 	building_group_bg_mining_machinists_mortality_mult = 0.05
 	building_group_bg_mining_engineers_mortality_mult = 0.02
+	building_group_bg_mining_slaves_mortality_mult = 0.2
 	
 	building_group_bg_logging_laborers_mortality_mult = 0.1
 	building_group_bg_logging_machinists_mortality_mult = 0.05
 	building_group_bg_logging_engineers_mortality_mult = 0.02
+	building_group_bg_logging_slaves_mortality_mult = 0.2
 	
 	building_group_bg_oil_extraction_laborers_mortality_mult = 0.1
 	building_group_bg_oil_extraction_machinists_mortality_mult = 0.05
@@ -156,18 +159,19 @@ commander_battle_end_loss = {
 
 in_default = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	building_throughput_add = -0.5
-	unit_offense_mult = -0.5
-	unit_defense_mult = -0.5
+	building_throughput_add = -0.75
+	unit_offense_mult = -0.75
+	unit_defense_mult = -0.75
 }
 
 declared_bankruptcy = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_prestige_mult = -0.5
 	country_loan_interest_rate_mult = 0.5
-	unit_offense_mult = -0.5
-	unit_defense_mult = -0.5
+	unit_offense_mult = -0.75
+	unit_defense_mult = -0.75
 	state_radicals_from_sol_change_mult = 1.0
+	state_turmoil_effects_mult = 0.25
 	state_construction_mult = -0.75
 }
 
@@ -296,7 +300,6 @@ military_wages_high = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_military_wages_mult = 0.15
 	interest_group_ig_armed_forces_approval_add = 1
-	country_prestige_from_army_power_projection_mult = 0.1
 	unit_morale_recovery_mult = 0.1
 }
 
@@ -304,7 +307,6 @@ military_wages_very_high = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_military_wages_mult = 0.3
 	interest_group_ig_armed_forces_approval_add = 2	
-	country_prestige_from_army_power_projection_mult = 0.2
 	unit_morale_recovery_mult = 0.2
 }
 
@@ -409,8 +411,8 @@ political_dysfunction = {
 }
 
 # Excess DIP increases Infamy decay by up to 25% at 2x production to usage
-# Babylon RP: Changed value to 10% reduction (Danarca)
-# Babylon RP: Changed to 15% reduction (Fallonar v1.3)
+# Imperia RP: Changed value to 10% reduction (Danarca)
+# Imperia RP: Changed to 15% reduction (Fallonar v1.3)
 diplomatic_mitigation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
@@ -526,7 +528,7 @@ country_rivalry = {
 }
 
 # Infamy modifiers, applied from current infamy level
-#Babylon RP: Adds own scaling modifiers
+#Imperia RP: Adds own scaling modifiers
 infamy_reputable = {}
 
 infamy_infamous = {
@@ -656,6 +658,12 @@ battle_naval_invasion_landing_penalty = {
 country_humiliated = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.25
+}
+
+country_cut_down_to_size = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.5
+	country_disallow_aggressive_plays = yes
 }
 
 forced_market_opening = {

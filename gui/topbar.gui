@@ -55,8 +55,8 @@ types topbar_components
 					using = GDP_tooltip_with_graph
 					using = tooltip_below
 
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_gdp')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_gdp')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 					
 					icon = {
@@ -78,8 +78,8 @@ types topbar_components
 					spacing = 2
 					using = literacy_tooltip_with_graph
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_literacy')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_literacy')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 			
 					icon = {
@@ -100,8 +100,8 @@ types topbar_components
 					spacing = 2
 					using = average_standard_of_living_tooltip_with_graph
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_standard_of_living')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_standard_of_living')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 				
 					textbox = {
@@ -126,8 +126,8 @@ types topbar_components
 					spacing = 2	
 					using = population_tooltip_with_graph
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_population')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_population')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 			
 					icon = {
@@ -148,8 +148,8 @@ types topbar_components
 					spacing = 2	
 					using = radicals_tooltip_with_graph
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_radicals')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_radicals')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alpha = "[TransparentIfZero_int32(Country.GetNumRadicals)]"
 					alwaystransparent = no
 			
@@ -171,8 +171,8 @@ types topbar_components
 					spacing = 2	
 					using = loyalists_tooltip_with_graph
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_loyalists')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_loyalists')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alpha = "[TransparentIfZero_int32(Country.GetNumLoyalists)]"
 					alwaystransparent = no
 			
@@ -194,7 +194,7 @@ types topbar_components
 					maximumsize = { 90 28 }
 					spacing = 2	
 					using = tooltip_below
-					tooltip = "BABYLON_POLITICAL_DISCORD_TOOLTIP"
+					tooltip = "IMPERIA_POLITICAL_DISCORD_TOOLTIP"
 					alwaystransparent = no
 			
 					icon = {
@@ -280,6 +280,10 @@ types topbar_components
 					spacing = 2
 					tooltip = "[Country.GetInfamyDesc]"
 					using = tooltip_below
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_infamy')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
+					alpha = "[TransparentIfZero(Country.GetInfamy)]"
+					alwaystransparent = no
 
 					icon = {
 						size = { @secondary_icon_size @secondary_icon_size }
@@ -290,10 +294,11 @@ types topbar_components
 
 					textbox = {
 						parentanchor = vcenter
-						raw_text = "[Country.GetInfamy|1v]"
-						alpha = "[TransparentIfZero_int32(Country.GetInfamy)]"
+						raw_text = "#variable [Country.GetInfamy|0]#!"
 						autoresize = yes
 						align = left|nobaseline
+						elide = right
+						fontsize_min = 12
 					}
 				}
 
@@ -362,8 +367,8 @@ types topbar_components
 					margin_left = 3
 					tooltip = "PANEL_MILITARY_NAVY_CURRENT_FLOTILLAS_TOOLTIP"
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_military')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_military')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 
 					icon = {
@@ -391,8 +396,8 @@ types topbar_components
 					spacing = 2
 					tooltip = "PANEL_MILITARY_ARMY_OVERVIEW_TOOLTIP"
 					using = tooltip_below
-					onmousehierarchyenter = "[SelectMapModeByKey('mm_military')]"
-					onmousehierarchyleave = "[UnforceMapMode]"
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_military')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
 					alwaystransparent = no
 
 					icon = {
@@ -880,7 +885,7 @@ types topbar_components
 		position = { 10 135 }
 
 		onclick = "[MapListPanelManager.ToggleCurrentPanel]"
-		onclick = "[SelectMapModeByKey('mm_default')]"
+		onclick = "[SetTempMapModeByKey('mm_default')]"
 
 		### RANK
 		rank_badge = {

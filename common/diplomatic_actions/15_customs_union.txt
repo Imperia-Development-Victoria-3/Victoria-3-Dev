@@ -8,7 +8,6 @@
 		NOT = {
 			has_law = law_type:law_true_neutrality
 		}
-
 		NOR = {
 			is_country_type = decentralized
 			has_law = law_type:law_isolationism
@@ -17,12 +16,33 @@
 			NOR = {
 				is_country_type = decentralized
 				has_law = law_type:law_isolationism
-				has_variable = babylon_new_customs_union_applicant_denied
 				has_law = law_type:law_true_neutrality
 			}
 		}
+		is_revolutionary = no
+		scope:target_country = {
+			is_revolutionary = no
+		}
 	}
 	possible = {
+		custom_tooltip = {
+			text = DIPLO_ACTION_MARKET_CONNECTION_REQUIRED
+			OR = {
+				AND = {
+					market = {
+						has_port = yes
+					}
+					scope:target_country.market = {
+						has_port = yes
+					}
+				}
+				market = {
+					any_scope_country = {
+						is_adjacent_to_country = scope:target_country
+					}
+				}
+			}
+		}
 		#either...
 		OR = {
 			AND = {
@@ -65,27 +85,17 @@
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
 			scope:target_country.relations:root >= relations_threshold:cordial
 		}
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+		}
 		is_revolutionary = no
 		scope:target_country = {
 			is_revolutionary = no
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_MARKET_CONNECTION_REQUIRED
-			OR = {
-				AND = {
-					market = {
-						has_port = yes
-					}
-					scope:target_country.market = {
-						has_port = yes
-					}
-				}
-				market = {
-					any_scope_country = {
-						is_adjacent_to_country = scope:target_country
-					}
-				}
-			}
 		}
 	}
 	accept_effect = {
@@ -101,30 +111,6 @@
 				type = trade_agreement
 			}
 		}
-		if = {
-			limit = {
-				babylon_new_customs_union_valid_without_diplo_play = no
-			}
-			#A list of applicants for the overlord
-			add_to_variable_list = {
-				name = babylon_new_customs_union_overlord
-				target = scope:target_country
-			}
-			scope:target_country = {
-				#Used in babylon_new_customs_union.3
-				set_variable = {
-					name = babylon_new_customs_union_applicant
-					value = root
-				}
-			}
-			hidden_effect = {
-				trigger_event = {
-					#Cannot be fired instantly
-					id = babylon_new_customs_union.3
-					days = 1
-				}
-			}
-		}
 	}
 	pact = {
 		cost = 25
@@ -138,60 +124,203 @@
 		subject_type = subject_type_customs_union		# A customs union is technically a type of subject, though it isn't presented this way in-game
 		weekly_effect = {
 			scope:target_country = {
+				remove_modifier ?= modifier_customs_union_payments_negative
 				add_modifier = {
 					name = modifier_customs_union_payments_negative
-					multiplier = scope:target_country.babylon_weekly_customs_union_minting_cost
-					days = 7
-				}
-				set_variable = {
-					name = previous_minting_cost
-					value = scope:target_country.babylon_weekly_customs_union_minting_cost
-					days = 8
+					multiplier = scope:target_country.imperia_weekly_customs_union_minting_cost
 				}
 			}
+			if = {
+				limit = {
+					has_variable = total_customs_union_payment_positive
+				}
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = previous_minting_cost
+						}
+					}
+					change_variable = {
+						name = total_customs_union_payment_positive
+						add = {
+							subtract = scope:target_country.var:previous_minting_cost
+							add = scope:target_country.imperia_weekly_customs_union_minting_cost
+						}
+					}
+				}
+				else = {
+					change_variable = {
+						name = total_customs_union_payment_positive
+						add = scope:target_country.imperia_weekly_customs_union_minting_cost
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = previous_minting_cost
+						}
+					}
+					set_variable = {
+						name = total_customs_union_payment_positive
+						value = {
+							add = {
+								subtract = scope:target_country.var:previous_minting_cost
+								add = scope:target_country.imperia_weekly_customs_union_minting_cost
+							}
+						}
+					}
+				}
+				else = {
+					set_variable = {
+						name = total_customs_union_payment_positive
+						value = scope:target_country.imperia_weekly_customs_union_minting_cost
+					}
+				}
+			}
+			scope:target_country = {
+				set_variable = {
+					name = previous_minting_cost
+					value = scope:target_country.imperia_weekly_customs_union_minting_cost
+				}
+			}
+			remove_modifier ?= modifier_customs_union_payments_positive
 			add_modifier = {
 				name = modifier_customs_union_payments_positive
 				multiplier = {
-					subtract = scope:target_country.babylon_weekly_customs_union_minting_cost
+					subtract = root.var:total_customs_union_payment_positive
 				}
-				days = 7
 			}
 		}
-		is_about_to_auto_break = {
-			scope:target_country.relations:root < 23			# this is: cordial + 3
-		}
-		should_auto_break = {
-			custom_tooltip = {
-				text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
-				# make sure to update is_about_to_auto_break when changing this:
-				scope:target_country.relations:root < relations_threshold:cordial
+		requirement_to_maintain = {
+			trigger = {
+				OR = {
+					AND = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+						scope:target_country = {
+							OR = {
+								is_country_type = recognized
+								is_country_type = colonial
+							}
+						}
+					}
+					AND = {
+						is_country_type = unrecognized
+						scope:target_country = {
+							is_country_type = unrecognized
+						}
+					}
+				}
 			}
 		}
-		should_invalidate = {
-			OR = {
-				has_war_with = scope:target_country
-				is_country_type = decentralized
-				scope:target_country = {
-					is_country_type = decentralized
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = {
+						is_country_type = decentralized
+					}
+					scope:target_country = {
+						NOT = {
+							is_country_type = decentralized
+						}
+					}
 				}
-				is_subject_of = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				is_subject = no
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
 				scope:target_country = {
-					is_subject_of = root
+					is_subject = no
 				}
-				is_junior_in_customs_union = yes
-				scope:target_country = {
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
+					scope:target_country.relations:root >= relations_threshold:cordial
+				}
+			}
+			show_about_to_break_warning = {
+				scope:target_country.relations:root <= 23				# this is: cordial + 3
+				scope:target_country.relations_change_rate:root < 0
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = {
+						has_war_with = scope:target_country
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
 					has_law = law_type:law_isolationism
 				}
-				has_law = law_type:law_isolationism
 			}
 		}
-		break_effect = {
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
+					scope:target_country = {
+						has_law = law_type:law_isolationism
+					}
+				}
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				is_junior_in_customs_union = no
+			}
+		}
+		manual_break_effect = {
 			change_relations = {
 				country = scope:target_country
 				value = -30
 			}
 			# AI may not take leaving their customs union well...
 			hidden_effect = {
+				remove_modifier ?= modifier_customs_union_payments_positive
+				change_variable = {
+					name = total_customs_union_payment_positive
+					subtract = scope:target_country.imperia_weekly_customs_union_minting_cost
+				}
+				# if high enough assume that there are still other countries with a customs union.
+				if = {
+					limit = {
+						var:total_customs_union_payment_positive > 100
+					}
+					add_modifier = {
+						name = modifier_customs_union_payments_positive
+						multiplier = {
+							subtract = root.var:total_customs_union_payment_positive
+						}
+					}
+				}
+				scope:target_country = {
+					remove_modifier ?= modifier_customs_union_payments_negative
+					remove_variable = previous_minting_cost
+				}
+				# AI may not take leaving their customs union well...
 				if = {
 					limit = {
 						scope:target_country.country_rank > root.country_rank
@@ -229,6 +358,8 @@
 					}
 				}
 			}
+		}
+		auto_break_effect = {
 		}
 	}
 	ai = {
@@ -715,7 +846,6 @@ join_customs_union = {
 		NOT = {
 			is_country_type = decentralized
 		}
-
 		scope:target_country = {
 			NOR = {
 				has_law = law_type:law_isolationism
@@ -802,29 +932,6 @@ join_customs_union = {
 				type = trade_agreement
 			}
 		}
-		if = {
-			limit = {
-				babylon_new_customs_union_valid_without_diplo_play = no
-			}
-			set_variable = {
-				name = babylon_new_customs_union_applicant
-				value = scope:target_country
-			}
-			scope:target_country = {
-				#A list of applicants for the overlord
-				add_to_variable_list = {
-					name = babylon_new_customs_union_overlord
-					target = root
-				}
-				hidden_effect = {
-					trigger_event = {
-						#Cannot be fired instantly
-						id = babylon_new_customs_union.3
-						days = 1
-					}
-				}
-			}
-		}
 	}
 	ai = {
 		check_acceptance_for_will_propose = yes
@@ -853,7 +960,6 @@ change_customs_union = {
 		NOT = {
 			is_country_type = decentralized
 		}
-
 		is_junior_in_customs_union = no
 		scope:target_country = {
 			NOR = {
@@ -936,29 +1042,6 @@ change_customs_union = {
 			remove_diplomatic_pact = {
 				country = scope:target_country
 				type = trade_agreement
-			}
-		}
-		if = {
-			limit = {
-				babylon_new_customs_union_valid_without_diplo_play = no
-			}
-			#A list of applicants for the overlord
-			add_to_variable_list = {
-				name = babylon_new_customs_union_overlord
-				target = scope:target_country
-			}
-			scope:target_country = {
-				set_variable = {
-					name = babylon_new_customs_union_applicant
-					value = root
-				}
-			}
-			hidden_effect = {
-				trigger_event = {
-					#Cannot be fired instantly
-					id = babylon_new_customs_union.3
-					days = 1
-				}
 			}
 		}
 	}
