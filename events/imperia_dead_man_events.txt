@@ -23,6 +23,29 @@ dead_man.1 = {
 		name = dead_man.1.a
 		set_variable = chose_initial_turk_government
 		if = {
+            limit = {
+                is_interest_group_type = ig_intelligentsia
+                leader = {
+                  NOT = {
+                      OR = {
+						has_ideology = ideology:ideology_republican
+						has_ideology = ideology:ideology_radical
+						has_ideology = ideology:ideology_atheist # nihilist
+						has_ideology = ideology:ideology_liberal_leader #democrat
+						has_ideology = ideology:ideology_positivist
+						has_ideology = ideology:ideology_market_liberal
+                       }
+                    }
+                }
+            }
+            leader = {
+                set_ideology = ideology:ideology_republican
+                add_modifier = {
+                    name = dead_man_revolutionary
+                }
+            }
+        }
+		if = {
 			limit = {
 				has_variable = supporting_theocracy_var
 			}
@@ -45,6 +68,28 @@ dead_man.1 = {
 		default_option = yes
 		set_variable = chose_initial_turk_government
 		if = {
+            limit = {
+                is_interest_group_type = ig_devout
+                leader = {
+                  NOT = {
+                      OR = {
+						has_ideology = ideology:ideology_theocrat
+						has_ideology = ideology:ideology_traditionalist
+						has_ideology = ideology:ideology_authoritarian
+						has_ideology = ideology:ideology_slaver
+						has_ideology = ideology:ideology_corporatist
+                       }
+                    }
+                }
+            }
+            leader = {
+                set_ideology = ideology:ideology_theocrat
+                add_modifier = {
+                    name = dead_man_revolutionary
+                }
+            }
+        } 
+		if = {
 			limit = {
 				has_variable = supporting_republican_var
 			}
@@ -66,27 +111,27 @@ dead_man.1 = {
 		name = dead_man.1.c
 		set_variable = chose_initial_turk_government
 		if = {
-			limit = {
-				ig:ig_trade_unions = {
-
-				}
-				NOT = {
-					OR = {
-						has_ideology = ideology:ideology_communist
-						has_ideology = ideology:ideology_vanguardist
-						has_ideology = ideology:ideology_anarchist
-						has_ideology = ideology:ideology_social_democrat
-						has_ideology = ideology:ideology_humanitarian
-					}
-				}
-			}
-			leader = {
-				set_ideology = ideology:ideology_communist
-				add_modifier = {
-					name = 1848_popular_radical
-				}
-			}
-		}
+            limit = {
+                is_interest_group_type = ig_trade_unions
+                leader = {
+                  NOT = {
+                      OR = {
+                          has_ideology = ideology:ideology_communist
+                          has_ideology = ideology:ideology_vanguardist
+                          has_ideology = ideology:ideology_anarchist
+                          has_ideology = ideology:ideology_social_democrat
+                          has_ideology = ideology:ideology_humanitarian
+                       }
+                    }
+                }
+            }
+            leader = {
+                set_ideology = ideology:ideology_communist
+                add_modifier = {
+                    name = dead_man_revolutionary
+                }
+            }
+        } 
 		if = {
 			limit = {
 				has_variable = supporting_republican_var
