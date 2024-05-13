@@ -65,8 +65,27 @@ dead_man.1 = {
 	option = { # Support Communist
 		name = dead_man.1.c
 		set_variable = chose_initial_turk_government
-		custom_tooltip = {
-			text = supporting_communists_tt
+		if = {
+			limit = {
+				ig:ig_trade_unions = {
+
+				}
+				NOT = {
+					OR = {
+						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_vanguardist
+						has_ideology = ideology:ideology_anarchist
+						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_humanitarian
+					}
+				}
+			}
+			leader = {
+				set_ideology = ideology:ideology_communist
+				add_modifier = {
+					name = 1848_popular_radical
+				}
+			}
 		}
 		if = {
 			limit = {
