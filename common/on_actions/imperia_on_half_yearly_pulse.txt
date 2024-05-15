@@ -22,13 +22,20 @@
 		# If your heir is above the age of 2, and is still a child
 		if = {
 			limit = {
-				heir = {
+				heir ?= {
 					age > 2
 					has_trait = trait_child
-					
+					# Dont pop for pre-generated heirs that werent "born"
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+						has_variable = raised_by_ruler
+					}
 				}
 			}
 			# Do a education progress tick
+			debug_log = "progress heir education"
 			progress_heir_education = yes
 		}
 	}

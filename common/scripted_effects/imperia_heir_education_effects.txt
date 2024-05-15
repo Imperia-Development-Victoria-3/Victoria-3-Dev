@@ -1,12 +1,17 @@
 ﻿progress_heir_education = {
 	# scope : country
 	# First do the "battle" tick to determine if changes are needed
+	# The heir exists, else the script wouldnt come to these parts
 	if = {
 		limit = {
 			NOT = {
 				heir = {
 					has_variable = stop_education
 				}
+			}
+			heir = {
+				has_variable = warden_selected_ideology
+				has_variable = heir_selected_ideology
 			}
 		}
 		heir = {
@@ -30,6 +35,7 @@
 		}
 		# Assume heir also needs to choose their next move here
 		heir = {
+			debug_log = "choose heir education"
 			choose_heir_education_goal = yes
 		}
 	}
@@ -56,6 +62,7 @@
 				}
 			}
 			ig:ig_devout.leader = {
+				debug_log = "devout choose education"
 				ai_warden_education_goal = yes
 			}
 		}
@@ -66,6 +73,7 @@
 				}
 			}
 			ig:ig_landowners.leader = {
+				debug_log = "nobles choose education"
 				ai_warden_education_goal = yes
 			}
 		}
@@ -76,11 +84,13 @@
 				}
 			}
 			ig:ig_petty_bourgeoisie.leader = {
+				debug_log = "pb choose education"
 				ai_warden_education_goal = yes
 			}
 		}
 		# Assume heir also needs to choose their next move here
 		heir = {
+			debug_log = "choose heir education"
 			choose_heir_education_goal = yes
 		}
 	}
@@ -95,6 +105,7 @@ choose_heir_education_goal = {
 	switch = {
 		trigger = is_interest_group_type
 		ig_armed_forces = {
+			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrats > liberal leader
@@ -114,7 +125,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -127,7 +138,7 @@ choose_heir_education_goal = {
 				1 = {
 					trigger = {
 						has_ideology = ideology:ideology_market_liberal
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -144,7 +155,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -171,7 +182,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -199,7 +210,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -241,7 +252,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_theocrat
 							AND = {
 								has_ideology = ideology:ideology_luddite
-								root = {
+								owner = {
 									NOT = {
 										has_law = law_type:law_slavery_banned
 									}
@@ -299,7 +310,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -316,7 +327,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_integralist
 							has_ideology = ideology:ideology_fascist
 						}
-						root = {
+						owner = {
 							has_technology_researched = pan-nationalism
 						}
 					}
@@ -341,6 +352,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_devout = {
+			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrat to liberal leader
@@ -360,7 +372,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -377,7 +389,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -403,7 +415,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -431,7 +443,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -462,7 +474,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -480,7 +492,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_luddite
-								root = {
+								owner = {
 									NOT = {
 										has_law = law_type:law_slavery_banned
 									}
@@ -502,12 +514,12 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -519,7 +531,7 @@ choose_heir_education_goal = {
 				# Slaver
 				10 = {
 					trigger = {
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -546,7 +558,7 @@ choose_heir_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -576,7 +588,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -607,7 +619,7 @@ choose_heir_education_goal = {
 				25 = {
 					trigger = {
 						has_ideology = ideology:ideology_theocrat
-						root = {
+						owner = {
 							has_technology_researched = corporatism
 						}
 					}
@@ -658,7 +670,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							has_ideology = ideology:ideology_fascist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -685,6 +697,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_industrialists = {
+			debug_log_scopes = yes
 			random_list = {
 				# Market Liberal (primary)
 				50 = {
@@ -696,7 +709,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -729,7 +742,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_market_liberal
 							has_ideology = ideology:ideology_social_democrat
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -749,7 +762,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -770,7 +783,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_humanitarian
 							has_ideology = ideology:ideology_social_democrat
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -788,7 +801,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_pacifist
 							has_ideology = ideology:ideology_reformer
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -812,7 +825,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_traditionalist
 							AND = {
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -840,7 +853,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_theocrat
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -902,6 +915,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_intelligentsia = {
+			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -913,7 +927,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -924,7 +938,7 @@ choose_heir_education_goal = {
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -942,7 +956,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -960,7 +974,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_pacifist
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -984,7 +998,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -997,7 +1011,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1036,7 +1050,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_feminist
 							has_ideology = ideology:ideology_market_liberal
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -1056,7 +1070,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -1079,7 +1093,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1104,7 +1118,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -1123,7 +1137,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -1197,6 +1211,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_landowners = {
+			debug_log_scopes = yes
 			random_list = {
 				# Traditionalist (primary)
 				50 = {
@@ -1227,7 +1242,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1252,7 +1267,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -1316,7 +1331,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							has_ideology = ideology:ideology_luddite
 						}
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -1336,12 +1351,12 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_pacifist
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -1361,7 +1376,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1372,7 +1387,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -1400,7 +1415,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_moderate
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -1422,7 +1437,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -1464,7 +1479,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -1480,7 +1495,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -1503,6 +1518,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_petty_bourgeoisie = {
+			debug_log_scopes = yes
 			random_list = {
 				# authoritarian (no primaries, very versatile)
 				25 = {
@@ -1546,7 +1562,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -1565,7 +1581,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -1585,7 +1601,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -1608,7 +1624,7 @@ choose_heir_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1638,7 +1654,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -1703,7 +1719,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -1721,7 +1737,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -1738,7 +1754,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -1771,6 +1787,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_rural_folk = {
+			debug_log_scopes = yes
 			# Again a split up IG, with no primaries
 			random_list = {
 				# land reformer
@@ -1783,7 +1800,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -1801,12 +1818,12 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -1818,7 +1835,7 @@ choose_heir_education_goal = {
 				# Slaver
 				25 = {
 					trigger = {
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -1845,7 +1862,7 @@ choose_heir_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1875,7 +1892,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -1897,7 +1914,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -1910,7 +1927,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -1990,7 +2007,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -2006,7 +2023,7 @@ choose_heir_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -2029,6 +2046,7 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_trade_unions = {
+			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -2040,7 +2058,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -2051,7 +2069,7 @@ choose_heir_education_goal = {
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -2069,7 +2087,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -2087,7 +2105,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_pacifist
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -2111,7 +2129,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -2124,7 +2142,7 @@ choose_heir_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -2148,7 +2166,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_feminist
 							has_ideology = ideology:ideology_market_liberal
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -2168,7 +2186,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -2203,7 +2221,7 @@ choose_heir_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -2293,7 +2311,6 @@ heir_education_battle_tick = {
 	# -3 is generally the heir,
 	# 0 is the current ideology
 	# 3 is where the warden wants to go
-	# First an effect for if everyone agrees on maintaining
 	if = {
 		limit = {
 			NOT = {
@@ -2305,6 +2322,7 @@ heir_education_battle_tick = {
 			value = 0
 		}
 	}
+	# First an effect for if everyone agrees on maintaining
 	if = {
 		limit = {
 			has_ideology = var:warden_selected_ideology
@@ -2396,6 +2414,8 @@ heir_education_battle_tick = {
 			limit = {
 				var:education_movement <= -3
 			}
+			debug_log = "heir won this battle"
+			debug_log_scopes = yes
 			set_ideology = var:heir_selected_ideology
 			remove_battle_variables = yes
 		}
@@ -2403,6 +2423,8 @@ heir_education_battle_tick = {
 			limit = {
 				var:education_movement >= 3
 			}
+			debug_log = "warden won this battle"
+			debug_log_scopes = yes
 			set_ideology = var:warden_selected_ideology
 			remove_battle_variables = yes
 		}
@@ -2411,9 +2433,12 @@ heir_education_battle_tick = {
 
 remove_battle_variables = {
 	# scope : heir
-	remove_variable = education_movement
 	remove_variable = warden_selected_ideology
 	remove_variable = heir_selected_ideology
+	set_variable = {
+		name = education_movement
+		value = 0
+	}
 }
 
 ai_warden_education_goal = {
@@ -2421,6 +2446,7 @@ ai_warden_education_goal = {
 	switch = {
 		trigger = is_interest_group_type
 		ig_armed_forces = {
+			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrats > liberal leader
@@ -2442,7 +2468,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -2457,7 +2483,7 @@ ai_warden_education_goal = {
 				1 = {
 					trigger = {
 						has_ideology = ideology:ideology_market_liberal
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -2476,7 +2502,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -2507,7 +2533,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -2539,7 +2565,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
@@ -2587,7 +2613,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_theocrat
 							AND = {
 								has_ideology = ideology:ideology_luddite
-								root = {
+								owner = {
 									NOT = {
 										has_law = law_type:law_slavery_banned
 									}
@@ -2651,7 +2677,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -2670,7 +2696,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_integralist
 							has_ideology = ideology:ideology_fascist
 						}
-						root = {
+						owner = {
 							has_technology_researched = pan-nationalism
 						}
 					}
@@ -2699,6 +2725,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_devout = {
+			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrat to liberal leader
@@ -2720,7 +2747,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -2739,13 +2766,13 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -2754,7 +2781,7 @@ ai_warden_education_goal = {
 					}
 					# Else if slavery is not up for debate
 					else = {
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2769,14 +2796,14 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
 								}
 							}
 						}
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2786,7 +2813,7 @@ ai_warden_education_goal = {
 					# Else if reformer is inactive
 					else = {
 						# Merely a temporary setback
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2801,14 +2828,14 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								has_technology_researched = egalitarianism
 								NOT = {
 									has_technology_researched = feminism
 								}
 							}
 						}
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2817,7 +2844,7 @@ ai_warden_education_goal = {
 					}
 					# Else if reformer is inactive
 					else = {
-						owner.root = {
+						owner.heir = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_moderate
@@ -2836,7 +2863,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -2856,7 +2883,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_luddite
-								root = {
+								owner = {
 									NOT = {
 										has_law = law_type:law_slavery_banned
 									}
@@ -2880,12 +2907,12 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -2899,7 +2926,7 @@ ai_warden_education_goal = {
 				# Slaver
 				10 = {
 					trigger = {
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -2928,7 +2955,7 @@ ai_warden_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -2960,7 +2987,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -2995,7 +3022,7 @@ ai_warden_education_goal = {
 				25 = {
 					trigger = {
 						has_ideology = ideology:ideology_theocrat
-						root = {
+						owner = {
 							has_technology_researched = corporatism
 						}
 					}
@@ -3052,7 +3079,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							has_ideology = ideology:ideology_fascist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -3083,6 +3110,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_industrialists = {
+			debug_log_scopes = yes
 			random_list = {
 				# Market Liberal (primary)
 				50 = {
@@ -3094,7 +3122,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -3131,7 +3159,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_market_liberal
 							has_ideology = ideology:ideology_social_democrat
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -3153,7 +3181,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -3176,7 +3204,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_humanitarian
 							has_ideology = ideology:ideology_social_democrat
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -3196,7 +3224,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_pacifist
 							has_ideology = ideology:ideology_reformer
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -3222,7 +3250,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_traditionalist
 							AND = {
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -3252,7 +3280,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_theocrat
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -3324,6 +3352,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_intelligentsia = {
+			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -3335,7 +3364,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -3346,7 +3375,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -3366,7 +3395,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -3386,7 +3415,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_pacifist
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -3412,7 +3441,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -3425,7 +3454,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -3468,7 +3497,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_feminist
 							has_ideology = ideology:ideology_market_liberal
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -3490,7 +3519,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -3515,7 +3544,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -3542,7 +3571,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -3563,7 +3592,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -3649,6 +3678,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_landowners = {
+			debug_log_scopes = yes
 			random_list = {
 				# Traditionalist (primary)
 				50 = {
@@ -3681,7 +3711,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -3708,7 +3738,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -3780,7 +3810,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							has_ideology = ideology:ideology_luddite
 						}
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -3802,12 +3832,12 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_pacifist
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -3829,7 +3859,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -3840,7 +3870,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -3870,7 +3900,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_moderate
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -3894,7 +3924,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -3942,7 +3972,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -3960,7 +3990,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -3987,6 +4017,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_petty_bourgeoisie = {
+			debug_log_scopes = yes
 			random_list = {
 				# authoritarian (no primaries, very versatile)
 				25 = {
@@ -4034,7 +4065,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -4055,7 +4086,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -4077,7 +4108,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -4102,7 +4133,7 @@ ai_warden_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -4134,7 +4165,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -4207,7 +4238,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -4227,7 +4258,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 							has_ideology = ideology:ideology_integralist
 						}
-						root = {
+						owner = {
 							has_technology_researched = political_agitation
 						}
 					}
@@ -4246,7 +4277,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -4285,6 +4316,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_rural_folk = {
+			debug_log_scopes = yes
 			# Again a split up IG, with no primaries
 			random_list = {
 				# land reformer
@@ -4297,7 +4329,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
@@ -4317,12 +4349,12 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 							AND = {
 								has_ideology = ideology:ideology_traditionalist
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = romanticism
 						}
 					}
@@ -4336,7 +4368,7 @@ ai_warden_education_goal = {
 				# Slaver
 				25 = {
 					trigger = {
-						root = {
+						owner = {
 							NOT = {
 								has_law = law_type:law_slavery_banned
 							}
@@ -4365,7 +4397,7 @@ ai_warden_education_goal = {
 							AND = {
 								# If reformer is not active
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -4397,7 +4429,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 							AND = {
 								# Luddite can pass through slaver if slavery has been banned
-								root = {
+								owner = {
 									has_law = law_type:law_slavery_banned
 								}
 								has_ideology = ideology:ideology_luddite
@@ -4421,7 +4453,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -4434,7 +4466,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -4526,7 +4558,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = stock_exchange
 						}
 					}
@@ -4544,7 +4576,7 @@ ai_warden_education_goal = {
 					}
 					if = {
 						limit = {
-							root = {
+							owner = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
 								}
@@ -4571,6 +4603,7 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_trade_unions = {
+			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -4582,7 +4615,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_pacifist
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -4593,7 +4626,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -4613,7 +4646,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_liberal_leader
 							has_ideology = ideology:ideology_feminist
 						}
-						root = {
+						owner = {
 							has_technology_researched = socialism
 						}
 					}
@@ -4633,7 +4666,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_reformer
 							has_ideology = ideology:ideology_pacifist
 						}
-						root = {
+						owner = {
 							OR = {
 								NOT = {
 									has_law = law_type:law_slavery_banned
@@ -4659,7 +4692,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_humanitarian
 								NOT = {
-									root = {
+									owner = {
 										OR = {
 											NOT = {
 												has_law = law_type:law_slavery_banned
@@ -4672,7 +4705,7 @@ ai_warden_education_goal = {
 							AND = {
 								has_ideology = ideology:ideology_moderate
 								NOT = {
-									root = {
+									owner = {
 										has_technology_researched = egalitarianism
 										NOT = {
 											has_technology_researched = feminism
@@ -4698,7 +4731,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_feminist
 							has_ideology = ideology:ideology_market_liberal
 						}
-						root = {
+						owner = {
 							has_technology_researched = feminism
 						}
 					}
@@ -4720,7 +4753,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_moderate
 							has_ideology = ideology:ideology_land_reformer
 						}
-						root = {
+						owner = {
 							has_technology_researched = egalitarianism
 							NOT = {
 								has_technology_researched = feminism
@@ -4759,7 +4792,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_land_reformer
 							has_ideology = ideology:ideology_traditionalist
 						}
-						root = {
+						owner = {
 							has_technology_researched = enclosure
 						}
 					}
