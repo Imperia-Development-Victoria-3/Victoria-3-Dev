@@ -4,11 +4,6 @@
 	# The heir exists, else the script wouldnt come to these parts
 	if = {
 		limit = {
-			NOT = {
-				heir = {
-					has_variable = stop_education
-				}
-			}
 			heir = {
 				has_variable = warden_selected_ideology
 				has_variable = heir_selected_ideology
@@ -24,7 +19,6 @@
 			heir = {
 				NOT = {
 					has_variable = warden_selected_ideology
-					has_variable = stop_education
 				}
 				has_variable = raised_by_ruler
 			}
@@ -35,7 +29,6 @@
 		}
 		# Assume heir also needs to choose their next move here
 		heir = {
-			debug_log = "choose heir education"
 			choose_heir_education_goal = yes
 		}
 	}
@@ -50,7 +43,6 @@
 				}
 				NOT = {
 					has_variable = warden_selected_ideology
-					has_variable = stop_education
 				}
 			}
 		}
@@ -62,7 +54,6 @@
 				}
 			}
 			ig:ig_devout.leader = {
-				debug_log = "devout choose education"
 				ai_warden_education_goal = yes
 			}
 		}
@@ -73,7 +64,6 @@
 				}
 			}
 			ig:ig_landowners.leader = {
-				debug_log = "nobles choose education"
 				ai_warden_education_goal = yes
 			}
 		}
@@ -84,13 +74,11 @@
 				}
 			}
 			ig:ig_petty_bourgeoisie.leader = {
-				debug_log = "pb choose education"
 				ai_warden_education_goal = yes
 			}
 		}
 		# Assume heir also needs to choose their next move here
 		heir = {
-			debug_log = "choose heir education"
 			choose_heir_education_goal = yes
 		}
 	}
@@ -105,7 +93,6 @@ choose_heir_education_goal = {
 	switch = {
 		trigger = is_interest_group_type
 		ig_armed_forces = {
-			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrats > liberal leader
@@ -352,7 +339,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_devout = {
-			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrat to liberal leader
@@ -697,7 +683,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_industrialists = {
-			debug_log_scopes = yes
 			random_list = {
 				# Market Liberal (primary)
 				50 = {
@@ -915,7 +900,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_intelligentsia = {
-			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -1211,7 +1195,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_landowners = {
-			debug_log_scopes = yes
 			random_list = {
 				# Traditionalist (primary)
 				50 = {
@@ -1518,7 +1501,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_petty_bourgeoisie = {
-			debug_log_scopes = yes
 			random_list = {
 				# authoritarian (no primaries, very versatile)
 				25 = {
@@ -1787,7 +1769,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_rural_folk = {
-			debug_log_scopes = yes
 			# Again a split up IG, with no primaries
 			random_list = {
 				# land reformer
@@ -2046,7 +2027,6 @@ choose_heir_education_goal = {
 			}
 		}
 		ig_trade_unions = {
-			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -2313,6 +2293,38 @@ heir_education_battle_tick = {
 	# 3 is where the warden wants to go
 	if = {
 		limit = {
+			has_variable = raised_by_clergy
+		}
+		owner.ig:ig_devout.leader = {
+			save_scope_as = warden_scope
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = raised_by_nobles
+		}
+		owner.ig:ig_landowners.leader = {
+			save_scope_as = warden_scope
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = raised_by_burghers
+		}
+		owner.ig:ig_petty_bourgeoisie.leader = {
+			save_scope_as = warden_scope
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = raised_by_ruler
+		}
+		owner.ruler = {
+			save_scope_as = warden_scope
+		}
+	}
+	if = {
+		limit = {
 			NOT = {
 				has_variable = education_movement
 			}
@@ -2343,9 +2355,24 @@ heir_education_battle_tick = {
 						has_variable = heir_maintains_education_status_quo
 					}
 				}
+				modifier = {
+					multiply = {
+						value = {
+							value = popularity
+							add = 100
+						}
+						divide = 100
+					}
+				}
 				change_variable = {
 					name = education_movement
-					subtract = 1
+					subtract = {
+						value = {
+							value = popularity
+							add = 100
+						}
+						divide = 100
+					}
 				}
 			}
 			# Warden movement
@@ -2355,9 +2382,24 @@ heir_education_battle_tick = {
 						has_variable = warden_maintains_education_status_quo
 					}
 				}
+				modifier = {
+					multiply = {
+						value = {
+							value = scope:warden_scope.popularity
+							add = 100
+						}
+						divide = 100
+					}
+				}
 				change_variable = {
 					name = education_movement
-					add = 1
+					add = {
+						value = {
+							value = scope:warden_scope.popularity
+							add = 100
+						}
+						divide = 100
+					}
 				}
 			}
 			# Maintain movement
@@ -2368,7 +2410,7 @@ heir_education_battle_tick = {
 					}
 					change_variable = {
 						name = education_movement
-						subtract = 1
+						subtract = 0.5
 					}
 				}
 				else_if = {
@@ -2377,7 +2419,7 @@ heir_education_battle_tick = {
 					}
 					change_variable = {
 						name = education_movement
-						add = 1
+						add = 0.5
 					}
 				}
 			}
@@ -2395,7 +2437,7 @@ heir_education_battle_tick = {
 					}
 					change_variable = {
 						name = education_movement
-						subtract = 1
+						subtract = 0.75
 					}
 				}
 				else_if = {
@@ -2404,10 +2446,14 @@ heir_education_battle_tick = {
 					}
 					change_variable = {
 						name = education_movement
-						add = 1
+						add = 0.75
 					}
 				}
 			}
+		}
+		round_variable = {
+			name = education_movement
+			nearest = 0.1
 		}
 		# If the heir won this battle
 		if = {
@@ -2415,7 +2461,6 @@ heir_education_battle_tick = {
 				var:education_movement <= -3
 			}
 			debug_log = "heir won this battle"
-			debug_log_scopes = yes
 			set_ideology = var:heir_selected_ideology
 			remove_battle_variables = yes
 		}
@@ -2424,7 +2469,6 @@ heir_education_battle_tick = {
 				var:education_movement >= 3
 			}
 			debug_log = "warden won this battle"
-			debug_log_scopes = yes
 			set_ideology = var:warden_selected_ideology
 			remove_battle_variables = yes
 		}
@@ -2446,7 +2490,6 @@ ai_warden_education_goal = {
 	switch = {
 		trigger = is_interest_group_type
 		ig_armed_forces = {
-			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrats > liberal leader
@@ -2725,7 +2768,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_devout = {
-			debug_log_scopes = yes
 			random_list = {
 				# First the backwards movement
 				# Social democrat to liberal leader
@@ -3110,7 +3152,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_industrialists = {
-			debug_log_scopes = yes
 			random_list = {
 				# Market Liberal (primary)
 				50 = {
@@ -3352,7 +3393,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_intelligentsia = {
-			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -3678,7 +3718,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_landowners = {
-			debug_log_scopes = yes
 			random_list = {
 				# Traditionalist (primary)
 				50 = {
@@ -4017,7 +4056,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_petty_bourgeoisie = {
-			debug_log_scopes = yes
 			random_list = {
 				# authoritarian (no primaries, very versatile)
 				25 = {
@@ -4316,7 +4354,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_rural_folk = {
-			debug_log_scopes = yes
 			# Again a split up IG, with no primaries
 			random_list = {
 				# land reformer
@@ -4603,7 +4640,6 @@ ai_warden_education_goal = {
 			}
 		}
 		ig_trade_unions = {
-			debug_log_scopes = yes
 			random_list = {
 				# Humanitarian (primary)
 				50 = {
@@ -4884,6 +4920,7 @@ ai_warden_education_goal = {
 	if = {
 		limit = {
 			owner.heir = {
+				has_variable = heir_selected_ideology
 				has_ideology = var:heir_selected_ideology
 			}
 		}
