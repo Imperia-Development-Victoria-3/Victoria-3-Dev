@@ -1,0 +1,31 @@
+﻿on_imperia_heir_born = {
+	effect = {
+		if = {
+			# If the heirs countrys ruler has one of the French monarchy variables, refer to the vanilla on_action for further action
+			limit = {
+				NOR = {
+					owner = {
+						ruler = {
+							OR = {
+								has_variable = orleanist_leader
+								has_variable = legitimist_leader
+								has_variable = bonapartist_leader
+							}
+						}
+					}
+					has_ideology = ideology:ideology_orleanist
+					has_ideology = ideology:ideology_legitimist
+					has_ideology = ideology:ideology_bonapartist
+				}
+			}
+			# Else, down here we go
+            set_ideology = ideology:ideology_moderate
+            owner = {
+                trigger_event = {
+                    id = imperia_heir_education.1
+                    popup = yes
+                }
+            }
+		}
+	}
+}

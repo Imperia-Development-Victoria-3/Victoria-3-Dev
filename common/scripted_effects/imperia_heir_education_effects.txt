@@ -1,0 +1,4861 @@
+﻿progress_heir_education = {
+	# scope : country
+	# First do the "battle" tick to determine if changes are needed
+	if = {
+		limit = {
+			NOT = {
+				heir = {
+					has_variable = stop_education
+				}
+			}
+		}
+		heir = {
+			heir_education_battle_tick = yes
+		}
+	}
+	# If you havent chosen, the child is raised by the ruler, and no education stop is in place...
+	if = {
+		limit = {
+			heir = {
+				NOT = {
+					has_variable = warden_selected_ideology
+					has_variable = stop_education
+				}
+				has_variable = raised_by_ruler
+			}
+		}
+		trigger_event = {
+			id = imperia_heir_education.2
+			popup = yes
+		}
+		# Assume heir also needs to choose their next move here
+		heir = {
+			choose_heir_education_goal = yes
+		}
+	}
+	# AI section
+	else_if = {
+		limit = {
+			heir = {
+				OR = {
+					has_variable = raised_by_clergy
+					has_variable = raised_by_nobles
+					has_variable = raised_by_burghers
+				}
+				NOT = {
+					has_variable = warden_selected_ideology
+					has_variable = stop_education
+				}
+			}
+		}
+		# Choose next ideology for heir
+		if = {
+			limit = {
+				heir = {
+					has_variable = raised_by_clergy
+				}
+			}
+			ig:ig_devout.leader = {
+				ai_warden_education_goal = yes
+			}
+		}
+		else_if = {
+			limit = {
+				heir = {
+					has_variable = raised_by_nobles
+				}
+			}
+			ig:ig_landowners.leader = {
+				ai_warden_education_goal = yes
+			}
+		}
+		else_if = {
+			limit = {
+				heir = {
+					has_variable = raised_by_burghers
+				}
+			}
+			ig:ig_petty_bourgeoisie.leader = {
+				ai_warden_education_goal = yes
+			}
+		}
+		# Assume heir also needs to choose their next move here
+		heir = {
+			choose_heir_education_goal = yes
+		}
+	}
+}
+
+choose_heir_education_goal = {
+	# scope : heir
+	# Logic : First we switch to the heirs IG
+	# Then we move backwards where necessary, and towards the going-to-be set ideology (heir_selected_ideology) when possible
+	# So: the triggers are everything that can move into the set_variable section
+	# The weights should be 50 for primary ideologies for the IG, 25 for those leading into those, and then 10 for the 2 second ring. Rest should be weight 1
+	switch = {
+		trigger = is_interest_group_type
+		ig_armed_forces = {
+			random_list = {
+				# First the backwards movement
+				# Social democrats > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# Market Liberals > land reformer
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_market_liberal
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Humanitarian line
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Abolitionist > reformer
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_abolitionist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						# Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_pacifist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# Corporatist to theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# End of humanitarian line
+				# End of backwards movement
+				# Towards traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_theocrat
+							AND = {
+								has_ideology = ideology:ideology_luddite
+								root = {
+									NOT = {
+										has_law = law_type:law_slavery_banned
+									}
+								}
+							}
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Jingoist
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_jingoist
+					}
+				}
+				# Authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_authoritarian
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# Fascist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# Ethno-nationalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_fascist
+						}
+						root = {
+							has_technology_researched = pan-nationalism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_ethno_nationalist
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						has_ideology = ideology:ideology_authoritarian
+						has_ideology = ideology:ideology_royalist
+						has_ideology = ideology:ideology_integralist
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+			}
+		}
+		ig_devout = {
+			random_list = {
+				# First the backwards movement
+				# Social democrat to liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# Humanitarian line
+				# From Humanitarian
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# From Abolitionist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_abolitionist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						# Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# From Pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_pacifist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# End of humanitarian line
+				# land reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Towards traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_luddite
+								root = {
+									NOT = {
+										has_law = law_type:law_slavery_banned
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Luddite
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_luddite
+					}
+				}
+				# Slaver
+				10 = {
+					trigger = {
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+						OR = {
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_slaver
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# Traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Jingoist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_jingoist
+					}
+				}
+				# Corporatist
+				25 = {
+					trigger = {
+						has_ideology = ideology:ideology_theocrat
+						root = {
+							has_technology_researched = corporatism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_corporatist_leader
+					}
+				}
+				# Theocrat
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_corporatist_leader
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# Authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian_royalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+			}
+		}
+		ig_industrialists = {
+			random_list = {
+				# Market Liberal (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# Liberal leader
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_social_democrat
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Feminist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_social_democrat
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_feminist
+					}
+				}
+				# Reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_reformer
+					}
+				}
+				# Social democrat
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_social_democrat
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_social_democrat
+					}
+				}
+				# Abolitionist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_abolitionist
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# From right-wing ideologies towards traditionalist
+				# Corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# To Authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# Hum. Roy. > Royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+				# To Fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+			}
+		}
+		ig_intelligentsia = {
+			random_list = {
+				# Humanitarian (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_humanitarian
+					}
+				}
+				# Social Democrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_social_democrat
+					}
+				}
+				# Abolitionist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_abolitionist
+					}
+				}
+				# Pacifist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_pacifist
+					}
+				}
+				# Democrat (liberal leader)
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Feminist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_feminist
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_reformer
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# market Liberal
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# land reformer
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Authoritarian line
+				# to traditionalist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# to authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# hum. roy. > royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+				# to fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_ethno_nationalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+			}
+		}
+		ig_landowners = {
+			random_list = {
+				# Traditionalist (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Moderate
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# jingoist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_jingoist
+					}
+				}
+				# authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# theocrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_corporatist_leader
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# slaver
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_luddite
+						}
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_slaver
+					}
+				}
+				# luddite
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_pacifist
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_luddite
+					}
+				}
+				# pacifist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_pacifist
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_moderate
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_reformer
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_humanitarian_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# Then the backwards movement
+				# soc.dem. > democrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# humanitarian > abolitionist / pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+			}
+		}
+		ig_petty_bourgeoisie = {
+			random_list = {
+				# authoritarian (no primaries, very versatile)
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# royalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian_royalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Market Liberal
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_reformer
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Jingoist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_jingoist
+					}
+				}
+				# Theocrat
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_corporatist_leader
+							has_ideology = ideology:ideology_theocrat
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# humanitarian Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_humanitarian_royalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_humanitarian_royalist
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# Integralist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_integralist
+					}
+				}
+				# Humanitarian & Soc.dem.
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Soc.dem. > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+			}
+		}
+		ig_rural_folk = {
+			# Again a split up IG, with no primaries
+			random_list = {
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Luddite
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_luddite
+					}
+				}
+				# Slaver
+				25 = {
+					trigger = {
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+						OR = {
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_slaver
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# Pacifist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_pacifist
+					}
+				}
+				# From right-wing ideologies towards traditionalist
+				# Corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# To Authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# Hum. Roy. > Royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+				# To Fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+				# For the left-wing side
+				# Social democrats > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_liberal_leader
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_market_liberal
+					}
+				}
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						set_variable = {
+							name = heir_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+			}
+		}
+		ig_trade_unions = {
+			random_list = {
+				# Humanitarian (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_humanitarian
+					}
+				}
+				# Social Democrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_social_democrat
+					}
+				}
+				# Abolitionist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_abolitionist
+					}
+				}
+				# Pacifist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_pacifist
+					}
+				}
+				# Feminist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_feminist
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_reformer
+					}
+				}
+				# Moderate
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_moderate
+					}
+				}
+				# land reformer
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_land_reformer
+					}
+				}
+				# Authoritarian line
+				# to traditionalist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_traditionalist
+					}
+				}
+				# corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_theocrat
+					}
+				}
+				# to authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_authoritarian
+					}
+				}
+				# hum. roy. > royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_royalist
+					}
+				}
+				# to fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_ethno_nationalist
+						}
+					}
+					set_variable = {
+						name = heir_selected_ideology
+						value = ideology:ideology_fascist
+					}
+				}
+			}
+		}
+	}
+	# IF the heir selected his/her own trait, consider them "happy" with the upbringing
+	# This makes them attempt to stay at the status quo
+	# just a reminder, but the scope is still the heir
+	if = {
+		limit = {
+			has_ideology = var:heir_selected_ideology
+		}
+		set_variable = heir_maintains_education_status_quo
+	}
+}
+
+heir_education_battle_tick = {
+	# scope : heir
+	# -3 is generally the heir,
+	# 0 is the current ideology
+	# 3 is where the warden wants to go
+	# First an effect for if everyone agrees on maintaining
+	if = {
+		limit = {
+			NOT = {
+				has_variable = education_movement
+			}
+		}
+		set_variable = {
+			name = education_movement
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_ideology = var:warden_selected_ideology
+			has_ideology = var:heir_selected_ideology
+		}
+		set_variable = {
+			name = stop_education
+			# two and a half years before next chance of upsetting the status quo
+			months = 30
+		}
+	}
+	else = {
+		random_list = {
+			# Heir movement
+			33 = {
+				trigger = {
+					NOT = {
+						has_variable = heir_maintains_education_status_quo
+					}
+				}
+				change_variable = {
+					name = education_movement
+					subtract = 1
+				}
+			}
+			# Warden movement
+			33 = {
+				trigger = {
+					NOT = {
+						has_variable = warden_maintains_education_status_quo
+					}
+				}
+				change_variable = {
+					name = education_movement
+					add = 1
+				}
+			}
+			# Maintain movement
+			33 = {
+				if = {
+					limit = {
+						var:education_movement > 0
+					}
+					change_variable = {
+						name = education_movement
+						subtract = 1
+					}
+				}
+				else_if = {
+					limit = {
+						var:education_movement < 0
+					}
+					change_variable = {
+						name = education_movement
+						add = 1
+					}
+				}
+			}
+			# Extra Maintain movement, in case one of the sides wish to do that
+			33 = {
+				trigger = {
+					OR = {
+						has_variable = heir_maintains_education_status_quo
+						has_variable = warden_maintains_education_status_quo
+					}
+				}
+				if = {
+					limit = {
+						var:education_movement > 0
+					}
+					change_variable = {
+						name = education_movement
+						subtract = 1
+					}
+				}
+				else_if = {
+					limit = {
+						var:education_movement < 0
+					}
+					change_variable = {
+						name = education_movement
+						add = 1
+					}
+				}
+			}
+		}
+		# If the heir won this battle
+		if = {
+			limit = {
+				var:education_movement <= -3
+			}
+			set_ideology = var:heir_selected_ideology
+			remove_battle_variables = yes
+		}
+		else_if = {
+			limit = {
+				var:education_movement >= 3
+			}
+			set_ideology = var:warden_selected_ideology
+			remove_battle_variables = yes
+		}
+	}
+}
+
+remove_battle_variables = {
+	# scope : heir
+	remove_variable = education_movement
+	remove_variable = warden_selected_ideology
+	remove_variable = heir_selected_ideology
+}
+
+ai_warden_education_goal = {
+	# scope : the IG leader of the wardens	
+	switch = {
+		trigger = is_interest_group_type
+		ig_armed_forces = {
+			random_list = {
+				# First the backwards movement
+				# Social democrats > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# Market Liberals > land reformer
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_market_liberal
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Humanitarian line
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_abolitionist
+							}
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+				# Abolitionist > reformer
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_abolitionist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_reformer
+							}
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						# Merely a temporary setback
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+				# Pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_pacifist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_reformer
+							}
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_moderate
+							}
+						}
+					}
+				}
+				# Corporatist to theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# End of humanitarian line
+				# End of backwards movement
+				# Towards traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_theocrat
+							AND = {
+								has_ideology = ideology:ideology_luddite
+								root = {
+									NOT = {
+										has_law = law_type:law_slavery_banned
+									}
+								}
+							}
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Jingoist
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_jingoist
+						}
+					}
+				}
+				# Authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_authoritarian
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# Fascist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# Ethno-nationalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_fascist
+						}
+						root = {
+							has_technology_researched = pan-nationalism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_ethno_nationalist
+						}
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						has_ideology = ideology:ideology_authoritarian
+						has_ideology = ideology:ideology_royalist
+						has_ideology = ideology:ideology_integralist
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+			}
+		}
+		ig_devout = {
+			random_list = {
+				# First the backwards movement
+				# Social democrat to liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# Humanitarian line
+				# From Humanitarian
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_abolitionist
+							}
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+				# From Abolitionist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_abolitionist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_reformer
+							}
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						# Merely a temporary setback
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+				# From Pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_pacifist
+					}
+					if = {
+						limit = {
+							root = {
+								has_technology_researched = egalitarianism
+								NOT = {
+									has_technology_researched = feminism
+								}
+							}
+						}
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_reformer
+							}
+						}
+					}
+					# Else if reformer is inactive
+					else = {
+						owner.root = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_moderate
+							}
+						}
+					}
+				}
+				# End of humanitarian line
+				# land reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Towards traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_luddite
+								root = {
+									NOT = {
+										has_law = law_type:law_slavery_banned
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Luddite
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_luddite
+						}
+					}
+				}
+				# Slaver
+				10 = {
+					trigger = {
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+						OR = {
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_slaver
+						}
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# Traditionalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Jingoist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_jingoist
+						}
+					}
+				}
+				# Corporatist
+				25 = {
+					trigger = {
+						has_ideology = ideology:ideology_theocrat
+						root = {
+							has_technology_researched = corporatism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_corporatist_leader
+						}
+					}
+				}
+				# Theocrat
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_corporatist_leader
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# Authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian_royalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+			}
+		}
+		ig_industrialists = {
+			random_list = {
+				# Market Liberal (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# Liberal leader
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_social_democrat
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Feminist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_social_democrat
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_feminist
+						}
+					}
+				}
+				# Reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+				}
+				# Social democrat
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_social_democrat
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_social_democrat
+						}
+					}
+				}
+				# Abolitionist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# From right-wing ideologies towards traditionalist
+				# Corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# To Authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# Hum. Roy. > Royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+				# To Fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+			}
+		}
+		ig_intelligentsia = {
+			random_list = {
+				# Humanitarian (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_humanitarian
+						}
+					}
+				}
+				# Social Democrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_social_democrat
+						}
+					}
+				}
+				# Abolitionist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+				}
+				# Pacifist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Democrat (liberal leader)
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Feminist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_feminist
+						}
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# market Liberal
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# land reformer
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Authoritarian line
+				# to traditionalist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# to authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# hum. roy. > royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+				# to fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_ethno_nationalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+			}
+		}
+		ig_landowners = {
+			random_list = {
+				# Traditionalist (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Moderate
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# jingoist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_jingoist
+						}
+					}
+				}
+				# authoritarian
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# theocrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_corporatist_leader
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# slaver
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_luddite
+						}
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_slaver
+						}
+					}
+				}
+				# luddite
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_pacifist
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_luddite
+						}
+					}
+				}
+				# pacifist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_moderate
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_humanitarian_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# Then the backwards movement
+				# soc.dem. > democrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# humanitarian > abolitionist / pacifist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_abolitionist
+							}
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+			}
+		}
+		ig_petty_bourgeoisie = {
+			random_list = {
+				# authoritarian (no primaries, very versatile)
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# royalist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian_royalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Market Liberal
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Jingoist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_jingoist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_jingoist
+						}
+					}
+				}
+				# Theocrat
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_corporatist_leader
+							has_ideology = ideology:ideology_theocrat
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# humanitarian Royalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_humanitarian_royalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_humanitarian_royalist
+						}
+					}
+				}
+				# Fascist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# Integralist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+						root = {
+							has_technology_researched = political_agitation
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_integralist
+						}
+					}
+				}
+				# Humanitarian & Soc.dem.
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_abolitionist
+							}
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+				# Soc.dem. > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+			}
+		}
+		ig_rural_folk = {
+			# Again a split up IG, with no primaries
+			random_list = {
+				# land reformer
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Luddite
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_traditionalist
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						root = {
+							has_technology_researched = romanticism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_luddite
+						}
+					}
+				}
+				# Slaver
+				25 = {
+					trigger = {
+						root = {
+							NOT = {
+								has_law = law_type:law_slavery_banned
+							}
+						}
+						OR = {
+							has_ideology = ideology:ideology_luddite
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_traditionalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_slaver
+						}
+					}
+				}
+				# Moderate
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							AND = {
+								# If reformer is not active
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+								# Enable pacifist to swap to moderate
+								has_ideology = ideology:ideology_pacifist
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# Traditionalist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_authoritarian
+							AND = {
+								# Luddite can pass through slaver if slavery has been banned
+								root = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_ideology = ideology:ideology_luddite
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# Pacifist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# From right-wing ideologies towards traditionalist
+				# Corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# To Authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# Hum. Roy. > Royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+				# To Fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+				# For the left-wing side
+				# Social democrats > liberal leader
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_liberal_leader
+						}
+					}
+				}
+				# Towards market liberal
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = stock_exchange
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_market_liberal
+						}
+					}
+				}
+				# Humanitarian > whatever
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+					if = {
+						limit = {
+							root = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+							}
+						}
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_abolitionist
+							}
+						}
+					}
+					# Else if slavery is not up for debate
+					else = {
+						# Yes.. A pacifist armed force heir. Merely a temporary setback
+						owner.heir = {
+							set_variable = {
+								name = warden_selected_ideology
+								value = ideology:ideology_pacifist
+							}
+						}
+					}
+				}
+			}
+		}
+		ig_trade_unions = {
+			random_list = {
+				# Humanitarian (primary)
+				50 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							AND = {
+								has_ideology = ideology:ideology_pacifist
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_humanitarian
+						}
+					}
+				}
+				# Social Democrat
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+						}
+						root = {
+							has_technology_researched = socialism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_social_democrat
+						}
+					}
+				}
+				# Abolitionist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+						}
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_abolitionist
+						}
+					}
+				}
+				# Pacifist
+				25 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_luddite
+							AND = {
+								has_ideology = ideology:ideology_humanitarian
+								NOT = {
+									root = {
+										OR = {
+											NOT = {
+												has_law = law_type:law_slavery_banned
+											}
+											has_law = law_type:law_serfdom
+										}
+									}
+								}
+							}
+							AND = {
+								has_ideology = ideology:ideology_moderate
+								NOT = {
+									root = {
+										has_technology_researched = egalitarianism
+										NOT = {
+											has_technology_researched = feminism
+										}
+									}
+								}
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_pacifist
+						}
+					}
+				}
+				# Feminist
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_liberal_leader
+							has_ideology = ideology:ideology_feminist
+							has_ideology = ideology:ideology_market_liberal
+						}
+						root = {
+							has_technology_researched = feminism
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_feminist
+						}
+					}
+				}
+				# Reformer
+				10 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_abolitionist
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_pacifist
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+						}
+						root = {
+							has_technology_researched = egalitarianism
+							NOT = {
+								has_technology_researched = feminism
+							}
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_reformer
+						}
+					}
+				}
+				# Moderate
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_moderate
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_moderate
+						}
+					}
+				}
+				# land reformer
+				5 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_market_liberal
+							has_ideology = ideology:ideology_reformer
+							has_ideology = ideology:ideology_moderate
+							has_ideology = ideology:ideology_land_reformer
+							has_ideology = ideology:ideology_traditionalist
+						}
+						root = {
+							has_technology_researched = enclosure
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_land_reformer
+						}
+					}
+				}
+				# Authoritarian line
+				# to traditionalist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_slaver
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_traditionalist
+						}
+					}
+				}
+				# corporatist > Theocrat
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_theocrat
+						}
+					}
+				}
+				# to authoritarian
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_royalist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_authoritarian
+						}
+					}
+				}
+				# hum. roy. > royalist
+				1 = {
+					trigger = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_royalist
+						}
+					}
+				}
+				# to fascist
+				1 = {
+					trigger = {
+						OR = {
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_ethno_nationalist
+						}
+					}
+					owner.heir = {
+						set_variable = {
+							name = warden_selected_ideology
+							value = ideology:ideology_fascist
+						}
+					}
+				}
+			}
+		}
+	}
+	# IF the warden selected his/her own trait, consider them "happy" with the upbringing
+	# This makes them attempt to stay at the status quo
+	# just a reminder, but the scope is still the warden
+	if = {
+		limit = {
+			owner.heir = {
+				has_ideology = var:heir_selected_ideology
+			}
+		}
+		owner.heir = {
+			set_variable = warden_maintains_education_status_quo
+		}
+	}
+}

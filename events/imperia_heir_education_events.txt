@@ -1,0 +1,957 @@
+﻿namespace = imperia_heir_education
+# Birth - choose a warden
+imperia_heir_education.1 = {
+	type = country_event
+	title = imperia_heir_education.1.t
+	desc = imperia_heir_education.1.desc
+	flavor = imperia_heir_education.1.f
+	duration = 3
+	gui_window = event_window_1char_tabloid
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	immediate = {
+		# Is used in the picture frame, but also from here on to make sure no double-heir-event shenanigans happens, in case one dies in the crib
+		heir = {
+			save_scope_as = heir_scope
+		}
+	}
+	# Raise the child yourself
+	option = {
+		name = imperia_heir_education.1.a
+		default_option = yes
+		scope:heir_scope = {
+			set_variable = raised_by_ruler
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	# Let the clergy raise the child (if you have a state-sponsored church)
+	option = {
+		trigger = {
+			OR = {
+				has_law = law_type:law_state_religion
+				has_law = law_type:law_freedom_of_conscience
+			}
+			ruler != ig:ig_devout.leader
+		}
+		name = imperia_heir_education.1.b
+		scope:heir_scope = {
+			set_variable = raised_by_clergy
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					ig:ig_devout = {
+						is_marginal = yes
+					}
+				}
+                divide = 10
+			}
+			modifier = {
+				trigger = {
+					ig:ig_devout = {
+						is_powerful = yes
+					}
+				}
+                multiply = 10
+			}
+		}
+	}
+	# Let the nobility raise the child
+	option = {
+		name = imperia_heir_education.1.c
+		trigger = {
+			ruler != ig:ig_landowners.leader
+		}
+		scope:heir_scope = {
+			set_variable = raised_by_nobles
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					ig:ig_landowners = {
+						is_marginal = yes
+					}
+				}
+                divide = 10
+			}
+			modifier = {
+				trigger = {
+					ig:ig_landowners = {
+						is_powerful = yes
+					}
+				}
+                multiply = 10
+			}
+		}
+	}
+	# Let the servants and burghers raise the child
+	option = {
+		name = imperia_heir_education.1.d
+		trigger = {
+			ruler != ig:ig_petty_bourgeoisie.leader
+		}
+		scope:heir_scope = {
+			set_variable = raised_by_burghers
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					ig:ig_petty_bourgeoisie = {
+						is_marginal = yes
+					}
+				}
+                divide = 10
+			}
+			modifier = {
+				trigger = {
+					ig:ig_petty_bourgeoisie = {
+						is_powerful = yes
+					}
+				}
+                multiply = 10
+			}
+		}
+	}
+}
+
+# Choose your next education ideology
+imperia_heir_education.2 = {
+	type = country_event
+	title = imperia_heir_education.2.title
+	desc = imperia_heir_education.2.desc
+	flavor = imperia_heir_education.2.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	immediate = {
+		# Is used in the picture frame, but also from here on to make sure no double-heir-event shenanigans happens, in case one dies
+		heir = {
+			save_scope_as = heir_scope
+			ideology = {
+				save_scope_as = current_ideology
+			}
+			if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				root.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				root.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				root.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				root.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else = {
+				root = {
+					random_scope_character = {
+						save_scope_as = warden_scope
+					}
+				}
+			}
+		}
+	}
+	# Stay on current
+	option = {
+		name = imperia_heir_education.2.stay
+		scope:heir_scope = {
+			set_variable = warden_maintains_education_status_quo
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	# Social Democrat
+	option = {
+		name = imperia_heir_education.2.aa
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_humanitarian
+					this = ideology:ideology_radical
+					this = ideology:ideology_feminist
+					this = ideology:ideology_liberal_leader
+				}
+			}
+			has_technology_researched = socialism
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_social_democrat
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_social_democrat
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Democrat (liberal leader)
+	option = {
+		name = imperia_heir_education.2.ab
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_market_liberal
+					this = ideology:ideology_feminist
+					this = ideology:ideology_social_democrat
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_liberal_leader
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_liberal_leader
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Humanitarian
+	option = {
+		name = imperia_heir_education.2.ac
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_social_democrat
+					this = ideology:ideology_positivist
+					this = ideology:ideology_abolitionist
+					AND = {
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+						this = ideology:ideology_pacifist
+					}
+				}
+			}
+			has_technology_researched = feminism
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_humanitarian
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_humanitarian
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Feminist
+	option = {
+		name = imperia_heir_education.2.ad
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_social_democrat
+					this = ideology:ideology_liberal_leader
+					this = ideology:ideology_radical
+				}
+			}
+			has_technology_researched = feminism
+			NOT = {
+				has_law = law_type:law_womens_suffrage
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_feminist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_feminist
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						is_female = yes
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Abolitionist
+	option = {
+		name = imperia_heir_education.2.ae
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_humanitarian
+					this = ideology:ideology_radical
+					this = ideology:ideology_pacifist
+				}
+			}
+			OR = {
+				NOT = {
+					has_law = law_type:law_slavery_banned
+				}
+				has_law = law_type:law_serfdom
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_abolitionist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_abolitionist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Market Liberal
+	option = {
+		name = imperia_heir_education.2.af
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_reformer
+					this = ideology:ideology_land_reformer
+					this = ideology:ideology_feminist
+					this = ideology:ideology_liberal_leader
+				}
+			}
+			has_technology_researched = stock_exchange
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_market_liberal
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_market_liberal
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Pacifist
+	option = {
+		name = imperia_heir_education.2.ba
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_abolitionist
+					this = ideology:ideology_reformer
+					this = ideology:ideology_luddite
+					AND = {
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+						this = ideology:ideology_humanitarian
+					}
+					# If feminism is unlocked, Reformer is locked. Meaning you have to go to Pacifism through moderate
+					AND = {
+						root = {
+							has_technology_researched = feminism
+						}
+						this = ideology:ideology_moderate
+					}
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_pacifist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_pacifist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Reformer
+	option = {
+		name = imperia_heir_education.2.bb
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_abolitionist
+					this = ideology:ideology_pacifist
+					this = ideology:ideology_market_liberal
+					this = ideology:ideology_moderate
+					this = ideology:ideology_land_reformer
+				}
+			}
+			has_technology_researched = egalitarianism
+			NOT = {
+				has_technology_researched = feminism
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_reformer
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_reformer
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Luddite
+	option = {
+		name = imperia_heir_education.2.bc
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_slaver
+					this = ideology:ideology_pacifist
+					AND = {
+						root = {
+							OR = {
+								NOT = {
+									has_law = law_type:law_slavery_banned
+								}
+								has_law = law_type:law_serfdom
+							}
+						}
+						this = ideology:ideology_traditionalist
+					}
+				}
+			}
+			has_technology_researched = romanticism
+			OR = {
+				has_law = law_type:law_command_economy
+				has_law = law_type:law_laissez_faire
+				has_law = law_type:law_interventionism
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_luddite
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_luddite
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Moderate
+	option = {
+		name = imperia_heir_education.2.bd
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_reformer
+					this = ideology:ideology_land_reformer
+					this = ideology:ideology_traditionalist
+				}
+				# If feminism is unlocked, Reformer is locked. Meaning you have to go to Moderate through pacifist
+				AND = {
+					root = {
+						has_technology_researched = feminism
+					}
+					this = ideology:ideology_pacifist
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_moderate
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_moderate
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Land reformer
+	option = {
+		name = imperia_heir_education.2.be
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_reformer
+					this = ideology:ideology_market_liberal
+					this = ideology:ideology_moderate
+					this = ideology:ideology_traditionalist
+				}
+			}
+			has_technology_researched = enclosure
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_land_reformer
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_land_reformer
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Corporatist
+	option = {
+		name = imperia_heir_education.2.bf
+		trigger = {
+			scope:current_ideology = ideology:ideology_theocrat
+			has_technology_researched = corporatism
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_corporatist_leader
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Slavery
+	option = {
+		name = imperia_heir_education.2.ca
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_reformer
+					this = ideology:ideology_market_liberal
+					this = ideology:ideology_moderate
+					this = ideology:ideology_traditionalist
+				}
+			}
+			NOT = {
+				has_law = law_type:law_slavery_banned
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_slaver
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_slaver
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Traditionalist
+	option = {
+		name = imperia_heir_education.2.cb
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_moderate
+					this = ideology:ideology_land_reformer
+					this = ideology:ideology_slaver
+					this = ideology:ideology_jingoist_leader
+					AND = {
+						root = {
+							has_law = law_type:law_slavery_banned
+						}
+						this = ideology:ideology_luddite
+					}
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_traditionalist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_traditionalist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Jingoist
+	option = {
+		name = imperia_heir_education.2.cc
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_traditionalist
+					this = ideology:ideology_authoritarian
+					this = ideology:ideology_fascist
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_jingoist_leader
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_jingoist_leader
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Theocrat
+	option = {
+		name = imperia_heir_education.2.cd
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_traditionalist
+					this = ideology:ideology_authoritarian
+					this = ideology:ideology_corporatist_leader
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_theocrat
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_theocrat
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Authoritarian
+	option = {
+		name = imperia_heir_education.2.ce
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_traditionalist
+					this = ideology:ideology_theocrat
+					this = ideology:ideology_jingoist
+					this = ideology:ideology_fascist
+					this = ideology:ideology_royalist
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_authoritarian
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_authoritarian
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Fascist
+	option = {
+		name = imperia_heir_education.2.cf
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_jingoist
+					this = ideology:ideology_authoritarian
+					this = ideology:ideology_ethno_nationalist
+					this = ideology:ideology_integralist
+					this = ideology:ideology_royalist
+				}
+			}
+			has_technology_researched = political_agitation
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_fascist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_fascist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Ethno-nationalist
+	option = {
+		name = imperia_heir_education.2.da
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_fascist
+					this = ideology:ideology_integralist
+				}
+			}
+			has_technology_researched = pan-nationalism
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_ethno_nationalist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_ethno_nationalist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Royalist
+	option = {
+		name = imperia_heir_education.2.db
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_authoritarian
+					this = ideology:ideology_humanitarian_royalist
+					this = ideology:ideology_integralist
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_royalist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_royalist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Integralist
+	option = {
+		name = imperia_heir_education.2.dc
+		trigger = {
+			scope:current_ideology = {
+				OR = {
+					this = ideology:ideology_fascist
+					this = ideology:ideology_ethno_nationalist
+					this = ideology:ideology_royalist
+				}
+			}
+			has_technology_researched = corporatism
+			any_primary_culture = {
+				OR = {
+					has_discrimination_trait = lusophone
+					has_discrimination_trait = hispanophone
+					has_discrimination_trait = francophone
+				}
+			}
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_integralist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_integralist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	# Humanitarian Royalist
+	option = {
+		name = imperia_heir_education.2.dd
+		trigger = {
+			scope:current_ideology = ideology:ideology_royalist
+			has_technology_researched = feminism
+		}
+		scope:heir_scope = {
+			set_variable = {
+				name = warden_selected_ideology
+				value = ideology:ideology_humanitarian_royalist
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_ideology = ideology:ideology_humanitarian_royalist
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	after = {
+		scope:heir_scope = {
+			set_variable = warden_selected_ideology
+		}
+	}
+}
