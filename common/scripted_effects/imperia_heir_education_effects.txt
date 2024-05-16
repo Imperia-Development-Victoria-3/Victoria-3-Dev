@@ -2339,20 +2339,14 @@ heir_education_battle_tick = {
 	else = {
 		random_list = {
 			# Heir movement
-			33 = {
+			100 = {
 				trigger = {
 					NOT = {
 						has_variable = heir_maintains_education_status_quo
 					}
 				}
 				modifier = {
-					multiply = {
-						value = {
-							value = popularity
-							add = 100
-						}
-						divide = 100
-					}
+					add = popularity
 				}
 				change_variable = {
 					name = education_movement
@@ -2366,20 +2360,14 @@ heir_education_battle_tick = {
 				}
 			}
 			# Warden movement
-			33 = {
+			100 = {
 				trigger = {
 					NOT = {
 						has_variable = warden_maintains_education_status_quo
 					}
 				}
 				modifier = {
-					multiply = {
-						value = {
-							value = scope:warden_scope.popularity
-							add = 100
-						}
-						divide = 100
-					}
+					add = scope:warden_scope.popularity
 				}
 				change_variable = {
 					name = education_movement
@@ -2393,28 +2381,48 @@ heir_education_battle_tick = {
 				}
 			}
 			# Maintain movement
-			33 = {
+			100 = {
 				if = {
 					limit = {
-						var:education_movement > 0
+						var:education_movement > 0.1
 					}
 					change_variable = {
 						name = education_movement
-						subtract = 0.5
+						subtract = 0.1
 					}
 				}
 				else_if = {
 					limit = {
-						var:education_movement < 0
+						var:education_movement < 0.1
+						var:education_movement > 0
+					}
+					set_variable = {
+						name = education_movement
+						value = 0
+					}
+				}
+				else_if = {
+					limit = {
+						var:education_movement < -0.1
 					}
 					change_variable = {
 						name = education_movement
 						add = 0.5
 					}
 				}
+				else_if = {
+					limit = {
+						var:education_movement > -0.1
+						var:education_movement < 0
+					}
+					set_variable = {
+						name = education_movement
+						value = 0
+					}
+				}
 			}
 			# Extra Maintain movement, in case one of the sides wish to do that
-			33 = {
+			100 = {
 				trigger = {
 					OR = {
 						has_variable = heir_maintains_education_status_quo
@@ -2423,20 +2431,40 @@ heir_education_battle_tick = {
 				}
 				if = {
 					limit = {
-						var:education_movement > 0
+						var:education_movement > 0.2
 					}
 					change_variable = {
 						name = education_movement
-						subtract = 0.75
+						subtract = 0.2
 					}
 				}
 				else_if = {
 					limit = {
-						var:education_movement < 0
+						var:education_movement < 0.2
+						var:education_movement > 0
+					}
+					set_variable = {
+						name = education_movement
+						value = 0
+					}
+				}
+				else_if = {
+					limit = {
+						var:education_movement < -0.2
 					}
 					change_variable = {
 						name = education_movement
-						add = 0.75
+						add = 0.2
+					}
+				}
+				else_if = {
+					limit = {
+						var:education_movement > -0.2
+						var:education_movement < 0
+					}
+					set_variable = {
+						name = education_movement
+						value = 0
 					}
 				}
 			}
@@ -2448,7 +2476,7 @@ heir_education_battle_tick = {
 		# If the heir won this battle
 		if = {
 			limit = {
-				var:education_movement <= -3
+				var:education_movement <= -2
 			}
 			debug_log = "heir won this battle"
 			set_ideology = var:heir_selected_ideology
@@ -2456,7 +2484,7 @@ heir_education_battle_tick = {
 		}
 		else_if = {
 			limit = {
-				var:education_movement >= 3
+				var:education_movement >= 2
 			}
 			debug_log = "warden won this battle"
 			set_ideology = var:warden_selected_ideology
