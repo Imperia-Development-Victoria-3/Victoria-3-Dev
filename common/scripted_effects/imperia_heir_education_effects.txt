@@ -2281,6 +2281,13 @@ heir_education_battle_tick = {
 	# -3 is generally the heir,
 	# 0 is the current ideology
 	# 3 is where the warden wants to go
+	save_scope_as = heir_scope
+	var:warden_selected_ideology = {
+		save_scope_as = warden_selected_ideology_scope
+	}
+	var:heir_selected_ideology = {
+		save_scope_as = heir_selected_ideology
+	}
 	if = {
 		limit = {
 			has_variable = raised_by_clergy
@@ -2479,6 +2486,9 @@ heir_education_battle_tick = {
 				var:education_movement <= -2
 			}
 			debug_log = "heir won this battle"
+			owner = {
+				post_notification = imperia_heir_won_education_round_notification
+			}
 			set_ideology = var:heir_selected_ideology
 			remove_battle_variables = yes
 		}
@@ -2487,6 +2497,9 @@ heir_education_battle_tick = {
 				var:education_movement >= 2
 			}
 			debug_log = "warden won this battle"
+			owner = {
+				post_notification = imperia_warden_won_education_round_notification
+			}
 			set_ideology = var:warden_selected_ideology
 			remove_battle_variables = yes
 		}
