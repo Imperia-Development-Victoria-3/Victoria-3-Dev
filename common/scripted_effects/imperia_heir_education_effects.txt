@@ -1,91 +1,81 @@
 ﻿progress_heir_education = {
-	# scope : country
+	# scope : character
 	# First do the "battle" tick to determine if changes are needed
 	# The heir exists, else the script wouldnt come to these parts
 	if = {
 		limit = {
-			heir = {
-				has_variable = warden_selected_ideology
-				has_variable = heir_selected_ideology
-			}
+			has_variable = warden_selected_ideology
+			has_variable = heir_selected_ideology
 		}
-		heir = {
-			heir_education_battle_tick = yes
-		}
+		heir_education_battle_tick = yes
 	}
 	# If you havent chosen, the child is raised by the ruler, and no education stop is in place...
 	if = {
 		limit = {
-			heir = {
-				NOT = {
-					has_variable = warden_selected_ideology
-				}
-				has_variable = raised_by_ruler
+			NOT = {
+				has_variable = warden_selected_ideology
+			}
+			has_variable = raised_by_ruler
+		}
+		owner = {
+			trigger_event = {
+				id = imperia_heir_education.2
+				popup = yes
 			}
 		}
-		trigger_event = {
-			id = imperia_heir_education.2
-			popup = yes
-		}
 		# Assume heir also needs to choose their next move here
-		heir = {
-			choose_heir_education_goal = yes
-		}
+		choose_heir_education_goal = yes
 	}
 	# AI section
 	else_if = {
 		limit = {
-			heir = {
-				OR = {
-					has_variable = raised_by_clergy
-					has_variable = raised_by_nobles
-					has_variable = raised_by_burghers
-				}
-				NOT = {
-					has_variable = warden_selected_ideology
-				}
+			OR = {
+				has_variable = raised_by_clergy
+				has_variable = raised_by_nobles
+				has_variable = raised_by_burghers
+			}
+			NOT = {
+				has_variable = warden_selected_ideology
 			}
 		}
 		# Choose next ideology for heir
 		if = {
 			limit = {
-				heir = {
-					has_variable = raised_by_clergy
-				}
+				has_variable = raised_by_clergy
 			}
-			ig:ig_devout.leader = {
-				ai_warden_education_goal = yes
+			owner.ig:ig_devout.leader = {
+				ai_warden_education_goal = {
+					WARD = prev
+				}
 			}
 		}
 		else_if = {
 			limit = {
-				heir = {
-					has_variable = raised_by_nobles
-				}
+				has_variable = raised_by_nobles
 			}
-			ig:ig_landowners.leader = {
-				ai_warden_education_goal = yes
+			owner.ig:ig_landowners.leader = {
+				ai_warden_education_goal = {
+					WARD = prev
+				}
 			}
 		}
 		else_if = {
 			limit = {
-				heir = {
-					has_variable = raised_by_burghers
-				}
+				has_variable = raised_by_burghers
 			}
-			ig:ig_petty_bourgeoisie.leader = {
-				ai_warden_education_goal = yes
+			owner.ig:ig_petty_bourgeoisie.leader = {
+				ai_warden_education_goal = {
+					WARD = prev
+				}
 			}
 		}
 		# Assume heir also needs to choose their next move here
-		heir = {
-			choose_heir_education_goal = yes
-		}
+		choose_heir_education_goal = yes
 	}
 }
 
 choose_heir_education_goal = {
-	# scope : heir
+	# scope : character
 	# Logic : First we switch to the heirs IG
 	# Then we move backwards where necessary, and towards the going-to-be set ideology (heir_selected_ideology) when possible
 	# So: the triggers are everything that can move into the set_variable section
@@ -2486,7 +2476,8 @@ remove_battle_variables = {
 }
 
 ai_warden_education_goal = {
-	# scope : the IG leader of the wardens	
+	# scope : the IG leader of the wardens
+	# $WARD$ = the ward; an heir or an underage ruler
 	switch = {
 		trigger = is_interest_group_type
 		ig_armed_forces = {
@@ -2497,7 +2488,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_social_democrat
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -2515,7 +2506,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -2530,7 +2521,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -2551,7 +2542,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -2561,7 +2552,7 @@ ai_warden_education_goal = {
 					# Else if slavery is not up for debate
 					else = {
 						# Yes.. A pacifist armed force heir. Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2583,7 +2574,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2593,7 +2584,7 @@ ai_warden_education_goal = {
 					# Else if reformer is inactive
 					else = {
 						# Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2615,7 +2606,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2624,7 +2615,7 @@ ai_warden_education_goal = {
 					}
 					# Else if reformer is inactive
 					else = {
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_moderate
@@ -2637,7 +2628,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_corporatist_leader
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -2667,7 +2658,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_traditionalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -2684,7 +2675,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_jingoist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_jingoist
@@ -2703,7 +2694,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -2724,7 +2715,7 @@ ai_warden_education_goal = {
 							has_technology_researched = political_agitation
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -2743,7 +2734,7 @@ ai_warden_education_goal = {
 							has_technology_researched = pan-nationalism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_ethno_nationalist
@@ -2758,7 +2749,7 @@ ai_warden_education_goal = {
 						has_ideology = ideology:ideology_integralist
 						has_ideology = ideology:ideology_humanitarian_royalist
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -2775,7 +2766,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_social_democrat
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -2793,7 +2784,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -2814,7 +2805,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -2823,7 +2814,7 @@ ai_warden_education_goal = {
 					}
 					# Else if slavery is not up for debate
 					else = {
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2845,7 +2836,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2855,7 +2846,7 @@ ai_warden_education_goal = {
 					# Else if reformer is inactive
 					else = {
 						# Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -2877,7 +2868,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_reformer
@@ -2886,7 +2877,7 @@ ai_warden_education_goal = {
 					}
 					# Else if reformer is inactive
 					else = {
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_moderate
@@ -2909,7 +2900,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -2933,7 +2924,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -2958,7 +2949,7 @@ ai_warden_education_goal = {
 							has_technology_researched = romanticism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_luddite
@@ -2979,7 +2970,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_traditionalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_slaver
@@ -3009,7 +3000,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -3036,7 +3027,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -3053,7 +3044,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_jingoist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_jingoist
@@ -3068,7 +3059,7 @@ ai_warden_education_goal = {
 							has_technology_researched = corporatism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_corporatist_leader
@@ -3085,7 +3076,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_authoritarian
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -3104,7 +3095,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -3125,7 +3116,7 @@ ai_warden_education_goal = {
 							has_technology_researched = political_agitation
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -3142,7 +3133,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -3167,7 +3158,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -3184,7 +3175,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_social_democrat
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -3204,7 +3195,7 @@ ai_warden_education_goal = {
 							has_technology_researched = feminism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_feminist
@@ -3229,7 +3220,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_reformer
@@ -3249,7 +3240,7 @@ ai_warden_education_goal = {
 							has_technology_researched = socialism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_social_democrat
@@ -3274,7 +3265,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_abolitionist
@@ -3302,7 +3293,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -3328,7 +3319,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -3341,7 +3332,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_corporatist_leader
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -3356,7 +3347,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_fascist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -3368,7 +3359,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_humanitarian_royalist
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -3383,7 +3374,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_integralist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -3419,7 +3410,7 @@ ai_warden_education_goal = {
 							has_technology_researched = feminism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_humanitarian
@@ -3439,7 +3430,7 @@ ai_warden_education_goal = {
 							has_technology_researched = socialism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_social_democrat
@@ -3464,7 +3455,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_abolitionist
@@ -3504,7 +3495,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_pacifist
@@ -3521,7 +3512,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_market_liberal
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -3541,7 +3532,7 @@ ai_warden_education_goal = {
 							has_technology_researched = feminism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_feminist
@@ -3566,7 +3557,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_reformer
@@ -3594,7 +3585,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -3615,7 +3606,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -3636,7 +3627,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -3654,7 +3645,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -3666,7 +3657,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_corporatist_leader
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -3681,7 +3672,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_fascist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -3693,7 +3684,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_humanitarian_royalist
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -3708,7 +3699,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -3732,7 +3723,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -3760,7 +3751,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -3781,7 +3772,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -3798,7 +3789,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_fascist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_jingoist
@@ -3817,7 +3808,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -3834,7 +3825,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_corporatist_leader
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -3855,7 +3846,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_slaver
@@ -3880,7 +3871,7 @@ ai_warden_education_goal = {
 							has_technology_researched = romanticism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_luddite
@@ -3921,7 +3912,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_pacifist
@@ -3946,7 +3937,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_reformer
@@ -3967,7 +3958,7 @@ ai_warden_education_goal = {
 							has_technology_researched = political_agitation
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -3984,7 +3975,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_humanitarian_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -3997,7 +3988,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_social_democrat
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -4015,7 +4006,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -4035,7 +4026,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -4045,7 +4036,7 @@ ai_warden_education_goal = {
 					# Else if slavery is not up for debate
 					else = {
 						# Yes.. A pacifist armed force heir. Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -4069,7 +4060,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -4086,7 +4077,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -4107,7 +4098,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -4128,7 +4119,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -4153,7 +4144,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_reformer
@@ -4183,7 +4174,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -4210,7 +4201,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -4227,7 +4218,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_jingoist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_jingoist
@@ -4244,7 +4235,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_theocrat
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -4259,7 +4250,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_humanitarian_royalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_humanitarian_royalist
@@ -4280,7 +4271,7 @@ ai_warden_education_goal = {
 							has_technology_researched = political_agitation
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -4300,7 +4291,7 @@ ai_warden_education_goal = {
 							has_technology_researched = political_agitation
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_integralist
@@ -4321,7 +4312,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -4331,7 +4322,7 @@ ai_warden_education_goal = {
 					# Else if slavery is not up for debate
 					else = {
 						# Yes.. A pacifist armed force heir. Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -4344,7 +4335,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_social_democrat
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -4370,7 +4361,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -4395,7 +4386,7 @@ ai_warden_education_goal = {
 							has_technology_researched = romanticism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_luddite
@@ -4416,7 +4407,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_traditionalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_slaver
@@ -4446,7 +4437,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -4473,7 +4464,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -4513,7 +4504,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_pacifist
@@ -4526,7 +4517,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_corporatist_leader
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -4541,7 +4532,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_fascist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -4553,7 +4544,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_humanitarian_royalist
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -4568,7 +4559,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_integralist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -4581,7 +4572,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_social_democrat
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_liberal_leader
@@ -4599,7 +4590,7 @@ ai_warden_education_goal = {
 							has_technology_researched = stock_exchange
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_market_liberal
@@ -4619,7 +4610,7 @@ ai_warden_education_goal = {
 								}
 							}
 						}
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_abolitionist
@@ -4629,7 +4620,7 @@ ai_warden_education_goal = {
 					# Else if slavery is not up for debate
 					else = {
 						# Yes.. A pacifist armed force heir. Merely a temporary setback
-						owner.heir = {
+						$WARD$ = {
 							set_variable = {
 								name = warden_selected_ideology
 								value = ideology:ideology_pacifist
@@ -4666,7 +4657,7 @@ ai_warden_education_goal = {
 							has_technology_researched = feminism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_humanitarian
@@ -4686,7 +4677,7 @@ ai_warden_education_goal = {
 							has_technology_researched = socialism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_social_democrat
@@ -4711,7 +4702,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_abolitionist
@@ -4751,7 +4742,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_pacifist
@@ -4771,7 +4762,7 @@ ai_warden_education_goal = {
 							has_technology_researched = feminism
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_feminist
@@ -4796,7 +4787,7 @@ ai_warden_education_goal = {
 							}
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_reformer
@@ -4811,7 +4802,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_moderate
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_moderate
@@ -4832,7 +4823,7 @@ ai_warden_education_goal = {
 							has_technology_researched = enclosure
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_land_reformer
@@ -4850,7 +4841,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_slaver
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_traditionalist
@@ -4862,7 +4853,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_corporatist_leader
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_theocrat
@@ -4877,7 +4868,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_fascist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_authoritarian
@@ -4889,7 +4880,7 @@ ai_warden_education_goal = {
 					trigger = {
 						has_ideology = ideology:ideology_humanitarian_royalist
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_royalist
@@ -4904,7 +4895,7 @@ ai_warden_education_goal = {
 							has_ideology = ideology:ideology_ethno_nationalist
 						}
 					}
-					owner.heir = {
+					$WARD$ = {
 						set_variable = {
 							name = warden_selected_ideology
 							value = ideology:ideology_fascist
@@ -4919,12 +4910,12 @@ ai_warden_education_goal = {
 	# just a reminder, but the scope is still the warden
 	if = {
 		limit = {
-			owner.heir = {
+			$WARD$ = {
 				has_variable = warden_selected_ideology
 				has_ideology = var:warden_selected_ideology
 			}
 		}
-		owner.heir = {
+		$WARD$ = {
 			set_variable = warden_maintains_education_status_quo
 		}
 	}
