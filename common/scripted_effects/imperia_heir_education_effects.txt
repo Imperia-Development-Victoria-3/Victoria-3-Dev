@@ -2283,7 +2283,7 @@ heir_education_battle_tick = {
 	# 3 is where the warden wants to go
 	save_scope_as = heir_scope
 	var:warden_selected_ideology = {
-		save_scope_as = warden_selected_ideology_scope
+		save_scope_as = warden_selected_ideology
 	}
 	var:heir_selected_ideology = {
 		save_scope_as = heir_selected_ideology
@@ -2318,6 +2318,26 @@ heir_education_battle_tick = {
 		}
 		owner.ruler = {
 			save_scope_as = warden_scope
+		}
+	}
+	save_scope_value_as = {
+		name = heir_education_movement_value
+		value = {
+			value = {
+				value = popularity
+				add = 100
+			}
+			divide = 100
+		}
+	}
+	save_scope_value_as = {
+		name = warden_education_movement_value
+		value = {
+			value = {
+				value = scope:warden_scope.popularity
+				add = 100
+			}
+			divide = 100
 		}
 	}
 	if = {
@@ -2357,13 +2377,14 @@ heir_education_battle_tick = {
 				}
 				change_variable = {
 					name = education_movement
-					subtract = {
-						value = {
-							value = popularity
-							add = 100
-						}
-						divide = 100
-					}
+					subtract = scope:heir_education_movement_value
+				}
+				save_scope_value_as = {
+					name = education_movement_value
+					value = var:education_movement
+				}
+				owner = {
+					post_notification = imperia_heir_progressed_education_round_notification
 				}
 			}
 			# Warden movement
@@ -2378,14 +2399,16 @@ heir_education_battle_tick = {
 				}
 				change_variable = {
 					name = education_movement
-					add = {
-						value = {
-							value = scope:warden_scope.popularity
-							add = 100
-						}
-						divide = 100
-					}
+					add = scope:warden_education_movement_value
 				}
+				save_scope_value_as = {
+					name = education_movement_value
+					value = var:education_movement
+				}
+				owner = {
+					post_notification = imperia_warden_progressed_education_round_notification
+				}
+
 			}
 			# Maintain movement
 			100 = {
@@ -2485,7 +2508,6 @@ heir_education_battle_tick = {
 			limit = {
 				var:education_movement <= -2
 			}
-			debug_log = "heir won this battle"
 			owner = {
 				post_notification = imperia_heir_won_education_round_notification
 			}
@@ -2496,7 +2518,6 @@ heir_education_battle_tick = {
 			limit = {
 				var:education_movement >= 2
 			}
-			debug_log = "warden won this battle"
 			owner = {
 				post_notification = imperia_warden_won_education_round_notification
 			}
