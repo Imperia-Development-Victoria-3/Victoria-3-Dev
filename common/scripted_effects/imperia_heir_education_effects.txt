@@ -4920,12 +4920,29 @@ ai_warden_education_goal = {
 	if = {
 		limit = {
 			owner.heir = {
-				has_variable = heir_selected_ideology
-				has_ideology = var:heir_selected_ideology
+				has_variable = warden_selected_ideology
+				has_ideology = var:warden_selected_ideology
 			}
 		}
 		owner.heir = {
 			set_variable = warden_maintains_education_status_quo
 		}
 	}
+}
+
+remove_all_education_variables_from_character = {
+	# scope : character
+	# remove warden var
+	remove_variable ?= raised_by_clergy
+	remove_variable ?= raised_by_nobles
+	remove_variable ?= raised_by_burghers
+	remove_variable ?= raised_by_ruler
+	# remove the goals
+	remove_variable ?= warden_selected_ideology
+	remove_variable ?= heir_selected_ideology
+	# general vars
+	remove_variable ?= stop_education
+	remove_variable ?= education_movement
+	remove_variable ?= warden_maintains_education_status_quo
+	remove_variable ?= heir_maintains_education_status_quo
 }

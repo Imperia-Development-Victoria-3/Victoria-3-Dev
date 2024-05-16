@@ -40,5 +40,34 @@
 			# Do a education progress tick
 			progress_heir_education = yes
 		}
+		# Else if the heir has grown up, but still has the variables
+		else_if = {
+			limit = {
+				heir ?= {
+					NOT = {
+						has_trait = trait_child
+					}
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+						has_variable = raised_by_ruler
+					}
+				}
+			}
+			heir = {
+				remove_all_education_variables_from_character = yes
+			}
+		}
+		if = {
+			limit = {
+				ruler = {
+					age >= 2
+					has_trait = trait_child
+					has_variable = raised_by_ruler
+				}
+				remove_variable = raised_by_ruler
+			}
+		}
 	}
 }
