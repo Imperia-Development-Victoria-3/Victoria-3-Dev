@@ -1849,3 +1849,27 @@ imperia_true_neutral_remaining_signers_value = {
 	value = var:true_neutral_required_signers_var
 	subtract = var:true_neutral_current_signers_var
 }
+
+imperia_heir_education_conversion_chance = {
+	# scope : character; hopefully heir
+	# This should result in -(10 - x)^2 + 60, with x being the heirs age
+	# Start at nothing
+	value = 0
+	# Then we minus, to get the right curve
+	subtract = {
+		# Get 10 - characters age
+		value = {
+			value = 10
+			subtract = age
+		}
+		# And multiply it by itself
+		multiply = {
+			value = 10
+			subtract = age
+		}
+	}
+	# Curve tops at 60% at age 10
+	add = 60
+	min = 0
+	max = 60
+}

@@ -1031,3 +1031,265 @@ imperia_heir_education.3 = {
 		name = "raised by ruler"
 	}
 }
+
+# Event for cultural and religious conversion
+imperia_heir_education.4 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		heir ?= {
+			# Only pop if you're the actual "parent" of the child; no PUs should get this
+			owner = prev
+			# Needs to be of sufficient age..
+			age >= 5
+			has_trait = trait_child
+			# Only pop if the warden has a different culture/religion
+			OR = {
+				AND = {
+					# clergy leaders religion or faith is not the same as the heirs religion / faith
+					has_variable = raised_by_clergy
+					OR = {
+						owner.ig:ig_devout.leader.culture != this.culture
+						owner.ig:ig_devout.leader.religion != this.religion
+					}
+				}
+				AND = {
+					# landowners leaders religion or faith is not the same as the heirs religion / faith
+					has_variable = raised_by_nobles
+					OR = {
+						owner.ig:ig_landowners.leader.culture != this.culture
+						owner.ig:ig_landowners.leader.religion != this.religion
+					}
+				}
+				AND = {
+					# clergy leaders religion or faith is not the same as the heirs religion / faith
+					has_variable = raised_by_burghers
+					OR = {
+						owner.ig:ig_petty_bourgeoisie.leader.culture != this.culture
+						owner.ig:ig_petty_bourgeoisie.leader.religion != this.religion
+					}
+				}
+				AND = {
+					# landowners leaders religion or faith is not the same as the heirs religion / faith
+					has_variable = raised_by_ruler
+					OR = {
+						owner.ruler.culture != this.culture
+						owner.ruler.religion != this.religion
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		# First we get a scope on the warden
+		heir = {
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+			# This section is mostly stolen from CK3 :^)
+			if = {
+				limit = {
+					scope:warden_scope.religion != this.religion
+				}
+				set_variable = {
+					name = education_faith_conversion_chance
+					value = imperia_heir_education_conversion_chance
+				}
+				random = {
+					chance = var:education_faith_conversion_chance
+					set_variable = convert_faith
+				}
+			}
+			if = {
+				limit = {
+					scope:warden_scope.culture != this.culture
+				}
+				# Has half the % of success as religion conversion
+				set_variable = {
+					name = education_culture_conversion_chance
+					value = {
+						value = imperia_heir_education_conversion_chance
+						divide = 2
+					}
+				}
+				random = {
+					chance = var:education_culture_conversion_chance
+					set_variable = convert_culture
+				}
+			}
+			# Check for conversion and pop event if its there!
+			if = {
+				limit = {
+					OR = {
+						has_variable = convert_faith
+						has_variable = convert_culture
+					}
+				}
+				owner = {
+					trigger_event = {
+						id = imperia_heir_education.5
+					}
+				}
+			}
+		}
+	}
+}
+
+# Actual Event for cultural and religious conversion
+imperia_heir_education.5 = {
+	type = country_event
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = imperia_heir_education.5.titleBoth
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_faith
+						has_variable = convert_culture
+					}
+				}
+			}
+			triggered_desc = {
+				desc = imperia_heir_education.5.titleRel
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_faith
+					}
+				}
+			}
+			triggered_desc = {
+				desc = imperia_heir_education.5.titleCult
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_culture
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = imperia_heir_education.5.descBoth
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_faith
+						has_variable = convert_culture
+					}
+				}
+			}
+			triggered_desc = {
+				desc = imperia_heir_education.5.descRel
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_faith
+					}
+				}
+			}
+			triggered_desc = {
+				desc = imperia_heir_education.5.descCult
+				trigger = {
+					scope:heir_scope = {
+						has_variable = convert_culture
+					}
+				}
+			}
+		}
+	}
+	flavor = imperia_heir_education.5.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	immediate = {
+		# First we get a scope on the warden
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.5.a
+		scope:heir_scope = {
+			if = {
+				limit = {
+					has_variable = convert_faith
+				}
+				change_character_religion = scope:warden_scope.religion
+			}
+			if = {
+				limit = {
+					has_variable = convert_culture
+				}
+				change_character_culture = scope:warden_scope.culture
+			}
+		}
+	}
+}
