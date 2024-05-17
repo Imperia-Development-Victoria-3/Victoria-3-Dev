@@ -10,8 +10,13 @@
 	}
 	possible = {
 		custom_tooltip = {
-			text = frankfurt_parliament_voting_governance_principle
+			text = frankfurt_parliament_joining_parliament
 			global_var:frankfurt_parliament_current_vote = 0
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_joined_parliament
+			}
 		}
 	}
 	selected = {
@@ -46,7 +51,6 @@ je_frankfurt_parliament_choose_club_button = {
 	}
 	selected = {
 		has_variable = club_change_cooldown
-		# Must be before the last vote
 	}
 	effect = {
 		trigger_event = {
@@ -119,6 +123,13 @@ je_frankfurt_parliament_vote_republic_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
+				has_variable = frankfurt_parliament_voted_monarchy
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = yes
 			}
 			add = 20
@@ -129,6 +140,11 @@ je_frankfurt_parliament_vote_republic_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_governance_principle
 			global_var:frankfurt_parliament_current_vote = 1
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_republic
+			}
 		}
 	}
 	selected = {
@@ -207,6 +223,16 @@ je_frankfurt_parliament_vote_monarchy_button = {
 		}
 		modifier = {
 			trigger = {
+				NOR = {
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
+				}
+				has_variable = frankfurt_parliament_voted_republic
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				OR = {
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
@@ -220,6 +246,11 @@ je_frankfurt_parliament_vote_monarchy_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_governance_principle
 			global_var:frankfurt_parliament_current_vote = 1
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_monarchy
+			}
 		}
 	}
 	selected = {
@@ -296,6 +327,16 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = no
+				OR = {
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+				}
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
 			}
 			add = 20
@@ -306,6 +347,11 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_power_distribution
 			global_var:frankfurt_parliament_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_oligarchy
+			}
 		}
 	}
 	selected = {
@@ -392,6 +438,16 @@ je_frankfurt_parliament_vote_wealth_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = no
+				OR = {
+					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+				}
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
 			}
 			add = 20
@@ -402,6 +458,11 @@ je_frankfurt_parliament_vote_wealth_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_power_distribution
 			global_var:frankfurt_parliament_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_wealth_suffrage
+			}
 		}
 	}
 	selected = {
@@ -488,6 +549,16 @@ je_frankfurt_parliament_vote_universal_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
+				OR = {
+					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+				}
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = yes
 			}
 			add = 20
@@ -498,6 +569,11 @@ je_frankfurt_parliament_vote_universal_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_power_distribution
 			global_var:frankfurt_parliament_current_vote = 2
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_universal_suffrage
+			}
 		}
 	}
 	selected = {
@@ -572,6 +648,16 @@ je_frankfurt_parliament_vote_presidential_button = {
 		}
 		modifier = {
 			trigger = {
+				NOR = {
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
+				}
+				has_variable = frankfurt_parliament_voted_parliamentary
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				OR = {
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
@@ -585,6 +671,11 @@ je_frankfurt_parliament_vote_presidential_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_republican_form
 			global_var:frankfurt_parliament_current_vote = 3
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_presidential
+			}
 		}
 	}
 	selected = {
@@ -658,6 +749,13 @@ je_frankfurt_parliament_vote_parliamentary_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
+				has_variable = frankfurt_parliament_voted_presidential
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = yes
 			}
 			add = 20
@@ -668,6 +766,11 @@ je_frankfurt_parliament_vote_parliamentary_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_republican_form
 			global_var:frankfurt_parliament_current_vote = 3
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_parliamentary
+			}
 		}
 	}
 	selected = {
@@ -734,11 +837,22 @@ je_frankfurt_parliament_lesser_germany_button = {
 			}
 			add = 80
 		}
+		modifier = {
+			trigger = {
+				imperia_frankfurt_parliament_lesser_germany_is_preferred_trigger = no
+			}
+			multiply = 0
+		}
 	}
 	possible = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_german_definition_form
 			global_var:frankfurt_parliament_current_vote = 4
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_lesser_germany
+			}
 		}
 	}
 	selected = {
@@ -803,11 +917,22 @@ je_frankfurt_parliament_greater_germany_button = {
 			}
 			add = 80
 		}
+		modifier = {
+			trigger = {
+				imperia_frankfurt_parliament_greater_germany_is_preferred_trigger = no
+			}
+			multiply = 0
+		}
 	}
 	possible = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_german_definition_form
 			global_var:frankfurt_parliament_current_vote = 4
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_greater_germany
+			}
 		}
 	}
 	selected = {
@@ -871,11 +996,22 @@ je_frankfurt_parliament_greater_austria_button = {
 			}
 			add = 80
 		}
+		modifier = {
+			trigger = {
+				imperia_frankfurt_parliament_greater_austria_is_preferred_trigger = no
+			}
+			multiply = 0
+		}
 	}
 	possible = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voting_german_definition_form
 			global_var:frankfurt_parliament_current_vote = 4
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voted_greater_austria
+			}
 		}
 	}
 	selected = {
@@ -950,6 +1086,16 @@ je_frankfurt_parliament_internal_focus_button = {
 		}
 		modifier = {
 			trigger = {
+				NOR = {
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
+					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
+				}
+				has_variable = frankfurt_parliament_voting_external_focus
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				OR = {
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = yes
 					imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = yes
@@ -963,6 +1109,11 @@ je_frankfurt_parliament_internal_focus_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voted_revolutionary_focus
 			global_var:frankfurt_parliament_current_vote = 5
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voting_internal_focus
+			}
 		}
 	}
 	selected = {
@@ -1037,6 +1188,13 @@ je_frankfurt_parliament_external_focus_button = {
 		}
 		modifier = {
 			trigger = {
+				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
+				has_variable = frankfurt_parliament_voting_internal_focus
+			}
+			multiply = 0
+		}
+		modifier = {
+			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = yes
 			}
 			add = 20
@@ -1047,6 +1205,11 @@ je_frankfurt_parliament_external_focus_button = {
 		custom_tooltip = {
 			text = frankfurt_parliament_voted_revolutionary_focus
 			global_var:frankfurt_parliament_current_vote = 5
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = frankfurt_parliament_voting_external_focus
+			}
 		}
 	}
 	selected = {
@@ -1203,7 +1366,7 @@ je_frankfurt_gutter_king_solidify_sway_button = {
 				name = gutter_king_solid_sway
 			}
 			if = {
-				limit = { 
+				limit = {
 					is_subject = yes
 				}
 				hidden_effect = {
