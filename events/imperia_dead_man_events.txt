@@ -450,3 +450,128 @@ dead_man_pulse.1 = {
 		}
 	}
 }
+
+# Military Supports Coup
+dead_man_pulse.2 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.2.t
+	desc = dead_man_pulse.2.d
+	flavor = dead_man_pulse.2.f
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/bicorne_hat.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_mil
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_mil
+	}
+	option = {
+		name = dead_man_pulse.2.a
+		custom_tooltip = {
+			text = communist_progress_increase_5_tt
+			change_variable = {
+				name = communist_progress
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_communist
+							has_ideology = ideology:ideology_vanguardist
+							has_ideology = ideology:ideology_anarchist
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+						}
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_vanguardist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+	}
+	option = {
+		name = dead_man_pulse.2.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_republican_leader
+							has_ideology = ideology:ideology_radical
+							has_ideology = ideology:ideology_atheist							# nihilist
+							has_ideology = ideology:ideology_liberal_leader							#democrat
+							has_ideology = ideology:ideology_positivist
+							has_ideology = ideology:ideology_market_liberal
+						}
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_republican_leader
+			}
+		}
+		add_modifier = {
+			name = dead_man_mil_bribery
+			months = short_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.2.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_corporatist
+						}
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		add_modifier = {
+			name = dead_man_mil_loyalty
+			months = normal_modifier_time
+		}
+		add_loyalists = {
+			pop_type = officers
+			value = large_radicals
+		}
+	}
+}
