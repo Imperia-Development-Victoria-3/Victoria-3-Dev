@@ -1032,16 +1032,17 @@ imperia_heir_education.3 = {
 	}
 }
 
-# Event for cultural and religious conversion
+# Hidden event for cultural and religious conversion
 imperia_heir_education.4 = {
 	type = country_event
 	hidden = yes
 	trigger = {
-		heir ?= {
+		any_scope_character = {
+			is_heir = yes
 			# Only pop if you're the actual "parent" of the child; no PUs should get this
 			owner = prev
 			# Needs to be of sufficient age..
-			age >= 5
+			age >= 4
 			has_trait = trait_child
 			# Only pop if the warden has a different culture/religion
 			OR = {
@@ -1081,7 +1082,7 @@ imperia_heir_education.4 = {
 		}
 	}
 	immediate = {
-		# First we get a scope on the warden
+		# First we get a scope on the warden & heir
 		heir = {
 			save_scope_as = heir_scope
 			if = {
@@ -1158,6 +1159,8 @@ imperia_heir_education.4 = {
 				owner = {
 					trigger_event = {
 						id = imperia_heir_education.5
+						# 60 day delay to make sure it doesnt clash with the skill development events
+						days = 60
 					}
 				}
 			}
@@ -1290,6 +1293,394 @@ imperia_heir_education.5 = {
 				}
 				change_character_culture = scope:warden_scope.culture
 			}
+		}
+	}
+}
+
+# Hidden event early positive personality trait
+imperia_heir_education.6 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		any_scope_character = {
+			is_heir = yes
+			# Only pop if you're the actual "parent" of the child; no PUs should get this
+			owner = prev
+			# Needs to age 6, and only age 6. Only pops once
+			age = 6
+			# ... And needs to be a character thats been followed since birth.
+			OR = {
+				has_variable = raised_by_clergy
+				has_variable = raised_by_nobles
+				has_variable = raised_by_burghers
+				has_variable = raised_by_ruler
+			}
+		}
+	}
+	immediate = {
+		# First we get a scope on the warden & heir
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+			# get 3 random positive personality traits (meaning they GIVE popularity)
+			# .. But only if raised by the ruler.
+			if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				imperia_load_heir_positive_personality_trait = yes
+				imperia_load_heir_positive_personality_trait = yes
+				imperia_load_heir_positive_personality_trait = yes
+				# Pop a choice event for the player
+				owner = {
+					trigger_event = {
+						id = imperia_heir_education.7
+					}
+				}
+			}
+			# The AI will choose randomly
+			else = {
+				random_list = {
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = direct
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = direct
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_direct
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = brave
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = brave
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_brave
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = charismatic
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = charismatic
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_charismatic
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = ambitious
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = ambitious
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_ambitious
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = honorable
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = honorable
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_honorable
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									has_trait = reckless
+								}
+								multiply = 0
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = reckless
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_reckless
+						}
+					}
+				}
+			}
+		}
+		post_notification = imperia_heir_acquired_trait_from_warden_upbringing_notification
+	}
+}
+
+# Actual Event for early positive personality trait
+imperia_heir_education.7 = {
+	type = country_event
+	title = imperia_heir_education.7.title
+	desc = imperia_heir_education.7.desc
+	flavor = imperia_heir_education.7.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	immediate = {
+		# First we get a scope on the warden & heir
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+		}
+		# This only pops when the ruler is the warden
+		ruler = {
+			save_scope_as = warden_scope
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.direct
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_direct_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_direct
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = direct
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.brave
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_brave_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_brave
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = brave
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.charismatic
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_charismatic_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_charismatic
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = charismatic
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.ambitious
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_ambitious_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_ambitious
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = ambitious
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.honorable
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_honorable_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_honorable
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = honorable
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.7.reckless
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_reckless_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_reckless
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = reckless
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	after = {
+		scope:heir_scope = {
+			imperia_remove_personality_trait_variables = yes
 		}
 	}
 }
