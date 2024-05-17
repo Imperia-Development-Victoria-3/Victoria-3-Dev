@@ -350,7 +350,6 @@ dead_man.2 = {
 	}
 }
 
-
 # University Protests
 dead_man_pulse.1 = {
 	type = country_event
@@ -364,138 +363,97 @@ dead_man_pulse.1 = {
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
-
 	trigger = {
 		NOT = {
 			has_variable = dead_man_pulse_uni
 		}
 		has_law = law_type:law_monarchy
 	}
-
 	immediate = {
 		set_variable = dead_man_pulse_uni
 	}
-
 	option = {
-		name = dead_man_pulse.1.a #STOPPING POINT
+		name = dead_man_pulse.1.a
 		default_option = yes
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_bonapartist
-				}
-			}
-			custom_tooltip = {
-				text = bonapartist_progress_increase_10_tt
-				change_variable = { name = bonapartist_progress add = 10 }
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_03_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.3
 			}
 		}
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_orleanist
-				}
-			}
-			custom_tooltip = {
-				text = orleanist_progress_increase_10_tt
-				change_variable = { name = orleanist_progress add = 10 }
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
 			}
 		}
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_legitimist
-				}
-			}
-			custom_tooltip = {
-				text = legitimist_progress_increase_10_tt
-				change_variable = { name = legitimist_progress add = 10 }
-			}
+		add_modifier = {
+			name = dead_man_uni_comm
+			months = normal_modifier_time
 		}
-		scope:monarchists_in_opposition = {
-			add_modifier = {
-				name = solidarity_in_opposition
-				months = normal_modifier_time
-			}
-			leader = {
-				set_variable = monarchist_working_with_republicans
-			}
-		}
-		scope:republicans_in_opposition = {
-			add_modifier = {
-				name = solidarity_in_opposition
-				months = normal_modifier_time
-			}
-			leader = {
-				set_variable = republican_working_with_monarchists
-			}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
 		}
 	}
-
-
 	option = {
-		name = french_pretenders_pulse.3.b
-
-		scope:monarchists_in_opposition = {
-			add_modifier = {
-				name = alone_with_principles
-				months = normal_modifier_time
+		name = dead_man_pulse.1.b
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_03_tt
+			change_variable = {
+				name = communist_progress
+				add = 15
 			}
 		}
-		scope:republicans_in_opposition = {
-			add_modifier = {
-				name = alone_with_principles
-				months = normal_modifier_time
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
 			}
+		}
+		add_modifier = {
+			name = dead_man_uni_comm
+			months = normal_modifier_time
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
 		}
 	}
-
 	option = {
-		name = french_pretenders_pulse.3.c
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_bonapartist
-				}
-			}
-			custom_tooltip = {
-				text = bonapartist_progress_decrease_10_tt
-				change_variable = { name = bonapartist_progress subtract = 10 }
+		name = dead_man_pulse.1.c
+		custom_tooltip = {
+			text = communist_progress_increase_15_tt
+			change_variable = {
+				name = communist_progress
+				add = 15
 			}
 		}
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_orleanist
-				}
-			}
-			custom_tooltip = {
-				text = orleanist_progress_decrease_10_tt
-				change_variable = { name = orleanist_progress subtract = 10 }
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
 			}
 		}
-		if = {
-			limit = {
-				scope:monarchists_in_opposition.leader = {
-					has_ideology = ideology:ideology_legitimist
-				}
-			}
-			custom_tooltip = {
-				text = legitimist_progress_decrease_10_tt
-				change_variable = { name = legitimist_progress subtract = 10 }
-			}
+		add_modifier = {
+			name = dead_man_uni_comm
+			months = normal_modifier_time
 		}
-		scope:monarchists_in_opposition = {
-			add_modifier = {
-				name = collaboration_collapsed
-				months = normal_modifier_time
-			}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
 		}
-		scope:republicans_in_opposition = {
-			add_modifier = {
-				name = collaboration_collapsed
-				months = normal_modifier_time
-			}
-		}
+	}
+}
+
+custom_tooltip = {
+	text = bonapartist_progress_decrease_tick_1_tt
+	change_variable = {
+		name = bonapartist_progress_from_effects
+		add = -1
 	}
 }
