@@ -5134,7 +5134,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_direct_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_direct_trait
@@ -5148,7 +5148,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_brave_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_brave_trait
@@ -5162,7 +5162,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_charismatic_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_charismatic_trait
@@ -5176,7 +5176,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_ambitious_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_ambitious_trait
@@ -5190,7 +5190,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_honorable_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_honorable_trait
@@ -5204,7 +5204,7 @@ imperia_load_heir_positive_personality_trait = {
 							has_variable = education_is_offered_reckless_trait
 						}
 					}
-					multiply = 0
+					add = -1
 				}
 			}
 			set_variable = education_is_offered_reckless_trait
@@ -5212,12 +5212,96 @@ imperia_load_heir_positive_personality_trait = {
 	}
 }
 
+imperia_load_heir_negative_personality_trait = {
+	# scope : heir
+	random_list = {
+		1 = {
+			modifier = {
+				if = {
+					limit = {
+						OR = {
+							has_modifier = modifier_kid_trait_arrogant
+							has_variable = education_is_offered_arrogant_trait
+						}
+					}
+					add = -1
+				}
+			}
+			set_variable = education_is_offered_arrogant_trait
+		}
+		1 = {
+			modifier = {
+				if = {
+					limit = {
+						OR = {
+							has_modifier = modifier_kid_trait_bigoted
+							has_variable = education_is_offered_bigoted_trait
+						}
+					}
+					add = -1
+				}
+			}
+			set_variable = education_is_offered_bigoted_trait
+		}
+		1 = {
+			modifier = {
+				if = {
+					limit = {
+						OR = {
+							has_modifier = modifier_kid_trait_imperious
+							has_modifier = modifier_kid_trait_charismatic
+							has_variable = education_is_offered_imperious_trait
+						}
+					}
+					add = -1
+				}
+			}
+			set_variable = education_is_offered_imperious_trait
+		}
+		1 = {
+			modifier = {
+				if = {
+					limit = {
+						OR = {
+							has_modifier = modifier_kid_trait_reserved
+							has_modifier = modifier_kid_trait_charismatic
+							has_variable = education_is_offered_reserved_trait
+						}
+					}
+					add = -1
+				}
+			}
+			set_variable = education_is_offered_reserved_trait
+		}
+		1 = {
+			modifier = {
+				if = {
+					limit = {
+						OR = {
+							has_modifier = modifier_kid_trait_cruel
+							has_variable = education_is_offered_cruel_trait
+						}
+					}
+					add = -1
+				}
+			}
+			set_variable = education_is_offered_cruel_trait
+		}
+	}
+}
 imperia_remove_personality_trait_variables = {
 	# scope : heir
+	# Positive traits
 	remove_variable ?= education_is_offered_direct_trait
 	remove_variable ?= education_is_offered_brave_trait
 	remove_variable ?= education_is_offered_charismatic_trait
 	remove_variable ?= education_is_offered_ambitious_trait
 	remove_variable ?= education_is_offered_honorable_trait
 	remove_variable ?= education_is_offered_reckless_trait
+	# Negative traits
+	remove_variable ?= education_is_offered_arrogant_trait
+	remove_variable ?= education_is_offered_bigoted_trait
+	remove_variable ?= education_is_offered_imperious_trait
+	remove_variable ?= education_is_offered_reserved_trait
+	remove_variable ?= education_is_offered_cruel_trait
 }
