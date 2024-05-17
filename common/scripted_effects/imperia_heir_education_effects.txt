@@ -1,4 +1,116 @@
-﻿progress_heir_education = {
+﻿imperia_heir_education_main = {
+	if = {
+		limit = {
+			OR = {
+				month = 0				# January
+				month = 4				# May
+				month = 8				# September
+			}
+			# Only pop if your heirs country is you
+			# Just so no shenanigans happens with PUs
+			heir.owner = this
+		}
+		# If your heir is above the age of 2, and is still a child
+		if = {
+			limit = {
+				heir ?= {
+					age >= 2
+					has_trait = trait_child
+					# Dont pop for pre-generated heirs that werent "born"
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+						has_variable = raised_by_ruler
+					}
+					NOR = {
+						has_variable = stop_education
+					}
+				}
+			}
+			# Do a education progress tick
+			heir = {
+				progress_heir_education = yes
+			}
+		}
+		# Else if the heir has grown up, but still has the variables
+		else_if = {
+			limit = {
+				heir ?= {
+					NOT = {
+						has_trait = trait_child
+					}
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+						has_variable = raised_by_ruler
+					}
+				}
+			}
+			heir = {
+				remove_all_education_variables_from_character = yes
+			}
+		}
+		# Remove the ruler-tutoring from underage rulers; they will be tutored by the landowners instead
+		if = {
+			limit = {
+				ruler = {
+					age >= 2
+					has_trait = trait_child
+					has_variable = raised_by_ruler
+				}
+			}
+			ruler = {
+				remove_variable = raised_by_ruler
+				set_variable = raised_by_nobles
+			}
+		}
+		# If the underage ruler is under education, educate them
+		if = {
+			limit = {
+				ruler = {
+					age >= 2
+					has_trait = trait_child
+					# Dont pop for pre-generated heirs that werent "born"
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+					}
+					NOT = {
+						has_variable = stop_education
+					}
+				}
+			}
+			# Do a education progress tick
+			ruler = {
+				progress_heir_education = yes
+			}
+		}
+		# If the previously-underaged ruler has grown up; remove their variables
+		else_if = {
+			limit = {
+				ruler = {
+					NOT = {
+						has_trait = trait_child
+					}
+					OR = {
+						has_variable = raised_by_clergy
+						has_variable = raised_by_nobles
+						has_variable = raised_by_burghers
+						has_variable = raised_by_ruler
+					}
+				}
+			}
+			ruler = {
+				remove_all_education_variables_from_character = yes
+			}
+		}
+	}
+}
+
+progress_heir_education = {
 	# scope : character
 	# First do the "battle" tick to determine if changes are needed
 	# The heir exists, else the script wouldnt come to these parts
@@ -2270,17 +2382,27 @@ choose_heir_education_goal = {
 	# just a reminder, but the scope is still the heir
 	if = {
 		limit = {
+			has_variable = heir_selected_ideology
 			has_ideology = var:heir_selected_ideology
 		}
 		set_variable = heir_maintains_education_status_quo
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				has_variable = heir_selected_ideology
+			}
+		}
+		debug_log = "ERROR! heir_selected_ideology not set"
+		debug_log_scopes = yes
 	}
 }
 
 heir_education_battle_tick = {
 	# scope : heir
-	# -3 is generally the heir,
+	# -2 is generally the heir,
 	# 0 is the current ideology
-	# 3 is where the warden wants to go
+	# 2 is where the warden wants to go
 	save_scope_as = heir_scope
 	var:warden_selected_ideology = {
 		save_scope_as = warden_selected_ideology
@@ -2408,7 +2530,6 @@ heir_education_battle_tick = {
 				owner = {
 					post_notification = imperia_warden_progressed_education_round_notification
 				}
-
 			}
 			# Maintain movement
 			100 = {
@@ -2501,7 +2622,7 @@ heir_education_battle_tick = {
 		}
 		round_variable = {
 			name = education_movement
-			nearest = 0.1
+			nearest = 0.01
 		}
 		# If the heir won this battle
 		if = {
