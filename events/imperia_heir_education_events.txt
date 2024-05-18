@@ -21,6 +21,10 @@ imperia_heir_education.1 = {
 		heir = {
 			save_scope_as = heir_scope
 		}
+		trigger_event = {
+			id = imperia_heir_education.3
+			days = 5844 # 16 years
+		}
 	}
 	# Raise the child yourself
 	option = {
@@ -54,7 +58,7 @@ imperia_heir_education.1 = {
 						is_marginal = yes
 					}
 				}
-				divide = 10
+				add = -90
 			}
 			modifier = {
 				trigger = {
@@ -62,7 +66,7 @@ imperia_heir_education.1 = {
 						is_powerful = yes
 					}
 				}
-				multiply = 10
+				add = 900
 			}
 		}
 	}
@@ -83,7 +87,7 @@ imperia_heir_education.1 = {
 						is_marginal = yes
 					}
 				}
-				divide = 10
+				add = -90
 			}
 			modifier = {
 				trigger = {
@@ -91,7 +95,7 @@ imperia_heir_education.1 = {
 						is_powerful = yes
 					}
 				}
-				multiply = 10
+				add = 900
 			}
 		}
 	}
@@ -112,7 +116,7 @@ imperia_heir_education.1 = {
 						is_marginal = yes
 					}
 				}
-				divide = 10
+				add = -90
 			}
 			modifier = {
 				trigger = {
@@ -120,7 +124,7 @@ imperia_heir_education.1 = {
 						is_powerful = yes
 					}
 				}
-				multiply = 10
+				add = 900
 			}
 		}
 	}
@@ -960,75 +964,15 @@ imperia_heir_education.2 = {
 	}
 }
 
-# Debugging event
+# Hidden event for fact-checking that the heir is infact 16 years old and is the correct one.
+# Well, in .13 at least
 imperia_heir_education.3 = {
 	type = country_event
-	title = "vibe check"
-	desc = "Current education value: [SCOPE.GetValue('education_movement_value')]"
-	flavor = ""
-	duration = 3
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	hidden = yes
 	immediate = {
-		# Is used in the picture frame, but also from here on to make sure no double-heir-event shenanigans happens, in case one dies
-		heir = {
-			save_scope_as = heir_scope
-			ideology = {
-				save_scope_as = current_ideology
-			}
-			var:warden_selected_ideology = {
-				save_scope_as = warden_ideology
-			}
-			var:heir_selected_ideology = {
-				save_scope_as = heir_ideology
-			}
-			save_scope_value_as = {
-				name = education_movement_value
-				value = var:education_movement
-			}
+		trigger_event = {
+			id = imperia_heir_education.13
 		}
-	}
-	option = {
-		name = "Currently: [SCOPE.sIdeology('current_ideology').GetName]"
-	}
-	option = {
-		name = "Wardens preferred: [SCOPE.sIdeology('warden_ideology').GetName]"
-	}
-	option = {
-		name = "Heir preferred: [SCOPE.sIdeology('heir_ideology').GetName]"
-	}
-	option = {
-		trigger = {
-			scope:heir_scope = {
-				has_variable = raised_by_clergy
-			}
-		}
-		name = "raised by clergy"
-	}
-	option = {
-		trigger = {
-			scope:heir_scope = {
-				has_variable = raised_by_nobles
-			}
-		}
-		name = "raised by nobles"
-	}
-	option = {
-		trigger = {
-			scope:heir_scope = {
-				has_variable = raised_by_burghers
-			}
-		}
-		name = "raised by burghers"
-	}
-	option = {
-		trigger = {
-			scope:heir_scope = {
-				has_variable = raised_by_ruler
-			}
-		}
-		name = "raised by ruler"
 	}
 }
 
@@ -2419,7 +2363,7 @@ imperia_heir_education.11 = {
 	}
 }
 
-# Heir advances education
+# Heir advances education; 14% chance per year, roughly
 imperia_heir_education.12 = {
 	type = country_event
 	title = imperia_heir_education.12.title
@@ -2694,6 +2638,417 @@ imperia_heir_education.12 = {
 }
 
 # Heir finishes his/her education
-# imperia_heir_education.13 = {
-
-# }
+imperia_heir_education.13 = {
+	type = country_event
+	title = imperia_heir_education.13.title
+	desc = imperia_heir_education.13.desc
+	flavor = imperia_heir_education.13.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	trigger = {
+		# Triggered from the hidden event, .3, which pop 16 years after the day of birth
+		# Done this roundabout way since event triggers are measured when the event is triggered, not when its scheduled to happen
+		any_scope_character = {
+			is_heir = yes
+			# Between 15 (including) and 17, in case leap year shenanigans make this pop when the heir is 16 years minus 1 day
+			age >= 15
+			age < 17
+			# Needs to have been followed since birth
+			OR = {
+				has_variable = raised_by_clergy
+				has_variable = raised_by_nobles
+				has_variable = raised_by_burghers
+				has_variable = raised_by_ruler
+			}
+		}
+	}
+	immediate = {
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+			### THE GREAT TRAIT REPLACEMENT
+			remove_trait = trait_child
+			if = {
+				limit = {
+					WARDEN_can_teach_WARD_a_skill = {
+						WARDEN = scope:warden_scope
+						WARD = scope:heir_scope
+					}
+				}
+				set_variable = final_lesson_from_warden
+				# If the warden can still teach something, do that now
+				random_list = {
+					# Artillery
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_artillery = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_artillery_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Trench
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_trench = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_trench_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Offensive
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_offensive = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_offensive_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Offensive
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_defensive = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_defensive_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Naval commander
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_naval_commander = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_naval_commander_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Convoy raider
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_convoy_raider = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_convoy_raider_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# popular commander
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_popular_commander = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_popular_commander_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# diplomat
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_diplomat = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_diplomat_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# colonial admin
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_colonial_admin = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_colonial_admin_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Political operator
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_political_operator = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_political_operator_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# orator
+					1 = {
+						trigger = {
+							WARDEN_can_teach_WARD_orator = {
+								WARDEN = scope:warden_scope
+								WARD = scope:heir_scope
+							}
+						}
+						imperia_give_or_upgrade_orator_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+				}
+			}
+			# Else if they at least learned a skill, up it (if possible)
+			else_if = {
+				limit = {
+					OR = {
+						### Levelable Skills
+						## Commander
+						# Artillery
+						has_modifier = basic_artillery_commander_education
+						has_modifier = experienced_artillery_commander_education
+						# Trench
+						has_modifier = stalwart_defender_education
+						has_modifier = trench_rat_education
+						# Offensive
+						has_modifier = basic_offensive_planner_education
+						has_modifier = experienced_offensive_planner_education
+						# Defensive
+						has_modifier = basic_defensive_strategist_education
+						has_modifier = experienced_defensive_strategist_education
+						## Admiral
+						# Naval Commander
+						has_modifier = basic_naval_commander_education
+						has_modifier = experienced_naval_commander_education
+						# Convoy Raider
+						has_modifier = convoy_raider_commander_education
+						has_modifier = experienced_convoy_raider_education
+						# Popular Commander
+						has_modifier = traditionalist_commander_education
+						has_modifier = popular_commander_education
+						## Politician
+						# Diplomat
+						has_modifier = basic_diplomat_education
+						has_modifier = experienced_diplomat_education
+						# Colonial admin
+						has_modifier = basic_colonial_administrator_education
+						has_modifier = experienced_colonial_administrator_education
+						# Political operator
+						has_modifier = basic_political_operator_education
+						has_modifier = experienced_political_operator_education
+						# Orator
+						has_modifier = inspirational_orator_education
+						has_modifier = demagogue_education
+					}
+				}
+				set_variable = random_skillup
+				random_list = {
+					# Commander skills
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_artillery_commander_education
+								has_modifier = experienced_artillery_commander_education
+							}
+						}
+						imperia_give_or_upgrade_artillery_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = stalwart_defender_education
+								has_modifier = trench_rat_education
+							}
+						}
+						imperia_give_or_upgrade_trench_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_offensive_planner_education
+								has_modifier = experienced_offensive_planner_education
+							}
+						}
+						imperia_give_or_upgrade_offensive_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_defensive_strategist_education
+								has_modifier = experienced_defensive_strategist_education
+							}
+						}
+						imperia_give_or_upgrade_defensive_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Admiral skills
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_naval_commander_education
+								has_modifier = experienced_naval_commander_education
+							}
+						}
+						imperia_give_or_upgrade_naval_commander_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = convoy_raider_commander_education
+								has_modifier = experienced_convoy_raider_education
+							}
+						}
+						imperia_give_or_upgrade_convoy_raider_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = traditionalist_commander_education
+								has_modifier = popular_commander_education
+							}
+						}
+						imperia_give_or_upgrade_popular_commander_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					# Politician skills
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_diplomat_education
+								has_modifier = experienced_diplomat_education
+							}
+						}
+						imperia_give_or_upgrade_diplomat_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_colonial_administrator_education
+								has_modifier = experienced_colonial_administrator_education
+							}
+						}
+						imperia_give_or_upgrade_colonial_admin_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = basic_political_operator_education
+								has_modifier = experienced_political_operator_education
+							}
+						}
+						imperia_give_or_upgrade_political_operator_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+					1 = {
+						trigger = {
+							OR = {
+								has_modifier = inspirational_orator_education
+								has_modifier = demagogue_education
+							}
+						}
+						imperia_give_or_upgrade_orator_education_to_CHARACTER = {
+							CHARACTER = scope:heir_scope
+						}
+					}
+				}
+			}
+			# Else just give a random skill
+			else = {
+				add_random_trait = skill
+			}
+			imperia_convert_education_modifiers_to_traits_and_skills = yes
+		}
+	}
+	option = {
+		default_option = yes
+		name = imperia_heir_education.13.a
+		scope:heir_scope = {
+			custom_tooltip = education_modifiers_have_been_replaced_tt
+			if = {
+				limit = {
+					has_variable = final_lesson_from_warden
+				}
+				custom_tooltip = final_lesson_from_warden_tt
+			}
+			else_if = {
+				limit = {
+					has_variable = random_skillup
+				}
+				custom_tooltip = random_skillup_tt
+			}
+			else = {
+				custom_tooltip = random_skill_gained_tt
+			}
+		}
+	}
+}
