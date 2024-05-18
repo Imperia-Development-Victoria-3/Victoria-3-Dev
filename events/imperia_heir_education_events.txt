@@ -1297,7 +1297,7 @@ imperia_heir_education.5 = {
 	}
 }
 
-# Hidden event early positive personality trait
+# Hidden event for early positive personality trait
 imperia_heir_education.6 = {
 	type = country_event
 	hidden = yes
@@ -1703,7 +1703,7 @@ imperia_heir_education.7 = {
 	}
 }
 
-# Hidden event negative personality trait
+# Hidden event for negative personality trait
 imperia_heir_education.8 = {
 	type = country_event
 	hidden = yes
@@ -2060,3 +2060,640 @@ imperia_heir_education.9 = {
 		}
 	}
 }
+
+# Hidden event for multiclass skill trait
+imperia_heir_education.10 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		any_scope_character = {
+			is_heir = yes
+			# Only pop if you're the actual "parent" of the child; no PUs should get this
+			owner = prev
+			# Needs to be age 13, and only age 13. Only pops once
+			age = 13
+			# ... And needs to be a character thats been followed since birth.
+			OR = {
+				has_variable = raised_by_clergy
+				has_variable = raised_by_nobles
+				has_variable = raised_by_burghers
+				has_variable = raised_by_ruler
+			}
+		}
+	}
+	immediate = {
+		# First we get a scope on the warden & heir
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+			# get 3 random multiclass skill traits
+			# .. But only if raised by the ruler.
+			if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				imperia_load_heir_multiclass_skill_trait = yes
+				imperia_load_heir_multiclass_skill_trait = yes
+				imperia_load_heir_multiclass_skill_trait = yes
+				# Pop a choice event for the player
+				owner = {
+					trigger_event = {
+						id = imperia_heir_education.11
+					}
+				}
+			}
+			# The AI will choose randomly
+			else = {
+				random_list = {
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									OR = {
+										has_modifier = modifier_kid_trait_explorer
+										has_variable = education_is_offered_explorer_trait
+									}
+								}
+								add = -4
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = explorer
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_explorer
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									OR = {
+										has_modifier = modifier_kid_trait_bandit
+										has_variable = education_is_offered_bandit_trait
+									}
+								}
+								add = -4
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = bandit
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_bandit
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									OR = {
+										has_modifier = modifier_kid_trait_erudite
+										has_variable = education_is_offered_erudite_trait
+									}
+								}
+								add = -4
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = erudite
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_erudite
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									OR = {
+										has_modifier = modifier_kid_trait_engineer
+										has_variable = education_is_offered_engineer_trait
+									}
+								}
+								add = -4
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = engineer
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_engineer
+						}
+					}
+					1 = {
+						modifier = {
+							if = {
+								limit = {
+									OR = {
+										has_modifier = modifier_kid_trait_master_bureaucrat
+										has_variable = education_is_offered_master_bureaucrat_trait
+									}
+								}
+								add = -4
+							}
+							if = {
+								limit = {
+									scope:warden_scope = {
+										has_trait = master_bureaucrat
+									}
+								}
+								add = 3
+							}
+						}
+						add_modifier = {
+							name = modifier_kid_trait_master_bureaucrat
+						}
+					}
+				}
+			}
+		}
+		post_notification = imperia_heir_acquired_trait_from_warden_upbringing_notification
+	}
+}
+
+# Actual Event for multiclass skill trait
+imperia_heir_education.11 = {
+	type = country_event
+	title = imperia_heir_education.11.title
+	desc = imperia_heir_education.11.desc
+	flavor = imperia_heir_education.11.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	immediate = {
+		# First we get a scope on the warden & heir
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+		}
+		# This only pops when the ruler is the warden
+		ruler = {
+			save_scope_as = warden_scope
+		}
+	}
+	option = {
+		name = imperia_heir_education.11.explorer
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_explorer_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_explorer
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = explorer
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.11.bandit
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_bandit_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_bandit
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = bandit
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.11.erudite
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_erudite_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_erudite
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = erudite
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.11.engineer
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_engineer_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_engineer
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = engineer
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.11.master_bureaucrat
+		trigger = {
+			scope:heir_scope = {
+				has_variable = education_is_offered_master_bureaucrat_trait
+			}
+		}
+		scope:heir_scope = {
+			add_modifier = {
+				name = modifier_kid_trait_master_bureaucrat
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:warden_scope = {
+						has_trait = master_bureaucrat
+					}
+				}
+				add = 3
+			}
+		}
+	}
+	after = {
+		scope:heir_scope = {
+			imperia_remove_personality_trait_variables = yes
+		}
+	}
+}
+
+# Heir advances education
+imperia_heir_education.12 = {
+	type = country_event
+	title = imperia_heir_education.12.title
+	desc = imperia_heir_education.12.desc
+	flavor = imperia_heir_education.12.flavor
+	duration = 3
+	gui_window = event_window_2char
+	right_icon = scope:warden_scope
+	left_icon = scope:heir_scope
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	trigger = {
+		any_scope_character = {
+			is_heir = yes
+			# Only pop if you're the actual "parent" of the child; no PUs should get this
+			owner = prev
+			# Needs to be age 10 or above
+			age >= 10
+			# And a child, of course
+			has_trait = trait_child
+			# ... And needs to be a character thats been followed since birth.
+			OR = {
+				has_variable = raised_by_clergy
+				has_variable = raised_by_nobles
+				has_variable = raised_by_burghers
+				has_variable = raised_by_ruler
+			}
+			trigger_if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				WARDEN_can_teach_WARD_a_skill = {
+					WARDEN = owner.ig:ig_devout.leader
+					WARD = this
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				WARDEN_can_teach_WARD_a_skill = {
+					WARDEN = owner.ig:ig_landowners.leader
+					WARD = this
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				WARDEN_can_teach_WARD_a_skill = {
+					WARDEN = owner.ig:ig_petty_bourgeoisie.leader
+					WARD = this
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				WARDEN_can_teach_WARD_a_skill = {
+					WARDEN = owner.ruler
+					WARD = this
+				}
+			}
+		}
+	}
+	immediate = {
+		random_scope_character = {
+			limit = {
+				is_heir = yes
+			}
+			save_scope_as = heir_scope
+			if = {
+				limit = {
+					has_variable = raised_by_clergy
+				}
+				owner.ig:ig_devout.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_nobles
+				}
+				owner.ig:ig_landowners.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_burghers
+				}
+				owner.ig:ig_petty_bourgeoisie.leader = {
+					save_scope_as = warden_scope
+				}
+			}
+			else_if = {
+				limit = {
+					has_variable = raised_by_ruler
+				}
+				owner.ruler = {
+					save_scope_as = warden_scope
+				}
+			}
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.artillery
+		trigger = {
+			WARDEN_can_teach_WARD_artillery = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_artillery_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.trench
+		trigger = {
+			WARDEN_can_teach_WARD_trench = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_trench_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.offensive
+		trigger = {
+			WARDEN_can_teach_WARD_offensive = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_offensive_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.defensive
+		trigger = {
+			WARDEN_can_teach_WARD_defensive = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_defensive_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.naval_commander
+		trigger = {
+			WARDEN_can_teach_WARD_naval_commander = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_naval_commander_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.convoy_raider
+		trigger = {
+			WARDEN_can_teach_WARD_convoy_raider = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_convoy_raider_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.popular_commander
+		trigger = {
+			WARDEN_can_teach_WARD_popular_commander = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_popular_commander_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.diplomat
+		trigger = {
+			WARDEN_can_teach_WARD_diplomat = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_diplomat_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.colonial_admin
+		trigger = {
+			WARDEN_can_teach_WARD_colonial_admin = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_colonial_admin_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.political_operator
+		trigger = {
+			WARDEN_can_teach_WARD_political_operator = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_political_operator_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = imperia_heir_education.12.orator
+		trigger = {
+			WARDEN_can_teach_WARD_orator = {
+				WARDEN = scope:warden_scope
+				WARD = scope:heir_scope
+			}
+		}
+		imperia_give_or_upgrade_orator_education_to_CHARACTER = {
+			CHARACTER = scope:heir_scope
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# Heir finishes his/her education
+# imperia_heir_education.13 = {
+
+# }
