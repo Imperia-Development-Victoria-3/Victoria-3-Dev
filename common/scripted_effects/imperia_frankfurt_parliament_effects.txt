@@ -491,9 +491,11 @@ imperia_frankfurt_parliament_dissolve_gutter_germany = {
 		}
 		activate_law = var:gutter_king_old_lawgroup_diplomatic_stance
 	}
-	every_in_list = {
-		variable = frankfurt_parliament_gutter_king_added_claims
-		remove_claim = prev
+	hidden_effect = {
+		every_in_list = {
+			variable = frankfurt_parliament_gutter_king_added_claims
+			remove_claim = prev
+		}
 	}
 }
 
@@ -1196,123 +1198,6 @@ imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 	}
 }
 
-imperia_frankfurt_parliament_start_gutter_germany_civil_war = {
-	# custom_tooltip = {
-	# 	text = gutter_german_civil_war_starts_tt
-		every_country = {
-			limit = {
-				OR = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
-				}
-			}
-			if = {
-				limit = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
-				}
-				save_scope_as = gutter_king
-			}
-			else_if = {
-				limit = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
-				}
-				add_to_global_variable_list = {
-					name = german_establishment_aligned
-					target = this
-				}
-			}
-			else_if = {
-				limit = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
-				}
-				if = {
-					limit = {
-						OR = {
-							has_modifier = gutter_king_solid_sway
-							has_modifier = gutter_king_complete_sway
-						}
-					}
-					add_to_global_variable_list = {
-						name = gutter_king_aligned
-						target = this
-					}
-				}
-				else_if = {
-					limit = {
-						OR = {
-							has_modifier = german_major_solid_sway
-							has_modifier = german_major_complete_sway
-						}
-					}
-					add_to_global_variable_list = {
-						name = german_establishment_aligned
-						target = this
-					}
-				}
-			}
-		}
-		ordered_in_global_list = {
-			variable = german_establishment_aligned
-			order_by = gdp
-			position = 0
-			save_scope_as = german_major
-			set_variable = german_establishment_leader
-		}
-		# REMOVE ONE OF THE FOLLOWING
-		# REMOVE TYPE TO MAKE IT BOOTUP
-		scope:german_major = {
-			create_diplomatic_play = {
-				type = dp_imperia_gutter_german_revolution
-				target_country = scope:gutter_king
-			}
-		}
-		create_diplomatic_play = {
-			initiator = scope:german_major
-			target_country = scope:gutter_king
-			type = dp_imperia_gutter_german_revolution
-		}
-		random_diplomatic_play = {
-			limit = {
-				initiator_is = scope:german_major
-				target_is = scope:gutter_king
-			}
-			set_variable = gutter_german_revolution_play
-		}
-		every_in_global_list = {
-			variable = gutter_king_aligned
-			random_diplomatic_play = {
-				limit = {
-					has_variable = gutter_german_revolution_play
-				}
-				add_target_backers = {
-					prev
-				}
-			}
-		}
-		every_in_global_list = {
-			variable = german_establishment_aligned
-			limit = {
-				this != scope:german_major
-			}
-			random_diplomatic_play = {
-				limit = {
-					has_variable = gutter_german_revolution_play
-				}
-				add_initiator_backers = {
-					prev
-				}
-			}
-		}
-		every_country = {
-			limit = {
-				has_diplomatic_relevance = root
-			}
-			post_notification = imperia_gutter_german_revolution_began
-		}
-	# }
-}
-
 imperia_frankfurt_parliament_gutter_king_consolidated = {
 	# scope : gutter king
 	$ROOT$ = {
@@ -1399,18 +1284,20 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 		# Sets the flag to be the Black-Red-Gold
 		# Should NOT be cleaned
 		set_variable = gutter_germany
-		every_state_region = {
-			# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
-			# Add a claim on them. Only for states in the gutter german definition
-			limit = {
-				any_scope_state = {
-					frankfurt_parliament_state_is_gutter_german = yes
-					NOT = {
-						has_claim_by = $ROOT$
+		hidden_effect = {
+			every_state_region = {
+				# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
+				# Add a claim on them. Only for states in the gutter german definition
+				limit = {
+					any_scope_state = {
+						frankfurt_parliament_state_is_gutter_german = yes
+						NOT = {
+							has_claim_by = $ROOT$
+						}
 					}
 				}
+				add_claim = $ROOT$
 			}
-			add_claim = $ROOT$
 		}
 		if = {
 			limit = {
