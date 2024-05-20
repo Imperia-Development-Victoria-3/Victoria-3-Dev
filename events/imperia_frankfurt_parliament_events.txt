@@ -361,6 +361,15 @@ frankfurt_parliament.2 = {
 				limit = {
 					any_scope_state = {
 						frankfurt_parliament_state_is_gutter_german = yes
+						NOT = {
+							has_claim_by = root
+						}
+					}
+				}
+				root = {
+					add_to_variable_list = {
+						name = frankfurt_parliament_gutter_king_added_claims
+						target = prev
 					}
 				}
 				add_claim = root
@@ -878,7 +887,6 @@ frankfurt_parliament.6 = {
 		name = frankfurt_parliament.6.a
 		custom_tooltip = frankfurt_parliament_support_the_left_tt
 		set_variable = frankfurt_parliament_supports_left_club
-
 	}
 	# Centre wing; federal monarchists
 	option = {
@@ -910,5 +918,56 @@ frankfurt_parliament.7 = {
 			value = 50
 		}
 		set_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
+	}
+}
+
+# Hidden event for winning the civil war as the Gutter King
+frankfurt_parliament.8 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = accepted_gutter_crown
+	}
+	immediate = {
+		# Poppet outside of the on_action to make it work properly
+		# Get every establishment aligned country
+		every_in_global_list = {
+			variable = german_establishment_aligned
+			# That is NOT a subject of the gutter king
+			# And make the gutter king subjugate them
+			root = {
+				create_diplomatic_pact = {
+					country = prev
+					type = dominion
+				}
+			}
+		}
+		# If Prussia was establishment (highly likely), Spawn the Rhineland to nerf them
+		# NGF cannot have spawned at this point
+		if = {
+			limit = {
+				is_target_in_global_variable_list = {
+					name = german_establishment_aligned
+					target = c:PRU
+				}
+			}
+			# Slight sidetrack to puppet Prussia, they dont get caught by the above loop for some reason...
+			root = {
+				create_diplomatic_pact = {
+					country = c:PRU
+					type = dominion
+				}
+			}
+			imperia_frankfurt_parliament_spawn_rhineland = yes
+			root = {
+				create_diplomatic_pact = {
+					country = c:RHE
+					type = puppet
+				}
+			}
+		}
+		imperia_frankfurt_parliament_gutter_king_consolidated = {
+			ROOT = root
+		}
 	}
 }

@@ -1,54 +1,60 @@
 ﻿# scope:notification_target = is the one who "won"
 # scope:actor = the one who backed down
 # Root = Diplomatic Play
-# on_imperia_diplo_play_back_down = {
-# 	effect = {
-# 		### If one sides backs down in the Gutter german civil war
-# 		if = {
-# 			limit = {
-# 				has_variable = gutter_german_revolution_play
-# 			}
-# 			# If the Gutter King submits
-# 			if = {
-# 				limit = {
-# 					scope:actor = {
-# 						has_variable = accepted_gutter_crown
-# 					}
-# 				}
-#                 # Dissolve Gutter Germany
-# 				scope:actor = {
-# 					imperia_frankfurt_parliament_dissolve_gutter_germany = yes
-# 				}
-# 			}
-# 			# If the German establishment submits
-# 			else_if = {
-# 				limit = {
-# 					scope:actor = {
-# 						has_variable = german_establishment_leader
-# 					}
-# 				}
-#                 # Get every establishment aligned country
-# 				every_in_global_list = {
-# 					variable = german_establishment_aligned
-#                     # That is NOT a subject of the gutter king
-# 					limit = {
-# 						NOT = {
-# 							is_subject_of = scope:notification_target
-# 						}
-# 					}
-#                     # And make the gutter king subjugate them
-# 					scope:notification_target = {
-# 						create_diplomatic_pact = {
-# 							country = prev
-# 							type = dominion
-# 						}
-# 					}
-# 				}
-#                 # Then consolidate
-# 				scope:notification_target = {
-# 					imperia_frankfurt_parliament_gutter_king_consolidated = yes
-# 				}
-# 			}
-# 		}
-# 	}
-# }
+on_imperia_diplo_play_back_down = {
+	effect = {
+		### If one sides backs down in the Gutter german civil war
+		if = {
+			limit = {
+				has_variable = gutter_german_revolution_play
+			}
+			# If the Gutter King submits
+			if = {
+				limit = {
+					scope:actor = {
+						has_variable = accepted_gutter_crown
+					}
+				}
+				every_country = {
+					limit = {
+						has_diplomatic_relevance = scope:actor
+					}
+					post_notification = imperia_gutter_german_revolution_major_won
+				}
+				# Dissolve Gutter Germany
+				scope:actor = {
+					imperia_frankfurt_parliament_dissolve_gutter_germany = yes
+				}
+			}
+			# If the German establishment submits
+			else_if = {
+				limit = {
+					scope:actor = {
+						has_variable = german_establishment_leader
+					}
+				}
+				# Save scopes for notification
+				scope:actor = {
+					save_scope_as = german_major
+				}
+				scope:notification_target = {
+					save_scope_as = gutter_king
+				}
+				every_country = {
+					limit = {
+						has_diplomatic_relevance = scope:actor
+					}
+					post_notification = imperia_gutter_german_revolution_king_won
+				}
+				# Then actually do the thing in a separate event (after the diplo play has ended)
+				scope:notification_target = {
+					make_independent = yes
+					trigger_event = {
+						id = frankfurt_parliament.8
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}

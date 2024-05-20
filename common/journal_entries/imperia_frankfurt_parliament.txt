@@ -95,7 +95,7 @@
 			imperia_frankfurt_parliament_update_club_influence = yes
 			# Update the german form voting AI tendencies (during the german form vote)
 			if = {
-				limit = { 
+				limit = {
 					global_var:frankfurt_parliament_current_vote = 4
 				}
 				imperia_frankfurt_parliament_update_german_form_ai_willingness = yes
@@ -539,6 +539,19 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 				name = je_imperia_frankfurt_german_consolidation_gutter_king_value
 				nearest = 0.05
 			}
+			if = {
+				limit = {
+					NOT = {
+						exists = scope:german_major
+					}
+				}
+				random_country = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+					save_scope_as = german_major
+				}
+			}
 		}
 	}
 	complete = {
@@ -548,7 +561,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 	}
 	on_complete = {
-		imperia_frankfurt_parliament_gutter_king_consolidated = yes
+		imperia_frankfurt_parliament_gutter_king_consolidated = {
+			ROOT = this
+		}
 	}
 	fail = {
 		custom_tooltip = {
@@ -570,7 +585,19 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	}
 	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Start a civil war
 	on_timeout = {
-		imperia_frankfurt_parliament_start_gutter_germany_civil_war = yes
+		set_global_variable = frankfurt_parliament_civil_war_happened
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+			save_scope_as = german_major
+		}
+		if = {
+			limit = {
+				exists = scope:german_major
+			}
+			imperia_frankfurt_parliament_start_gutter_germany_civil_war = yes
+		}
 	}
 	progressbar = yes
 	timeout = 1826
@@ -604,13 +631,21 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 		}
 	}
 	fail = {
-		custom_tooltip = {
-			text = frankfurt_germany_fully_consolidated_tt
-			scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
-		}
-		scope:gutter_king_scope = {
-			NOT = {
-				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_consolidated_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_civil_war_happened_tt
+				has_global_variable = frankfurt_parliament_civil_war_happened
 			}
 		}
 	}
@@ -719,13 +754,21 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		}
 	}
 	fail = {
-		custom_tooltip = {
-			text = frankfurt_germany_fully_consolidated_tt
-			scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
-		}
-		scope:gutter_king_scope = {
-			NOT = {
-				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_consolidated_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_civil_war_happened_tt
+				has_global_variable = frankfurt_parliament_civil_war_happened
 			}
 		}
 	}

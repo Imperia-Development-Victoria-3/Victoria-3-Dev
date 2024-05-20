@@ -491,6 +491,10 @@ imperia_frankfurt_parliament_dissolve_gutter_germany = {
 		}
 		activate_law = var:gutter_king_old_lawgroup_diplomatic_stance
 	}
+	every_in_list = {
+		variable = frankfurt_parliament_gutter_king_added_claims
+		remove_claim = prev
+	}
 }
 
 imperia_frankfurt_parliament_spawn_rhineland = {
@@ -1194,7 +1198,7 @@ imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 
 imperia_frankfurt_parliament_start_gutter_germany_civil_war = {
 	# custom_tooltip = {
-		# text = gutter_german_civil_war_starts_tt
+	# 	text = gutter_german_civil_war_starts_tt
 		every_country = {
 			limit = {
 				OR = {
@@ -1255,24 +1259,18 @@ imperia_frankfurt_parliament_start_gutter_germany_civil_war = {
 			save_scope_as = german_major
 			set_variable = german_establishment_leader
 		}
+		# REMOVE ONE OF THE FOLLOWING
+		# REMOVE TYPE TO MAKE IT BOOTUP
 		scope:german_major = {
 			create_diplomatic_play = {
-				name = gutter_german_revolution
+				type = dp_imperia_gutter_german_revolution
 				target_country = scope:gutter_king
-				type = dp_humiliation
-				add_war_goal = {
-					holder = scope:german_major
-					type = contain_threat
-					target_country = scope:gutter_king
-					primary_demand = yes
-				}
-				add_war_goal = {
-					holder = scope:gutter_king
-					type = make_puppet
-					target_country = scope:german_major
-					primary_demand = yes
-				}
 			}
+		}
+		create_diplomatic_play = {
+			initiator = scope:german_major
+			target_country = scope:gutter_king
+			type = dp_imperia_gutter_german_revolution
 		}
 		random_diplomatic_play = {
 			limit = {
@@ -1306,114 +1304,122 @@ imperia_frankfurt_parliament_start_gutter_germany_civil_war = {
 				}
 			}
 		}
+		every_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			post_notification = imperia_gutter_german_revolution_began
+		}
 	# }
 }
 
 imperia_frankfurt_parliament_gutter_king_consolidated = {
 	# scope : gutter king
-	if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-			exists = c:AUS
-			OR = {
-				c:AUS = root
-				c:AUS = {
-					is_subject_of = root
+	$ROOT$ = {
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+				exists = c:AUS
+				OR = {
+					c:AUS = $ROOT$
+					c:AUS = {
+						is_subject_of = $ROOT$
+					}
 				}
 			}
-		}
-		imperia_frankfurt_parliament_shatter_austria = yes
-	}
-	if = {
-		limit = {
-			country_has_primary_culture = cu:north_german
+			imperia_frankfurt_parliament_shatter_austria = yes
 		}
 		if = {
 			limit = {
-				OR = {
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-					has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-				}
+				country_has_primary_culture = cu:north_german
 			}
-			imperia_frankfurt_parliament_spawn_south_german_federation = yes
-		}
-		custom_tooltip = {
-			text = frankfurt_germany_consolidates_tt
-			every_subject_or_below = {
+			if = {
 				limit = {
-					country_has_primary_culture = cu:north_german
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+					}
 				}
-				root = {
-					annex = prev
+				imperia_frankfurt_parliament_spawn_south_german_federation = yes
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_consolidates_tt
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:north_german
+					}
+					$ROOT$ = {
+						annex = prev
+					}
 				}
 			}
-		}
-	}
-	if = {
-		limit = {
-			country_has_primary_culture = cu:south_german
 		}
 		if = {
 			limit = {
-				OR = {
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-				}
+				country_has_primary_culture = cu:south_german
 			}
-			imperia_frankfurt_parliament_spawn_rhineland = yes
-		}
-		custom_tooltip = {
-			text = frankfurt_germany_consolidates_tt
-			every_subject_or_below = {
+			if = {
 				limit = {
-					country_has_primary_culture = cu:south_german
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+					}
 				}
-				root = {
-					annex = prev
+				imperia_frankfurt_parliament_spawn_rhineland = yes
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_consolidates_tt
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:south_german
+					}
+					$ROOT$ = {
+						annex = prev
+					}
 				}
 			}
-		}
-	}
-	add_modifier = {
-		name = crown_from_the_gutter
-		years = 20
-		is_decaying = yes
-	}
-	if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_republic_var
-			has_global_variable = frankfurt_parliament_has_majority_for_universal_var
 		}
 		add_modifier = {
-			name = radical_republican_germany
-			years = 15
+			name = crown_from_the_gutter
+			years = 20
 			is_decaying = yes
 		}
-	}
-	change_tag = GER
-	# Sets the flag to be the Black-Red-Gold
-	# Should NOT be cleaned
-	set_variable = gutter_germany
-	every_state_region = {
-		# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
-		# Add a claim on them. Only for states in the gutter german definition
-		limit = {
-			any_scope_state = {
-				frankfurt_parliament_state_is_gutter_german = yes
-				NOT = {
-					has_claim_by = root
-				}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+				has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+			}
+			add_modifier = {
+				name = radical_republican_germany
+				years = 15
+				is_decaying = yes
 			}
 		}
-		add_claim = root
-	}
-	if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+		change_tag = GER
+		# Sets the flag to be the Black-Red-Gold
+		# Should NOT be cleaned
+		set_variable = gutter_germany
+		every_state_region = {
+			# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
+			# Add a claim on them. Only for states in the gutter german definition
+			limit = {
+				any_scope_state = {
+					frankfurt_parliament_state_is_gutter_german = yes
+					NOT = {
+						has_claim_by = $ROOT$
+					}
+				}
+			}
+			add_claim = $ROOT$
 		}
-		custom_tooltip = {
-			text = imperia_frankfurt_parliament_grant_external_focus_claims_tt
-			imperia_frankfurt_parliament_grant_external_focus_claims = yes
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+			}
+			custom_tooltip = {
+				text = imperia_frankfurt_parliament_grant_external_focus_claims_tt
+				imperia_frankfurt_parliament_grant_external_focus_claims = yes
+			}
 		}
 	}
 }
