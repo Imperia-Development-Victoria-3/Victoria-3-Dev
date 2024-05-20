@@ -967,126 +967,125 @@ frankfurt_parliament.8 = {
 			}
 		}
 		imperia_frankfurt_parliament_gutter_king_consolidated = {
-			ROOT = root
+			GUTTER_KING = root
 		}
 	}
 }
 
+# Hidden event for starting the civil war
 frankfurt_parliament.9 = {
 	type = country_event
 	hidden = yes
+	trigger = {
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+		}
+	}
 	immediate = {
-		if = {
+		every_country = {
 			limit = {
-				any_country = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
 					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 				}
 			}
-			every_country = {
+			if = {
 				limit = {
-					OR = {
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
-					}
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+				}
+				save_scope_as = gutter_king
+			}
+			else_if = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+				add_to_global_variable_list = {
+					name = german_establishment_aligned
+					target = this
+				}
+			}
+			else_if = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
 				}
 				if = {
 					limit = {
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+						OR = {
+							has_modifier = gutter_king_solid_sway
+							has_modifier = gutter_king_complete_sway
+						}
 					}
-					save_scope_as = gutter_king
+					add_to_global_variable_list = {
+						name = gutter_king_aligned
+						target = this
+					}
 				}
 				else_if = {
 					limit = {
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+						OR = {
+							has_modifier = german_major_solid_sway
+							has_modifier = german_major_complete_sway
+						}
 					}
 					add_to_global_variable_list = {
 						name = german_establishment_aligned
 						target = this
 					}
 				}
-				else_if = {
-					limit = {
-						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
-					}
-					if = {
-						limit = {
-							OR = {
-								has_modifier = gutter_king_solid_sway
-								has_modifier = gutter_king_complete_sway
-							}
-						}
-						add_to_global_variable_list = {
-							name = gutter_king_aligned
-							target = this
-						}
-					}
-					else_if = {
-						limit = {
-							OR = {
-								has_modifier = german_major_solid_sway
-								has_modifier = german_major_complete_sway
-							}
-						}
-						add_to_global_variable_list = {
-							name = german_establishment_aligned
-							target = this
-						}
-					}
+			}
+		}
+		ordered_in_global_list = {
+			variable = german_establishment_aligned
+			order_by = gdp
+			position = 0
+			save_scope_as = german_major
+			set_variable = german_establishment_leader
+		}
+		# REMOVE TYPE TO MAKE IT BOOTABLE
+		scope:german_major = {
+			create_diplomatic_play = {
+				type = dp_imperia_gutter_german_revolution
+				target_country = scope:gutter_king
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				initiator_is = scope:german_major
+				target_is = scope:gutter_king
+			}
+			set_variable = gutter_german_revolution_play
+		}
+		every_in_global_list = {
+			variable = gutter_king_aligned
+			random_diplomatic_play = {
+				limit = {
+					has_variable = gutter_german_revolution_play
+				}
+				add_target_backers = {
+					prev
 				}
 			}
-			ordered_in_global_list = {
-				variable = german_establishment_aligned
-				order_by = gdp
-				position = 0
-				save_scope_as = german_major
-				set_variable = german_establishment_leader
-			}
-			# REMOVE TYPE TO MAKE IT BOOTABLE
-			scope:german_major = {
-				create_diplomatic_play = {
-					type = dp_imperia_gutter_german_revolution
-					target_country = scope:gutter_king
-				}
+		}
+		every_in_global_list = {
+			variable = german_establishment_aligned
+			limit = {
+				this != scope:german_major
 			}
 			random_diplomatic_play = {
 				limit = {
-					initiator_is = scope:german_major
-					target_is = scope:gutter_king
+					has_variable = gutter_german_revolution_play
 				}
-				set_variable = gutter_german_revolution_play
-			}
-			every_in_global_list = {
-				variable = gutter_king_aligned
-				random_diplomatic_play = {
-					limit = {
-						has_variable = gutter_german_revolution_play
-					}
-					add_target_backers = {
-						prev
-					}
+				add_initiator_backers = {
+					prev
 				}
 			}
-			every_in_global_list = {
-				variable = german_establishment_aligned
-				limit = {
-					this != scope:german_major
-				}
-				random_diplomatic_play = {
-					limit = {
-						has_variable = gutter_german_revolution_play
-					}
-					add_initiator_backers = {
-						prev
-					}
-				}
+		}
+		every_country = {
+			limit = {
+				has_diplomatic_relevance = root
 			}
-			every_country = {
-				limit = {
-					has_diplomatic_relevance = root
-				}
-				post_notification = imperia_gutter_german_revolution_began
-			}
+			post_notification = imperia_gutter_german_revolution_began
 		}
 	}
 }

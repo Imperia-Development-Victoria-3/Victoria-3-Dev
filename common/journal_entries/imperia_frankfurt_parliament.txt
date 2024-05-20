@@ -56,6 +56,7 @@
 			popup = yes
 			days = 14
 		}
+		imperia_frankfurt_parliament_initialise_club_variables = yes
 		imperia_frankfurt_parliament_update_club_influence = yes
 		if = {
 			limit = {
@@ -154,6 +155,7 @@
 								frankfurt_parliament_has_majority_for_republic = yes
 							}
 							set_global_variable = frankfurt_parliament_has_majority_for_republic_var
+							
 						}
 						else = {
 							set_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
@@ -353,6 +355,19 @@
 						change_global_variable = {
 							name = frankfurt_parliament_current_vote
 							add = 1
+						}
+					}
+					# Pop a notification to announce the result
+					if = {
+						limit = { 
+							global_var:frankfurt_parliament_current_vote > 1
+							global_var:frankfurt_parliament_current_vote < 7
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_imperia_frankfurt_parliament
+							}
+							post_notification = imperia_frankfurt_parliament_vote_happened
 						}
 					}
 				}
@@ -562,7 +577,7 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	}
 	on_complete = {
 		imperia_frankfurt_parliament_gutter_king_consolidated = {
-			ROOT = this
+			GUTTER_KING = this
 		}
 	}
 	fail = {

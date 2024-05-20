@@ -783,7 +783,6 @@ imperia_frankfurt_parliament_BOOST_club = {
 	# scope : country being boosted
 	# root : player country
 	# If the player is left leaning
-	imperia_frankfurt_parliament_initialise_club_variables = yes
 	if = {
 		limit = {
 			root = {
@@ -846,7 +845,6 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 	# scope : country being sabotaged
 	# root : player country
 	# If the player is left leaning
-	imperia_frankfurt_parliament_initialise_club_variables = yes
 	if = {
 		limit = {
 			root = {
@@ -919,7 +917,6 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 	# scope : country being influenced
 	# root : player country
-	imperia_frankfurt_parliament_initialise_club_variables = yes
 	# If the player is left leaning
 	if = {
 		limit = {
@@ -993,7 +990,6 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 	# scope : country being influenced
 	# root : player country
-	imperia_frankfurt_parliament_initialise_club_variables = yes
 	# Pop this section if LEFT = 1; meaning its trying to influence the left
 	if = {
 		limit = {
@@ -1061,38 +1057,17 @@ imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 }
 
 imperia_frankfurt_parliament_initialise_club_variables = {
-	if = {
-		limit = {
-			NOT = {
-				has_variable = frankfurt_parliament_center_club_boost
-			}
-		}
-		set_variable = {
-			name = frankfurt_parliament_center_club_boost
-			value = 1
-		}
+	set_variable = {
+		name = frankfurt_parliament_left_club_boost
+		value = 1
 	}
-	if = {
-		limit = {
-			NOT = {
-				has_variable = frankfurt_parliament_center_club_boost
-			}
-		}
-		set_variable = {
-			name = frankfurt_parliament_left_club_boost
-			value = 1
-		}
+	set_variable = {
+		name = frankfurt_parliament_center_club_boost
+		value = 1
 	}
-	if = {
-		limit = {
-			NOT = {
-				has_variable = frankfurt_parliament_right_club_boost
-			}
-		}
-		set_variable = {
-			name = frankfurt_parliament_right_club_boost
-			value = 1
-		}
+	set_variable = {
+		name = frankfurt_parliament_right_club_boost
+		value = 1
 	}
 }
 
@@ -1199,16 +1174,16 @@ imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 }
 
 imperia_frankfurt_parliament_gutter_king_consolidated = {
-	# scope : gutter king
-	$ROOT$ = {
+	# GUTTER_KING : gutter king
+	$GUTTER_KING$ = {
 		if = {
 			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
 				exists = c:AUS
 				OR = {
-					c:AUS = $ROOT$
+					c:AUS = $GUTTER_KING$
 					c:AUS = {
-						is_subject_of = $ROOT$
+						is_subject_of = $GUTTER_KING$
 					}
 				}
 			}
@@ -1233,7 +1208,7 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 					limit = {
 						country_has_primary_culture = cu:north_german
 					}
-					$ROOT$ = {
+					$GUTTER_KING$ = {
 						annex = prev
 					}
 				}
@@ -1258,7 +1233,7 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 					limit = {
 						country_has_primary_culture = cu:south_german
 					}
-					$ROOT$ = {
+					$GUTTER_KING$ = {
 						annex = prev
 					}
 				}
@@ -1292,11 +1267,11 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 					any_scope_state = {
 						frankfurt_parliament_state_is_gutter_german = yes
 						NOT = {
-							has_claim_by = $ROOT$
+							has_claim_by = $GUTTER_KING$
 						}
 					}
 				}
-				add_claim = $ROOT$
+				add_claim = $GUTTER_KING$
 			}
 		}
 		if = {
