@@ -1240,3 +1240,76 @@ imperia_frankfurt_parliament_greater_austria_ai_willingness_value = {
 		add = 80
 	}
 }
+
+imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = gutter_king_start_sway
+				has_modifier = german_major_solid_sway
+			}
+		}
+		add = 20
+	}
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = gutter_king_solid_sway
+				has_modifier = german_major_start_sway
+			}
+		}
+		add = 40
+	}
+	every_country = {
+		limit = {
+			has_modifier = gutter_king_complete_sway
+		}
+		add = 60
+	}
+}
+
+imperia_frankfurt_parliament_german_major_authority_spent_on_princes = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = german_major_start_sway
+				has_modifier = gutter_king_solid_sway
+			}
+		}
+		add = 20
+	}
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = german_major_solid_sway
+				has_modifier = gutter_king_start_sway
+			}
+		}
+		add = 40
+	}
+	every_country = {
+		limit = {
+			has_modifier = german_major_complete_sway
+		}
+		add = 60
+	}
+	# Spread out equally between the German Majors, in case there are more of them
+	if = {
+		limit = {
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		divide = {
+			value = 0
+			every_country = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+				add = 1
+			}
+		}
+	}
+}

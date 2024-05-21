@@ -1285,3 +1285,68 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 		}
 	}
 }
+
+imperia_frankfurt_parliament_update_gutter_minor_promises = {
+	remove_modifier ?= gutter_minor_promises
+	if = {
+		limit = {
+			has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+			has_global_variable = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+		}
+		if = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+			add_modifier = {
+				name = gutter_minor_promises
+				multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+			}
+		}
+		else_if = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+			add_modifier = {
+				name = gutter_minor_promises
+				multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_update_gutter_minor_promises_variables = {
+	set_global_variable = {
+		name = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+		value = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes
+	}
+	set_global_variable = {
+		name = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+		value = imperia_frankfurt_parliament_german_major_authority_spent_on_princes
+	}
+}
+
+imperia_frankfurt_parliament_final_set_gutter_minor_promises = {
+	remove_modifier ?= gutter_minor_promises
+	if = {
+		limit = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+		}
+		add_modifier = {
+			name = gutter_minor_promises
+			multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+			years = 15
+			is_decaying = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+		}
+		add_modifier = {
+			name = gutter_minor_promises
+			multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+			years = 15
+			is_decaying = yes
+		}
+	}
+}

@@ -155,7 +155,6 @@
 								frankfurt_parliament_has_majority_for_republic = yes
 							}
 							set_global_variable = frankfurt_parliament_has_majority_for_republic_var
-							
 						}
 						else = {
 							set_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
@@ -359,7 +358,7 @@
 					}
 					# Pop a notification to announce the result
 					if = {
-						limit = { 
+						limit = {
 							global_var:frankfurt_parliament_current_vote > 1
 							global_var:frankfurt_parliament_current_vote < 7
 						}
@@ -567,6 +566,9 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 					save_scope_as = german_major
 				}
 			}
+			# Re/sets the authority multiplier weekly here for performance reasons
+			imperia_frankfurt_parliament_update_gutter_minor_promises_variables = yes
+			imperia_frankfurt_parliament_update_gutter_minor_promises = yes
 		}
 	}
 	complete = {
@@ -576,6 +578,15 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 	}
 	on_complete = {
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+			}
+			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+		}
 		imperia_frankfurt_parliament_gutter_king_consolidated = {
 			GUTTER_KING = this
 		}
@@ -590,6 +601,15 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 		}
 	}
 	on_fail = {
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+			}
+			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+		}
 		imperia_frankfurt_parliament_dissolve_gutter_germany = yes
 	}
 	current_value = {
@@ -601,6 +621,15 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Start a civil war
 	on_timeout = {
 		set_global_variable = frankfurt_parliament_civil_war_happened
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+			}
+			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+		}
 		custom_tooltip = {
 			text = gutter_german_civil_war_starts_tt
 			trigger_event = {
@@ -626,6 +655,11 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
 			}
 			save_scope_as = gutter_king_scope
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			imperia_frankfurt_parliament_update_gutter_minor_promises = yes
 		}
 	}
 	complete = {
@@ -713,9 +747,13 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		}
 		if = {
 			limit = {
-				has_modifier = gutter_king_solid_sway
+				OR = {
+					has_modifier = german_major_start_sway
+					has_modifier = gutter_king_solid_sway
+				}
 			}
-			remove_modifier = gutter_king_solid_sway
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= german_major_start_sway
 			add_modifier = {
 				name = german_major_start_sway
 				years = 5
@@ -727,28 +765,6 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 				has_modifier = gutter_king_complete_sway
 			}
 			remove_modifier = gutter_king_complete_sway
-		}
-		if = {
-			limit = {
-				has_modifier = german_major_start_sway
-			}
-			remove_modifier = german_major_start_sway
-			add_modifier = {
-				name = german_major_start_sway
-				years = 5
-				is_decaying = yes
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = german_major_solid_sway
-			}
-			remove_modifier = german_major_solid_sway
-			add_modifier = {
-				name = german_major_solid_sway
-				years = 5
-				is_decaying = yes
-			}
 		}
 		if = {
 			limit = {
@@ -796,9 +812,13 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		}
 		if = {
 			limit = {
-				has_modifier = gutter_king_solid_sway
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = german_major_start_sway
+				}
 			}
-			remove_modifier = gutter_king_solid_sway
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= german_major_start_sway
 			add_modifier = {
 				name = gutter_king_solid_sway
 				years = 5
@@ -812,28 +832,6 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 			remove_modifier = gutter_king_complete_sway
 			add_modifier = {
 				name = gutter_king_complete_sway
-				years = 5
-				is_decaying = yes
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = german_major_start_sway
-			}
-			remove_modifier = german_major_start_sway
-			add_modifier = {
-				name = gutter_king_solid_sway
-				years = 5
-				is_decaying = yes
-			}
-		}
-		if = {
-			limit = {
-				has_modifier = german_major_solid_sway
-			}
-			remove_modifier = german_major_solid_sway
-			add_modifier = {
-				name = gutter_king_start_sway
 				years = 5
 				is_decaying = yes
 			}
