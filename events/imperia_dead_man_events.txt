@@ -171,8 +171,7 @@ dead_man.1 = {
 	}
 }
 
-namespace = dead_man
-# REPUBLICAN END EVENT
+# COMMUNIST END EVENT
 dead_man.2 = {
 	type = country_event
 	placement = root
@@ -181,10 +180,10 @@ dead_man.2 = {
 	flavor = dead_man.2.f
 	duration = 3
 	event_image = {
-		video = "unspecific_ruler_speaking_to_people"
+		video = "europenorthamerica_springtime_of_nations"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/protest.dds"
 	cooldown = {
 		months = normal_modifier_time
 	}
@@ -206,146 +205,180 @@ dead_man.2 = {
 		remove_modifier ?= internal_strife
 	}
 	option = {
-		# Support Republican
-		name = dead_man.1.a
-		set_variable = chose_initial_turk_government
-		if = {
-			limit = {
-				ig:ig_intelligentsia.leader = {
-					NOT = {
-						OR = {
-							has_ideology = ideology:ideology_republican_leader
-							has_ideology = ideology:ideology_radical
-							has_ideology = ideology:ideology_atheist							# nihilist
-							has_ideology = ideology:ideology_liberal_leader							#democrat
-							has_ideology = ideology:ideology_positivist
-							has_ideology = ideology:ideology_market_liberal
-						}
-					}
-				}
-			}
-			ig:ig_intelligentsia.leader = {
-				set_ideology = ideology:ideology_republican_leader
-				add_modifier = {
-					name = dead_man_revolutionary
-				}
-			}
+		# Supported Communists 1
+		name = dead_man.2.a
+		trigger = {
+			dead_man_communists_winning = yes
 		}
-		if = {
-			limit = {
-				has_variable = supporting_theocracy_var
-			}
-			remove_variable = supporting_theocracy_var
-		}
-		if = {
-			limit = {
-				has_variable = supporting_communist_var
-			}
-			remove_variable = supporting_communist_var
-		}
-		custom_tooltip = {
-			text = republican_progress_increase_15_tt
-			change_variable = {
-				name = republican_progress
-				add = 15
-			}
-		}
-		set_variable = supporting_republican_var
-		add_journal_entry = {
-			type = je_dead_man_main
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_anarchy
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_cooperative_ownership
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_protected_speech
+		activate_law = law_type:law_guaranteed_liberties
+		activate_law = law_type:law_disarmed_police
+		activate_law = law_type:law_national_militia
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
 		}
 	}
 	option = {
-		# Support Theocracy
-		name = dead_man.1.b
-		default_option = yes
-		set_variable = chose_initial_turk_government
-		if = {
-			limit = {
-				ig:ig_devout.leader = {
-					NOT = {
-						OR = {
-							has_ideology = ideology:ideology_theocrat
-							has_ideology = ideology:ideology_traditionalist
-							has_ideology = ideology:ideology_authoritarian
-							has_ideology = ideology:ideology_slaver
-							has_ideology = ideology:ideology_corporatist
-						}
-					}
-				}
-			}
-			ig:ig_devout.leader = {
-				set_ideology = ideology:ideology_theocrat
-				add_modifier = {
-					name = dead_man_revolutionary
-				}
-			}
+		# Supported Communists 2
+		name = dead_man.2.b
+		trigger = {
+			dead_man_communists_winning = yes
 		}
-		if = {
-			limit = {
-				has_variable = supporting_republican_var
-			}
-			remove_variable = supporting_republican_var
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_universal_suffrage
+		activate_law = law_type:law_multicultural
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_cooperative_ownership
+		activate_law = law_type:law_state_atheism
+		activate_law = law_type:law_worker_protections
+		activate_law = law_type:law_old_age_pension
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
 		}
-		if = {
-			limit = {
-				has_variable = supporting_communist_var
-			}
-			remove_variable = supporting_communist_var
-		}
-		custom_tooltip = {
-			text = theocracy_progress_increase_15_tt
-			change_variable = {
-				name = theocracy_progress
-				add = 15
-			}
-		}
-		set_variable = supporting_theocracy_var
 	}
 	option = {
-		# Support Communist
-		name = dead_man.1.c
-		set_variable = chose_initial_turk_government
-		if = {
-			limit = {
-				ig:ig_trade_unions.leader = {
-					NOT = {
-						OR = {
-							has_ideology = ideology:ideology_communist
-							has_ideology = ideology:ideology_vanguardist
-							has_ideology = ideology:ideology_anarchist
-							has_ideology = ideology:ideology_social_democrat
-							has_ideology = ideology:ideology_humanitarian
-						}
-					}
-				}
-			}
-			ig:ig_trade_unions.leader = {
-				set_ideology = ideology:ideology_communist
-				add_modifier = {
-					name = dead_man_revolutionary
-				}
-			}
+		# Supported Communists 3
+		name = dead_man.2.c
+		trigger = {
+			dead_man_communists_winning = yes
 		}
-		if = {
-			limit = {
-				has_variable = supporting_republican_var
-			}
-			remove_variable = supporting_republican_var
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_technocracy
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_command_economy
+		activate_law = law_type:law_professional_army
+		activate_law = law_type:law_state_atheism
+		activate_law = law_type:law_censorship
+		activate_law = law_type:law_secret_police
+		activate_law = law_type:law_militarized_police
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
 		}
-		if = {
-			limit = {
-				has_variable = supporting_theocracy_var
-			}
-			remove_variable = supporting_theocracy_var
+	}
+	option = {
+		# Supported Republicans 1
+		name = dead_man.2.l
+		trigger = {
+			dead_man_republicans_winning = yes
 		}
-		custom_tooltip = {
-			text = communist_progress_increase_15_tt
-			change_variable = {
-				name = communist_progress
-				add = 15
-			}
+		set_country_type = recognized
+		activate_law = law_type:law_parliamentary_republic
+		activate_law = law_type:law_census_voting
+		activate_law = law_type:law_cultural_exclusion
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_public_schools
+		activate_law = law_type:law_guaranteed_liberties
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
 		}
-		set_variable = supporting_communist_var
+	}
+	option = {
+		# Supported Republicans 2
+		name = dead_man.2.m
+		trigger = {
+			dead_man_republicans_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_parliamentary_republic
+		activate_law = law_type:law_wealth_voting
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_private_schools
+		activate_law = law_type:law_private_health_insurance
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
+		}
+	}
+	option = {
+		# Supported Republicans 3
+		name = dead_man.2.n
+		trigger = {
+			dead_man_republicans_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_presidential_republic
+		activate_law = law_type:law_oligarchy
+		activate_law = law_type:law_freedom_of_conscience
+		activate_law = law_type:law_meritocratic_bureaucracy
+		activate_law = law_type:law_interventionism
+		activate_law = law_type:law_dedicated_police
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
+		}
+	}
+	option = {
+		# Supported Theocracy 1
+		name = dead_man.2.x
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_autocracy
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_professional_army
+		activate_law = law_type:law_national_guard
+		activate_law = law_type:law_censorship
+		activate_law = law_type:law_empowered_gendarmerie
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
+		}
+	}
+	option = {
+		# Supported Theocracy 2
+		name = dead_man.2.y
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_landed_voting
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_agrarianism
+		activate_law = law_type:law_homesteading
+		activate_law = law_type:law_no_womens_rights
+		activate_law = law_type:law_closed_borders
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
+		}
+	}
+	option = {
+		# Supported Theocracy 3
+		name = dead_man.2.z
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_oligarchy
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_inquisition
+		activate_law = law_type:law_faith_orders
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_charitable_health_system
+		activate_law = law_type:law_no_womens_rights
+		activate_law = law_type:law_poor_laws
+		add_modifier = {
+			name = dead_man_coup_success
+			months = long_modifier_time
+		}
 	}
 }
