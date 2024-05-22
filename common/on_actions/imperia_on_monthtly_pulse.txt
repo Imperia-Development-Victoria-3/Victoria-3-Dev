@@ -129,6 +129,18 @@
 				multiplier = local_var:tmp_imperia_china_infamy_penalty_value
 			}
 		}
+		# Add money transfer variables to countries that doesnt have them yet
+		if = {
+			limit = { 
+				NOT = {
+					has_variable = imperia_money_transfer_amount
+				}
+			}
+			set_variable = {
+				name = imperia_money_transfer_amount
+				value = 0
+			}
+		}
 	}
 	events = {
 		infamy_rebalance.1		#updates provinces each month
@@ -327,12 +339,24 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 					NOT = {
 						has_global_variable = imperia_vienna_congress_minimum_time
 					}
+					has_global_variable = imperia_vienna_congress_in_session 
 				}
 				# Have a 20% chance of ending it
 				random = {
 					chance = 20
 					end_congress_scripted_effect = yes
 				}
+			}
+			if = {
+				limit = {
+					has_global_variable = imperia_vienna_congress_in_session 
+					or = {
+						not = { exists = global_var:imperia_vienna_congress_session_target}
+						not = { exists = global_var:imperia_vienna_congress_session_initiator}
+					}
+				}
+				remove_global_variable = imperia_vienna_congress_in_session
+				remove_global_variable = congress_random_events_enabled
 			}
 		}
 	}
