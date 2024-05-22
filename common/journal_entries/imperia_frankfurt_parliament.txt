@@ -509,9 +509,17 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
 			value = 0
 		}
+		set_global_variable = {
+			name = frankfurt_parliament_weeks_to_civil_war
+			value = 260
+		}
 	}
 	on_weekly_pulse = {
 		effect = {
+			change_global_variable = {
+				name = frankfurt_parliament_weeks_to_civil_war
+				subtract = 1
+			}
 			if = {
 				limit = {
 					frankfurt_parliament_gutter_king_is_consolidating = yes
@@ -682,13 +690,22 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 		}
 	}
 	complete = {
-		custom_tooltip = {
-			text = frankfurt_germany_fully_stamped_out_tt
-			scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
-		}
-		scope:gutter_king_scope = {
-			NOT = {
-				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_stamped_out_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			hidden_trigger = {
+				NOT = {
+					exists = scope:gutter_king_scope
+				}
 			}
 		}
 	}
@@ -741,13 +758,22 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 		}
 	}
 	complete = {
-		custom_tooltip = {
-			text = frankfurt_germany_fully_stamped_out_tt
-			scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
-		}
-		scope:gutter_king_scope = {
-			NOT = {
-				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_stamped_out_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			hidden_trigger = {
+				NOT = {
+					exists = scope:gutter_king_scope
+				}
 			}
 		}
 	}
