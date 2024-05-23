@@ -626,7 +626,7 @@ dead_man_pulse.5 = {
 	flavor = dead_man_pulse.5.f
 	duration = 3
 	event_image = {
-		video = "votp_cops_march"
+		video = "africa_soldiers_breaking_protest"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/protest.dds"
@@ -675,7 +675,6 @@ dead_man_pulse.5 = {
 	}
 	option = {
 		name = dead_man_pulse.5.b
-		default_option = yes
 		custom_tooltip = {
 			text = republican_progress_decrease_10_tt
 			change_variable = {
@@ -710,6 +709,7 @@ dead_man_pulse.5 = {
 	}
 	option = {
 		name = dead_man_pulse.5.c
+		default_option = yes
 		custom_tooltip = {
 			text = theocracy_progress_increase_tick_1_tt
 			change_variable = {
@@ -721,14 +721,14 @@ dead_man_pulse.5 = {
 			text = communist_progress_decrease_15_tt
 			change_variable = {
 				name = communist_progress
-				add = -5
+				add = -15
 			}
 		}
 		custom_tooltip = {
 			text = republican_progress_decrease_5_tt
 			change_variable = {
 				name = republican_progress
-				add = -15
+				add = -5
 			}
 		}
 		c:KUR ?= {
@@ -740,6 +740,170 @@ dead_man_pulse.5 = {
 		add_modifier = {
 			name = dead_man_kurd_cost
 			years = 3
+		}
+	}
+}
+
+# EGYPTIAN INTERFERENCE; FLESH OUT WITH EGYPT UPDATE
+dead_man_pulse.6 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.6.t
+	desc = dead_man_pulse.6.d
+	flavor = dead_man_pulse.6.f
+	duration = 3
+	event_image = {
+		video = "middleeast_upperclass_party"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/scales.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_egypt
+		}
+		has_law = law_type:law_monarchy
+		exists = c:EGY
+		c:EGY = {
+		  is_subject = no
+		}
+	}
+	immediate = {
+		set_variable = dead_man_pulse_egypt
+	}
+	option = {
+		name = dead_man_pulse.6.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -20
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+			  name = dead_man_egypt_loss
+			  months = normal_modifier_time
+			}
+		  }
+		add_modifier = {
+			name = dead_man_egypt_comm
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = -60
+		}
+	}
+	option = {
+		name = dead_man_pulse.6.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_decrease_25_tt
+			change_variable = {
+				name = republican_progress
+				add = -25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_20_tt
+			change_variable = {
+				name = communist_progress
+				add = -20
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+			  name = dead_man_egypt_bonus 
+			  months = normal_modifier_time
+			}
+		  }
+		add_modifier = {
+			name = dead_man_egypt_rep
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = -15
+		}
+	}
+	option = {
+		name = dead_man_pulse.6.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+			  name = dead_man_egypt_bonus 
+			  months = normal_modifier_time
+			}
+		  }
+		add_modifier = {
+			name = dead_man_egypt_theo
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = 30
 		}
 	}
 }
