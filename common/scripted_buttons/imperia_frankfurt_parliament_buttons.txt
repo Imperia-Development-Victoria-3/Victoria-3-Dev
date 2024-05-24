@@ -1811,6 +1811,10 @@ je_frankfurt_sway_execute = {
 				value = 500
 			}
 		}
+		set_variable = {
+			name = loop_counts
+			value = 0
+		}
 		while = {
 			# While there's still enough "gas in the tank" to spend on countries
 			# And any countries to sway, for that matter
@@ -1836,8 +1840,33 @@ je_frankfurt_sway_execute = {
 				name = sway_spending_amount
 				subtract = sway_authority_cost
 			}
+			change_variable = {
+				name = loop_counts
+				add = 1
+			}
 		}
 		imperia_frankfurt_parliament_update_gutter_minor_promises = yes
+		if = {
+			limit = {
+				has_variable = loop_counts
+			}
+			save_scope_value_as = {
+				name = countries_swayed_count
+				value = var:loop_counts
+			}
+		}
+		save_scope_as = swayer
+		every_country = {
+			limit = {
+				this != root
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				}
+			}
+			post_notification = gutter_german_swayed_x_countries
+		}
 		set_variable = {
 			name = sway_menu_level
 			value = 0
