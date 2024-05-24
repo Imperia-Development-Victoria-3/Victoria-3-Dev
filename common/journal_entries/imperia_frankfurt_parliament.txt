@@ -530,13 +530,29 @@
 je_imperia_frankfurt_german_consolidation_gutter_king = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-	scripted_button = je_frankfurt_gutter_king_start_sway_button
-	scripted_button = je_frankfurt_gutter_king_solidify_sway_button
-	scripted_button = je_frankfurt_gutter_king_complete_sway_button
+	scripted_button = je_frankfurt_sway_back_button
+	scripted_button = je_frankfurt_sway_start_button
+	# Spending buttons here
+	scripted_button = je_frankfurt_sway_low_spending_button
+	scripted_button = je_frankfurt_sway_medium_spending_button
+	scripted_button = je_frankfurt_sway_high_spending_button
+	scripted_button = je_frankfurt_sway_very_high_spending_button
+	# Select target region here
+	scripted_button = je_frankfurt_sway_target_north_button
+	scripted_button = je_frankfurt_sway_target_south_button
+	# Select target loyalty here
+	scripted_button = je_frankfurt_sway_min_loyalty_button
+	scripted_button = je_frankfurt_sway_max_loyalty_button
+	# Execute
+	scripted_button = je_frankfurt_sway_execute
 	immediate = {
 		# Initialise the JE value; hit 0 for failure and 100 for success (For Gutter King)
 		set_variable = {
 			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+			value = 0
+		}
+		set_variable = {
+			name = sway_menu_level
 			value = 0
 		}
 		set_global_variable = {
@@ -628,7 +644,12 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
 				}
 			}
-			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			if = {
+				limit = {
+					has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
 		}
 		imperia_frankfurt_parliament_gutter_king_consolidated = {
 			GUTTER_KING = root
@@ -658,7 +679,12 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
 				}
 			}
-			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			if = {
+				limit = {
+					has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
 		}
 		save_scope_as = gutter_king
 		imperia_frankfurt_parliament_dissolve_gutter_germany = yes
@@ -678,14 +704,19 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Start a civil war
 	on_timeout = {
 		set_global_variable = frankfurt_parliament_civil_war_happened
-		every_country = {
+		if = {
 			limit = {
-				OR = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
-				}
+				has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
 			}
-			imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			every_country = {
+				limit = {
+					OR = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
 		}
 		random_country = {
 			limit = {
@@ -708,9 +739,21 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 je_imperia_frankfurt_german_consolidation_german_major = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-	scripted_button = je_frankfurt_german_major_start_sway_button
-	scripted_button = je_frankfurt_german_major_solidify_sway_button
-	scripted_button = je_frankfurt_german_major_complete_sway_button
+	scripted_button = je_frankfurt_sway_back_button
+	scripted_button = je_frankfurt_sway_start_button
+	# Spending buttons here
+	scripted_button = je_frankfurt_sway_low_spending_button
+	scripted_button = je_frankfurt_sway_medium_spending_button
+	scripted_button = je_frankfurt_sway_high_spending_button
+	scripted_button = je_frankfurt_sway_very_high_spending_button
+	# Select target region here
+	scripted_button = je_frankfurt_sway_target_north_button
+	scripted_button = je_frankfurt_sway_target_south_button
+	# Select target loyalty here
+	scripted_button = je_frankfurt_sway_min_loyalty_button
+	scripted_button = je_frankfurt_sway_max_loyalty_button
+	# Execute
+	scripted_button = je_frankfurt_sway_execute
 	immediate = {
 		random_country = {
 			limit = {
@@ -718,10 +761,9 @@ je_imperia_frankfurt_german_consolidation_german_major = {
 			}
 			save_scope_as = gutter_king_scope
 		}
-	}
-	on_weekly_pulse = {
-		effect = {
-			imperia_frankfurt_parliament_update_gutter_minor_promises = yes
+		set_variable = {
+			name = sway_menu_level
+			value = 0
 		}
 	}
 	complete = {

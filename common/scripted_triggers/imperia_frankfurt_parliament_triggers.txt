@@ -266,6 +266,9 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 					this = root
 					this = {
 						is_subject_of = root
+						NOT = {
+							is_subject_type = subject_type_customs_union
+						}
 					}
 				}
 			}
@@ -448,4 +451,162 @@ imperia_frankfurt_parliament_greater_austria_is_preferred_trigger = {
 	has_variable = greater_austria_ai_willingness
 	var:greater_austria_ai_willingness > var:lesser_germany_ai_willingness
 	var:greater_austria_ai_willingness > var:greater_germany_ai_willingness
+}
+
+imperia_frankfurt_parliament_country_has_sway_targets = {
+	any_country = {
+		has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+		trigger_if = {
+			limit = {
+				root = {
+					has_variable = sway_target_north
+				}
+			}
+			country_has_primary_culture = cu:north_german
+		}
+		trigger_else_if = {
+			limit = {
+				root = {
+					has_variable = sway_target_south
+				}
+			}
+			country_has_primary_culture = cu:south_german
+		}
+		trigger_if = {
+			limit = {
+				root = {
+					has_variable = sway_loyalty_min
+				}
+			}
+			trigger_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				OR = {
+					has_modifier = german_major_solid_sway
+					has_modifier = german_major_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				root = {
+					has_variable = sway_loyalty_max
+				}
+			}
+			trigger_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				NOT = {
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				NOT = {
+					has_modifier = german_major_complete_sway
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_TARGET_can_be_swayed_by_SWAYER = {
+	# TARGET : german minor
+	# SWAYER : german major/gutter king
+	$TARGET$ = {
+		has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+		trigger_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_target_north
+				}
+			}
+			country_has_primary_culture = cu:north_german
+		}
+		trigger_else_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_target_south
+				}
+			}
+			country_has_primary_culture = cu:south_german
+		}
+		trigger_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_loyalty_min
+				}
+			}
+			trigger_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				OR = {
+					has_modifier = german_major_solid_sway
+					has_modifier = german_major_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_loyalty_max
+				}
+			}
+			trigger_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				NOT = {
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				NOT = {
+					has_modifier = german_major_complete_sway
+				}
+			}
+		}
+	}
 }

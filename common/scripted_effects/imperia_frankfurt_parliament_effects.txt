@@ -1303,28 +1303,36 @@ imperia_frankfurt_parliament_gutter_king_consolidated = {
 
 imperia_frankfurt_parliament_update_gutter_minor_promises = {
 	hidden_effect = {
-		remove_modifier ?= gutter_minor_promises
 		if = {
 			limit = {
 				has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
 				has_global_variable = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
 			}
-			if = {
+			every_country = {
 				limit = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					OR = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
 				}
-				add_modifier = {
-					name = gutter_minor_promises
-					multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				remove_modifier ?= gutter_minor_promises
+				if = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+					add_modifier = {
+						name = gutter_minor_promises
+						multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+					}
 				}
-			}
-			else_if = {
-				limit = {
-					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
-				}
-				add_modifier = {
-					name = gutter_minor_promises
-					multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+				else_if = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+					add_modifier = {
+						name = gutter_minor_promises
+						multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+					}
 				}
 			}
 		}
@@ -1367,6 +1375,114 @@ imperia_frankfurt_parliament_final_set_gutter_minor_promises = {
 				multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
 				years = 10
 				is_decaying = yes
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_sway_TARGET_to_SWAYER = {
+	if = {
+		limit = {
+			$SWAYER$ = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+		$TARGET$ = {
+			if = {
+				limit = {
+					has_modifier = gutter_king_solid_sway
+				}
+				remove_modifier ?= gutter_king_solid_sway
+				add_modifier = {
+					name = gutter_king_complete_sway
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = german_major_solid_sway
+				}
+				remove_modifier ?= german_major_solid_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					hidden_effect = {
+						make_independent = yes
+					}
+				}
+				root = {
+					create_diplomatic_pact = {
+						country = prev
+						type = dominion
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = german_major_complete_sway
+				}
+				remove_modifier ?= german_major_complete_sway
+				add_modifier = {
+					name = german_major_solid_sway
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			$SWAYER$ = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		$TARGET$ = {
+			if = {
+				limit = {
+					has_modifier = german_major_solid_sway
+				}
+				remove_modifier ?= german_major_solid_sway
+				add_modifier = {
+					name = german_major_complete_sway
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = gutter_king_solid_sway
+				}
+				remove_modifier ?= gutter_king_solid_sway
+				add_modifier = {
+					name = german_major_solid_sway
+				}
+				if = {
+					limit = {
+						has_variable = frankfurt_parliament_original_overlord
+					}
+					hidden_effect = {
+						make_independent = yes
+					}
+					var:frankfurt_parliament_original_overlord = {
+						create_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+					}
+				}
+				else = {
+					hidden_effect = {
+						make_independent = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = gutter_king_complete_sway
+				}
+				remove_modifier ?= gutter_king_complete_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
 			}
 		}
 	}
