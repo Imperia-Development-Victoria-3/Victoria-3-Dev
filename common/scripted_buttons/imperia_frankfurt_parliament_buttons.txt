@@ -1267,7 +1267,10 @@ je_frankfurt_sway_back_button = {
 		base = 0
 	}
 	possible = {
-		var:sway_menu_level > 0
+		custom_tooltip = {
+			text = can_go_back_sway_tt
+			var:sway_menu_level != 0
+		}
 	}
 	effect = {
 		# If spending is being considered
@@ -1328,39 +1331,18 @@ je_frankfurt_sway_start_button = {
 		base = 100
 	}
 	possible = {
-		# IF NOT ON COOLDOWN
-		always = yes
+		custom_tooltip = {
+			text = frankfurt_been_45_days_since_last_sway_tt
+			NOT = {
+				has_variable = je_frankfurt_gutter_major_sway_button_cooldown
+			}
+		}
 	}
 	effect = {
 		set_variable = {
 			name = sway_menu_level
 			value = 1
 		}
-		# set_variable = {
-		# 	name = je_frankfurt_gutter_major_sway_button_cooldown
-		# 	days = 14
-		# }
-		# random_country = {
-		# 	limit = {
-		# 		has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
-		# 		has_modifier = german_major_complete_sway
-		# 		custom_tooltip = {
-		# 			text = frankfurt_been_a_month_since_last_sway_on_this_country_tt
-		# 			NOT = {
-		# 				has_variable = je_frankfurt_minor_recently_swayed
-		# 			}
-		# 		}
-		# 	}
-		# 	set_variable = {
-		# 		name = je_frankfurt_minor_recently_swayed
-		# 		months = 1
-		# 	}
-		# 	remove_modifier ?= german_major_complete_sway
-		# 	add_modifier = {
-		# 		name = german_major_solid_sway
-		# 	}
-		# }
-		# imperia_frankfurt_parliament_update_gutter_minor_promises = yes
 	}
 }
 
@@ -1378,8 +1360,10 @@ je_frankfurt_sway_low_spending_button = {
 	}
 	possible = {
 		authority > 50
-		NOT = {
-			has_variable = sway_spending_level
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_spending_level
+			}
 		}
 	}
 	selected = {
@@ -1411,8 +1395,10 @@ je_frankfurt_sway_medium_spending_button = {
 	}
 	possible = {
 		authority > 100
-		NOT = {
-			has_variable = sway_spending_level
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_spending_level
+			}
 		}
 	}
 	selected = {
@@ -1444,8 +1430,10 @@ je_frankfurt_sway_high_spending_button = {
 	}
 	possible = {
 		authority > 250
-		NOT = {
-			has_variable = sway_spending_level
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_spending_level
+			}
 		}
 	}
 	selected = {
@@ -1477,8 +1465,10 @@ je_frankfurt_sway_very_high_spending_button = {
 	}
 	possible = {
 		authority > 500
-		NOT = {
-			has_variable = sway_spending_level
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_spending_level
+			}
 		}
 	}
 	selected = {
@@ -1509,11 +1499,19 @@ je_frankfurt_sway_target_north_button = {
 		base = 50
 	}
 	possible = {
-		NOT = {
-			has_variable = sway_target_north
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_target_north
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			custom_tooltip = {
+				text = frankfurt_been_3_months_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
 			country_has_primary_culture = cu:north_german
 			trigger_if = {
 				limit = {
@@ -1562,11 +1560,19 @@ je_frankfurt_sway_target_south_button = {
 		base = 50
 	}
 	possible = {
-		NOT = {
-			has_variable = sway_target_south
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_target_south
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			custom_tooltip = {
+				text = frankfurt_been_3_months_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
 			country_has_primary_culture = cu:south_german
 			trigger_if = {
 				limit = {
@@ -1615,11 +1621,19 @@ je_frankfurt_sway_min_loyalty_button = {
 		base = 50
 	}
 	possible = {
-		NOT = {
-			has_variable = sway_loyalty_min
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_loyalty_min
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			custom_tooltip = {
+				text = frankfurt_been_3_months_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
 			trigger_if = {
 				limit = {
 					root = {
@@ -1685,11 +1699,19 @@ je_frankfurt_sway_max_loyalty_button = {
 		base = 50
 	}
 	possible = {
-		NOT = {
-			has_variable = sway_loyalty_max
+		hidden_trigger = {
+			NOT = {
+				has_variable = sway_loyalty_max
+			}
 		}
 		any_country = {
 			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+			custom_tooltip = {
+				text = frankfurt_been_3_months_since_last_sway_on_this_country_tt
+				NOT = {
+					has_variable = je_frankfurt_minor_recently_swayed
+				}
+			}
 			trigger_if = {
 				limit = {
 					root = {
@@ -1790,12 +1812,13 @@ je_frankfurt_sway_execute = {
 			}
 		}
 		while = {
+			# While there's still enough "gas in the tank" to spend on countries
+			# And any countries to sway, for that matter
 			limit = {
-				# This should be the minimum amount of authority that can be spent on a country
-				# Should be the same value as is used in imperia_frankfurt_parliament_german_major_authority_spent_on_princes and its gutter_king counterpart
 				var:sway_spending_amount >= sway_authority_cost
 				imperia_frankfurt_parliament_country_has_sway_targets = yes
 			}
+			# Sway a random country that can be swayed with the current settings
 			random_country = {
 				limit = {
 					imperia_frankfurt_parliament_TARGET_can_be_swayed_by_SWAYER = {
@@ -1824,5 +1847,10 @@ je_frankfurt_sway_execute = {
 		remove_variable ?= sway_target_south
 		remove_variable ?= sway_loyalty_min
 		remove_variable ?= sway_loyalty_max
+		custom_tooltip = sway_execute_tt
+		set_variable = {
+			name = je_frankfurt_gutter_major_sway_button_cooldown
+			days = 45
+		}
 	}
 }
