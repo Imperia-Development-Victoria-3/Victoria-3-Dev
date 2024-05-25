@@ -134,20 +134,18 @@
 		if = {
 			limit = {
 				imperia_frankfurt_parliament_is_in_session = no
-				# At least one country has one of the following variables...
-				any_country = {
-					OR = {
-						has_variable = frankfurt_parliament_voted_republic
-						has_variable = frankfurt_parliament_voted_monarchy
-						has_variable = frankfurt_parliament_voted_oligarchy
-						has_variable = frankfurt_parliament_voted_wealth_suffrage
-						has_variable = frankfurt_parliament_voted_universal_suffrage
-						has_variable = frankfurt_parliament_voted_presidential
-						has_variable = frankfurt_parliament_voted_parliamentary
-						has_variable = frankfurt_parliament_voted_lesser_germany
-						has_variable = frankfurt_parliament_voted_greater_germany
-						has_variable = frankfurt_parliament_voted_greater_austria
-					}
+				# And has at least one of the following variables; meaning they participated in the Parliament
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voted_lesser_germany
+					has_variable = frankfurt_parliament_voted_greater_germany
+					has_variable = frankfurt_parliament_voted_greater_austria
 				}
 				# And the German Revolt is not happening
 				any_diplomatic_play = {
@@ -161,7 +159,7 @@
 		}
 		# Add money transfer variables to countries that doesnt have them yet
 		if = {
-			limit = { 
+			limit = {
 				NOT = {
 					has_variable = imperia_money_transfer_amount
 				}
@@ -369,7 +367,7 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 					NOT = {
 						has_global_variable = imperia_vienna_congress_minimum_time
 					}
-					has_global_variable = imperia_vienna_congress_in_session 
+					has_global_variable = imperia_vienna_congress_in_session
 				}
 				# Have a 20% chance of ending it
 				random = {
@@ -379,10 +377,14 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 			}
 			if = {
 				limit = {
-					has_global_variable = imperia_vienna_congress_in_session 
+					has_global_variable = imperia_vienna_congress_in_session
 					or = {
-						not = { exists = global_var:imperia_vienna_congress_session_target}
-						not = { exists = global_var:imperia_vienna_congress_session_initiator}
+						not = {
+							exists = global_var:imperia_vienna_congress_session_target
+						}
+						not = {
+							exists = global_var:imperia_vienna_congress_session_initiator
+						}
 					}
 				}
 				remove_global_variable = imperia_vienna_congress_in_session
