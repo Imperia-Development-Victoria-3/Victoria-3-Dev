@@ -1320,6 +1320,7 @@ je_frankfurt_sway_back_button = {
 				value = 1
 			}
 			remove_variable ?= sway_spending_level
+			remove_variable ?= sway_spending_amount
 		}
 		# If loyalty target is being considered
 		else_if = {
@@ -1386,7 +1387,7 @@ je_frankfurt_sway_low_spending_button = {
 		base = 5
 	}
 	possible = {
-		authority > 50
+		authority > sway_low_spend_authority
 		hidden_trigger = {
 			NOT = {
 				has_variable = sway_spending_level
@@ -1405,6 +1406,10 @@ je_frankfurt_sway_low_spending_button = {
 			name = sway_spending_level
 			value = 1
 		}
+		set_variable = {
+			name = sway_spending_amount
+			value = sway_low_spend_authority
+		}
 	}
 }
 
@@ -1421,7 +1426,7 @@ je_frankfurt_sway_medium_spending_button = {
 		base = 11
 	}
 	possible = {
-		authority > 100
+		authority > sway_medium_spend_authority
 		hidden_trigger = {
 			NOT = {
 				has_variable = sway_spending_level
@@ -1440,6 +1445,10 @@ je_frankfurt_sway_medium_spending_button = {
 			name = sway_spending_level
 			value = 2
 		}
+		set_variable = {
+			name = sway_spending_amount
+			value = sway_medium_spend_authority
+		}
 	}
 }
 
@@ -1456,7 +1465,7 @@ je_frankfurt_sway_high_spending_button = {
 		base = 27
 	}
 	possible = {
-		authority > 250
+		authority > sway_high_spend_authority
 		hidden_trigger = {
 			NOT = {
 				has_variable = sway_spending_level
@@ -1475,6 +1484,10 @@ je_frankfurt_sway_high_spending_button = {
 			name = sway_spending_level
 			value = 3
 		}
+		set_variable = {
+			name = sway_spending_amount
+			value = sway_high_spend_authority
+		}
 	}
 }
 
@@ -1491,7 +1504,7 @@ je_frankfurt_sway_very_high_spending_button = {
 		base = 55
 	}
 	possible = {
-		authority > 500
+		authority > sway_very_high_spend_authority
 		hidden_trigger = {
 			NOT = {
 				has_variable = sway_spending_level
@@ -1509,6 +1522,10 @@ je_frankfurt_sway_very_high_spending_button = {
 		set_variable = {
 			name = sway_spending_level
 			value = 4
+		}
+		set_variable = {
+			name = sway_spending_amount
+			value = sway_very_high_spend_authority
 		}
 	}
 }
@@ -1802,42 +1819,6 @@ je_frankfurt_sway_execute = {
 		imperia_frankfurt_parliament_country_has_sway_targets = yes
 	}
 	effect = {
-		if = {
-			limit = {
-				var:sway_spending_level = 1
-			}
-			set_variable = {
-				name = sway_spending_amount
-				value = 50
-			}
-		}
-		else_if = {
-			limit = {
-				var:sway_spending_level = 2
-			}
-			set_variable = {
-				name = sway_spending_amount
-				value = 100
-			}
-		}
-		else_if = {
-			limit = {
-				var:sway_spending_level = 3
-			}
-			set_variable = {
-				name = sway_spending_amount
-				value = 250
-			}
-		}
-		else_if = {
-			limit = {
-				var:sway_spending_level = 4
-			}
-			set_variable = {
-				name = sway_spending_amount
-				value = 500
-			}
-		}
 		set_variable = {
 			name = loop_counts
 			value = 0
