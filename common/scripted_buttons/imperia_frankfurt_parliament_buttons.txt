@@ -1305,27 +1305,27 @@ je_frankfurt_sway_back_button = {
 	possible = {
 		custom_tooltip = {
 			text = can_go_back_sway_tt
-			var:sway_menu_level != 0
+			var:sway_menu_page != 0
 		}
 	}
 	effect = {
 		# If spending is being considered
 		if = {
 			limit = {
-				var:sway_menu_level = 1
+				var:sway_menu_page = 1
 			}
 			set_variable = {
-				name = sway_menu_level
+				name = sway_menu_page
 				value = 0
 			}
 		}
 		# If region is being considered
 		else_if = {
 			limit = {
-				var:sway_menu_level = 2
+				var:sway_menu_page = 2
 			}
 			set_variable = {
-				name = sway_menu_level
+				name = sway_menu_page
 				value = 1
 			}
 			remove_variable ?= sway_spending_level
@@ -1333,10 +1333,10 @@ je_frankfurt_sway_back_button = {
 		# If loyalty target is being considered
 		else_if = {
 			limit = {
-				var:sway_menu_level = 3
+				var:sway_menu_page = 3
 			}
 			set_variable = {
-				name = sway_menu_level
+				name = sway_menu_page
 				value = 2
 			}
 			remove_variable ?= sway_target_north
@@ -1345,10 +1345,10 @@ je_frankfurt_sway_back_button = {
 		# If country is ready to execute the sway
 		else_if = {
 			limit = {
-				var:sway_menu_level = 4
+				var:sway_menu_page = 4
 			}
 			set_variable = {
-				name = sway_menu_level
+				name = sway_menu_page
 				value = 3
 			}
 			remove_variable ?= sway_loyalty_min
@@ -1361,7 +1361,7 @@ je_frankfurt_sway_start_button = {
 	name = "je_frankfurt_sway_start_button"
 	desc = "je_frankfurt_sway_start_button_desc"
 	visible = {
-		var:sway_menu_level ?= 0
+		var:sway_menu_page ?= 0
 	}
 	ai_chance = {
 		base = 100
@@ -1376,7 +1376,7 @@ je_frankfurt_sway_start_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 1
 		}
 	}
@@ -1388,7 +1388,7 @@ je_frankfurt_sway_low_spending_button = {
 	visible = {
 		OR = {
 			var:sway_spending_level ?= 1
-			var:sway_menu_level ?= 1
+			var:sway_menu_page ?= 1
 		}
 	}
 	ai_chance = {
@@ -1407,7 +1407,7 @@ je_frankfurt_sway_low_spending_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 2
 		}
 		set_variable = {
@@ -1423,7 +1423,7 @@ je_frankfurt_sway_medium_spending_button = {
 	visible = {
 		OR = {
 			var:sway_spending_level ?= 2
-			var:sway_menu_level ?= 1
+			var:sway_menu_page ?= 1
 		}
 	}
 	ai_chance = {
@@ -1442,7 +1442,7 @@ je_frankfurt_sway_medium_spending_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 2
 		}
 		set_variable = {
@@ -1458,7 +1458,7 @@ je_frankfurt_sway_high_spending_button = {
 	visible = {
 		OR = {
 			var:sway_spending_level ?= 3
-			var:sway_menu_level ?= 1
+			var:sway_menu_page ?= 1
 		}
 	}
 	ai_chance = {
@@ -1477,7 +1477,7 @@ je_frankfurt_sway_high_spending_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 2
 		}
 		set_variable = {
@@ -1493,7 +1493,7 @@ je_frankfurt_sway_very_high_spending_button = {
 	visible = {
 		OR = {
 			var:sway_spending_level ?= 4
-			var:sway_menu_level ?= 1
+			var:sway_menu_page ?= 1
 		}
 	}
 	ai_chance = {
@@ -1512,7 +1512,7 @@ je_frankfurt_sway_very_high_spending_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 2
 		}
 		set_variable = {
@@ -1528,7 +1528,7 @@ je_frankfurt_sway_target_north_button = {
 	visible = {
 		OR = {
 			has_variable = sway_target_north
-			var:sway_menu_level ?= 2
+			var:sway_menu_page ?= 2
 		}
 	}
 	ai_chance = {
@@ -1576,7 +1576,7 @@ je_frankfurt_sway_target_north_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 3
 		}
 		set_variable = sway_target_north
@@ -1589,7 +1589,7 @@ je_frankfurt_sway_target_south_button = {
 	visible = {
 		OR = {
 			has_variable = sway_target_south
-			var:sway_menu_level ?= 2
+			var:sway_menu_page ?= 2
 		}
 	}
 	ai_chance = {
@@ -1637,7 +1637,7 @@ je_frankfurt_sway_target_south_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 3
 		}
 		set_variable = sway_target_south
@@ -1649,7 +1649,7 @@ je_frankfurt_sway_min_loyalty_button = {
 	desc = "je_frankfurt_sway_min_loyalty_button_desc"
 	visible = {
 		OR = {
-			var:sway_menu_level ?= 3
+			var:sway_menu_page ?= 3
 			has_variable = sway_loyalty_min
 		}
 	}
@@ -1715,7 +1715,7 @@ je_frankfurt_sway_min_loyalty_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 4
 		}
 		set_variable = sway_loyalty_min
@@ -1727,7 +1727,7 @@ je_frankfurt_sway_max_loyalty_button = {
 	desc = "je_frankfurt_sway_max_loyalty_button_desc"
 	visible = {
 		OR = {
-			var:sway_menu_level ?= 3
+			var:sway_menu_page ?= 3
 			has_variable = sway_loyalty_max
 		}
 	}
@@ -1791,7 +1791,7 @@ je_frankfurt_sway_max_loyalty_button = {
 	}
 	effect = {
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 4
 		}
 		set_variable = sway_loyalty_max
@@ -1802,7 +1802,7 @@ je_frankfurt_sway_execute = {
 	name = "je_frankfurt_sway_execute"
 	desc = "je_frankfurt_sway_execute_desc"
 	visible = {
-		var:sway_menu_level ?= 4
+		var:sway_menu_page ?= 4
 	}
 	ai_chance = {
 		base = 100
@@ -1904,7 +1904,7 @@ je_frankfurt_sway_execute = {
 			post_notification = gutter_german_swayed_x_countries
 		}
 		set_variable = {
-			name = sway_menu_level
+			name = sway_menu_page
 			value = 0
 		}
 		remove_variable ?= sway_spending_level
