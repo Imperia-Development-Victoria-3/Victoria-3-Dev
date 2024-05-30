@@ -1994,6 +1994,27 @@ dead_man_pulse.10 = {
 			value = 0.10
 			pop_type = laborers
 		}
+		if = {
+			limit = {
+				ig:ig_rural_folk.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_communist
+							has_ideology = ideology:ideology_vanguardist
+							has_ideology = ideology:ideology_anarchist
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+						}
+					}
+				}
+			}
+			ig:ig_rural_folk.leader = {
+				set_ideology = ideology:ideology_anarchist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
 		add_modifier = {
 			name = dead_man_manifesto_comm
 			months = long_modifier_time
@@ -2002,7 +2023,6 @@ dead_man_pulse.10 = {
 	}
 	option = {
 		name = dead_man_pulse.10.b
-		default_option = yes
 		custom_tooltip = {
 			text = republican_progress_decrease_tick_05_tt
 			change_variable = {
@@ -2110,7 +2130,7 @@ dead_man_pulse.10 = {
 			}
 		}
 		custom_tooltip = {
-			text = communist_progress_decrease_25_tt
+			text = communist_progress_decrease_40_tt
 			change_variable = {
 				name = communist_progress
 				add = -40
@@ -2132,6 +2152,221 @@ dead_man_pulse.10 = {
 		}
 		add_modifier = {
 			name = dead_man_manifesto_censor
+			months = normal_modifier_time
+		}
+	}
+}
+
+# FOREIGN REPUBLICANS SUPPORT
+dead_man_pulse.11 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.11.t
+	desc = dead_man_pulse.11.d
+	flavor = dead_man_pulse.11.f
+	duration = 3
+	event_image = {
+		video = "middleeast_middleclass_cafe"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/protest.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_republican
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_republican
+	}
+	option = {
+		name = dead_man_pulse.11.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_tick_2_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_40_tt
+			change_variable = {
+				name = republican_progress
+				add = 40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		add_loyalists = {
+			value = 0.10
+			pop_type = bureaucrats
+		}
+		add_loyalists = {
+			value = 0.10
+			pop_type = capitalists
+		}
+		if = {
+			limit = {
+				ig:ig_industrialists.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_republican_leader
+							has_ideology = ideology:ideology_radical
+							has_ideology = ideology:ideology_atheist							# nihilist
+							has_ideology = ideology:ideology_liberal_leader							#democrat
+							has_ideology = ideology:ideology_positivist
+							has_ideology = ideology:ideology_market_liberal
+						}
+					}
+				}
+			}
+			ig:ig_industrialists.leader = {
+				set_ideology = ideology:ideology_market_liberal
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_rep
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.c
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_theo
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.e
+		trigger = {
+			OR = {
+				has_law = law_type:law_isolationism
+				has_law = law_type:law_protectionism
+				has_law = law_type:law_closed_borders
+				has_law = law_type:law_migration_controls
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_40_tt
+			change_variable = {
+				name = communist_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_trade
 			months = normal_modifier_time
 		}
 	}
