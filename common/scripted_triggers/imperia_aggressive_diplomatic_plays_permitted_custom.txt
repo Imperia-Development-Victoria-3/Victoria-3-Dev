@@ -1,12 +1,32 @@
-﻿imperia_aggressive_diplomatic_plays_permitted = {
-	#Country scope
-	AND = {
-		aggressive_diplomatic_plays_permitted = yes
-		NOT = {
-			has_modifier = no_more_war
-		}
-		NOT = {
+﻿imperia_relaxed_diplomatic_plays_permitted = {
+	# For true neutral countries in very specific use-cases; meaning the subject autonomy relevant diplo plays for now
+	# Add new blockers to this trigger, in general
+	aggressive_diplomatic_plays_permitted = yes
+	NOT = {
+		has_modifier = no_more_war
+	}
+	trigger_if = {
+		limit = { 
+			exists = scope:target_country
 			has_law = law_type:law_true_neutrality
 		}
+		scope:target_country = {
+			is_country_type = colonial
+			custom_tooltip = {
+				text = shares_primary_culture_with_overlord_tt
+				any_primary_culture = {
+					is_primary_culture_of = prev.overlord
+				}
+			}
+		}
+	}
+}
+
+imperia_aggressive_diplomatic_plays_permitted = {
+	# For every other use-case, use this one
+	# Includes everything from the other one, plus a true neutral blocker
+	imperia_relaxed_diplomatic_plays_permitted = yes
+	NOT = {
+		has_law = law_type:law_true_neutrality
 	}
 }
