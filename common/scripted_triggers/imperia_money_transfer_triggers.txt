@@ -1,0 +1,14 @@
+﻿can_send_money_to_recipient_trigger = {
+	var:imperia_money_transfer_amount >= 1000
+	var:imperia_money_transfer_amount <= imperia_current_transferable_money_value
+	OR = {
+		AND = {
+			exists = scope:target
+			scope:target.imperia_current_max_of_recievable_money_value >= var:imperia_money_transfer_amount
+		}
+		AND = {
+            has_variable = money_transfer_target_country
+			var:money_transfer_target_country.imperia_current_max_of_recievable_money_value >= var:imperia_money_transfer_amount
+		}
+	}
+}
