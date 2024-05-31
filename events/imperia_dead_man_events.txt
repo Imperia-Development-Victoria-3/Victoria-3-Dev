@@ -141,7 +141,7 @@ dead_man.1 = {
 	}
 }
 
-# COMMUNIST END EVENT
+# END EVENT
 dead_man.2 = {
 	type = country_event
 	placement = root
@@ -153,7 +153,7 @@ dead_man.2 = {
 		video = "europenorthamerica_springtime_of_nations"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/protest.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 	cooldown = {
 		months = normal_modifier_time
 	}
@@ -191,8 +191,9 @@ dead_man.2 = {
 		activate_law = law_type:law_disarmed_police
 		activate_law = law_type:law_national_militia
 		add_modifier = {
-			name = dead_man_coup_success
+			name = communist_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -211,8 +212,9 @@ dead_man.2 = {
 		activate_law = law_type:law_worker_protections
 		activate_law = law_type:law_old_age_pension
 		add_modifier = {
-			name = dead_man_coup_success
+			name = communist_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -232,8 +234,9 @@ dead_man.2 = {
 		activate_law = law_type:law_secret_police
 		activate_law = law_type:law_militarized_police
 		add_modifier = {
-			name = dead_man_coup_success
+			name = communist_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -250,8 +253,9 @@ dead_man.2 = {
 		activate_law = law_type:law_public_schools
 		activate_law = law_type:law_guaranteed_liberties
 		add_modifier = {
-			name = dead_man_coup_success
+			name = republican_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -268,8 +272,9 @@ dead_man.2 = {
 		activate_law = law_type:law_private_schools
 		activate_law = law_type:law_private_health_insurance
 		add_modifier = {
-			name = dead_man_coup_success
+			name = republican_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -287,8 +292,9 @@ dead_man.2 = {
 		activate_law = law_type:law_interventionism
 		activate_law = law_type:law_dedicated_police
 		add_modifier = {
-			name = dead_man_coup_success
+			name = republican_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -307,8 +313,9 @@ dead_man.2 = {
 		activate_law = law_type:law_censorship
 		activate_law = law_type:law_empowered_gendarmerie
 		add_modifier = {
-			name = dead_man_coup_success
+			name = theocracy_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -327,8 +334,9 @@ dead_man.2 = {
 		activate_law = law_type:law_no_womens_rights
 		activate_law = law_type:law_closed_borders
 		add_modifier = {
-			name = dead_man_coup_success
+			name = theocracy_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 	option = {
@@ -349,8 +357,9 @@ dead_man.2 = {
 		activate_law = law_type:law_no_womens_rights
 		activate_law = law_type:law_poor_laws
 		add_modifier = {
-			name = dead_man_coup_success
+			name = theocracy_restoration
 			months = long_modifier_time
+			is_decaying = yes
 		}
 	}
 }
@@ -366,7 +375,7 @@ dead_man.3 = {
 		video = "unspecific_politicians_arguing"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	cooldown = {
 		months = normal_modifier_time
 	}
@@ -385,7 +394,7 @@ dead_man.3 = {
 	}
 	option = {
 		# Accept Balkan Loss
-		name = dead_man.1.a
+		name = dead_man.3.a
 		default_option = yes
 		imperia_balkan_disintegrate = yes
 		change_relations = {
@@ -424,82 +433,191 @@ dead_man.3 = {
 			country = c:BUL
 			value = 60
 		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:greek
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:bulgarian
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:serb
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:croat
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:romanian
+		}
 		add_modifier = {
 			name = dead_man_balkan_disintegrate_full
 			years = long_modifier_time
 		}
 	}
 	option = {
-		# We give them a little cake
-		name = dead_man.1.b
-		set_variable = chose_initial_turk_government
-		if = {
-			limit = {
-				ig:ig_devout.leader = {
-					NOT = {
-						OR = {
-							has_ideology = ideology:ideology_theocrat
-							has_ideology = ideology:ideology_traditionalist
-							has_ideology = ideology:ideology_authoritarian
-							has_ideology = ideology:ideology_slaver
-							has_ideology = ideology:ideology_corporatist
-						}
-					}
-				}
-			}
-			ig:ig_devout.leader = {
-				set_ideology = ideology:ideology_theocrat
-				add_modifier = {
-					name = dead_man_revolutionary
-				}
-			}
+		# Negotiate Partial Balkan Loss
+		name = dead_man.3.b
+		imperia_balkan_disintegrate_partial = yes
+		change_relations = {
+			country = c:SLO
+			value = -30
 		}
-		remove_variable ?= supporting_republican_var 
-		remove_variable ?= supporting_communist_var 
-		custom_tooltip = {
-			text = theocracy_progress_increase_15_tt
-			change_variable = {
-				name = theocracy_progress
-				add = 15
-			}
+		change_relations = {
+			country = c:WAL
+			value = -30
 		}
-		set_variable = supporting_theocracy_var
+		change_relations = {
+			country = c:GRE
+			value = -30
+		}
+		change_relations = {
+			country = c:SER
+			value = 30
+		}
+		change_relations = {
+			country = c:BOS
+			value = 30
+		}
+		change_relations = {
+			country = c:SLV
+			value = -30
+		}
+		change_relations = {
+			country = c:CRO
+			value = -30
+		}
+		change_relations = {
+			country = c:ALB
+			value = 30
+		}
+		change_relations = {
+			country = c:BUL
+			value = -60
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_partial
+			years = long_modifier_time
+		}
 	}
 	option = {
-		# Support Communist
-		name = dead_man.1.c
-		set_variable = chose_initial_turk_government
-		if = {
-			limit = {
-				ig:ig_trade_unions.leader = {
-					NOT = {
-						OR = {
-							has_ideology = ideology:ideology_communist
-							has_ideology = ideology:ideology_vanguardist
-							has_ideology = ideology:ideology_anarchist
-							has_ideology = ideology:ideology_social_democrat
-							has_ideology = ideology:ideology_humanitarian
-						}
-					}
-				}
-			}
-			ig:ig_trade_unions.leader = {
-				set_ideology = ideology:ideology_communist
-				add_modifier = {
-					name = dead_man_revolutionary
-				}
-			}
+		# Rejected Balkan Deal
+		name = dead_man.3.c
+		change_relations = {
+			country = c:SLO
+			value = -60
 		}
-		remove_variable ?= supporting_theocracy_var 
-		remove_variable ?= supporting_republican_var 
-		custom_tooltip = {
-			text = communist_progress_increase_15_tt
-			change_variable = {
-				name = communist_progress
-				add = 15
-			}
+		change_relations = {
+			country = c:WAL
+			value = -60
 		}
-		set_variable = supporting_communist_var
+		change_relations = {
+			country = c:GRE
+			value = -60
+		}
+		change_relations = {
+			country = c:SER
+			value = -60
+		}
+		change_relations = {
+			country = c:BOS
+			value = -60
+		}
+		change_relations = {
+			country = c:SLV
+			value = -60
+		}
+		change_relations = {
+			country = c:CRO
+			value = -60
+		}
+		change_relations = {
+			country = c:ALB
+			value = -60
+		}
+		change_relations = {
+			country = c:BUL
+			value = -60
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_rejected
+			years = long_modifier_time
+		}
 	}
 }
 
