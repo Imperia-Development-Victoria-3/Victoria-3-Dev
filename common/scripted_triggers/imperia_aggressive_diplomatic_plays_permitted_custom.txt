@@ -1,12 +1,16 @@
-﻿imperia_aggressive_diplomatic_plays_permitted = {
-	#Country scope
-	AND = {
-		aggressive_diplomatic_plays_permitted = yes
-		NOT = {
-			has_modifier = no_more_war
-		}
-		NOT = {
-			has_law = law_type:law_true_neutrality
-		}
+﻿imperia_true_neutral_diplomatic_plays_permitted = {
+	# For true neutral countries in very specific cases; meaning the subject autonomy relevant diplo plays for now
+	aggressive_diplomatic_plays_permitted = yes
+	NOT = {
+		has_modifier = no_more_war
+	}
+}
+
+imperia_aggressive_diplomatic_plays_permitted = {
+	# For everything else, use this one
+	# Includes everything from the other one, plus a true neutral blocker
+	imperia_true_neutral_diplomatic_plays_permitted = yes
+	NOT = {
+		has_law = law_type:law_true_neutrality
 	}
 }
