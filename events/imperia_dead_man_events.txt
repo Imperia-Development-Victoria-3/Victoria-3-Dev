@@ -354,3 +354,152 @@ dead_man.2 = {
 		}
 	}
 }
+
+dead_man.3 = {
+	type = country_event
+	placement = root
+	title = dead_man.3.t
+	desc = dead_man.3.d
+	flavor = dead_man.3.f
+	duration = 3
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		AND = {
+			has_variable = dead_man_ended_var
+			has_variable = dead_man_pulse_balk_comm
+		}
+		NOT = {
+			has_variable = dead_man_no_balk
+		}
+	}
+	immediate = {
+		set_variable = dead_man_no_balk
+		remove_variable ?= dead_man_pulse_balk_comm
+	}
+	option = {
+		# Accept Balkan Loss
+		name = dead_man.1.a
+		default_option = yes
+		imperia_balkan_disintegrate = yes
+		change_relations = {
+			country = c:SLO
+			value = 60
+		}
+		change_relations = {
+			country = c:WAL
+			value = 60
+		}
+		change_relations = {
+			country = c:GRE
+			value = 60
+		}
+		change_relations = {
+			country = c:SER
+			value = 60
+		}
+		change_relations = {
+			country = c:BOS
+			value = 60
+		}
+		change_relations = {
+			country = c:SLV
+			value = 60
+		}
+		change_relations = {
+			country = c:CRO
+			value = 60
+		}
+		change_relations = {
+			country = c:ALB
+			value = 60
+		}
+		change_relations = {
+			country = c:BUL
+			value = 60
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_full
+			years = long_modifier_time
+		}
+	}
+	option = {
+		# We give them a little cake
+		name = dead_man.1.b
+		set_variable = chose_initial_turk_government
+		if = {
+			limit = {
+				ig:ig_devout.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_corporatist
+						}
+					}
+				}
+			}
+			ig:ig_devout.leader = {
+				set_ideology = ideology:ideology_theocrat
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+		remove_variable ?= supporting_republican_var 
+		remove_variable ?= supporting_communist_var 
+		custom_tooltip = {
+			text = theocracy_progress_increase_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 15
+			}
+		}
+		set_variable = supporting_theocracy_var
+	}
+	option = {
+		# Support Communist
+		name = dead_man.1.c
+		set_variable = chose_initial_turk_government
+		if = {
+			limit = {
+				ig:ig_trade_unions.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_communist
+							has_ideology = ideology:ideology_vanguardist
+							has_ideology = ideology:ideology_anarchist
+							has_ideology = ideology:ideology_social_democrat
+							has_ideology = ideology:ideology_humanitarian
+						}
+					}
+				}
+			}
+			ig:ig_trade_unions.leader = {
+				set_ideology = ideology:ideology_communist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+		remove_variable ?= supporting_theocracy_var 
+		remove_variable ?= supporting_republican_var 
+		custom_tooltip = {
+			text = communist_progress_increase_15_tt
+			change_variable = {
+				name = communist_progress
+				add = 15
+			}
+		}
+		set_variable = supporting_communist_var
+	}
+}
+
