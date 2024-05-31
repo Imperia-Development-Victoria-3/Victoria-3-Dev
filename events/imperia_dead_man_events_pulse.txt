@@ -1500,10 +1500,10 @@ dead_man_pulse.9 = {
 			}
 		}
 		custom_tooltip = {
-			text = communist_progress_decrease_10_tt
+			text = communist_progress_decrease_15_tt
 			change_variable = {
 				name = communist_progress
-				add = -10
+				add = -15
 			}
 		}
 		custom_tooltip = {
@@ -1673,10 +1673,10 @@ dead_man_pulse.9 = {
 			has_law = law_type:law_secret_police
 		}
 		custom_tooltip = {
-			text = communist_progress_increase_tick_2_tt
+			text = communist_progress_increase_tick_1_tt
 			change_variable = {
 				name = communist_progress_from_effects
-				add = 2
+				add = 1
 			}
 		}
 		custom_tooltip = {
@@ -1933,8 +1933,10 @@ dead_man_pulse.10 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/protest.dds"
 	trigger = {
-		NOT = {
+		NOR = {
 			has_variable = dead_man_pulse_manifesto
+			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
 		}
 		has_law = law_type:law_monarchy
 	}
@@ -2171,8 +2173,9 @@ dead_man_pulse.11 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/protest.dds"
 	trigger = {
-		NOT = {
+		NOR = {
 			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
 		}
 		has_law = law_type:law_monarchy
 	}
@@ -2316,7 +2319,7 @@ dead_man_pulse.11 = {
 			}
 		}
 		custom_tooltip = {
-			text = communist_progress_decrease_15_tt
+			text = communist_progress_decrease_5_tt
 			change_variable = {
 				name = communist_progress
 				add = -5
@@ -2347,14 +2350,14 @@ dead_man_pulse.11 = {
 		custom_tooltip = {
 			text = republican_progress_decrease_40_tt
 			change_variable = {
-				name = communist_progress
+				name = republican_progress
 				add = -40
 			}
 		}
 		custom_tooltip = {
 			text = communist_progress_decrease_15_tt
 			change_variable = {
-				name = republican_progress
+				name = communist_progress
 				add = -15
 			}
 		}
@@ -2368,6 +2371,228 @@ dead_man_pulse.11 = {
 		add_modifier = {
 			name = dead_man_republican_trade
 			months = normal_modifier_time
+		}
+	}
+}
+
+# ARABIC IMAMS PRAISE FUNDAMENTALISTS
+dead_man_pulse.12 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.12.t
+	desc = dead_man_pulse.12.d
+	flavor = dead_man_pulse.12.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/scales.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_manifesto
+			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_imam
+	}
+	option = {
+		name = dead_man_pulse.12.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 25
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.b
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_rep
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.c
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_2_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_10_tt
+			change_variable = {
+				name = communist_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		add_loyalists = {
+			value = 0.20
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = 0.10
+			pop_type = peasants
+		}
+		if = {
+			limit = {
+				ig:ig_rural_folk.leader = {
+					NOT = {
+						OR = {
+							has_ideology = ideology:ideology_theocrat
+							has_ideology = ideology:ideology_traditionalist
+							has_ideology = ideology:ideology_authoritarian
+							has_ideology = ideology:ideology_slaver
+							has_ideology = ideology:ideology_corporatist
+						}
+					}
+				}
+			}
+			ig:ig_rural_folk.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		add_modifier = {
+			name = dead_man_imam_theo
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.e
+		trigger = {
+			has_law = law_type:law_total_separation
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_40_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.10
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_secular
+			months = normal_modifier_time
+			is_decaying = yes
 		}
 	}
 }
