@@ -926,17 +926,23 @@ imperia_balkan_disintegrate_partial = {
 			C:TUR = {
 				every_scope_state = {
 					limit = {
-						AND = {
-							OR = {
-								region = sr:region_balkans
-								region = sr:region_danubia
-							}
-							NAND = {
-								state = s:STATE_WESTERN_THRACE
-								state = s:STATE_NORTHERN_THRACE
-								state = s:STATE_EASTERN_THRACE
+						OR = {
+							region = sr:region_balkans
+							region = sr:region_danubia
+						}
+						NOR = {
+							state_region = s:STATE_WESTERN_THRACE
+							state_region = s:STATE_NORTHERN_THRACE
+							state_region = s:STATE_EASTERN_THRACE
+							culture_percent_state = {
+								target = cu:turkish
+								value >= 0.40
 							}
 						}
+					}
+					save_scope_value_as = {
+						name = largest_culture_percentage
+						value = biggest_culture_percentage_in_state
 					}
 					random_scope_pop = {
 						limit = {
@@ -951,7 +957,7 @@ imperia_balkan_disintegrate_partial = {
 							prev = {
 								culture_percent_state = {
 									target = prev.culture
-									value >= 0.40
+									value >= scope:largest_culture_percentage
 								}
 							}
 						}
