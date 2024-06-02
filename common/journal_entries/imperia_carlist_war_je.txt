@@ -1,0 +1,61 @@
+﻿je_carlist_war = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	group = je_group_foreign_affairs
+
+	should_be_pinned_by_default = yes
+
+	modifiers_while_active = {
+		modifier_carlist_war_funding
+	}
+
+	complete = {
+		is_at_war = no
+		NOT = {
+			exists = c:SPA
+		}
+	}
+	
+	on_complete = {
+		change_tag = SPA
+		set_variable = carlists_won
+		set_capital = STATE_TOLEDO
+		add_modifier = {
+			name = modifier_carlist_war_legacy
+			months = 240
+			is_decaying = yes
+		}
+
+	}
+}
+
+je_carlist_war_cristinos = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	group = je_group_foreign_affairs
+
+	should_be_pinned_by_default = yes
+
+	modifiers_while_active = {
+		modifier_carlist_war_funding
+	}
+
+	complete = {
+		is_at_war = no
+		NOT = {
+			exists = c:CAR
+		}
+	}
+
+	on_complete = {
+		add_modifier = {
+			name = modifier_carlist_war_legacy
+			months = 240
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = modifier_carlist_war_debts
+			months = 120
+		}
+	}
+}

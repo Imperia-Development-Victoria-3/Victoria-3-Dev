@@ -1787,3 +1787,79 @@ imperia_china_infamy_penalty_value = {
 		}
 	}
 }
+
+imperia_money_transfer_ten_million_counter = {
+	value = 0
+	add = {
+		value = var:imperia_money_transfer_amount
+		divide = 10000000
+		floor = 1
+	}
+}
+
+imperia_money_transfer_one_million_counter = {
+	value = 0
+	add = {
+		value = var:imperia_money_transfer_amount
+		divide = 1000000
+		modulo = 10
+		floor = 1
+	}
+}
+
+imperia_money_transfer_one_hundred_k_counter = {
+	value = 0
+	add = {
+		value = var:imperia_money_transfer_amount
+		divide = 100000
+		modulo = 10
+		floor = 1
+	}
+}
+
+imperia_money_transfer_ten_k_counter = {
+	value = 0
+	add = {
+		value = var:imperia_money_transfer_amount
+		divide = 10000
+		modulo = 10
+		floor = 1
+	}
+}
+
+imperia_money_transfer_one_k_counter = {
+	value = 0
+	add = {
+		value = var:imperia_money_transfer_amount
+		divide = 1000
+		modulo = 10
+		floor = 1
+	}
+}
+
+imperia_remaining_credits_value = {
+	value = credit
+	subtract = imperia_current_debt_value
+}
+
+imperia_current_debt_value = {
+	value = credit
+	multiply = scaled_debt
+}
+
+imperia_current_transferable_money_value = {
+	value = gold_reserves
+	add = imperia_remaining_credits_value
+}
+
+imperia_current_max_of_recievable_money_value = {
+	value = gold_reserves_limit
+	add = imperia_current_debt_value
+	subtract = gold_reserves
+}
+
+imperia_true_neutral_remaining_signers_value = {
+	# scope : true neutral applicant
+	value = var:true_neutral_required_signers_var
+	subtract = var:true_neutral_current_signers_var
+}
