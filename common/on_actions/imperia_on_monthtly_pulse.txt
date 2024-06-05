@@ -129,9 +129,37 @@
 				multiplier = local_var:tmp_imperia_china_infamy_penalty_value
 			}
 		}
+		# Frankfurt Parliament variable cleanup
+		# Done here to maintain stability in inter-JE functions
+		if = {
+			limit = {
+				imperia_frankfurt_parliament_is_in_session = no
+				# And has at least one of the following variables; meaning they participated in the Parliament
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voted_lesser_germany
+					has_variable = frankfurt_parliament_voted_greater_germany
+					has_variable = frankfurt_parliament_voted_greater_austria
+				}
+				# And the German Revolt is not happening
+				any_diplomatic_play = {
+					count = 0
+					is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+				}
+			}
+			# Assume the thing is over, and variables havent been cleaned up
+			# So clean them up
+			imperia_frankfurt_parliament_clean_variables = yes
+		}
 		# Add money transfer variables to countries that doesnt have them yet
 		if = {
-			limit = { 
+			limit = {
 				NOT = {
 					has_variable = imperia_money_transfer_amount
 				}
@@ -339,7 +367,7 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 					NOT = {
 						has_global_variable = imperia_vienna_congress_minimum_time
 					}
-					has_global_variable = imperia_vienna_congress_in_session 
+					has_global_variable = imperia_vienna_congress_in_session
 				}
 				# Have a 20% chance of ending it
 				random = {
@@ -349,10 +377,14 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 			}
 			if = {
 				limit = {
-					has_global_variable = imperia_vienna_congress_in_session 
+					has_global_variable = imperia_vienna_congress_in_session
 					or = {
-						not = { exists = global_var:imperia_vienna_congress_session_target}
-						not = { exists = global_var:imperia_vienna_congress_session_initiator}
+						not = {
+							exists = global_var:imperia_vienna_congress_session_target
+						}
+						not = {
+							exists = global_var:imperia_vienna_congress_session_initiator
+						}
 					}
 				}
 				remove_global_variable = imperia_vienna_congress_in_session
@@ -361,7 +393,6 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 		}
 	}
 }
-
 
 on_imperia_monthly_pulse_ai_executive_decisions = {
 	effect = {
@@ -389,8 +420,6 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 				name = prefers_anti_imperialist
 				value = 0
 			}
-
-			
 			set_local_variable = {
 				name = counter_expansionsism
 				value = 0
@@ -411,14 +440,13 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 				name = counter_anti_imperialist
 				value = 0
 			}
-
 			every_interest_group = {
 				if = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
 							law = law_type:law_expansionism
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
 						}
 					}
 					change_local_variable = {
@@ -430,7 +458,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type 
+							law = root.active_law:lawgroup_diplomatic_stance.type
 							comparison_law = law_type:law_expansionism
 						}
 					}
@@ -439,13 +467,12 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						add = 1
 					}
 				}
-
 				if = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
 							law = law_type:law_imperialism
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
 						}
 					}
 					change_local_variable = {
@@ -457,7 +484,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type 
+							law = root.active_law:lawgroup_diplomatic_stance.type
 							comparison_law = law_type:law_imperialism
 						}
 					}
@@ -466,13 +493,12 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						add = 1
 					}
 				}
-
 				if = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
 							law = law_type:law_armed_neutrality
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
 						}
 					}
 					change_local_variable = {
@@ -484,7 +510,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type 
+							law = root.active_law:lawgroup_diplomatic_stance.type
 							comparison_law = law_type:law_armed_neutrality
 						}
 					}
@@ -493,13 +519,12 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						add = 1
 					}
 				}
-
 				if = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
 							law = law_type:law_pacifist
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
 						}
 					}
 					change_local_variable = {
@@ -511,7 +536,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type 
+							law = root.active_law:lawgroup_diplomatic_stance.type
 							comparison_law = law_type:law_pacifist
 						}
 					}
@@ -520,13 +545,12 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						add = 1
 					}
 				}
-
 				if = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
 							law = law_type:law_anti_imperialist
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type 
+							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
 						}
 					}
 					change_local_variable = {
@@ -538,7 +562,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 					limit = {
 						is_in_government = yes
 						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type 
+							law = root.active_law:lawgroup_diplomatic_stance.type
 							comparison_law = law_type:law_anti_imperialist
 						}
 					}
@@ -552,7 +576,6 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 				limit = {
 					law_type:law_true_neutrality != root.active_law:lawgroup_diplomatic_stance.type
 				}
-		
 				if = {
 					limit = {
 						law_type:law_expansionism != root.active_law:lawgroup_diplomatic_stance.type
@@ -563,7 +586,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						local_var:prefers_expansionsism > local_var:counter_expansionsism
 					}
 					activate_law = law_type:law_expansionism
-				} 
+				}
 				else_if = {
 					limit = {
 						law_type:law_imperialism != root.active_law:lawgroup_diplomatic_stance.type
@@ -607,7 +630,7 @@ on_imperia_monthly_pulse_ai_executive_decisions = {
 						local_var:prefers_anti_imperialist > local_var:counter_anti_imperialist
 					}
 					activate_law = law_type:law_anti_imperialist
-				} 
+				}
 			}
 		}
 	}
