@@ -65,6 +65,7 @@ discord_break.1 = {
 				}
 			}
 		}
+		desc = discord_break.1.desc.interim_intro
 		# Second option
 		random_valid = {
 			# Minor Public dissatisfaction
@@ -134,6 +135,21 @@ discord_break.1 = {
 	on_opened_soundeffect = "event:/SFX/Events/unspecific/leader_speaking_to_a_group_of_people"
 	duration = 3
 	immediate = {
+		random_scope_state = {
+			save_scope_as = peaceful_protest_state
+		}
+		random_scope_state = {
+			save_scope_as = corrupt_state
+		}
+		random_scope_building = {
+			save_scope_as = striking_building
+		}
+		random_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			save_scope_as = foreign_investor
+		}
 		random_list = {
 			# This gets lower as discord moves towards 200
 			0 = {
@@ -162,7 +178,7 @@ discord_break.1 = {
 					1 = {
 						set_variable = {
 							name = first_option
-							value = 1
+							value = 4
 						}
 					}
 				}
@@ -241,7 +257,7 @@ discord_break.1 = {
 						}
 						set_variable = {
 							name = second_option
-							value = 1
+							value = 4
 						}
 					}
 				}
@@ -291,7 +307,6 @@ discord_break.1 = {
 				}
 			}
 		}
-
 	}
 	# Minor public dissatisfaction
 	option = {
@@ -316,7 +331,7 @@ discord_break.1 = {
 				var:second_option = 2
 			}
 		}
-		random_scope_state = {
+		scope:peaceful_protest_state = {
 			# 5% radicals in random state
 			add_radicals_in_state = {
 				value = 0.05
@@ -349,7 +364,7 @@ discord_break.1 = {
 			}
 		}
 		# 10% less tax collected in state
-		random_scope_state = {
+		scope:corrupt_state = {
 			add_modifier = {
 				name = discord_state_corruption_penalty
 				multiplier = 10
@@ -367,7 +382,7 @@ discord_break.1 = {
 			}
 		}
 		# -25% throughput in random building in entire country
-		random_scope_building = {
+		scope:striking_building = {
 			add_modifier = {
 				name = discord_building_strike
 				multiplier = 25
@@ -385,7 +400,7 @@ discord_break.1 = {
 			}
 		}
 		add_modifier = {
-			name = discord_country_strike
+			name = discord_country_nationwide_disruption
 			multiplier = 2
 			months = 12
 		}
@@ -399,16 +414,42 @@ discord_break.1 = {
 				var:second_option = 7
 			}
 		}
-        # If theres a spot, create a random agitator
+		# If theres a spot, create a random agitator
 		if = {
 			limit = {
 				empty_agitator_slots > 0
 			}
-			create_character = {
-				is_agitator = yes
+			# Show a character being created
+			show_as_tooltip = {
+				create_character = {
+					is_agitator = yes
+				}
+			}
+			# Create a random swing-group agitator
+			hidden_effect = {
+				random_list = {
+					1 = {
+						create_character = {
+							is_agitator = yes
+							interest_group = ig_armed_forces
+						}
+					}
+					1 = {
+						create_character = {
+							is_agitator = yes
+							interest_group = ig_rural_folk
+						}
+					}
+					1 = {
+						create_character = {
+							is_agitator = yes
+							interest_group = ig_petty_bourgeoisie
+						}
+					}
+				}
 			}
 		}
-        # Else just give 1.5% radicals
+		# Else just give 1.5% radicals
 		else = {
 			add_radicals = {
 				value = 0.015
@@ -424,15 +465,15 @@ discord_break.1 = {
 				var:second_option = 8
 			}
 		}
-        random_country = {
-            limit = {
-                has_diplomatic_relevance = root
-            }
-            change_relations = {
-                country = root
-                value = -10
-            }
-        }
+		random_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			change_relations = {
+				country = root
+				value = -10
+			}
+		}
 	}
 	after = {
 		remove_variable = first_option
