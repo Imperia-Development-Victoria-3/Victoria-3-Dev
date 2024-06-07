@@ -1256,23 +1256,111 @@ imperia_discord_serf_contribution_value = {
 }
 
 discord_break_lvl_1_lower = {
-	value = var:political_discord
-	multiply = -1
-	add = 200 # Max Discord at this lvl
+	# An inverted parabola formula.. Yes.
+	# y=-x^2/25+10x-525
+	# y = chance of an event in this range being chosen
+	# x = current discord
+	# Starts at 75 discord (which is not relevant since discord events doesnt pop there), highest chance at 125 discord, stops at 175 discord
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 10
+		multiply = var:political_discord
+	}
+	subtract = 525
 }
 
 discord_break_lvl_1_upper = {
-	value = var:political_discord
-	subtract = 100 # Min discord at this lvl
+	# Inverted parabola formula
+	# y=-x^2/25+18x-1125
+	# Starts at 125 discord, highest chance at 175 discord, stops at 225 discord
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 18
+		multiply = var:political_discord
+	}
+	subtract = 1125
 }
 
 discord_break_lvl_2_lower = {
-	value = var:political_discord
-	multiply = -1
-	add = 300
+	# Inverted parabola formula
+	# y=-x^2/25+18x-1925
+	# Starts at 175 discord, highest chance at 225 discord, stops at 275 discord
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 18
+		multiply = var:political_discord
+	}
+	subtract = 1925
 }
 
 discord_break_lvl_2_upper = {
-	value = var:political_discord
-	subtract = 200
+	# Inverted parabola formula
+	# y=-x^2/25+22x-2925
+	# Starts at 225 discord, highest chance at 275 discord, stops at 325 discord
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 22
+		multiply = var:political_discord
+	}
+	subtract = 2925
+}
+
+discord_break_lvl_3_lower = {
+	# Inverted parabola formula
+	# y=-x^2/25+26x-4125
+	# Starts at 275 discord, highest chance at 325 discord, stops at 375 discord
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 26
+		multiply = var:political_discord
+	}
+	subtract = 4125
+}
+
+discord_break_lvl_3_upper = {
+	# Inverted parabola formula
+	# y=-x^2/25+30x-5525
+	# Starts at 325 discord, highest chance at 375 discord, stops at 425 discord (which is probably not going to be exceeded..?)
+	subtract = {
+		value = {
+			value = var:political_discord
+			multiply = var:political_discord
+		}
+		divide = 25
+	}
+	add = {
+		value = 30
+		multiply = var:political_discord
+	}
+	subtract = 5525
 }
