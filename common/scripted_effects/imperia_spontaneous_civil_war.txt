@@ -1,94 +1,102 @@
 ﻿instant_civil_war = {
-	random_scope_state = {
-		limit = {
-			is_capital = no
-			is_incorporated = yes
-		}
-		set_variable = dynamic_country_cede
-	}
-	every_scope_state = {
-		limit = {
-			is_capital = no
-			is_incorporated = yes
-			NOT = {
-				has_variable = dynamic_country_cede
-			}
-			any_neighbouring_state = {
+	custom_tooltip = {
+		text = civil_war_starts_tt
+		random_scope_state = {
+			limit = {
+				is_capital = no
 				is_incorporated = yes
-				has_variable = dynamic_country_cede
 			}
-		}
-		random = {
-			chance = $STRENGTH$
 			set_variable = dynamic_country_cede
 		}
-	}
-	every_scope_state = {
-		limit = {
-			is_capital = no
-			is_incorporated = yes
-			NOT = {
-				has_variable = dynamic_country_cede
-			}
-			any_neighbouring_state = {
-				is_incorporated = yes
-				has_variable = dynamic_country_cede
-			}
-		}
-		random = {
-			chance = $STRENGTH$
-			set_variable = dynamic_country_cede
-		}
-	}
-	every_scope_state = {
-		limit = {
-			is_capital = no
-			is_incorporated = yes
-			NOT = {
-				has_variable = dynamic_country_cede
-			}
-			any_neighbouring_state = {
-				is_incorporated = yes
-				has_variable = dynamic_country_cede
-			}
-		}
-		random = {
-			chance = $STRENGTH$
-			set_variable = dynamic_country_cede
-		}
-	}
-	set_variable = is_ceding_dynamic_country_states
-	create_dynamic_country = {
-		origin = root
-		cede_state_trigger = {
-			owner = {
-				has_variable = is_ceding_dynamic_country_states
-			}
-			has_variable = dynamic_country_cede
-		}
-		color = grey
-		primary_unit_color = grey
-		secondary_unit_color = grey
-		tertiary_unit_color = grey
-		on_created = {
-			set_variable = civil_war_country
-		}
-	}
-	remove_variable = is_ceding_dynamic_country_states
-	random_country = {
-		limit = {
-			has_variable = civil_war_country
-		}
-		save_scope_as = civil_war_country
-	}
-	scope:civil_war_country = {
-		create_diplomatic_play = {
-			type = dp_revolution
-			target_country = root
-		}
-		remove_variable = civil_war_country
 		every_scope_state = {
-			remove_variable = dynamic_country_cede
+			limit = {
+				is_capital = no
+				is_incorporated = yes
+				NOT = {
+					has_variable = dynamic_country_cede
+				}
+				any_neighbouring_state = {
+					is_incorporated = yes
+					has_variable = dynamic_country_cede
+				}
+			}
+			random = {
+				chance = $STRENGTH$
+				set_variable = dynamic_country_cede
+			}
+		}
+		every_scope_state = {
+			limit = {
+				is_capital = no
+				is_incorporated = yes
+				NOT = {
+					has_variable = dynamic_country_cede
+				}
+				any_neighbouring_state = {
+					is_incorporated = yes
+					has_variable = dynamic_country_cede
+				}
+			}
+			random = {
+				chance = $STRENGTH$
+				set_variable = dynamic_country_cede
+			}
+		}
+		every_scope_state = {
+			limit = {
+				is_capital = no
+				is_incorporated = yes
+				NOT = {
+					has_variable = dynamic_country_cede
+				}
+				any_neighbouring_state = {
+					is_incorporated = yes
+					has_variable = dynamic_country_cede
+				}
+			}
+			random = {
+				chance = $STRENGTH$
+				set_variable = dynamic_country_cede
+			}
+		}
+		set_variable = is_ceding_dynamic_country_states
+		create_dynamic_country = {
+			origin = root
+			cede_state_trigger = {
+				owner = {
+					has_variable = is_ceding_dynamic_country_states
+				}
+				has_variable = dynamic_country_cede
+			}
+			color = grey
+			primary_unit_color = grey
+			secondary_unit_color = grey
+			tertiary_unit_color = grey
+			on_created = {
+				set_variable = civil_war_country
+			}
+		}
+		remove_variable = is_ceding_dynamic_country_states
+		random_country = {
+			limit = {
+				has_variable = civil_war_country
+			}
+			save_scope_as = civil_war_country
+		}
+		if = {
+			limit = {
+				exists = scope:civil_war_country
+			}
+			scope:civil_war_country = {
+				create_diplomatic_play = {
+					type = dp_revolution
+					target_country = root
+				}
+				remove_variable = civil_war_country
+				every_scope_state = {
+					remove_variable = dynamic_country_cede
+				}
+			}
 		}
 	}
 }
