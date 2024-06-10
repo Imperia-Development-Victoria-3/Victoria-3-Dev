@@ -1377,3 +1377,189 @@ discord_break_lvl_3_upper = {
 	min = 0
 	max = 100
 }
+
+discord_option_1_base_value = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				var:first_option = 101
+				var:first_option = 102
+				var:first_option = 103
+				var:first_option = 104
+			}
+		}
+		value = 125
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:first_option = 105
+				var:first_option = 106
+				var:first_option = 107
+				var:first_option = 108
+			}
+		}
+		value = 175
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:first_option = 201
+				var:first_option = 202
+				var:first_option = 203
+				var:first_option = 204
+				var:first_option = 205
+			}
+		}
+		value = 225
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:first_option = 206
+				var:first_option = 207
+				var:first_option = 208
+				var:first_option = 209
+				var:first_option = 2010
+				var:first_option = 2011
+			}
+		}
+		value = 275
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:first_option = 301
+				var:first_option = 302
+				var:first_option = 303
+				var:first_option = 304
+				var:first_option = 305
+				var:first_option = 306
+				var:first_option = 307
+			}
+		}
+		value = 325
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:first_option = 308
+				var:first_option = 309
+				var:first_option = 3010
+				var:first_option = 3011
+				var:first_option = 3012
+				var:first_option = 3013
+			}
+		}
+		value = 375
+	}
+}
+
+discord_option_2_base_value = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				var:second_option = 101
+				var:second_option = 102
+				var:second_option = 103
+				var:second_option = 104
+			}
+		}
+		value = 125
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:second_option = 105
+				var:second_option = 106
+				var:second_option = 107
+				var:second_option = 108
+			}
+		}
+		value = 175
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:second_option = 201
+				var:second_option = 202
+				var:second_option = 203
+				var:second_option = 204
+				var:second_option = 205
+			}
+		}
+		value = 225
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:second_option = 206
+				var:second_option = 207
+				var:second_option = 208
+				var:second_option = 209
+				var:second_option = 2010
+				var:second_option = 2011
+			}
+		}
+		value = 275
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:second_option = 301
+				var:second_option = 302
+				var:second_option = 303
+				var:second_option = 304
+				var:second_option = 305
+				var:second_option = 306
+				var:second_option = 307
+			}
+		}
+		value = 325
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:second_option = 308
+				var:second_option = 309
+				var:second_option = 3010
+				var:second_option = 3011
+				var:second_option = 3012
+				var:second_option = 3013
+			}
+		}
+		value = 375
+	}
+}
+
+discord_option_1_reduction = {
+	# First we get a 5th of the chosen options value and subtract that
+	subtract = {
+		value = discord_option_1_base_value
+		divide = 5
+	}
+	# Then we add a 10th of the other options value
+	add = {
+		value = discord_option_2_base_value
+		divide = 10
+	}
+	# For example, if you're on 200 discord
+	# And can choose between base 175 and a base 225 options
+	# Choosing the 175 option would give -(175/5)+(225/10) = -12.5 discord
+	# Choosing the 225 instead would give -(225/5)+(175/10) = -27.5 discord
+	# If you get two 125 options, which many people will, you will lose -(125/5)+(125/10) = -12.5 discord
+	# This incentivises taking severe options if you can handle them
+}
+
+discord_option_2_reduction = {
+	subtract = {
+		value = discord_option_2_base_value
+		divide = 5
+	}
+	add = {
+		value = discord_option_1_base_value
+		divide = 10
+	}
+}
