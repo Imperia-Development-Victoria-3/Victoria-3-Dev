@@ -1,4 +1,16 @@
-﻿ruler_is_republican = {
+﻿ruler_is_communist = {
+	ruler = {
+		OR = {
+			has_ideology = ideology:ideology_communist
+			has_ideology = ideology:ideology_vanguardist
+			has_ideology = ideology:ideology_anarchist
+			has_ideology = ideology:ideology_social_democrat
+			has_ideology = ideology:ideology_humanitarian
+		}
+	}
+}
+
+ruler_is_republican = {
 	ruler = {
 		OR = {
 			has_ideology = ideology:ideology_republican
@@ -23,16 +35,43 @@ ruler_is_theocrat = {
 	}
 }
 
-ruler_is_communist = {
-	ruler = {
-		OR = {
-			has_ideology = ideology:ideology_communist
-			has_ideology = ideology:ideology_vanguardist
-			has_ideology = ideology:ideology_anarchist
-			has_ideology = ideology:ideology_social_democrat
-			has_ideology = ideology:ideology_humanitarian
-		}
+is_communist_supporter = {
+	OR = {
+		has_ideology = ideology:ideology_communist
+		has_ideology = ideology:ideology_vanguardist
+		has_ideology = ideology:ideology_anarchist
+		has_ideology = ideology:ideology_social_democrat
+		has_ideology = ideology:ideology_humanitarian
 	}
+}
+
+is_republican_supporter = {
+	OR = {
+		has_ideology = ideology:ideology_republican_leader
+		has_ideology = ideology:ideology_radical
+		has_ideology = ideology:ideology_atheist				# nihilist
+		has_ideology = ideology:ideology_liberal_leader
+		has_ideology = ideology:ideology_positivist
+		has_ideology = ideology:ideology_market_liberal
+	}
+}
+
+is_theocracy_supporter = {
+	OR = {
+		has_ideology = ideology:ideology_theocrat
+		has_ideology = ideology:ideology_traditionalist
+		has_ideology = ideology:ideology_authoritarian
+		has_ideology = ideology:ideology_slaver
+		has_ideology = ideology:ideology_corporatist
+	}
+}
+
+dead_man_communists_winning = {
+	has_variable = republican_progress
+	has_variable = theocracy_progress
+	has_variable = communist_progress
+	var:communist_progress => var:republican_progress
+	var:communist_progress => var:theocracy_progress
 }
 
 dead_man_republicans_winning = {
@@ -49,12 +88,4 @@ dead_man_theocrats_winning = {
 	has_variable = communist_progress
 	var:theocracy_progress => var:communist_progress
 	var:theocracy_progress => var:republican_progress
-}
-
-dead_man_communists_winning = {
-	has_variable = republican_progress
-	has_variable = theocracy_progress
-	has_variable = communist_progress
-	var:communist_progress => var:republican_progress
-	var:communist_progress => var:theocracy_progress
 }
