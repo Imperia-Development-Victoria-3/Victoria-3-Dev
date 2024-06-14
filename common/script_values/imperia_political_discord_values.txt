@@ -23,8 +23,8 @@ political_discord_trade_pact_mult = 1
 political_discord_customs_union_pact_mult = 1.1
 political_discord_rivalry_pact_mult = 1.5
 democratic_opposition_division_value = 2.5
-cultural_majority_same_culture_overlord_midpoint_fraction = 0.35
-cultural_majority_normal_midpoint_fraction = 0.65
+cultural_majority_same_culture_overlord_midpoint_fraction = 0.25
+cultural_majority_normal_midpoint_fraction = 0.50
 serfs_per_aristocrat = 20
 slave_percent_to_discord = 2
 radical_percent_to_discord = 2
@@ -321,12 +321,8 @@ imperia_discord_legitimacy_offset_value = {
 }
 
 imperia_discord_cultural_majority_value = {
-	# Same logic as in the legitimacy calculation.
-	# If roughly 75% of the country are primary culture, and rest is discriminated against...
 	value = imperia_get_primary_culture_fraction_rough
-	# The percentage is given as a fraction, so 0.75 here
 	multiply = 100
-	#Now its 75
 	if = {
 		limit = {
 			is_subject = yes
@@ -339,24 +335,18 @@ imperia_discord_cultural_majority_value = {
 				}
 			}
 		}
-		# 35 is the midpoint, if you're a subject with a same-culture('ish) overlord
 		subtract = {
 			value = cultural_majority_same_culture_overlord_midpoint_fraction
 			multiply = 100
 		}
 	}
 	else = {
-		# else 65 is the midpoint
 		subtract = {
 			value = cultural_majority_normal_midpoint_fraction
 			multiply = 100
 		}
 	}
-	# So since our imaginary country just had 65 removed
-	# Its now 10
 	multiply = -1
-	# Then if you have above that that midpoint; a discord loss
-	# You halve the loss
 	if = {
 		limit = {
 			OR = {
@@ -377,12 +367,9 @@ imperia_discord_cultural_majority_value = {
 		}
 		divide = 2
 	}
-	# If you would gain discord; double it
 	else = {
 		multiply = 2
 	}
-	# Reverse the sign, so..
-	# A 75% primary_culture'd nation would have 5 discord removed.
 }
 
 imperia_discord_religious_majority_value = {
