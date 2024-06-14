@@ -1,0 +1,991 @@
+﻿je_imperia_frankfurt_parliament = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_frankfurt_parliament_join_parliament_button
+	# Voting Starting Options
+	scripted_button = je_frankfurt_parliament_vote_republic_button
+	scripted_button = je_frankfurt_parliament_vote_monarchy_button
+	# Who gets to vote in Germany?
+	scripted_button = je_frankfurt_parliament_vote_oligarchy_button
+	scripted_button = je_frankfurt_parliament_vote_wealth_button
+	scripted_button = je_frankfurt_parliament_vote_universal_button
+	# Optional round - presidential or parliamentary republic
+	scripted_button = je_frankfurt_parliament_vote_presidential_button
+	scripted_button = je_frankfurt_parliament_vote_parliamentary_button
+	# Claims
+	scripted_button = je_frankfurt_parliament_lesser_germany_button
+	scripted_button = je_frankfurt_parliament_greater_germany_button
+	scripted_button = je_frankfurt_parliament_greater_austria_button
+	# Optional round - revolution? Only for universal suffrage republics
+	scripted_button = je_frankfurt_parliament_internal_focus_button
+	scripted_button = je_frankfurt_parliament_external_focus_button
+	# Change/choose Club
+	scripted_button = je_frankfurt_parliament_choose_club_button
+	# Leave the conference, wont be pressed to join the new Germany
+	scripted_button = je_frankfurt_parliament_leave_button
+	is_shown_when_inactive = {
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:south_german
+		}
+	}
+	possible = {
+		any_country = {
+			filter = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+			}
+			has_technology_researched = nationalism
+			percent >= 0.65
+		}
+	}
+	immediate = {
+		# This section pops at the start of the Conference. Used to initialise stuff, like variables
+		# Only does so once
+		trigger_event = {
+			# Announcement
+			id = frankfurt_parliament.4
+			popup = yes
+		}
+		# Choose a club!
+		# Only for the player, through the triggers on the event
+		trigger_event = {
+			id = frankfurt_parliament.6
+			popup = yes
+			days = 14
+		}
+		imperia_frankfurt_parliament_initialise_club_variables = yes
+		imperia_frankfurt_parliament_update_club_influence = yes
+		if = {
+			limit = {
+				NOT = {
+					exists = global_var:frankfurt_parliament_voting_period
+				}
+			}
+			set_global_variable = {
+				name = frankfurt_parliament_voting_period
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_parliament_current_vote
+				value = 0
+			}
+			set_global_variable = frankfurt_parliament_held
+			# This one is just initialised here, will be "populated" on completion
+			set_global_variable = {
+				name = frankfurt_eligible_german_leader_voters
+				value = 0
+			}
+		}
+	}
+	fail = {
+		custom_tooltip = {
+			text = left_frankfurt_parliament_tt
+			has_variable = left_frankfurt_parliament
+		}
+	}
+	current_value = {
+		value = global_var:frankfurt_parliament_voting_period
+	}
+	on_weekly_pulse = {
+		effect = {
+			# Updates the club influence for the country
+			# Uses ROOT, so HAS to be fired with the evaluated country in topscope
+			imperia_frankfurt_parliament_update_club_influence = yes
+			# Update the german form voting AI tendencies (during the german form vote)
+			if = {
+				limit = {
+					global_var:frankfurt_parliament_current_vote = 4
+				}
+				imperia_frankfurt_parliament_update_german_form_ai_willingness = yes
+			}
+			# If you didnt join the parliament (for whatever reason), and the proper voting is happening, kick you out
+			if = {
+				limit = {
+					NOT = {
+						has_variable = frankfurt_parliament_joined_parliament
+					}
+					global_var:frankfurt_parliament_current_vote >= 1
+				}
+				set_variable = left_frankfurt_parliament
+			}
+			if = {
+				limit = {
+					# If you own Frankfurt City
+					imperia_country_owns_frankfurt_city = yes
+				}
+				change_global_variable = {
+					name = frankfurt_parliament_voting_period
+					add = 1
+				}
+				if = {
+					# monarchy vs republic
+					limit = {
+						global_var:frankfurt_parliament_current_vote = 1
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_republic_voters_var
+						value = imperia_frankfurt_parliament_republic_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_monarchy_voters_var
+						value = imperia_frankfurt_parliament_monarchy_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_governance_abstentions_var
+						value = {
+							value = imperia_frankfurt_parliament_current_voters_value
+							subtract = imperia_frankfurt_parliament_republic_voters_value
+							subtract = imperia_frankfurt_parliament_monarchy_voters_value
+						}
+					}
+				}
+				if = {
+					# voting laws
+					limit = {
+						global_var:frankfurt_parliament_current_vote = 2
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_oligarchy_voters_var
+						value = imperia_frankfurt_parliament_oligarchy_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_wealth_voters_var
+						value = imperia_frankfurt_parliament_wealth_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_universal_voters_var
+						value = imperia_frankfurt_parliament_universal_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_suffrage_abstentions_var
+						value = {
+							value = imperia_frankfurt_parliament_current_voters_value
+							subtract = imperia_frankfurt_parliament_oligarchy_voters_value
+							subtract = imperia_frankfurt_parliament_wealth_voters_value
+							subtract = imperia_frankfurt_parliament_universal_voters_value
+						}
+					}
+				}
+				if = {
+					# parliamentary vs presidential republic - conditional
+					limit = {
+						global_var:frankfurt_parliament_current_vote = 3
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_presidential_voters_var
+						value = imperia_frankfurt_parliament_presidential_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_parliamentary_voters_var
+						value = imperia_frankfurt_parliament_parliamentary_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_republic_type_abstentions_var
+						value = {
+							value = imperia_frankfurt_parliament_current_voters_value
+							subtract = imperia_frankfurt_parliament_presidential_voters_value
+							subtract = imperia_frankfurt_parliament_parliamentary_voters_value
+						}
+					}
+				}
+				if = {
+					# What is the German fatherland?
+					limit = {
+						global_var:frankfurt_parliament_current_vote = 4
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_lesser_germany_voters_var
+						value = imperia_frankfurt_parliament_lesser_germany_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_greater_germany_voters_var
+						value = imperia_frankfurt_parliament_greater_germany_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_greater_austria_voters_var
+						value = imperia_frankfurt_parliament_greater_austria_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_german_form_abstentions_var
+						value = {
+							value = imperia_frankfurt_parliament_current_voters_value
+							subtract = imperia_frankfurt_parliament_lesser_germany_voters_value
+							subtract = imperia_frankfurt_parliament_greater_germany_voters_value
+							subtract = imperia_frankfurt_parliament_greater_austria_voters_value
+						}
+					}
+				}
+				if = {
+					# internal vs external focus - only for radical republics
+					limit = {
+						global_var:frankfurt_parliament_current_vote = 5
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_internal_focus_voters_var
+						value = imperia_frankfurt_parliament_internal_focus_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_external_focus_voters_var
+						value = imperia_frankfurt_parliament_external_focus_voters_value
+					}
+					set_global_variable = {
+						name = imperia_frankfurt_parliament_revolutionary_focus_abstentions_var
+						value = {
+							value = imperia_frankfurt_parliament_current_voters_value
+							subtract = imperia_frankfurt_parliament_internal_focus_voters_value
+							subtract = imperia_frankfurt_parliament_external_focus_voters_value
+						}
+					}
+				}
+				## If the voting has run for 16 weeks, start over with a new vote category
+				if = {
+					limit = {
+						global_var:frankfurt_parliament_voting_period >= 16
+					}
+					set_global_variable = {
+						name = frankfurt_parliament_voting_period
+						value = 0
+					}
+					# Save result to a global var, performance enhancing code
+					if = {
+						# monarchy vs republic
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 1
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_republic_var
+						}
+						else = {
+							set_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+						}
+					}
+					if = {
+						# voting laws
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 2
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_oligarchy = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_wealth = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_wealth_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_universal = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_universal_var
+						}
+					}
+					if = {
+						# parliamentary vs presidential republic - conditional
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 3
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_presidential_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_parliamentary_republic = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_parliamentary_republic_var
+						}
+					}
+					if = {
+						# What is the German fatherland?
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 4
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_lesser_germany = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_greater_germany = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_greater_austria = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+						}
+					}
+					if = {
+						# internal vs external focus - only for radical republics
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 5
+						}
+						if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_internal_focus = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
+						}
+						else_if = {
+							limit = {
+								frankfurt_parliament_has_majority_for_external_focus = yes
+							}
+							set_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+						}
+					}
+					change_global_variable = {
+						name = frankfurt_parliament_current_vote
+						add = 1
+					}
+					if = {
+						limit = {
+							# The presidential/parliamentary debate only takes place if republic and wealth voting won
+							OR = {
+								has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+								NOT = {
+									has_global_variable = frankfurt_parliament_has_majority_for_wealth_var
+								}
+							}
+							global_var:frankfurt_parliament_current_vote = 3
+						}
+						# Skip it if those 2 are NOT true
+						change_global_variable = {
+							name = frankfurt_parliament_current_vote
+							add = 1
+						}
+					}
+					if = {
+						limit = {
+							# The revolutionary focus debate only takes place if republic and universal voting won
+							OR = {
+								has_global_variable = frankfurt_parliament_has_majority_for_monarchy_var
+								NOT = {
+									has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+								}
+							}
+							global_var:frankfurt_parliament_current_vote = 5
+						}
+						# Skip it if those 2 are NOT true
+						change_global_variable = {
+							name = frankfurt_parliament_current_vote
+							add = 1
+						}
+					}
+					# Pop a notification to announce the result
+					if = {
+						limit = {
+							global_var:frankfurt_parliament_current_vote > 1
+							global_var:frankfurt_parliament_current_vote < 7
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_imperia_frankfurt_parliament
+							}
+							post_notification = imperia_frankfurt_parliament_vote_happened
+						}
+					}
+				}
+			}
+		}
+		# Not every event can be fired for every country, so its in weekly to improve the smooth flow of events
+		# On a shared 2-month cooldown in any case
+		random_events = {
+			1 = frankfurt_parliament_clubs.1
+			1 = frankfurt_parliament_clubs.2
+			1 = frankfurt_parliament_clubs.3
+			1 = frankfurt_parliament_clubs.4
+			1 = frankfurt_parliament_clubs.5
+			1 = frankfurt_parliament_clubs.6
+		}
+	}
+	complete = {
+		# Complete on voting round 7, round 6 is the last chance for countries to leave
+		custom_tooltip = {
+			text = frankfurt_parliament_is_over_tt
+			has_global_variable = frankfurt_parliament_current_vote
+			global_var:frankfurt_parliament_current_vote = 7
+		}
+	}
+	on_complete = {
+		change_global_variable = {
+			name = frankfurt_eligible_german_leader_voters
+			add = 1
+		}
+		# Fire this section ONCE
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = frankfurt_has_voted_for_german_leader
+				}
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_1
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_2
+				value = 0
+			}
+			set_global_variable = {
+				name = frankfurt_has_voted_for_german_leader_3
+				value = 0
+			}
+			# Get 3 big (independent) German powers, probably Prussia, Austria and Bavaria?
+			# Austria wont be selected if Lesser Germany wins
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+							exists = c:AUS
+						}
+						c:AUS != this
+					}
+				}
+				order_by = gdp
+				position = 0
+				set_variable = first_candidate_german_leader
+			}
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+							exists = c:AUS
+						}
+						c:AUS != this
+					}
+				}
+				order_by = gdp
+				position = 1
+				set_variable = second_candidate_german_leader
+			}
+			ordered_country = {
+				limit = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					trigger_if = {
+						limit = {
+							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+							exists = c:AUS
+						}
+						c:AUS != this
+					}
+				}
+				order_by = gdp
+				position = 2
+				set_variable = third_candidate_german_leader
+			}
+		}
+		set_variable = frankfurt_parliament_voting_for_gutter_king
+		trigger_event = {
+			id = frankfurt_parliament.1
+			days = 3
+		}
+	}
+	goal_add_value = {
+		# Should be the same as the voting_period max; currently 16
+		add = 16
+	}
+	progressbar = yes
+	weight = 5000
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_german_consolidation_gutter_king = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_frankfurt_sway_back_button
+	scripted_button = je_frankfurt_sway_start_button
+	# Spending buttons here
+	scripted_button = je_frankfurt_sway_low_spending_button
+	scripted_button = je_frankfurt_sway_medium_spending_button
+	scripted_button = je_frankfurt_sway_high_spending_button
+	scripted_button = je_frankfurt_sway_very_high_spending_button
+	# Select target region here
+	scripted_button = je_frankfurt_sway_target_north_button
+	scripted_button = je_frankfurt_sway_target_south_button
+	# Select target loyalty here
+	scripted_button = je_frankfurt_sway_min_loyalty_button
+	scripted_button = je_frankfurt_sway_max_loyalty_button
+	# Execute
+	scripted_button = je_frankfurt_sway_execute
+	immediate = {
+		# Initialise the JE value; hit 0 for failure and 100 for success (For Gutter King)
+		set_variable = {
+			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+			value = 0
+		}
+		set_variable = {
+			name = sway_menu_page
+			value = 0
+		}
+		set_global_variable = {
+			name = frankfurt_parliament_weeks_to_civil_war
+			value = 260
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			change_global_variable = {
+				name = frankfurt_parliament_weeks_to_civil_war
+				subtract = 1
+			}
+			if = {
+				limit = {
+					frankfurt_parliament_gutter_king_is_consolidating = yes
+				}
+				change_variable = {
+					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+					add = {
+						value = gutter_king_ratio_over_gutter_german_claims
+						subtract = 0.75
+						multiply = 4
+					}
+				}
+				# Set a global variable for localisation, performance enhancing code
+				set_global_variable = {
+					name = frankfurt_parliament_gutter_king_is_consolidating_var
+					value = 1
+				}
+			}
+			else = {
+				change_variable = {
+					name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+					# Add since the resulting number is negative
+					add = {
+						value = gutter_king_ratio_over_gutter_german_claims
+						# Ratio is always between 0 and .75 here
+						subtract = 0.75
+						# So now its MAX zero
+						multiply = 1.333
+						# This was found through.. Too many spreadsheets. Needs more 3's on the end, but it works well enough
+					}
+				}
+				# Set a global variable for localisation, performance enhancing code
+				set_global_variable = {
+					name = frankfurt_parliament_gutter_king_is_consolidating_var
+					value = 0
+				}
+			}
+			round_variable = {
+				name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+				nearest = 0.05
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_variable = german_major
+					}
+				}
+				random_country = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+					root = {
+						set_variable = {
+							name = german_major
+							value = prev
+						}
+					}
+				}
+			}
+			# Re/sets the authority multiplier weekly here for performance reasons
+			imperia_frankfurt_parliament_update_gutter_minor_promises_variables = yes
+			imperia_frankfurt_parliament_update_gutter_minor_promises = yes
+		}
+	}
+	complete = {
+		custom_tooltip = {
+			text = frankfurt_germany_fully_consolidated_tt
+			root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+		}
+	}
+	on_complete = {
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+			}
+			if = {
+				limit = {
+					has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
+		}
+		imperia_frankfurt_parliament_consolidate_gutter_king = {
+			GUTTER_KING = root
+		}
+		save_scope_as = gutter_king
+		every_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			post_notification = imperia_gutter_germany_consolidated
+		}
+	}
+	fail = {
+		custom_tooltip = {
+			text = frankfurt_germany_fully_stamped_out_tt
+			root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+			# This variable gets initialised once a great power has taken stock of the option to bend the knee
+			# Hopefully sets the progressbar for everyone?
+			has_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
+		}
+	}
+	on_fail = {
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+			}
+			if = {
+				limit = {
+					has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
+		}
+		save_scope_as = gutter_king
+		imperia_frankfurt_parliament_dissolve_gutter_germany = yes
+		every_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			post_notification = imperia_gutter_germany_fizzled_out
+		}
+	}
+	current_value = {
+		value = root.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
+	}
+	goal_add_value = {
+		add = 100
+	}
+	# JE will run for 5 years, if balance is still maintained at that point (unlikely).. Start a civil war
+	on_timeout = {
+		set_global_variable = frankfurt_parliament_civil_war_happened
+		if = {
+			limit = {
+				has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+			}
+			every_country = {
+				limit = {
+					OR = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				imperia_frankfurt_parliament_final_set_gutter_minor_promises = yes
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+			custom_tooltip = gutter_german_civil_war_starts_tt
+		}
+		hidden_effect = {
+			trigger_event = {
+				id = frankfurt_parliament.9
+			}
+		}
+	}
+	progressbar = yes
+	timeout = 1826
+	weight = 5000
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_german_consolidation_german_major = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_frankfurt_sway_back_button
+	scripted_button = je_frankfurt_sway_start_button
+	# Spending buttons here
+	scripted_button = je_frankfurt_sway_low_spending_button
+	scripted_button = je_frankfurt_sway_medium_spending_button
+	scripted_button = je_frankfurt_sway_high_spending_button
+	scripted_button = je_frankfurt_sway_very_high_spending_button
+	# Select target region here
+	scripted_button = je_frankfurt_sway_target_north_button
+	scripted_button = je_frankfurt_sway_target_south_button
+	# Select target loyalty here
+	scripted_button = je_frankfurt_sway_min_loyalty_button
+	scripted_button = je_frankfurt_sway_max_loyalty_button
+	# Execute
+	scripted_button = je_frankfurt_sway_execute
+	immediate = {
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+			save_scope_as = gutter_king_scope
+		}
+		set_variable = {
+			name = sway_menu_page
+			value = 0
+		}
+	}
+	complete = {
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_stamped_out_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			hidden_trigger = {
+				NOT = {
+					exists = scope:gutter_king_scope
+				}
+			}
+		}
+	}
+	fail = {
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_consolidated_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_civil_war_happened_tt
+				has_global_variable = frankfurt_parliament_civil_war_happened
+			}
+		}
+	}
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_imperia_frankfurt_german_consolidation_german_major_status
+			}
+		}
+	}
+	current_value = {
+		value = scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
+	}
+	goal_add_value = {
+		add = 100
+	}
+	progressbar = yes
+	weight = 5000
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_german_consolidation_german_minor = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	immediate = {
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+			save_scope_as = gutter_king_scope
+		}
+	}
+	complete = {
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_stamped_out_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value <= 0
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			hidden_trigger = {
+				NOT = {
+					exists = scope:gutter_king_scope
+				}
+			}
+		}
+	}
+	# Completion = gutter germany dissolved
+	on_complete = {
+		if = {
+			limit = {
+				has_modifier = german_major_solid_sway
+			}
+			remove_modifier = german_major_solid_sway
+			add_modifier = {
+				name = german_major_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = german_major_start_sway
+					has_modifier = gutter_king_solid_sway
+				}
+			}
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= german_major_start_sway
+			add_modifier = {
+				name = german_major_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_king_complete_sway
+			}
+			remove_modifier = gutter_king_complete_sway
+		}
+		if = {
+			limit = {
+				has_modifier = german_major_complete_sway
+			}
+			remove_modifier = german_major_complete_sway
+			add_modifier = {
+				name = german_major_complete_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+	}
+	fail = {
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = frankfurt_germany_fully_consolidated_tt
+					scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value >= 100
+				}
+				scope:gutter_king_scope = {
+					NOT = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_civil_war_happened_tt
+				has_global_variable = frankfurt_parliament_civil_war_happened
+			}
+		}
+	}
+	# failure = gutter germany consolidated
+	on_fail = {
+		if = {
+			limit = {
+				has_modifier = german_major_solid_sway
+			}
+			remove_modifier = german_major_solid_sway
+			add_modifier = {
+				name = gutter_king_start_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = german_major_start_sway
+				}
+			}
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= german_major_start_sway
+			add_modifier = {
+				name = gutter_king_solid_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_king_complete_sway
+			}
+			remove_modifier = gutter_king_complete_sway
+			add_modifier = {
+				name = gutter_king_complete_sway
+				years = 5
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = german_major_complete_sway
+			}
+			remove_modifier = german_major_complete_sway
+		}
+	}
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_imperia_frankfurt_german_consolidation_german_minor_status
+			}
+		}
+	}
+	current_value = {
+		value = scope:gutter_king_scope.var:je_imperia_frankfurt_german_consolidation_gutter_king_value
+	}
+	goal_add_value = {
+		add = 100
+	}
+	progressbar = yes
+	weight = 5000
+	should_be_pinned_by_default = yes
+}

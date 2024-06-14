@@ -4,6 +4,36 @@
 		subject_canton = FRS
 		priority = 100
 	}
+
+	flag_definition = {
+		coa = FRS_jap
+		priority = 200
+		trigger = {
+			exists = c:JAP
+			exists = c:FRS
+			c:FRS = {
+				is_subject_of = c:JAP
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = FRS_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:FRS
+			c:FRS = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
 }
 
 HNA = {
@@ -12,6 +42,24 @@ HNA = {
 		subject_canton = HNA
 		priority = 100
 	}
+
+	flag_definition = {
+		coa = HNA_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:HNA
+			c:HNA = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
 }
 
 XIB = {
@@ -19,6 +67,24 @@ XIB = {
 		coa = XIB
 		subject_canton = XIB
 		priority = 100
+	}
+
+	flag_definition = {
+		coa = XIB_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:XIB
+			c:XIB = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
 	}
 }
 
@@ -34,10 +100,10 @@ SIH = {
 			}
 		}
 	}
-		flag_definition = {
-		coa = SIH_republic
-		subject_canton = SIH_republic
-		priority = 100
+	flag_definition = {
+	coa = SIH_republic
+	subject_canton = SIH_republic
+	priority = 100
 		trigger = {
 			OR = {
 			coa_def_republic_flag_trigger = yes
@@ -45,6 +111,24 @@ SIH = {
 			}
 			NOT = {
 			coa_def_subject_trigger = yes
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = SIH_qing
+		priority = 300
+		trigger = {
+			exists = c:CHI
+			exists = c:SIH
+			c:SIH = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
 			}
 		}
 	}
@@ -59,6 +143,49 @@ YUE = {
 			NOT = {
 			coa_def_republic_flag_trigger = yes
 			coa_def_dictatorship_flag_trigger = yes
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = YUE_qing
+		priority = 200
+		trigger = {
+			exists = c:CHI
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = YUE_gbr
+		priority = 200
+		trigger = {
+			exists = c:GBR
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:GBR
+			}
+		}
+	}
+
+	
+	flag_definition = {
+		coa = YUE_por
+		priority = 200
+		trigger = {
+			exists = c:POR
+			exists = c:YUE
+			c:YUE = {
+				is_subject_of = c:POR
 			}
 		}
 	}
@@ -93,15 +220,41 @@ MCH = { # Manchuria
 		trigger = {
 			exists = c:CHI
 			exists = c:MCH
+			c:MCH = {
+				is_subject_of = c:CHI
+			}
 			c:CHI = {
-				has_diplomatic_pact = {
-					who = c:MCH
-					type = vassal
-					is_initiator = yes
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
 				}
 			}
 		}
-	}		
+	}
+
+	flag_definition = {
+		coa = MCH_jap
+		priority = 2
+		trigger = {
+			exists = c:JAP
+			exists = c:MCH
+			c:MCH = {
+				is_subject_of = c:JAP
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = MCH_rus
+		priority = 2
+		trigger = {
+			exists = c:RUS
+			exists = c:MCH
+			c:MCH = {
+				is_subject_of = c:RUS
+			}
+		}
+	}			
 }
 
 MGL = { # Mongolia
@@ -114,16 +267,29 @@ MGL = { # Mongolia
 	}
 	flag_definition = {
 		coa = MGL_qing
-		priority = 2
+		priority = 200
 		trigger = {
 			exists = c:CHI
 			exists = c:MGL
+			c:MGL = {
+				is_subject_of = c:CHI
+			}
 			c:CHI = {
-				has_diplomatic_pact = {
-					who = c:MGL
-					type = vassal
-					is_initiator = yes
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
 				}
+			}
+		}
+	}
+	flag_definition = {
+		coa = MGL_rus
+		priority = 200
+		trigger = {
+			exists = c:RUS
+			exists = c:MGL
+			c:MGL = {
+				is_subject_of = c:RUS
 			}
 		}
 	}	
@@ -144,12 +310,85 @@ MGL = { # Mongolia
 	}		
 }
 
+XIN = { # Xinjiang
+	flag_definition = {
+		coa = XIN
+		allow_overlord_canton = yes	
+		coa_with_overlord_canton = XIN_subject			
+		subject_canton = XIN
+		priority = 1
+	}
+	flag_definition = {
+		coa = XIN_republic
+		subject_canton = XIN_republic
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = XIN_rus
+		priority = 100
+		trigger = {
+			exists = c:RUS
+			exists = c:XIN
+			c:XIN = {
+				is_subject_of = c:RUS
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = XIN_qing
+		priority = 100
+		trigger = {
+			exists = c:CHI
+			exists = c:XIN
+			c:XIN = {
+				is_subject_of = c:CHI
+			}
+			c:CHI = {
+				has_law = law_type:law_monarchy
+				NOT = {
+					has_variable = china_han_empire
+				}
+			}
+		}
+	}
+}
+
 POL = { # Poland
 	flag_definition = {
 		coa = POL
 		subject_canton = POL
 		priority = 1
-	}	
+	}
+	flag_definition = {
+		coa = POL_subject_rus
+		priority = 500
+		trigger = {
+			exists = c:POL
+			exists = c:RUS
+			c:POL = {
+				is_subject_of = c:RUS
+			}
+		}
+	}
+	flag_definition = {
+		coa = POL_pu_rus
+		priority = 600
+		trigger = {
+			exists = c:POL
+			exists = c:RUS
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:POL
+					type = personal_union
+					is_initiator = yes
+				}
+			}
+		}
+	}		
 	flag_definition = {
 		coa = POL_republic
 		subject_canton = POL_republic
@@ -188,22 +427,6 @@ POL = { # Poland
 		trigger = { 
 			coa_def_communist_flag_trigger = yes
 		}
-	}
-	flag_definition = {
-		coa = CPL
-		subject_canton = CPL
-		priority = 2000
-		trigger = {
-			exists = c:RUS
-			exists = c:POL
-			c:RUS = {
-				has_diplomatic_pact = {
-					who = c:POL
-					type = personal_union
-					is_initiator = yes
-				}
-			}
-		}
 	}	
 }
 
@@ -234,6 +457,21 @@ GEO = { # Georgia
 					type = puppet
 					is_initiator = yes
 				}
+			}
+		}
+	}
+
+	flag_definition = {
+		coa = GEO_ottoman
+		priority = 30
+		trigger = {
+			exists = c:TUR
+			exists = c:GEO
+			c:GEO = {
+				is_subject_of = c:TUR
+			}
+			c:TUR = {
+				has_law = law_type:law_monarchy
 			}
 		}
 	}
@@ -287,6 +525,18 @@ KUR = { #Kurdistan
 	}
 }
 
+GER = {
+	flag_definition = {
+		coa = GER_modern
+		subject_canton = GER_modern
+		priority = 100
+		trigger = { 
+			scope:actor ?= {
+				has_variable = gutter_germany
+			}
+		}
+	}
+}
 CAR = {
 	flag_definition = {
 		coa = SPA_absolute_monarchy
@@ -295,3 +545,336 @@ CAR = {
 	}
 }
 
+FIN = { # Finland
+	flag_definition = {
+		coa = FIN
+		allow_overlord_canton = yes	
+		coa_with_overlord_canton = FIN_subject		
+		subject_canton = FIN
+		priority = 1
+	}
+	flag_definition = {
+		coa = FIN_subject_RUS
+		priority = 2
+		trigger = { 
+			coa_def_russian_ensign_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = FIN_pu_RUS
+		priority = 3
+		trigger = {
+			exists = c:RUS
+			exists = c:FIN
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:FIN
+					type = personal_union
+					is_initiator = yes
+				}
+			}
+		}
+	}	
+	flag_definition = {
+		coa = FIN_fascist
+		subject_canton = FIN_fascist
+		priority = 10
+		trigger = { 
+			coa_def_fascist_flag_trigger = yes
+		}
+	}	
+}
+
+RUS = { # Russia
+	flag_definition = {
+		coa = RUS_imperial_constitutional
+		subject_canton = RUS_republic
+		priority = 1
+	}
+	flag_definition = {
+		coa = RUS_imperial_constitutional
+		subject_canton = RUS_republic
+		priority = 20
+		trigger = { 
+			coa_def_absolute_monarchy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = RUS_republic
+		subject_canton = RUS_republic
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}		
+	flag_definition = {
+		coa = RUS_dictatorship
+		subject_canton = RUS_dictatorship
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = RUS_oligarchy
+		subject_canton = RUS_oligarchy
+		priority = 25
+		trigger = {
+			coa_def_oligarchy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = RUS_soviet_union
+		priority = 1500 # need to override the DEFAULT
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = RUS_soviet_technocracy
+		priority = 1750 # need to override the DEFAULT
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+			scope:actor ?= {
+				has_law = law_type:law_technocracy
+			}
+		}
+	}
+	flag_definition = {
+		coa = RUS_fascist
+		subject_canton = RUS_fascist
+		priority = 1500
+		trigger = { 
+			coa_def_fascist_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = RUS_theocracy
+		subject_canton = RUS_theocracy
+		priority = 20
+		trigger = { 
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = RUS_nihilist
+		priority = 1500 # need to override the DEFAULT
+		trigger = { 
+			coa_def_nihilist_flag_trigger = yes
+		}
+	}
+}
+
+TUR = { # Turkey
+	flag_definition = {
+		coa = TUR
+		subject_canton = TUR
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_subject			
+		priority = 1
+	}	
+	flag_definition = {
+		coa = TUR_monarchy
+		subject_canton = TUR_monarchy
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_subject			
+		priority = 5
+		trigger = { 
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = TUR	
+		subject_canton = TUR
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_subject			
+		priority = 20
+		trigger = { 
+			coa_def_absolute_monarchy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = TUR_ottoman_1844
+		subject_canton = TUR_ottoman_1844
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_subject			
+		priority = 25
+		trigger = { 
+			c:TUR ?= {
+				has_law = law_type:law_monarchy
+			}
+			game_date >= 1844.1.1
+		}
+	}	
+	flag_definition = {
+		coa = TUR_republic
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_republic_subject			
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = TUR_dictatorship
+		subject_canton = TUR_dictatorship
+		allow_overlord_canton = yes		
+		coa_with_overlord_canton = TUR_republic_subject			
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = TUR_theocracy
+		subject_canton = TUR_theocracy
+		priority = 20
+		trigger = { 
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = TUR_subject_GBR
+		allow_overlord_canton = yes		
+		priority = 50
+		trigger = { 
+			coa_def_british_ensign_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = TUR_subject	
+		allow_overlord_canton = yes	
+		overlord_canton_offset = { 0.01 0.015 }
+		overlord_canton_scale = { 0.48 0.47 }			
+		priority = 50
+		trigger = { 
+			coa_def_french_ensign_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = TUR_subject_GBR
+		subject_canton = TUR
+		allow_overlord_canton = yes			
+		priority = 50
+		trigger = { 
+			coa_def_spanish_ensign_trigger = yes
+		}
+	}	
+}	
+
+MON = { # Montenegro
+	flag_definition = {
+		coa = MON	
+		subject_canton = MON
+		priority = 1
+	}
+	flag_definition = {
+		coa = MON_absolute_monarchy
+		priority = 10
+		trigger = { 
+			coa_def_absolute_monarchy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = MON_dictatorship
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}		
+	flag_definition = {
+		coa = MON_ottoman
+		priority = 30
+		trigger = {
+			exists = c:MON
+			exists = c:TUR
+			c:MON = {
+				is_subject_of = c:TUR
+			}
+			c:TUR = {
+				has_law = law_type:law_monarchy
+			}
+		}
+	}
+}
+
+ROM = { # Romania
+	flag_definition = {
+		coa = ROM
+		subject_canton = ROM
+		priority = 1
+	}
+	flag_definition = {
+		coa = ROM_fascist
+		subject_canton = ROM_fascist
+		priority = 10
+		trigger = { 
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = ROM_ottoman
+		priority = 20
+		trigger = {
+			exists = c:ROM
+			exists = c:TUR
+			c:ROM = {
+				is_subject_of = c:TUR
+			}
+			c:TUR = {
+				has_law = law_type:law_monarchy
+			}
+		}
+	}	
+}
+
+GRE = { # Greece
+	flag_definition = {
+		coa = GRE
+		allow_overlord_canton = yes
+		subject_canton = GRE
+		overlord_canton_scale = { @canton_scale_cross_x @canton_scale_cross_y }
+	}
+	flag_definition = {
+		coa = GRE_absolute_monarchy
+		priority = 10
+		allow_overlord_canton = yes
+		subject_canton = GRE_absolute_monarchy
+		overlord_canton_scale = { @canton_scale_cross_x @canton_scale_cross_y }
+		trigger = { 
+			coa_def_absolute_monarchy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = GRE_republic
+		subject_canton = GRE
+		priority = 10
+		allow_overlord_canton = yes
+		overlord_canton_scale = { 0.5 @[1/9*5] }
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = GRE_fascist
+		subject_canton = GRE_fascist
+		priority = 50
+		trigger = { 
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = GRE_ottoman
+		priority = 50
+		trigger = {
+			exists = c:GRE
+			exists = c:TUR
+			c:GRE = {
+				is_subject_of = c:TUR
+			}
+			c:TUR = {
+				has_law = law_type:law_monarchy
+			}
+		}
+	}	
+}
