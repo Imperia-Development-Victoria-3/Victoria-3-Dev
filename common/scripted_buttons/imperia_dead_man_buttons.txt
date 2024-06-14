@@ -1,0 +1,153 @@
+﻿tur_republican_button = {
+	name = "republican_button"
+	desc = "republican_button_desc"
+
+	visible = {
+		owner = { 
+			has_variable = chose_initial_turk_government 
+		}
+	}
+
+	possible = {
+		trigger_if = {
+			limit = {
+				has_variable = has_selected_republican_once_var
+			}
+			custom_tooltip = {
+				text = cannot_choose_republican_twice_tt
+				always = no
+			}
+		}
+		any_interest_group = {
+			is_in_government = yes
+			OR = {	
+				leader = {
+					is_republican_supporter = yes
+				}
+				is_interest_group_type = ig_intelligentsia
+			}
+		}
+		custom_tooltip = {
+			text = not_already_supporting_republicanism
+			NOT = { has_variable = supporting_republican_var }
+		}
+	}
+	
+	selected = {
+		has_variable = supporting_republican_var
+	}
+
+	effect = {
+		set_variable = supporting_republican_var
+		set_variable = has_selected_republican_once_var
+		remove_variable ?= supporting_theocracy_var
+		remove_variable ?= supporting_communist_var
+		custom_tooltip = {
+			text = republican_progress_increase_10_tt
+			change_variable = { name = republican_progress add = 10 }
+		}
+	}
+}
+
+tur_theocracy_button = {
+	name = "theocracy_button"
+	desc = "theocracy_button_desc"
+
+	visible = {
+		owner = { 
+			has_variable = chose_initial_turk_government 
+		}
+	}
+
+	possible = {
+		trigger_if = {
+			limit = {
+				has_variable = has_selected_theocracy_once_var
+			}
+			custom_tooltip = {
+				text = cannot_choose_theocracy_twice_tt
+				always = no
+			}
+		}
+		any_interest_group = {
+			is_in_government = yes
+			OR = {
+				leader = {
+					is_theocracy_supporter = yes
+				}
+				is_interest_group_type = ig_devout
+			}
+		}
+		custom_tooltip = {
+			text = not_already_supporting_theocracy
+			NOT = { has_variable = supporting_theocracy_var }
+		}
+	}
+	
+	selected = {
+		has_variable = supporting_theocracy_var
+	}
+
+	effect = {
+		# Only one of these variables can be active at a time
+		set_variable = supporting_theocracy_var
+		set_variable = has_selected_theocracy_once_var
+		remove_variable ?= supporting_republican_var
+		remove_variable ?= supporting_communist_var
+		custom_tooltip = {
+			text = theocracy_progress_increase_10_tt
+			change_variable = { name = theocracy_progress add = 10 }
+		}
+	}
+}
+
+tur_communist_button = {
+	name = "communist_button"
+	desc = "communist_button_desc"
+
+	visible = {
+		owner = { 
+			has_variable = chose_initial_turk_government 
+		}
+	}
+
+	possible = {
+		trigger_if = {
+			limit = {
+				has_variable = has_selected_communist_once_var
+			}
+			custom_tooltip = {
+				text = cannot_choose_communist_twice_tt
+				always = no
+			}
+		}
+		any_interest_group = {
+			is_in_government = yes
+			OR = {
+				leader = {
+					is_communist_supporter = yes
+				}
+				is_interest_group_type = ig_trade_unions
+			}
+		}
+		custom_tooltip = {
+			text = not_already_supporting_communist
+			NOT = { has_variable = supporting_communist_var }
+		}
+	}
+	
+	selected = {
+		has_variable = supporting_communist_var
+	}
+
+	effect = {
+		set_variable = supporting_communist_var
+		set_variable = has_selected_communist_once_var
+		remove_variable ?= supporting_republican_var
+		remove_variable ?= supporting_theocracy_var
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = { name = communist_progress add = 10 }
+		}
+	}
+}
