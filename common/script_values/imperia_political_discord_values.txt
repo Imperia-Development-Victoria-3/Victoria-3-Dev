@@ -1521,6 +1521,84 @@ discord_option_2_base_value = {
 	}
 }
 
+discord_option_3_base_value = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				var:third_option = 101
+				var:third_option = 102
+				var:third_option = 103
+				var:third_option = 104
+			}
+		}
+		value = 125
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:third_option = 105
+				var:third_option = 106
+				var:third_option = 107
+				var:third_option = 108
+			}
+		}
+		value = 175
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:third_option = 201
+				var:third_option = 202
+				var:third_option = 203
+				var:third_option = 204
+				var:third_option = 205
+			}
+		}
+		value = 225
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:third_option = 206
+				var:third_option = 207
+				var:third_option = 208
+				var:third_option = 209
+				var:third_option = 2010
+				var:third_option = 2011
+			}
+		}
+		value = 275
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:third_option = 301
+				var:third_option = 302
+				var:third_option = 303
+				var:third_option = 304
+				var:third_option = 305
+				var:third_option = 306
+				var:third_option = 307
+			}
+		}
+		value = 325
+	}
+	else_if = {
+		limit = {
+			OR = {
+				var:third_option = 308
+				var:third_option = 309
+				var:third_option = 3010
+				var:third_option = 3011
+				var:third_option = 3012
+				var:third_option = 3013
+			}
+		}
+		value = 375
+	}
+}
+
 discord_option_1_reduction = {
 	# First we get a 5th of the chosen options value and subtract that
 	subtract = {
@@ -1530,7 +1608,8 @@ discord_option_1_reduction = {
 	# Then we add a 10th of the other options value
 	add = {
 		value = discord_option_2_base_value
-		divide = 10
+		add = discord_option_3_base_value
+		divide = 20
 	}
 	# For example, if you're on 200 discord
 	# And can choose between base 175 and a base 225 options
@@ -1547,6 +1626,19 @@ discord_option_2_reduction = {
 	}
 	add = {
 		value = discord_option_1_base_value
-		divide = 10
+		add = discord_option_3_base_value
+		divide = 20
+	}
+}
+
+discord_option_3_reduction = {
+	subtract = {
+		value = discord_option_3_base_value
+		divide = 5
+	}
+	add = {
+		value = discord_option_1_base_value
+		add = discord_option_2_base_value
+		divide = 20
 	}
 }
