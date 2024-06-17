@@ -1,28 +1,4 @@
-﻿political_discord_change_miniscule = 1
-political_discord_change_small = 2
-political_discord_change_medium = 3
-political_discord_change_large = 4
-political_discord_change_xl = 5
-political_discord_change_huge = 10
-political_discord_change_massive = 20
-miniscule_discord_gain = 1
-minor_discord_gain = 20
-medium_discord_gain = 40
-major_discord_gain = 60
-massive_discord_gain = 100
-monumental_discord_gain = 150
-miniscule_discord_loss = -5
-minor_discord_loss = -10
-medium_discord_loss = -20
-major_discord_loss = -40
-massive_discord_loss = -60
-monumental_discord_loss = -100
-political_discord_defensive_pact_mult = 1.25
-political_discord_alliance_pact_mult = 1.5
-political_discord_trade_pact_mult = 1
-political_discord_customs_union_pact_mult = 1.1
-political_discord_rivalry_pact_mult = 1.5
-democratic_opposition_division_value = 2.5
+﻿democratic_opposition_division_value = 2.5
 cultural_majority_same_culture_overlord_midpoint_fraction = 0.35
 cultural_majority_normal_midpoint_fraction = 0.65
 serfs_per_aristocrat = 20
@@ -38,73 +14,6 @@ political_discord_disapprove = 4
 political_discord_strongly_disapprove = {
 	value = political_discord_disapprove
 	multiply = 2
-}
-
-imperia_discord_fetch_value = {
-	# Another country should be saved as scope:target_country
-	# This is called from the GUI, with a MakeScope setting the target_country
-	# And also from the journal entry
-	value = 0
-	if = {
-		limit = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = defensive_pact
-			}
-		}
-		add = {
-			value = imperia_discord_external_calculation
-			multiply = political_discord_defensive_pact_mult
-		}
-	}
-	if = {
-		limit = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = alliance
-			}
-		}
-		add = {
-			value = imperia_discord_external_calculation
-			multiply = political_discord_alliance_pact_mult
-		}
-	}
-	if = {
-		limit = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = trade_agreement
-			}
-		}
-		add = {
-			value = imperia_discord_external_calculation
-			multiply = political_discord_trade_pact_mult
-		}
-	}
-	if = {
-		limit = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = customs_union
-			}
-		}
-		add = {
-			value = imperia_discord_external_calculation
-			multiply = political_discord_customs_union_pact_mult
-		}
-	}
-	if = {
-		limit = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = rivalry
-			}
-		}
-		subtract = {
-			value = imperia_discord_external_calculation
-			multiply = political_discord_rivalry_pact_mult
-		}
-	}
 }
 
 imperia_discord_character_law_calculation = {
@@ -405,38 +314,6 @@ imperia_discord_religious_majority_value = {
 		subtract = 60
 	}
 	multiply = -1
-}
-
-imperia_discord_homeland_ownership_value = {
-	value = 0
-	scope:target_country = {
-		every_scope_state = {
-			save_temporary_scope_as = temp_state_scope
-			if = {
-				limit = {
-					root = {
-						any_primary_culture = {
-							culture_is_discriminated_in = scope:target_country
-							has_homeland = scope:temp_state_scope
-						}
-					}
-				}
-				add = 1
-			}
-		}
-	}
-}
-
-imperia_discord_homeland_nationalism_value = {
-	value = 0
-	if = {
-		limit = {
-			has_technology_researched = nationalism
-			exists = scope:target_country
-		}
-		add = imperia_discord_homeland_ownership_value
-		multiply = 3
-	}
 }
 
 imperia_discord_average_turmoil_in_country_value = {
