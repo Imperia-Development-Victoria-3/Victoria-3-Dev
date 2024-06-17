@@ -218,7 +218,7 @@ warlord_china_events.100 = { #Split china up into warlord states
 					set_variable = warlord_state
 
 					ig:ig_armed_forces = {
-						set_interest_group_name = ig_guominjun
+						set_interest_group_name = ig_zhili_clique
 					}
 
 					if = {
@@ -594,10 +594,20 @@ warlord_china_events.100 = { #Split china up into warlord states
 		every_subject_or_below = {
 			make_independent = yes
 		}
-		ig:ig_armed_forces = {
-			set_interest_group_name = ig_zhili_clique
-		}
 
+		play_as = c:ZHI
+
+		c:ZHI = {
+			annex_with_incorporation = c:CHI
+			set_capital = STATE_BEIJING
+
+			add_modifier = {
+				name = modifier_recognized_national_government
+			}
+			add_journal_entry = {
+				type = je_warlord_chinese_reunification
+			}
+		}
 	}
 }
 
@@ -816,6 +826,185 @@ warlord_china_events.301 = {
 		add_modifier = {
 			name = warlord_legitimacy
 			months = normal_modifier_time
+		}
+	}
+}
+
+warlord_china_events.302 = {
+	type = country_event
+	placement = root
+	duration = 3
+
+	title = warlord_china_events.302.t
+	desc = warlord_china_events.302.d
+	flavor = warlord_china_events.302.f
+
+	event_image = {
+		video = "asia_farmers_market"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	trigger = {
+		# Triggered by JE
+	}
+
+	immediate = {
+		remove_modifier = modifier_recognized_national_government
+
+		change_tag = CHI
+	}
+
+	option = { #Republic of China
+		name = warlord_china_events.302.a
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_presidential_republic
+					has_law = law_type:law_parliamentary_republic
+				}
+			}
+		}
+
+		add_loyalists = {
+			value = 0.1
+		}
+	}
+
+	option = { #Republic of China (KMT)
+		name = warlord_china_events.302.b
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_presidential_republic
+					has_law = law_type:law_parliamentary_republic
+				}
+			}
+		}
+		set_variable = china_kmt_republic
+
+		add_loyalists = {
+			value = 0.1
+		}
+	}
+
+	option = { #Manchu Restoration
+		name = warlord_china_events.302.c
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+			}
+		}
+		add_primary_culture = cu:manchu
+
+		add_loyalists = {
+			value = 0.5
+			culture = cu:manchu
+		}
+
+		if = {
+			limit = {
+				year < 1862
+			}
+			create_character = {
+				template = chi_xianfeng_template
+				ruler = yes
+			}
+			create_character = {
+				template = imperia_chi_tongzhi_emperor_template
+				heir = yes
+			}
+		}
+		else_if = {
+			limit = {
+				year >= 1862
+				year < 1876
+			}
+			create_character = {
+				template = imperia_chi_tongzhi_emperor_template
+				ruler = yes
+			}
+			create_character = {
+				template = imperia_chi_guangxu_emperor_template
+				heir = yes
+			}
+		}
+
+		else_if = {
+			limit = {
+				year >= 1876
+				year < 1908
+			}
+			create_character = {
+				template = imperia_chi_guangxu_emperor_template
+				ruler = yes
+			}
+			create_character = {
+				template = imperia_chi_xuantong_emperor_template
+				heir = yes
+			}
+		}
+
+		else_if = {
+			limit = {
+				year >= 1908
+				year < 1937
+			}
+			create_character = {
+				template = imperia_chi_xuantong_emperor_template
+				ruler = yes
+			}
+		}
+	}
+
+	option = { #A New Dynasty
+		name = warlord_china_events.302.e
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+			}
+		}
+		set_variable = china_han_empire
+
+		add_loyalists = {
+			value = 0.1
+			culture = cu:han
+		}
+	}
+
+	option = { #People's Republic of China
+		name = warlord_china_events.302.g
+		trigger = {
+			ROOT = {
+					has_law = law_type:law_council_republic
+			}
+		}
+
+		add_loyalists = {
+			pop_type = laborers
+			value = 0.25
+		}
+	}
+
+	option = { #Fascist China oh god oh fuck surely this won't happen
+		name = warlord_china_events.302.h
+		trigger = {
+			ROOT = {
+				coa_def_fascist_flag_trigger = yes
+			}
+		}
+
+		add_loyalists = {
+			value = 0.1
+			culture = cu:han
 		}
 	}
 }

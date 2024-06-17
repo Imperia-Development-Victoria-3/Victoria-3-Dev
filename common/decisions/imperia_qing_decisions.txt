@@ -28,3 +28,44 @@
 		base = 15
 	}
 }
+
+warlord_china_declare_rival_gov = {
+	is_shown = {
+		has_global_variable = china_shatters
+		NOR = {
+			has_modifier = modifier_recognized_national_government
+			has_modifier = modifier_rival_national_government
+		}
+		OR = {
+			capital = {
+				state_is_in_china = yes
+			}	
+			country_has_primary_culture = cu:manchu
+		}
+	}
+
+	possible = {
+		any_scope_state = {
+			state_is_in_china = yes
+			count >= 5
+		}
+
+		any_scope_state = {
+			OR = {
+			state_region = s:STATE_BEIJING
+			state_region = s:STATE_XIAN
+			state_region = s:STATE_NANJING
+			state_region = s:STATE_GUANGDONG
+			}
+		}
+	}
+
+	when_taken = {
+		add_modifier = {
+			name = modifier_rival_national_government
+		}
+		add_journal_entry = {
+			type = je_warlord_overthrow_national_gov
+		}
+	}
+}
