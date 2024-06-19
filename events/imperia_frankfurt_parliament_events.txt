@@ -1,0 +1,1098 @@
+﻿namespace = frankfurt_parliament
+# Vote for your favourite German prince
+frankfurt_parliament.1 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament.1.t
+	desc = frankfurt_parliament.1.d
+	flavor = frankfurt_parliament.1.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 1
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+		# Set the 3 chosen countries as scopes
+		random_country = {
+			limit = {
+				has_variable = first_candidate_german_leader
+			}
+			save_scope_as = first_candidate_scope
+		}
+		random_country = {
+			limit = {
+				has_variable = second_candidate_german_leader
+			}
+			save_scope_as = second_candidate_scope
+		}
+		random_country = {
+			limit = {
+				has_variable = third_candidate_german_leader
+			}
+			save_scope_as = third_candidate_scope
+		}
+	}
+	option = {
+		default_option = yes
+		name = frankfurt_parliament.1.a
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_1
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:first_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = frankfurt_parliament.1.b
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_2
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:second_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = frankfurt_parliament.1.c
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader_3
+			add = 1
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						any_primary_culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:great_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:major_power
+					}
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					scope:third_candidate_scope = {
+						country_rank >= rank_value:minor_power
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	after = {
+		change_global_variable = {
+			name = frankfurt_has_voted_for_german_leader
+			add = 1
+		}
+		if = {
+			limit = {
+				# If Everyone has voted
+				global_var:frankfurt_eligible_german_leader_voters = global_var:frankfurt_has_voted_for_german_leader
+			}
+			if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_1 > global_var:frankfurt_has_voted_for_german_leader_2
+					global_var:frankfurt_has_voted_for_german_leader_1 > global_var:frankfurt_has_voted_for_german_leader_3
+				}
+				scope:first_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_parliament.2
+						popup = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_2 > global_var:frankfurt_has_voted_for_german_leader_1
+					global_var:frankfurt_has_voted_for_german_leader_2 > global_var:frankfurt_has_voted_for_german_leader_3
+				}
+				scope:second_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_parliament.2
+						popup = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:frankfurt_has_voted_for_german_leader_3 > global_var:frankfurt_has_voted_for_german_leader_1
+					global_var:frankfurt_has_voted_for_german_leader_3 > global_var:frankfurt_has_voted_for_german_leader_2
+				}
+				scope:third_candidate_scope = {
+					trigger_event = {
+						id = frankfurt_parliament.2
+						popup = yes
+					}
+				}
+			}
+			else = {
+				# If this vote is tied, give it to the highest scored candidate, I guess
+				if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_1 >= global_var:frankfurt_has_voted_for_german_leader_2
+						global_var:frankfurt_has_voted_for_german_leader_1 >= global_var:frankfurt_has_voted_for_german_leader_3
+					}
+					scope:first_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_parliament.2
+							popup = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_2 >= global_var:frankfurt_has_voted_for_german_leader_1
+						global_var:frankfurt_has_voted_for_german_leader_2 >= global_var:frankfurt_has_voted_for_german_leader_3
+					}
+					scope:second_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_parliament.2
+							popup = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						global_var:frankfurt_has_voted_for_german_leader_3 >= global_var:frankfurt_has_voted_for_german_leader_1
+						global_var:frankfurt_has_voted_for_german_leader_3 >= global_var:frankfurt_has_voted_for_german_leader_2
+					}
+					scope:third_candidate_scope = {
+						trigger_event = {
+							id = frankfurt_parliament.2
+							popup = yes
+						}
+					}
+				}
+			}
+		}
+		remove_variable ?= frankfurt_parliament_voting_for_gutter_king
+	}
+}
+
+# Gutter Crown is offered to a prominent German prince...
+frankfurt_parliament.2 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament.2.t
+	desc = frankfurt_parliament.2.d
+	flavor = frankfurt_parliament.2.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 1
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		set_variable = frankfurt_parliament_considering_gutter_crown
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+	}
+	option = {
+		# Accept the Gutter Crown
+		name = frankfurt_parliament.2.a
+		set_variable = accepted_gutter_crown
+		add_journal_entry = {
+			type = je_imperia_frankfurt_german_consolidation_gutter_king
+		}
+		# Monarchy vs republic laws
+		set_variable = {
+			name = gutter_king_old_lawgroup_governance_principles
+			value = active_law:lawgroup_governance_principles.type
+		}
+		if = {
+			limit = {
+				OR = {
+					is_subject = yes
+					is_subject_type = subject_type_customs_union
+				}
+			}
+			overlord = {
+				save_scope_as = overlord_scope
+			}
+			set_variable = {
+				name = frankfurt_parliament_original_overlord
+				value = scope:overlord_scope
+			}
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
+						has_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
+					}
+				}
+				activate_law = law_type:law_presidential_republic
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+						has_global_variable = frankfurt_parliament_has_majority_for_parliamentary_republic_var
+					}
+				}
+				activate_law = law_type:law_parliamentary_republic
+			}
+		}
+		else = {
+			activate_law = law_type:law_monarchy
+		}
+		# Voting laws
+		set_variable = {
+			name = gutter_king_old_lawgroup_distribution_of_power
+			value = active_law:lawgroup_distribution_of_power.type
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
+			}
+			activate_law = law_type:law_oligarchy
+		}
+		else_if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_wealth_var
+			}
+			activate_law = law_type:law_wealth_voting
+		}
+		else_if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+			}
+			activate_law = law_type:law_universal_suffrage
+		}
+		custom_tooltip = frankfurt_parliament_add_german_claims_tt
+		# Claims
+		hidden_effect = {
+			every_state_region = {
+				limit = {
+					any_scope_state = {
+						frankfurt_parliament_state_is_gutter_german = yes
+						NOT = {
+							has_claim_by = root
+						}
+					}
+				}
+				root = {
+					add_to_variable_list = {
+						name = frankfurt_parliament_gutter_king_added_claims
+						target = prev
+					}
+				}
+				add_claim = root
+			}
+		}
+		# foreign laws, only for liberal republican germany
+		# Also adds infamy here
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
+					has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+				}
+			}
+			set_variable = {
+				name = gutter_king_old_lawgroup_diplomatic_stance
+				value = active_law:lawgroup_diplomatic_stance.type
+			}
+		}
+		if = {
+			limit = {
+				# Will only ever be true if it was voted for
+				has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
+			}
+			change_infamy = 70
+			activate_law = law_type:law_armed_neutrality
+		}
+		else_if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+			}
+			change_infamy = 95
+			activate_law = law_type:law_expansionism
+		}
+		else_if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+			}
+			change_infamy = 60
+		}
+		else = {
+			# Gives a base amount of infamy to anyone who accepts the Gutter Crown
+			change_infamy = 50
+		}
+		# Subjugation demands
+		custom_tooltip = frankfurt_parliament_german_minor_get_subjugation_demand_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					this != root
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = yes
+					}
+					OR = {
+						is_subject = no
+						is_subject_type = subject_type_customs_union
+					}
+					# Mostly to exclude Switzerland, who are excluded exactly because of True Neutrality
+					# If they go away from true neutrality, include them I guess
+					# If someone else becomes true neutral, exclude them
+					NOT = {
+						has_law = law_type:law_true_neutrality
+					}
+				}
+				trigger_event = {
+					# Subjugation demand
+					id = frankfurt_parliament.3
+					popup = yes
+				}
+			}
+		}
+		# If the Gutter King is a Great power (Probably Austria or Prussia), the other great germans will oppose
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			every_country = {
+				limit = {
+					this != root
+					country_rank >= rank_value:great_power
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = no
+					}
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				trigger_event = {
+					id = frankfurt_parliament.5
+				}
+			}
+		}
+		custom_tooltip = would_happen_upon_consolidation_tt
+		if = {
+			limit = {
+				root ?= c:AUS
+				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+			}
+			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
+		}
+		show_as_tooltip = {
+			add_modifier = {
+				name = crown_from_the_gutter
+				years = 20
+				is_decaying = yes
+			}
+			if = {
+				limit = {
+					has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+				}
+				custom_tooltip = {
+					text = imperia_frankfurt_parliament_grant_external_focus_claims_tt
+					imperia_frankfurt_parliament_grant_external_focus_claims = yes
+				}
+			}
+		}
+		remove_global_variable ?= frankfurt_eligible_german_leader_voters
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					# The Frankfurt owner should accept the crown, but only if they're small.
+					imperia_country_owns_frankfurt_city = yes
+					country_rank <= rank_value:insignificant_power
+				}
+				add = 100
+			}
+			modifier = {
+				trigger = {
+					# Austria accepts gladly if the parliament voted to allow all of Austria into Gutter German
+					root ?= c:AUS
+					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+				}
+				add = 1000
+			}
+		}
+	}
+	option = {
+		# Decline
+		default_option = yes
+		name = frankfurt_parliament.2.b
+		set_variable = declined_gutter_crown
+		if = {
+			# First re-offers to the great German Princes
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						has_variable = first_candidate_german_leader
+						has_variable = second_candidate_german_leader
+						has_variable = third_candidate_german_leader
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						has_variable = first_candidate_german_leader
+						has_variable = second_candidate_german_leader
+						has_variable = third_candidate_german_leader
+					}
+				}
+				trigger_event = {
+					id = frankfurt_parliament.2
+					popup = yes
+				}
+			}
+		}
+		else_if = {
+			# Else it offers to the Frankfurt owner (Probably Frankfurt City?) if they havent declined already...
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					imperia_country_owns_frankfurt_city = yes
+				}
+			}
+			random_country = {
+				limit = {
+					imperia_country_owns_frankfurt_city = yes
+				}
+				trigger_event = {
+					id = frankfurt_parliament.2
+					popup = yes
+				}
+			}
+		}
+		else_if = {
+			# Else it offers to a non-declining German Country. Really desperate.
+			limit = {
+				any_country = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						has_variable = declined_gutter_crown
+					}
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				trigger_event = {
+					id = frankfurt_parliament.2
+					popup = yes
+				}
+			}
+		}
+		else = {
+			every_country = {
+				limit = {
+					has_diplomatic_relevance = root
+				}
+				post_notification = nobody_wants_gutter_crown
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					# The Frankfurt owner should accept the crown, but only if they're small.
+					imperia_country_owns_frankfurt_city = yes
+					country_rank <= rank_value:insignificant_power
+				}
+				add = -100
+			}
+		}
+	}
+	after = {
+		remove_variable ?= frankfurt_parliament_considering_gutter_crown
+	}
+}
+
+# Gutter King demands subjugation
+frankfurt_parliament.3 = {
+	type = country_event
+	placement = scope:gutter_king_scope.capital
+	title = frankfurt_parliament.3.t
+	desc = frankfurt_parliament.3.d
+	flavor = frankfurt_parliament.3.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		OR = {
+			# To fire, must either have stayed in the conference OR be a great power
+			NOT = {
+				has_variable = left_frankfurt_parliament
+			}
+			country_rank >= rank_value:great_power
+		}
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = accepted_gutter_crown
+			}
+			save_scope_as = gutter_king_scope
+		}
+		if = {
+			limit = {
+				OR = {
+					is_subject = yes
+					is_subject_type = subject_type_customs_union
+				}
+			}
+			overlord = {
+				save_scope_as = overlord_scope
+			}
+			set_variable = {
+				name = frankfurt_parliament_original_overlord
+				value = scope:overlord_scope
+			}
+		}
+	}
+	option = {
+		# accept
+		name = frankfurt_parliament.3.a
+		trigger = {
+			# Only those who stayed can join at this point
+			NOT = {
+				has_variable = left_frankfurt_parliament
+			}
+		}
+		custom_tooltip = imperia_frankfurt_parliament_game_can_end_for_you_tt
+		add_modifier = {
+			name = gutter_king_solid_sway
+		}
+		if = {
+			limit = {
+				is_subject = yes
+			}
+			make_independent = yes
+		}
+		scope:gutter_king_scope = {
+			create_diplomatic_pact = {
+				country = root
+				type = dominion
+			}
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_german_consolidation_german_minor
+		}
+		if = {
+			limit = {
+				root ?= c:AUS
+				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+			}
+			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					scope:gutter_king_scope = {
+						frankfurt_parliament_prince_will_join_gutter_king = yes
+					}
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		# decline
+		name = frankfurt_parliament.3.b
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		else = {
+			add_modifier = {
+				name = german_major_complete_sway
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_minor
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				trigger = {
+					scope:gutter_king_scope = {
+						frankfurt_parliament_prince_will_join_gutter_king = yes
+					}
+				}
+				add = -100
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				is_player = yes
+			}
+			set_variable = frankfurt_considered_bending_the_knee
+		}
+		if = {
+			limit = {
+				any_country = {
+					is_player = yes
+					capital = {
+						frankfurt_parliament_state_is_gutter_german = yes
+					}
+					NOT = {
+						has_variable = frankfurt_considered_bending_the_knee
+					}
+					NOT = {
+						has_variable = accepted_gutter_crown
+					}
+					count = 0
+				}
+			}
+			scope:gutter_king_scope = {
+				trigger_event = {
+					# The _initialised variable is set in this event; allows for the possible failure
+					# Also sets the _value variable to 50, so its effectively in the middle from the start
+					# Well, 1 day after the last player clicks an option. Janky, but couldnt see other options for the implementation I wanted
+					# - Danarca
+					id = frankfurt_parliament.7
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+# Frankfurt Parliament Opening announcement
+frankfurt_parliament.4 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament.4.t
+	desc = frankfurt_parliament.4.d
+	flavor = frankfurt_parliament.4.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+	}
+	option = {
+		default_option = yes
+		name = frankfurt_parliament.4.a
+		custom_tooltip = frankfurt_parliament_joined_parliament_tt
+		set_variable = frankfurt_parliament_joined_parliament
+		custom_tooltip = frankfurt_we_can_now_vote_through_journal_tt
+		show_as_tooltip = {
+			add_journal_entry = {
+				type = je_imperia_frankfurt_parliament
+			}
+		}
+	}
+	option = {
+		name = frankfurt_parliament.4.b
+		custom_tooltip = frankfurt_we_can_now_vote_through_journal_tt
+		show_as_tooltip = {
+			add_journal_entry = {
+				type = je_imperia_frankfurt_parliament
+			}
+		}
+	}
+}
+
+# German Major reacts to other german major claiming Gutter Crown
+frankfurt_parliament.5 = {
+	type = country_event
+	placement = scope:gutter_king_scope.capital
+	title = frankfurt_parliament.5.t
+	desc = frankfurt_parliament.5.d
+	flavor = frankfurt_parliament.5.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_country = {
+			limit = {
+				has_variable = accepted_gutter_crown
+			}
+			save_scope_as = gutter_king_scope
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_german_consolidation_german_major
+		}
+	}
+	option = {
+		name = frankfurt_parliament.5.a
+		default_option = yes
+		show_as_tooltip = {
+			add_journal_entry = {
+				type = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+	}
+}
+
+# Player chooses which Club to support
+frankfurt_parliament.6 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament.6.t
+	desc = frankfurt_parliament.6.desc
+	flavor = frankfurt_parliament.6.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+		remove_variable ?= frankfurt_parliament_supports_left_club
+		remove_variable ?= frankfurt_parliament_supports_center_club
+		remove_variable ?= frankfurt_parliament_supports_right_club
+		add_modifier = {
+			name = club_change_cooldown
+			months = 4
+		}
+	}
+	trigger = {
+		is_player = yes
+		NOT = {
+			has_modifier = club_change_cooldown
+		}
+	}
+	# Left wing; radical democrats
+	option = {
+		name = frankfurt_parliament.6.a
+		custom_tooltip = frankfurt_parliament_support_the_left_tt
+		set_variable = frankfurt_parliament_supports_left_club
+	}
+	# Centre wing; federal monarchists
+	option = {
+		default_option = yes
+		name = frankfurt_parliament.6.b
+		custom_tooltip = frankfurt_parliament_support_the_center_tt
+		set_variable = frankfurt_parliament_supports_center_club
+	}
+	# Right wing; absolute monarchists
+	option = {
+		name = frankfurt_parliament.6.c
+		custom_tooltip = frankfurt_parliament_support_the_right_tt
+		set_variable = frankfurt_parliament_supports_right_club
+	}
+	# Dont choose right now
+	option = {
+		name = frankfurt_parliament.6.d
+		remove_modifier ?= club_change_cooldown
+	}
+}
+
+# Set the progress bar for the gutter king to be in the middle
+frankfurt_parliament.7 = {
+	type = country_event
+	hidden = yes
+	immediate = {
+		set_variable = {
+			name = je_imperia_frankfurt_german_consolidation_gutter_king_value
+			value = 50
+		}
+		set_variable = je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
+	}
+}
+
+# Hidden event for winning the civil war as the Gutter King
+frankfurt_parliament.8 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = accepted_gutter_crown
+	}
+	immediate = {
+		# Popped outside of the on_action to make it work properly
+		# Get every establishment aligned country
+		every_in_global_list = {
+			variable = german_establishment_aligned
+			# That is NOT a subject of the gutter king
+			# And make the gutter king subjugate them
+			root = {
+				create_diplomatic_pact = {
+					country = prev
+					type = dominion
+				}
+			}
+		}
+		# If Prussia was establishment (highly likely), Spawn the Rhineland to nerf them
+		# NGF cannot have spawned at this point
+		if = {
+			limit = {
+				is_target_in_global_variable_list = {
+					name = german_establishment_aligned
+					target = c:PRU
+				}
+			}
+			# Slight sidetrack to puppet Prussia, they dont get caught by the above loop for some reason...
+			root = {
+				create_diplomatic_pact = {
+					country = c:PRU
+					type = dominion
+				}
+			}
+			imperia_frankfurt_parliament_spawn_rhineland = yes
+			root = {
+				create_diplomatic_pact = {
+					country = c:RHE
+					type = puppet
+				}
+			}
+		}
+		imperia_frankfurt_parliament_consolidate_gutter_king = {
+			GUTTER_KING = root
+		}
+	}
+}
+
+# Hidden event for starting the civil war
+frankfurt_parliament.9 = {
+	type = country_event
+	hidden = yes
+	trigger = {
+		any_country = {
+			has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+		}
+	}
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				}
+			}
+			if = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+				}
+				save_scope_as = gutter_king
+			}
+			else_if = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+				add_to_global_variable_list = {
+					name = german_establishment_aligned
+					target = this
+				}
+			}
+			else_if = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				}
+				if = {
+					limit = {
+						OR = {
+							has_modifier = gutter_king_solid_sway
+							has_modifier = gutter_king_complete_sway
+						}
+					}
+					add_to_global_variable_list = {
+						name = gutter_king_aligned
+						target = this
+					}
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_modifier = german_major_solid_sway
+							has_modifier = german_major_complete_sway
+						}
+					}
+					add_to_global_variable_list = {
+						name = german_establishment_aligned
+						target = this
+					}
+				}
+			}
+		}
+		ordered_in_global_list = {
+			variable = german_establishment_aligned
+			order_by = gdp
+			position = 0
+			save_scope_as = german_major
+			set_variable = german_establishment_leader
+		}
+		scope:german_major = {
+			create_diplomatic_play = {
+				type = dp_imperia_gutter_german_revolt
+				target_country = scope:gutter_king
+			}
+		}
+		every_in_global_list = {
+			variable = gutter_king_aligned
+			random_diplomatic_play = {
+				limit = {
+					is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+				}
+				add_target_backers = {
+					prev
+				}
+			}
+		}
+		every_in_global_list = {
+			variable = german_establishment_aligned
+			limit = {
+				this != scope:german_major
+			}
+			random_diplomatic_play = {
+				limit = {
+					is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+				}
+				add_initiator_backers = {
+					prev
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				has_diplomatic_relevance = root
+			}
+			post_notification = imperia_gutter_german_revolt_began
+		}
+	}
+}

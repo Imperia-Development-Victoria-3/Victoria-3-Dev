@@ -1,0 +1,774 @@
+﻿namespace = dead_man
+# start event
+dead_man.1 = {
+	type = country_event
+	placement = root
+	title = dead_man.1.t
+	desc = dead_man.1.d
+	flavor = dead_man.1.f
+	duration = 3
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		NOT = {
+			has_variable = dead_man_startup_var
+		}
+	}
+	immediate = {
+		set_variable = dead_man_startup_var
+		add_journal_entry = {
+			type = je_dead_man_main
+		}
+	}
+	option = {
+		# Support Republican
+		name = dead_man.1.a
+		default_option = yes
+		set_variable = chose_initial_turk_government
+		if = {
+			limit = {
+				ig:ig_intelligentsia.leader = {
+					NOT = {
+						is_republican_supporter = yes
+					}
+				}
+			}
+			ig:ig_intelligentsia.leader = {
+				set_ideology = ideology:ideology_republican_leader
+			}
+		}
+		ig:ig_intelligentsia.leader = {
+			add_modifier = {
+				name = dead_man_revolutionary
+			}
+		}
+		remove_variable ?= supporting_theocracy_var
+		remove_variable ?= supporting_communist_var
+		custom_tooltip = {
+			text = republican_progress_increase_15_tt
+			change_variable = {
+				name = republican_progress
+				add = 15
+			}
+		}
+		set_variable = supporting_republican_var
+	}
+	option = {
+		# Support Theocracy
+		name = dead_man.1.b
+		set_variable = chose_initial_turk_government
+		if = {
+			limit = {
+				ig:ig_devout.leader = {
+					NOT = {
+						is_theocracy_supporter = yes
+					}
+				}
+			}
+			ig:ig_devout.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		ig:ig_devout.leader = {
+			add_modifier = {
+				name = dead_man_revolutionary
+			}
+		}
+		remove_variable ?= supporting_republican_var
+		remove_variable ?= supporting_communist_var
+		custom_tooltip = {
+			text = theocracy_progress_increase_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 15
+			}
+		}
+		set_variable = supporting_theocracy_var
+	}
+	option = {
+		# Support Communist
+		name = dead_man.1.c
+		set_variable = chose_initial_turk_government
+		if = {
+			limit = {
+				ig:ig_trade_unions.leader = {
+					NOT = {
+						is_communist_supporter = yes
+					}
+				}
+			}
+			ig:ig_trade_unions.leader = {
+				set_ideology = ideology:ideology_communist
+			}
+		}
+		ig:ig_trade_unions.leader = {
+			add_modifier = {
+				name = dead_man_revolutionary
+			}
+		}
+		remove_variable ?= supporting_theocracy_var
+		remove_variable ?= supporting_republican_var
+		custom_tooltip = {
+			text = communist_progress_increase_15_tt
+			change_variable = {
+				name = communist_progress
+				add = 15
+			}
+		}
+		set_variable = supporting_communist_var
+	}
+}
+
+# END EVENT
+dead_man.2 = {
+	type = country_event
+	placement = root
+	title = dead_man.2.t
+	desc = dead_man.2.d
+	flavor = dead_man.2.f
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_springtime_of_nations"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		NOT = {
+			has_variable = dead_man_ended_var
+		}
+	}
+	immediate = {
+		set_variable = dead_man_ended_var
+		remove_modifier ?= outmoded_bureaucracy
+		remove_modifier ?= cizye_tax
+		remove_modifier ?= stagnant_economy
+		remove_modifier ?= janissary_legacy
+		remove_modifier ?= rampant_piracy
+		remove_modifier ?= kurdish_question
+		remove_modifier ?= balkan_disarray
+		remove_modifier ?= imbalanced_education
+		remove_modifier ?= internal_strife
+		add_loyalists = {
+			value = 0.35
+		}
+	}
+	option = {
+		# Supported Communists 1
+		name = dead_man.2.a
+		trigger = {
+			dead_man_communists_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_anarchy
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_cooperative_ownership
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_protected_speech
+		activate_law = law_type:law_guaranteed_liberties
+		activate_law = law_type:law_disarmed_police
+		activate_law = law_type:law_national_militia
+		add_modifier = {
+			name = communist_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Communists 2
+		name = dead_man.2.b
+		trigger = {
+			dead_man_communists_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_universal_suffrage
+		activate_law = law_type:law_multicultural
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_cooperative_ownership
+		activate_law = law_type:law_state_atheism
+		activate_law = law_type:law_worker_protections
+		activate_law = law_type:law_old_age_pension
+		add_modifier = {
+			name = communist_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Communists 3
+		name = dead_man.2.c
+		trigger = {
+			dead_man_communists_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_council_republic
+		activate_law = law_type:law_technocracy
+		activate_law = law_type:law_collectivized_agriculture
+		activate_law = law_type:law_command_economy
+		activate_law = law_type:law_professional_army
+		activate_law = law_type:law_state_atheism
+		activate_law = law_type:law_censorship
+		activate_law = law_type:law_secret_police
+		activate_law = law_type:law_militarized_police
+		add_modifier = {
+			name = communist_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Republicans 1
+		name = dead_man.2.l
+		trigger = {
+			dead_man_republicans_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_parliamentary_republic
+		activate_law = law_type:law_census_voting
+		activate_law = law_type:law_national_supremacy
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_public_schools
+		activate_law = law_type:law_guaranteed_liberties
+		add_modifier = {
+			name = republican_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Republicans 2
+		name = dead_man.2.m
+		trigger = {
+			dead_man_republicans_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_parliamentary_republic
+		activate_law = law_type:law_wealth_voting
+		activate_law = law_type:law_national_supremacy
+		activate_law = law_type:law_total_separation
+		activate_law = law_type:law_private_schools
+		activate_law = law_type:law_private_health_insurance
+		add_modifier = {
+			name = republican_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Republicans 3
+		name = dead_man.2.n
+		trigger = {
+			dead_man_republicans_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_presidential_republic
+		activate_law = law_type:law_oligarchy
+		activate_law = law_type:law_national_supremacy
+		activate_law = law_type:law_freedom_of_conscience
+		activate_law = law_type:law_meritocratic_bureaucracy
+		activate_law = law_type:law_interventionism
+		activate_law = law_type:law_dedicated_police
+		add_modifier = {
+			name = republican_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Theocracy 1
+		name = dead_man.2.x
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_autocracy
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_professional_army
+		activate_law = law_type:law_national_guard
+		activate_law = law_type:law_censorship
+		activate_law = law_type:law_empowered_gendarmerie
+		add_modifier = {
+			name = theocracy_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Theocracy 2
+		name = dead_man.2.y
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_landed_voting
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_agrarianism
+		activate_law = law_type:law_homesteading
+		activate_law = law_type:law_no_womens_rights
+		activate_law = law_type:law_closed_borders
+		add_modifier = {
+			name = theocracy_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	option = {
+		# Supported Theocracy 3
+		name = dead_man.2.z
+		trigger = {
+			dead_man_theocrats_winning = yes
+		}
+		set_country_type = recognized
+		activate_law = law_type:law_theocracy
+		activate_law = law_type:law_oligarchy
+		activate_law = law_type:law_state_religion
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_inquisition
+		activate_law = law_type:law_faith_orders
+		activate_law = law_type:law_religious_schools
+		activate_law = law_type:law_charitable_health_system
+		activate_law = law_type:law_no_womens_rights
+		activate_law = law_type:law_poor_laws
+		add_modifier = {
+			name = theocracy_restoration
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = dead_man_complete
+		}
+	}
+	after = {
+		tur_clear_dead_man_variables = yes
+	}
+}
+
+dead_man.3 = {
+	type = country_event
+	placement = root
+	title = dead_man.3.t
+	desc = dead_man.3.d
+	flavor = dead_man.3.f
+	duration = 3
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		AND = {
+			has_variable = dead_man_ended_var
+			has_variable = dead_man_pulse_balk_comm
+		}
+		NOT = {
+			has_variable = dead_man_no_balk
+		}
+	}
+	immediate = {
+		set_variable = dead_man_no_balk
+		remove_variable ?= dead_man_pulse_balk_comm
+	}
+	option = {
+		# Accept Balkan Loss
+		name = dead_man.3.a
+		default_option = yes
+		imperia_balkan_disintegrate = yes		#slo, wal, gre, ser, bos, slv, cro, alb, bul
+		if = {
+			limit = {
+				exists = c:BUL
+			}
+			change_relations = {
+				country = c:BUL
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:GRE
+			}
+			change_relations = {
+				country = c:GRE
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SER
+			}
+			change_relations = {
+				country = c:SER
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:WAL
+			}
+			change_relations = {
+				country = c:WAL
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:ALB
+			}
+			change_relations = {
+				country = c:ALB
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:BOS
+			}
+			change_relations = {
+				country = c:BOS
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLO
+			}
+			change_relations = {
+				country = c:SLO
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLV
+			}
+			change_relations = {
+				country = c:SLV
+				value = 60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:CRO
+			}
+			change_relations = {
+				country = c:CRO
+				value = 60
+			}
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:greek
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:bulgarian
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:serb
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:croat
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.25
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_full
+			years = long_modifier_time
+		}
+	}
+	option = {
+		# Negotiate Partial Balkan Loss
+		name = dead_man.3.b
+		imperia_balkan_disintegrate_partial = yes
+		if = {
+			limit = {
+				exists = c:BUL
+			}
+			change_relations = {
+				country = c:BUL
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:GRE
+			}
+			change_relations = {
+				country = c:GRE
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SER
+			}
+			change_relations = {
+				country = c:SER
+				value = 30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:WAL
+			}
+			change_relations = {
+				country = c:WAL
+				value = -30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:ALB
+			}
+			change_relations = {
+				country = c:ALB
+				value = 30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:BOS
+			}
+			change_relations = {
+				country = c:BOS
+				value = 30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLO
+			}
+			change_relations = {
+				country = c:SLO
+				value = -30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLV
+			}
+			change_relations = {
+				country = c:SLV
+				value = -30
+			}
+		}
+		if = {
+			limit = {
+				exists = c:CRO
+			}
+			change_relations = {
+				country = c:CRO
+				value = -30
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_partial
+			years = long_modifier_time
+		}
+	}
+	option = {
+		# Rejected Balkan Deal
+		name = dead_man.3.c
+		if = {
+			limit = {
+				exists = c:BUL
+			}
+			change_relations = {
+				country = c:BUL
+				value = -90
+			}
+		}
+		if = {
+			limit = {
+				exists = c:GRE
+			}
+			change_relations = {
+				country = c:GRE
+				value = -90
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SER
+			}
+			change_relations = {
+				country = c:SER
+				value = -90
+			}
+		}
+		if = {
+			limit = {
+				exists = c:WAL
+			}
+			change_relations = {
+				country = c:WAL
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:ALB
+			}
+			change_relations = {
+				country = c:ALB
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:BOS
+			}
+			change_relations = {
+				country = c:BOS
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLO
+			}
+			change_relations = {
+				country = c:SLO
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:SLV
+			}
+			change_relations = {
+				country = c:SLV
+				value = -60
+			}
+		}
+		if = {
+			limit = {
+				exists = c:CRO
+			}
+			change_relations = {
+				country = c:CRO
+				value = -60
+			}
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.25
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balkan_disintegrate_rejected
+			years = long_modifier_time
+		}
+	}
+}

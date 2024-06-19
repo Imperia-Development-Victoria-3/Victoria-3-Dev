@@ -1,0 +1,1475 @@
+﻿imperia_frankfurt_parliament_clean_variables = {
+	# Scope: any country in the world
+	# Called from on_actions if certain conditions are met (basically if the thing is over)
+	### ### ###
+	# General Variables
+	remove_variable ?= frankfurt_parliament_joined_parliament
+	remove_variable ?= left_frankfurt_parliament
+	remove_global_variable ?= frankfurt_parliament_voting_period
+	remove_global_variable ?= frankfurt_parliament_current_vote
+	remove_global_variable ?= imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+	remove_global_variable ?= imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+	# Club variables
+	remove_variable ?= frankfurt_parliament_left_faction_influence
+	remove_variable ?= frankfurt_parliament_center_faction_influence
+	remove_variable ?= frankfurt_parliament_right_faction_influence
+	remove_variable ?= frankfurt_parliament_supports_left_club
+	remove_variable ?= frankfurt_parliament_supports_center_club
+	remove_variable ?= frankfurt_parliament_supports_right_club
+	remove_variable ?= frankfurt_parliament_left_club_boost
+	remove_variable ?= frankfurt_parliament_center_club_boost
+	remove_variable ?= frankfurt_parliament_right_club_boost
+	# Vote variables
+	remove_variable ?= frankfurt_parliament_voted_republic
+	remove_variable ?= frankfurt_parliament_voted_monarchy
+	remove_variable ?= frankfurt_parliament_voted_oligarchy
+	remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
+	remove_variable ?= frankfurt_parliament_voted_universal_suffrage
+	remove_variable ?= frankfurt_parliament_voted_presidential
+	remove_variable ?= frankfurt_parliament_voted_parliamentary
+	remove_variable ?= frankfurt_parliament_voted_lesser_germany
+	remove_variable ?= frankfurt_parliament_voted_greater_germany
+	remove_variable ?= frankfurt_parliament_voted_greater_austria
+	remove_variable ?= frankfurt_parliament_voting_internal_focus
+	remove_variable ?= frankfurt_parliament_voting_external_focus
+	remove_variable ?= lesser_germany_ai_willingness
+	remove_variable ?= greater_germany_ai_willingness
+	remove_variable ?= greater_austria_ai_willingness
+	# Global vote counts
+	remove_global_variable ?= imperia_frankfurt_parliament_republic_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_monarchy_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_governance_abstentions_var
+	remove_global_variable ?= imperia_frankfurt_parliament_oligarchy_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_wealth_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_universal_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_suffrage_abstentions_var
+	remove_global_variable ?= imperia_frankfurt_parliament_presidential_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_parliamentary_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_republic_type_abstentions_var
+	remove_global_variable ?= imperia_frankfurt_parliament_lesser_germany_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_greater_germany_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_greater_austria_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_german_form_abstentions_var
+	remove_global_variable ?= imperia_frankfurt_parliament_internal_focus_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_external_focus_voters_var
+	remove_global_variable ?= imperia_frankfurt_parliament_revolutionary_focus_abstentions_var
+	# Global vote results
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_republic_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_monarchy_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_oligarchy_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_wealth_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_universal_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_presidential_republic_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_parliamentary_republic_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_lesser_germany_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_germany_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_austria_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_internal_focus_var
+	remove_global_variable ?= frankfurt_parliament_has_majority_for_external_focus_var
+	# Gutter king candidates
+	remove_variable ?= first_candidate_german_leader
+	remove_variable ?= second_candidate_german_leader
+	remove_variable ?= third_candidate_german_leader
+	# Gutter king voting
+	remove_global_variable ?= frankfurt_has_voted_for_german_leader
+	remove_global_variable ?= frankfurt_has_voted_for_german_leader_1
+	remove_global_variable ?= frankfurt_has_voted_for_german_leader_2
+	remove_global_variable ?= frankfurt_has_voted_for_german_leader_3
+	# Gutter crown acceptance
+	remove_variable ?= accepted_gutter_crown
+	remove_variable ?= declined_gutter_crown
+	# Gutter King consolidation
+	remove_variable ?= je_imperia_frankfurt_german_consolidation_gutter_king_value
+	remove_variable ?= je_imperia_frankfurt_german_consolidation_gutter_king_value_initialised
+	remove_variable ?= frankfurt_considered_bending_the_knee
+	remove_global_variable ?= frankfurt_parliament_gutter_king_is_consolidating_var
+	remove_global_variable ?= frankfurt_parliament_weeks_to_civil_war
+	clear_global_variable_list ?= frankfurt_parliament_gutter_king_added_claims
+	# Sway variables
+	remove_variable ?= sway_menu_page
+	remove_variable ?= sway_spending_level
+	remove_variable ?= sway_target_north
+	remove_variable ?= sway_target_south
+	remove_variable ?= sway_loyalty_min
+	remove_variable ?= sway_loyalty_max
+	remove_variable ?= sway_spending_amount
+	remove_variable ?= loop_counts
+	# Gutter King old lawgroups
+	remove_variable ?= gutter_king_old_lawgroup_governance_principles
+	remove_variable ?= gutter_king_old_lawgroup_distribution_of_power
+	remove_variable ?= gutter_king_old_lawgroup_diplomatic_stance
+	# Gutter germany princes variables
+	remove_variable ?= frankfurt_parliament_original_overlord
+	# German Revolt
+	remove_global_variable ?= frankfurt_parliament_civil_war_happened
+	clear_global_variable_list ?= gutter_king_aligned
+	clear_global_variable_list ?= german_establishment_aligned
+	remove_variable ?= german_establishment_leader
+}
+
+imperia_frankfurt_parliament_shatter_austria = {
+	# Can be used anywhere, will scope to Austria anyways
+	# Removes non-gutter-german states and makes them free
+	if = {
+		limit = {
+			exists = c:AUS
+		}
+		custom_tooltip = {
+			text = frankfurt_parliament_austria_will_shatter_tt
+			c:AUS = {
+				every_scope_state = {
+					limit = {
+						frankfurt_parliament_state_is_gutter_german = no
+					}
+					random_scope_pop = {
+						limit = {
+							prev.state_region = {
+								is_homeland = prev.culture
+							}
+							culture = {
+								NOR = {
+									this = cu:north_german
+									this = cu:south_german
+								}
+							}
+							prev = {
+								culture_percent_state = {
+									target = prev.culture
+									value >= 0.2
+								}
+							}
+						}
+						# Hungarian lands to Hungary
+						if = {
+							limit = {
+								has_pop_culture = hungarian
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:HUN
+									}
+								}
+								create_country = {
+									tag = HUN
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:HUN
+									set_state_type = incorporated
+								}
+							}
+						}
+						# North Italian lands to Venice
+						if = {
+							limit = {
+								has_pop_culture = north_italian
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:VEN
+									}
+								}
+								create_country = {
+									tag = VEN
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:VEN
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Slovak to Slovakia
+						if = {
+							limit = {
+								has_pop_culture = slovak
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:SLV
+									}
+								}
+								create_country = {
+									tag = SLV
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:SLV
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Polish and Ukrainian to Galicia-Lodomeria
+						if = {
+							limit = {
+								OR = {
+									has_pop_culture = polish
+									has_pop_culture = ukrainian
+								}
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:GAL
+									}
+								}
+								create_country = {
+									tag = GAL
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:GAL
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Slovenes to Slovenia
+						if = {
+							limit = {
+								has_pop_culture = slovene
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:SLO
+									}
+								}
+								create_country = {
+									tag = SLO
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:SLO
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Romanians to Transylvania
+						if = {
+							limit = {
+								has_pop_culture = romanian
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:TRS
+									}
+								}
+								create_country = {
+									tag = TRS
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:TRS
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Croatians to Croatia
+						if = {
+							limit = {
+								has_pop_culture = croat
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:CRO
+									}
+								}
+								create_country = {
+									tag = CRO
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:CRO
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Bosnians to Bosnia
+						if = {
+							limit = {
+								has_pop_culture = bosniak
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:BOS
+									}
+								}
+								create_country = {
+									tag = BOS
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:BOS
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Serbians to Serbia
+						if = {
+							limit = {
+								has_pop_culture = serb
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:SER
+									}
+								}
+								create_country = {
+									tag = SER
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:SER
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Albanians to Albania
+						if = {
+							limit = {
+								has_pop_culture = albanian
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:ALB
+									}
+								}
+								create_country = {
+									tag = ALB
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:ALB
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Bulgarians to Bulgaria
+						if = {
+							limit = {
+								has_pop_culture = bulgarian
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:BUL
+									}
+								}
+								create_country = {
+									tag = BUL
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:BUL
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Greeks to Greece
+						if = {
+							limit = {
+								has_pop_culture = greek
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:GRE
+									}
+								}
+								create_country = {
+									tag = GRE
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:GRE
+									set_state_type = incorporated
+								}
+							}
+						}
+						# Turks to Turkey (or probably the Ottomans, although who knows if it gets this far)
+						if = {
+							limit = {
+								has_pop_culture = turkish
+							}
+							if = {
+								limit = {
+									NOT = {
+										exists = c:TUR
+									}
+								}
+								create_country = {
+									tag = TUR
+									origin = c:AUS
+									state = prev
+								}
+							}
+							else = {
+								prev = {
+									set_state_owner = c:TUR
+									set_state_type = incorporated
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_dissolve_gutter_germany = {
+	# Scope : gutter king
+	custom_tooltip = {
+		text = frankfurt_return_to_old_status_tt
+		every_subject_or_below = {
+			limit = {
+				is_direct_subject_of = prev
+			}
+			remove_modifier ?= gutter_king_solid_sway
+			remove_modifier ?= gutter_king_complete_sway
+			make_independent = yes
+			if = {
+				limit = {
+					has_variable = frankfurt_parliament_original_overlord
+				}
+				var:frankfurt_parliament_original_overlord = {
+					create_diplomatic_pact = {
+						country = prev
+						type = customs_union
+					}
+				}
+			}
+		}
+	}
+	activate_law ?= var:gutter_king_old_lawgroup_governance_principles
+	activate_law ?= var:gutter_king_old_lawgroup_distribution_of_power
+	activate_law ?= var:gutter_king_old_lawgroup_diplomatic_stance
+	hidden_effect = {
+		every_in_list = {
+			variable = frankfurt_parliament_gutter_king_added_claims
+			remove_claim = prev
+		}
+	}
+}
+
+imperia_frankfurt_parliament_spawn_rhineland = {
+	custom_tooltip = {
+		text = imperia_frankfurt_parliament_spawn_rhineland_tt
+		every_state = {
+			limit = {
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						has_variable = gutter_germany
+						any_overlord_or_above = {
+							OR = {
+								has_variable = accepted_gutter_crown
+								has_variable = gutter_germany
+							}
+						}
+					}
+				}
+				imperia_frankfurt_is_rhineland_state = yes
+			}
+			add_to_local_variable_list = {
+				name = rhine_states
+				target = this
+			}
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							is_target_in_local_variable_list = {
+								name = rhine_owners
+								target = this
+							}
+						}
+					}
+					add_to_local_variable_list = {
+						name = rhine_owners
+						target = this
+					}
+				}
+			}
+		}
+		ordered_in_local_list = {
+			variable = rhine_owners
+			limit = {
+				capital = {
+					is_target_in_local_variable_list = {
+						name = rhine_states
+						target = this
+					}
+				}
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = rhineland_originator
+		}
+		if = {
+			limit = {
+				exists = scope:rhineland_originator
+			}
+			scope:rhineland_originator = {
+				change_tag = RHE
+			}
+		}
+		every_in_local_list = {
+			variable = rhine_states
+			set_state_owner = c:RHE
+		}
+	}
+}
+
+imperia_frankfurt_parliament_spawn_south_german_federation = {
+	custom_tooltip = {
+		text = imperia_frankfurt_parliament_spawn_south_german_federation_tt
+		every_state = {
+			limit = {
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						has_variable = gutter_germany
+						any_overlord_or_above = {
+							OR = {
+								has_variable = accepted_gutter_crown
+								has_variable = gutter_germany
+							}
+						}
+					}
+				}
+				state_region = {
+					is_homeland = cu:south_german
+				}
+			}
+			add_to_local_variable_list = {
+				name = south_german_states
+				target = this
+			}
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							is_target_in_local_variable_list = {
+								name = south_german_owners
+								target = this
+							}
+						}
+					}
+					add_to_local_variable_list = {
+						name = south_german_owners
+						target = this
+					}
+				}
+			}
+		}
+		ordered_in_local_list = {
+			variable = south_german_owners
+			limit = {
+				capital = {
+					is_target_in_local_variable_list = {
+						name = south_german_states
+						target = this
+					}
+				}
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = south_german_originator
+		}
+		if = {
+			limit = {
+				exists = scope:south_german_originator
+			}
+			scope:south_german_originator = {
+				change_tag = SGF
+			}
+		}
+		every_in_local_list = {
+			variable = south_german_states
+			limit = {
+				owner != c:SGF
+			}
+			set_state_owner = c:SGF
+		}
+	}
+}
+
+imperia_frankfurt_parliament_grant_external_focus_claims = {
+	# Grants claims to all states which would permit the [HRE/United States of Europe] formation
+	# At least under the plausible nation formation rule
+	every_state_region = {
+		limit = {
+			OR = {
+				is_homeland = cu:north_german
+				is_homeland = cu:south_german
+				is_homeland = cu:alemannic
+				is_homeland = cu:czech
+				is_homeland = cu:dutch
+				is_homeland = cu:flemish
+				is_homeland = cu:wallonian
+				is_homeland = cu:north_italian
+				is_homeland = cu:slovene
+			}
+			NOT = {
+				any_scope_state = {
+					has_claim_by = root
+				}
+			}
+		}
+		add_claim = root
+	}
+}
+
+imperia_frankfurt_parliament_update_german_form_ai_willingness = {
+	set_variable = {
+		name = lesser_germany_ai_willingness
+		value = imperia_frankfurt_parliament_lesser_germany_ai_willingness_value
+	}
+	set_variable = {
+		name = greater_germany_ai_willingness
+		value = imperia_frankfurt_parliament_greater_germany_ai_willingness_value
+	}
+	set_variable = {
+		name = greater_austria_ai_willingness
+		value = imperia_frankfurt_parliament_greater_austria_ai_willingness_value
+	}
+}
+
+imperia_frankfurt_parliament_update_club_influence = {
+	# scope : country
+	# Left faction = Deutcher Hof; radical democrats
+	set_variable = {
+		name = frankfurt_parliament_left_faction_influence
+		value = 0
+	}
+	# Centre faction = Casino; federal monarchist; should be the largest one
+	set_variable = {
+		name = frankfurt_parliament_center_faction_influence
+		value = 0
+	}
+	# Right faction = Steinernes Haus; absolute monarchy
+	set_variable = {
+		name = frankfurt_parliament_right_faction_influence
+		value = 0
+	}
+	every_interest_group = {
+		root = {
+			change_variable = {
+				name = frankfurt_parliament_left_faction_influence
+				add = prev.imperia_frankfurt_parliament_left_faction_interest_group_influence
+			}
+			change_variable = {
+				name = frankfurt_parliament_center_faction_influence
+				add = prev.imperia_frankfurt_parliament_center_faction_interest_group_influence
+			}
+			change_variable = {
+				name = frankfurt_parliament_right_faction_influence
+				add = prev.imperia_frankfurt_parliament_right_faction_interest_group_influence
+			}
+		}
+		leader = {
+			root = {
+				change_variable = {
+					name = frankfurt_parliament_left_faction_influence
+					add = prev.imperia_frankfurt_parliament_left_faction_leader_influence
+				}
+				change_variable = {
+					name = frankfurt_parliament_center_faction_influence
+					add = prev.imperia_frankfurt_parliament_center_faction_leader_influence
+				}
+				change_variable = {
+					name = frankfurt_parliament_right_faction_influence
+					add = prev.imperia_frankfurt_parliament_right_faction_leader_influence
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			multiply = var:frankfurt_parliament_left_club_boost
+		}
+	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_center_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			multiply = var:frankfurt_parliament_center_club_boost
+		}
+	}
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_right_club_boost
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_faction_influence
+			multiply = var:frankfurt_parliament_right_club_boost
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_left_faction_influence
+		nearest = 1
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_faction_influence
+		nearest = 1
+	}
+	round_variable = {
+		name = frankfurt_parliament_right_faction_influence
+		nearest = 1
+	}
+}
+
+imperia_frankfurt_parliament_BOOST_club = {
+	# scope : country being boosted
+	# root : player country
+	# If the player is left leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is centre leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_center_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_center_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			multiply = {
+				value = 1
+				add = $BOOST$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+}
+
+imperia_frankfurt_parliament_SABOTAGE_club = {
+	# scope : country being sabotaged
+	# root : player country
+	# If the player is left leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = var:frankfurt_parliament_left_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_left_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = var:frankfurt_parliament_right_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_right_club_boost
+					divide = {
+						value = 1
+						add = $SABOTAGE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			divide = {
+				value = 1
+				add = $SABOTAGE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
+	# scope : country being influenced
+	# root : player country
+	# If the player is left leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = var:frankfurt_parliament_left_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_left_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is right leaning
+	if = {
+		limit = {
+			root = {
+				has_variable = frankfurt_parliament_supports_right_club
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			add = {
+				value = var:frankfurt_parliament_right_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_right_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
+	# scope : country being influenced
+	# root : player country
+	# Pop this section if LEFT = 1; meaning its trying to influence the left
+	if = {
+		limit = {
+			$LEFT$ = 1
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_club_boost
+			add = {
+				value = var:frankfurt_parliament_center_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_center_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_left_club_boost
+			nearest = 0.01
+		}
+	}
+	# If the player is "borrowing" from the right
+	if = {
+		limit = {
+			$LEFT$ = 0
+		}
+		change_variable = {
+			name = frankfurt_parliament_right_club_boost
+			add = {
+				value = var:frankfurt_parliament_center_club_boost
+				subtract = {
+					value = var:frankfurt_parliament_center_club_boost
+					divide = {
+						value = 1
+						add = $INFLUENCE$
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_center_club_boost
+			divide = {
+				value = 1
+				add = $INFLUENCE$
+			}
+		}
+		round_variable = {
+			name = frankfurt_parliament_right_club_boost
+			nearest = 0.01
+		}
+	}
+	round_variable = {
+		name = frankfurt_parliament_center_club_boost
+		nearest = 0.01
+	}
+}
+
+imperia_frankfurt_parliament_initialise_club_variables = {
+	set_variable = {
+		name = frankfurt_parliament_left_club_boost
+		value = 1
+	}
+	set_variable = {
+		name = frankfurt_parliament_center_club_boost
+		value = 1
+	}
+	set_variable = {
+		name = frankfurt_parliament_right_club_boost
+		value = 1
+	}
+}
+
+imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+	# scope : random country being influenced
+	# CLUB: 1 = left; 2 = center; 3 = right
+	# BOOST: 1 = small; 2 = medium; 3 = big
+	switch = {
+		trigger = $CLUB$
+		1 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_left_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_left_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_left_support_by_big_boost
+				}
+			}
+		}
+		2 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_center_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_center_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_center_support_by_big_boost
+				}
+			}
+		}
+		3 = {
+			switch = {
+				trigger = $BOOST$
+				1 = {
+					custom_label = will_increase_right_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_increase_right_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_increase_right_support_by_big_boost
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+	# scope : random country being influenced
+	# CLUB: 1 = left; 2 = center; 3 = right
+	# SABOTAGE: 1 = small; 2 = medium; 3 = big
+	switch = {
+		trigger = $CLUB$
+		1 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_left_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_left_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_left_support_by_big_boost
+				}
+			}
+		}
+		2 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_center_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_center_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_center_support_by_big_boost
+				}
+			}
+		}
+		3 = {
+			switch = {
+				trigger = $SABOTAGE$
+				1 = {
+					custom_label = will_decrease_right_support_by_small_boost
+				}
+				2 = {
+					custom_label = will_decrease_right_support_by_medium_boost
+				}
+				3 = {
+					custom_label = will_decrease_right_support_by_big_boost
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_consolidate_gutter_king = {
+	# GUTTER_KING : gutter king
+	$GUTTER_KING$ = {
+		if = {
+			limit = {
+				is_subject = yes
+			}
+			make_independent = yes
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+				exists = c:AUS
+				OR = {
+					c:AUS = $GUTTER_KING$
+					c:AUS = {
+						is_subject_of = $GUTTER_KING$
+					}
+				}
+			}
+			imperia_frankfurt_parliament_shatter_austria = yes
+		}
+		if = {
+			limit = {
+				country_has_primary_culture = cu:north_german
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
+					}
+				}
+				imperia_frankfurt_parliament_spawn_south_german_federation = yes
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_consolidates_tt
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:north_german
+					}
+					$GUTTER_KING$ = {
+						annex = prev
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				country_has_primary_culture = cu:south_german
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
+						has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
+					}
+				}
+				imperia_frankfurt_parliament_spawn_rhineland = yes
+			}
+			custom_tooltip = {
+				text = frankfurt_germany_consolidates_tt
+				every_subject_or_below = {
+					limit = {
+						country_has_primary_culture = cu:south_german
+					}
+					$GUTTER_KING$ = {
+						annex = prev
+					}
+				}
+			}
+		}
+		add_modifier = {
+			name = crown_from_the_gutter
+			years = 20
+			is_decaying = yes
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+				has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+			}
+			add_modifier = {
+				name = radical_republican_germany
+				years = 15
+				is_decaying = yes
+			}
+		}
+		change_tag = GER
+		# Sets the flag to be the Black-Red-Gold
+		# Should NOT be cleaned
+		set_variable = gutter_germany
+		hidden_effect = {
+			every_state_region = {
+				# And just in case someone dipped from the parliament JE, or wasnt invited due to having a proper overlord
+				# Add a claim on them. Only for states in the gutter german definition
+				limit = {
+					any_scope_state = {
+						frankfurt_parliament_state_is_gutter_german = yes
+						NOT = {
+							has_claim_by = $GUTTER_KING$
+						}
+					}
+				}
+				add_claim = $GUTTER_KING$
+			}
+		}
+		if = {
+			limit = {
+				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
+			}
+			custom_tooltip = {
+				text = imperia_frankfurt_parliament_grant_external_focus_claims_tt
+				imperia_frankfurt_parliament_grant_external_focus_claims = yes
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_update_gutter_minor_promises = {
+	hidden_effect = {
+		if = {
+			limit = {
+				has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				has_global_variable = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+			}
+			every_country = {
+				limit = {
+					OR = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				remove_modifier ?= gutter_minor_promises
+				if = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+					add_modifier = {
+						name = gutter_minor_promises
+						multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+					}
+				}
+				else_if = {
+					limit = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+					add_modifier = {
+						name = gutter_minor_promises
+						multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+					}
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_update_gutter_minor_promises_variables = {
+	set_global_variable = {
+		name = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+		value = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes
+	}
+	set_global_variable = {
+		name = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+		value = imperia_frankfurt_parliament_german_major_authority_spent_on_princes
+	}
+}
+
+imperia_frankfurt_parliament_final_set_gutter_minor_promises = {
+	hidden_effect = {
+		remove_modifier ?= gutter_minor_promises
+		if = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+				has_global_variable = imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				has_global_variable = imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+			}
+			add_modifier = {
+				name = gutter_minor_promises
+				multiplier = global_var:imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes_var
+				years = 10
+				is_decaying = yes
+			}
+		}
+		else_if = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+			add_modifier = {
+				name = gutter_minor_promises
+				multiplier = global_var:imperia_frankfurt_parliament_german_major_authority_spent_on_princes_var
+				years = 10
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_sway_TARGET_to_SWAYER = {
+	if = {
+		limit = {
+			$SWAYER$ = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+			}
+		}
+		$TARGET$ = {
+			if = {
+				limit = {
+					has_modifier = gutter_king_solid_sway
+				}
+				remove_modifier ?= gutter_king_solid_sway
+				add_modifier = {
+					name = gutter_king_complete_sway
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = german_major_solid_sway
+				}
+				remove_modifier ?= german_major_solid_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					hidden_effect = {
+						make_independent = yes
+					}
+				}
+				root = {
+					create_diplomatic_pact = {
+						country = prev
+						type = dominion
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = german_major_complete_sway
+				}
+				remove_modifier ?= german_major_complete_sway
+				add_modifier = {
+					name = german_major_solid_sway
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			$SWAYER$ = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		$TARGET$ = {
+			if = {
+				limit = {
+					has_modifier = german_major_solid_sway
+				}
+				remove_modifier ?= german_major_solid_sway
+				add_modifier = {
+					name = german_major_complete_sway
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = gutter_king_solid_sway
+				}
+				remove_modifier ?= gutter_king_solid_sway
+				add_modifier = {
+					name = german_major_solid_sway
+				}
+				if = {
+					limit = {
+						has_variable = frankfurt_parliament_original_overlord
+					}
+					hidden_effect = {
+						make_independent = yes
+					}
+					var:frankfurt_parliament_original_overlord = {
+						create_diplomatic_pact = {
+							country = prev
+							type = customs_union
+						}
+					}
+				}
+				else = {
+					hidden_effect = {
+						make_independent = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = gutter_king_complete_sway
+				}
+				remove_modifier ?= gutter_king_complete_sway
+				add_modifier = {
+					name = gutter_king_solid_sway
+				}
+			}
+		}
+	}
+	set_variable = {
+		name = je_frankfurt_minor_recently_swayed
+		days = 42
+	}
+}
