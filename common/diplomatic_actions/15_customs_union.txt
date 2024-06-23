@@ -122,77 +122,7 @@
 		relations_progress_per_day = 1		# At 100, +1 relations
 		relations_improvement_max = 80
 		subject_type = subject_type_customs_union		# A customs union is technically a type of subject, though it isn't presented this way in-game
-		weekly_effect = {
-			scope:target_country = {
-				remove_modifier ?= modifier_customs_union_payments_negative
-				add_modifier = {
-					name = modifier_customs_union_payments_negative
-					multiplier = scope:target_country.imperia_weekly_customs_union_minting_cost
-				}
-			}
-			if = {
-				limit = {
-					has_variable = total_customs_union_payment_positive
-				}
-				if = {
-					limit = {
-						scope:target_country = {
-							has_variable = previous_minting_cost
-						}
-					}
-					change_variable = {
-						name = total_customs_union_payment_positive
-						add = {
-							subtract = scope:target_country.var:previous_minting_cost
-							add = scope:target_country.imperia_weekly_customs_union_minting_cost
-						}
-					}
-				}
-				else = {
-					change_variable = {
-						name = total_customs_union_payment_positive
-						add = scope:target_country.imperia_weekly_customs_union_minting_cost
-					}
-				}
-			}
-			else = {
-				if = {
-					limit = {
-						scope:target_country = {
-							has_variable = previous_minting_cost
-						}
-					}
-					set_variable = {
-						name = total_customs_union_payment_positive
-						value = {
-							add = {
-								subtract = scope:target_country.var:previous_minting_cost
-								add = scope:target_country.imperia_weekly_customs_union_minting_cost
-							}
-						}
-					}
-				}
-				else = {
-					set_variable = {
-						name = total_customs_union_payment_positive
-						value = scope:target_country.imperia_weekly_customs_union_minting_cost
-					}
-				}
-			}
-			scope:target_country = {
-				set_variable = {
-					name = previous_minting_cost
-					value = scope:target_country.imperia_weekly_customs_union_minting_cost
-				}
-			}
-			remove_modifier ?= modifier_customs_union_payments_positive
-			add_modifier = {
-				name = modifier_customs_union_payments_positive
-				multiplier = {
-					subtract = root.var:total_customs_union_payment_positive
-				}
-			}
-		}
+
 		requirement_to_maintain = {
 			trigger = {
 				OR = {
@@ -299,28 +229,6 @@
 			}
 			# AI may not take leaving their customs union well...
 			hidden_effect = {
-				remove_modifier ?= modifier_customs_union_payments_positive
-				change_variable = {
-					name = total_customs_union_payment_positive
-					subtract = scope:target_country.imperia_weekly_customs_union_minting_cost
-				}
-				# if high enough assume that there are still other countries with a customs union.
-				if = {
-					limit = {
-						var:total_customs_union_payment_positive > 100
-					}
-					add_modifier = {
-						name = modifier_customs_union_payments_positive
-						multiplier = {
-							subtract = root.var:total_customs_union_payment_positive
-						}
-					}
-				}
-				scope:target_country = {
-					remove_modifier ?= modifier_customs_union_payments_negative
-					remove_variable = previous_minting_cost
-				}
-				# AI may not take leaving their customs union well...
 				if = {
 					limit = {
 						scope:target_country.country_rank > root.country_rank
