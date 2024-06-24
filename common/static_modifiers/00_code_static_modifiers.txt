@@ -32,7 +32,10 @@ base_values = {
 
 	state_education_access_wealth_add = 0.005
 	
+	country_law_enactment_max_setbacks_add = 3
+	
 	country_minting_add = 500
+	country_government_dividends_efficiency_add = 0.25
 
 	state_tax_capacity_add = 100
 	state_infrastructure_add = 3
@@ -45,8 +48,9 @@ base_values = {
 	
 	state_farmers_investment_pool_contribution_add = 0.05
 	state_shopkeepers_investment_pool_contribution_add = 0.05
-	state_aristocrats_investment_pool_contribution_add = 0.10
-	state_capitalists_investment_pool_contribution_add = 0.20
+	state_clergymen_investment_pool_contribution_add = 0.20
+	state_aristocrats_investment_pool_contribution_add = 0.20
+	state_capitalists_investment_pool_contribution_add = 0.30
 	
 	# To balance for unincorporated states not paying taxes
 	state_unincorporated_starting_wages_mult = -0.20
@@ -72,6 +76,10 @@ base_values = {
 	state_urbanization_per_level_add = 100
 	
 	unit_experience_gain_add = 1.0
+	
+	# Changing this value currently does nothing as the logic is contained in a static modifier below 
+	# It just needs to be above 0 to ensure the mechanic is activated at all
+	country_leverage_resistance_per_population_add = 1 
 }
 
 # Scales with a country's global prestige rank, so at 20/100 this is multiplied by 0.8x, 50/100 by 0.5x, etc
@@ -156,6 +164,10 @@ commander_battle_end_loss = {
 	character_popularity_add = 1	# scaled by a negative define
 }
 
+opposition_agitator_popularity = {
+	character_popularity_add = 1
+}
+
 in_default = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_throughput_add = -0.75
@@ -187,6 +199,21 @@ unincorporated_state = {
 	building_group_bg_government_throughput_add = -0.1
 	building_group_bg_military_throughput_add = -0.1		
 	state_market_access_price_impact = -0.1
+}
+
+recently_conquered_state = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
+	building_nationalization_cost_mult = -0.50
+	building_nationalization_radicals_mult = -0.50
+	state_pop_pol_str_mult = -0.50
+	state_tax_collection_mult = -0.50
+	state_conscription_rate_mult = -0.50
+}
+
+recently_liberated_state = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	building_nationalization_cost_mult = -0.75
+	building_nationalization_radicals_mult = -0.75
 }
 
 market_capital_state = {
@@ -229,15 +256,15 @@ tax_modifier_medium = {
 
 tax_modifier_high = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
-	country_legitimacy_base_add = -5
-	state_radicals_from_sol_change_mult = 0.25
+	country_legitimacy_base_add = -10
+	state_radicals_from_sol_change_mult = 0.5
 	interest_group_in_government_attraction_mult = -0.1
 }	
 
 tax_modifier_very_high = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
-	country_legitimacy_base_add = -10
-	state_radicals_from_sol_change_mult = 0.5
+	country_legitimacy_base_add = -20
+	state_radicals_from_sol_change_mult = 1.0
 	interest_group_in_government_attraction_mult = -0.2
 }	
 
@@ -389,10 +416,11 @@ efficient_bureaucracy = {
 	state_construction_mult = 0.10
 }
 
-# Insufficient BUR reduces tax collected by 100% at 2x usage to production
+# Insufficient BUR reduces tax & government dividends collected by 100% at 2x usage to production
 administrative_overburden = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_tax_waste_add = 1
+	country_government_dividends_waste_add = 1
 }
 
 # Excess AUT reduces enactment time by -25% at 2x production to usage
@@ -406,7 +434,6 @@ political_dysfunction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_opposition_ig_approval_add = -10
 	state_radicals_from_sol_change_mult = 0.20
-	interest_group_in_government_attraction_mult = -1
 }
 
 # Excess DIP increases Infamy decay by up to 25% at 2x production to usage
@@ -414,7 +441,15 @@ political_dysfunction = {
 # Imperia RP: Changed to 15% reduction (Fallonar v1.3)
 diplomatic_mitigation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_leverage_generation_mult = 0.25
 	country_infamy_decay_mult = 0.15
+}
+
+# Scales with country population / COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_DIVISOR
+# Capped at COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_MAX_MULTIPLIER
+country_leverage_resistance_per_population_add = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_leverage_resistance_add = 50
 }
 
 # Insufficient DIP reduces prestige by up to 50% at 2x usage to production
@@ -603,6 +638,12 @@ state_turmoil_extreme = {
 	state_construction_mult = -0.15
 }
 
+# Scales by the amount of debt owed to government owned buildings (ie; government self owned debt)
+government_owned_debt = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_government_dividends_waste_add = 1
+}
+
 # Scales with country GDP / COUNTRY_GDP_MODIFIER_DIVISOR
 # Capped at COUNTRY_GDP_MODIFIER_MAX_MULTIPLIER
 country_gdp = {
@@ -657,12 +698,13 @@ battle_naval_invasion_landing_penalty = {
 country_humiliated = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.25
+	country_leverage_generation_mult = -0.50
 }
 
 country_cut_down_to_size = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.5
-	country_disallow_aggressive_plays = yes
+	country_disallow_aggressive_plays_bool = yes
 }
 
 forced_market_opening = {
@@ -722,9 +764,14 @@ formation_attrition_at_home_hq = {
 	military_formation_attrition_risk_mult = -0.5
 }
 
+# This is multiplied with country_authority_per_subject_add and the number of direct subjects of the country
+country_authority_per_subject = {
+	country_authority_add = 1.0
+}
+
 supported_law_cancelled = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
-	political_movement_radicalism_add = 30
+	political_movement_radicalism_add = 10
 }
 
 # Scaled by building_mobilization_cost_mult
@@ -743,4 +790,55 @@ forced_regime_change = {
 	interest_group_in_government_approval_add = 5
 	country_legitimacy_base_add = 25
 	country_prestige_mult = -0.25
+}
+
+cohesion_from_members = {
+	# scaled by power_bloc_cohesion_per_member_add on the Identity * number of non-leader, non-subject members
+	power_bloc_cohesion_add = 1
+}
+
+weak_power_bloc = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	power_bloc_cohesion_mult = -0.5
+}
+
+power_bloc_no_primary_principles = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	power_bloc_cohesion_mult = -0.5
+}
+
+power_bloc_primary_principles_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 10
+}
+
+foreign_legislative_interference = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_cannot_start_law_enactment_bool = yes
+}
+
+foreign_legislative_interference_enactment = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_cannot_cancel_law_enactment_bool = yes
+}
+
+impose_law_cooldown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_cannot_be_target_for_law_imposition_bool = yes
+}
+
+# Should be scaled to the level desired when added
+installed_regime = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_imposition_success_add = 1
+}
+
+agreeable_to_imposition = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.1
+}
+
+successfully_met_foreign_imposition_legitimacy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 10
 }
