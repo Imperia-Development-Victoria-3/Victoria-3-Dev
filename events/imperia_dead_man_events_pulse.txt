@@ -1,0 +1,2960 @@
+﻿namespace = dead_man_pulse
+# UNIVERSITY PROTESTS
+dead_man_pulse.1 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.1.t
+	desc = dead_man_pulse.1.d
+	flavor = dead_man_pulse.1.f
+	duration = 3
+	event_image = {
+		video = "middleeast_courtroom_upheaval"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_uni
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_uni
+	}
+	option = {
+		name = dead_man_pulse.1.a
+		default_option = yes
+		custom_tooltip = {
+			text = communist_progress_increase_tick_03_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.3
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_modifier = {
+			name = dead_man_uni_comm
+			months = normal_modifier_time
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+	}
+	option = {
+		name = dead_man_pulse.1.b
+		custom_tooltip = {
+			text = republican_progress_increase_10_tt
+			change_variable = {
+				name = republican_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		add_modifier = {
+			name = dead_man_uni_rep
+			months = short_modifier_time
+		}
+		add_radicals = {
+			pop_type = academics
+			value = very_large_radicals
+		}
+		add_radicals = {
+			pop_type = clergymen
+			value = large_radicals
+		}
+	}
+	option = {
+		name = dead_man_pulse.1.c
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		add_modifier = {
+			name = dead_man_uni_theo
+			months = short_modifier_time
+		}
+		add_radicals = {
+			pop_type = academics
+			value = very_large_radicals
+		}
+		add_radicals = {
+			pop_type = bureaucrats
+			value = large_radicals
+		}
+	}
+}
+
+# MILITARY SUPPORTS COUP
+dead_man_pulse.2 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.2.t
+	desc = dead_man_pulse.2.d
+	flavor = dead_man_pulse.2.f
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/bicorne_hat.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_mil
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_mil
+	}
+	option = {
+		name = dead_man_pulse.2.a
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = {
+				name = communist_progress
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						is_communist_supporter = yes
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_vanguardist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+		add_modifier = {
+			name = dead_man_mil_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.2.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						is_republican_supporter = yes
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_republican_leader
+			}
+		}
+		add_modifier = {
+			name = dead_man_mil_rep
+			months = short_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.2.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_armed_forces.leader = {
+					NOT = {
+						is_theocracy_supporter = yes
+					}
+				}
+			}
+			ig:ig_armed_forces.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		add_modifier = {
+			name = dead_man_mil_theo
+			months = normal_modifier_time
+		}
+		add_loyalists = {
+			pop_type = officers
+			value = large_radicals
+		}
+	}
+}
+
+# BALKAN NATIONALISTS DEMAND INDEPENDENCE
+dead_man_pulse.3 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.3.t
+	desc = dead_man_pulse.3.d
+	flavor = dead_man_pulse.3.f
+	duration = 3
+	event_image = {
+		video = "votp_agitator_speaking"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_balk
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_balk
+	}
+	option = {
+		name = dead_man_pulse.3.a		#We Promise to Free the Balkans
+		custom_tooltip = {
+			text = communist_progress_increase_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_25_tt
+			change_variable = {
+				name = communist_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_15_tt
+			change_variable = {
+				name = republican_progress
+				add = 15
+			}
+		}
+		add_modifier = {
+			name = dead_man_balk_comm
+			months = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:greek
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bulgarian
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:serb
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:croat
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:romanian
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:slovak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		set_variable = dead_man_pulse_balk_comm
+	}
+	option = {
+		name = dead_man_pulse.3.b
+		highlighted_option = yes
+		trigger = {
+			AND = {
+				has_law = law_type:law_total_separation
+				OR = {
+					has_law = law_type:law_cultural_exclusion
+					has_law = law_type:law_multicultural
+				}
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = {
+				name = communist_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_40_tt
+			change_variable = {
+				name = republican_progress
+				add = 40
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:bulgarian
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:serb
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:croat
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balk_rep
+			months = long_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.3.c
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:romanian
+		}
+		add_modifier = {
+			name = dead_man_balk_theo
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# TURKISH NATIONALISM
+dead_man_pulse.4 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.4.t
+	desc = dead_man_pulse.4.d
+	flavor = dead_man_pulse.4.f
+	duration = 3
+	event_image = {
+		video = "votp_cops_march"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_turk
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_turk
+	}
+	option = {
+		name = dead_man_pulse.4.a
+		custom_tooltip = {
+			text = communist_progress_increase_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:turkish
+		}
+	}
+	option = {
+		name = dead_man_pulse.4.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_10_tt
+			change_variable = {
+				name = republican_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_loyalists = {
+			value = 0.2
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:romanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:misri
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bedouin
+		}
+		add_modifier = {
+			name = dead_man_turk_rep
+			months = long_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.4.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		add_loyalists = {
+			value = 0.15
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:misri
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:bedouin
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:romanian
+		}
+	}
+}
+
+# KURDISH SUPPORT; FLESH OUT WITH KURD UPDATE
+dead_man_pulse.5 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.5.t
+	desc = dead_man_pulse.5.d
+	flavor = dead_man_pulse.5.f
+	duration = 3
+	event_image = {
+		video = "africa_soldiers_breaking_protest"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_kurd
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_kurd
+	}
+	option = {
+		name = dead_man_pulse.5.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_25_tt
+			change_variable = {
+				name = communist_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		c:KUR ?= {
+			add_modifier = {
+				name = dead_man_kurd_bonus
+				years = 3
+			}
+		}
+		add_modifier = {
+			name = dead_man_kurd_cost
+			years = 3
+		}
+	}
+	option = {
+		name = dead_man_pulse.5.b
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_20_tt
+			change_variable = {
+				name = communist_progress
+				add = -20
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_20_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -20
+			}
+		}
+		c:KUR ?= {
+			add_modifier = {
+				name = dead_man_kurd_bonus
+				years = 3
+			}
+		}
+		add_modifier = {
+			name = dead_man_kurd_cost
+			years = 3
+		}
+	}
+	option = {
+		name = dead_man_pulse.5.c
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		c:KUR ?= {
+			add_modifier = {
+				name = dead_man_kurd_bonus
+				years = 3
+			}
+		}
+		add_modifier = {
+			name = dead_man_kurd_cost
+			years = 3
+		}
+	}
+}
+
+# EGYPTIAN INTERFERENCE; FLESH OUT WITH EGYPT UPDATE
+dead_man_pulse.6 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.6.t
+	desc = dead_man_pulse.6.d
+	flavor = dead_man_pulse.6.f
+	duration = 3
+	event_image = {
+		video = "middleeast_upperclass_party"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_egypt
+		}
+		has_law = law_type:law_monarchy
+		exists = c:EGY
+		c:EGY = {
+			is_subject = no
+		}
+	}
+	immediate = {
+		set_variable = dead_man_pulse_egypt
+	}
+	option = {
+		name = dead_man_pulse.6.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -20
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+				name = dead_man_egypt_loss
+				months = normal_modifier_time
+			}
+		}
+		add_modifier = {
+			name = dead_man_egypt_comm
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = -60
+		}
+	}
+	option = {
+		name = dead_man_pulse.6.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_decrease_25_tt
+			change_variable = {
+				name = republican_progress
+				add = -25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_20_tt
+			change_variable = {
+				name = communist_progress
+				add = -20
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+				name = dead_man_egypt_bonus
+				months = normal_modifier_time
+			}
+		}
+		add_modifier = {
+			name = dead_man_egypt_rep
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = -15
+		}
+	}
+	option = {
+		name = dead_man_pulse.6.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		c:EGY ?= {
+			add_modifier = {
+				name = dead_man_egypt_bonus
+				months = normal_modifier_time
+			}
+		}
+		add_modifier = {
+			name = dead_man_egypt_theo
+			months = normal_modifier_time
+		}
+		change_relations ?= {
+			country = c:EGY
+			value = 30
+		}
+	}
+}
+
+# FUNDAMENTALIST POGROMS AGAINST MINORITIES
+dead_man_pulse.7 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.7.t
+	desc = dead_man_pulse.7.d
+	flavor = dead_man_pulse.7.f
+	duration = 3
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_pogrom
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_pogrom
+	}
+	option = {
+		name = dead_man_pulse.7.a
+		custom_tooltip = {
+			text = communist_progress_increase_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:misri
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:bedouin
+		}
+		add_modifier = {
+			name = dead_man_pogrom_comm
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.7.b
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_10_tt
+			change_variable = {
+				name = communist_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:misri
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bedouin
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.1
+			culture = cu:armenian
+		}
+		add_modifier = {
+			name = dead_man_pogrom_rep
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.7.c
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:misri
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:bedouin
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:armenian
+		}
+		add_modifier = {
+			name = dead_man_pogrom_theo
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.7.e
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_inquisition
+				has_law = law_type:law_faith_orders
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_2_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:misri
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:bedouin
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:bulgarian
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:greek
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:albanian
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:serb
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:bosniak
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:croat
+		}
+		add_radicals = {
+			value = 0.15
+			culture = cu:armenian
+		}
+		add_modifier = {
+			name = dead_man_pogrom_theo_inquisition
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# FEMINIST PROTESTS
+dead_man_pulse.8 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.8.t
+	desc = dead_man_pulse.8.d
+	flavor = dead_man_pulse.8.f
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_sufferage"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_fem
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_fem
+	}
+	option = {
+		name = dead_man_pulse.8.a
+		custom_tooltip = {
+			text = communist_progress_increase_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = {
+				name = communist_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:misri
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_radicals = {
+			value = 0.05
+			culture = cu:bedouin
+		}
+		add_modifier = {
+			name = dead_man_fem_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.8.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_5_tt
+			change_variable = {
+				name = republican_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_10_tt
+			change_variable = {
+				name = communist_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_modifier = {
+			name = dead_man_fem_rep
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.8.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:misri
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:bedouin
+		}
+		add_modifier = {
+			name = dead_man_fem_theo
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.8.e
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_women_in_the_workplace
+				has_law = law_type:law_womens_suffrage
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -25
+			}
+		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:turkish
+		}
+		add_modifier = {
+			name = dead_man_fem_comm_law
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# THE SULTAN QUESTION
+dead_man_pulse.9 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.9.t
+	desc = dead_man_pulse.9.d
+	flavor = dead_man_pulse.9.f
+	duration = 3
+	event_image = {
+		video = "votp_monarch_holding_court"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	trigger = {
+		NOT = {
+			has_variable = dead_man_pulse_sultan
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_sultan
+	}
+	option = {
+		name = dead_man_pulse.9.a
+		custom_tooltip = {
+			text = communist_progress_increase_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_15_tt
+			change_variable = {
+				name = republican_progress
+				add = 15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 10
+			}
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = aristocrats
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = officers
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = 0.05
+			pop_type = bureaucrats
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = laborers
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_modifier = {
+			name = dead_man_sultan_comm
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.9.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_10_tt
+			change_variable = {
+				name = republican_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = aristocrats
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = 0.15
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = 0.15
+			pop_type = bureaucrats
+		}
+		add_loyalists = {
+			value = 0.05
+			pop_type = laborers
+		}
+		add_modifier = {
+			name = dead_man_sultan_rep
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.9.c
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_10_tt
+			change_variable = {
+				name = communist_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		add_loyalists = {
+			value = 0.15
+			pop_type = aristocrats
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = 0.05
+			pop_type = officers
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = laborers
+		}
+		add_modifier = {
+			name = dead_man_sultan_theo
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.9.g
+		highlighted_option = yes
+		trigger = {
+			has_law = law_type:law_secret_police
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_10_tt
+			change_variable = {
+				name = communist_progress
+				add = 10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_5_tt
+			change_variable = {
+				name = republican_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_petty_bourgeoisie.leader = {
+					NOT = {
+						is_communist_supporter = yes
+					}
+				}
+			}
+			ig:ig_petty_bourgeoisie.leader = {
+				set_ideology = ideology:ideology_vanguardist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+		add_modifier = {
+			name = dead_man_sultan_comm_secret
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.9.h
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_landed_voting
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_universal_suffrage
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_2_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_5_tt
+			change_variable = {
+				name = republican_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		if = {
+			limit = {
+				ig:ig_industrialists.leader = {
+					NOT = {
+						is_republican_supporter = yes
+					}
+				}
+			}
+			ig:ig_industrialists.leader = {
+				set_ideology = ideology:ideology_republican_leader
+			}
+		}
+		add_modifier = {
+			name = dead_man_sultan_rep_vote
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.9.i
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_inquisition
+				has_law = law_type:law_empowered_gendarmerie
+				has_law = law_type:law_militarized_police
+			}
+			NOT = {
+				has_law = law_type:law_total_separation
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_5_tt
+			change_variable = {
+				name = republican_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_2_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_10_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -10
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = aristocrats
+		}
+		add_loyalists = {
+			value = 0.2
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = officers
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = laborers
+		}
+		if = {
+			limit = {
+				ig:ig_landowners.leader = {
+					NOT = {
+						is_theocracy_supporter = yes
+					}
+				}
+			}
+			ig:ig_landowners.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		add_modifier = {
+			name = dead_man_sultan_theo_inq
+			months = normal_modifier_time
+		}
+	}
+}
+
+# SOCIALIST MANIFESTO
+dead_man_pulse.10 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.10.t
+	desc = dead_man_pulse.10.d
+	flavor = dead_man_pulse.10.f
+	duration = 3
+	event_image = {
+		video = "votp_prison"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_manifesto
+			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_manifesto
+	}
+	option = {
+		name = dead_man_pulse.10.a
+		default_option = yes
+		custom_tooltip = {
+			text = communist_progress_increase_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_25_tt
+			change_variable = {
+				name = communist_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = laborers
+		}
+		if = {
+			limit = {
+				ig:ig_rural_folk.leader = {
+					NOT = {
+						is_communist_supporter = yes
+					}
+				}
+			}
+			ig:ig_rural_folk.leader = {
+				set_ideology = ideology:ideology_anarchist
+				add_modifier = {
+					name = dead_man_revolutionary
+				}
+			}
+		}
+		add_modifier = {
+			name = dead_man_manifesto_comm
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.10.b
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = laborers
+		}
+		add_modifier = {
+			name = dead_man_manifesto_rep
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.10.c
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = laborers
+		}
+		add_modifier = {
+			name = dead_man_manifesto_theo
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.10.e
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_censorship
+				has_law = law_type:law_outlawed_dissent
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_40_tt
+			change_variable = {
+				name = communist_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_modifier = {
+			name = dead_man_manifesto_censor
+			months = normal_modifier_time
+		}
+	}
+}
+
+# FOREIGN REPUBLICANS SUPPORT
+dead_man_pulse.11 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.11.t
+	desc = dead_man_pulse.11.d
+	flavor = dead_man_pulse.11.f
+	duration = 3
+	event_image = {
+		video = "middleeast_middleclass_cafe"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_manifesto
+			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_republican
+	}
+	option = {
+		name = dead_man_pulse.11.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.b
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_increase_tick_2_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_40_tt
+			change_variable = {
+				name = republican_progress
+				add = 40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -1
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = bureaucrats
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = capitalists
+		}
+		if = {
+			limit = {
+				ig:ig_industrialists.leader = {
+					NOT = {
+						is_republican_supporter = yes
+					}
+				}
+			}
+			ig:ig_industrialists.leader = {
+				set_ideology = ideology:ideology_market_liberal
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_rep
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.c
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_5_tt
+			change_variable = {
+				name = communist_progress
+				add = -5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_25_tt
+			change_variable = {
+				name = republican_progress
+				add = 25
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_theo
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.11.e
+		highlighted_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_isolationism
+				has_law = law_type:law_protectionism
+				has_law = law_type:law_closed_borders
+				has_law = law_type:law_migration_controls
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_40_tt
+			change_variable = {
+				name = republican_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_15_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -15
+			}
+		}
+		add_modifier = {
+			name = dead_man_republican_trade
+			months = normal_modifier_time
+		}
+	}
+}
+
+# ARABIC IMAMS PRAISE FUNDAMENTALISTS
+dead_man_pulse.12 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.12.t
+	desc = dead_man_pulse.12.d
+	flavor = dead_man_pulse.12.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_manifesto
+			has_variable = dead_man_pulse_republican
+			has_variable = dead_man_pulse_imam
+		}
+		has_law = law_type:law_monarchy
+	}
+	immediate = {
+		set_variable = dead_man_pulse_imam
+	}
+	option = {
+		name = dead_man_pulse.12.a
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 25
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_comm
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.b
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_1_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = communist_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_rep
+			months = normal_modifier_time
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.c
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_2_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 2
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 25
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_2_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -2
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_10_tt
+			change_variable = {
+				name = communist_progress
+				add = -10
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_5_tt
+			change_variable = {
+				name = republican_progress
+				add = -5
+			}
+		}
+		add_loyalists = {
+			value = 0.2
+			pop_type = clergymen
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = peasants
+		}
+		if = {
+			limit = {
+				ig:ig_rural_folk.leader = {
+					NOT = {
+						is_theocracy_supporter = yes
+					}
+				}
+			}
+			ig:ig_rural_folk.leader = {
+				set_ideology = ideology:ideology_theocrat
+			}
+		}
+		add_modifier = {
+			name = dead_man_imam_theo
+			months = long_modifier_time
+			is_decaying = yes
+		}
+	}
+	option = {
+		name = dead_man_pulse.12.e
+		highlighted_option = yes
+		trigger = {
+			has_law = law_type:law_total_separation
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_40_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_15_tt
+			change_variable = {
+				name = republican_progress
+				add = -15
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_10_tt
+			change_variable = {
+				name = republican_progress
+				add = -10
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = peasants
+		}
+		add_modifier = {
+			name = dead_man_imam_secular
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+#COMMUNIST PUSHBACK
+dead_man_pulse.13 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.13.t
+	desc = dead_man_pulse.13.d
+	flavor = dead_man_pulse.13.f
+	duration = 3
+	event_image = {
+		video = "votp_conspiring"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_pushback_comm
+			has_variable = dead_man_pulse_pushback_rep
+			has_variable = dead_man_pulse_pushback_theo
+		}
+		has_law = law_type:law_monarchy
+		dead_man_communists_winning = yes
+		var:communist_progress >= 300
+	}
+	immediate = {
+		set_variable = dead_man_pulse_pushback_comm
+	}
+	option = {
+		name = dead_man_pulse.13.a
+		default_option = yes
+		custom_tooltip = {
+			text = communist_progress_decrease_25_tt
+			change_variable = {
+				name = communist_progress
+				add = -25
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 0.5
+			}
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = aristocrats
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = shopkeepers
+		}
+	}
+	option = {
+		name = dead_man_pulse.13.b
+		custom_tooltip = {
+			text = communist_progress_decrease_40_tt
+			change_variable = {
+				name = communist_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_decrease_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_15_tt
+			change_variable = {
+				name = republican_progress
+				add = 15
+			}
+		}
+		add_modifier = {
+			name = dead_man_pushback_comm
+			months = normal_modifier_time
+		}
+		add_loyalists = {
+			pop_type = academics
+			value = 0.2
+		}
+		add_loyalists = {
+			pop_type = bureaucrats
+			value = 0.2
+		}
+		add_loyalists = {
+			pop_type = clerks
+			value = 0.15
+		}
+	}
+}
+
+#REPUBLICAN PUSHBACK
+dead_man_pulse.14 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.14.t
+	desc = dead_man_pulse.14.d
+	flavor = dead_man_pulse.14.f
+	duration = 3
+	event_image = {
+		video = "votp_realist_household"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_pushback_comm
+			has_variable = dead_man_pulse_pushback_rep
+			has_variable = dead_man_pulse_pushback_theo
+		}
+		has_law = law_type:law_monarchy
+		dead_man_republicans_winning = yes
+		var:republican_progress >= 300
+	}
+	immediate = {
+		set_variable = dead_man_pulse_pushback_rep
+	}
+	option = {
+		name = dead_man_pulse.14.a
+		default_option = yes
+		custom_tooltip = {
+			text = republican_progress_decrease_25_tt
+			change_variable = {
+				name = republican_progress
+				add = -25
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_05_tt
+			change_variable = {
+				name = communist_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 0.5
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = laborers
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = clergymen
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = shopkeepers
+		}
+	}
+	option = {
+		name = dead_man_pulse.14.b
+		custom_tooltip = {
+			text = republican_progress_decrease_40_tt
+			change_variable = {
+				name = republican_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_tick_1_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_5_tt
+			change_variable = {
+				name = communist_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_increase_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 5
+			}
+		}
+		add_modifier = {
+			name = dead_man_pushback_rep
+			months = normal_modifier_time
+		}
+		add_loyalists = {
+			pop_type = laborers
+			value = 0.1
+		}
+		add_loyalists = {
+			pop_type = clergymen
+			value = 0.15
+		}
+		add_loyalists = {
+			pop_type = engineers
+			value = 0.1
+		}
+		add_loyalists = {
+			pop_type = clerks
+			value = 0.1
+		}
+	}
+}
+
+#THEOCRACY PUSHBACK
+dead_man_pulse.15 = {
+	type = country_event
+	placement = ROOT
+	title = dead_man_pulse.15.t
+	desc = dead_man_pulse.15.d
+	flavor = dead_man_pulse.15.f
+	duration = 3
+	event_image = {
+		video = "votp_hostile_court"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+	trigger = {
+		NOR = {
+			has_variable = dead_man_pulse_pushback_comm
+			has_variable = dead_man_pulse_pushback_rep
+			has_variable = dead_man_pulse_pushback_theo
+		}
+		has_law = law_type:law_monarchy
+		dead_man_republicans_winning = yes
+		var:theocracy_progress >= 300
+	}
+	immediate = {
+		set_variable = dead_man_pulse_pushback_theo
+	}
+	option = {
+		name = dead_man_pulse.15.a
+		default_option = yes
+		custom_tooltip = {
+			text = theocracy_progress_decrease_25_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -25
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 0.5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_05_tt
+			change_variable = {
+				name = theocracy_progress_from_effects
+				add = 0.5
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = 0.05
+			pop_type = laborers
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = 0.15
+			pop_type = bureaucrats
+		}
+	}
+	option = {
+		name = dead_man_pulse.15.b
+		custom_tooltip = {
+			text = theocracy_progress_decrease_40_tt
+			change_variable = {
+				name = theocracy_progress
+				add = -40
+			}
+		}
+		custom_tooltip = {
+			text = theocracy_progress_decrease_tick_05_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = -0.5
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_tick_1_tt
+			change_variable = {
+				name = republican_progress_from_effects
+				add = 1
+			}
+		}
+		custom_tooltip = {
+			text = communist_progress_increase_5_tt
+			change_variable = {
+				name = communist_progress
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = republican_progress_increase_5_tt
+			change_variable = {
+				name = theocracy_progress
+				add = 5
+			}
+		}
+		add_modifier = {
+			name = dead_man_pushback_theo
+			months = normal_modifier_time
+		}
+		add_loyalists = {
+			pop_type = machinists
+			value = 0.1
+		}
+		add_loyalists = {
+			pop_type = bureaucrats
+			value = 0.15
+		}
+		add_loyalists = {
+			pop_type = capitalists
+			value = 0.1
+		}
+		add_loyalists = {
+			pop_type = aristocrats
+			value = 0.15
+		}
+	}
+}
