@@ -14,18 +14,21 @@ law_traditionalism = {
 	on_activate = {
 	}
 	modifier = {
-		state_shopkeepers_investment_pool_efficiency_mult = -0.4
-		state_farmers_investment_pool_efficiency_mult = -0.15
-		state_capitalists_investment_pool_efficiency_mult = -0.6
+		state_shopkeepers_investment_pool_efficiency_mult = -0.5
+		state_capitalists_investment_pool_efficiency_mult = -0.5
+		state_farmers_investment_pool_efficiency_mult = -0.5	
+		state_clergymen_investment_pool_efficiency_mult = -0.5	
+		state_aristocrats_investment_pool_efficiency_mult = -0.5	
 		state_bureaucracy_population_base_cost_factor_mult = -0.25
+		country_government_dividends_reinvestment_add = 0.25
 		state_tax_capacity_mult = -0.25
 		country_private_construction_allocation_mult = 0.25
+		building_nationalization_cost_mult = 1.0
+		building_nationalization_investment_return_add = 0.1
+		country_leverage_resistance_mult = 0.25
 
 		state_market_access_price_impact = -0.15
-		
-		country_subsidies_bg_infrastructure = yes
-		country_subsidies_bg_power = yes
-		country_subsidies_bg_trade = yes
+		country_disable_nationalization_without_compensation_bool = yes
 	}
 	possible_political_movements = {
 		law_interventionism
@@ -37,12 +40,7 @@ law_traditionalism = {
 	pop_support = {
 		value = 0
 	}
-
-	build_from_investment_pool = {
-		bg_agriculture
-		bg_plantations
-		bg_ranching
-	}
+	
 	# AI should never switch back to traditionalism
 	ai_will_do = {
 		always = no
@@ -51,11 +49,7 @@ law_traditionalism = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -75,25 +69,12 @@ law_interventionism = {
 		manufacturies
 	}
 	modifier = {
-		country_subsidies_all = yes
+		country_disable_nationalization_without_compensation_bool = yes
 		country_private_construction_allocation_mult = 0.5
-		state_shopkeepers_investment_pool_efficiency_mult = 0.25
-		state_farmers_investment_pool_efficiency_mult = 0.25
-		state_aristocrats_investment_pool_efficiency_mult = -0.10
+		building_nationalization_investment_return_add = 0.5
+		country_government_dividends_reinvestment_add = 0.5
+		country_government_dividends_efficiency_add = 0.25
 		country_bureaucracy_investment_cost_factor_mult = -0.05
-	}
-	build_from_investment_pool = {
-		bg_agriculture
-		bg_plantations
-		bg_ranching
-		bg_manufacturing
-		bg_mining
-		bg_logging
-		bg_rubber
-		bg_whaling
-		bg_fishing
-		bg_oil_extraction
-		bg_infrastructure
 	}
 	possible_political_movements = {
 		law_command_economy
@@ -126,11 +107,7 @@ law_interventionism = {
 		value = 0
 		
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -150,26 +127,15 @@ law_agrarianism = {
 	}
 	modifier = {
 		state_aristocrats_investment_pool_efficiency_mult = 0.5
-		state_farmers_investment_pool_efficiency_mult = 0.8
-		state_shopkeepers_investment_pool_efficiency_mult = -0.25
-		state_capitalists_investment_pool_efficiency_mult = -0.4
+		state_clergymen_investment_pool_efficiency_mult = 0.5
+		state_farmers_investment_pool_efficiency_mult = 0.5
+		state_capitalists_investment_pool_efficiency_mult = -0.25
 		country_private_construction_allocation_mult = 0.5
-		country_subsidies_bg_agriculture = yes
-		country_subsidies_bg_ranching = yes
-		country_subsidies_bg_plantations = yes
-		country_subsidies_bg_infrastructure = yes
-		country_subsidies_bg_power = yes
-		country_subsidies_bg_trade = yes
-	}
-	build_from_investment_pool = {
-		bg_agriculture
-		bg_plantations
-		bg_ranching
-		bg_infrastructure
-		bg_whaling
-		bg_logging
-		bg_rubber
-		bg_fishing
+		building_nationalization_investment_return_add = 0.5
+		country_government_dividends_reinvestment_add = 0.5
+		country_government_dividends_efficiency_add = 0.3
+		
+		country_disable_nationalization_without_compensation_bool = yes
 	}
 	possible_political_movements = {
 		law_interventionism
@@ -222,11 +188,7 @@ law_agrarianism = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -307,18 +269,10 @@ law_industry_banned = {
 		country_private_construction_allocation_mult = 0.5
 		country_production_tech_research_speed_mult = -0.25
 		country_production_tech_spread_mult = -0.25
-		country_subsidies_bg_agriculture = yes
-		country_subsidies_bg_ranching = yes
-		country_subsidies_bg_plantations = yes
-		country_subsidies_bg_infrastructure = yes
-		country_subsidies_bg_power = yes
-		country_subsidies_bg_trade = yes
-	}
-	build_from_investment_pool = {
-		bg_agriculture
-		bg_plantations
-		bg_ranching
-		bg_infrastructure
+		building_nationalization_investment_return_add = 0.5
+		country_government_dividends_reinvestment_add = 0.25
+		country_government_dividends_efficiency_add = 0.3
+		country_disable_nationalization_without_compensation_bool = yes
 	}
 	possible_political_movements = {
 		law_interventionism
@@ -352,11 +306,7 @@ law_industry_banned = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -383,23 +333,11 @@ law_laissez_faire = {
 		country_capitalists_pol_str_mult = 0.25
 		country_trade_route_competitiveness_mult = 0.1
 		country_private_construction_allocation_mult = 0.75
+		country_government_dividends_reinvestment_add = 1.0		
 		country_max_companies_add = 1
 		country_bureaucracy_investment_cost_factor_mult = -0.10
-		
-		country_subsidies_bg_infrastructure = yes
-		country_subsidies_bg_power = yes
-		country_subsidies_bg_trade = yes
-		country_private_buildings_protected = yes
-	}
-	build_from_investment_pool = {
-		bg_manufacturing
-		bg_mining
-		bg_logging
-		bg_rubber
-		bg_oil_extraction
-		bg_infrastructure
-		bg_whaling
-		bg_fishing
+		country_disable_nationalization_bool = yes
+		country_force_privatization_bool = yes
 	}
 	possible_political_movements = {
 		law_interventionism
@@ -431,14 +369,10 @@ law_laissez_faire = {
 	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
-	}
+	}	
 }
 
 law_cooperative_ownership = {
@@ -463,19 +397,11 @@ law_cooperative_ownership = {
 		country_trade_route_competitiveness_mult = -0.1
 		country_private_construction_allocation_mult = 0.35
 		country_bureaucracy_investment_cost_factor_mult = 0.05
-		country_company_throughput_bonus_add = -0.1
-		country_subsidies_all = yes
+		country_government_dividends_reinvestment_add = 1.0
+
+		country_force_collectivization_bool = yes
 	}
-	build_from_investment_pool = {
-		bg_manufacturing
-		bg_mining
-		bg_logging
-		bg_rubber
-		bg_oil_extraction
-		bg_infrastructure
-		bg_whaling
-		bg_fishing
-	}
+	
 	possible_political_movements = {
 		law_interventionism
 		law_agrarianism
@@ -504,11 +430,7 @@ law_cooperative_ownership = {
 	ai_enact_weight_modifier = { #Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 		
@@ -519,6 +441,19 @@ law_cooperative_ownership = {
 			add = 250
 		}
 	}
+	
+	ai_impose_chance = {
+		value = 0
+		
+		if = {
+			limit = {
+				has_law = law_type:law_cooperative_ownership			
+			}
+			
+			add = base_impose_law_weight
+			multiply = 10.0
+		}
+	}	
 }
 
 law_command_economy = {
@@ -545,14 +480,23 @@ law_command_economy = {
 		}
 	}
 	modifier = {
-		country_subsidies_all = yes
-		country_disable_investment_pool = yes
+		country_disable_investment_pool_bool = yes
+
 		country_authority_add = 200
 		country_authority_mult = 0.25
 		country_trade_route_competitiveness_mult = -0.20
 		country_bureaucracy_investment_cost_factor_mult = 0.10
 		country_company_throughput_bonus_add = 0.05
 		country_max_companies_add = -1
+
+		country_bureaucrats_pol_str_mult = 0.25
+		building_nationalization_cost_mult = -0.5
+		building_nationalization_radicals_mult = -0.75
+		country_government_dividends_efficiency_add = 0.4
+		
+		country_leverage_resistance_mult = 0.25
+
+		country_disable_privatization_bool = yes
 	}
 	possible_political_movements = {
 		law_interventionism
@@ -592,11 +536,7 @@ law_command_economy = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 		
@@ -614,4 +554,17 @@ law_command_economy = {
 			add = 100
 		}
 	}
+	
+	ai_impose_chance = {
+		value = 0
+		
+		if = {
+			limit = {
+				has_law = law_type:law_command_economy			
+			}
+			
+			add = base_impose_law_weight
+			multiply = 10.0
+		}
+	}	
 }
