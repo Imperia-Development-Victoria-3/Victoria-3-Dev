@@ -727,6 +727,14 @@ discord_break.1 = {
 			}
 			save_scope_as = foreign_investor
 		}
+		ordered_interest_group = {
+			limit = {
+				is_member_of_any_lobby = no
+			}
+			order_by = ig_clout
+			position = 0
+			save_scope_as = largest_non_lobbying_interest_group
+		}
 		# Lvl 3 stuff
 		random_scope_state = {
 			save_scope_as = widespread_riot_epicentre
@@ -1989,6 +1997,43 @@ discord_break.1 = {
 				value = -10
 			}
 		}
+		if = {
+			# If theres no anti-investor lobby
+			limit = {
+				any_political_lobby = {
+					is_political_lobby_type = lobby_anti_country
+					target = scope:foreign_investor
+					count = 0
+				}
+			}
+			# Create one, with the biggest IG not currently in a lobby
+			create_political_lobby = {
+				type = lobby_anti_country
+				target = scope:foreign_investor
+				add_interest_group = scope:largest_non_lobbying_interest_group
+			}
+		}
+		# Appease the anti-investor lobby and piss off the pro-investor lobby
+		every_political_lobby = {
+			limit = {
+				target = scope:foreign_investor
+				is_political_lobby_type = lobby_pro_country
+			}
+			change_appeasement = {
+				amount = -2
+				factor = appeasement_lobby_displeased
+			}
+		}
+		every_political_lobby = {
+			limit = {
+				target = scope:foreign_investor
+				is_political_lobby_type = lobby_anti_country
+			}
+			change_appeasement = {
+				amount = 1
+				factor = appeasement_lobby_pleased
+			}
+		}
 		discord_break_option_effect = {
 			OPTION = 108
 		}
@@ -2405,6 +2450,43 @@ discord_break.1 = {
 			change_relations = {
 				country = root
 				value = -25
+			}
+		}
+		if = {
+			# If theres no anti-investor lobby
+			limit = {
+				any_political_lobby = {
+					is_political_lobby_type = lobby_anti_country
+					target = scope:foreign_investor
+					count = 0
+				}
+			}
+			# Create one, with the biggest IG not currently in a lobby
+			create_political_lobby = {
+				type = lobby_anti_country
+				target = scope:foreign_investor
+				add_interest_group = scope:largest_non_lobbying_interest_group
+			}
+		}
+		# Appease the anti-investor lobby and piss off the pro-investor lobby
+		every_political_lobby = {
+			limit = {
+				target = scope:foreign_investor
+				is_political_lobby_type = lobby_pro_country
+			}
+			change_appeasement = {
+				amount = -5
+				factor = appeasement_lobby_displeased
+			}
+		}
+		every_political_lobby = {
+			limit = {
+				target = scope:foreign_investor
+				is_political_lobby_type = lobby_anti_country
+			}
+			change_appeasement = {
+				amount = 2
+				factor = appeasement_lobby_pleased
 			}
 		}
 		discord_break_option_effect = {
