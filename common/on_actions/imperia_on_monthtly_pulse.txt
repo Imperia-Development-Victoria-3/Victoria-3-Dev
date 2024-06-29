@@ -169,6 +169,39 @@
 				value = 0
 			}
 		}
+		remove_modifier ?= modifier_state_religion_home_defence_discount
+		remove_modifier ?= modifier_state_religion_home_affairs_discount
+		remove_modifier ?= modifier_state_religion_education_discount
+		remove_modifier ?= modifier_state_religion_health_discount
+		if = {
+			limit = {
+				has_law = law_type:law_state_religion
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_faith_orders
+				}
+				add_modifier = modifier_state_religion_home_defence_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_inquisition
+				}
+				add_modifier = modifier_state_religion_home_affairs_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_religious_schools
+				}
+				add_modifier = modifier_state_religion_education_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_charitable_health_system
+				}
+				add_modifier = modifier_state_religion_health_discount
+			}
+		}
 	}
 	events = {
 		infamy_rebalance.1		#updates provinces each month
