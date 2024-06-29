@@ -53,6 +53,7 @@ DEFAULT = {
 		priority = 100
 		
 		trigger = {
+			exists = c:RSM
 			scope:actor ?= {
 				c:RSM ?= this
 			}
@@ -1105,11 +1106,7 @@ RSM = { # Republic of San Marco
 		priority = 5
 		
 		trigger = {
-			OR = {
-				has_law = law_type:law_parliamentary_republic
-				has_law = law_type:law_presidential_republic
-				has_law = law_type:law_council_republic
-			}
+			coa_def_republic_flag_trigger = yes
 		}
 	}
 }
@@ -1128,6 +1125,48 @@ FIN = { # Finland
 				has_diplomatic_pact = {
 					who = c:FIN
 					type = personal_union
+					is_initiator = yes
+				}
+			}
+		}
+	}
+}
+
+POL = { # Poland
+	dynamic_country_name = {
+		name = dyn_c_congress_poland
+		adjective = dyn_c_congress_poland_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			exists = c:RUS
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:POL
+					type = personal_union
+					is_initiator = yes
+				}
+			}
+		}
+	}
+}
+
+UBD = { # Baltic
+	dynamic_country_name = {
+		name = dyn_c_baltic_governorate
+		adjective = dyn_c_baltic_governorate_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			exists = c:RUS
+			c:RUS = {
+				has_diplomatic_pact = {
+					who = c:UBD
+					type = puppet
 					is_initiator = yes
 				}
 			}
@@ -1849,11 +1888,23 @@ QUE = { # Quebec
 
 RUS = { # Russia
 	dynamic_country_name = {
-		name = dyn_c_soviet_union
-		adjective = dyn_c_soviet_union_adj
+		name = dyn_c_russian_republic
+		adjective = dyn_c_russian_republic_adj
 		
 		is_main_tag_only = yes
 		priority = 0
+		
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+
+	dynamic_country_name = {
+		name = dyn_c_rsfsr
+		adjective = dyn_c_rsfsr_adj
+		
+		is_main_tag_only = yes
+		priority = 5
 		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
@@ -1870,6 +1921,30 @@ RUS = { # Russia
 		trigger = {
 			exists = c:RUS
 			coa_def_nihilist_flag_trigger = yes
+		}
+	}	
+
+	dynamic_country_name = {
+		name = dyn_c_soviet_union
+		adjective = dyn_c_soviet_union_adj
+		
+		is_main_tag_only = yes
+		priority = 25
+		
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+			scope:actor = {
+				OR = {
+					any_scope_state = {
+						state_region = {
+							NOT = {
+								is_homeland = cu:russian
+							}
+						}
+						count >= 15
+					}
+				}
+			}
 		}
 	}	
 }
@@ -2490,7 +2565,7 @@ KAZ = {
 		adjective = dyn_c_kazakh_khanate_adj
 		
 		is_main_tag_only = yes
-		priority = 0
+		priority = 3
 		
 		trigger = {
 			exists = scope:actor
@@ -2501,11 +2576,45 @@ KAZ = {
 		}
 	}
 	dynamic_country_name = { # Autonomy
+		name = dyn_c_kazakh_steppe_governorate_general
+		adjective = dyn_c_kazakh_steppe_governorate_general_adj
+		
+		is_main_tag_only = yes
+		priority = 5
+		
+		trigger = {
+			exists = scope:actor
+			AND = {
+				exists = c:RUS
+				c:RUS = {
+					has_law = law_type:law_monarchy
+					OR = {
+						has_diplomatic_pact = {
+							who = scope:actor
+							type = puppet
+							is_initiator = yes
+						}
+						has_diplomatic_pact = {
+							who = scope:actor
+							type = dominion
+							is_initiator = yes
+						}
+						has_diplomatic_pact = {
+							who = scope:actor
+							type = protectorate
+							is_initiator = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Autonomy
 		name = dyn_c_kazakh_alash_autonomy
 		adjective = dyn_c_kazakh_alash_autonomy_adj
 		
 		is_main_tag_only = yes
-		priority = 0
+		priority = 5
 		
 		trigger = {
 			exists = scope:actor
@@ -3183,6 +3292,115 @@ PLT = {
 			exists = scope:actor
 			scope:actor ?= {
 				was_formed_from = ARG
+			}
+		}
+	}
+}
+
+ARB = {
+	dynamic_country_name = {
+		name = dyn_c_muhammara
+		adjective = dyn_c_muhammara_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+}
+
+
+PER = {
+	dynamic_country_name = {
+		name = dyn_c_iran
+		adjective = dyn_c_iran_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			scope:actor = {
+				NOT = { is_country_type = unrecognized }
+			}
+		}
+	}
+}
+
+AFG = {
+	dynamic_country_name = {
+		name = dyn_c_durrani_empire
+		adjective = dyn_c_durrani_empire_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				has_law = law_type:law_monarchy
+				was_formed_from = HER
+			}
+		}
+	}
+}
+
+GEO = {
+	dynamic_country_name = {
+		name = dyn_c_kartli_kakheti
+		adjective = dyn_c_kartli_kakheti_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				is_country_type = unrecognized
+				NOT = {
+					has_technology_researched = nationalism
+				}
+			}
+		}
+	}
+}
+
+AZB = {
+	dynamic_country_name = {
+		name = dyn_c_shirvan
+		adjective = dyn_c_shirvan_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				is_country_type = unrecognized
+				NOT = {
+					has_technology_researched = nationalism
+				}
+			}
+		}
+	}
+}
+
+LUR = {
+	dynamic_country_name = {
+		name = dyn_c_bakhtiari
+		adjective = dyn_c_bakhtiari_adj
+
+		is_main_tag_only = yes
+		priority = 1
+
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				is_country_type = unrecognized
+				NOT = {
+					has_technology_researched = nationalism
+				}
 			}
 		}
 	}

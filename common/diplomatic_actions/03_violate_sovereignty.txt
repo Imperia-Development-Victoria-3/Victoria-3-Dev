@@ -1,13 +1,19 @@
 ﻿violate_sovereignty = {
+	groups= {
+		general
+	}
 	requires_approval = yes
 	should_notify_third_parties = yes
 	violates_sovereignty = yes
 	can_use_obligations = yes
+	
+	selectable = {
+		NOT = { is_country_type = decentralized }
+	}
+	
 	potential = {
 		is_at_war = yes
-		NOT = {
-			is_country_type = decentralized
-		}
+
 		NOT = {
 			has_war_with = scope:target_country
 			is_in_war_together = scope:target_country
@@ -145,6 +151,20 @@
 		}
 	}
 	ai = {
+		evaluation_chance = {
+			value = 0
+			
+			if = {
+				limit = { 
+					is_at_war = yes 
+					any_scope_war = {
+						is_warleader = root
+					}				
+				}
+				add = 1
+			}
+		}	
+	
 		propose_score = {
 			value = 100
 		}
@@ -351,29 +371,7 @@
 			}
 			if = {
 				limit = {
-					any_country = {
-						NOT = {
-							this = scope:actor
-						}
-						OR = {
-							country_rank >= scope:actor.country_rank
-							army_size >= scope:actor.army_size
-						}
-						OR = {
-							has_diplomatic_pact = {
-								who = root
-								type = alliance
-							}
-							has_diplomatic_pact = {
-								who = root
-								type = customs_union
-							}
-							has_diplomatic_pact = {
-								who = root
-								type = defensive_pact
-							}
-						}
-					}
+					has_powerful_protectors = yes
 				}
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_POWERFUL_PROTECTORS_THEM"
