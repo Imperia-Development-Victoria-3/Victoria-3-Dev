@@ -17,7 +17,31 @@ liberty_desire_weekly_change = {
 			value = -0.2
 			desc = "gov_chartered_company"
 		}	
-	}	
+	}
+
+	# Special - DEI collapses if independent
+	if = {
+		limit = { 
+			root.first_country = { c:NET ?= this } 
+			root.second_country = { c:DEI ?= this } 
+		}
+		add = {
+			value = -0.2
+			desc = "DEI"
+		}	
+	}		
+	
+	# Special - Pacify the Steppes
+	if = {
+		limit = { 
+			root.first_country = { has_journal_entry = je_pacify_the_steppes } 
+			root.second_country = { has_government_type = gov_zhuz } 
+		}
+		add = {
+			value = -0.2
+			desc = "pacify_the_steppe_modifier"
+		}	
+	}		
 
 	add = {
 		if = {
