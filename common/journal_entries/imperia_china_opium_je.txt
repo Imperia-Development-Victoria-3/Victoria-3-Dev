@@ -1,9 +1,8 @@
 ﻿#Opium Epidemic JEs
-
-je_the_opium_dilemma = { 	#Sichuan
+je_the_opium_dilemma = {
+	#Sichuan
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
-
 	complete = {
 		any_scope_building = {
 			is_building_type = building_opium_plantation
@@ -13,14 +12,13 @@ je_the_opium_dilemma = { 	#Sichuan
 			level >= 10
 		}
 	}
-
 	on_complete = {
 		c:CHI ?= {
-			trigger_event = { #Notification event
+			trigger_event = {
+				#Notification event
 				id = imperia_china_opium.1
 			}
 		}
-
 		add_journal_entry = {
 			type = je_chinese_opium_trade
 		}
@@ -31,10 +29,10 @@ je_the_opium_dilemma = { 	#Sichuan
 	}
 }
 
-je_opium_trade_participation = {	#For Substates once Sichuan initializes
+je_opium_trade_participation = {
+	#For Substates once Sichuan initializes
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
-
 	complete = {
 		any_scope_building = {
 			is_building_type = building_opium_plantation
@@ -42,9 +40,8 @@ je_opium_trade_participation = {	#For Substates once Sichuan initializes
 			weekly_profit > 0
 			occupancy >= 0.75
 			level >= 10
-		}	
+		}
 	}
-
 	on_complete = {
 		add_journal_entry = {
 			type = je_chinese_opium_trade
@@ -55,66 +52,61 @@ je_opium_trade_participation = {	#For Substates once Sichuan initializes
 	}
 	invalid = {
 		OR = {
-			has_global_variable = china_shatters	
-			has_global_variable = opium_epidemic_resolved		
+			has_global_variable = china_shatters
+			has_global_variable = opium_epidemic_resolved
 		}
 	}
 }
 
-je_chinese_opium_trade = {		#JE w/modifier to denote participation in the Chinese Opium Trade
+je_chinese_opium_trade = {
+	#JE w/modifier to denote participation in the Chinese Opium Trade
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
-
 	complete = {
 		any_scope_building = {
 			is_building_type = building_opium_plantation
 			level > 5
 			count = 0
-		}		
+		}
 	}
-
 	on_complete = {
 		add_journal_entry = {
 			type = je_opium_trade_participation
 		}
 		remove_modifier = modifier_opium_profits
 	}
-
 	fail = {
 		c:CHI ?= {
 			OR = {
-			has_modifier = modifier_opium_ascendant
-			has_modifier = modifier_opium_eradicated
+				has_modifier = modifier_opium_ascendant
+				has_modifier = modifier_opium_eradicated
 			}
 		}
 	}
-
 	on_fail = {
 		remove_modifier = modifier_opium_profits
 	}
 	invalid = {
 		OR = {
-			has_global_variable = china_shatters	
-			has_global_variable = opium_epidemic_resolved		
+			has_global_variable = china_shatters
+			has_global_variable = opium_epidemic_resolved
 		}
 	}
 	on_invalid = {
 		remove_modifier = modifier_opium_profits
 	}
-
 }
 
-je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
+je_the_opium_struggle = {
+	#China opium epidemic JE, part of Fragile Unity
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
-
 	immediate = {
 		set_variable = {
 			name = opium_struggle_var
 			value = 0
 		}
 	}
-
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -126,34 +118,33 @@ je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
 		NOT = {
 			has_law = law_type:law_free_trade
 		}
-			this.market = {
-				any_trade_route = {
-					goods = g:opium
-					count = 0
-					level > 6
-				}
+		this.market = {
+			any_trade_route = {
+				goods = g:opium
+				count = 0
+				level > 6
 			}
+		}
 	}
-
 	on_complete = {
-		trigger_event = { #Opium Eradicated
+		trigger_event = {
+			#Opium Eradicated
 			id = imperia_china_opium.2
 		}
 		custom_tooltip = {
 			text = fragile_unity_major_remove_tt
 		}
 	}
-
 	timeout = 16425
 	on_timeout = {
-		trigger_event = { #Opium Ascendant
+		trigger_event = {
+			#Opium Ascendant
 			id = imperia_china_opium.3
 		}
 		custom_tooltip = {
 			text = fragile_unity_major_add_tt
 		}
 	}
-
 	on_monthly_pulse = {
 		effect = {
 			if = {
@@ -165,7 +156,9 @@ je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
 					NOT = {
 						has_law = law_type:law_free_trade
 						any_market = {
-							NOT = { owner = root }
+							NOT = {
+								owner = root
+							}
 							any_trade_route = {
 								exporter.owner = root
 								goods = g:opium
@@ -192,7 +185,7 @@ je_the_opium_struggle = {	#China opium epidemic JE, part of Fragile Unity
 	}
 	goal_add_value = {
 		add = 60
-	}		
+	}
 	invalid = {
 		has_global_variable = china_shatters
 	}
