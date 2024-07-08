@@ -378,34 +378,21 @@ frankfurt_parliament.2 = {
 				add_claim = root
 			}
 		}
-		# foreign laws, only for liberal republican germany
-		# Also adds infamy here
+		# Add infamy
 		if = {
 			limit = {
-				OR = {
-					has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
-					has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
-				}
-			}
-			set_variable = {
-				name = gutter_king_old_lawgroup_diplomatic_stance
-				value = active_law:lawgroup_diplomatic_stance.type
-			}
-		}
-		if = {
-			limit = {
-				# Will only ever be true if it was voted for
+				# Will only ever be true if it was voted for	
 				has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
 			}
 			change_infamy = 70
-			activate_law = law_type:law_armed_neutrality
+			# activate_law = law_type:law_armed_neutrality <- CHANGE ON OTHER BRANCH
 		}
 		else_if = {
 			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
 			}
 			change_infamy = 95
-			activate_law = law_type:law_expansionism
+			# activate_law = law_type:law_expansionism <- CHANGE ON OTHER BRANCH
 		}
 		else_if = {
 			limit = {
@@ -414,7 +401,7 @@ frankfurt_parliament.2 = {
 			change_infamy = 60
 		}
 		else = {
-			# Gives a base amount of infamy to anyone who accepts the Gutter Crown
+			# Gives a base amount of infamy to anyone who accepts the Gutter Crown	
 			change_infamy = 50
 		}
 		# Subjugation demands
@@ -431,7 +418,7 @@ frankfurt_parliament.2 = {
 					# If they go away from true neutrality, include them I guess
 					# If someone else becomes true neutral, exclude them
 					NOT = {
-						has_law = law_type:law_true_neutrality
+						has_modifier = imperia_true_neutral
 					}
 				}
 				trigger_event = {
