@@ -9,66 +9,6 @@
 		value = 0
 	}
 	###############################
-	### EXTERNAL CONSIDERATIONS ###
-	# Then we add to it for each foreign country we have a valid pact with
-	# Inside the *fetch operation the different valid pacts are evaluated
-	###
-	# Used for tooltip purposes
-	set_variable = {
-		name = diplomatic_discord_add_total
-		value = 0
-	}
-	every_country = {
-		limit = {
-			OR = {
-				has_diplomatic_pact = {
-					who = root
-					type = defensive_pact
-				}
-				has_diplomatic_pact = {
-					who = root
-					type = alliance
-				}
-				has_diplomatic_pact = {
-					who = root
-					type = trade_agreement
-				}
-				has_diplomatic_pact = {
-					who = root
-					type = rivalry
-				}
-			}
-		}
-		save_scope_as = target_country
-		root = {
-			set_local_variable = {
-				name = var_imperia_discord_fetch_value
-				value = imperia_discord_fetch_value
-			}
-			if = {
-				limit = {
-					local_var:var_imperia_discord_fetch_value > 0
-				}
-				change_variable = {
-					name = theoretical_discord_add
-					add = local_var:var_imperia_discord_fetch_value
-				}
-			}
-			else = {
-				change_variable = {
-					name = theoretical_discord_subtract
-					add = local_var:var_imperia_discord_fetch_value
-				}
-			}
-			# Used for tooltip purposes
-			change_variable = {
-				name = diplomatic_discord_add_total
-				add = local_var:var_imperia_discord_fetch_value
-			}
-		}
-	}
-	### END EXTERNAL ##############
-	###############################
 	### INTERNAL CONSIDERATIONS ###
 	# First the ruler
 	set_local_variable = {

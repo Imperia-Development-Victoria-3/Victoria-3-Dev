@@ -5,7 +5,7 @@ Imperia Roleplay is a mod for Victoria 3 aimed at multiplayer playthroughs by co
 Main features of the mod:
 -	**Roleplay primers** which give a summary of a nation’s history at game start.
 ![Roleplay primers](/.assets/images/roleplayprimer.png)
--	**Expanding** and **balancing** laws, with some of our own unique laws such as foreign policy and balancing laws so there are no “meta” laws. For example, public schooling is nerfed and more options such as “Patriotic Schools” are added.
+-	**Expanding** and **balancing** laws, balancing laws so there are no “meta” laws. For example, public schooling is nerfed and more options such as “Patriotic Schools” are added.
 ![Law examples](/.assets/images/laws.png)
 -	**Balance gameplay around history**, such as making authoritarian and conservative playthroughs viable rather than pushing for modernization and liberalization as the only viable gameplan.
 

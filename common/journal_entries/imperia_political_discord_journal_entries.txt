@@ -21,6 +21,10 @@
 				name = political_discord
 				value = 0
 			}
+			set_variable = {
+				name = equilibrium_discord
+				value = 0
+			}
 		}
 		hidden_effect = {
 			add_modifier = {
@@ -59,13 +63,19 @@
 	current_value = {
 		value = var:political_discord
 	}
+
+	goal_add_value = {
+		add = 400
+	}
+
+	progressbar = yes
+
 	on_monthly_pulse = {
 		effect = {
 			imperia_political_discord_monthly_pulse_journal_entry = yes
 			if = {
 				limit = {
 					var:political_discord >= 400
-					always = no					# disabled until further notice
 					any_scope_state = {
 						count >= 2
 					}
@@ -155,19 +165,9 @@
 						name = break_3_cooldown
 						months = 12
 					}
-					random_list = {
-						100 = {
-							trigger_event = {
-								id = ideology_break_3_1_event.1
-								popup = yes
-							}
-						}
-						100 = {
-							trigger_event = {
-								id = ideology_break_3_2_event.1
-								popup = yes
-							}
-						}
+					trigger_event = {
+						id = discord_break.1
+						popup = yes
 					}
 				}
 			}
@@ -203,20 +203,9 @@
 						name = break_2_cooldown
 						months = 12
 					}
-					# Break lvl 2
-					random_list = {
-						100 = {
-							trigger_event = {
-								id = ideology_break_2_1_event.1
-								popup = yes
-							}
-						}
-						100 = {
-							trigger_event = {
-								id = ideology_break_2_2_event.1
-								popup = yes
-							}
-						}
+					trigger_event = {
+						id = discord_break.1
+						popup = yes
 					}
 				}
 			}
@@ -253,20 +242,9 @@
 						name = break_1_cooldown
 						months = 12
 					}
-					# Break lvl 1
-					random_list = {
-						100 = {
-							trigger_event = {
-								id = ideology_break_1_1_event.1
-								popup = yes
-							}
-						}
-						100 = {
-							trigger_event = {
-								id = ideology_break_1_2_event.1
-								popup = yes
-							}
-						}
+					trigger_event = {
+						id = discord_break.1
+						popup = yes
 					}
 				}
 			}

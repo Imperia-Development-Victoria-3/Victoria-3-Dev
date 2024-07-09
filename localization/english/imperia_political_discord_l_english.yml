@@ -2,11 +2,11 @@
  je_imperia_political_discord: "Political Discord"
  je_imperia_political_discord_reason: "#bold Check the topbar icon for information on where your [concept_political_discord] is coming from.#!\n\n$imperia_discord_current_effect_je_0$\n\n$imperia_discord_current_effect_je_100$\n\n$imperia_discord_current_effect_je_200$\n\n$imperia_discord_current_effect_je_300$\n\n#r At #v 400#! your country collapses into competing statelets.#!"
 
- imperia_discord_current_effect_je_300: "Between #v 300#! and #v 400#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_3_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nMajor #v Break Events#! happens every #v 6#! months."
+ imperia_discord_current_effect_je_300: "Between #v 300#! and #v 400#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_3_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nMajor #v Break Events#! happens every #v 12#! months."
 
- imperia_discord_current_effect_je_200: "Between #v 200#! and #v 300#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_2_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nModerate #v Break Events#! happens every #v 6#! months."
+ imperia_discord_current_effect_je_200: "Between #v 200#! and #v 300#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_2_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nModerate #v Break Events#! happens every #v 12#! months."
 
- imperia_discord_current_effect_je_100: "Between #v 100#! and #v 200#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_1_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nMinor #v Break Events#! happens every #v 6#! months."
+ imperia_discord_current_effect_je_100: "Between #v 100#! and #v 200#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_1_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nMinor #v Break Events#! happens every #v 12#! months."
 
  imperia_discord_current_effect_je_0: "Between #v 0#! and #v 100#! your country experiences the following modifier:\n[GetScriptedGui('discord_modifier_lvl_0_tooltip').ExecuteTooltip(GuiScope.SetRoot(ROOT.GetCountry.MakeScope).End)]\nNo #v Break Events#! happen."
 
@@ -14,8 +14,6 @@
  decrease_discord_tt: "#g [concept_political_discord] will change by [SCOPE.GetValue('discord_change')|0v]#!"
 
  discord_government_legitimacy_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_legitimacy_offset_value')|0-=] [concept_political_discord] from [SCOPE.sCountry('root_scope').GetGovernmentLegitimacy|v] [concept_legitimacy]"
-
- discord_turmoil_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_average_turmoil_in_country_value')|0-=] [concept_political_discord] from [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_average_turmoil_in_country_value')|v1]#v %#! [concept_country_turmoil]"
 
  discord_radicals_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_radicals_value')|0-=] [concept_political_discord] from [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_radicals_fraction')|%v1] [Concept('concept_radical','$concept_radicals$')]"
 
@@ -33,8 +31,6 @@
  discord_opposition_character_contribution_tt: "[SCOPE.sCharacter('character_scope').MakeScope.ScriptValue('imperia_discord_democratic_opposition_character_law_calculation')|0-=] [concept_political_discord] from [SCOPE.sCharacter('character_scope').GetPrimaryRoleTitle] [SCOPE.sCharacter('character_scope').GetFullName]"
 
  discord_religious_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_religious_majority_value')|0-=] [concept_political_discord] from [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_get_state_religion_fraction_rough')|%v0] [SCOPE.sCountry('root_scope').GetStateReligion.GetName] [concept_religious_dominance]"
-
- discord_diplomacy_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.GetVariable('diplomatic_discord_add_total').GetValue|0-=] [concept_political_discord] from [Concept('concept_diplomatic_pact','$concept_diplomatic_pacts$')]"
 
  discord_slave_contribution_tt: "[SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_discord_slave_contribution_value')|0-=] [concept_political_discord] from [SCOPE.sCountry('root_scope').MakeScope.ScriptValue('imperia_get_slave_pop_fraction_rough')|%v1] [Concept('concept_slavery', '$concept_slaves$')]"
 
@@ -67,27 +63,8 @@
  discord_lvl_3_modifier: "Hopeless Future"
  discord_lvl_3_modifier_desc: "At this level of discord the country is on the verge of collapse."
 
- DISCORD_WITH_COUNTRY_BREAKDOWN_TOOLTIP: "#header [concept_political_discord] with [Country.GetName]#!\n$DISCORD_BREAKDOWN_lawgroup_governance_principles$\n$DISCORD_BREAKDOWN_lawgroup_distribution_of_power$\n$DISCORD_BREAKDOWN_lawgroup_diplomatic_stance$\n$DISCORD_BREAKDOWN_lawgroup_free_speech$\n$DISCORD_BREAKDOWN_lawgroup_citizenship$\n$DISCORD_BREAKDOWN_lawgroup_church_and_state$\n$DISCORD_BREAKDOWN_nationalism_homelands$\n\nThe #b $trade_agreement$#! pact #r increases Discord#! by the above values.\nA #b $defensive_pact$#! #r increases Discord#! by the above values, plus #v 25%#!\nAn #b $alliance$#! #r increases Discord#! by the above values, plus #v 50%#!\n\nA #b $rivalry$#! #g decreases Discord#! by the above values, plus #v 50%#!"
-
- DISCORD_BREAKDOWN_lawgroup_governance_principles: "Difference in #b $lawgroup_governance_principles$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_governance_principles')]#!"
-
- DISCORD_BREAKDOWN_lawgroup_distribution_of_power: "Difference in #b $lawgroup_distribution_of_power$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_distribution_of_power')]#!"
-
- DISCORD_BREAKDOWN_lawgroup_citizenship: "[concept_cultural_tensions]: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_citizenship')]#!"
-
- DISCORD_BREAKDOWN_lawgroup_diplomatic_stance: "Difference in #b $lawgroup_diplomatic_stance$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_diplomatic_stance')]#!"
-
- DISCORD_BREAKDOWN_lawgroup_church_and_state: "[concept_religious_tensions]: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_church_and_state')]#!"
-
- DISCORD_BREAKDOWN_lawgroup_free_speech: "Difference in #b $lawgroup_free_speech$#!: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_free_speech')]#!"
-
- DISCORD_BREAKDOWN_nationalism_homelands: "[concept_nationalist_tensions]: #v [GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('target_country', Country.MakeScope).ScriptValue('imperia_discord_homeland_nationalism_value')]#!"
-
  concept_nationalist_tensions: "Nationalist Tensions"
  concept_nationalist_tensions_desc: "Researching #v Nationalism#! will inflame #b Nationalist Tensions#!; they will give rise to [concept_political_discord] whenever you engage diplomatically with countries that own your homelands and discriminate against your main culture."
-
- concept_religious_tensions: "Religious Tensions"
- concept_religious_tensions_desc: "Diplomacy between nations causes [concept_political_discord] based upon your [GetLawGroup('lawgroup_church_and_state').GetName] law, and the target country's [concept_state_religion]'s distance from your own #b State Religion#!.\n\nIf you're a [GetLawType('law_theocracy').GetName] you gain 2x more Discord from #b Religious Tensions#!, and as such it would be wise to keep diplomacy confined to your own religion when playing as one.\n\n#b $atheist$#! countries gets a 3x malus towards #b Theocracies#!."
 
  concept_cultural_tensions: "Cultural Tensions"
  concept_cultural_tensions_desc: "Diplomacy between nations causes [concept_political_discord] based upon your [GetLawGroup('lawgroup_citizenship').GetName] law and the target country's [concept_primary_cultures] distance from your own #b Primary Cultures#!."
@@ -133,3 +110,16 @@
  IMPERIA_EQUILIBRIUM_DISCORD_ORANGE: "#color:{1,0.5,0} [SCOPE.GetRootScope.GetVariable('equilibrium_discord').GetValue|b0]#!"
  IMPERIA_EQUILIBRIUM_DISCORD_YELLOW: "#yellow [SCOPE.GetRootScope.GetVariable('equilibrium_discord').GetValue|b0]#!"
  IMPERIA_EQUILIBRIUM_DISCORD_GREEN: "#green [SCOPE.GetRootScope.GetVariable('equilibrium_discord').GetValue|b0]#!"
+
+ discord_bureaucracy_penalty: "Government Corruption"
+ discord_state_corruption_penalty: "State Corruption"
+ discord_building_strike: "Strike"
+ discord_country_nationwide_disruption: "Nationwide Disruption"
+ discord_political_movement_boost: "Bold Movement"
+ discord_interest_group_weakened: "Weakened Interest Group"
+ discord_interest_group_strengthened: "Strengthened Interest Group"
+ discord_state_law_breakdown_penalty: "Order Breakdown"
+ discord_country_widespread_corruption: "Widespread Corruption"
+ discord_country_interest_groups_unhappy: "Government Challenged"
+ discord_country_brain_drain: "Brain Drain"
+ discord_country_severe_goods_shortage: "Severe Shortages"
