@@ -3,6 +3,98 @@
 @canton_scale_cross_x = @[ ( 333 / coa_width ) + 0.001 ]
 @canton_scale_cross_y = @[ ( 205 / coa_height ) + 0.001 ]
 
+CHI = { # China
+	flag_definition = {
+		coa = CHI_han_empire
+		coa_with_overlord_canton = CHI_han_empire
+		priority = 5
+		trigger = { 
+			scope:actor ?= {
+				NOT = { country_has_primary_culture = cu:manchu }
+				has_law = law_type:law_monarchy
+			}
+		}
+	}
+	flag_definition = {
+		coa = CHI_absolute_monarchy
+		subject_canton = CHI
+		coa_with_overlord_canton = CHI_subject
+		allow_overlord_canton = yes		
+		priority = 1
+	}
+
+	flag_definition = {
+		coa = CHI_absolute_monarchy
+		subject_canton = CHI_absolute_monarchy
+		coa_with_overlord_canton = CHI_subject
+		allow_overlord_canton = yes				
+		priority = 20
+		trigger = { 
+			scope:actor ?= {
+			coa_def_absolute_monarchy_flag_trigger = yes	
+			country_has_primary_culture = cu:manchu
+			}
+		}
+	}	
+	flag_definition = {
+		coa = CHI_republic
+		subject_canton = CHI_republic
+		allow_overlord_canton = yes
+		priority = 10
+		trigger = { 
+			coa_def_republic_flag_trigger = yes
+		}
+	}	
+
+	flag_definition = {
+		coa = CHI_republic_kmt
+		subject_canton = CHI_dictatorship
+		allow_overlord_canton = yes
+		priority = 30
+		trigger = {
+			scope:actor = {
+				OR = {
+					has_law = law_type:law_presidential_republic
+					has_law = law_type:law_parliamentary_republic
+				}
+				has_variable = china_kmt_republic
+			}
+		}
+	}
+	flag_definition = {
+		coa = CHI_dictatorship
+		subject_canton = CHI_dictatorship
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = CHI_theocracy
+		subject_canton = CHI_theocracy
+		subject_canton = CHI_absolute_monarchy
+		priority = 20
+		trigger = { 
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}	
+	flag_definition = {
+		coa = CHI_communist
+		priority = 1500
+		trigger = { 
+			coa_def_communist_flag_trigger = yes
+		}
+	}		
+}
+
+ZHI = {
+	flag_definition = {
+		coa = ZHI
+		subject_canton = ZHI
+		priority = 100
+	}
+}
+
 FRS = {
 	flag_definition = {
 		coa = FRS
