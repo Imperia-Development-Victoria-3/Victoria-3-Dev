@@ -29,6 +29,11 @@ je_chinese_national_identity = {
 			set_variable = je_chinese_national_identity_completed
 		}
 	}
+
+	invalid = {
+		has_global_variable = china_shatters
+	}
+	
 	weight = 1000
 }
 je_end_han_discrimination = {
@@ -92,6 +97,12 @@ je_qing_administrative_reform = {
 		custom_tooltip = {
 			text = fragile_unity_minor_remove_tt
 			set_variable = je_qing_administrative_reform_completed
+		}
+		every_subject_or_below = {
+			limit = {
+				overlord = c:CHI
+			}
+			remove_modifier = modifier_provincial_disorder
 		}
 	}
 	timeout = 14600
@@ -187,6 +198,12 @@ je_investigate_military_reform = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 
+	immediate = {
+		set_variable = {
+		name = eight_banners_powerful_var
+		value = 0
+		}
+	}
 	complete = {
 		has_technology_researched = line_infantry
 		NOT = {
@@ -202,13 +219,33 @@ je_investigate_military_reform = {
 		}
 	}
 	fail = {
-		ig:ig_armed_forces = {
-			is_powerful = yes
+		custom_tooltip = {
+			text = eight_banners_powerful_tt
+			var:eight_banners_powerful_var > 24
+			}	
 		}
 	}
 	on_fail = {
 		trigger_event = {
 			id = imperia_qing.5
+		}
+	}
+	current_value = {
+		value = var:eight_banners_powerful_var
+	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					ig:ig_armed_forces = {
+						is_powerful = yes
+					}
+				}
+				change_variable = {
+					name = eight_banners_powerful_var
+					add = 1
+				}
+			}
 		}
 	}
 	weight = 1000
@@ -248,16 +285,7 @@ je_reform_the_banner_system_local = {
 		remove_modifier = modifier_crumbling_banner_system
 		set_variable = chose_yong_ying
 	}
-	fail = {
-		ig:ig_armed_forces = {
-			is_powerful = yes
-		}
-	}
-	on_fail = {
-		trigger_event = {
-			id = imperia_qing.5
-		}
-	}
+
 	invalid = {
 		NOT = {
 			has_modifier = modifier_crumbling_banner_system
@@ -316,16 +344,7 @@ je_reform_the_banner_system_modern = {
 		remove_modifier = modifier_crumbling_banner_system
 		set_variable = chose_new_army
 	}
-	fail = {
-		ig:ig_armed_forces = {
-			is_powerful = yes
-		}
-	}
-	on_fail = {
-		trigger_event = {
-			id = imperia_qing.5
-		}
-	}
+
 	invalid = {
 		NOT = {
 			has_modifier = modifier_crumbling_banner_system
@@ -372,6 +391,7 @@ je_establish_local_armies = {
 			}
 			add_modifier = {
 				name = modifier_local_armies
+				months = 240
 			}
 		}
 		else = {
@@ -392,6 +412,11 @@ je_establish_local_armies = {
 	on_fail = {
 		remove_modifier = modifier_crumbling_banner_system
 	}
+
+	invalid = {
+		has_global_variable = china_shatters
+	}
+
 	weight = 1000
 }
 
@@ -486,9 +511,6 @@ je_promote_western_learning = {
 			name = modifier_self_strengthening_movement
 			months = 240
 			is_decaying = yes
-		}
-		custom_tooltip = {
-			text = fragile_unity_major_remove_tt
 		}
 	}
 	weight = 1000
@@ -622,35 +644,40 @@ je_settle_the_steppe = {
 	#Eastern Provinces
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_historical_content
+	scripted_button = manchuria_migration_button
+
+	modifiers_while_active = {
+		modifier_chuang_guandong
+	}
 
 	complete = {
+		total_population > 12000000
 		has_law = law_type:law_cultural_exclusion
+
 		s:STATE_SHENGJING.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 		s:STATE_SOUTHERN_MANCHURIA.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 		s:STATE_NORTHERN_MANCHURIA.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 15
+				level >= 5
 			}
 		}
 	}
 	on_complete = {
-		add_primary_culture = cu:han
-		add_modifier = {
-			name = modifier_qing_new_frontiers
-			months = 240
-			is_decaying = yes
+		trigger_event = {
+			id = imperia_qing_substates.13
 		}
+
 		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_add_tt

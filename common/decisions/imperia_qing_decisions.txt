@@ -1,30 +1,67 @@
 ﻿qing_language_call_language_conference = {
 	is_shown = {
-		exists = c:CHI 
+		exists = c:CHI
 		c:CHI = ROOT
 		is_subject = no
-		not = { has_variable = has_called_chinese_language_conference}
+		not = {
+			has_variable = has_called_chinese_language_conference
+		}
 	}
-
 	possible = {
 		c:CHI = {
 			has_technology_researched = nationalism
 			custom_tooltip = {
 				text = chinese_national_identity_tt
-				has_variable = je_chinese_national_identity_completed				
+				has_variable = je_chinese_national_identity_completed
 			}
 		}
 	}
-
 	when_taken = {
-		trigger_event = { 
-			id = imperia_qing_substates.6 
+		trigger_event = {
+			id = imperia_qing_substates.6
 			days = 0
-			popup = yes 
+			popup = yes
 		}
 	}
-
 	ai_chance = {
 		base = 15
+	}
+}
+
+warlord_china_declare_rival_gov = {
+	is_shown = {
+		has_global_variable = china_shatters
+		NOR = {
+			has_modifier = modifier_recognized_national_government
+			has_modifier = modifier_rival_national_government
+		}
+		OR = {
+			capital = {
+				state_is_in_china = yes
+			}
+			country_has_primary_culture = cu:manchu
+		}
+	}
+	possible = {
+		any_scope_state = {
+			state_is_in_china = yes
+			count >= 5
+		}
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_BEIJING
+				state_region = s:STATE_XIAN
+				state_region = s:STATE_NANJING
+				state_region = s:STATE_GUANGDONG
+			}
+		}
+	}
+	when_taken = {
+		add_modifier = {
+			name = modifier_rival_national_government
+		}
+		add_journal_entry = {
+			type = je_warlord_overthrow_national_gov
+		}
 	}
 }

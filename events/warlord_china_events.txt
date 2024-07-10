@@ -1,48 +1,60 @@
 ﻿namespace = warlord_china_events
-
-warlord_china_events.100 = { #Split china up into warlord states
+warlord_china_events.100 = {
+	#Split china up into warlord states
 	type = country_event
 	placement = root
 	duration = 3
-
 	title = warlord_china_events.100.t
 	desc = warlord_china_events.100.d
 	flavor = warlord_china_events.100.f
-
 	event_image = {
 		video = "unspecific_armored_train"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
-
 	trigger = {
 		exists = c:CHI
 		this = c:CHI
-		NOT = { has_global_variable = china_shatters }
+		NOT = {
+			has_global_variable = china_shatters
+		}
 	}
-
 	immediate = {
 		set_global_variable = china_shatters
-		
 		set_variable = chinese_central_government
-			
-		if = { 
+		remove_modifier = modifier_chinese_diglossia
+		every_country = {
+			limit = {
+				has_modifier = modifier_crumbling_banner_system
+			}
+			remove_modifier = modifier_crumbling_banner_system
+		}
+		every_country = {
+			limit = {
+				has_modifier = modifier_local_armies
+			}
+			remove_modifier = modifier_local_armies
+		}
+		every_country = {
+			limit = {
+				has_modifier = modifier_chinese_diglossia
+			}
+			remove_modifier = modifier_chinese_diglossia
+		}
+		if = {
 			limit = {
 				c:KOR = {
-				is_subject_of = ROOT
+					is_subject_of = ROOT
 				}
 			}
-			s:STATE_SOUTHERN_MANCHURIA = {
+			s:STATE_GANDO = {
 				add_claim = c:KOR
 			}
 		}
-		
 		if = {
 			limit = {
 				c:MGL = {
-				is_subject_of = ROOT
+					is_subject_of = ROOT
 				}
 			}
 			s:STATE_GANSU = {
@@ -57,46 +69,50 @@ warlord_china_events.100 = { #Split china up into warlord states
 			s:STATE_XIAN = {
 				add_claim = c:MGL
 			}
+			s:STATE_ALXA = {
+				add_claim = c:MGL
+			}
+			s:STATE_HINGGAN = {
+				add_claim = c:MGL
+			}
 		}
-		
 		if = {
 			limit = {
 				c:TIB = {
-				is_subject_of = ROOT
+					is_subject_of = ROOT
 				}
 			}
-			s:STATE_QINGHAI = { 
+			s:STATE_QINGHAI = {
 				add_claim = c:TIB
 			}
 			s:STATE_SICHUAN = {
 				add_claim = c:TIB
 			}
 		}
-		
 		if = {
 			limit = {
 				c:BUR = {
-				is_subject_of = ROOT
+					is_subject_of = ROOT
 				}
 			}
 			s:STATE_YUNNAN = {
 				add_claim = c:BUR
 			}
 		}
-		
 		if = {
 			limit = {
 				c:DAI = {
-				is_subject_of = ROOT
+					is_subject_of = ROOT
 				}
 			}
 			s:STATE_GUANGDONG = {
 				add_claim = c:DAI
 			}
 		}
-					
 		if = {
-			limit = { exists = s:STATE_HUNAN.region_state:CHI }
+			limit = {
+				exists = s:STATE_HUNAN.region_state:CHI
+			}
 			create_country = {
 				tag = HNA
 				origin = this
@@ -106,11 +122,16 @@ warlord_china_events.100 = { #Split china up into warlord states
 					set_variable = warlord_state
 				}
 			}
-			c:HNA = { save_scope_as = scope_HNA }
+			c:HNA = {
+				save_scope_as = scope_HNA
+			}
 		}
 		if = {
-			limit = { exists = s:STATE_GUANGXI.region_state:CHI }
-			create_country = { #Guangxi
+			limit = {
+				exists = s:STATE_GUANGXI.region_state:CHI
+			}
+			create_country = {
+				#Guangxi
 				tag = GNG
 				origin = this
 				state = s:STATE_GUANGXI.region_state:CHI
@@ -119,24 +140,25 @@ warlord_china_events.100 = { #Split china up into warlord states
 					set_variable = warlord_state
 				}
 			}
-			c:GNG = { save_scope_as = scope_GNG }
+			c:GNG = {
+				save_scope_as = scope_GNG
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_SOUTHERN_ANHUI.region_state:CHI }
-			create_country = { #Anhui Clique
+			limit = {
+				exists = s:STATE_SOUTHERN_ANHUI.region_state:CHI
+			}
+			create_country = {
+				#Anhui Clique
 				tag = AHU
 				origin = this
 				state = s:STATE_SOUTHERN_ANHUI.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
-
 					ig:ig_armed_forces = {
 						set_interest_group_name = ig_anhui_clique
 					}
-
 					if = {
 						limit = {
 							c:CHI = {
@@ -144,10 +166,10 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_rural_poverty
+							name = modifier_rural_poverty
 						}
 						add_journal_entry = {
-						type = je_rural_poverty_substate
+							type = je_rural_poverty_substate
 						}
 					}
 					if = {
@@ -157,7 +179,7 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_chinese_diglossia
+							name = modifier_chinese_diglossia
 						}
 					}
 					if = {
@@ -167,31 +189,33 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_female_shortage
+							name = modifier_female_shortage
 						}
 						add_journal_entry = {
-						type = je_end_female_infanticide
+							type = je_end_female_infanticide
 						}
 					}
 				}
 			}
-			c:AHU = { save_scope_as = scope_AHU }
+			c:AHU = {
+				save_scope_as = scope_AHU
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_ZHILI.region_state:CHI }
-			create_country = { #Zhili Clique
+			limit = {
+				exists = s:STATE_ZHILI.region_state:CHI
+			}
+			create_country = {
+				#Zhili Clique
 				tag = ZHI
 				origin = this
 				state = s:STATE_ZHILI.region_state:CHI
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
-
 					ig:ig_armed_forces = {
-						set_interest_group_name = ig_guominjun
+						set_interest_group_name = ig_zhili_clique
 					}
-
 					if = {
 						limit = {
 							c:CHI = {
@@ -199,10 +223,10 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_rural_poverty
+							name = modifier_rural_poverty
 						}
 						add_journal_entry = {
-						type = je_rural_poverty_substate
+							type = je_rural_poverty_substate
 						}
 					}
 					if = {
@@ -212,7 +236,7 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_chinese_diglossia
+							name = modifier_chinese_diglossia
 						}
 					}
 					if = {
@@ -222,20 +246,24 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_female_shortage
+							name = modifier_female_shortage
 						}
 						add_journal_entry = {
-						type = je_end_female_infanticide
+							type = je_end_female_infanticide
 						}
 					}
 				}
 			}
-			c:ZHI = { save_scope_as = scope_ZHI }
+			c:ZHI = {
+				save_scope_as = scope_ZHI
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_SOUTHERN_MANCHURIA.region_state:CHI }
-			create_country = { #Fengtian Clique
+			limit = {
+				exists = s:STATE_SOUTHERN_MANCHURIA.region_state:CHI
+			}
+			create_country = {
+				#Fengtian Clique
 				tag = MCH
 				origin = this
 				state = s:STATE_SOUTHERN_MANCHURIA.region_state:CHI
@@ -244,24 +272,25 @@ warlord_china_events.100 = { #Split china up into warlord states
 					set_variable = warlord_state
 				}
 			}
-			c:MCH = { save_scope_as = scope_MCH }
+			c:MCH = {
+				save_scope_as = scope_MCH
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_SHANXI.region_state:CHI }
-			create_country = {  #Shanxi
+			limit = {
+				exists = s:STATE_SHANXI.region_state:CHI
+			}
+			create_country = {
+				#Shanxi
 				tag = SHN
 				origin = this
 				state = s:STATE_SHANXI.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
-
 					ig:ig_armed_forces = {
 						set_interest_group_name = ig_shanxi_clique
 					}
-
 					if = {
 						limit = {
 							c:CHI = {
@@ -269,10 +298,10 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_rural_poverty
+							name = modifier_rural_poverty
 						}
 						add_journal_entry = {
-						type = je_rural_poverty_substate
+							type = je_rural_poverty_substate
 						}
 					}
 					if = {
@@ -282,7 +311,7 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_chinese_diglossia
+							name = modifier_chinese_diglossia
 						}
 					}
 					if = {
@@ -292,107 +321,121 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_female_shortage
+							name = modifier_female_shortage
 						}
 						add_journal_entry = {
-						type = je_end_female_infanticide
+							type = je_end_female_infanticide
 						}
 					}
 				}
 			}
-			c:SHN = { save_scope_as = scope_SHN }
+			c:SHN = {
+				save_scope_as = scope_SHN
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_TIANSHAN.region_state:CHI }
-			create_country = {  #Xinjiang Clique
+			limit = {
+				exists = s:STATE_TIANSHAN.region_state:CHI
+			}
+			create_country = {
+				#Xinjiang Clique
 				tag = XIN
 				origin = this
 				state = s:STATE_TIANSHAN.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:XIN = { save_scope_as = scope_XIN }
+			c:XIN = {
+				save_scope_as = scope_XIN
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_YUNNAN.region_state:CHI }
-			create_country = {  #Yunnan
+			limit = {
+				exists = s:STATE_YUNNAN.region_state:CHI
+			}
+			create_country = {
+				#Yunnan
 				tag = YUN
 				origin = this
 				state = s:STATE_YUNNAN.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:YUN = { save_scope_as = scope_YUN }
+			c:YUN = {
+				save_scope_as = scope_YUN
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_GUIZHOU.region_state:CHI }
-			create_country = { #Guizhou
+			limit = {
+				exists = s:STATE_GUIZHOU.region_state:CHI
+			}
+			create_country = {
+				#Guizhou
 				tag = GUI
 				origin = this
 				state = s:STATE_GUIZHOU.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:GUI = { save_scope_as = scope_GUI }
+			c:GUI = {
+				save_scope_as = scope_GUI
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_GUANGDONG.region_state:CHI }
-			create_country = { #Guangdong
+			limit = {
+				exists = s:STATE_GUANGDONG.region_state:CHI
+			}
+			create_country = {
+				#Guangdong
 				tag = YUE
 				origin = this
 				state = s:STATE_GUANGDONG.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:YUE = { save_scope_as = scope_YUE }
+			c:YUE = {
+				save_scope_as = scope_YUE
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_SICHUAN.region_state:CHI }
+			limit = {
+				exists = s:STATE_SICHUAN.region_state:CHI
+			}
 			create_country = {
 				tag = SIH
 				origin = this
 				state = s:STATE_SICHUAN.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:SIH = { save_scope_as = scope_SIH }
+			c:SIH = {
+				save_scope_as = scope_SIH
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_SHANDONG.region_state:CHI }
+			limit = {
+				exists = s:STATE_SHANDONG.region_state:CHI
+			}
 			create_country = {
 				tag = SHA
 				origin = this
 				state = s:STATE_SHANDONG.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
-
 					ig:ig_armed_forces = {
 						set_interest_group_name = ig_shandong_army
 					}
-
 					if = {
 						limit = {
 							c:CHI = {
@@ -400,10 +443,10 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_rural_poverty
+							name = modifier_rural_poverty
 						}
 						add_journal_entry = {
-						type = je_rural_poverty_substate
+							type = je_rural_poverty_substate
 						}
 					}
 					if = {
@@ -413,7 +456,7 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_chinese_diglossia
+							name = modifier_chinese_diglossia
 						}
 					}
 					if = {
@@ -423,65 +466,71 @@ warlord_china_events.100 = { #Split china up into warlord states
 							}
 						}
 						add_modifier = {
-						name = modifier_female_shortage
+							name = modifier_female_shortage
 						}
 						add_journal_entry = {
-						type = je_end_female_infanticide
+							type = je_end_female_infanticide
 						}
 					}
 				}
 			}
-			c:SHA = { save_scope_as = scope_SHA }
+			c:SHA = {
+				save_scope_as = scope_SHA
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_NINGXIA.region_state:CHI }
+			limit = {
+				exists = s:STATE_NINGXIA.region_state:CHI
+			}
 			create_country = {
 				tag = XIB
 				origin = this
 				state = s:STATE_NINGXIA.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 					set_variable = warlord_state
 				}
 			}
-			c:XIB = { save_scope_as = scope_XIB }
+			c:XIB = {
+				save_scope_as = scope_XIB
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_ULIASTAI.region_state:CHI }
+			limit = {
+				exists = s:STATE_ULIASTAI.region_state:CHI
+			}
 			create_country = {
 				tag = MGL
 				origin = this
 				state = s:STATE_ULIASTAI.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 				}
 			}
-			c:MGL = { save_scope_as = scope_MGL }
+			c:MGL = {
+				save_scope_as = scope_MGL
+			}
 		}
-
 		if = {
-			limit = { exists = s:STATE_TUVA.region_state:CHI }
+			limit = {
+				exists = s:STATE_TUVA.region_state:CHI
+			}
 			create_country = {
 				tag = TUV
 				origin = this
 				state = s:STATE_TUVA.region_state:CHI
-
 				on_created = {
 					warlord_setup_effect = yes
 				}
 			}
-			c:TUV = { save_scope_as = scope_TUV }
+			c:TUV = {
+				save_scope_as = scope_TUV
+			}
 		}
-
 		every_subject_or_below = {
 			make_independent = yes
 		}
 	}
-
 	option = {
 		default_option = yes
 		name = warlord_china_events.100.a
@@ -491,7 +540,9 @@ warlord_china_events.100 = { #Split china up into warlord states
 				any_scope_state = {
 					is_capital = no
 					any_neighbouring_state = {
-						owner = { has_variable = warlord_state }
+						owner = {
+							has_variable = warlord_state
+						}
 					}
 				}
 			}
@@ -549,7 +600,6 @@ warlord_china_events.100 = { #Split china up into warlord states
 				set_interest_group_name = ig_liangguang_army
 			}
 		}
-		
 		every_country = {
 			limit = {
 				OR = {
@@ -558,45 +608,45 @@ warlord_china_events.100 = { #Split china up into warlord states
 				}
 			}
 			add_modifier = {
-			name = modifier_warlord_era
-			months = 300
+				name = modifier_warlord_era
+				months = -1
 			}
 		}
 		every_subject_or_below = {
 			make_independent = yes
 		}
-		ig:ig_armed_forces = {
-			set_interest_group_name = ig_zhili_clique
+		play_as = c:ZHI
+		c:ZHI = {
+			annex_with_incorporation = c:CHI
+			set_capital = STATE_BEIJING
+			add_modifier = {
+				name = modifier_recognized_national_government
+			}
+			add_journal_entry = {
+				type = je_warlord_chinese_reunification
+			}
 		}
-
 	}
 }
 
-warlord_china_events.200 = { #Fragile Unity Victory
+warlord_china_events.200 = {
+	#Fragile Unity Victory
 	type = country_event
 	placement = root
 	duration = 3
-
 	title = warlord_china_events.200.t
 	desc = warlord_china_events.200.d
 	flavor = warlord_china_events.200.f
-
 	event_image = {
 		video = "asia_farmers_market"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
 	trigger = {
 		# Triggered by JE
 	}
-
 	immediate = {
-		
 	}
-
 	option = {
 		default_option = yes
 		name = warlord_china_events.200.a
@@ -608,7 +658,6 @@ warlord_china_events.200 = { #Fragile Unity Victory
 			value = large_radicals
 		}
 	}
-
 	option = {
 		name = warlord_china_events.200.b
 		add_modifier = {
@@ -621,46 +670,35 @@ warlord_china_events.200 = { #Fragile Unity Victory
 	}
 }
 
-
-warlord_china_events.110 = { #Prisoner Killing
+warlord_china_events.110 = {
+	#Prisoner Killing
 	type = country_event
 	placement = root
 	duration = 3
-
 	title = warlord_china_events.110.t
 	desc = warlord_china_events.110.d
 	flavor = warlord_china_events.110.f
-
 	event_image = {
 		video = "asia_farmers_market"
 	}
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-
 	trigger = {
 		any_scope_character = {
 			is_ruler = yes
-
 			has_trait = cruel
-
 		}
 		has_government_type = gov_warlord_state
 	}
-
 	immediate = {
 		random_scope_character = {
 			limit = {
 				is_ruler = yes
-
 				has_trait = cruel
 			}
 			save_scope_as = prisoner_killing_warlord
 		}
-
 	}
-
 	option = {
 		default_option = yes
 		name = warlord_china_events.110.a
@@ -669,9 +707,7 @@ warlord_china_events.110 = { #Prisoner Killing
 				value = 0.5
 			}
 		}
-
 	}
-
 	option = {
 		default_option = yes
 		name = warlord_china_events.110.b
@@ -679,33 +715,22 @@ warlord_china_events.110 = { #Prisoner Killing
 			name = modifier_prisoner_murder_covered_up
 			months = normal_modifier_time
 		}
-
 	}
 }
-
-
-
 
 # Yan Xishan Thought
 warlord_china_events.301 = {
 	type = country_event
 	placement = root
 	duration = 3
-
 	title = warlord_china_events.301.t
 	desc = warlord_china_events.301.d
 	flavor = warlord_china_events.301.f
-
-
-
 	gui_window = event_window_1char_tabloid
 	left_icon = scope:yan_xishan_thinker
-
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/misc/1Character_Banner"
-
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
-
 	trigger = {
 		has_government_type = gov_warlord_state
 		has_law = law_type:law_autocracy
@@ -787,6 +812,160 @@ warlord_china_events.301 = {
 		add_modifier = {
 			name = warlord_legitimacy
 			months = normal_modifier_time
+		}
+	}
+}
+
+warlord_china_events.302 = {
+	type = country_event
+	placement = root
+	duration = 3
+	title = warlord_china_events.302.t
+	desc = warlord_china_events.302.d
+	flavor = warlord_china_events.302.f
+	event_image = {
+		video = "asia_farmers_market"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	trigger = {
+		# Triggered by JE
+	}
+	immediate = {
+		remove_modifier = modifier_recognized_national_government
+		change_tag = CHI
+		every_country = {
+			remove_modifier ?= modifier_warlord_era
+		}
+	}
+	option = {
+		#Republic of China
+		name = warlord_china_events.302.a
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_presidential_republic
+					has_law = law_type:law_parliamentary_republic
+				}
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+		}
+	}
+	option = {
+		#Republic of China (KMT)
+		name = warlord_china_events.302.b
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_presidential_republic
+					has_law = law_type:law_parliamentary_republic
+				}
+			}
+		}
+		set_variable = china_kmt_republic
+		add_loyalists = {
+			value = 0.1
+		}
+	}
+	option = {
+		#Manchu Restoration
+		name = warlord_china_events.302.c
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+			}
+		}
+		add_primary_culture = cu:manchu
+		add_loyalists = {
+			value = 0.5
+			culture = cu:manchu
+		}
+		if = {
+			limit = {
+				year < 1862
+			}
+			create_character = {
+				template = chi_xianfeng_template
+				ruler = yes
+			}
+		}
+		else_if = {
+			limit = {
+				year >= 1862
+				year < 1876
+			}
+			create_character = {
+				template = imperia_chi_tongzhi_emperor_template
+				ruler = yes
+			}
+		}
+		else_if = {
+			limit = {
+				year >= 1876
+				year < 1908
+			}
+			create_character = {
+				template = imperia_chi_guangxu_emperor_template
+				ruler = yes
+			}
+		}
+		else_if = {
+			limit = {
+				year >= 1908
+				year < 1937
+			}
+			create_character = {
+				template = imperia_chi_xuantong_emperor_template
+				ruler = yes
+			}
+		}
+	}
+	option = {
+		#A New Dynasty
+		name = warlord_china_events.302.e
+		trigger = {
+			ROOT = {
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+				}
+			}
+		}
+		set_variable = china_han_empire
+		add_loyalists = {
+			value = 0.1
+			culture = cu:han
+		}
+	}
+	option = {
+		#People's Republic of China
+		name = warlord_china_events.302.g
+		trigger = {
+			ROOT = {
+				has_law = law_type:law_council_republic
+			}
+		}
+		add_loyalists = {
+			pop_type = laborers
+			value = 0.25
+		}
+	}
+	option = {
+		#Fascist China oh god oh fuck surely this won't happen
+		name = warlord_china_events.302.h
+		trigger = {
+			ROOT = {
+				coa_def_fascist_flag_trigger = yes
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			culture = cu:han
 		}
 	}
 }
