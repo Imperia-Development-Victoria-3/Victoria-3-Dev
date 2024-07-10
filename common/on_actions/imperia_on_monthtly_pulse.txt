@@ -104,6 +104,18 @@
 			}
 			remove_modifier = player_construction_bonus
 		}
+		# Zollverein member construction nerf to prevent them from funding Prussia to the moon
+		# Kleinstaaterei is the term for these countries, localised as Kleinstaat
+		remove_modifier ?= zollverein_member_construction_penalty
+		if = {
+			limit = {
+				power_bloc.power_bloc_leader ?= c:PRU
+				this != c:PRU
+			}
+			add_modifier = {
+				name = zollverein_member_construction_penalty
+			}
+		}
 		# Random events while congress is in session
 		if = {
 			limit = {
@@ -167,6 +179,39 @@
 			set_variable = {
 				name = imperia_money_transfer_amount
 				value = 0
+			}
+		}
+		remove_modifier ?= modifier_state_religion_home_defence_discount
+		remove_modifier ?= modifier_state_religion_home_affairs_discount
+		remove_modifier ?= modifier_state_religion_education_discount
+		remove_modifier ?= modifier_state_religion_health_discount
+		if = {
+			limit = {
+				has_law = law_type:law_state_religion
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_faith_orders
+				}
+				add_modifier = modifier_state_religion_home_defence_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_inquisition
+				}
+				add_modifier = modifier_state_religion_home_affairs_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_religious_schools
+				}
+				add_modifier = modifier_state_religion_education_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_charitable_health_system
+				}
+				add_modifier = modifier_state_religion_health_discount
 			}
 		}
 	}
