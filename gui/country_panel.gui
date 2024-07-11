@@ -623,12 +623,66 @@ types country_panel_types
 					visible = "[Not(Country.IsInPowerBloc)]"
 
 					blockoverride "stats_tooltip" {
+						tooltip = "NO_POWER_BLOC_TOOLTIP"
+					}
+
+					blockoverride "entire_icon" {
+						icon = {
+							texture = "gfx/interface/main_hud/powerblocs.dds"
+							size = { 50 50 }
+							parentanchor = right|vcenter
+						}
+					}
+
+					blockoverride "stats_label" {
+						text = "[concept_power_bloc]"
+					}
+
+					blockoverride "stats_value" {
+						text = "COUNTRY_PANEL_LEVERAGE_LABEL"
+					}
+				}
+
+				#LEVERAGE - Country is a leader of a Power Bloc
+				country_stats_entry = {
+					visible = "[And(Country.GetPowerBloc.IsLeader(Country.Self), Not(Country.IsLocalPlayer))]"
+
+					blockoverride "stats_tooltip" {
+						tooltip = "LEVERAGE_ON_LEADER_NOT_APPLICABLE"
+					}
+
+					blockoverride "information_icon" {
+						texture = "gfx/interface/icons/generic_icons/leverage.dds"
+					}
+
+					blockoverride "stats_label" {
+						text = "YOUR_LEVERAGE"
+					}
+
+					blockoverride "stats_value" {
+						text = "NONE"
+						default_format = "#title"
+					}
+				}
+
+				#LEVERAGE - Country is NOT a leader of a Power Bloc
+				country_stats_entry = {
+					visible = "[And(Not(Country.GetPowerBloc.IsLeader(Country.Self)), Not(Country.IsLocalPlayer))]"
+
+					blockoverride "stats_tooltip" {
 						tooltipwidget = {
 							RegularTooltip_Leverage = {
 								datacontext = "[GetPlayer.GetPowerBloc]"
 
 								blockoverride "has_power_bloc_context_visibility" {
 									visible = "[GetPlayer.IsInPowerBloc]"
+								}
+
+								blockoverride "have_no_power_bloc" {
+									custom_tooltip_textbox = {
+										visible = "[Not(GetPlayer.IsInPowerBloc)]"
+										text = "PLAYER_IS_NOT_IN_A_POWER_BLOC"
+									}
 								}
 							}
 						}
@@ -639,10 +693,11 @@ types country_panel_types
 					}
 
 					blockoverride "stats_label" {
-						text = "[concept_power_bloc]"
+						text = "YOUR_LEVERAGE"
 					}
+
 					blockoverride "stats_value" {
-						text = "COUNTRY_PANEL_LEVERAGE_LABEL"
+						text = "COUNTRY_PANEL_LEVERAGE_VALUE"
 					}
 				}
 

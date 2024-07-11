@@ -223,6 +223,16 @@ law_total_separation = {
 	disallowing_laws = {
 		law_theocracy
 	}
+	
+	can_enact = {
+		OR = {
+			is_power_bloc_leader = no
+			power_bloc ?= {
+				NOT = { has_identity = identity:identity_religious }
+			}
+		}
+	}
+	
 	on_enact = {
 		recalculate_pop_ig_support = yes
 		if = {
@@ -314,17 +324,23 @@ law_state_atheism = {
 		law_faith_orders
 		law_inquisition
 	}
+	can_enact = {
+		ig:ig_devout = {
+			is_in_government = no
+		}
+		OR = {
+			is_power_bloc_leader = no
+			power_bloc ?= {
+				NOT = { has_identity = identity:identity_religious }
+			}
+		}
+	}
 	modifier = {
 		interest_group_ig_devout_pol_str_mult = -0.5
 		interest_group_ig_devout_approval_add = -10
 		state_conversion_mult = 2.25
 		country_authority_add = 300
 		state_radicals_from_discrimination_mult = 0.1
-	}
-	can_enact = {
-		ig:ig_devout = {
-			is_in_government = no
-		}
 	}
 	on_enact = {
 		set_state_religion = rel:atheist
