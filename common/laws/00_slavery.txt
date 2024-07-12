@@ -33,9 +33,6 @@ law_slavery_banned = {
 		}		
 	}
 	
-	modifier = {
-	}
-	
 	pop_support = {
 		value = 0
 		
@@ -150,11 +147,16 @@ law_slavery_banned = {
 		
 		# Strong tendency towards abolitionism in the late game
 		if = {
-			limit = { 
+			limit = {
 				has_technology_researched = human_rights
+				NOT = { has_strategy = ai_strategy_reactionary_agenda }
+				OR = {
+					NOT = { has_strategy = ai_strategy_conservative_agenda }
+					any_political_movement = { desired_law = law_type:law_slavery_banned }				
+				}	
 			}
-			add = 500
-		}		
+			add = 1000
+		}			
 	}
 	
 	ai_impose_chance = {
@@ -213,7 +215,7 @@ law_debt_slavery = {
 	
 	modifier = {
 		interest_group_ig_industrialists_pol_str_mult = 0.10
-
+		interest_group_ig_landowners_pol_str_mult = 0.5
 	}
 	
 	pop_support = {
@@ -441,6 +443,10 @@ law_legacy_slavery = {
 				add_ideology = ideology_pro_slavery 
 			}
 		}
+	}	
+		
+	modifier = {
+		interest_group_ig_landowners_pol_str_mult = 0.25
 	}	
 
 	possible_political_movements = {
