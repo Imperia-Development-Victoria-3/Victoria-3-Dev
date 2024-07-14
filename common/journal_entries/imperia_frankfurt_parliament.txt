@@ -560,6 +560,24 @@ je_imperia_frankfurt_german_consolidation_gutter_king = {
 	}
 	on_weekly_pulse = {
 		effect = {
+			# Make sure that german minor subjects stay at or around 50 liberty desire, to combat any shenanigans
+			every_subject_or_below = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				}
+				if = {
+					limit = {
+						liberty_desire > 55
+					}
+					add_liberty_desire = -5
+				}
+				else_if = {
+					limit = {
+						liberty_desire < 45
+					}
+					add_liberty_desire = 5
+				}
+			}
 			change_global_variable = {
 				name = frankfurt_parliament_weeks_to_civil_war
 				subtract = 1
