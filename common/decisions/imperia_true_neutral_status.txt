@@ -108,3 +108,54 @@ consider_true_neutral_status = {
 		base = 1
 	}
 }
+
+abolish_true_neutral = {
+	is_shown = {
+		has_modifier = imperia_true_neutral
+	}
+	possible = {
+		has_modifier = imperia_true_neutral
+		is_at_war = no
+		# This variable is active while the event is active
+		custom_tooltip = {
+			text = is_not_considering_neutrality_abolishment_tt
+			NOT = {
+				has_variable = considering_abolishing_neutrality
+			}
+		}
+	}
+	when_taken = {
+		trigger_event = {
+			id = imperia_true_neutral_status.3
+			popup = yes
+		}
+		custom_label = if_you_accept_tt
+		show_as_tooltip = {
+			remove_modifier = imperia_true_neutral
+			add_radicals = {
+				# +10% radicals in the country
+				value = 0.1
+			}
+			every_country = {
+				limit = {
+					OR = {
+						country_rank >= rank_value:great_power
+						is_adjacent_to_country = root
+					}
+					NOR = {
+						is_country_type = unrecognized
+						is_country_type = decentralized
+					}
+				}
+				# Change relations with every power that would've considered the neutrality treaty
+				change_relations = {
+					country = root
+					value = -35
+				}
+			}
+		}
+	}
+	ai_chance = {
+		base = 0
+	}
+}
