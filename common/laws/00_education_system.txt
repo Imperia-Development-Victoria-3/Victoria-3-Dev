@@ -44,7 +44,7 @@ law_religious_schools = {
 		law_protected_speech
 	}
 	modifier = {
-		country_institution_cost_institution_education_system_mult = 0.15
+		country_institution_cost_institution_education_system_mult = 0.2
 	}
 	institution = institution_schools
 	institution_modifier = {
@@ -118,13 +118,23 @@ law_religious_schools = {
 		if = {
 			limit = { 
 				OR = {
-					has_journal_entry = je_sick_man_absolute_education
 					has_journal_entry = je_terakoya
 				}
 				has_law = law_type:law_no_schools
 			}
 			add = 1000
-		}				
+		}
+		if = {
+			limit = { 
+				has_journal_entry = je_sick_man_absolute_education
+				OR = {
+					has_law = law_type:law_no_schools
+					has_law = law_type:law_private_schools
+					has_law = law_type:law_public_schools
+				}
+			}
+			add = 1000
+		}	
 	}
 
 	ai_impose_chance = {
@@ -160,7 +170,7 @@ law_patriot_schools = {
 	}
 	modifier = {
 		country_institution_schools_max_investment_add = 1
-		country_institution_cost_institution_education_system_mult = 0.15
+		country_institution_cost_institution_education_system_mult = 0.2
 	}
 	institution = institution_schools
 	institution_modifier = {
@@ -242,13 +252,23 @@ law_patriot_schools = {
 		if = {
 			limit = { 
 				OR = {
-					has_journal_entry = je_sick_man_absolute_education
 					has_journal_entry = je_terakoya
 				}
 				has_law = law_type:law_no_schools
 			}
 			add = 1000
 		}
+		if = {
+			limit = { 
+				has_journal_entry = je_sick_man_absolute_education
+				OR = {
+					has_law = law_type:law_no_schools
+					has_law = law_type:law_private_schools
+					has_law = law_type:law_public_schools
+				}
+			}
+			add = 1000
+		}		
 	}
 }
 
@@ -319,13 +339,27 @@ law_private_schools = {
 		if = {
 			limit = { 
 				OR = {
-					has_journal_entry = je_sick_man_liberal_education
 					has_journal_entry = je_terakoya
 				}
-				has_law = law_type:law_no_schools
+				OR = {
+					has_law = law_type:law_no_schools
+					has_law = law_type:law_patriot_schools
+					has_law = law_type:law_religious_schools
+				}
 			}
 			add = 1000
-		}		
+		}
+		if = {
+			limit = { 
+				has_journal_entry = je_sick_man_liberal_education
+				OR = {
+					has_law = law_type:law_no_schools
+					has_law = law_type:law_patriot_schools
+					has_law = law_type:law_religious_schools
+				}
+			}
+			add = 1000
+		}
 	}
 
 	ai_impose_chance = {
@@ -364,7 +398,7 @@ law_public_schools = {
 		law_serfdom
 	}
 	modifier = {
-		country_institution_cost_institution_education_system_mult = 0.5
+		country_institution_cost_institution_education_system_mult = 0.6
 	}
 	institution = institution_schools
 	institution_modifier = {
@@ -426,13 +460,23 @@ law_public_schools = {
 		if = {
 			limit = { 
 				OR = {
-					has_journal_entry = je_sick_man_liberal_education
 					has_journal_entry = je_terakoya
 				}
 				has_law = law_type:law_no_schools
 			}
 			add = 1000
-		}			
+		}
+		if = {
+			limit = { 
+				has_journal_entry = je_sick_man_liberal_education
+				OR = {
+					has_law = law_type:law_no_schools
+					has_law = law_type:law_patriot_schools
+					has_law = law_type:law_religious_schools
+				}
+			}
+			add = 1000
+		}
 	}
 
 	ai_impose_chance = {

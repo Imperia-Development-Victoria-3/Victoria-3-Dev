@@ -128,11 +128,20 @@ law_right_of_assembly = {
 
 	ai_enact_weight_modifier = { #Petitions
 		value = 0
-		
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_outlawed_dissent
+					has_law = law_type:law_censorship
+				}
+				has_journal_entry = je_sick_man_liberal_voting
+			}
+			add = 1000
+		}	
 	}
 }
 
@@ -179,10 +188,19 @@ law_protected_speech = {
 
 	ai_enact_weight_modifier = { #Petitions
 		value = 0
-		
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_outlawed_dissent
+					has_law = law_type:law_censorship
+				}
+				has_journal_entry = je_sick_man_liberal_voting
+			}
+			add = 1000
+		}	
 	}
 }

@@ -43,8 +43,8 @@
 	modifier = {
 		interest_group_ig_landowners_pol_str_mult = 0.5
 		country_military_goods_cost_mult = -0.10
-		tax_land_add = 0.1
-		state_accepted_birth_rate_mult = 0.01
+		tax_land_add = 0.15
+		state_accepted_birth_rate_mult = 0.015
 		state_peasants_internal_migration_disallowed_bool = yes
 		state_peasants_mass_migration_disallowed_bool = yes
 	}
@@ -100,6 +100,7 @@ law_tenant_farmers = {
 	modifier = {
 		interest_group_ig_landowners_pol_str_mult = 0.25
 		tax_land_add = 0.05
+		tax_per_capita_add = 0.05
 		state_aristocrats_investment_pool_efficiency_mult = 0.10
 		building_unincorporated_throughput_add = 0.05
 		state_peasants_internal_migration_disallowed_bool = yes
@@ -199,7 +200,18 @@ law_tenant_farmers = {
 				}			
 			}
 			add = 1000
-		}		
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_serfdom
+					has_law = law_type:law_commercialized_agriculture
+					has_law = law_type:law_homesteading
+				}
+				has_journal_entry = je_sick_man_absolute_islam
+			}
+			add = 1000
+		}
 	}
 }
 
@@ -220,10 +232,10 @@ law_commercialized_agriculture = {
 		}
 	}
 	modifier = {
-		tax_per_capita_add = 0.05
+		tax_per_capita_add = 0.1
 		interest_group_ig_industrialists_pop_attraction_mult = 0.1
 		country_trade_route_competitiveness_mult = 0.05
-		country_trade_route_quantity_mult = 0.1
+		country_trade_route_quantity_mult = 0.15
 		country_loan_interest_rate_mult = -0.05
 	}
 	disallowing_laws = {
@@ -338,7 +350,17 @@ law_commercialized_agriculture = {
 				}
 			}
 			add = 1000
-		}		
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_serfdom
+					has_law = law_type:law_tenant_farmers
+				}
+				has_journal_entry = je_sick_man_liberal_labor
+			}
+			add = 1000
+		}
 	}
 }
 
@@ -455,7 +477,17 @@ law_homesteading = {
 				}
 			}
 			add = 1000
-		}		
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_serfdom
+					has_law = law_type:law_tenant_farmers
+				}
+				has_journal_entry = je_sick_man_liberal_labor
+			}
+			add = 1000
+		}
 	}
 }
 

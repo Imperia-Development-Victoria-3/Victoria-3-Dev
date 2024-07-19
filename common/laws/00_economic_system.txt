@@ -33,6 +33,7 @@ law_traditionalism = {
 		state_aristocrats_investment_pool_efficiency_mult = -0.35
 		state_bureaucracy_population_base_cost_factor_mult = -0.25
 		country_government_dividends_reinvestment_add = 0.25
+		country_government_dividends_efficiency_add = 0.2
 		state_tax_capacity_mult = -0.25
 		country_private_construction_allocation_mult = 0.25
 		building_nationalization_cost_mult = 1
@@ -95,8 +96,8 @@ law_interventionism = {
 		country_disable_nationalization_without_compensation_bool = yes
 		country_private_construction_allocation_mult = 0.5
 		building_nationalization_investment_return_add = 0.5
-		country_government_dividends_reinvestment_add = 0.45
-		country_government_dividends_efficiency_add = 0.3
+		country_government_dividends_reinvestment_add = 0.4
+		country_government_dividends_efficiency_add = 0.45
 		state_farmers_investment_pool_efficiency_mult = 0.25
 		state_shopkeepers_investment_pool_efficiency_mult = 0.25
 		state_capitalists_investment_pool_efficiency_mult = -0.1
@@ -189,6 +190,17 @@ law_interventionism = {
 			}
 			add = 1000
 		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_traditionalism
+					has_law = law_type:law_agrarianism
+					has_law = law_type:law_industry_banned
+				}
+				has_journal_entry = je_sick_man_liberal_labor
+			}
+			add = 1000
+		}
 	}
 }
 
@@ -224,7 +236,7 @@ law_agrarianism = {
 		state_shopkeepers_investment_pool_efficiency_mult = -0.25
 		country_private_construction_allocation_mult = 0.5
 		building_nationalization_investment_return_add = 0.5
-		country_government_dividends_reinvestment_add = 0.55
+		country_government_dividends_reinvestment_add = 0.6
 		country_government_dividends_efficiency_add = 0.25
 		country_leverage_resistance_mult = 0.15
 		country_disable_nationalization_without_compensation_bool = yes
@@ -419,7 +431,7 @@ law_industry_banned = {
 		country_production_tech_research_speed_mult = -0.25
 		country_production_tech_spread_mult = -0.25
 		building_nationalization_investment_return_add = 0.5
-		country_government_dividends_reinvestment_add = 0.25
+		country_government_dividends_reinvestment_add = 0.4
 		country_government_dividends_efficiency_add = 0.3
 		country_leverage_resistance_mult = 0.15
 		country_disable_nationalization_without_compensation_bool = yes
@@ -495,8 +507,7 @@ law_laissez_faire = {
 		state_capitalists_investment_pool_efficiency_mult = 0.15
 		country_capitalists_pol_str_mult = 0.25
 		country_private_construction_allocation_mult = 0.75
-		country_government_dividends_reinvestment_add = 0.9
-		country_government_dividends_efficiency_add = 0.05
+		country_government_dividends_reinvestment_add = 0.95
 		country_max_companies_add = 1
 		country_leverage_resistance_mult = -0.2
 		country_leverage_generation_mult = 0.25
@@ -585,7 +596,18 @@ law_laissez_faire = {
 				}	
 			}
 			add = 1000
-		}		
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_law = law_type:law_traditionalism
+					has_law = law_type:law_agrarianism
+					has_law = law_type:law_industry_banned
+				}
+				has_journal_entry = je_sick_man_liberal_labor
+			}
+			add = 1000
+		}
 	}	
 }
 
@@ -623,7 +645,7 @@ law_cooperative_ownership = {
 		country_trade_route_competitiveness_mult = -0.1
 		country_private_construction_allocation_mult = 0.35
 		country_bureaucracy_investment_cost_factor_mult = 0.05
-		country_government_dividends_reinvestment_add = 1
+		country_government_dividends_reinvestment_add = 0.95
 		country_leverage_resistance_mult = 0.25
 		country_force_collectivization_bool = yes
 		country_disable_privatization_bool = yes
@@ -726,7 +748,7 @@ law_command_economy = {
 		country_bureaucrats_pol_str_mult = 0.25
 		building_nationalization_cost_mult = -0.5
 		building_nationalization_radicals_mult = -0.75
-		country_government_dividends_efficiency_add = 0.45
+		country_government_dividends_efficiency_add = 0.75
 		country_leverage_resistance_mult = 0.50
 		country_disable_privatization_bool = yes
 	}
