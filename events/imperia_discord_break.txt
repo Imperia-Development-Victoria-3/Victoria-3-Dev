@@ -1896,11 +1896,17 @@ discord_break.1 = {
 			}
 		}
 		# -25% throughput in random building in entire country
-		scope:striking_building = {
-			add_modifier = {
-				name = discord_building_strike
-				multiplier = 25
-				months = 12
+		# If you have no real buildings, get a freebie, I guess
+		if = {
+			limit = {
+				exists = scope:striking_building
+			}
+			scope:striking_building = {
+				add_modifier = {
+					name = discord_building_strike
+					multiplier = 25
+					months = 12
+				}
 			}
 		}
 		discord_break_option_effect = {
@@ -2000,6 +2006,8 @@ discord_break.1 = {
 		if = {
 			# If theres no anti-investor lobby
 			limit = {
+				exists = scope:foreign_investor
+				exists = scope:largest_non_lobbying_interest_group
 				any_political_lobby = {
 					is_political_lobby_type = lobby_anti_country
 					target = scope:foreign_investor
@@ -2014,24 +2022,29 @@ discord_break.1 = {
 			}
 		}
 		# Appease the anti-investor lobby and piss off the pro-investor lobby
-		every_political_lobby = {
+		if = {
 			limit = {
-				target = scope:foreign_investor
-				is_political_lobby_type = lobby_pro_country
+				exists = scope:foreign_investor
 			}
-			change_appeasement = {
-				amount = -2
-				factor = appeasement_lobby_displeased
+			every_political_lobby = {
+				limit = {
+					target = scope:foreign_investor
+					is_political_lobby_type = lobby_pro_country
+				}
+				change_appeasement = {
+					amount = -2
+					factor = appeasement_lobby_displeased
+				}
 			}
-		}
-		every_political_lobby = {
-			limit = {
-				target = scope:foreign_investor
-				is_political_lobby_type = lobby_anti_country
-			}
-			change_appeasement = {
-				amount = 1
-				factor = appeasement_lobby_pleased
+			every_political_lobby = {
+				limit = {
+					target = scope:foreign_investor
+					is_political_lobby_type = lobby_anti_country
+				}
+				change_appeasement = {
+					amount = 1
+					factor = appeasement_lobby_pleased
+				}
 			}
 		}
 		discord_break_option_effect = {
@@ -2455,6 +2468,8 @@ discord_break.1 = {
 		if = {
 			# If theres no anti-investor lobby
 			limit = {
+				exists = scope:foreign_investor
+				exists = scope:largest_non_lobbying_interest_group
 				any_political_lobby = {
 					is_political_lobby_type = lobby_anti_country
 					target = scope:foreign_investor
@@ -2469,24 +2484,29 @@ discord_break.1 = {
 			}
 		}
 		# Appease the anti-investor lobby and piss off the pro-investor lobby
-		every_political_lobby = {
+		if = {
 			limit = {
-				target = scope:foreign_investor
-				is_political_lobby_type = lobby_pro_country
+				exists = scope:foreign_investor
 			}
-			change_appeasement = {
-				amount = -5
-				factor = appeasement_lobby_displeased
+			every_political_lobby = {
+				limit = {
+					target = scope:foreign_investor
+					is_political_lobby_type = lobby_pro_country
+				}
+				change_appeasement = {
+					amount = -5
+					factor = appeasement_lobby_displeased
+				}
 			}
-		}
-		every_political_lobby = {
-			limit = {
-				target = scope:foreign_investor
-				is_political_lobby_type = lobby_anti_country
-			}
-			change_appeasement = {
-				amount = 2
-				factor = appeasement_lobby_pleased
+			every_political_lobby = {
+				limit = {
+					target = scope:foreign_investor
+					is_political_lobby_type = lobby_anti_country
+				}
+				change_appeasement = {
+					amount = 2
+					factor = appeasement_lobby_pleased
+				}
 			}
 		}
 		discord_break_option_effect = {
@@ -2738,18 +2758,27 @@ discord_break.1 = {
 				var:third_option = 309
 			}
 		}
-		every_scope_building = {
+		if = {
 			limit = {
-				OR = {
-					type = scope:major_strike_building_1
-					type = scope:major_strike_building_2
-					type = scope:major_strike_building_3
+				AND = {
+					exists = scope:major_strike_building_1
+					exists = scope:major_strike_building_2
+					exists = scope:major_strike_building_3
 				}
 			}
-			add_modifier = {
-				name = discord_building_strike
-				multiplier = 75
-				months = 12
+			every_scope_building = {
+				limit = {
+					OR = {
+						type = scope:major_strike_building_1
+						type = scope:major_strike_building_2
+						type = scope:major_strike_building_3
+					}
+				}
+				add_modifier = {
+					name = discord_building_strike
+					multiplier = 75
+					months = 12
+				}
 			}
 		}
 		discord_break_option_effect = {
