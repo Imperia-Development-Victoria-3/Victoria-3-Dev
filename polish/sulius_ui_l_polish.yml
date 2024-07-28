@@ -1,0 +1,43 @@
+﻿l_polish:
+
+#tooltip_header [concept_legitimacy]
+[LegitimacyLevel.GetNameNoFormatting]#! $LEGITIMACY_LEVEL_ACTIVE$
+$LEGITIMACY_LEVEL_BOUNDS_DESC$
+$LEGITIMACY_LEVEL_CURRENT_LEGITIMACY_DESC$
+$TOOLTIP_DELIMITER$
+Efekty:#indent_newline:2 
+[LegitimacyLevel.GetEffectsWithLoyaltiesGain(GetPlayer.Self)]#!\n\n
+To jest spowodowane:#indent_newline:2 
+[GetPlayer.GetGovernmentLegitimacyDesc]#! 
+
+#tooltip_header [concept_money]#! 
+Saldo: #variable @money![AccessPlayer.PredictWeeklyBalance|D=+]#![GetPlayer.GetPowerDeltaIcon('money')]
+[SelectLocalization(GreaterThan_CFixedPoint(GetPlayer.GetPrincipal, '(CFixedPoint)0'), 'CREDIT_DESC', 'GOLD_RESERVES_DESC')]
+Limit rezerw złota: @money![GetPlayer.GetGoldReserveLimit|Dv]#!#![SelectLocalization(GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, 'CAPITAL_MONEY_DELAYED', 'OBSERVER_NO_COUNTRY_SELECTED') ]
+
+#tooltip_header [concept_technology]#! 
+[SelectLocalization(GetPlayer.GetCurrentlyResearchedTechnology.IsValid, 'SULIUS_RESEARCHING', 'SULIUS_NOT_RESEARCHING')]
+$TOOLTIP_DELIMITER$
+#V Postęp w technologii#! 
+#help Z [concept_innovation]: @innovation![GetPlayer.GetWeeklyInnovation|+0]
+Z [concept_technology_spread]: [GetPlayer.GetWeeklyTechnologySpreadForTechDesc(GetPlayer.GetCurrentlyResearchedTechnology.Self)]
+$TOOLTIP_DELIMITER$
+#V [concept_innovation]#! 
+Generujemy #v @innovation![GetPlayer.GetWeeklyInnovation|+2]#! [concept_innovation] co tydzień:
+[GetPlayer.GetWeeklyInnovationDesc]\n\n
+Maksymalnie @innovation![GetPlayer.GetWeeklyMaxInnovation|v2] [concept_innovation] może być zainwestowane w aktywne badania każdego tygodnia:
+[GetPlayer.GetWeeklyMaxInnovationDesc]\n\n
+Wszystkie [concept_innovation] które nie zostały wydane z powodu limitów inwestycji lub braku aktywnych badań, zwiększą tempo [concept_technology_spread] w naszym kraju.
+
+#tooltip_header [concept_technology]#! 
+[GetPlayer.GetName] obecnie bada [GetPlayer.GetCurrentlyResearchedTechnology.GetName]#!\nPostęp: #v @innovation! [GetPlayer.GetCurrentlyResearchedTechnology.GetProgress(GetPlayer.Self)|D]#! / #maximum [GetPlayer.GetCurrentlyResearchedTechnology.GetCost(GetPlayer.Self)|D]#! ([GetPlayer.GetCurrentlyResearchedTechnology.GetTimeLeftDesc(GetPlayer.Self)] pozostało)
+
+#tooltip_header [concept_technology]#! 
+[GetPlayer.GetName] nie bada obecnie żadnej technologii.
+
+#tooltip_header [concept_political_discord]
+[GetPlayer.GetAdjective] [concept_political_discord]: [GetPlayer.GetCustom('imperia_current_political_discord_formatted')]
+Osiągnięcie #variable 400#! doprowadzi do upadku twojego kraju.
+Sprawdź swoje Wpisy Dziennika, aby uzyskać informacje o bieżących efektach.\n\n
+[GetScriptedGui('domestic_discord_contribution').ExecuteTooltip(GuiScope.SetRoot(GetPlayer.MakeScope).End)]
+
