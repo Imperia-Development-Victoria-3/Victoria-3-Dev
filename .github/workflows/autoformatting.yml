@@ -1,0 +1,43 @@
+name: autoformatting-Core
+
+on:
+  push:
+    branches:
+      - Imperia-Core
+  pull_request:
+    branches:
+      - Imperia-Core
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main repository
+      uses: actions/checkout@v4
+      with:
+        repository: Imperia-Development-Victoria-3/Victoria-3-Dev
+
+    - name: Set up sparse checkout for other repository
+      run: |
+        git clone --no-checkout https://github.com/Imperia-Development-Victoria-3/Victoria-3-dev-utilities.git Imperia-Parser
+        cd Imperia-Parser
+        git config core.sparseCheckout true
+        echo "parser*" >> .git/info/sparse-checkout
+        git checkout main
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Install dependencies
+      run: |
+        pip install -r Imperia-Parser/requirements.txt
+      # working-directory: other-repo # Use the working directory of the other repo if needed
+
+    - name: Run a script that uses both repositories
+      run: |
+        # Commands that use code from both repositories
+        # Example: Running a Python script from the other-repo that needs code from main-repo
+        python other-repo/scripts/your_script.py
