@@ -23,7 +23,7 @@ jobs:
         git clone --no-checkout https://github.com/Imperia-Development-Victoria-3/Victoria-3-dev-utilities.git Imperia-Parser
         cd Imperia-Parser
         git config core.sparseCheckout true
-        echo "parser*" >> .git/info/sparse-checkout
+        echo "Parser/*" >> .git/info/sparse-checkout
         git checkout main
 
     - name: Set up Python
@@ -34,10 +34,9 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r Imperia-Parser/requirements.txt
-      # working-directory: other-repo # Use the working directory of the other repo if needed
 
     - name: Run a script that uses both repositories
       run: |
-        # Commands that use code from both repositories
-        # Example: Running a Python script from the other-repo that needs code from main-repo
-        python other-repo/scripts/your_script.py
+        python Imperia-Parser/Parser/format.py --folder ${{GITHUB_WORKSPACE}} --config ${{GITHUB_WORKSPACE}}/Imperia-Parser/Parser/config/general.yml
+      env:
+        PYTHONUNBUFFERED: 1  # to ensure that Python output is not buffered
