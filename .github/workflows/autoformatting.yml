@@ -18,13 +18,22 @@ jobs:
       with:
         repository: Imperia-Development-Victoria-3/Victoria-3-Dev
 
-    - name: Set up sparse checkout for other repository
-      run: |
-        git clone --no-checkout https://github.com/Imperia-Development-Victoria-3/Victoria-3-dev-utilities.git Imperia-Parser
-        cd Imperia-Parser
-        git config core.sparseCheckout true
-        echo "Parser/*" >> .git/info/sparse-checkout
-        git checkout main
+    # - name: Set up sparse checkout for other repository
+    #   run: |
+    #     git clone --no-checkout https://github.com/Imperia-Development-Victoria-3/Victoria-3-dev-utilities.git Imperia-Parser
+    #     cd Imperia-Parser
+    #     git config core.sparseCheckout true
+    #     echo "Parser/*" >> .git/info/sparse-checkout
+    #     git checkout main
+
+
+    - name: Get the parser
+      uses: actions/checkout@v4
+      with:
+        repository: Imperia-Development-Victoria-3/Victoria-3-dev-utilities
+        sparse-checkout: 'Parser'
+        sparse-checkout-cone-mode: false
+
 
     - name: Set up Python
       uses: actions/setup-python@v4
