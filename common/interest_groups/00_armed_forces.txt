@@ -3,13 +3,13 @@
 	texture = "gfx/interface/icons/ig_icons/armed_forces.dds"
 	layer = "revolution_dynamic_armed_forces"
 	index = 0
-
+	
 	ideologies = {
 		ideology_jingoist
 		ideology_loyalist
 		ideology_patriotic
 	}
-
+	
 	enable = {
 		always = yes
 	}
@@ -20,7 +20,7 @@
 		ig_trait_veteran_consultation
 		ig_trait_materiel_waste
 	}
-
+	
 	on_enable = {
 		ig:ig_armed_forces = {
 			if = {
@@ -106,7 +106,7 @@
 	}
 	on_disable = {}
 	on_character_ig_membership = {}
-
+	
 	pop_potential = {
 		OR = {
 			is_pop_type = soldiers
@@ -115,10 +115,10 @@
 			pop_is_discriminated = no
 		}
 	}
-
+	
 	pop_weight = {
 		value = 0
-
+		
 		add = {
 			desc = "POP_NOT_DISCRIMINATED"
 			if = {
@@ -126,7 +126,7 @@
 					pop_is_discriminated = no
 				}
 				value = 25
-				if = { # Militarisation of colonial settlers
+				if = {	# Militarisation of colonial settlers
 					limit = {
 						owner = {
 							has_law = law_type:law_colonial_resettlement
@@ -137,7 +137,7 @@
 					}
 					add = 50
 				}
-				if = { # Separation of the military and people
+				if = {	# Separation of the military and people
 					limit = {
 						NOR = {
 							is_pop_type = soldiers
@@ -151,7 +151,7 @@
 				}
 			}
 		}
-
+		
 		add = {
 			desc = "POP_SOLDIERS"
 			if = {
@@ -159,7 +159,7 @@
 					is_pop_type = soldiers
 				}
 				value = 100
-				if = { # Institutional loyalty
+				if = {	# Institutional loyalty
 					limit = {
 						owner = {
 							has_law = law_type:law_professional_army
@@ -167,7 +167,7 @@
 					}
 					add = 50
 				}
-				if = { # Pay makes soldiers more inclined to be loyal to Armed Forces
+				if = {	# Pay makes soldiers more inclined to be loyal to Armed Forces
 					limit = {
 						owner = {
 							military_wage_level = very_low
@@ -209,7 +209,7 @@
 				}
 			}
 		}
-
+		
 		add = {
 			desc = "POP_ARISTOCRATS"
 			if = {
@@ -227,7 +227,7 @@
 				}
 			}
 		}
-
+		
 		add = {
 			desc = "POP_OFFICERS"
 			if = {
@@ -237,8 +237,8 @@
 				value = 250
 			}
 		}
-
-		add = { # There's one firearm for every twelve people on the planet. The question is, how do we arm the other eleven?
+		
+		add = {	# There's one firearm for every twelve people on the planet. The question is, how do we arm the other eleven?
 			desc = "MILITARY_INDUSTRIES"
 			if = {
 				limit = {
@@ -263,7 +263,7 @@
 				}
 			}
 		}
-
+		
 		multiply = {
 			desc = "LEADER_POPULARITY"
 			scope:interest_group = {
@@ -295,7 +295,7 @@
 					is_in_government = yes
 				}
 			}
-			multiply = { # Multiplied by 1.25x max
+			multiply = {	# Multiplied by 1.25x max
 				desc = "POP_LOYALISTS"
 				value = pop_loyalist_fraction
 				divide = 4
@@ -308,7 +308,7 @@
 					is_in_government = no
 				}
 			}
-			multiply = { # Multiplied by 1.25x max
+			multiply = {	# Multiplied by 1.25x max
 				desc = "POP_RADICALS"
 				value = pop_radical_fraction
 				divide = 4
@@ -316,7 +316,7 @@
 			}
 		}
 	}
-
+	
 	monarch_weight = {
 		value = 1
 		# Monarch is not likely to adopt a marginal IG
@@ -381,7 +381,7 @@
 			}
 		}
 	}
-
+	
 	agitator_weight = {
 		# Agitators more likely to come from populist IG's rather than elitist
 		value = 0.5
@@ -397,27 +397,27 @@
 			}
 		}
 	}
-
+	
 	commander_weight = {
 		value = 5.0
 	}
-
+	
 	noble_chance = {
 		value = 0.5
 	}
-
+	
 	female_commander_chance = {
 		value = 0.0
-  		if = {
-    		limit = {
-       			owner = {
+		if = {
+			limit = {
+				owner = {
 					OR = {
 						country_has_primary_culture = cu:ibo
 						country_has_primary_culture = cu:akan
 					}
 				}
 			}
-     		add = {
+			add = {
 				value = 0.30
 			}
 		}
@@ -425,7 +425,7 @@
 	female_politician_chance = {
 		value = 0.0
 	}
-
+	
 	female_agitator_chance = {
 		value = 0.01
 		
@@ -434,36 +434,36 @@
 				owner = {
 					has_law = law_type:law_women_own_property
 				}
-
+				
 			}
 			add = {
 				value = 0.01
 			}
-		}	
+		}
 		
 		if = {
 			limit = {
 				owner = {
 					has_law = law_type:law_women_in_the_workplace
 				}
-
+				
 			}
 			add = {
 				value = 0.01
 			}
 		}
-
+		
 		if = {
 			limit = {
 				owner = {
 					has_law = law_type:law_womens_suffrage
 				}
-
+				
 			}
 			add = {
 				value = 0.01
 			}
-		}		
+		}
 	}
 
 	# The chance that a commander belonging to this IG takes over leadership when it changes

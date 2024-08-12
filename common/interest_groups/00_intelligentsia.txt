@@ -3,14 +3,14 @@
 	texture = "gfx/interface/icons/ig_icons/intelligensia.dds"
 	layer = "revolution_dynamic_intelligentsia"
 	index = 3
-
+	
 	ideologies = {
 		ideology_liberal
 		ideology_anti_clerical
 		ideology_republican
 		ideology_anti_slavery
 	}
-
+	
 	enable = {
 		always = yes
 	}
@@ -21,7 +21,7 @@
 		ig_trait_avant_garde
 		ig_trait_social_criticism
 	}
-
+	
 	on_enable = {
 		ig:ig_intelligentsia = {
 			if = {
@@ -34,8 +34,8 @@
 			}
 			else_if = {
 				limit = {
-					owner = { 
-						OR = { 
+					owner = {
+						OR = {
 							c:TUR ?= this
 							c:RUS ?= this
 						}
@@ -60,7 +60,7 @@
 				set_ig_trait = ig_trait:ig_trait_propagandists
 			}
 		}
-		
+
 		# Papal Intellegentsia
 		if = {
 			limit = {
@@ -86,7 +86,7 @@
 					has_discrimination_trait = han_chinese
 				}
 			}
-			ig:ig_intelligentsia = { 
+			ig:ig_intelligentsia = {
 				set_interest_group_name = ig_literati
 				remove_ideology = ideology_anti_clerical
 			}
@@ -101,7 +101,7 @@
 				set_ig_trait = ig_trait:ig_trait_brasilidade
 				set_ig_trait = ig_trait:ig_trait_bachareis
 				set_ig_trait = ig_trait:ig_trait_social_criticism
-
+				
 				remove_ideology = ideology_republican
 				add_ideology = ideology_constitutionalist
 			}
@@ -135,7 +135,7 @@
 	}
 	on_disable = {}
 	on_character_ig_membership = {}
-
+	
 	pop_potential = {
 		literacy_rate > 0.25
 		OR = {
@@ -148,10 +148,10 @@
 			is_pop_type = engineers
 		}
 	}
-
+	
 	pop_weight = {
 		value = 0
-
+		
 		add = {
 			desc = "POP_ACADEMICS"
 			if = {
@@ -161,7 +161,7 @@
 				value = 250
 			}
 		}
-
+		
 		add = {
 			desc = "POP_BUREAUCRATS"
 			if = {
@@ -171,7 +171,7 @@
 				value = 150
 			}
 		}
-
+		
 		add = {
 			desc = "POP_CLERKS"
 			if = {
@@ -181,7 +181,7 @@
 				value = 50
 			}
 		}
-
+		
 		add = {
 			desc = "POP_ARISTOCRATS"
 			if = {
@@ -231,7 +231,7 @@
 				multiply = 20
 			}
 		}
-
+		
 		multiply = {
 			desc = "LEADER_POPULARITY"
 			scope:interest_group = {
@@ -244,11 +244,11 @@
 				}
 			}
 		}
-
+		
 		multiply = {
 			desc = "decentralized_power"
 			value = 1.0
-
+			
 			if = {
 				limit = {
 					owner = {
@@ -278,7 +278,7 @@
 					is_in_government = yes
 				}
 			}
-			multiply = { # Multiplied by 1.25x max
+			multiply = {	# Multiplied by 1.25x max
 				desc = "POP_LOYALISTS"
 				value = pop_loyalist_fraction
 				divide = 4
@@ -291,7 +291,7 @@
 					is_in_government = no
 				}
 			}
-			multiply = { # Multiplied by 1.25x max
+			multiply = {	# Multiplied by 1.25x max
 				desc = "POP_RADICALS"
 				value = pop_radical_fraction
 				divide = 4
@@ -299,7 +299,7 @@
 			}
 		}
 	}
-
+	
 	monarch_weight = {
 		value = 1
 		# Monarch is not likely to adopt a marginal IG
@@ -354,7 +354,7 @@
 			}
 		}
 	}
-
+	
 	agitator_weight = {
 		# Agitators more likely to come from populist IG's rather than elitist
 		value = 0.75
@@ -370,15 +370,15 @@
 			}
 		}
 	}
-
+	
 	commander_weight = {
 		value = 1.0
 	}
-
+	
 	noble_chance = {
 		value = 0.5
 	}
-
+	
 	female_commander_chance = {
 		value = 0.0
 		if = {
@@ -393,26 +393,26 @@
 			add = {
 				value = 0.30
 			}
-
+			
 		}
-
+		
 	}
 	female_politician_chance = {
 		value = 0.0
-
+		
 		if = {
 			limit = {
 				owner = {
 					has_law = law_type:law_womens_suffrage
 				}
-
+				
 			}
 			add = {
 				value = 0.035
 			}
 		}
 	}
-
+	
 	female_agitator_chance = {
 		value = 0.035
 		
@@ -421,36 +421,36 @@
 				owner = {
 					has_law = law_type:law_women_own_property
 				}
-
+				
 			}
 			add = {
 				value = 0.035
 			}
-		}	
+		}
 		
 		if = {
 			limit = {
 				owner = {
 					has_law = law_type:law_women_in_the_workplace
 				}
-
+				
 			}
 			add = {
 				value = 0.035
 			}
 		}
-
+		
 		if = {
 			limit = {
 				owner = {
 					has_law = law_type:law_womens_suffrage
 				}
-
+				
 			}
 			add = {
 				value = 0.035
 			}
-		}		
+		}
 	}
 
 	# The chance that a commander belonging to this IG takes over leadership when it changes
