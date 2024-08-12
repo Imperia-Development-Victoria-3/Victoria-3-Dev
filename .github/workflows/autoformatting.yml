@@ -58,3 +58,11 @@ jobs:
     - name: Run formatting script
       run: |
         python Imperia-Parser/parser/format.py --format_folder "." --config "Imperia-Parser/parser/config/general.yml"
+
+
+    - name: Commit and push if changes are made
+      run: |
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git add -u
+        git diff-index --quiet HEAD || (git commit -m "Re-encoded txt files to UTF-8 BOM" && git push origin "${{ github.ref }}")
