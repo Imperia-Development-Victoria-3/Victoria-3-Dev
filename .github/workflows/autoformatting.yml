@@ -41,19 +41,26 @@ jobs:
         python-version: '3.10'
 
 
-    - name: Debug paths - Print working directory and list contents
-      run: |
-        echo "Current working directory:"
-        pwd
-        echo "Contents of the root directory:"
-        ls -la
-        echo "Contents of the Imperia-Parser directory:"
-        ls -la Imperia-Parser
+    # - name: Debug paths - Print working directory and list contents
+    #   run: |
+    #     echo "Current working directory:"
+    #     pwd
+    #     echo "Contents of the root directory:"
+    #     ls -la
+    #     echo "Contents of the Imperia-Parser directory:"
+    #     ls -la Imperia-Parser
 
 
     - name: Install dependencies
       run: |
         pip install -r Imperia-Parser/parser/requirements.txt
+
+
+    - name: Pull latest changes before reformatting
+      run: |
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git pull --rebase origin "${{ github.head_ref }}"
 
     - name: Run formatting script
       run: |
@@ -62,8 +69,8 @@ jobs:
 
     - name: Commit and push if changes are made
       run: |
-        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
-        git config --local user.name "${{ github.actor }}"
         git add -u
-        git diff-index --quiet HEAD || (git commit -m "Reformatted all files to common sense" &&  git push origin "HEAD:${{ github.head_ref }}")
-
+        git diff-index --quiet HEAD || (
+          git commit -m "Reformatted all files to common sense" && \
+          git push origin "HEAD:${{ github.head_ref }}"
+        )
