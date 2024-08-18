@@ -1,17 +1,17 @@
 ﻿force_regime_change = {
-	groups= {
+	groups = {
 		power_bloc_leader
 	}
 	show_in_lens = no
-
+	
 	texture = "gfx/interface/icons/diplomatic_action_icons/force_regime_change.dds"
 	
 	selectable = {
 		is_power_bloc_leader = yes
 		power_bloc ?= {
 			modifier:power_bloc_leader_can_regime_change_bool = yes
-		}		
-	}	
+		}
+	}
 	
 	potential = {
 		power_bloc ?= {
@@ -34,8 +34,8 @@
 					abs = yes
 				}
 			}
-		}	
-	
+		}
+		
 		power_bloc = {
 			current_cohesion_percentage >= 0.5
 		}
@@ -65,55 +65,55 @@
 	
 	ai = {
 		evaluation_chance = {
-			value = 0.025 # AI shouldn't use this very often
+			value = 0.025	# AI shouldn't use this very often
 		}
 		
 		will_propose = {
 			power_bloc = { current_cohesion_percentage >= 0.75 }
-			"ai_ideological_opinion(scope:target_country)" <= -50			
+			"ai_ideological_opinion(scope:target_country)" <= -50
 			OR = {
 				"ai_ideological_opinion(scope:target_country)" <= -100
 				has_attitude = {
 					who = scope:target_country
 					attitude = domineering
-				}					
+				}
 				AND = {
-					has_radical_leftist_government = no			
+					has_radical_leftist_government = no
 					scope:target_country = {
 						has_radical_leftist_government = yes
 					}
 				}
 				AND = {
-					has_radical_leftist_economy = no			
+					has_radical_leftist_economy = no
 					scope:target_country = {
 						has_radical_leftist_economy = yes
 					}
-				}		
+				}
 			}
 		}
-
-		propose_score = {								
+		
+		propose_score = {
 			value = 10
-
+			
 			if = {
 				limit = {
-					OR = {					
+					OR = {
 						AND = {
-							has_radical_leftist_government = no			
+							has_radical_leftist_government = no
 							scope:target_country = {
 								has_radical_leftist_government = yes
 							}
 						}
 						AND = {
-							has_radical_leftist_economy = no			
+							has_radical_leftist_economy = no
 							scope:target_country = {
 								has_radical_leftist_economy = yes
 							}
-						}				
+						}
 					}
 				}
 				add = 100
-			}				
+			}
 		}
 	}
 }
