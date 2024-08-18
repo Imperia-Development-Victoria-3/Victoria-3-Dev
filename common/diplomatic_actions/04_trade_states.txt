@@ -32,10 +32,6 @@ trade_states = {
 	possible = {
 		is_diplomatic_play_committed_participant = no
 		scope:target_country = { is_diplomatic_play_committed_participant = no }
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-			scope:target_country.relations:root > relations_threshold:poor
-		}
 		has_diplomatic_relevance = scope:target_country
 		is_revolutionary = no
 		in_default = no	
@@ -171,7 +167,14 @@ trade_states = {
 		}	
 		
 		accept_score = {
-			value = 0	
+			value = 0
+			
+			if = {
+				limit = {
+					scope:target_country.relations:root > relations_threshold:poor
+				}
+				add = -1000
+			}
 			
 			if = {
 				limit = {
