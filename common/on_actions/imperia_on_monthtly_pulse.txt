@@ -214,6 +214,52 @@
 				add_modifier = modifier_state_religion_health_discount
 			}
 		}
+		# Force-removing IGs from lobbies after a certain amount of time
+		every_interest_group = {
+			# First subtract from the membership timer (if it exists)
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				change_variable = {
+					name = imperia_ig_lobby_membership_timer
+					subtract = 1
+				}
+			}
+			# If the IG is part of a lobby, but doesnt have the timer; create new membership timers
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					NOT = {
+						has_variable = imperia_ig_lobby_membership_timer
+					}
+				}
+				set_variable = {
+					name = imperia_ig_lobby_membership_timer
+					# Months in lobby; 10 years so far
+					value = 120
+				}
+			}
+			# If the timer hits zero (or below, just in case); remove the IG from every lobby they're a part of
+			if = {
+				limit = {
+					var:imperia_ig_lobby_membership_timer <= 0
+				}
+				# This can be used in both country and in IGs. Is used in IG scope here to scope to lobbies the IG is a part of
+				every_political_lobby = {
+					remove_lobby_member = prev
+				}
+			}
+			# If the IG is not a member of a lobby, but has the timer-variable; remove the variable
+			if = {
+				limit = {
+					is_member_of_any_lobby = no
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				remove_variable = imperia_ig_lobby_membership_timer
+			}
+		}
 	}
 	random_events = {
 		23 = 0
