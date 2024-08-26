@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -261,13 +261,26 @@
 				remove_variable = imperia_ig_lobby_membership_timer
 			}
 		}
+		## AI Disabling
+		# Sets the is_player variable for new/reconnecting players
+		if = {
+			limit = {
+				is_player = yes
+				NOT = {
+					has_variable = is_player
+				}
+			}
+			# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
+			remove_variable ?= ai_disabled_timer
+			set_variable = is_player
+		}
 	}
 	random_events = {
 		23 = 0
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
