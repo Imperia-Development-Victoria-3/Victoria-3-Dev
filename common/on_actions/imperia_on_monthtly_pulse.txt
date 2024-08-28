@@ -261,6 +261,19 @@
 				remove_variable = imperia_ig_lobby_membership_timer
 			}
 		}
+		## AI Disabling
+		# Sets the is_player variable for new/reconnecting players
+		if = {
+			limit = {
+				is_player = yes
+				NOT = {
+					has_variable = detected_player
+				}
+			}
+			# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
+			remove_variable ?= ai_disabled_timer
+			set_variable = detected_player
+		}
 	}
 	random_events = {
 		23 = 0
