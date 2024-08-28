@@ -1609,88 +1609,102 @@ default_popup =  {
 			widget = { size = { 20 20 } }
 
 			flowcontainer = {
-				minimumsize = { 530 -1 }
-				margin = { 15 5 }
-							
+				direction = vertical
+				margin_bottom = 10
+				
 				background = {
 					using = Background_Area
 					margin = { 0 5 }
 				}
-	
-				widget = {
-					parentanchor = vcenter
-					size = { 110 40 }
 
-					button_icon_minus_action = {
-						parentanchor = vcenter
-						position = { 5 0 }
-						tooltip = "BUILDING_NATIONALIZATION_DECREASE_LEVELS_TOOLTIP"
-						enabled = "[GreaterThan_int32(NationalizeBuildingWindow.GetNumLevelsToNationalize,'(int32)1')]"
-						using = tooltip_below
-
-						block "button_size" {
-							size = { 35 35 }
-						}
-						
-						click_modifiers = {
-							ondefault = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-1')]"
-							onshift = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-10')]"
-							onctrl = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-1000')]"
-						}					
-					}
-					
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						align = nobaseline
-						raw_text = "#v [NationalizeBuildingWindow.GetNumLevelsToNationalize]#!"
-					}					
-					
-					button_icon_plus_action = {
-						parentanchor = right|vcenter
-						position = { -5 0 }
-						tooltip = "BUILDING_NATIONALIZATION_INCREASE_LEVELS_TOOLTIP"
-						enabled = "[LessThan_int32(NationalizeBuildingWindow.GetNumLevelsToNationalize,Building.GetNumLevelsCanBeNationalized)]"
-						using = tooltip_below
-					
-						block "button_size" {
-							size = { 35 35 }
-						}
-						
-						click_modifiers = {
-							ondefault = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)1')]"
-							onshift = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)10')]"
-							onctrl = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)1000')]"
-						}	
-					}
-				}
-				
-				widget = { size = { 20 20 } }
-
-				# Checkbox + textbox: Nationalize Building with Compensation
 				flowcontainer = {
-					parentanchor = vcenter
-					tooltip = "[NationalizeBuildingWindow.GetCanToggleCompensationTooltip]"
-					using = tooltip_below
-
-					button_checkbox = {
+					minimumsize = { 530 -1 }
+					margin = { 15 5 }
+								
+		
+					widget = {
 						parentanchor = vcenter
-						onclick = "[NationalizeBuildingWindow.ToggleGiveCompensation]"
-						enabled = "[NationalizeBuildingWindow.CanToggleCompensation]"
-						checked = "[NationalizeBuildingWindow.WillGiveCompensation]"
-						size = { 30 30 }
-						using = check_button_sound
-					}			
+						size = { 110 40 }
 
-					textbox = {
-						text = BUILDING_NATIONALIZATION_WITH_COMPENSATION
-						autoresize = yes
-						margin_left = 10
-						align = nobaseline
-						parentanchor = vcenter
+						button_icon_minus_action = {
+							parentanchor = vcenter
+							position = { 5 0 }
+							tooltip = "BUILDING_NATIONALIZATION_DECREASE_LEVELS_TOOLTIP"
+							enabled = "[GreaterThan_int32(NationalizeBuildingWindow.GetNumLevelsToNationalize,'(int32)1')]"
+							using = tooltip_below
+
+							block "button_size" {
+								size = { 35 35 }
+							}
+							
+							click_modifiers = {
+								ondefault = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-1')]"
+								onshift = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-10')]"
+								onctrl = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)-1000')]"
+							}					
+						}
+						
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							align = nobaseline
+							raw_text = "#v [NationalizeBuildingWindow.GetNumLevelsToNationalize]#!"
+						}					
+						
+						button_icon_plus_action = {
+							parentanchor = right|vcenter
+							position = { -5 0 }
+							tooltip = "BUILDING_NATIONALIZATION_INCREASE_LEVELS_TOOLTIP"
+							enabled = "[LessThan_int32(NationalizeBuildingWindow.GetNumLevelsToNationalize,Building.GetNumLevelsCanBeNationalized)]"
+							using = tooltip_below
+						
+							block "button_size" {
+								size = { 35 35 }
+							}
+							
+							click_modifiers = {
+								ondefault = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)1')]"
+								onshift = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)10')]"
+								onctrl = "[NationalizeBuildingWindow.ChangeLevelsToNationalize('(int32)1000')]"
+							}	
+						}
 					}
-				}				
-			}	
+					
+					widget = { size = { 20 20 } }
+
+					# Checkbox + textbox: Nationalize Building with Compensation
+					flowcontainer = {
+						parentanchor = vcenter
+						tooltip = "[NationalizeBuildingWindow.GetCanToggleCompensationTooltip]"
+						using = tooltip_below
+
+						button_checkbox = {
+							parentanchor = vcenter
+							onclick = "[NationalizeBuildingWindow.ToggleGiveCompensation]"
+							enabled = "[NationalizeBuildingWindow.CanToggleCompensation]"
+							checked = "[NationalizeBuildingWindow.WillGiveCompensation]"
+							size = { 30 30 }
+							using = check_button_sound
+						}			
+
+						textbox = {
+							text = BUILDING_NATIONALIZATION_WITH_COMPENSATION
+							autoresize = yes
+							margin_left = 10
+							align = nobaseline
+							parentanchor = vcenter
+						}
+					}				
+				}
+
+				textbox = {
+					margin_left = 20
+					autoresize = yes
+					align = nobaseline
+					default_format = "#title"
+					text = "CTRL_CLICK_TO_SET_TO_MAXIMUM_MINIMUM"
+				}
+			}
 		}
 	}
 
