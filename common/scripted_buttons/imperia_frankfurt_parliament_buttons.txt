@@ -268,9 +268,9 @@ je_frankfurt_parliament_vote_monarchy_button = {
 	}
 }
 
-je_frankfurt_parliament_vote_oligarchy_button = {
-	name = "je_frankfurt_parliament_vote_oligarchy_button"
-	desc = "je_frankfurt_parliament_vote_oligarchy_button_desc"
+je_frankfurt_parliament_vote_census_button = {
+	name = "je_frankfurt_parliament_vote_census_button"
+	desc = "je_frankfurt_parliament_vote_census_button_desc"
 	visible = {
 		has_global_variable = frankfurt_parliament_current_vote
 		global_var:frankfurt_parliament_current_vote = 2
@@ -282,11 +282,11 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 				ruler = {
 					interest_group = {
 						prefers_law = {
-							law = law_type:law_oligarchy
+							law = law_type:law_census_voting
 							comparison_law = law_type:law_wealth_voting
 						}
 						prefers_law = {
-							law = law_type:law_oligarchy
+							law = law_type:law_census_voting
 							comparison_law = law_type:law_universal_suffrage
 						}
 					}
@@ -301,7 +301,7 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 					has_journal_entry = je_imperia_frankfurt_parliament
 					relations:root >= relations_threshold:cordial
 					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_census
 				}
 			}
 			add = -20
@@ -313,7 +313,7 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 					has_journal_entry = je_imperia_frankfurt_parliament
 					relations:root >= relations_threshold:amicable
 					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_census
 				}
 			}
 			add = 50
@@ -325,7 +325,7 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 					has_journal_entry = je_imperia_frankfurt_parliament
 					relations:root >= relations_threshold:friendly
 					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_census
 				}
 			}
 			add = 80
@@ -354,20 +354,20 @@ je_frankfurt_parliament_vote_oligarchy_button = {
 		}
 		hidden_trigger = {
 			NOT = {
-				has_variable = frankfurt_parliament_voted_oligarchy
+				has_variable = frankfurt_parliament_voted_census
 			}
 		}
 	}
 	selected = {
-		has_variable = frankfurt_parliament_voted_oligarchy
+		has_variable = frankfurt_parliament_voted_census
 	}
 	effect = {
-		set_variable = frankfurt_parliament_voted_oligarchy
+		set_variable = frankfurt_parliament_voted_census
 		## Remove these voting vars (if it exists, thats what the ?= means)
 		remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
 		remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 		custom_tooltip = {
-			text = frankfurt_votes_for_oligarchy_tt
+			text = frankfurt_votes_for_census_tt
 		}
 	}
 }
@@ -387,7 +387,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 					interest_group = {
 						prefers_law = {
 							law = law_type:law_wealth_voting
-							comparison_law = law_type:law_oligarchy
+							comparison_law = law_type:law_census_voting
 						}
 					}
 				}
@@ -447,7 +447,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = no
 				OR = {
-					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_census
 					has_variable = frankfurt_parliament_voted_universal_suffrage
 				}
 			}
@@ -477,7 +477,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 	effect = {
 		set_variable = frankfurt_parliament_voted_wealth_suffrage
 		## Remove these voting vars (if it exists, thats what the ?= means)
-		remove_variable ?= frankfurt_parliament_voted_oligarchy
+		remove_variable ?= frankfurt_parliament_voted_census
 		remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 		custom_tooltip = {
 			text = frankfurt_votes_for_wealth_voting_tt
@@ -500,7 +500,7 @@ je_frankfurt_parliament_vote_universal_button = {
 					interest_group = {
 						prefers_law = {
 							law = law_type:law_universal_suffrage
-							comparison_law = law_type:law_oligarchy
+							comparison_law = law_type:law_census_voting
 						}
 					}
 				}
@@ -560,7 +560,7 @@ je_frankfurt_parliament_vote_universal_button = {
 			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
 				OR = {
-					has_variable = frankfurt_parliament_voted_oligarchy
+					has_variable = frankfurt_parliament_voted_census
 					has_variable = frankfurt_parliament_voted_wealth_suffrage
 				}
 			}
@@ -590,7 +590,7 @@ je_frankfurt_parliament_vote_universal_button = {
 	effect = {
 		set_variable = frankfurt_parliament_voted_universal_suffrage
 		## Remove these voting vars (if it exists, thats what the ?= means)
-		remove_variable ?= frankfurt_parliament_voted_oligarchy
+		remove_variable ?= frankfurt_parliament_voted_census
 		remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
 		custom_tooltip = {
 			text = frankfurt_votes_for_universal_suffrage_tt
