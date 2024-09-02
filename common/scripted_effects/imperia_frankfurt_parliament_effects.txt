@@ -12,13 +12,10 @@
 	# Club variables
 	remove_variable ?= frankfurt_parliament_left_faction_influence
 	remove_variable ?= frankfurt_parliament_center_faction_influence
-	remove_variable ?= frankfurt_parliament_right_faction_influence
 	remove_variable ?= frankfurt_parliament_supports_left_club
 	remove_variable ?= frankfurt_parliament_supports_center_club
-	remove_variable ?= frankfurt_parliament_supports_right_club
 	remove_variable ?= frankfurt_parliament_left_club_boost
 	remove_variable ?= frankfurt_parliament_center_club_boost
-	remove_variable ?= frankfurt_parliament_right_club_boost
 	# Vote variables
 	remove_variable ?= frankfurt_parliament_voted_republic
 	remove_variable ?= frankfurt_parliament_voted_monarchy
@@ -681,11 +678,6 @@ imperia_frankfurt_parliament_update_club_influence = {
 		name = frankfurt_parliament_center_faction_influence
 		value = 0
 	}
-	# Right faction = Steinernes Haus; absolute monarchy
-	set_variable = {
-		name = frankfurt_parliament_right_faction_influence
-		value = 0
-	}
 	every_interest_group = {
 		root = {
 			change_variable = {
@@ -695,10 +687,6 @@ imperia_frankfurt_parliament_update_club_influence = {
 			change_variable = {
 				name = frankfurt_parliament_center_faction_influence
 				add = prev.imperia_frankfurt_parliament_center_faction_interest_group_influence
-			}
-			change_variable = {
-				name = frankfurt_parliament_right_faction_influence
-				add = prev.imperia_frankfurt_parliament_right_faction_interest_group_influence
 			}
 		}
 		leader = {
@@ -710,10 +698,6 @@ imperia_frankfurt_parliament_update_club_influence = {
 				change_variable = {
 					name = frankfurt_parliament_center_faction_influence
 					add = prev.imperia_frankfurt_parliament_center_faction_leader_influence
-				}
-				change_variable = {
-					name = frankfurt_parliament_right_faction_influence
-					add = prev.imperia_frankfurt_parliament_right_faction_leader_influence
 				}
 			}
 		}
@@ -736,25 +720,12 @@ imperia_frankfurt_parliament_update_club_influence = {
 			multiply = var:frankfurt_parliament_center_club_boost
 		}
 	}
-	if = {
-		limit = {
-			has_variable = frankfurt_parliament_right_club_boost
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_faction_influence
-			multiply = var:frankfurt_parliament_right_club_boost
-		}
-	}
 	round_variable = {
 		name = frankfurt_parliament_left_faction_influence
 		nearest = 1
 	}
 	round_variable = {
 		name = frankfurt_parliament_center_faction_influence
-		nearest = 1
-	}
-	round_variable = {
-		name = frankfurt_parliament_right_faction_influence
 		nearest = 1
 	}
 }
@@ -800,25 +771,6 @@ imperia_frankfurt_parliament_BOOST_club = {
 			nearest = 0.01
 		}
 	}
-	# If the player is right leaning
-	if = {
-		limit = {
-			root = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			multiply = {
-				value = 1
-				add = $BOOST$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
-			nearest = 0.01
-		}
-	}
 }
 
 imperia_frankfurt_parliament_SABOTAGE_club = {
@@ -853,38 +805,6 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 		}
 		round_variable = {
 			name = frankfurt_parliament_left_club_boost
-			nearest = 0.01
-		}
-	}
-	# If the player is right leaning
-	if = {
-		limit = {
-			root = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			add = {
-				value = var:frankfurt_parliament_right_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_right_club_boost
-					divide = {
-						value = 1
-						add = $SABOTAGE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			divide = {
-				value = 1
-				add = $SABOTAGE$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
 			nearest = 0.01
 		}
 	}
@@ -929,38 +849,6 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 			nearest = 0.01
 		}
 	}
-	# If the player is right leaning
-	if = {
-		limit = {
-			root = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			add = {
-				value = var:frankfurt_parliament_right_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_right_club_boost
-					divide = {
-						value = 1
-						add = $INFLUENCE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			divide = {
-				value = 1
-				add = $INFLUENCE$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
-			nearest = 0.01
-		}
-	}
 	round_variable = {
 		name = frankfurt_parliament_center_club_boost
 		nearest = 0.01
@@ -1000,36 +888,6 @@ imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 			nearest = 0.01
 		}
 	}
-	# If the player is "borrowing" from the right
-	if = {
-		limit = {
-			$LEFT$ = 0
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			add = {
-				value = var:frankfurt_parliament_center_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_center_club_boost
-					divide = {
-						value = 1
-						add = $INFLUENCE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			divide = {
-				value = 1
-				add = $INFLUENCE$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
-			nearest = 0.01
-		}
-	}
 	round_variable = {
 		name = frankfurt_parliament_center_club_boost
 		nearest = 0.01
@@ -1045,15 +903,11 @@ imperia_frankfurt_parliament_initialise_club_variables = {
 		name = frankfurt_parliament_center_club_boost
 		value = 1
 	}
-	set_variable = {
-		name = frankfurt_parliament_right_club_boost
-		value = 1
-	}
 }
 
 imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
 	# scope : random country being influenced
-	# CLUB: 1 = left; 2 = center; 3 = right
+	# CLUB: 1 = left; 2 = center
 	# BOOST: 1 = small; 2 = medium; 3 = big
 	switch = {
 		trigger = $CLUB$
@@ -1085,26 +939,12 @@ imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
 				}
 			}
 		}
-		3 = {
-			switch = {
-				trigger = $BOOST$
-				1 = {
-					custom_label = will_increase_right_support_by_small_boost
-				}
-				2 = {
-					custom_label = will_increase_right_support_by_medium_boost
-				}
-				3 = {
-					custom_label = will_increase_right_support_by_big_boost
-				}
-			}
-		}
 	}
 }
 
 imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 	# scope : random country being influenced
-	# CLUB: 1 = left; 2 = center; 3 = right
+	# CLUB: 1 = left; 2 = center
 	# SABOTAGE: 1 = small; 2 = medium; 3 = big
 	switch = {
 		trigger = $CLUB$
@@ -1133,20 +973,6 @@ imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 				}
 				3 = {
 					custom_label = will_decrease_center_support_by_big_boost
-				}
-			}
-		}
-		3 = {
-			switch = {
-				trigger = $SABOTAGE$
-				1 = {
-					custom_label = will_decrease_right_support_by_small_boost
-				}
-				2 = {
-					custom_label = will_decrease_right_support_by_medium_boost
-				}
-				3 = {
-					custom_label = will_decrease_right_support_by_big_boost
 				}
 			}
 		}
