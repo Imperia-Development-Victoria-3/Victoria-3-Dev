@@ -6,7 +6,6 @@
 	scripted_button = je_frankfurt_parliament_vote_republic_button
 	scripted_button = je_frankfurt_parliament_vote_monarchy_button
 	# Who gets to vote in Germany?
-	scripted_button = je_frankfurt_parliament_vote_census_button
 	scripted_button = je_frankfurt_parliament_vote_wealth_button
 	scripted_button = je_frankfurt_parliament_vote_universal_button
 	# Optional round - presidential or parliamentary republic
@@ -98,6 +97,7 @@
 			# Uses ROOT, so HAS to be fired with the evaluated country in topscope
 			imperia_frankfurt_parliament_update_club_influence = yes
 			# Update the german form voting AI tendencies (during the german form vote)
+			imperia_frankfurt_update_faction_tendency = yes
 			if = {
 				limit = {
 					global_var:frankfurt_parliament_current_vote = 4
@@ -151,10 +151,6 @@
 						global_var:frankfurt_parliament_current_vote = 2
 					}
 					set_global_variable = {
-						name = imperia_frankfurt_parliament_census_voters_var
-						value = imperia_frankfurt_parliament_census_voters_value
-					}
-					set_global_variable = {
 						name = imperia_frankfurt_parliament_wealth_voters_var
 						value = imperia_frankfurt_parliament_wealth_voters_value
 					}
@@ -166,7 +162,6 @@
 						name = imperia_frankfurt_parliament_suffrage_abstentions_var
 						value = {
 							value = imperia_frankfurt_parliament_current_voters_value
-							subtract = imperia_frankfurt_parliament_census_voters_value
 							subtract = imperia_frankfurt_parliament_wealth_voters_value
 							subtract = imperia_frankfurt_parliament_universal_voters_value
 						}
@@ -272,12 +267,6 @@
 						# voting laws
 						limit = {
 							global_var:frankfurt_parliament_current_vote = 2
-						}
-						if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_census = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_census_var
 						}
 						else_if = {
 							limit = {

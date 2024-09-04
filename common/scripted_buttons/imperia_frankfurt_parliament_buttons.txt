@@ -262,103 +262,6 @@ je_frankfurt_parliament_vote_monarchy_button = {
 	}
 }
 
-je_frankfurt_parliament_vote_census_button = {
-	name = "je_frankfurt_parliament_vote_census_button"
-	desc = "je_frankfurt_parliament_vote_census_button_desc"
-	visible = {
-		has_global_variable = frankfurt_parliament_current_vote
-		global_var:frankfurt_parliament_current_vote = 2
-	}
-	ai_chance = {
-		base = 0
-		modifier = {
-			trigger = {
-				ruler = {
-					interest_group = {
-						prefers_law = {
-							law = law_type:law_census_voting
-							comparison_law = law_type:law_wealth_voting
-						}
-						prefers_law = {
-							law = law_type:law_census_voting
-							comparison_law = law_type:law_universal_suffrage
-						}
-					}
-				}
-			}
-			add = 75
-		}
-		modifier = {
-			trigger = {
-				country_rank < rank_value:major_power
-				any_country = {
-					has_journal_entry = je_imperia_frankfurt_parliament
-					relations:root >= relations_threshold:cordial
-					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_census
-				}
-			}
-			add = -20
-		}
-		modifier = {
-			trigger = {
-				country_rank < rank_value:major_power
-				any_country = {
-					has_journal_entry = je_imperia_frankfurt_parliament
-					relations:root >= relations_threshold:amicable
-					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_census
-				}
-			}
-			add = 50
-		}
-		modifier = {
-			trigger = {
-				country_rank < rank_value:major_power
-				any_country = {
-					has_journal_entry = je_imperia_frankfurt_parliament
-					relations:root >= relations_threshold:friendly
-					country_rank >= rank_value:major_power
-					has_variable = frankfurt_parliament_voted_census
-				}
-			}
-			add = 80
-		}
-		modifier = {
-			trigger = {
-				OR = {
-					has_variable = frankfurt_parliament_voted_wealth_suffrage
-					has_variable = frankfurt_parliament_voted_universal_suffrage
-				}
-			}
-			add = -1000
-		}
-	}
-	possible = {
-		custom_tooltip = {
-			text = frankfurt_parliament_voting_power_distribution
-			global_var:frankfurt_parliament_current_vote = 2
-		}
-		hidden_trigger = {
-			NOT = {
-				has_variable = frankfurt_parliament_voted_census
-			}
-		}
-	}
-	selected = {
-		has_variable = frankfurt_parliament_voted_census
-	}
-	effect = {
-		set_variable = frankfurt_parliament_voted_census
-		## Remove these voting vars (if it exists, thats what the ?= means)
-		remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
-		remove_variable ?= frankfurt_parliament_voted_universal_suffrage
-		custom_tooltip = {
-			text = frankfurt_votes_for_census_tt
-		}
-	}
-}
-
 je_frankfurt_parliament_vote_wealth_button = {
 	name = "je_frankfurt_parliament_vote_wealth_button"
 	desc = "je_frankfurt_parliament_vote_wealth_button_desc"
@@ -433,10 +336,7 @@ je_frankfurt_parliament_vote_wealth_button = {
 		modifier = {
 			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = no
-				OR = {
-					has_variable = frankfurt_parliament_voted_census
-					has_variable = frankfurt_parliament_voted_universal_suffrage
-				}
+				has_variable = frankfurt_parliament_voted_universal_suffrage
 			}
 			add = -1000
 		}
@@ -464,7 +364,6 @@ je_frankfurt_parliament_vote_wealth_button = {
 	effect = {
 		set_variable = frankfurt_parliament_voted_wealth_suffrage
 		## Remove these voting vars (if it exists, thats what the ?= means)
-		remove_variable ?= frankfurt_parliament_voted_census
 		remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 		custom_tooltip = {
 			text = frankfurt_votes_for_wealth_voting_tt
@@ -546,10 +445,7 @@ je_frankfurt_parliament_vote_universal_button = {
 		modifier = {
 			trigger = {
 				imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = no
-				OR = {
-					has_variable = frankfurt_parliament_voted_census
-					has_variable = frankfurt_parliament_voted_wealth_suffrage
-				}
+				has_variable = frankfurt_parliament_voted_wealth_suffrage
 			}
 			add = -1000
 		}
@@ -577,7 +473,6 @@ je_frankfurt_parliament_vote_universal_button = {
 	effect = {
 		set_variable = frankfurt_parliament_voted_universal_suffrage
 		## Remove these voting vars (if it exists, thats what the ?= means)
-		remove_variable ?= frankfurt_parliament_voted_census
 		remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
 		custom_tooltip = {
 			text = frankfurt_votes_for_universal_suffrage_tt

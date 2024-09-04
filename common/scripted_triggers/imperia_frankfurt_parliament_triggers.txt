@@ -13,37 +13,13 @@
 	}
 }
 
-frankfurt_parliament_has_majority_for_census = {
-	# Either...
-	OR = {
-		# Census won
-		AND = {
-			imperia_frankfurt_parliament_census_voters_value > imperia_frankfurt_parliament_wealth_voters_value
-			imperia_frankfurt_parliament_census_voters_value > imperia_frankfurt_parliament_universal_voters_value
-		}
-		# Or a tiebreaker in favor of it
-		AND = {
-			imperia_frankfurt_parliament_census_voters_value >= imperia_frankfurt_parliament_wealth_voters_value
-			imperia_frankfurt_parliament_census_voters_value >= imperia_frankfurt_parliament_universal_voters_value
-			any_country = {
-				imperia_country_owns_frankfurt_city = yes
-				has_variable = frankfurt_parliament_voted_census
-			}
-		}
-	}
-}
-
 frankfurt_parliament_has_majority_for_wealth = {
 	# Either...
 	OR = {
 		# wealth beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_census_voters_value
-			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
-		}
+		imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
 		# Or a tiebreaker in favor of it
 		AND = {
-			imperia_frankfurt_parliament_wealth_voters_value >= imperia_frankfurt_parliament_census_voters_value
 			imperia_frankfurt_parliament_wealth_voters_value >= imperia_frankfurt_parliament_universal_voters_value
 			any_country = {
 				imperia_country_owns_frankfurt_city = yes
@@ -56,14 +32,10 @@ frankfurt_parliament_has_majority_for_wealth = {
 frankfurt_parliament_has_majority_for_universal = {
 	# Either...
 	OR = {
-		# universal suffrage beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_census_voters_value
-			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
-		}
+		# universal suffrage beat the other
+		imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
 		# Or a tiebreaker in favor of it
 		AND = {
-			imperia_frankfurt_parliament_universal_voters_value >= imperia_frankfurt_parliament_census_voters_value
 			imperia_frankfurt_parliament_universal_voters_value >= imperia_frankfurt_parliament_wealth_voters_value
 			any_country = {
 				imperia_country_owns_frankfurt_city = yes
@@ -84,7 +56,6 @@ frankfurt_parliament_has_majority_for_presidential_republic = {
 				has_variable = frankfurt_parliament_voted_presidential
 			}
 		}
-		has_global_variable = frankfurt_parliament_has_majority_for_census_var
 	}
 }
 
@@ -303,6 +274,13 @@ imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = 
 	var:frankfurt_parliament_center_faction_influence > var:frankfurt_parliament_left_faction_influence
 }
 
+imperia_frankfurt_parliament_country_votes_radical = {
+	has_variable = frankfurt_parliament_tendency_radical
+	has_variable = frankfurt_parliament_tendency_moderate
+	has_variable = frankfurt_parliament_tendency_liberal
+	var:frankfurt_parliament_tendency_radical > var:frankfurt_parliament_tendency_moderate
+	var:frankfurt_parliament_tendency_radical > var:frankfurt_parliament_tendency_liberal
+}
 
 imperia_frankfurt_parliament_lesser_germany_is_preferred_trigger = {
 	has_variable = lesser_germany_ai_willingness

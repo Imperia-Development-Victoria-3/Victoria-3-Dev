@@ -19,7 +19,6 @@
 	# Vote variables
 	remove_variable ?= frankfurt_parliament_voted_republic
 	remove_variable ?= frankfurt_parliament_voted_monarchy
-	remove_variable ?= frankfurt_parliament_voted_census
 	remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
 	remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 	remove_variable ?= frankfurt_parliament_voted_presidential
@@ -36,7 +35,6 @@
 	remove_global_variable ?= imperia_frankfurt_parliament_republic_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_monarchy_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_governance_abstentions_var
-	remove_global_variable ?= imperia_frankfurt_parliament_census_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_wealth_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_universal_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_suffrage_abstentions_var
@@ -53,7 +51,6 @@
 	# Global vote results
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_republic_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_monarchy_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_census_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_wealth_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_universal_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_presidential_republic_var
@@ -1284,4 +1281,30 @@ imperia_frankfurt_parliament_sway_TARGET_to_SWAYER = {
 		name = je_frankfurt_minor_recently_swayed
 		days = 42
 	}
+}
+
+imperia_frankfurt_update_faction_tendency = {
+	# If one or more of these variables is unset, re/set them
+	if = {
+		limit = {
+			NOT = {
+				has_variable = frankfurt_parliament_tendency_radical
+				has_variable = frankfurt_parliament_tendency_moderate
+				has_variable = frankfurt_parliament_tendency_liberal
+			}
+		}
+		set_variable = {
+			name = frankfurt_parliament_tendency_radical
+			value = 0
+		}
+		set_variable = {
+			name = frankfurt_parliament_tendency_moderate
+			value = 0
+		}
+		set_variable = {
+			name = frankfurt_parliament_tendency_liberal
+			value = 0
+		}
+	}
+
 }
