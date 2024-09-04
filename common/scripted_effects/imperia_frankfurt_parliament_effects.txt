@@ -675,26 +675,42 @@ imperia_frankfurt_parliament_update_club_influence = {
 		name = frankfurt_parliament_center_faction_influence
 		value = 0
 	}
-	every_interest_group = {
-		root = {
-			change_variable = {
-				name = frankfurt_parliament_left_faction_influence
-				add = prev.imperia_frankfurt_parliament_left_faction_interest_group_influence
-			}
-			change_variable = {
-				name = frankfurt_parliament_center_faction_influence
-				add = prev.imperia_frankfurt_parliament_center_faction_interest_group_influence
+	every_scope_character = {
+		limit = {
+			is_character_alive = yes
+			OR = {
+				has_role = politician
+				has_role = agitator
 			}
 		}
-		leader = {
+		if = {
+			limit = {
+				OR = {
+					has_ideology = ideology_radical
+					has_ideology = ideology_social_democrat
+					has_ideology = ideology_liberal_leader
+					has_ideology = ideology_atheist
+					has_ideology = ideology_republican_leader
+				}
+			}
 			root = {
 				change_variable = {
 					name = frankfurt_parliament_left_faction_influence
-					add = prev.imperia_frankfurt_parliament_left_faction_leader_influence
+					add = {
+						value = prev.popularity
+						add = 100
+					}
 				}
+			}
+		}
+		else = {
+			root = {
 				change_variable = {
 					name = frankfurt_parliament_center_faction_influence
-					add = prev.imperia_frankfurt_parliament_center_faction_leader_influence
+					add = {
+						value = prev.popularity
+						add = 100
+					}
 				}
 			}
 		}
@@ -1306,5 +1322,4 @@ imperia_frankfurt_update_faction_tendency = {
 			value = 0
 		}
 	}
-
 }
