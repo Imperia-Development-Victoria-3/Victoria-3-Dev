@@ -177,6 +177,14 @@ foreign_arms_deal = {
 		is_revolutionary = no
 	}
 	
+
+	accept_effect = {
+		set_variable = {
+			name = imperia_arms_deal_active
+			value = yes
+		}
+	}
+
 	potential = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
@@ -298,6 +306,17 @@ foreign_arms_deal = {
 
 		requirement_to_maintain = {
 			trigger = {
+				scope:target_country = {
+					OR = {
+						is_diplomatic_play_committed_participant = yes
+						is_at_war = yes				
+					}
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
 				custom_tooltip = {
 					text = "DIPLOMATIC_PACT_REQUIREMENT_DIPLOMATIC_AUTONOMY"
 					aggressive_diplomatic_plays_permitted = yes
@@ -305,18 +324,75 @@ foreign_arms_deal = {
 				}
 			}
 		}
-		
-		manual_break_effect = {
-			change_relations = { country = scope:target_country value = -10 }
-		}
-		
-		auto_break_effect = { 
+
+		monthly_effect = {
 			scope:target_country = {
-				NOR = {
-					is_diplomatic_play_committed_participant = yes
-					is_at_war = yes				
+				remove_variable ?= imperia_gunsmithing_treaty
+				remove_variable ?= imperia_rifling_treaty
+				remove_variable ?= imperia_repeaters_treaty
+				remove_variable ?= imperia_bolt_action_rifles_treaty
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						has_technology_researched = gunsmithing
+					}
+				}
+				scope:target_country = {
+					set_variable = imperia_gunsmithing_treaty
 				}
 			}
+			if = {
+				limit = {
+					scope:actor = {
+						has_technology_researched = rifling
+					}
+				}
+				scope:target_country = {
+					set_variable = imperia_rifling_treaty
+				}
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						has_technology_researched = repeaters
+					}
+				}
+				scope:target_country = {
+					set_variable = imperia_repeaters_treaty
+				}
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						has_technology_researched = bolt_action_rifles
+					}
+				}
+				scope:target_country = {
+					set_variable = imperia_bolt_action_rifles_treaty
+				}
+			}
+		}
+		
+		manual_break_effect = {
+			scope:target_country = {
+				remove_variable ?= imperia_gunsmithing_treaty
+				remove_variable ?= imperia_rifling_treaty
+				remove_variable ?= imperia_repeaters_treaty
+				remove_variable ?= imperia_bolt_action_rifles_treaty
+			}
+			remove_variable = imperia_arms_deal_active
+			change_relations = { country = scope:target_country value = -30 }
+		}
+		
+		auto_break_effect = {
+			scope:target_country = {
+				remove_variable ?= imperia_gunsmithing_treaty
+				remove_variable ?= imperia_rifling_treaty
+				remove_variable ?= imperia_repeaters_treaty
+				remove_variable ?= imperia_bolt_action_rifles_treaty
+			}
+			remove_variable = imperia_arms_deal_active
 		}
 	}
 
@@ -785,7 +861,7 @@ grant_foreign_arms_deal = {
 		OR = {
 			NOT = {
 				has_technology_researched = gunsmithing
-			}			}
+			}
 			AND = {
 				NOT = {
 					has_technology_researched = rifling
