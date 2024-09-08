@@ -23,14 +23,8 @@
 	remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 	remove_variable ?= frankfurt_parliament_voted_presidential
 	remove_variable ?= frankfurt_parliament_voted_parliamentary
-	remove_variable ?= frankfurt_parliament_voted_lesser_germany
-	remove_variable ?= frankfurt_parliament_voted_greater_germany
-	remove_variable ?= frankfurt_parliament_voted_greater_austria
 	remove_variable ?= frankfurt_parliament_voting_internal_focus
 	remove_variable ?= frankfurt_parliament_voting_external_focus
-	remove_variable ?= lesser_germany_ai_willingness
-	remove_variable ?= greater_germany_ai_willingness
-	remove_variable ?= greater_austria_ai_willingness
 	# Global vote counts
 	remove_global_variable ?= imperia_frankfurt_parliament_republic_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_monarchy_voters_var
@@ -41,9 +35,6 @@
 	remove_global_variable ?= imperia_frankfurt_parliament_presidential_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_parliamentary_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_republic_type_abstentions_var
-	remove_global_variable ?= imperia_frankfurt_parliament_lesser_germany_voters_var
-	remove_global_variable ?= imperia_frankfurt_parliament_greater_germany_voters_var
-	remove_global_variable ?= imperia_frankfurt_parliament_greater_austria_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_german_form_abstentions_var
 	remove_global_variable ?= imperia_frankfurt_parliament_internal_focus_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_external_focus_voters_var
@@ -55,9 +46,6 @@
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_universal_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_presidential_republic_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_parliamentary_republic_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_lesser_germany_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_germany_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_austria_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_internal_focus_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_external_focus_var
 	# Gutter king candidates
@@ -112,7 +100,7 @@ imperia_frankfurt_parliament_shatter_austria = {
 			c:AUS = {
 				every_scope_state = {
 					limit = {
-						frankfurt_parliament_state_is_gutter_german = no
+						imperia_is_lesser_german_state = no
 					}
 					random_scope_pop = {
 						limit = {
@@ -648,21 +636,6 @@ imperia_frankfurt_parliament_grant_external_focus_claims = {
 	}
 }
 
-imperia_frankfurt_parliament_update_german_form_ai_willingness = {
-	set_variable = {
-		name = lesser_germany_ai_willingness
-		value = imperia_frankfurt_parliament_lesser_germany_ai_willingness_value
-	}
-	set_variable = {
-		name = greater_germany_ai_willingness
-		value = imperia_frankfurt_parliament_greater_germany_ai_willingness_value
-	}
-	set_variable = {
-		name = greater_austria_ai_willingness
-		value = imperia_frankfurt_parliament_greater_austria_ai_willingness_value
-	}
-}
-
 imperia_frankfurt_parliament_update_club_influence = {
 	# scope : country
 	# Left faction = Deutcher Hof; radical democrats
@@ -1005,30 +978,9 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 		}
 		if = {
 			limit = {
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-				exists = c:AUS
-				OR = {
-					c:AUS = $GUTTER_KING$
-					c:AUS = {
-						is_subject_of = $GUTTER_KING$
-					}
-				}
-			}
-			imperia_frankfurt_parliament_shatter_austria = yes
-		}
-		if = {
-			limit = {
 				country_has_primary_culture = cu:north_german
 			}
-			if = {
-				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-					}
-				}
-				imperia_frankfurt_parliament_spawn_south_german_federation = yes
-			}
+			imperia_frankfurt_parliament_spawn_south_german_federation = yes
 			custom_tooltip = {
 				text = frankfurt_germany_consolidates_tt
 				every_subject_or_below = {
@@ -1045,15 +997,7 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 			limit = {
 				country_has_primary_culture = cu:south_german
 			}
-			if = {
-				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-					}
-				}
-				imperia_frankfurt_parliament_spawn_rhineland = yes
-			}
+			imperia_frankfurt_parliament_spawn_rhineland = yes
 			custom_tooltip = {
 				text = frankfurt_germany_consolidates_tt
 				every_subject_or_below = {
@@ -1092,7 +1036,7 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 				# Add a claim on them. Only for states in the gutter german definition
 				limit = {
 					any_scope_state = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 						NOT = {
 							has_claim_by = $GUTTER_KING$
 						}

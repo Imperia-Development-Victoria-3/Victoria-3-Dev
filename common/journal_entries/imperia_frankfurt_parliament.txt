@@ -11,10 +11,6 @@
 	# Optional round - presidential or parliamentary republic
 	scripted_button = je_frankfurt_parliament_vote_presidential_button
 	scripted_button = je_frankfurt_parliament_vote_parliamentary_button
-	# Claims
-	scripted_button = je_frankfurt_parliament_lesser_germany_button
-	scripted_button = je_frankfurt_parliament_greater_germany_button
-	scripted_button = je_frankfurt_parliament_greater_austria_button
 	# Optional round - revolution? Only for universal suffrage republics
 	scripted_button = je_frankfurt_parliament_internal_focus_button
 	scripted_button = je_frankfurt_parliament_external_focus_button
@@ -190,33 +186,6 @@
 					}
 				}
 				if = {
-					# What is the German fatherland?
-					limit = {
-						global_var:frankfurt_parliament_current_vote = 4
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_lesser_germany_voters_var
-						value = imperia_frankfurt_parliament_lesser_germany_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_greater_germany_voters_var
-						value = imperia_frankfurt_parliament_greater_germany_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_greater_austria_voters_var
-						value = imperia_frankfurt_parliament_greater_austria_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_german_form_abstentions_var
-						value = {
-							value = imperia_frankfurt_parliament_current_voters_value
-							subtract = imperia_frankfurt_parliament_lesser_germany_voters_value
-							subtract = imperia_frankfurt_parliament_greater_germany_voters_value
-							subtract = imperia_frankfurt_parliament_greater_austria_voters_value
-						}
-					}
-				}
-				if = {
 					# internal vs external focus - only for radical republics
 					limit = {
 						global_var:frankfurt_parliament_current_vote = 5
@@ -297,30 +266,6 @@
 								frankfurt_parliament_has_majority_for_parliamentary_republic = yes
 							}
 							set_global_variable = frankfurt_parliament_has_majority_for_parliamentary_republic_var
-						}
-					}
-					if = {
-						# What is the German fatherland?
-						limit = {
-							global_var:frankfurt_parliament_current_vote = 4
-						}
-						if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_lesser_germany = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-						}
-						else_if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_greater_germany = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						}
-						else_if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_greater_austria = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
 						}
 					}
 					if = {
@@ -461,13 +406,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 0
@@ -480,13 +419,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 1
@@ -499,13 +432,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 2
