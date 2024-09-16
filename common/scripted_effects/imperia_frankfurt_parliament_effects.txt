@@ -12,43 +12,29 @@
 	# Club variables
 	remove_variable ?= frankfurt_parliament_left_faction_influence
 	remove_variable ?= frankfurt_parliament_center_faction_influence
-	remove_variable ?= frankfurt_parliament_right_faction_influence
 	remove_variable ?= frankfurt_parliament_supports_left_club
 	remove_variable ?= frankfurt_parliament_supports_center_club
-	remove_variable ?= frankfurt_parliament_supports_right_club
 	remove_variable ?= frankfurt_parliament_left_club_boost
 	remove_variable ?= frankfurt_parliament_center_club_boost
-	remove_variable ?= frankfurt_parliament_right_club_boost
 	# Vote variables
 	remove_variable ?= frankfurt_parliament_voted_republic
 	remove_variable ?= frankfurt_parliament_voted_monarchy
-	remove_variable ?= frankfurt_parliament_voted_oligarchy
 	remove_variable ?= frankfurt_parliament_voted_wealth_suffrage
 	remove_variable ?= frankfurt_parliament_voted_universal_suffrage
 	remove_variable ?= frankfurt_parliament_voted_presidential
 	remove_variable ?= frankfurt_parliament_voted_parliamentary
-	remove_variable ?= frankfurt_parliament_voted_lesser_germany
-	remove_variable ?= frankfurt_parliament_voted_greater_germany
-	remove_variable ?= frankfurt_parliament_voted_greater_austria
 	remove_variable ?= frankfurt_parliament_voting_internal_focus
 	remove_variable ?= frankfurt_parliament_voting_external_focus
-	remove_variable ?= lesser_germany_ai_willingness
-	remove_variable ?= greater_germany_ai_willingness
-	remove_variable ?= greater_austria_ai_willingness
 	# Global vote counts
 	remove_global_variable ?= imperia_frankfurt_parliament_republic_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_monarchy_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_governance_abstentions_var
-	remove_global_variable ?= imperia_frankfurt_parliament_oligarchy_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_wealth_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_universal_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_suffrage_abstentions_var
 	remove_global_variable ?= imperia_frankfurt_parliament_presidential_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_parliamentary_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_republic_type_abstentions_var
-	remove_global_variable ?= imperia_frankfurt_parliament_lesser_germany_voters_var
-	remove_global_variable ?= imperia_frankfurt_parliament_greater_germany_voters_var
-	remove_global_variable ?= imperia_frankfurt_parliament_greater_austria_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_german_form_abstentions_var
 	remove_global_variable ?= imperia_frankfurt_parliament_internal_focus_voters_var
 	remove_global_variable ?= imperia_frankfurt_parliament_external_focus_voters_var
@@ -56,14 +42,10 @@
 	# Global vote results
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_republic_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_monarchy_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_oligarchy_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_wealth_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_universal_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_presidential_republic_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_parliamentary_republic_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_lesser_germany_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_germany_var
-	remove_global_variable ?= frankfurt_parliament_has_majority_for_greater_austria_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_internal_focus_var
 	remove_global_variable ?= frankfurt_parliament_has_majority_for_external_focus_var
 	# Gutter king candidates
@@ -118,7 +100,7 @@ imperia_frankfurt_parliament_shatter_austria = {
 			c:AUS = {
 				every_scope_state = {
 					limit = {
-						frankfurt_parliament_state_is_gutter_german = no
+						imperia_is_lesser_german_state = no
 					}
 					random_scope_pop = {
 						limit = {
@@ -654,24 +636,9 @@ imperia_frankfurt_parliament_grant_external_focus_claims = {
 	}
 }
 
-imperia_frankfurt_parliament_update_german_form_ai_willingness = {
-	set_variable = {
-		name = lesser_germany_ai_willingness
-		value = imperia_frankfurt_parliament_lesser_germany_ai_willingness_value
-	}
-	set_variable = {
-		name = greater_germany_ai_willingness
-		value = imperia_frankfurt_parliament_greater_germany_ai_willingness_value
-	}
-	set_variable = {
-		name = greater_austria_ai_willingness
-		value = imperia_frankfurt_parliament_greater_austria_ai_willingness_value
-	}
-}
-
 imperia_frankfurt_parliament_update_club_influence = {
 	# scope : country
-	# Left faction = Deutcher Hof; radical democrats
+	# Left faction = Deutscher Hof; radical democrats
 	set_variable = {
 		name = frankfurt_parliament_left_faction_influence
 		value = 0
@@ -681,39 +648,44 @@ imperia_frankfurt_parliament_update_club_influence = {
 		name = frankfurt_parliament_center_faction_influence
 		value = 0
 	}
-	# Right faction = Steinernes Haus; absolute monarchy
-	set_variable = {
-		name = frankfurt_parliament_right_faction_influence
-		value = 0
-	}
-	every_interest_group = {
-		root = {
-			change_variable = {
-				name = frankfurt_parliament_left_faction_influence
-				add = prev.imperia_frankfurt_parliament_left_faction_interest_group_influence
-			}
-			change_variable = {
-				name = frankfurt_parliament_center_faction_influence
-				add = prev.imperia_frankfurt_parliament_center_faction_interest_group_influence
-			}
-			change_variable = {
-				name = frankfurt_parliament_right_faction_influence
-				add = prev.imperia_frankfurt_parliament_right_faction_interest_group_influence
+	every_scope_character = {
+		limit = {
+			is_character_alive = yes
+			OR = {
+				has_role = politician
+				has_role = agitator
 			}
 		}
-		leader = {
+		if = {
+			limit = {
+				OR = {
+					has_ideology = ideology:ideology_radical
+					has_ideology = ideology:ideology_social_democrat
+					has_ideology = ideology:ideology_liberal_leader
+					has_ideology = ideology:ideology_atheist
+					has_ideology = ideology:ideology_republican_leader
+					has_ideology = ideology:ideology_reformer
+					has_ideology = ideology:ideology_land_reformer
+				}
+			}
 			root = {
 				change_variable = {
 					name = frankfurt_parliament_left_faction_influence
-					add = prev.imperia_frankfurt_parliament_left_faction_leader_influence
+					add = {
+						value = prev.popularity
+						add = 100
+					}
 				}
+			}
+		}
+		else = {
+			root = {
 				change_variable = {
 					name = frankfurt_parliament_center_faction_influence
-					add = prev.imperia_frankfurt_parliament_center_faction_leader_influence
-				}
-				change_variable = {
-					name = frankfurt_parliament_right_faction_influence
-					add = prev.imperia_frankfurt_parliament_right_faction_leader_influence
+					add = {
+						value = prev.popularity
+						add = 100
+					}
 				}
 			}
 		}
@@ -736,25 +708,12 @@ imperia_frankfurt_parliament_update_club_influence = {
 			multiply = var:frankfurt_parliament_center_club_boost
 		}
 	}
-	if = {
-		limit = {
-			has_variable = frankfurt_parliament_right_club_boost
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_faction_influence
-			multiply = var:frankfurt_parliament_right_club_boost
-		}
-	}
 	round_variable = {
 		name = frankfurt_parliament_left_faction_influence
 		nearest = 1
 	}
 	round_variable = {
 		name = frankfurt_parliament_center_faction_influence
-		nearest = 1
-	}
-	round_variable = {
-		name = frankfurt_parliament_right_faction_influence
 		nearest = 1
 	}
 }
@@ -800,25 +759,6 @@ imperia_frankfurt_parliament_BOOST_club = {
 			nearest = 0.01
 		}
 	}
-	# If the player is right leaning
-	if = {
-		limit = {
-			root = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			multiply = {
-				value = 1
-				add = $BOOST$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
-			nearest = 0.01
-		}
-	}
 }
 
 imperia_frankfurt_parliament_SABOTAGE_club = {
@@ -833,64 +773,34 @@ imperia_frankfurt_parliament_SABOTAGE_club = {
 		}
 		change_variable = {
 			name = frankfurt_parliament_center_club_boost
-			add = {
-				value = var:frankfurt_parliament_left_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_left_club_boost
-					divide = {
-						value = 1
-						add = $SABOTAGE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_left_club_boost
-			divide = {
+			multiply = {
 				value = 1
-				add = $SABOTAGE$
+				subtract = $SABOTAGE$
 			}
 		}
 		round_variable = {
-			name = frankfurt_parliament_left_club_boost
+			name = frankfurt_parliament_center_club_boost
 			nearest = 0.01
 		}
 	}
-	# If the player is right leaning
+	# For center leaners
 	if = {
 		limit = {
 			root = {
-				has_variable = frankfurt_parliament_supports_right_club
+				has_variable = frankfurt_parliament_supports_center_club
 			}
 		}
 		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			add = {
-				value = var:frankfurt_parliament_right_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_right_club_boost
-					divide = {
-						value = 1
-						add = $SABOTAGE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			divide = {
+			name = frankfurt_parliament_left_club_boost
+			multiply = {
 				value = 1
-				add = $SABOTAGE$
+				subtract = $SABOTAGE$
 			}
 		}
 		round_variable = {
-			name = frankfurt_parliament_right_club_boost
+			name = frankfurt_parliament_left_club_boost
 			nearest = 0.01
 		}
-	}
-	round_variable = {
-		name = frankfurt_parliament_center_club_boost
-		nearest = 0.01
 	}
 }
 
@@ -926,38 +836,6 @@ imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
 		}
 		round_variable = {
 			name = frankfurt_parliament_left_club_boost
-			nearest = 0.01
-		}
-	}
-	# If the player is right leaning
-	if = {
-		limit = {
-			root = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			add = {
-				value = var:frankfurt_parliament_right_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_right_club_boost
-					divide = {
-						value = 1
-						add = $INFLUENCE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			divide = {
-				value = 1
-				add = $INFLUENCE$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
 			nearest = 0.01
 		}
 	}
@@ -1000,36 +878,6 @@ imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
 			nearest = 0.01
 		}
 	}
-	# If the player is "borrowing" from the right
-	if = {
-		limit = {
-			$LEFT$ = 0
-		}
-		change_variable = {
-			name = frankfurt_parliament_right_club_boost
-			add = {
-				value = var:frankfurt_parliament_center_club_boost
-				subtract = {
-					value = var:frankfurt_parliament_center_club_boost
-					divide = {
-						value = 1
-						add = $INFLUENCE$
-					}
-				}
-			}
-		}
-		change_variable = {
-			name = frankfurt_parliament_center_club_boost
-			divide = {
-				value = 1
-				add = $INFLUENCE$
-			}
-		}
-		round_variable = {
-			name = frankfurt_parliament_right_club_boost
-			nearest = 0.01
-		}
-	}
 	round_variable = {
 		name = frankfurt_parliament_center_club_boost
 		nearest = 0.01
@@ -1045,15 +893,11 @@ imperia_frankfurt_parliament_initialise_club_variables = {
 		name = frankfurt_parliament_center_club_boost
 		value = 1
 	}
-	set_variable = {
-		name = frankfurt_parliament_right_club_boost
-		value = 1
-	}
 }
 
 imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
 	# scope : random country being influenced
-	# CLUB: 1 = left; 2 = center; 3 = right
+	# CLUB: 1 = left; 2 = center
 	# BOOST: 1 = small; 2 = medium; 3 = big
 	switch = {
 		trigger = $CLUB$
@@ -1085,44 +929,16 @@ imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
 				}
 			}
 		}
-		3 = {
-			switch = {
-				trigger = $BOOST$
-				1 = {
-					custom_label = will_increase_right_support_by_small_boost
-				}
-				2 = {
-					custom_label = will_increase_right_support_by_medium_boost
-				}
-				3 = {
-					custom_label = will_increase_right_support_by_big_boost
-				}
-			}
-		}
 	}
 }
 
 imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 	# scope : random country being influenced
-	# CLUB: 1 = left; 2 = center; 3 = right
+	# CLUB: 1 = left; 2 = center
 	# SABOTAGE: 1 = small; 2 = medium; 3 = big
 	switch = {
 		trigger = $CLUB$
 		1 = {
-			switch = {
-				trigger = $SABOTAGE$
-				1 = {
-					custom_label = will_decrease_left_support_by_small_boost
-				}
-				2 = {
-					custom_label = will_decrease_left_support_by_medium_boost
-				}
-				3 = {
-					custom_label = will_decrease_left_support_by_big_boost
-				}
-			}
-		}
-		2 = {
 			switch = {
 				trigger = $SABOTAGE$
 				1 = {
@@ -1136,17 +952,17 @@ imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
 				}
 			}
 		}
-		3 = {
+		2 = {
 			switch = {
 				trigger = $SABOTAGE$
 				1 = {
-					custom_label = will_decrease_right_support_by_small_boost
+					custom_label = will_decrease_left_support_by_small_boost
 				}
 				2 = {
-					custom_label = will_decrease_right_support_by_medium_boost
+					custom_label = will_decrease_left_support_by_medium_boost
 				}
 				3 = {
-					custom_label = will_decrease_right_support_by_big_boost
+					custom_label = will_decrease_left_support_by_big_boost
 				}
 			}
 		}
@@ -1164,30 +980,9 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 		}
 		if = {
 			limit = {
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-				exists = c:AUS
-				OR = {
-					c:AUS = $GUTTER_KING$
-					c:AUS = {
-						is_subject_of = $GUTTER_KING$
-					}
-				}
-			}
-			imperia_frankfurt_parliament_shatter_austria = yes
-		}
-		if = {
-			limit = {
 				country_has_primary_culture = cu:north_german
 			}
-			if = {
-				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-					}
-				}
-				imperia_frankfurt_parliament_spawn_south_german_federation = yes
-			}
+			imperia_frankfurt_parliament_spawn_south_german_federation = yes
 			custom_tooltip = {
 				text = frankfurt_germany_consolidates_tt
 				every_subject_or_below = {
@@ -1204,15 +999,7 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 			limit = {
 				country_has_primary_culture = cu:south_german
 			}
-			if = {
-				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-					}
-				}
-				imperia_frankfurt_parliament_spawn_rhineland = yes
-			}
+			imperia_frankfurt_parliament_spawn_rhineland = yes
 			custom_tooltip = {
 				text = frankfurt_germany_consolidates_tt
 				every_subject_or_below = {
@@ -1251,7 +1038,7 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 				# Add a claim on them. Only for states in the gutter german definition
 				limit = {
 					any_scope_state = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 						NOT = {
 							has_claim_by = $GUTTER_KING$
 						}
