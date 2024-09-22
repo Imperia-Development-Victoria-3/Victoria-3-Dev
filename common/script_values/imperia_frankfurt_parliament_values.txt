@@ -9,6 +9,46 @@ club_influence_1_target = 75
 club_influence_3_targets = 300
 club_influence_5_targets = 550
 # AI willingness to press buttons
+imperia_frankfurt_parliament_left_percentage = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = {
+			value = var:frankfurt_parliament_left_faction_influence
+			divide = {
+				value = var:frankfurt_parliament_left_faction_influence
+				add = var:frankfurt_parliament_center_faction_influence
+			}
+		}
+		multiply = 100
+	}
+	else = {
+		value = 50
+	}
+}
+
+imperia_frankfurt_parliament_center_percentage = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = {
+			value = var:frankfurt_parliament_center_faction_influence
+			divide = {
+				value = var:frankfurt_parliament_center_faction_influence
+				add = var:frankfurt_parliament_left_faction_influence
+			}
+		}
+		multiply = 100
+	}
+	else = {
+		value = 50
+	}
+}
+
 imperia_frankfurt_parliament_current_voters_value = {
 	value = 0
 	every_country = {
@@ -248,5 +288,119 @@ imperia_frankfurt_parliament_german_major_authority_spent_on_princes = {
 				add = 1
 			}
 		}
+	}
+}
+
+imperia_frankfurt_outside_pressure_for_left = {
+	# Goes from 0 (in case of no friends who for the left) to 45 (in case of besties in the left faction)
+	# They take previous votes into account here, just because
+	value = 0
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:cordial
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:amicable
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:friendly
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+}
+
+imperia_frankfurt_outside_pressure_for_center = {
+	# Goes from 0 (in case of no friends who for the center) to 45 (in case of besties in the center faction)
+	# They take previous votes into account here, just because
+	value = 0
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:cordial
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:amicable
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:friendly
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
 	}
 }

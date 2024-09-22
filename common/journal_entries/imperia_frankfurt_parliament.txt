@@ -23,9 +23,10 @@
 			country_has_primary_culture = cu:north_german
 			country_has_primary_culture = cu:south_german
 		}
-		# Should only happen before 1850
-		# Replace with a global variable check, when possible!
-		year < 1850
+		NOT = {
+			# This variable gets created during the republic vs monarchy vote, just to allow countries to actually get the JE
+			has_global_variable = frankfurt_parliament_started
+		}
 	}
 	possible = {
 		any_country = {
@@ -209,6 +210,14 @@
 						value = 0
 					}
 					# Save result to a global var, performance enhancing code
+					if = {
+						# Once everyone has (had a chance to) join(ed)
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 0
+						}
+						# Global variable so multiple parliaments arent held..
+						set_global_variable = frankfurt_parliament_started
+					}
 					if = {
 						# monarchy vs republic
 						limit = {

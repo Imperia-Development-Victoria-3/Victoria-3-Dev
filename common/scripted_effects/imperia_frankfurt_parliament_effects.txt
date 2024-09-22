@@ -648,6 +648,7 @@ imperia_frankfurt_parliament_update_club_influence = {
 		name = frankfurt_parliament_center_faction_influence
 		value = 0
 	}
+	# Go through characters
 	every_scope_character = {
 		limit = {
 			is_character_alive = yes
@@ -690,6 +691,69 @@ imperia_frankfurt_parliament_update_club_influence = {
 			}
 		}
 	}
+	## Check the rulers interest here
+	# For a perfect 20% the total should be 33.33~~ to one variable, but since we evaluate both suffrage and government form, each of those gives 20 points.
+	# First their opinion on republics versus monarchies
+	if = {
+		limit = {
+			ruler = {
+				interest_group = {
+					OR = {
+						prefers_law = {
+							law = law_type:law_presidential_republic
+							comparison_law = law_type:law_monarchy
+						}
+						prefers_law = {
+							law = law_type:law_parliamentary_republic
+							comparison_law = law_type:law_monarchy
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			add = 20
+		}
+	}
+	else = {
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			add = 20
+		}
+	}
+	# Now suffrage
+	if = {
+		limit = {
+			ruler = {
+				interest_group = {
+					prefers_law = {
+						law = law_type:law_universal_suffrage
+						comparison_law = law_type:law_wealth_voting
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			add = 20
+		}
+	}
+	else = {
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			add = 20
+		}
+	}
+	## Now outside influences
+	change_variable = {
+		name = frankfurt_parliament_left_faction_influence
+		add = imperia_frankfurt_outside_pressure_for_left
+	}
+	change_variable = {
+		name = frankfurt_parliament_center_faction_influence
+		add = imperia_frankfurt_outside_pressure_for_center
+	}
 	if = {
 		limit = {
 			has_variable = frankfurt_parliament_left_club_boost
@@ -715,6 +779,26 @@ imperia_frankfurt_parliament_update_club_influence = {
 	round_variable = {
 		name = frankfurt_parliament_center_faction_influence
 		nearest = 1
+	}
+	random_list = {
+		0 = {
+			modifier = {
+				add = imperia_frankfurt_parliament_left_percentage
+			}
+			set_variable = {
+				name = frankfurt_parliament_country_votes_left
+				value = yes
+			}
+		}
+		0 = {
+			modifier = {
+				add = imperia_frankfurt_parliament_center_percentage
+			}
+			set_variable = {
+				name = frankfurt_parliament_country_votes_left
+				value = no
+			}
+		}
 	}
 }
 
