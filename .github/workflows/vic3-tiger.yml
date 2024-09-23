@@ -26,13 +26,20 @@ jobs:
     - name: Clone Rust program repository
       run: git clone --branch main https://github.com/amtep/ck3-tiger vic3-tiger
 
+    - uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        # required
+        app-id: ${{ secrets.BUGHUNT_BOT_ID }}
+        private-key: ${{ secrets.BUGHUNT_BOT_TOKEN }}
+    
     - name: Checkout vanilla game data repository
       uses: actions/checkout@v4
       with:
         repository: Imperia-Development-Victoria-3/External-mods
         ref: vanilla
         path: vanilla-game
-        token: ${{ secrets.BUGHUNT_BOT_TOKEN }}  # GitHub token for authentication
+        token: ${{ steps.app-token.outputs.token }}  # GitHub token for authentication
 
     # Install Rust (using rustup)
     - name: Install Rust
