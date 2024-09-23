@@ -1,0 +1,50 @@
+name: autoformatting-Core
+
+# on:
+#   pull_request:
+#     branches:
+#       - Imperia-Core
+#     types:
+#       - synchronize
+#       - opened
+
+on:
+    push:
+      branches-ignore:
+        - Imperia-Core
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the current repository (default branch)
+    - name: Checkout current repository
+      uses: actions/checkout@v4
+
+    # Clone the Rust program repository from its "main" branch
+    - name: Clone Rust program repository
+      run: git clone --branch main https://github.com/amtep/ck3-tiger vic3-tiger
+
+    # Clone the vanilla game data repository from the "vanilla" branch
+    - name: Clone vanilla game data repository
+      run: git clone --branch vanilla https://github.com/Imperia-Development-Victoria-3/External-mods vanilla-game
+
+    # Install Rust (using rustup)
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+
+    # Navigate to the Rust program repository and build it
+    - name: Build Rust program
+      run: |
+        cd vic3-tiger
+        cargo build --release
+
+    # Run the resulting executable
+    - name: Run the Rust program executable
+      run: |
+        ./rust-program/target/release/vic-3-tiger
