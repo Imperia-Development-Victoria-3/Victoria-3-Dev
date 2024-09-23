@@ -1,4 +1,4 @@
-name: autoformatting-Core
+name: vic3-tiger-check
 
 # on:
 #   pull_request:
@@ -26,9 +26,13 @@ jobs:
     - name: Clone Rust program repository
       run: git clone --branch main https://github.com/amtep/ck3-tiger vic3-tiger
 
-    # Clone the vanilla game data repository from the "vanilla" branch
-    - name: Clone vanilla game data repository
-      run: git clone --branch vanilla https://github.com/Imperia-Development-Victoria-3/External-mods vanilla-game
+    - name: Checkout vanilla game data repository
+      uses: actions/checkout@v4
+      with:
+        repository: Imperia-Development-Victoria-3/External-mods
+        ref: vanilla
+        path: vanilla-game
+        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
 
     # Install Rust (using rustup)
     - name: Install Rust
