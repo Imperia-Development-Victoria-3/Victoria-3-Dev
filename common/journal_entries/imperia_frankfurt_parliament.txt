@@ -929,7 +929,7 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 	should_be_pinned_by_default = yes
 }
 
-je_imperia_frankfurt_crown_from_the_gutter_main = {
+je_imperia_frankfurt_gutter_crown_main = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
 	immediate = {
@@ -944,6 +944,241 @@ je_imperia_frankfurt_crown_from_the_gutter_main = {
 		}
 		add_modifier = {
 			name = gutter_crown_military_penalty
+		}
+		trigger_event = {
+			id = frankfurt_parliament.10
+			popup = yes
+		}
+	}
+	complete = {
+		NOR = {
+			has_modifier = gutter_crown_economy_penalty
+			has_modifier = gutter_crown_political_penalty
+			has_modifier = gutter_crown_admin_penalty
+			has_modifier = gutter_crown_military_penalty
+		}
+	}
+	on_timeout = {
+		if = {
+			limit = {
+				has_modifier = gutter_crown_economy_penalty
+			}
+			remove_modifier = gutter_crown_economy_penalty
+			add_modifier = {
+				name = gutter_crown_economy_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_political_penalty
+			}
+			remove_modifier = gutter_crown_political_penalty
+			add_modifier = {
+				name = gutter_crown_political_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_admin_penalty
+			}
+			remove_modifier = gutter_crown_admin_penalty
+			add_modifier = {
+				name = gutter_crown_admin_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_military_penalty
+			}
+			remove_modifier = gutter_crown_military_penalty
+			add_modifier = {
+				name = gutter_crown_military_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+	}
+	# 5 years timer
+	timeout = 1826
+	can_revolution_inherit = no
+	transferable = no
+	weight = 10000 # Important
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_gutter_crown_economy = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	complete = {
+		# Pretty much copied from the Meiji eco JE
+		in_default = no
+		any_scope_state = {
+			filter = {
+				is_incorporated = yes
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+			}
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 5
+			}
+			has_building = building_railway
+			percent > 0.8
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_economy_penalty
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	complete = {
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_political_penalty
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_admin = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_no_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_small_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_medium_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_large_effort_button
+	immediate = {
+		set_variable = {
+			name = gutter_crown_admin_integration_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_admin_penalty
+		# Remove integration effort modifiers
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+	}
+	on_weekly_pulse = {
+		effect = {
+			## Resyncs the money cost modifier each week
+			# And of course adds progress
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+			if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 1
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 5% of gdp
+						divide = 20
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 2
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 10% of gdp
+						divide = 10
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 4
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 20% of gdp
+						divide = 5
+					}
+				}
+			}
+		}
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+	on_fail = {
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+	}
+	current_value = {
+		value = root.var:gutter_crown_admin_integration_var
+	}
+	goal_add_value = {
+		# 15 months of 20% gdp spending = 3x your countrys worth, probably
+		add = 240
+	}
+	progressbar = yes
+}
+
+je_imperia_frankfurt_gutter_crown_military = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	complete = {
+		pop_type_percent_country = {
+			pop_type = soldiers
+			percent = 0.01
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_military_penalty
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
 		}
 	}
 }

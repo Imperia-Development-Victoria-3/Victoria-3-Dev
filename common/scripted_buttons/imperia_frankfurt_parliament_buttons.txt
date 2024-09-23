@@ -1020,3 +1020,203 @@ je_frankfurt_sway_execute = {
 		}
 	}
 }
+
+je_imperia_frankfurt_gutter_crown_admin_no_effort_button = {
+	name = "je_imperia_frankfurt_gutter_crown_admin_no_effort_button"
+	desc = "je_imperia_frankfurt_gutter_crown_admin_no_effort_button_desc"
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = {
+				# If country is in bureaucracy deficit, cancel the payments
+				bureaucracy < 0
+			}
+			add = 100
+		}
+	}
+	visible = {
+		always = yes
+	}
+	selected = {
+		NOR = {
+			has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+	}
+	possible = {
+		OR = {
+			has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+	}
+	effect = {
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_admin_small_effort_button = {
+	name = "je_imperia_frankfurt_gutter_crown_admin_small_effort_button"
+	desc = "je_imperia_frankfurt_gutter_crown_admin_small_effort_button_desc"
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = {
+				# Go for this if there's no current effort and bureaucracy is in the 500 - 1000 range
+				NOR = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+					has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+				}
+				bureaucracy < 1000
+				bureaucracy > 500
+			}
+			add = 100
+		}
+	}
+	visible = {
+		always = yes
+	}
+	selected = {
+		has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+	}
+	possible = {
+		# Possible if none of the modifiers are active (so no effort is active) OR one of the other efforts are active
+		OR = {
+			NOR = {
+				has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			}
+			has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+		bureaucracy > 500
+	}
+	effect = {
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		}
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+			multiplier = {
+				value = gdp
+				# 5% of gdp
+				divide = 20
+			}
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_admin_medium_effort_button = {
+	name = "je_imperia_frankfurt_gutter_crown_admin_medium_effort_button"
+	desc = "je_imperia_frankfurt_gutter_crown_admin_medium_effort_button_desc"
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = {
+				NOR = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+					has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+				}
+				bureaucracy < 2000
+				bureaucracy > 1000
+			}
+			add = 100
+		}
+	}
+	visible = {
+		always = yes
+	}
+	selected = {
+		has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+	}
+	possible = {
+		# Possible if none of the modifiers are active (so no effort is active) OR one of the other efforts are active
+		OR = {
+			NOR = {
+				has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			}
+			has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+		bureaucracy > 1000
+	}
+	effect = {
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		}
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+			multiplier = {
+				value = gdp
+				# 10% of gdp
+				divide = 10
+			}
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_admin_large_effort_button = {
+	name = "je_imperia_frankfurt_gutter_crown_admin_large_effort_button"
+	desc = "je_imperia_frankfurt_gutter_crown_admin_large_effort_button_desc"
+	ai_chance = {
+		base = 0
+		modifier = {
+			trigger = {
+				NOR = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+					has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				}
+				bureaucracy > 2000
+			}
+			add = 100
+		}
+	}
+	visible = {
+		always = yes
+	}
+	selected = {
+		has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+	}
+	possible = {
+		# Possible if none of the modifiers are active (so no effort is active) OR one of the other efforts are active
+		OR = {
+			NOR = {
+				has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			}
+			has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		}
+		bureaucracy > 2000
+	}
+	effect = {
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+		add_modifier = {
+			name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+			multiplier = {
+				value = gdp
+				# 20% of gdp
+				divide = 5
+			}
+		}
+	}
+}
