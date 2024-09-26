@@ -1,0 +1,221 @@
+﻿namespace = guadeloupe
+
+# An Offer for Guadeloupe
+guadeloupe.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = guadeloupe.1.t
+	desc = guadeloupe.1.d
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:guadeloupe_seller = {
+						c:FRA ?= this
+					}
+				}
+				desc = guadeloupe.1.f_fra
+			}
+			triggered_desc = {
+				trigger = {
+					always = yes
+				}
+				desc = guadeloupe.1.f
+			}
+		}
+	}
+
+	duration = 3
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		# Scopes set in guadeloupe.4
+	}
+
+	option = {
+		name = guadeloupe.1.a
+		default_option = yes
+		add_modifier = {
+			name = guadeloupe_fra_big_money
+			months = 12
+			is_decaying = no
+		}
+		scope:guadeloupe_buyer = {
+			trigger_event = { id = guadeloupe.2 days = 0 popup = yes }
+		}
+		#start working from here
+		show_as_tooltip = {
+			random_state = {
+				limit = {
+					state_region = s:STATE_West_Indies
+					owner = scope:guadeloupe_seller
+				}
+				state_region = {
+					remove_claim = root
+					add_claim = scope:guadeloupe_buyer
+				}
+				set_state_owner = scope:guadeloupe_buyer
+			}
+			change_relations = {
+				country = scope:guadeloupe_buyer
+				value = 10
+			}
+		}
+		ai_chance = {
+			base = 75
+		}
+		#--------------------------------------#
+
+	}
+	option = {
+		name = guadeloupe.1.b
+		scope:guadeloupe_buyer = {
+			trigger_event = { id = guadeloupe.3 days = 0 popup = yes }
+		}
+		show_as_tooltip = {
+			change_relations = {
+				country = scope:guadeloupe_buyer
+				value = -20
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					scope:guadeloupe_seller = { 
+						NOT = {
+							has_variable = guadeloupe_sale_cooldown #Unsolicited offer
+						}
+					}
+				}
+				add = 25
+			}
+		}
+	}
+}
+
+# Failed guadeloupe Purchase
+guadeloupe.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = guadeloupe.3.t
+	desc = guadeloupe.3.d
+	flavor = guadeloupe.3.f
+
+	duration = 3
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	trigger = {
+	}
+
+	immediate = {
+		# Scopes set in guadeloupe.4
+	}
+
+	option = {
+		name = guadeloupe.3.a
+		default_option = yes
+		s:STATE_guadeloupe = {
+			add_claim = ROOT
+		}
+		change_relations = {
+			country = scope:guadeloupe_seller
+			value = -20
+		}
+	}
+	option = {
+		name = guadeloupe.3.b
+		default_option = yes
+		change_relations = {
+			country = scope:guadeloupe_seller
+			value = -5
+		}
+	}
+}
+
+# Making an Offer
+guadeloupe.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = guadeloupe.4.t
+	desc = guadeloupe.4.d
+	flavor = guadeloupe.4.f
+
+	duration = 3
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	trigger = {
+	}
+#Work from here, figure out what Guadeloupe is
+	immediate = {
+		root = {
+			save_scope_as = guadeloupe_buyer
+		}
+		random_state = {
+			limit = {
+				state_region = s:STATE_guadeloupe
+				owner = {
+					NOT = {
+						is_country_type = decentralized
+					}
+				}
+			}
+			save_scope_as = guadeloupe_scope
+			owner = {
+				save_scope_as = guadeloupe_seller
+			}
+		}
+	}
+#-------------------------#
+	option = {
+		name = guadeloupe.4.a
+		ai_chance = {
+			base = 1
+		}
+		custom_tooltip = guadeloupe.4.tt1 # 3 million over a year
+		scope:guadeloupe_seller = {
+			trigger_event = {
+				id = guadeloupe.1
+				days = 0
+				popup = yes
+			}
+		}
+	}
+	option = { # perhaps another time
+		name = guadeloupe.4.c
+		default_option = yes
+		ai_chance = {
+			base = 0
+		}
+		scope:guadeloupe_seller = {
+			post_notification = guadeloupe_negotiations_fail
+		}
+	}
+}
