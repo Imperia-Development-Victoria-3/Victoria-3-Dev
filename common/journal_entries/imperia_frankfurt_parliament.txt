@@ -1049,9 +1049,33 @@ je_imperia_frankfurt_gutter_crown_economy = {
 je_imperia_frankfurt_gutter_crown_political = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
+
 	complete = {
+		any_subject_or_below = {
+			limit = {
+				is_direct_subject_of = c:GER
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+			}
+			count = all
+			is_subject_type = subject_type_puppet
+		}
 	}
 	on_complete = {
+		every_subject_or_below = {
+			limit = {
+				is_direct_subject_of = c:GER
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+			}
+			c:GER = {
+				annex_with_incorporation = prev
+			}
+		}
 		remove_modifier = gutter_crown_political_penalty
 	}
 	fail = {
