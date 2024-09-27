@@ -15,6 +15,7 @@ imperia_infamy_gp.1 = {
 	duration = 3
     trigger = {
         exists = global_var:current_pariah
+        global_var:current_pariah != this
         NOT = {
             has_variable = is_sanctioning_pariah
         }
@@ -26,6 +27,13 @@ imperia_infamy_gp.1 = {
     immediate = {
         global_var:current_pariah = {
             save_scope_as = pariah_scope
+        }
+        # Is set to no here, will change if they sanction
+        # Done like this so event doesnt pop multiple times
+        set_variable = {
+            name = is_sanctioning_pariah
+            value = no
+            years = 10
         }
     }
     option = {
@@ -50,12 +58,7 @@ imperia_infamy_gp.1 = {
             country = scope:pariah_scope
             value = 10
         }
-        set_variable = {
-            name = is_sanctioning_pariah
-            value = no
-            years = 10
-        }
-        # Add some negative modifiers here
+        # TO-DO: Add a negative modifier here
     }
     after = {
         scope:pariah_scope = {
