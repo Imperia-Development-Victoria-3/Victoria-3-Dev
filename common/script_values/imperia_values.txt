@@ -511,8 +511,8 @@ imperia_infamy_multiplier = {
 			infamy > 20
 		}
 		add = root.infamy
-		subtract = 20	# Remove 'excess' infamy from calculations
-		divide = 80	# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
+		subtract = 20		# Remove 'excess' infamy from calculations
+		divide = 80		# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
 	}
 	else = {
 		value = 0
@@ -1080,7 +1080,6 @@ imperia_qing_fragile_unity_value = {
 		}
 		subtract = 10
 	}
-	
 	if = {
 		limit = {
 			has_modifier = modifier_opium_ascendant
@@ -1951,12 +1950,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.50
+						value >= 0.5
 					}
 				}
 			}
 		}
-		value = 0.50
+		value = 0.5
 	}
 	else_if = {
 		limit = {
@@ -1977,12 +1976,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.40
+						value >= 0.4
 					}
 				}
 			}
 		}
-		value = 0.40
+		value = 0.4
 	}
 	else_if = {
 		limit = {
@@ -2003,12 +2002,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.30
+						value >= 0.3
 					}
 				}
 			}
 		}
-		value = 0.30
+		value = 0.3
 	}
 	else_if = {
 		limit = {
@@ -2029,12 +2028,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.20
+						value >= 0.2
 					}
 				}
 			}
 		}
-		value = 0.20
+		value = 0.2
 	}
 	else_if = {
 		limit = {
@@ -2055,12 +2054,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.10
+						value >= 0.1
 					}
 				}
 			}
 		}
-		value = 0.10
+		value = 0.1
 	}
 	else_if = {
 		limit = {
@@ -2074,5 +2073,35 @@ biggest_culture_percentage_in_state = {
 			}
 		}
 		value = 0.05
+	}
+}
+
+economic_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_sanctioning_pariah
+				var:is_sanctioning_pariah = yes
+			}
+			switch = {
+				trigger = country_rank
+				rank_value:great_power = {
+					add = 1
+				}
+				rank_value:major_power = {
+					add = 0.333
+				}
+				rank_value:minor_power = {
+					add = 0.111
+				}
+				insignificant_power = {
+					add = 0.037
+				}
+			}
+		}
 	}
 }

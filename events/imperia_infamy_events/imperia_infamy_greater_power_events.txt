@@ -1,0 +1,70 @@
+﻿namespace = imperia_infamy_gp
+
+# Economic sanctions for pariah
+imperia_infamy_gp.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/vandalized_storefront"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_infamy_gp.1.t
+	desc = imperia_infamy_gp.1.d
+	flavor = imperia_infamy_gp.1.f
+	duration = 3
+    trigger = {
+        exists = global_var:current_pariah
+        NOT = {
+            has_variable = is_sanctioning_pariah
+        }
+        OR = {
+            is_country_type = recognized
+            is_country_type = colonial
+        }
+    }
+    immediate = {
+        global_var:current_pariah = {
+            save_scope_as = pariah_scope
+        }
+    }
+    option = {
+        # Sanction the pariah
+        name = imperia_infamy_gp.1.a
+        default_option = yes
+        custom_tooltip = worsen_sanctions_tt
+        change_relations = {
+            country = scope:pariah_scope
+            value = -25
+        }
+        set_variable = {
+            name = is_sanctioning_pariah
+            value = yes
+            years = 10
+        }
+    }
+    option = {
+        # Take some penalties instead
+        name = imperia_infamy_gp.1.b
+        change_relations = {
+            country = scope:pariah_scope
+            value = 10
+        }
+        set_variable = {
+            name = is_sanctioning_pariah
+            value = no
+            years = 10
+        }
+        # Add some negative modifiers here
+    }
+    after = {
+        scope:pariah_scope = {
+            remove_modifier ?= modifier_pariah_economic_sanctions
+            # The modifier gets worse the more/stronger the sanctioners are
+            add_modifier = {
+                name = modifier_pariah_economic_sanctions
+                multiplier = economic_sanctioners_strength
+            }
+        }
+    }
+}

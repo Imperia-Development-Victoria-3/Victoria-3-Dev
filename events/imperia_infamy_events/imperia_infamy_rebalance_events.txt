@@ -1,0 +1,402 @@
+﻿namespace = infamy_rebalance
+infamy_rebalance.1 = {
+	# Sets pariah neighbour journal entries
+	type = country_event
+	hidden = yes
+	trigger = {
+		infamy >= infamy_threshold:pariah
+	}
+	immediate = {
+		save_scope_as = pariah_scope
+		every_country = {
+			limit = {
+				AND = {
+					has_strategic_adjacency = scope:pariah_scope
+					NOT = {
+						this = scope:pariah_scope
+					}
+					NOT = {
+						is_country_type = decentralized
+					}
+				}
+			}
+			add_journal_entry = {
+				type = je_pariah_neighbour
+				target = scope:pariah_scope
+			}
+		}
+	}
+}
+
+infamy_rebalance.4 = {
+	#negative event for provinces bordering pariahs
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/vandalized_storefront"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.4.t
+	desc = infamy_rebalance.4.d
+	flavor = infamy_rebalance.4.f
+	placement = scope:border_state
+	duration = 3
+	trigger = {
+		any_neighbouring_state = {
+			owner = {
+				infamy >= infamy_threshold:pariah
+				NOT = {
+					is_diplomatic_play_enemy_of = root
+				}
+			}
+		}
+	}
+	immediate = {
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = {
+						infamy >= infamy_threshold:pariah
+					}
+				}
+			}
+			save_scope_as = border_state
+		}
+		random_country = {
+			limit = {
+				infamy >= infamy_threshold:pariah
+				any_state = {
+					owner = PREV
+					any_neighbouring_state = {
+						owner = root
+					}
+				}
+			}
+			save_scope_as = pariah_neighbour
+		}
+	}
+	option = {
+		name = infamy_rebalance.4.a
+		scope:border_state = {
+			add_modifier = {
+				name = modifier_state_scared_of_pariah
+				months = short_modifier_time
+				is_decaying = yes
+			}
+		}
+		custom_tooltip = {
+			text = everyCountrySharingCulturalTraitRelationsTT
+			every_country = {
+				limit = {
+					any_primary_culture = {
+						shares_non_heritage_trait_with_any_primary_culture = root
+					}
+					this != root
+					this != scope:pariah_neighbour
+				}
+				change_relations = {
+					country = root
+					value = 30
+				}
+			}
+		}
+		default_option = yes
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		name = infamy_rebalance.4.b
+		scope:border_state = {
+			add_modifier = {
+				name = modifier_state_angry_with_leader
+				months = short_modifier_time
+				is_decaying = yes
+			}
+			add_radicals_in_state = {
+				value = 0.15
+			}
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+infamy_rebalance.7 = {
+	#cleanup coalition member variables
+	type = country_event
+	hidden = yes
+	immediate = {
+		remove_variable = pariah_coalition_member
+	}
+}
+
+infamy_rebalance.8 = {
+	#Wartime event for coalition members
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.8.t
+	desc = infamy_rebalance.8.d
+	flavor = infamy_rebalance.8.f
+	duration = 3
+	trigger = {
+		#coalition member
+		is_at_war = yes
+		any_diplomatic_play = {
+			has_play_goal = contain_threat
+			is_war = yes
+			OR = {
+				initiator_is = root
+				any_scope_initiator_ally = {
+					this = root
+				}
+			}
+		}
+		any_country = {
+			#scopes to pariah
+			infamy >= infamy_threshold:pariah
+			is_at_war = yes
+			any_diplomatic_play = {
+				has_play_goal = contain_threat
+				is_war = yes
+				target_is = prev
+			}
+		}
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				#scopes to pariah
+				infamy >= infamy_threshold:pariah
+				is_at_war = yes
+				any_diplomatic_play = {
+					has_play_goal = contain_threat
+					is_war = yes
+					target_is = prev
+				}
+			}
+			save_scope_as = pariah
+		}
+	}
+	option = {
+		#domestic bonus
+		name = infamy_rebalance.8.a
+		random_interest_group = {
+			limit = {
+				leader = {
+					has_ideology = ideology:ideology_pacifist
+				}
+			}
+			leader = {
+				set_ideology = ideology:ideology_jingoist_leader
+			}
+		}
+		every_scope_state = {
+			limit = {
+				owner = root
+				is_incorporated = yes
+			}
+			add_loyalists_in_state = {
+				value = medium_radicals				#5%
+			}
+		}
+		default_option = yes
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		#external bonus
+		name = infamy_rebalance.8.b
+		change_infamy = -15
+		random_country = {
+			#Gives relationship with coalition leader
+			limit = {
+				is_diplomatic_play_initiator = yes
+				is_diplomatic_play_enemy_of = scope:pariah
+				NOT = {
+					this = root
+				}
+			}
+			change_relations = {
+				country = root
+				value = 25
+			}
+		}
+		every_diplomatic_play = {
+			#Gives relations with the rest
+			limit = {
+				has_play_goal = contain_threat
+				is_war = yes
+				target_is = scope:pariah
+			}
+			every_scope_initiator_ally = {
+				limit = {
+					NOT = {
+						this = root
+					}
+				}
+				change_relations = {
+					country = root
+					value = 25
+				}
+			}
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+infamy_rebalance.9 = {
+	#Wartime event for pariah
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.9.t
+	desc = infamy_rebalance.9.d
+	flavor = infamy_rebalance.9.f
+	duration = 3
+	trigger = {
+		#root is pariah in coalition
+		infamy >= infamy_threshold:pariah
+		is_at_war = yes
+		any_diplomatic_play = {
+			has_play_goal = contain_threat
+			is_war = yes
+			target_is = root
+		}
+	}
+	immediate = {
+	}
+	option = {
+		#domestic penalty
+		name = infamy_rebalance.9.a
+		random_interest_group = {
+			limit = {
+				NOT = {
+					is_interest_group_type = ig_armed_forces
+				}
+				leader = {
+					has_ideology = ideology:ideology_jingoist_leader
+				}
+			}
+			leader = {
+				set_ideology = ideology:ideology_pacifist
+			}
+		}
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+			}
+			add_radicals_in_state = {
+				value = very_large_radicals				#20%
+			}
+		}
+		default_option = yes
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		#external penalty
+		name = infamy_rebalance.9.b
+		random_country = {
+			limit = {
+				is_diplomatic_play_initiator = yes
+				is_diplomatic_play_enemy_of = root
+			}
+			change_relations = {
+				country = root
+				value = -100
+			}
+		}
+		every_diplomatic_play = {
+			limit = {
+				has_play_goal = contain_threat
+				is_war = yes
+				target_is = root
+			}
+			every_scope_initiator_ally = {
+				change_relations = {
+					country = root
+					value = -50
+				}
+			}
+		}
+		add_modifier = {
+			name = modifier_pariah_influence_loss
+			months = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+infamy_rebalance.13 = {
+	#on_country_released_as_independent = meaning you get an infamy reduction as if you annexed the territory
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.13.t
+	desc = infamy_rebalance.13.d
+	flavor = infamy_rebalance.13.f
+	duration = 1
+	immediate = {
+		set_variable = {
+			name = infamy_reduction
+			value = scope:target.get_total_released_COUNTRY_infamy_worth_annex
+			days = 35
+		}
+		change_infamy = var:infamy_reduction
+	}
+	option = {
+		name = infamy_rebalance.13.a
+		show_as_tooltip = {
+			change_infamy = var:infamy_reduction
+		}
+	}
+}
+
+infamy_rebalance.14 = {
+	#on_country_released_as_own_subject = meaning you get an infamy reduction as if you subjugated the territory little more than half the annex reduction
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = infamy_rebalance.14.t
+	desc = infamy_rebalance.14.d
+	flavor = infamy_rebalance.14.f
+	duration = 1
+	immediate = {
+		set_variable = {
+			name = infamy_reduction
+			value = scope:target.get_total_released_COUNTRY_infamy_worth_vassal
+			days = 35
+		}
+		change_infamy = var:infamy_reduction
+	}
+	option = {
+		name = infamy_rebalance.14.a
+		show_as_tooltip = {
+			change_infamy = var:infamy_reduction
+		}
+	}
+}
