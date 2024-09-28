@@ -14,18 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the current repository (default branch)
     - name: Checkout current repository
       uses: actions/checkout@v4
 
-    # Clone the Rust program repository from its "main" branch
     - name: Clone Rust program repository
       run: git clone --branch main https://github.com/amtep/ck3-tiger vic3-tiger
 
     - uses: actions/create-github-app-token@v1
       id: app-token
       with:
-        # required
         app-id: ${{ secrets.BUGHUNT_BOT_ID }}
         private-key: ${{ secrets.BUGHUNT_BOT_TOKEN }}
         owner: ${{ github.repository_owner }}
@@ -38,7 +35,6 @@ jobs:
         path: vanilla-game
         token: ${{ steps.app-token.outputs.token }}  # GitHub token for authentication
 
-    # Navigate to the Rust program repository and build it
     - name: Build Rust program
       run: |
         cd vic3-tiger
@@ -60,16 +56,14 @@ jobs:
         cat error.log
         exit 1
 
-
     - name: Update the suppressed error json
       if: ${{ steps.check_error_log.outputs.has_errors == 'true' && contains( github.event.pull_request.labels.*.name, 'override') }}
       run: |
-        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
-        git config --local user.name "${{ github.actor }}"
-        git add -u
         cd vic3-tiger
         cargo run --release -p vic3-tiger "${{ github.workspace }}" --json --game "${{ github.workspace }}/vanilla-game" > ../files/current_errors.json
         cd ..
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
         git add files/current_errors.json
         git diff-index --quiet HEAD || git commit -m "Added systemic errors to our suppression list" &&  git push origin "HEAD:${{ github.head_ref }}"
   
