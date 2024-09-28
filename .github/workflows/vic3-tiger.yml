@@ -52,11 +52,13 @@ jobs:
     - name: Check if error log is empty
       id: check_error_log
       run: |
-        if [ -s ./error.log ]; then
-          echo "has_errors=true" >> $GITHUB_OUTPUT
-        else
-          echo "has_errors=false" >> $GITHUB_OUTPUT
-        fi
+          set +e
+          if [ -s ./error.log ]; then
+            echo "has_errors=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_errors=false" >> $GITHUB_OUTPUT
+          fi
+          set -e
 
     - name: Fail PR if there are errors
       if: steps.check_error_log.outputs.has_errors == 'true' && github.event.pull_request.head.ref != 'override-branch'
