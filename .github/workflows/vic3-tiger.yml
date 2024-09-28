@@ -61,7 +61,8 @@ jobs:
       run: |
         cd vic3-tiger
         cargo run --release -p vic3-tiger "${{ github.workspace }}" --json --game "${{ github.workspace }}/vanilla-game" > ../files/current_errors.json
-        cd ..
+        cd "${{ github.workspace }}"
+        git status
         git config --local user.email "${{ github.actor }}@users.noreply.github.com"
         git config --local user.name "${{ github.actor }}"
         git add files/current_errors.json
