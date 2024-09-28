@@ -42,11 +42,10 @@
 	on_monthly_pulse = {
 		random_events = {
 			9 = 0
-			1 = infamy_rebalance.4	#penalty for states bordering pariah
-			1 = infamy_rebalance.8	#wartime event for coalition member
+			1 = infamy_rebalance.4			#penalty for states bordering pariah
+			1 = infamy_rebalance.8			#wartime event for coalition member
 		}
 	}
-	fail = {}
 	invalid = {
 		trigger_if = {
 			limit = {
@@ -86,6 +85,7 @@ je_is_pariah = {
 	on_complete = {
 		remove_modifier ?= modifier_international_pariah
 		remove_modifier ?= modifier_pariah_economic_sanctions
+		remove_modifier ?= modifier_pariah_trade_sanctions
 		remove_modifier ?= modifier_pariah_international_isolation
 		if = {
 			limit = {
@@ -124,15 +124,29 @@ je_is_pariah = {
 					}
 				}
 			}
+			# If trade sanctions gets into play
+			if = {
+				limit = {
+					infamy >= 130
+					global_var:current_pariah = this
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_pariah_neighbour
+					}
+					trigger_event = {
+						# If this event is triggered by non-GPs the effects are scaled down the smaller their rank
+						id = imperia_infamy_gp.2
+					}
+				}
+			}
 		}
 		random_events = {
 			#Fires the pariah wartime event roughly once every 4 months. 
 			3 = 0
-			1 = infamy_rebalance.9	#wartime event for pariah
+			1 = infamy_rebalance.9			#wartime event for pariah
 		}
 	}
-	fail = {}
-	invalid = {}
 	progressbar = no
 	should_be_pinned_by_default = yes
 }

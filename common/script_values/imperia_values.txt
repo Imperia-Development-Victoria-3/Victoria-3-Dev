@@ -2084,8 +2084,47 @@ economic_sanctioners_strength = {
 		}
 		every_country = {
 			limit = {
-				has_variable = is_sanctioning_pariah
-				var:is_sanctioning_pariah = yes
+				has_variable = is_eco_sanctioning_pariah
+				var:is_eco_sanctioning_pariah = yes
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:great_power
+				}
+				add = 1
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:major_power
+				}
+				add = 0.333
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:minor_power
+				}
+				add = 0.111
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				add = 0.037
+			}
+		}
+	}
+}
+
+trade_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_trade_sanctioning_pariah
+				var:is_trade_sanctioning_pariah = yes
 			}
 			if = {
 				limit = {
