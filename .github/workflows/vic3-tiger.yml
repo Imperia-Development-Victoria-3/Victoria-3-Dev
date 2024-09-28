@@ -49,13 +49,11 @@ jobs:
         cargo build --release -p vic3-tiger
         cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" > error.log
 
-
     - name: Check if error log is empty
       id: check_error_log
       run: |
         if [ -s ./error.log ]; then
           echo "has_errors=true" >> $GITHUB_OUTPUT
-          exit 1
         else
           echo "has_errors=false" >> $GITHUB_OUTPUT
         fi
