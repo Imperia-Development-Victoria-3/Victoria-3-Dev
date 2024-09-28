@@ -42,12 +42,19 @@ jobs:
         path: vanilla-game
         token: ${{ steps.app-token.outputs.token }}  # GitHub token for authentication
 
+
+    # - name: Download a release from another repository
+    #   uses: cardinalby/git-get-release-action@v1      with:
+    #   env:
+    #     GITHUB_TOKEN: ${{ github.token }}  # or your personal access token
+
     # Navigate to the Rust program repository and build it
     - name: Build Rust program
       run: |
         cd vic3-tiger
         cargo build --release -p vic3-tiger
-        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" > error.log
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" > ../error.log
+        cat ../error.log
 
     - name: Check if error log is empty
       id: check_error_log
