@@ -47,7 +47,22 @@ jobs:
       run: |
         cd vic3-tiger
         cargo build --release -p vic3-tiger
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" > error.log
 
-    # Run the resulting executable
-    - name: Run the Rust program executable
-      run: ./vic3-tiger/target/release/vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game"
+
+    - name: Check if error log is empty
+      id: check_error_log
+      run: |
+        run: |
+          if [ -s ./error.log ]; then
+            echo "::set-output name=has_errors::true"
+            exit 1
+          else
+            echo "::set-output name=has_errors::false"
+          fi
+    
+          # Block PR unless override is applied
+    - name: Fail PR if there are errors
+      if: steps.check_error_log.outputs.has_errors == 'true' && github.event.pull_request.head.ref != 'override-branch'
+      run: exit 1
+
