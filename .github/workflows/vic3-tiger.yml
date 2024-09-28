@@ -42,19 +42,12 @@ jobs:
         path: vanilla-game
         token: ${{ steps.app-token.outputs.token }}  # GitHub token for authentication
 
-
-    # - name: Download a release from another repository
-    #   uses: cardinalby/git-get-release-action@v1      with:
-    #   env:
-    #     GITHUB_TOKEN: ${{ github.token }}  # or your personal access token
-
     # Navigate to the Rust program repository and build it
     - name: Build Rust program
       run: |
         cd vic3-tiger
         cargo build --release -p vic3-tiger
-        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" > ../error.log
-        cat ../error.log
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" --supress ${{ github.workspace }}/files/current_errors.json  > ../error.log
 
     - name: Check if error log is empty
       id: check_error_log
@@ -65,16 +58,19 @@ jobs:
             echo "has_errors=false" >> $GITHUB_OUTPUT
           fi
 
-
-    - name: Print the error status
-      run: |
-        if [ -s ./error.log ]; then
-            echo "The file error.log exists and is not empty."
-        else
-            echo "The file error.log either does not exist or is empty."
-        fi
-        echo "Error status is ${{ steps.check_error_log.outputs.has_errors }}"
-
     - name: Fail PR if error log is not empty
       if: ${{ steps.check_error_log.outputs.has_errors == 'true' && github.event.pull_request.head.ref != 'override-branch' }}
-      run: exit 1
+      run: |
+        cat error.log
+        exit 1
+
+
+    - name: Update the suppressed error json
+      if: ${{ steps.check_error_log.outputs.has_errors == 'true' && github.event.pull_request.head.ref != 'override-branch' }}
+      run:
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git add -u
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --json --game "${{ github.workspace }}/vanilla-game" > ../files/current_errors.json
+        git diff-index --quiet HEAD || (git commit -m "Added systemic errors to our suppression list" &&  git push origin "HEAD:${{ github.head_ref }}")
+  
