@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -271,13 +271,31 @@
 			remove_variable ?= ai_disabled_timer
 			set_variable = detected_player
 		}
+		# Demolish non-capital statues
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_power_bloc_statue
+					state = {
+						is_capital = no
+					}
+				}
+			}
+			every_scope_state = {
+				limit = {
+					has_building = building_power_bloc_statue
+					is_capital = no
+				}
+				remove_building = building_power_bloc_statue
+			}
+		}
 	}
 	random_events = {
 		23 = 0
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
