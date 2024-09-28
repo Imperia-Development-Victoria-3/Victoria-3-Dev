@@ -58,6 +58,10 @@ jobs:
             echo "has_errors=false" >> $GITHUB_OUTPUT
           fi
 
+
+    - name: Print the error status
+      run: echo "Error status is ${{ steps.check_error_log.outputs.has_errors }}"
+
     - name: Fail PR if error log is not empty
       if: ${{ steps.check_error_log.outputs.has_errors == 'true' && github.event.pull_request.head.ref != 'override-branch' }}
       run: exit 1
