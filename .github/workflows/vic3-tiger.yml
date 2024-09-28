@@ -71,5 +71,5 @@ jobs:
         cargo run --release -p vic3-tiger "${{ github.workspace }}" --json --game "${{ github.workspace }}/vanilla-game" > ../files/current_errors.json
         cd ..
         git add files/current_errors.json
-        git commit -m "Added systemic errors to our suppression list" &&  git push origin "HEAD:${{ github.head_ref }}"
+        git diff-index --quiet HEAD || git commit -m "Added systemic errors to our suppression list" &&  git push origin "HEAD:${{ github.head_ref }}"
   
