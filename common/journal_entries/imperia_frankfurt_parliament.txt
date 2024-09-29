@@ -29,15 +29,9 @@
 		}
 	}
 	possible = {
-		any_country = {
-			filter = {
-				OR = {
-					country_has_primary_culture = cu:north_german
-					country_has_primary_culture = cu:south_german
-				}
-			}
-			has_technology_researched = nationalism
-			percent >= 0.65
+		custom_tooltip = {
+			text = ready_for_frankfurt_tt
+			has_global_variable = ready_for_frankfurt
 		}
 	}
 	immediate = {
@@ -55,27 +49,29 @@
 			popup = yes
 			days = 14
 		}
-		imperia_frankfurt_parliament_initialise_club_variables = yes
-		imperia_frankfurt_parliament_update_club_influence = yes
-		if = {
-			limit = {
-				NOT = {
-					exists = global_var:frankfurt_parliament_voting_period
+		hidden_effect = {
+			imperia_frankfurt_parliament_initialise_club_variables = yes
+			imperia_frankfurt_parliament_update_club_influence = yes
+			if = {
+				limit = {
+					NOT = {
+						exists = global_var:frankfurt_parliament_voting_period
+					}
 				}
-			}
-			set_global_variable = {
-				name = frankfurt_parliament_voting_period
-				value = 0
-			}
-			set_global_variable = {
-				name = frankfurt_parliament_current_vote
-				value = 0
-			}
-			set_global_variable = frankfurt_parliament_held
-			# This one is just initialised here, will be "populated" on completion
-			set_global_variable = {
-				name = frankfurt_eligible_german_leader_voters
-				value = 0
+				set_global_variable = {
+					name = frankfurt_parliament_voting_period
+					value = 0
+				}
+				set_global_variable = {
+					name = frankfurt_parliament_current_vote
+					value = 0
+				}
+				set_global_variable = frankfurt_parliament_held
+				# This one is just initialised here, will be "populated" on completion
+				set_global_variable = {
+					name = frankfurt_eligible_german_leader_voters
+					value = 0
+				}
 			}
 		}
 	}
@@ -1049,7 +1045,6 @@ je_imperia_frankfurt_gutter_crown_economy = {
 je_imperia_frankfurt_gutter_crown_political = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
-
 	complete = {
 		any_subject_or_below = {
 			limit = {
