@@ -314,10 +314,7 @@ frankfurt_parliament.2 = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
-						has_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
-					}
+					has_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
 				}
 				activate_law = law_type:law_presidential_republic
 			}
@@ -341,12 +338,6 @@ frankfurt_parliament.2 = {
 		}
 		if = {
 			limit = {
-				has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
-			}
-			activate_law = law_type:law_oligarchy
-		}
-		else_if = {
-			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_wealth_var
 			}
 			activate_law = law_type:law_wealth_voting
@@ -363,7 +354,7 @@ frankfurt_parliament.2 = {
 			every_state_region = {
 				limit = {
 					any_scope_state = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 						NOT = {
 							has_claim_by = root
 						}
@@ -415,7 +406,7 @@ frankfurt_parliament.2 = {
 				limit = {
 					this != root
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 					}
 					is_subject = no
 					# Mostly to exclude Switzerland, who are excluded exactly because of True Neutrality
@@ -442,7 +433,7 @@ frankfurt_parliament.2 = {
 					this != root
 					country_rank >= rank_value:great_power
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = no
+						imperia_is_lesser_german_state = no
 					}
 					OR = {
 						country_has_primary_culture = cu:north_german
@@ -455,13 +446,6 @@ frankfurt_parliament.2 = {
 			}
 		}
 		custom_tooltip = would_happen_upon_consolidation_tt
-		if = {
-			limit = {
-				root ?= c:AUS
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-			}
-			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
-		}
 		show_as_tooltip = {
 			add_modifier = {
 				name = crown_from_the_gutter
@@ -488,14 +472,6 @@ frankfurt_parliament.2 = {
 					country_rank <= rank_value:insignificant_power
 				}
 				add = 100
-			}
-			modifier = {
-				trigger = {
-					# Austria accepts gladly if the parliament voted to allow all of Austria into Gutter German
-					root ?= c:AUS
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-				}
-				add = 1000
 			}
 		}
 	}
@@ -679,13 +655,6 @@ frankfurt_parliament.3 = {
 		add_journal_entry = {
 			type = je_imperia_frankfurt_german_consolidation_german_minor
 		}
-		if = {
-			limit = {
-				root ?= c:AUS
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-			}
-			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
-		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -742,7 +711,7 @@ frankfurt_parliament.3 = {
 				any_country = {
 					is_player = yes
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 					}
 					NOT = {
 						has_variable = frankfurt_considered_bending_the_knee
@@ -868,7 +837,6 @@ frankfurt_parliament.6 = {
 		}
 		remove_variable ?= frankfurt_parliament_supports_left_club
 		remove_variable ?= frankfurt_parliament_supports_center_club
-		remove_variable ?= frankfurt_parliament_supports_right_club
 		add_modifier = {
 			name = club_change_cooldown
 			months = 4
@@ -892,12 +860,6 @@ frankfurt_parliament.6 = {
 		name = frankfurt_parliament.6.b
 		custom_tooltip = frankfurt_parliament_support_the_center_tt
 		set_variable = frankfurt_parliament_supports_center_club
-	}
-	# Right wing; absolute monarchists
-	option = {
-		name = frankfurt_parliament.6.c
-		custom_tooltip = frankfurt_parliament_support_the_right_tt
-		set_variable = frankfurt_parliament_supports_right_club
 	}
 	# Dont choose right now
 	option = {
@@ -1066,7 +1028,9 @@ frankfurt_parliament.9 = {
 		every_in_global_list = {
 			variable = german_establishment_aligned
 			limit = {
-				this != scope:german_major
+				scope:german_major = {
+					prev != this
+				}
 			}
 			random_diplomatic_play = {
 				limit = {

@@ -6,16 +6,11 @@
 	scripted_button = je_frankfurt_parliament_vote_republic_button
 	scripted_button = je_frankfurt_parliament_vote_monarchy_button
 	# Who gets to vote in Germany?
-	scripted_button = je_frankfurt_parliament_vote_oligarchy_button
 	scripted_button = je_frankfurt_parliament_vote_wealth_button
 	scripted_button = je_frankfurt_parliament_vote_universal_button
 	# Optional round - presidential or parliamentary republic
 	scripted_button = je_frankfurt_parliament_vote_presidential_button
 	scripted_button = je_frankfurt_parliament_vote_parliamentary_button
-	# Claims
-	scripted_button = je_frankfurt_parliament_lesser_germany_button
-	scripted_button = je_frankfurt_parliament_greater_germany_button
-	scripted_button = je_frankfurt_parliament_greater_austria_button
 	# Optional round - revolution? Only for universal suffrage republics
 	scripted_button = je_frankfurt_parliament_internal_focus_button
 	scripted_button = je_frankfurt_parliament_external_focus_button
@@ -97,13 +92,6 @@
 			# Updates the club influence for the country
 			# Uses ROOT, so HAS to be fired with the evaluated country in topscope
 			imperia_frankfurt_parliament_update_club_influence = yes
-			# Update the german form voting AI tendencies (during the german form vote)
-			if = {
-				limit = {
-					global_var:frankfurt_parliament_current_vote = 4
-				}
-				imperia_frankfurt_parliament_update_german_form_ai_willingness = yes
-			}
 			# If you didnt join the parliament (for whatever reason), and the proper voting is happening, kick you out
 			if = {
 				limit = {
@@ -151,10 +139,6 @@
 						global_var:frankfurt_parliament_current_vote = 2
 					}
 					set_global_variable = {
-						name = imperia_frankfurt_parliament_oligarchy_voters_var
-						value = imperia_frankfurt_parliament_oligarchy_voters_value
-					}
-					set_global_variable = {
 						name = imperia_frankfurt_parliament_wealth_voters_var
 						value = imperia_frankfurt_parliament_wealth_voters_value
 					}
@@ -166,7 +150,6 @@
 						name = imperia_frankfurt_parliament_suffrage_abstentions_var
 						value = {
 							value = imperia_frankfurt_parliament_current_voters_value
-							subtract = imperia_frankfurt_parliament_oligarchy_voters_value
 							subtract = imperia_frankfurt_parliament_wealth_voters_value
 							subtract = imperia_frankfurt_parliament_universal_voters_value
 						}
@@ -191,33 +174,6 @@
 							value = imperia_frankfurt_parliament_current_voters_value
 							subtract = imperia_frankfurt_parliament_presidential_voters_value
 							subtract = imperia_frankfurt_parliament_parliamentary_voters_value
-						}
-					}
-				}
-				if = {
-					# What is the German fatherland?
-					limit = {
-						global_var:frankfurt_parliament_current_vote = 4
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_lesser_germany_voters_var
-						value = imperia_frankfurt_parliament_lesser_germany_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_greater_germany_voters_var
-						value = imperia_frankfurt_parliament_greater_germany_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_greater_austria_voters_var
-						value = imperia_frankfurt_parliament_greater_austria_voters_value
-					}
-					set_global_variable = {
-						name = imperia_frankfurt_parliament_german_form_abstentions_var
-						value = {
-							value = imperia_frankfurt_parliament_current_voters_value
-							subtract = imperia_frankfurt_parliament_lesser_germany_voters_value
-							subtract = imperia_frankfurt_parliament_greater_germany_voters_value
-							subtract = imperia_frankfurt_parliament_greater_austria_voters_value
 						}
 					}
 				}
@@ -275,12 +231,6 @@
 						}
 						if = {
 							limit = {
-								frankfurt_parliament_has_majority_for_oligarchy = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
-						}
-						else_if = {
-							limit = {
 								frankfurt_parliament_has_majority_for_wealth = yes
 							}
 							set_global_variable = frankfurt_parliament_has_majority_for_wealth_var
@@ -311,30 +261,6 @@
 						}
 					}
 					if = {
-						# What is the German fatherland?
-						limit = {
-							global_var:frankfurt_parliament_current_vote = 4
-						}
-						if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_lesser_germany = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-						}
-						else_if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_greater_germany = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-						}
-						else_if = {
-							limit = {
-								frankfurt_parliament_has_majority_for_greater_austria = yes
-							}
-							set_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-						}
-					}
-					if = {
 						# internal vs external focus - only for radical republics
 						limit = {
 							global_var:frankfurt_parliament_current_vote = 5
@@ -352,10 +278,12 @@
 							set_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
 						}
 					}
+					# Actual turnover
 					change_global_variable = {
 						name = frankfurt_parliament_current_vote
 						add = 1
 					}
+					## Skip entries
 					if = {
 						limit = {
 							# The presidential/parliamentary debate only takes place if republic and wealth voting won
@@ -368,6 +296,16 @@
 							global_var:frankfurt_parliament_current_vote = 3
 						}
 						# Skip it if those 2 are NOT true
+						change_global_variable = {
+							name = frankfurt_parliament_current_vote
+							add = 1
+						}
+					}
+					if = {
+						limit = {
+							# This slot *was* for the German form, skip it now.
+							global_var:frankfurt_parliament_current_vote = 4
+						}
 						change_global_variable = {
 							name = frankfurt_parliament_current_vote
 							add = 1
@@ -409,12 +347,10 @@
 		# Not every event can be fired for every country, so its in weekly to improve the smooth flow of events
 		# On a shared 2-month cooldown in any case
 		random_events = {
+			# 75% of no event, should give some breathing room between the events, taking the 2-month cooldown in account
+			chance_of_no_event = 75
 			1 = frankfurt_parliament_clubs.1
 			1 = frankfurt_parliament_clubs.2
-			1 = frankfurt_parliament_clubs.3
-			1 = frankfurt_parliament_clubs.4
-			1 = frankfurt_parliament_clubs.5
-			1 = frankfurt_parliament_clubs.6
 		}
 	}
 	complete = {
@@ -462,13 +398,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 0
@@ -481,13 +411,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 1
@@ -500,13 +424,7 @@
 						country_has_primary_culture = cu:south_german
 					}
 					is_subject = no
-					trigger_if = {
-						limit = {
-							has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-							exists = c:AUS
-						}
-						c:AUS != this
-					}
+					c:AUS != this
 				}
 				order_by = gdp
 				position = 2

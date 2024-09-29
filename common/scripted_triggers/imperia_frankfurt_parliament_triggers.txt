@@ -13,37 +13,13 @@
 	}
 }
 
-frankfurt_parliament_has_majority_for_oligarchy = {
-	# Either...
-	OR = {
-		# Oligarchy won
-		AND = {
-			imperia_frankfurt_parliament_oligarchy_voters_value > imperia_frankfurt_parliament_wealth_voters_value
-			imperia_frankfurt_parliament_oligarchy_voters_value > imperia_frankfurt_parliament_universal_voters_value
-		}
-		# Or a tiebreaker in favor of it
-		AND = {
-			imperia_frankfurt_parliament_oligarchy_voters_value >= imperia_frankfurt_parliament_wealth_voters_value
-			imperia_frankfurt_parliament_oligarchy_voters_value >= imperia_frankfurt_parliament_universal_voters_value
-			any_country = {
-				imperia_country_owns_frankfurt_city = yes
-				has_variable = frankfurt_parliament_voted_oligarchy
-			}
-		}
-	}
-}
-
 frankfurt_parliament_has_majority_for_wealth = {
 	# Either...
 	OR = {
 		# wealth beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_oligarchy_voters_value
-			imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
-		}
+		imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
 		# Or a tiebreaker in favor of it
 		AND = {
-			imperia_frankfurt_parliament_wealth_voters_value >= imperia_frankfurt_parliament_oligarchy_voters_value
 			imperia_frankfurt_parliament_wealth_voters_value >= imperia_frankfurt_parliament_universal_voters_value
 			any_country = {
 				imperia_country_owns_frankfurt_city = yes
@@ -56,14 +32,10 @@ frankfurt_parliament_has_majority_for_wealth = {
 frankfurt_parliament_has_majority_for_universal = {
 	# Either...
 	OR = {
-		# universal suffrage beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_oligarchy_voters_value
-			imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
-		}
+		# universal suffrage beat the other
+		imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
 		# Or a tiebreaker in favor of it
 		AND = {
-			imperia_frankfurt_parliament_universal_voters_value >= imperia_frankfurt_parliament_oligarchy_voters_value
 			imperia_frankfurt_parliament_universal_voters_value >= imperia_frankfurt_parliament_wealth_voters_value
 			any_country = {
 				imperia_country_owns_frankfurt_city = yes
@@ -84,7 +56,6 @@ frankfurt_parliament_has_majority_for_presidential_republic = {
 				has_variable = frankfurt_parliament_voted_presidential
 			}
 		}
-		has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
 	}
 }
 
@@ -100,66 +71,6 @@ frankfurt_parliament_has_majority_for_parliamentary_republic = {
 			}
 		}
 		has_global_variable = frankfurt_parliament_has_majority_for_universal_var
-	}
-}
-
-frankfurt_parliament_has_majority_for_lesser_germany = {
-	# Either...
-	OR = {
-		# Lesser Germany beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_lesser_germany_voters_value > imperia_frankfurt_parliament_greater_germany_voters_value
-			imperia_frankfurt_parliament_lesser_germany_voters_value > imperia_frankfurt_parliament_greater_austria_voters_value
-		}
-		# Or a tiebreaker in favor of it
-		AND = {
-			imperia_frankfurt_parliament_lesser_germany_voters_value >= imperia_frankfurt_parliament_greater_germany_voters_value
-			imperia_frankfurt_parliament_lesser_germany_voters_value >= imperia_frankfurt_parliament_greater_austria_voters_value
-			any_country = {
-				imperia_country_owns_frankfurt_city = yes
-				has_variable = frankfurt_parliament_voted_lesser_germany
-			}
-		}
-	}
-}
-
-frankfurt_parliament_has_majority_for_greater_germany = {
-	# Either...
-	OR = {
-		# greater Germany beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_greater_germany_voters_value > imperia_frankfurt_parliament_lesser_germany_voters_value
-			imperia_frankfurt_parliament_greater_germany_voters_value > imperia_frankfurt_parliament_greater_austria_voters_value
-		}
-		# Or a tiebreaker in favor of it
-		AND = {
-			imperia_frankfurt_parliament_greater_germany_voters_value >= imperia_frankfurt_parliament_lesser_germany_voters_value
-			imperia_frankfurt_parliament_greater_germany_voters_value >= imperia_frankfurt_parliament_greater_austria_voters_value
-			any_country = {
-				imperia_country_owns_frankfurt_city = yes
-				has_variable = frankfurt_parliament_voted_greater_germany
-			}
-		}
-	}
-}
-
-frankfurt_parliament_has_majority_for_greater_austria = {
-	# Either...
-	OR = {
-		# greater austria beat the 2 others
-		AND = {
-			imperia_frankfurt_parliament_greater_austria_voters_value > imperia_frankfurt_parliament_lesser_germany_voters_value
-			imperia_frankfurt_parliament_greater_austria_voters_value > imperia_frankfurt_parliament_greater_germany_voters_value
-		}
-		# Or a tiebreaker in favor of it
-		AND = {
-			imperia_frankfurt_parliament_greater_austria_voters_value >= imperia_frankfurt_parliament_lesser_germany_voters_value
-			imperia_frankfurt_parliament_greater_austria_voters_value >= imperia_frankfurt_parliament_greater_germany_voters_value
-			any_country = {
-				imperia_country_owns_frankfurt_city = yes
-				has_variable = frankfurt_parliament_voted_greater_austria
-			}
-		}
 	}
 }
 
@@ -209,15 +120,10 @@ frankfurt_parliament_prince_will_join_gutter_king = {
 }
 
 frankfurt_parliament_gutter_king_is_consolidating = {
-	OR = {
-		has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-		has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-		has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-	}
 	any_state_region = {
 		filter = {
 			any_scope_state = {
-				frankfurt_parliament_state_is_gutter_german = yes
+				imperia_is_lesser_german_state = yes
 			}
 		}
 		any_scope_state = {
@@ -229,52 +135,6 @@ frankfurt_parliament_gutter_king_is_consolidating = {
 			}
 		}
 		percent >= 0.75
-	}
-}
-
-frankfurt_parliament_state_is_gutter_german = {
-	trigger_if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_lesser_germany_var
-		}
-		# "Traditional" german states, Kleindeutschland
-		this = {
-			imperia_is_lesser_german_state = yes
-		}
-	}
-	trigger_else_if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-		}
-		# German Confederation states, historically the option chossen by the Parliament (no Prussian-Polish lands + German Austria/Bohemia)
-		this = {
-			imperia_is_german_confederation_state = yes
-		}
-	}
-	trigger_else_if = {
-		limit = {
-			has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-		}
-		# Highly hypothetical Greater, Greater German Empire, asked for by some Austrian members. Included *all* of Austria besides everything else.
-		# Also includes Switzerland, because why the hell not at this point..
-		this = {
-			OR = {
-				imperia_is_german_confederation_state = yes
-				AND = {
-					# If it's not on the German Confederation list it can pass if its owned by Austria, Prussia or Switzerland if the state is European
-					state_is_in_europe = yes
-					OR = {
-						owner ?= c:AUS
-						owner ?= c:PRU
-						owner ?= c:SWI
-					}
-				}
-			}
-		}
-	}
-	trigger_else = {
-		# If no consensus has been reached (yet) then there's no states to claim
-		always = no
 	}
 }
 
@@ -297,41 +157,10 @@ imperia_frankfurt_parliament_is_in_session = {
 
 imperia_frankfurt_parliament_law_is_preferred_by_dominating_left_ai_trigger = {
 	var:frankfurt_parliament_left_faction_influence > var:frankfurt_parliament_center_faction_influence
-	var:frankfurt_parliament_left_faction_influence > var:frankfurt_parliament_right_faction_influence
 }
 
 imperia_frankfurt_parliament_law_is_preferred_by_dominating_center_ai_trigger = {
 	var:frankfurt_parliament_center_faction_influence > var:frankfurt_parliament_left_faction_influence
-	var:frankfurt_parliament_center_faction_influence > var:frankfurt_parliament_right_faction_influence
-}
-
-imperia_frankfurt_parliament_law_is_preferred_by_dominating_right_ai_trigger = {
-	var:frankfurt_parliament_right_faction_influence > var:frankfurt_parliament_left_faction_influence
-	var:frankfurt_parliament_right_faction_influence > var:frankfurt_parliament_center_faction_influence
-}
-
-imperia_frankfurt_parliament_lesser_germany_is_preferred_trigger = {
-	has_variable = lesser_germany_ai_willingness
-	has_variable = greater_germany_ai_willingness
-	has_variable = greater_austria_ai_willingness
-	var:lesser_germany_ai_willingness > var:greater_germany_ai_willingness
-	var:lesser_germany_ai_willingness > var:greater_austria_ai_willingness
-}
-
-imperia_frankfurt_parliament_greater_germany_is_preferred_trigger = {
-	has_variable = lesser_germany_ai_willingness
-	has_variable = greater_germany_ai_willingness
-	has_variable = greater_austria_ai_willingness
-	var:greater_germany_ai_willingness > var:lesser_germany_ai_willingness
-	var:greater_germany_ai_willingness > var:greater_austria_ai_willingness
-}
-
-imperia_frankfurt_parliament_greater_austria_is_preferred_trigger = {
-	has_variable = lesser_germany_ai_willingness
-	has_variable = greater_germany_ai_willingness
-	has_variable = greater_austria_ai_willingness
-	var:greater_austria_ai_willingness > var:lesser_germany_ai_willingness
-	var:greater_austria_ai_willingness > var:greater_germany_ai_willingness
 }
 
 imperia_frankfurt_parliament_country_has_sway_targets = {
