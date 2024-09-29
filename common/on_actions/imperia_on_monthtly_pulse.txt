@@ -289,6 +289,78 @@
 				remove_building = building_power_bloc_statue
 			}
 		}
+		## Global multicultural levelup cooldowns
+		# To prevent back-to-back leveling
+		if = {
+			limit = {
+				# If country has the burgeoning multiculturalism institution
+				has_institution = institution_multiculturalism
+			}
+			if = {
+				# First time cooldown here
+				limit = {
+					NOT = {
+						has_global_variable = current_max_multiculturalism_level
+					}
+				}
+				set_global_variable = {
+					name = current_max_multiculturalism_level
+					value = 1
+				}
+				set_global_variable = {
+					name = multiculturalism_upgrade_cooldown
+					years = 10
+				}
+			}
+			if = {
+				limit = {
+					# If country is currently at the max (or above, I guess) allowed by the global var
+					institution_investment_level = {
+						institution = institution_multiculturalism
+						value >= global_var:current_max_multiculturalism_level
+					}
+				}
+				if = {
+					limit = {
+						# The cooldown is done
+						NOT = {
+							has_global_variable = multiculturalism_upgrade_cooldown
+						}
+					}
+					# Increase allowed max, and reset the cooldown
+					change_global_variable = {
+						name = current_max_multiculturalism_level
+						add = 1
+					}
+					set_global_variable = {
+						name = multiculturalism_upgrade_cooldown
+						years = 10
+					}
+				}
+				else_if = {
+					limit = {
+						# If country is expanding the institution rapidly, and has the cooldown active (since its an else_if)
+						# Or the institution is above its current max, just to calm my nerves
+						OR = {
+							expanding_institution = institution_multiculturalism
+							institution_investment_level = {
+								institution = institution_multiculturalism
+								value > global_var:current_max_multiculturalism_level
+							}
+						}
+					}
+					# Reset the institution to the max; SHOULD remove the expansion
+					save_scope_value_as = {
+						name = current_max
+						value = global_var:current_max_multiculturalism_level
+					}
+					set_institution_investment_level = {
+						institution = institution_multiculturalism
+						value = scope:current_max
+					}
+				}
+			}
+		}
 	}
 	random_events = {
 		23 = 0
