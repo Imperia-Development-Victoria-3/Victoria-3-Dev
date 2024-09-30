@@ -1092,3 +1092,96 @@ frankfurt_parliament.10 = {
 		}
 	}
 }
+
+# Political Integration event - state bureaucrats
+frankfurt_parliament.11 = {
+	type = country_event
+	title = frankfurt_parliament.11.t
+	desc = frankfurt_parliament.11.desc
+	flavor = frankfurt_parliament.11.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.11.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_hereditary_bureaucrats
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_integration_modifier
+				years = 10
+			}
+		}
+	}
+	# Integration - hereditary bureaucrats
+	option = {
+		name = frankfurt_parliament.11.b
+		trigger = {
+			has_law = law_type:law_hereditary_bureaucrats
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_integration_modifier
+				years = 5
+				multiplier = 0.5
+			}
+		}
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.11.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_elected_bureaucrats
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_replacement_modifier
+				years = 10
+			}
+		}
+	}
+	# Replacement - elected bureaucrats
+	option = {
+		name = frankfurt_parliament.11.d
+		trigger = {
+			has_law = law_type:law_elected_bureaucrats
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_replacement_modifier
+				years = 5
+				multiplier = 0.5
+			}
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.11.e
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_left_be_modifier
+				years = 10
+			}
+		}
+	}
+}

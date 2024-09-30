@@ -1047,7 +1047,7 @@ je_imperia_frankfurt_gutter_crown_political = {
 	group = je_group_historical_content
 	complete = {
 		any_subject_or_below = {
-			limit = {
+			filter = {
 				is_direct_subject_of = c:GER
 				OR = {
 					country_has_primary_culture = cu:north_german
@@ -1056,6 +1056,22 @@ je_imperia_frankfurt_gutter_crown_political = {
 			}
 			count = all
 			is_subject_type = subject_type_puppet
+		}
+		any_scope_state = {
+			filter = {
+				state_region = {
+					OR = {
+						is_homeland = cu:north_german
+						is_homeland = cu:south_german
+					}
+				}
+			}
+			count = all
+			OR = {
+				has_modifier = gutter_crown_political_je_integration_modifier
+				has_modifier = gutter_crown_political_je_replacement_modifier
+				has_modifier = gutter_crown_political_je_left_be_modifier
+			}
 		}
 	}
 	on_complete = {
@@ -1076,6 +1092,12 @@ je_imperia_frankfurt_gutter_crown_political = {
 	fail = {
 		NOT = {
 			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+	on_weekly_pulse = {
+		random_events = {
+			chance_of_no_event = 80
+			1 = frankfurt_parliament.11 # State bureaucrat integration event
 		}
 	}
 }
