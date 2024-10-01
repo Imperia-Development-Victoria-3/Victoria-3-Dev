@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -350,13 +350,39 @@
 						}
 					}
 					# Reset the institution to the max; SHOULD remove the expansion
-					save_scope_value_as = {
-						name = current_max
-						value = global_var:current_max_multiculturalism_level
-					}
-					set_institution_investment_level = {
-						institution = institution_multiculturalism
-						level = scope:current_max
+					# Cant do set_institution_investment_level dynamically, hence this "solution"
+					switch = {
+						trigger	 = global_var:current_max_multiculturalism_level
+						1 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 1
+							}
+						}
+						2 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 2
+							}
+						}
+						3 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 3
+							}
+						}
+						4 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 4
+							}
+						}
+						5 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 5
+							}
+						}
 					}
 				}
 			}
@@ -367,7 +393,7 @@
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
