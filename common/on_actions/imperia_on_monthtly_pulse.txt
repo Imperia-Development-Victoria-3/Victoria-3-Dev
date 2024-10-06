@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -387,13 +387,28 @@
 				}
 			}
 		}
+		if = {
+			limit = {
+				this ?= c:BIC
+				is_subject = yes
+				NOT = {
+					has_variable = bic_collapse_var
+				}
+			}
+			# Colonial India, who is a subject and haven't collapsed yet
+			# Should save their overlord so the surrounding vassals gains independence at the same time..
+			set_variable = {
+				name = india_overlord
+				value = overlord
+			}
+		}
 	}
 	random_events = {
 		23 = 0
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
