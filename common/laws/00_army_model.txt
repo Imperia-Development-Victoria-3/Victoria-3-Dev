@@ -4,6 +4,19 @@
 	
 	progressiveness = -50
 	
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_army_model_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+	
 	modifier = {
 		unit_morale_loss_mult = 0.1
 		unit_experience_gain_mult = -0.25
@@ -12,6 +25,7 @@
 		country_military_goods_cost_mult = -0.1
 		state_building_barracks_max_level_add = 25
 		state_building_conscription_center_max_level_add = 50
+		country_leverage_resistance_mult = -0.10
 	}
 	
 	on_enact = {
@@ -38,14 +52,14 @@
 		law_mass_conscription
 		law_national_militia
 	}
-
+	
 	pop_support = {
 		value = 0
 		# Aristocrats like feudalism
 		add = {
-			desc = "POP_ARISTOCRATS"			
+			desc = "POP_ARISTOCRATS"
 			if = {
-				limit = { 
+				limit = {
 					is_pop_type = aristocrats
 				}
 				value = 0.33
@@ -57,16 +71,12 @@
 	ai_will_do = {
 		always = no
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -80,6 +90,19 @@ law_professional_army = {
 	
 	unlocking_technologies = { military_drill }
 	
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_army_model_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+	
 	modifier = {
 		unit_morale_loss_mult = -0.1
 		state_conscription_rate_add = 0.01
@@ -87,13 +110,14 @@ law_professional_army = {
 		country_soldiers_pol_str_mult = 0.1
 		state_building_barracks_max_level_add = 30
 		state_building_conscription_center_max_level_add = 25
-		unit_experience_gain_mult = 0.25
+		unit_experience_gain_mult = 0.33333
+		country_leverage_resistance_mult = 0.10
 	}
 	
 	possible_political_movements = {
 		law_mass_conscription
 	}
-
+	
 	on_enact = {
 		if = {
 			limit = {
@@ -111,14 +135,14 @@ law_professional_army = {
 			custom_tooltip = military_pops_af_ig_shift_effect_tt
 		}
 	}
-
+	
 	pop_support = {
 		value = 0
 		# Officers like professionalism
 		add = {
-			desc = "POP_OFFICERS"			
+			desc = "POP_OFFICERS"
 			if = {
-				limit = { 
+				limit = {
 					is_pop_type = officers
 				}
 				value = 0.5
@@ -126,26 +150,44 @@ law_professional_army = {
 		}
 		# soldiers are broadly in favor of this also
 		add = {
-			desc = "POP_SOLDIERS"		
+			desc = "POP_SOLDIERS"
 			if = {
-				limit = { 
+				limit = {
 					is_pop_type = soldiers
 				}
 				value = 0.25
 			}
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+		
+		if = {
+			limit = {
+				has_journal_entry = je_sick_man_army
+				has_law = law_type:law_peasant_levies
+			}
+			add = 1000
+		}
+
+		# AI should really try to get out of Peasant Levies under the right circumstances
+		if = {
+			limit = {
+				has_law = law_type:law_peasant_levies
+				NOT = { has_strategy = ai_strategy_reactionary_agenda }
+				OR = {
+					NOT = { has_strategy = ai_strategy_conservative_agenda }
+					any_political_movement = { desired_law = law_type:law_professional_army }
+					has_technology_researched = napoleonic_warfare
+				}
+			}
+			add = 1000
 		}
 	}
 }
@@ -158,10 +200,24 @@ law_national_militia = {
 	
 	unlocking_technologies = { mandatory_service }
 	
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_army_model_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+	
 	modifier = {
 		unit_morale_loss_mult = -0.05
 		state_conscription_rate_add = 0.05
 		interest_group_ig_armed_forces_pol_str_mult = -0.25
+		country_leverage_resistance_mult = 0.25
 		state_building_barracks_max_level_add = 5
 		state_building_conscription_center_max_level_add = 100
 	}
@@ -170,7 +226,7 @@ law_national_militia = {
 		law_professional_army
 		law_mass_conscription
 	}
-
+	
 	on_enact = {
 		if = {
 			limit = {
@@ -186,14 +242,14 @@ law_national_militia = {
 			custom_tooltip = non_military_pops_af_ig_shift_effect_negative_tt
 		}
 	}
-
+	
 	pop_support = {
 		value = 0
 		# Farmers like waving a rifle around and telling people to get off their land
 		add = {
-			desc = "POP_FARMERS"			
+			desc = "POP_FARMERS"
 			if = {
-				limit = { 
+				limit = {
 					is_pop_type = farmers
 				}
 				value = 0.25
@@ -207,16 +263,12 @@ law_national_militia = {
 			has_ideology = ideology:ideology_pacifist
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -230,14 +282,29 @@ law_mass_conscription = {
 	
 	unlocking_technologies = { enlistment_offices }
 	
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_army_model_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+	
 	modifier = {
 		unit_morale_loss_mult = 0.05
 		state_conscription_rate_add = 0.03
+		country_military_goods_cost_mult = -0.05
 		building_training_rate_mult = 1
 		state_building_barracks_max_level_add = 100
 		state_building_conscription_center_max_level_add = 100
+		country_leverage_resistance_mult = 0.15
 	}
-
+	
 	on_enact = {
 		if = {
 			limit = {
@@ -257,21 +324,39 @@ law_mass_conscription = {
 	possible_political_movements = {
 		law_mass_conscription
 	}
-
+	
 	pop_support = {
 		value = 0
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+		
+		if = {
+			limit = {
+				has_journal_entry = je_sick_man_army
+				has_law = law_type:law_peasant_levies
+			}
+			add = 1000
+		}
+
+		# AI should really try to get out of Peasant Levies under the right circumstances
+		if = {
+			limit = {
+				has_law = law_type:law_peasant_levies
+				NOT = { has_strategy = ai_strategy_reactionary_agenda }
+				OR = {
+					NOT = { has_strategy = ai_strategy_conservative_agenda }
+					any_political_movement = { desired_law = law_type:law_professional_army }
+					has_technology_researched = napoleonic_warfare
+				}
+			}
+			add = 1000
 		}
 	}
 }

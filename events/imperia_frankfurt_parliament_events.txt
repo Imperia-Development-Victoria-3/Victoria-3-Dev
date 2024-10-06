@@ -298,10 +298,7 @@ frankfurt_parliament.2 = {
 		}
 		if = {
 			limit = {
-				OR = {
-					is_subject = yes
-					is_subject_type = subject_type_customs_union
-				}
+				is_subject = yes
 			}
 			overlord = {
 				save_scope_as = overlord_scope
@@ -317,10 +314,7 @@ frankfurt_parliament.2 = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
-						has_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
-					}
+					has_global_variable = frankfurt_parliament_has_majority_for_presidential_republic_var
 				}
 				activate_law = law_type:law_presidential_republic
 			}
@@ -344,12 +338,6 @@ frankfurt_parliament.2 = {
 		}
 		if = {
 			limit = {
-				has_global_variable = frankfurt_parliament_has_majority_for_oligarchy_var
-			}
-			activate_law = law_type:law_oligarchy
-		}
-		else_if = {
-			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_wealth_var
 			}
 			activate_law = law_type:law_wealth_voting
@@ -366,7 +354,7 @@ frankfurt_parliament.2 = {
 			every_state_region = {
 				limit = {
 					any_scope_state = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 						NOT = {
 							has_claim_by = root
 						}
@@ -381,34 +369,25 @@ frankfurt_parliament.2 = {
 				add_claim = root
 			}
 		}
-		# foreign laws, only for liberal republican germany
-		# Also adds infamy here
+		# Add infamy
 		if = {
 			limit = {
-				OR = {
-					has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
-					has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
-				}
-			}
-			set_variable = {
-				name = gutter_king_old_lawgroup_diplomatic_stance
-				value = active_law:lawgroup_diplomatic_stance.type
-			}
-		}
-		if = {
-			limit = {
-				# Will only ever be true if it was voted for
+				# Will only ever be true if it was voted for	
 				has_global_variable = frankfurt_parliament_has_majority_for_internal_focus_var
 			}
 			change_infamy = 70
-			activate_law = law_type:law_armed_neutrality
+			add_modifier = {
+				name = frankfurt_gutter_king_internal_focus
+				years = 20
+				is_decaying = yes
+			}
 		}
 		else_if = {
 			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_external_focus_var
 			}
+			# Gives a bunch of Central European claims
 			change_infamy = 95
-			activate_law = law_type:law_expansionism
 		}
 		else_if = {
 			limit = {
@@ -417,7 +396,7 @@ frankfurt_parliament.2 = {
 			change_infamy = 60
 		}
 		else = {
-			# Gives a base amount of infamy to anyone who accepts the Gutter Crown
+			# Gives a base amount of infamy to anyone who accepts the Gutter Crown	
 			change_infamy = 50
 		}
 		# Subjugation demands
@@ -427,17 +406,14 @@ frankfurt_parliament.2 = {
 				limit = {
 					this != root
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 					}
-					OR = {
-						is_subject = no
-						is_subject_type = subject_type_customs_union
-					}
+					is_subject = no
 					# Mostly to exclude Switzerland, who are excluded exactly because of True Neutrality
 					# If they go away from true neutrality, include them I guess
 					# If someone else becomes true neutral, exclude them
 					NOT = {
-						has_law = law_type:law_true_neutrality
+						has_modifier = imperia_true_neutral
 					}
 				}
 				trigger_event = {
@@ -457,7 +433,7 @@ frankfurt_parliament.2 = {
 					this != root
 					country_rank >= rank_value:great_power
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = no
+						imperia_is_lesser_german_state = no
 					}
 					OR = {
 						country_has_primary_culture = cu:north_german
@@ -470,13 +446,6 @@ frankfurt_parliament.2 = {
 			}
 		}
 		custom_tooltip = would_happen_upon_consolidation_tt
-		if = {
-			limit = {
-				root ?= c:AUS
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-			}
-			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
-		}
 		show_as_tooltip = {
 			add_modifier = {
 				name = crown_from_the_gutter
@@ -503,14 +472,6 @@ frankfurt_parliament.2 = {
 					country_rank <= rank_value:insignificant_power
 				}
 				add = 100
-			}
-			modifier = {
-				trigger = {
-					# Austria accepts gladly if the parliament voted to allow all of Austria into Gutter German
-					root ?= c:AUS
-					has_global_variable = frankfurt_parliament_has_majority_for_greater_austria_var
-				}
-				add = 1000
 			}
 		}
 	}
@@ -655,10 +616,7 @@ frankfurt_parliament.3 = {
 		}
 		if = {
 			limit = {
-				OR = {
-					is_subject = yes
-					is_subject_type = subject_type_customs_union
-				}
+				is_subject = yes
 			}
 			overlord = {
 				save_scope_as = overlord_scope
@@ -697,13 +655,6 @@ frankfurt_parliament.3 = {
 		add_journal_entry = {
 			type = je_imperia_frankfurt_german_consolidation_german_minor
 		}
-		if = {
-			limit = {
-				root ?= c:AUS
-				has_global_variable = frankfurt_parliament_has_majority_for_greater_germany_var
-			}
-			custom_tooltip = frankfurt_parliament_austria_will_shatter_on_consolidation_tt
-		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -719,6 +670,7 @@ frankfurt_parliament.3 = {
 	option = {
 		# decline
 		name = frankfurt_parliament.3.b
+		default_option = yes
 		if = {
 			limit = {
 				country_rank >= rank_value:great_power
@@ -759,7 +711,7 @@ frankfurt_parliament.3 = {
 				any_country = {
 					is_player = yes
 					capital = {
-						frankfurt_parliament_state_is_gutter_german = yes
+						imperia_is_lesser_german_state = yes
 					}
 					NOT = {
 						has_variable = frankfurt_considered_bending_the_knee
@@ -885,7 +837,6 @@ frankfurt_parliament.6 = {
 		}
 		remove_variable ?= frankfurt_parliament_supports_left_club
 		remove_variable ?= frankfurt_parliament_supports_center_club
-		remove_variable ?= frankfurt_parliament_supports_right_club
 		add_modifier = {
 			name = club_change_cooldown
 			months = 4
@@ -909,12 +860,6 @@ frankfurt_parliament.6 = {
 		name = frankfurt_parliament.6.b
 		custom_tooltip = frankfurt_parliament_support_the_center_tt
 		set_variable = frankfurt_parliament_supports_center_club
-	}
-	# Right wing; absolute monarchists
-	option = {
-		name = frankfurt_parliament.6.c
-		custom_tooltip = frankfurt_parliament_support_the_right_tt
-		set_variable = frankfurt_parliament_supports_right_club
 	}
 	# Dont choose right now
 	option = {
@@ -948,6 +893,12 @@ frankfurt_parliament.8 = {
 		# Get every establishment aligned country
 		every_in_global_list = {
 			variable = german_establishment_aligned
+			# Do not subjugate if the country left the Parliament
+			limit = {
+				NOT = {
+					has_variable = left_frankfurt_parliament
+				}
+			}
 			# That is NOT a subject of the gutter king
 			# And make the gutter king subjugate them
 			root = {
@@ -1077,7 +1028,9 @@ frankfurt_parliament.9 = {
 		every_in_global_list = {
 			variable = german_establishment_aligned
 			limit = {
-				this != scope:german_major
+				scope:german_major = {
+					prev != this
+				}
 			}
 			random_diplomatic_play = {
 				limit = {

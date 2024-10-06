@@ -33,30 +33,9 @@
 	on_weekly_pulse = {}
 	
 	on_war_begins = {}
-
+	
 	on_war_end = {}
 }
-
-dp_imperia_colonial_war = {
-	war_goal = humiliation
-	texture = "gfx/interface/icons/war_goals/humiliation.dds"
-	possible = {
-		has_law = law_type:law_imperialism
-		NOT = { is_country_type = decentralized }
-		imperia_aggressive_diplomatic_plays_permitted = yes
-		NOT = { is_subject_of = scope:target_country }
-		scope:target_country = {
-			NOT = { is_country_type = decentralized }
-			NOT = { is_subject_of = root }
-			is_country_type = recognized
-		}
-		custom_tooltip = {
-			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
-			scope:target_country.relations:root < relations_threshold:cordial
-		}				
-	}
-}
-
 
 dp_imperia_great_war = {
 	requires_interest_marker = no
@@ -66,45 +45,43 @@ dp_imperia_great_war = {
 		NOT = { is_country_type = decentralized }
 		imperia_aggressive_diplomatic_plays_permitted = yes
 		NOT = { is_subject_of = scope:target_country }
-		has_technology_researched = multilateral_alliances 
+		has_technology_researched = multilateral_alliances
 		has_global_variable = trench_works_invented_global
-
+		
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			NOT = { is_subject_of = root }
-			has_technology_researched = multilateral_alliances 
+			has_technology_researched = multilateral_alliances
 		}
 		custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER_NOT
 			scope:target_country.relations:root < relations_threshold:cordial
 		}
 	}
-
+	
 	on_weekly_pulse = {
 		every_scope_play_involved = {
 			root.war = {
 				if = {
 					limit = {
-					    has_war_support = {
-					        target = prev
-					        value < 0
-					    }
+						has_war_support = {
+							target = prev
+							value < 0
+						}
 					}
-
-					add_war_war_support = { 
-						target = prev 
+					
+					add_war_war_support = {
+						target = prev
 						value = 10
 					}
 				}
 			}
 		}
 	}
-
-	on_war_begins = {
-	}
-
-	on_war_end = {
-	}
+	
+	on_war_begins = {}
+	
+	on_war_end = {}
 }
 
 dp_imperia_gutter_german_revolt = {
@@ -116,13 +93,13 @@ dp_imperia_gutter_german_revolt = {
 	texture = "gfx/interface/icons/war_goals/humiliation.dds"
 	selectable_in_lens = {
 		always = no
-	}	
+	}
 	possible = {
 		always = no
 	}
 	on_weekly_pulse = {}
 	
 	on_war_begins = {}
-
+	
 	on_war_end = {}
 }

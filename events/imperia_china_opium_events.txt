@@ -1,0 +1,139 @@
+﻿namespace = imperia_china_opium
+
+imperia_china_opium.1 = {	#Notification Event
+	type = country_event
+	placement = root
+	title = imperia_china_opium.1.t
+	desc = imperia_china_opium.1.d
+	
+	duration = 3
+	
+	event_image = {
+		video = "gfx/event_pictures/asia_poor_people_moving.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	
+	trigger = {}
+	
+	option = {	#We must monitor the situation
+		name = imperia_china_opium.1.a
+		
+		custom_tooltip = {
+			text = opium_epidemic_explanation
+		}
+		
+		if = {
+			limit = {
+				c:MCH.overlord ?= c:CHI
+			}
+			c:MCH ?= {
+				add_journal_entry = {
+					type = je_opium_trade_participation
+				}
+			}
+		}
+		if = {
+			limit = {
+				c:YUE.overlord ?= c:CHI
+			}
+			c:YUE ?= {
+				add_journal_entry = {
+					type = je_opium_trade_participation
+				}
+			}
+		}
+		if = {
+			limit = {
+				c:HNA.overlord ?= c:CHI
+			}
+			c:HNA ?= {
+				add_journal_entry = {
+					type = je_opium_trade_participation
+				}
+			}
+		}
+		if = {
+			limit = {
+				c:XIB.overlord ?= c:CHI
+			}
+			c:XIB ?= {
+				add_journal_entry = {
+					type = je_opium_trade_participation
+				}
+			}
+		}
+	}
+}
+
+imperia_china_opium.2 = {	#Opium Eradicated
+	type = country_event
+	placement = root
+	title = imperia_china_opium.2.t
+	desc = imperia_china_opium.2.d
+	flavor = imperia_china_opium.2.f
+	
+	duration = 3
+	
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	
+	trigger = {}
+	
+	option = {	#The scourge of Opium has finally been eradicated!
+		name = imperia_china_opium.2.a
+		add_modifier = {
+			name = modifier_opium_eradicated
+			months = 120
+		}
+		every_primary_culture = {
+			remove_cultural_obsession = opium
+		}
+		add_loyalists = {
+			value = 0.1
+		}
+		set_global_variable = opium_epidemic_resolved
+	}
+}
+
+imperia_china_opium.3 = {	#Opium Ascendant
+	type = country_event
+	placement = root
+	title = imperia_china_opium.3.t
+	desc = imperia_china_opium.3.d
+	flavor = imperia_china_opium.3.f
+	
+	duration = 3
+	
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	
+	trigger = {}
+	
+	option = {	#Our efforts were in vain...
+		name = imperia_china_opium.3.a
+		add_modifier = {
+			name = modifier_opium_ascendant
+			months = 240
+		}
+		add_radicals = {
+			value = 0.1
+		}
+		set_global_variable = opium_epidemic_resolved
+	}
+}

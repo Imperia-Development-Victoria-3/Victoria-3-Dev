@@ -40,152 +40,6 @@ imperia_vienna_congress_severity_max_negative = {
 	multiply = -1
 }
 
-imperia_ai_foreign_law_state_wargoal_weight = {
-	value = 1
-	if = {
-		limit = {
-			has_law = law_type:law_expansionism
-			scope:target_state = {
-				region = {
-					NOR = {
-						any_scope_state = {
-							owner = root
-							is_incorporated = yes
-						}
-						any_neighbouring_state = {
-							owner = root
-							is_incorporated = yes
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_imperialism
-			scope:target_country = {
-				NOT = {
-					is_country_type = unrecognized
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_armed_neutrality
-			scope:target_country = {
-				NOT = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_anti_imperialist
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_no_colonial_affairs
-					NOT = {
-						any_primary_culture = {
-							shares_heritage_and_other_trait_with_any_primary_culture = root
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_pacifist
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_true_neutrality
-		}
-		multiply = 0
-	}
-}
-
-imperia_ai_foreign_law_country_wargoal_weight = {
-	value = 1
-	if = {
-		limit = {
-			has_law = law_type:law_expansionism
-			scope:target_country = {
-				NOT = {
-					any_neighbouring_state = {
-						owner = root
-						is_incorporated = yes
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_imperialism
-			scope:target_country = {
-				NOT = {
-					is_country_type = unrecognized
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_armed_neutrality
-			scope:target_country = {
-				NOT = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_anti_imperialist
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_no_colonial_affairs
-					NOT = {
-						any_primary_culture = {
-							shares_heritage_and_other_trait_with_any_primary_culture = root
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_pacifist
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_true_neutrality
-		}
-		multiply = 0
-	}
-}
-
 imperia_get_primary_culture_fraction_rough = {
 	value = 0
 	every_scope_culture = {
@@ -657,8 +511,8 @@ imperia_infamy_multiplier = {
 			infamy > 20
 		}
 		add = root.infamy
-		subtract = 20		# Remove 'excess' infamy from calculations
-		divide = 80		# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
+		subtract = 20	# Remove 'excess' infamy from calculations
+		divide = 80	# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
 	}
 	else = {
 		value = 0
@@ -720,7 +574,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_major_power
 				}
 			}
-			value = 5
+			value = 4
 		}
 		else_if = {
 			limit = {
@@ -729,7 +583,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_regional_power
 				}
 			}
-			value = 10
+			value = 8
 		}
 		else_if = {
 			limit = {
@@ -738,7 +592,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_power
 				}
 			}
-			value = 15
+			value = 12
 		}
 	}
 	else_if = {
@@ -1005,15 +859,14 @@ imperia_qing_fragile_unity_value = {
 	}
 	if = {
 		limit = {
-			# All state regions that are manchu homelands must be owned by c:CHI or one of their subjects
+			# If China loses Amur and Outer Manchuria
 			# Hardcoded for now
-			country_or_subject_owns_entire_state_region = STATE_SHENGJING
-			country_or_subject_owns_entire_state_region = STATE_OUTER_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_SOUTHERN_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_NORTHERN_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_TRANS_BAIKAL
+			NOT = {
+				country_or_subject_owns_entire_state_region = STATE_AMUR
+				country_or_subject_owns_entire_state_region = STATE_OUTER_MANCHURIA
+			}
 		}
-		subtract = 5
+		add = 5
 	}
 	### JE completions
 	# je_end_han_discrimination
@@ -1197,7 +1050,7 @@ imperia_qing_fragile_unity_value = {
 		limit = {
 			has_variable = imperia_taiping_appeared
 		}
-		add = 20
+		add = 10
 	}
 	# Boxer rebvellion timed out
 	if = {
@@ -1219,6 +1072,20 @@ imperia_qing_fragile_unity_value = {
 			}
 		}
 		add = 5
+	}
+	#Opium Epidemic JE
+	if = {
+		limit = {
+			has_modifier = modifier_opium_eradicated
+		}
+		subtract = 10
+	}
+	
+	if = {
+		limit = {
+			has_modifier = modifier_opium_ascendant
+		}
+		add = 10
 	}
 	#These go last
 	min = 0
@@ -1680,37 +1547,6 @@ imperia_discord_ai_voting_weight = {
 	}
 }
 
-imperia_weekly_customs_union_minting_cost = {
-	if = {
-		limit = {
-			has_variable = previous_minting_cost
-		}
-		value = {
-			add = modifier:country_minting_add
-			subtract = var:previous_minting_cost
-		}
-	}
-	else = {
-		value = modifier:country_minting_add
-	}
-	divide = {
-		add = 1
-		divide = 0.6		# old $DIVISOR$ 
-	}
-	if = {
-		limit = {
-			has_variable = previous_minting_cost
-		}
-		subtract = {
-			add = modifier:country_minting_add
-			subtract = var:previous_minting_cost
-		}
-	}
-	else = {
-		subtract = modifier:country_minting_add
-	}
-}
-
 imperia_china_infamy_penalty_value = {
 	value = 0
 	if = {
@@ -1734,7 +1570,7 @@ imperia_china_infamy_penalty_value = {
 					}
 				}
 			}
-			add = 6
+			add = 4
 		}
 		every_subject_or_below = {
 			limit = {
@@ -1758,7 +1594,7 @@ imperia_china_infamy_penalty_value = {
 						}
 					}
 				}
-				add = 6
+				add = 4
 			}
 		}
 	}
@@ -1769,7 +1605,7 @@ imperia_money_transfer_ten_million_counter = {
 	add = {
 		value = var:imperia_money_transfer_amount
 		divide = 10000000
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1779,7 +1615,7 @@ imperia_money_transfer_one_million_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 1000000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1789,7 +1625,7 @@ imperia_money_transfer_one_hundred_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 100000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1799,7 +1635,7 @@ imperia_money_transfer_ten_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 10000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1809,7 +1645,7 @@ imperia_money_transfer_one_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 1000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 

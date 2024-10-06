@@ -113,21 +113,14 @@ je_german_unification_idea = {
 			country_has_primary_culture = cu:north_german
 			country_has_primary_culture = cu:south_german
 		}
-		hidden_trigger = {
-			imperia_frankfurt_parliament_is_in_session = no
-			has_global_variable = frankfurt_parliament_held
-			any_country = {
-				has_variable = gutter_germany
-				count = 0
-			}
-		}
 	}
 	possible = {
 		OR = {
 			country_has_primary_culture = cu:north_german
 			country_has_primary_culture = cu:south_german
 		}
-		hidden_trigger = {
+		custom_tooltip = {
+			text = frankfurt_parliament_is_over_tt
 			imperia_frankfurt_parliament_is_in_session = no
 			has_global_variable = frankfurt_parliament_held
 			any_country = {
@@ -145,7 +138,11 @@ je_german_unification_idea = {
 				}
 			}
 			has_technology_researched = nationalism
-			percent >= 0.85			# From 0.75; should not happen while the Parliament is happening
+			percent >= 0.85	# From 0.75; should not happen while the Parliament is happening
+		}
+		je:je_german_unification_idea = {
+			# Here so it doesnt disappear immediately upon the Frankfurt ending...
+			journal_entry_age > 14
 		}
 	}
 	on_complete = {
@@ -321,7 +318,7 @@ je_north_german_unification = {
 	}
 	on_monthly_pulse = {
 		events = {
-			german_unification.3			# Bismarck
+			german_unification.3	# Bismarck
 		}
 		effect = {
 			if = {
@@ -448,7 +445,10 @@ je_german_unification = {
 		}
 	}
 	invalid = {
-		country_has_primary_culture = cu:hungarian
+		OR = {
+			country_has_primary_culture = cu:hungarian
+			c:HRE ?= THIS
+		}
 	}
 	weight = 1000
 	should_be_pinned_by_default = yes

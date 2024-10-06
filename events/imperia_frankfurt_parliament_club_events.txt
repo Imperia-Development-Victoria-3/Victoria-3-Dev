@@ -53,15 +53,6 @@ frankfurt_parliament_clubs.1 = {
 				value = 2
 			}
 		}
-		else_if = {
-			limit = {
-				has_variable = frankfurt_parliament_supports_right_club
-			}
-			save_scope_value_as = {
-				name = club_value
-				value = 3
-			}
-		}
 	}
 	trigger = {
 		is_player = yes
@@ -71,7 +62,6 @@ frankfurt_parliament_clubs.1 = {
 		OR = {
 			has_variable = frankfurt_parliament_supports_left_club
 			has_variable = frankfurt_parliament_supports_center_club
-			has_variable = frankfurt_parliament_supports_right_club
 		}
 		# Must be before the last vote
 		global_var:frankfurt_parliament_current_vote < 6
@@ -239,7 +229,7 @@ frankfurt_parliament_clubs.1 = {
 	}
 }
 
-# Sabotage the opposing side
+# Sabotage the other side
 frankfurt_parliament_clubs.2 = {
 	type = country_event
 	placement = scope:frankfurt_location_scope
@@ -281,16 +271,16 @@ frankfurt_parliament_clubs.2 = {
 			}
 			save_scope_value_as = {
 				name = club_value
-				value = 3
+				value = 1
 			}
 		}
-		else_if = {
+		if = {
 			limit = {
-				has_variable = frankfurt_parliament_supports_right_club
+				has_variable = frankfurt_parliament_supports_center_club
 			}
 			save_scope_value_as = {
 				name = club_value
-				value = 1
+				value = 2
 			}
 		}
 	}
@@ -300,8 +290,8 @@ frankfurt_parliament_clubs.2 = {
 			has_variable = club_random_event_cooldown
 		}
 		OR = {
-			has_variable = frankfurt_parliament_supports_right_club
 			has_variable = frankfurt_parliament_supports_left_club
+			has_variable = frankfurt_parliament_supports_center_club
 		}
 		# Must be before the last vote
 		global_var:frankfurt_parliament_current_vote < 6
@@ -325,7 +315,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 3
 			}
-			custom_label = will_increase_center_club_support_by_big_boost
 		}
 		add_modifier = {
 			name = supported_club_in_other_country
@@ -353,7 +342,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 2
 			}
-			custom_label = will_increase_center_club_support_by_medium_boost
 		}
 		random_country = {
 			limit = {
@@ -367,7 +355,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 2
 			}
-			custom_label = will_increase_center_club_support_by_medium_boost
 		}
 		random_country = {
 			limit = {
@@ -381,7 +368,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 2
 			}
-			custom_label = will_increase_center_club_support_by_medium_boost
 		}
 		add_modifier = {
 			name = supported_club_in_other_country
@@ -408,7 +394,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 1
 			}
-			custom_label = will_increase_center_club_support_by_small_boost
 		}
 		random_country = {
 			limit = {
@@ -422,7 +407,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 1
 			}
-			custom_label = will_increase_center_club_support_by_small_boost
 		}
 		random_country = {
 			limit = {
@@ -436,7 +420,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 1
 			}
-			custom_label = will_increase_center_club_support_by_small_boost
 		}
 		random_country = {
 			limit = {
@@ -450,7 +433,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 1
 			}
-			custom_label = will_increase_center_club_support_by_small_boost
 		}
 		random_country = {
 			limit = {
@@ -464,7 +446,6 @@ frankfurt_parliament_clubs.2 = {
 				CLUB = scope:club_value
 				SABOTAGE = 1
 			}
-			custom_label = will_increase_center_club_support_by_small_boost
 		}
 		add_modifier = {
 			name = supported_club_in_other_country
@@ -475,895 +456,5 @@ frankfurt_parliament_clubs.2 = {
 	# Nothankyou
 	option = {
 		name = frankfurt_parliament_clubs.2.d
-	}
-}
-
-# Influence neighbouring row; left faction only
-frankfurt_parliament_clubs.3 = {
-	type = country_event
-	placement = scope:frankfurt_location_scope
-	title = frankfurt_parliament_clubs.3.t
-	desc = frankfurt_parliament_clubs.3.desc
-	flavor = frankfurt_parliament_clubs.3.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		texture = "gfx/event_pictures/frankfurt_parliament.dds"
-	}
-	duration = 2
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		random_state = {
-			limit = {
-				imperia_is_frankfurt_city_state = yes
-			}
-			save_scope_as = frankfurt_location_scope
-		}
-		set_variable = {
-			name = club_random_event_cooldown
-			months = 2
-		}
-		save_scope_value_as = {
-			name = big_boost
-			value = 40
-		}
-		save_scope_value_as = {
-			name = medium_boost
-			value = 16.6
-		}
-		save_scope_value_as = {
-			name = small_boost
-			value = 12
-		}
-	}
-	trigger = {
-		is_player = yes
-		NOT = {
-			has_variable = club_random_event_cooldown
-		}
-		has_variable = frankfurt_parliament_supports_left_club
-		# Must be before the last vote
-		global_var:frankfurt_parliament_current_vote < 6
-	}
-	# Sabotage the influence; 1 target
-	# Costs 75
-	option = {
-		trigger = {
-			influence > club_influence_1_target
-		}
-		name = frankfurt_parliament_clubs.3.a
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.4
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 3
-			}
-			custom_label = will_decrease_center_club_support_by_big_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_1_target
-			months = 6
-		}
-	}
-	# Spread the influence evenly; 3 targets
-	# Costs 300
-	option = {
-		trigger = {
-			influence > club_influence_3_targets
-		}
-		default_option = yes
-		name = frankfurt_parliament_clubs.3.b
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_3_targets
-			months = 6
-		}
-	}
-	# Spread the influence thin; 5 targets
-	# Costs 550
-	option = {
-		trigger = {
-			influence > club_influence_5_targets
-		}
-		name = frankfurt_parliament_clubs.3.c
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 1
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_5_targets
-			months = 6
-		}
-	}
-	# Nothankyou
-	option = {
-		name = frankfurt_parliament_clubs.3.d
-	}
-}
-
-# Influence neighbouring row; support centre faction only from left
-frankfurt_parliament_clubs.4 = {
-	type = country_event
-	placement = scope:frankfurt_location_scope
-	title = frankfurt_parliament_clubs.4.t
-	desc = frankfurt_parliament_clubs.4.desc
-	flavor = frankfurt_parliament_clubs.4.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		texture = "gfx/event_pictures/frankfurt_parliament.dds"
-	}
-	duration = 2
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		random_state = {
-			limit = {
-				imperia_is_frankfurt_city_state = yes
-			}
-			save_scope_as = frankfurt_location_scope
-		}
-		set_variable = {
-			name = club_random_event_cooldown
-			months = 2
-		}
-		save_scope_value_as = {
-			name = big_boost
-			value = 40
-		}
-		save_scope_value_as = {
-			name = medium_boost
-			value = 16.6
-		}
-		save_scope_value_as = {
-			name = small_boost
-			value = 12
-		}
-	}
-	trigger = {
-		is_player = yes
-		NOT = {
-			has_variable = club_random_event_cooldown
-		}
-		has_variable = frankfurt_parliament_supports_center_club
-		# Must be before the last vote
-		global_var:frankfurt_parliament_current_vote < 6
-	}
-	# Sabotage the influence; 1 target
-	# Costs 75
-	option = {
-		trigger = {
-			influence > club_influence_1_target
-		}
-		name = frankfurt_parliament_clubs.4.a
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.4
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 3
-			}
-			custom_label = will_decrease_left_club_support_by_big_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_1_target
-			months = 6
-		}
-	}
-	# Spread the influence evenly; 3 targets
-	# Costs 300
-	option = {
-		trigger = {
-			influence > club_influence_3_targets
-		}
-		default_option = yes
-		name = frankfurt_parliament_clubs.4.b
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_left_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_left_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_left_club_support_by_medium_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_3_targets
-			months = 6
-		}
-	}
-	# Spread the influence thin; 5 targets
-	# Costs 550
-	option = {
-		trigger = {
-			influence > club_influence_5_targets
-		}
-		name = frankfurt_parliament_clubs.4.c
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_left_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_left_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_left_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_left_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 1
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_left_club_support_by_small_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_5_targets
-			months = 6
-		}
-	}
-	# Nothankyou
-	option = {
-		name = frankfurt_parliament_clubs.4.d
-	}
-}
-
-# Influence neighbouring row; support centre faction only, borrowing from right
-frankfurt_parliament_clubs.5 = {
-	type = country_event
-	placement = scope:frankfurt_location_scope
-	title = frankfurt_parliament_clubs.5.t
-	desc = frankfurt_parliament_clubs.5.desc
-	flavor = frankfurt_parliament_clubs.5.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		texture = "gfx/event_pictures/frankfurt_parliament.dds"
-	}
-	duration = 2
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		random_state = {
-			limit = {
-				imperia_is_frankfurt_city_state = yes
-			}
-			save_scope_as = frankfurt_location_scope
-		}
-		set_variable = {
-			name = club_random_event_cooldown
-			months = 2
-		}
-		save_scope_value_as = {
-			name = big_boost
-			value = 40
-		}
-		save_scope_value_as = {
-			name = medium_boost
-			value = 16.6
-		}
-		save_scope_value_as = {
-			name = small_boost
-			value = 12
-		}
-	}
-	trigger = {
-		is_player = yes
-		NOT = {
-			has_variable = club_random_event_cooldown
-		}
-		has_variable = frankfurt_parliament_supports_center_club
-		# Must be before the last vote
-		global_var:frankfurt_parliament_current_vote < 6
-	}
-	# Sabotage the influence; 1 target
-	# Costs 75
-	option = {
-		trigger = {
-			influence > club_influence_1_target
-		}
-		name = frankfurt_parliament_clubs.5.a
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.4
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 3
-			}
-			custom_label = will_decrease_right_club_support_by_big_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_1_target
-			months = 6
-		}
-	}
-	# Spread the influence evenly; 3 targets
-	# Costs 300
-	option = {
-		trigger = {
-			influence > club_influence_3_targets
-		}
-		default_option = yes
-		name = frankfurt_parliament_clubs.5.b
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_right_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_right_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.166
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 2
-			}
-			custom_label = will_decrease_right_club_support_by_medium_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_3_targets
-			months = 6
-		}
-	}
-	# Spread the influence thin; 5 targets
-	# Costs 550
-	option = {
-		trigger = {
-			influence > club_influence_5_targets
-		}
-		name = frankfurt_parliament_clubs.5.c
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_right_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_right_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_right_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_right_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_LEFT_club_from_center = {
-				INFLUENCE = 0.12
-				LEFT = 0
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 2
-				BOOST = 1
-			}
-			custom_label = will_decrease_right_club_support_by_small_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_5_targets
-			months = 6
-		}
-	}
-	# Nothankyou
-	option = {
-		name = frankfurt_parliament_clubs.5.d
-	}
-}
-
-# Influence neighbouring row; right faction only
-frankfurt_parliament_clubs.6 = {
-	type = country_event
-	placement = scope:frankfurt_location_scope
-	title = frankfurt_parliament_clubs.6.t
-	desc = frankfurt_parliament_clubs.6.desc
-	flavor = frankfurt_parliament_clubs.6.f
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	event_image = {
-		texture = "gfx/event_pictures/frankfurt_parliament.dds"
-	}
-	duration = 2
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	immediate = {
-		random_state = {
-			limit = {
-				imperia_is_frankfurt_city_state = yes
-			}
-			save_scope_as = frankfurt_location_scope
-		}
-		set_variable = {
-			name = club_random_event_cooldown
-			months = 2
-		}
-		save_scope_value_as = {
-			name = big_boost
-			value = 40
-		}
-		save_scope_value_as = {
-			name = medium_boost
-			value = 16.6
-		}
-		save_scope_value_as = {
-			name = small_boost
-			value = 12
-		}
-	}
-	trigger = {
-		is_player = yes
-		NOT = {
-			has_variable = club_random_event_cooldown
-		}
-		has_variable = frankfurt_parliament_supports_right_club
-		# Must be before the last vote
-		global_var:frankfurt_parliament_current_vote < 6
-	}
-	# Sabotage the influence; 1 target
-	# Costs 75
-	option = {
-		trigger = {
-			influence > club_influence_1_target
-		}
-		name = frankfurt_parliament_clubs.6.a
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.4
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 3
-			}
-			custom_label = will_decrease_center_club_support_by_big_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_1_target
-			months = 6
-		}
-	}
-	# Spread the influence evenly; 3 targets
-	# Costs 300
-	option = {
-		trigger = {
-			influence > club_influence_3_targets
-		}
-		default_option = yes
-		name = frankfurt_parliament_clubs.6.b
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.166
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 2
-			}
-			custom_label = will_decrease_center_club_support_by_medium_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_3_targets
-			months = 6
-		}
-	}
-	# Spread the influence thin; 5 targets
-	# Costs 550
-	option = {
-		trigger = {
-			influence > club_influence_5_targets
-		}
-		name = frankfurt_parliament_clubs.6.c
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		random_country = {
-			limit = {
-				has_journal_entry = je_imperia_frankfurt_parliament
-				is_player = no
-			}
-			imperia_frankfurt_parliament_INFLUENCE_neighbouring_club = {
-				INFLUENCE = 0.12
-			}
-			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
-				CLUB = 3
-				BOOST = 1
-			}
-			custom_label = will_decrease_center_club_support_by_small_boost
-		}
-		add_modifier = {
-			name = supported_club_in_other_country
-			multiplier = club_influence_5_targets
-			months = 6
-		}
-	}
-	# Nothankyou
-	option = {
-		name = frankfurt_parliament_clubs.6.d
 	}
 }

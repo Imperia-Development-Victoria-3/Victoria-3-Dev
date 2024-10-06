@@ -20,11 +20,7 @@
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -64,27 +60,11 @@ law_national_guard = {
 			}
 		}
 	}
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_OFFICERS"
-			if = {
-				limit = {
-					is_pop_type = officers
-				}
-				value = 0.33
-			}
-		}
-	}
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -107,7 +87,8 @@ law_localized_garrisons = {
 	}
 	modifier = {
 		country_institution_home_defence_max_investment_add = 1
-	}	
+		country_institution_cost_institution_home_defence_mult = -0.1
+	}
 	institution = institution_home_defence
 	institution_modifier = {
 		state_conscription_rate_add = 0.003
@@ -121,7 +102,7 @@ law_localized_garrisons = {
 		political_movement_radicalism_mult = 0.05
 		tax_land_add = 0.03
 		tax_per_capita_add = 0.01
-
+		
 	}
 	possible_political_movements = {
 		law_national_guard
@@ -132,7 +113,7 @@ law_localized_garrisons = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_LANDOWNERS"
+			desc = "POP_ARISTOCRATS"
 			if = {
 				limit = {
 					is_pop_type = aristocrats
@@ -140,9 +121,6 @@ law_localized_garrisons = {
 				value = 0.33
 			}
 		}
-	}
-	pop_support = {
-		value = 0
 		add = {
 			desc = "POP_OFFICERS"
 			if = {
@@ -152,16 +130,12 @@ law_localized_garrisons = {
 				value = 0.20
 			}
 		}
-	} 
+	}
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -183,6 +157,9 @@ law_faith_orders = {
 	disallowing_laws = {
 		law_total_separation
 		law_state_atheism
+	}
+	modifier = {
+		country_institution_cost_institution_home_defence_mult = -0.1
 	}
 	institution = institution_home_defence
 	institution_modifier = {
@@ -211,9 +188,6 @@ law_faith_orders = {
 				value = 0.33
 			}
 		}
-	}
-	pop_support = {
-		value = 0
 		add = {
 			desc = "POP_OFFICERS"
 			if = {
@@ -228,12 +202,20 @@ law_faith_orders = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_no_home_defence
+					has_law = law_type:law_localized_garrisons
+					has_law = law_type:law_private_paramilitaries
+					has_law = law_type:law_emergency_relief_services
+				}
+				has_journal_entry = je_sick_man_absolute_separatism
+			}
+			add = 1000
 		}
 	}
 }
@@ -252,7 +234,7 @@ law_private_paramilitaries = {
 		law_worker_protections
 	}
 	modifier = {
-		country_bureaucracy_investment_cost_factor_mult = -0.05
+		country_institution_cost_institution_home_defence_mult = -0.25
 	}
 	institution = institution_home_defence
 	institution_modifier = {
@@ -272,7 +254,7 @@ law_private_paramilitaries = {
 	pop_support = {
 		value = 0
 		add = {
-			desc = "POP_INDUSTRIALISTS"
+			desc = "POP_CAPITALISTS"
 			if = {
 				limit = {
 					is_pop_type = capitalists
@@ -280,9 +262,6 @@ law_private_paramilitaries = {
 				value = 0.33
 			}
 		}
-	}
-	pop_support = {
-		value = 0
 		add = {
 			desc = "POP_SHOPKEEPERS"
 			if = {
@@ -297,11 +276,7 @@ law_private_paramilitaries = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -315,7 +290,7 @@ law_emergency_relief_services = {
 		egalitarianism
 	}
 	modifier = {
-		country_bureaucracy_investment_cost_factor_mult = 0.05
+		country_institution_cost_institution_home_defence_mult = 0.15
 	}
 	institution = institution_home_defence
 	institution_modifier = {
@@ -343,9 +318,6 @@ law_emergency_relief_services = {
 				value = 0.20
 			}
 		}
-	}
-	pop_support = {
-		value = 0
 		add = {
 			desc = "POP_LABORERS"
 			if = {
@@ -360,11 +332,7 @@ law_emergency_relief_services = {
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}

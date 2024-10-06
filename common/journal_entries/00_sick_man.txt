@@ -48,6 +48,13 @@
 		trigger_event = {
 			id = sick_man.3
 		}
+		if = {
+			limit = {
+				is_in_power_bloc = yes
+				is_power_bloc_leader = yes
+			}
+			custom_tooltip = sick_man_of_europe_lose_power_bloc
+		}
 	}
 	current_value = {
 		value = var:sick_man_var
@@ -62,6 +69,7 @@
 	}
 	progressbar = yes
 	weight = 10000
+	
 	should_be_pinned_by_default = yes
 }
 
@@ -94,7 +102,7 @@ je_sick_man_bureaucracy = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.9			# Land registration resisted
+			10 = tanzimat_events.9	# Land registration resisted
 		}
 	}
 	invalid = {
@@ -118,10 +126,10 @@ je_sick_man_economy = {
 				is_incorporated = yes
 			}
 			state_has_building_type_levels = {
-				target = bt:building_urban_center
+				target = building_urban_center
 				value >= 3
 			}
-			percent >= 0.25
+			percent >= 0.33333
 		}
 	}
 	on_complete = {
@@ -152,7 +160,7 @@ je_sick_man_army = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 	complete = {
-		army_size >= 150
+		army_size >= 135
 		OR = {
 			has_law = law_type:law_professional_army
 			has_law = law_type:law_mass_conscription
@@ -192,7 +200,7 @@ je_sick_man_army = {
 	}
 	on_monthly_pulse = {
 		events = {
-			tanzimat_events.10			# Tanzimat Draft Question
+			tanzimat_events.10	# Tanzimat Draft Question
 		}
 	}
 	invalid = {
@@ -210,7 +218,7 @@ je_sick_man_navy = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 	complete = {
-		navy_size >= 50
+		navy_size >= 40
 		OR = {
 			has_law = law_type:law_professional_army
 			has_law = law_type:law_mass_conscription
@@ -419,7 +427,11 @@ je_sick_man_liberal_separatism = {
 			turmoil <= 0.6
 		}
 		has_law = law_type:law_no_migration_controls
-		has_law = law_type:law_cultural_exclusion
+		OR = {
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+			has_law = law_type:law_true_multicultural
+		}
 	}
 	immediate = {
 		rel:catholic = {
@@ -512,7 +524,11 @@ je_sick_man_liberal_separatism = {
 						turmoil <= 0.6
 					}
 					has_law = law_type:law_no_migration_controls
-					has_law = law_type:law_cultural_exclusion
+					OR = {
+						has_law = law_type:law_cultural_exclusion
+						has_law = law_type:law_multicultural
+						has_law = law_type:law_true_multicultural
+					}
 				}
 				change_variable = {
 					name = sick_man_separatist_var
@@ -522,7 +538,7 @@ je_sick_man_liberal_separatism = {
 		}
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5			# Paranoia Event
+			10 = tanzimat_events.5	# Paranoia Event
 		}
 	}
 	current_value = {
@@ -597,7 +613,7 @@ je_sick_man_absolute_separatism = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5			# Paranoia Event
+			10 = tanzimat_events.5	# Paranoia Event
 		}
 	}
 	invalid = {
@@ -705,7 +721,7 @@ je_sick_man_absolute_education = {
 	progressbar = yes
 }
 
-# Liberalism
+# Liberalism / Constitution
 je_sick_man_liberal_voting = {
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 	group = je_group_historical_content

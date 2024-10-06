@@ -5,8 +5,9 @@
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = -0.3
 		country_aristocrats_pol_str_mult = 0.25
+		country_leverage_resistance_mult = 0.10
 	}
-
+	
 	on_enact = {
 		custom_tooltip = urban_aristocrats_int_ig_shift_effect_tt
 		if = {
@@ -36,7 +37,7 @@
 			}
 		}
 	}
-
+	
 	ai_will_do = {
 		exists = ruler
 		ruler = {
@@ -47,11 +48,7 @@
 		#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -68,11 +65,12 @@ law_appointed_bureaucrats = {
 		country_bureaucrats_pol_str_mult = -0.1
 		state_loyalists_from_sol_change_mult = 0.05
 		state_radicals_from_sol_change_mult = -0.05
+		country_leverage_resistance_mult = 0.05
 	}
 	possible_political_movements = {
 		law_appointed_bureaucrats
 	}
-
+	
 	on_enact = {
 		if = {
 			limit = {
@@ -87,7 +85,7 @@ law_appointed_bureaucrats = {
 			custom_tooltip = urban_aristocrats_int_ig_shift_effect_negative_tt
 		}
 	}
-
+	
 	pop_support = {
 		value = 0
 		# Academics like technocracy
@@ -215,6 +213,7 @@ law_meritocratic_bureaucracy = {
 		country_bureaucrats_pol_str_mult = 0.2
 		country_academics_pol_str_mult = 0.05
 		state_radicals_from_sol_change_mult = 0.05
+		country_leverage_resistance_mult = 0.15
 	}
 	possible_political_movements = {
 		law_meritocratic_bureaucracy
@@ -255,20 +254,24 @@ law_meritocratic_bureaucracy = {
 					}
 					is_pop_type = bureaucrats
 				}
+				value = 0.25
 			}
-			value = 0.25
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+		
+		if = {
+			limit = {
+				has_journal_entry = je_sick_man_bureaucracy
+				has_law = law_type:law_hereditary_bureaucrats
+			}
+			add = 1000
 		}
 	}
 }
@@ -289,8 +292,9 @@ law_elected_bureaucrats = {
 		interest_group_ig_petty_bourgeoisie_pop_attraction_mult = 0.10
 		state_loyalists_from_sol_change_mult = 0.1
 		state_radicals_from_sol_change_mult = 0.1
+		country_leverage_resistance_mult = -0.15
 	}
-
+	
 	on_enact = {
 		custom_tooltip = bureaucrats_pb_ig_shift_effect_tt
 		if = {
@@ -316,19 +320,15 @@ law_elected_bureaucrats = {
 					}
 					is_pop_type = bureaucrats
 				}
+				value = 0.25
 			}
-			value = 0.25
 		}
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
-			limit = {
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-				scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}

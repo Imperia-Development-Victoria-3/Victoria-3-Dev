@@ -90,7 +90,7 @@ types panel_military {
 			### ARMY / FORCELIMIT
 			textbox = {
 				block "current_unit_count" {
-					raw_text = "@conscripts!#v [Country.GetConscriptedBattalions]"
+					raw_text = "@conscripts!#v [Country.CalcConscriptableBattalions]"
 				}
 				autoresize = yes
 				align = left|nobaseline
@@ -731,13 +731,13 @@ types panel_military {
 						}
 					}
 				}
-
-				widget = { size = { 1 10 } }
 			}
 		}
 
-		blockoverride "fixed_bottom" {	
+		blockoverride "fixed_bottom" {
+
 			flowcontainer = {
+				visible = "[Or(InformationPanel.IsTabSelected('army'), InformationPanel.IsTabSelected('navy'))]"
 				direction = vertical
 				spacing = 5
 
@@ -774,6 +774,7 @@ types panel_military {
 
 				### CREATE FORMATIONS
 				button = {
+					name = "tutorial_highlight_create_army"
 					using = default_button_map_interaction
 					parentanchor = hcenter
 					size = { 520 50 }
@@ -837,8 +838,14 @@ types panel_military {
 					
 					big_mobilize_all_button = {}
 				}
+
+				widget = {
+					size = { 5 5 }
+				}
 			}
 		}
+
+		blockoverride "bottom_spacing" {}
 	}
 }
 

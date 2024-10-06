@@ -21,6 +21,11 @@
 			id = dead_man.2
 		}
 	}
+	invalid = {
+		NOT = {
+			has_law = law_type:law_monarchy
+		}
+	}
 	scripted_button = tur_republican_button
 	scripted_button = tur_theocracy_button
 	scripted_button = tur_communist_button
@@ -47,10 +52,10 @@
 	}
 	on_weekly_pulse = {
 		effect = {
-			tur_weekly_pulse_communist_progress = yes			#Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
-			tur_weekly_pulse_theocracy_progress = yes			#Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
-			tur_weekly_pulse_republican_progress = yes			#Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
-			tur_leading_government = yes			#The progress bar in this JE is always equivalent to the progress of the dynasty that's currently doing best. This scripted effect determines which dynasty that is, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable.
+			tur_weekly_pulse_communist_progress = yes	#Calculates how much the communists will get next month. Updates weekly, but is not added until the monthly.
+			tur_weekly_pulse_theocracy_progress = yes	#Calculates how much the theocracys will get next month. Updates weekly, but is not added until the monthly.
+			tur_weekly_pulse_republican_progress = yes	#Calculates how much the republicans will get next month. Updates weekly, but is not added until the monthly.
+			tur_leading_government = yes	#The progress bar in this JE is always equivalent to the progress of the dynasty that's currently doing best. This scripted effect determines which dynasty that is, and sets fra_leading_dynasty_progress to be equal to that dynasty's progress variable.
 		}
 	}
 	on_monthly_pulse = {
@@ -68,7 +73,7 @@
 				name = communist_progress
 				add = var:communist_progress_next
 			}
-			tur_leading_government = yes			#See above - this ensures that the monthly tick will not momentarily send the status loc out of sync with what the bar is representing.
+			tur_leading_government = yes	#See above - this ensures that the monthly tick will not momentarily send the status loc out of sync with what the bar is representing.
 		}
 		random_events = {
 			780 = 0
@@ -89,18 +94,13 @@
 			80 = dead_man_pulse.15
 		}
 	}
-	invalid = {
-		NOT = {
-			#Previous "Stamp Out Monarchism" requirement is deprecated - this can now come back from the dead properly upon restoring the monarchy.
-			has_law = law_type:law_monarchy
-		}
-	}
+	
 	on_invalid = {
-		tur_clear_dead_man_variables = yes		#It should not be possible for this JE to somehow be deleted without these variables being cleared.
+		tur_clear_dead_man_variables = yes	#It should not be possible for this JE to somehow be deleted without these variables being cleared.
 	}
 	weight = 100
 	current_value = {
-		value = root.var:tur_leading_government_progress		#Set to always be equal to the leading dynasty's progress by the tur_leading_government effect.
+		value = root.var:tur_leading_government_progress	#Set to always be equal to the leading dynasty's progress by the tur_leading_government effect.
 	}
 	goal_add_value = {
 		value = 360

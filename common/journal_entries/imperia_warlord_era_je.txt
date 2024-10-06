@@ -1,0 +1,113 @@
+﻿je_warlord_overthrow_national_gov = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_internal_affairs
+	
+	complete = {
+		any_country = {
+			NOT = {
+				this = root
+			}
+			has_modifier = modifier_recognized_national_government
+			count = 0
+		}
+	}
+	
+	on_complete = {
+		add_journal_entry = {
+			type = je_warlord_chinese_reunification
+		}
+		add_modifier = {
+			name = modifier_recognized_national_government
+		}
+		remove_modifier = modifier_rival_national_government
+	}
+	
+	fail = {
+		is_subject = yes
+		overlord ?= {
+			has_modifier = modifier_warlord_era
+		}
+	}
+	
+	on_fail = {
+		remove_modifier = modifier_rival_national_government
+	}
+	
+	weight = 5000
+	should_be_pinned_by_default = yes
+}
+
+je_warlord_chinese_reunification = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	group = je_group_internal_affairs
+	
+	complete = {
+		any_country = {
+			NOT = {
+				this = root
+			}
+			has_modifier = modifier_rival_national_government
+			count = 0
+		}
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_BEIJING
+			}
+			any_subject_or_below = {
+				any_scope_state = {
+					state_region = s:STATE_BEIJING
+				}
+			}
+		}
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_NANJING
+			}
+			any_subject_or_below = {
+				any_scope_state = {
+					state_region = s:STATE_NANJING
+				}
+			}
+		}
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_XIAN
+			}
+			any_subject_or_below = {
+				any_scope_state = {
+					state_region = s:STATE_XIAN
+				}
+			}
+		}
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_GUANGDONG
+			}
+			any_subject_or_below = {
+				any_scope_state = {
+					state_region = s:STATE_GUANGDONG
+				}
+			}
+		}
+	}
+	
+	on_complete = {
+		trigger_event = {
+			id = warlord_china_events.302
+		}
+		
+		change_tag = CHI
+		
+	}
+	
+	fail = {
+		is_subject = yes
+		overlord ?= {
+			has_modifier = modifier_warlord_era
+		}
+	}
+	
+	on_fail = {
+		remove_modifier = modifier_recognized_national_government
+	}
+}
