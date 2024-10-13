@@ -10,6 +10,12 @@ NMilitary = {
 	INTERCEPTION_DELAY_BASE_DAYS = 3	# was 5     # atleast this many days between each admiral interception attempt
 	INTERCEPTION_DELAY_MAX_RANDOM_DAYS_FACTOR = 7	# was 10    # up to this many extra days between each admiral interception attempt
 	INTERCEPTION_BASE_CHANCE = 0.4	# was 0.1   # base chance when trying to intercept enemy admirals
+	MOBILIZATION_INFRASTRUCTURE_FACTOR = 0.01	# amount of mobilization generated per point of infrastructure. one battalion takes one full point of mobilization to mobilize
+	MIN_MOBILIZATION_PER_DAY = 0.04	# minimum mobilization gained per day by each mobilizing battalion (the last unit to gain mobilization in a state might have to do with whatever is left)
+	MAX_MOBILIZATION_PER_DAY = 0.15	# maximum mobilization gained per day by each mobilizing battalion
+	MOBILIZATION_OPTION_DIFFERENCE_ORGANIZATION_IMPACT = 5	# The penalty to Organization gained for each difference by merging units between Formations with different Mobilization Options
+	MILITARY_FORMATION_WEEKLY_MAX_UNIT_UPGRADES_ARMY = 0.08	# Each week a mobilized army can upgrade this (0.0-1.0) fraction of its total number of units.
+	MILITARY_FORMATION_WEEKLY_MAX_UNIT_UPGRADES_FLEET = 0.04	# Each week a mobilized fleet can upgrade this (0.0-1.0) fraction of its total number of units.
 }
 
 NWar = {
@@ -42,9 +48,9 @@ NWar = {
 }
 
 NPops = {
-	ASSIMILATION_RATE = 0.003	#0.002 Percentage of pops who will Assimilate into a different Culture each month, if eligible
+	ASSIMILATION_RATE = 0.002	# Percentage of pops who will Assimilate into a different Culture each month, if eligible
 	MIN_ASSIMILATION = 15	#10 If there is any assmiliation at least this many people will assimilate
-	CONVERSION_RATE = 0.0009	#0.002 Percentage of pops who will Convert into a different Religion each month, if eligible
+	CONVERSION_RATE = 0.0006	#0.002 Percentage of pops who will Convert into a different Religion each month, if eligible
 	MIN_CONVERSION = 15	# If there is any conversion at least this many people will convert
 	RADICALS_MAX_FROM_LOW_SOL = 0.3	#0.18				# If pop is already this % radical, don't add more radicals from low SOL (Scales by delta between SoL and expected min SoL)
 	RADICALS_MAX_FROM_DISCRIMINATION = 0.8	#0.5	# If pop is already this % radical, don't add more radicals from discrimination (Scales by literacy)
@@ -78,7 +84,7 @@ NPops = {
 	MARKET_MIGRATION_MIN_DIFFERENCE_IN_MIGRATION_ATTRACTION_TO_MOVE = 5	# Pops will not migrate if their best option is to a state with a lower delta in migration pull than this number
 	MARKET_MIGRATION_MIN_POP_FRACTION_TO_MOVE = 0.05	# If the people wanting to migrate constitues less than this fraction of a pop, no new pop will be created and they won't migrate.
 	MIGRATION_PULL_MULT_FROM_NO_DISCRIMINATION = 0.75	#.5						# Migration pull multiplier increased by this if pop is moving from discrimination to no discrimination (not applied to mass migration targets)
-	MIGRATION_PULL_MULT_FROM_HOMELANDS = 0.45	#.2	
+	MIGRATION_PULL_MULT_FROM_HOMELANDS = 0.66	#.45, .2	
 	## Mass Migrations ##
 	# Mass Migration Setup #
 	MASS_MIGRATION_ORIGIN_MIN_TURMOIL = 0.25	#.15								# Must have at least this much turmoil in cultural homelands to create a migration target
@@ -137,6 +143,7 @@ NPolitics = {
 }
 
 NEconomy = {
+	COUNTRY_GDP_MODIFIER_MAX_MULTIPLIER = 400000	# The country_gdp modifier multiplier cannot be higher than this
 	PRICE_RANGE = 0.75	# min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]
 	
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.5	# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
@@ -175,6 +182,8 @@ NDiplomacy = {
 	WAR_GOAL_INFAMY_ANNEX_COUNTRY = 3.0	#4
 	WAR_GOAL_INFAMY_UNIFICATION = 0.5
 	WAR_GOAL_INFAMY_REGIME_CHANGE = 0.4	#Vanilla .50
+	WAR_GOAL_INFAMY_FORCE_NATIONALIZATION = 0.2
+	WAR_GOAL_INFAMY_FOREIGN_INVESTMENT_RIGHTS = 0.1
 	
 	BASE_YEARLY_INFAMY_DECAY_RATE = 5.0	# Decay rate of infamy per year
 	
@@ -188,7 +197,37 @@ NDiplomacy = {
 	WAR_GOAL_CONTAIN_THREAT_YEARS_SINCE_CONQUEST = 25
 	
 	PRESTIGE_FROM_ARMY_POWER_PROJECTION = 0.015	#.03 Per point of power projection from army combat power
-	PRESTIGE_FROM_NAVY_POWER_PROJECTION = 0.05	#.1 Per point of power projection from navy combat power
+	PRESTIGE_FROM_NAVY_POWER_PROJECTION = 0.025	#.1 Per point of power projection from navy combat power
 	PRESTIGE_FROM_SUBJECT_ARMY_POWER_PROJECTION = 0.00025	#.0005 Per point of power projection from army combat power in subjects
-	PRESTIGE_FROM_SUBJECT_NAVY_POWER_PROJECTION = 0.005	#.01 Per point of power projection from navy combat power in subjects
+	PRESTIGE_FROM_SUBJECT_NAVY_POWER_PROJECTION = 0.003	#.01 Per point of power projection from navy combat power in subjects
+}
+
+NPowerBlocs = {
+	MAX_PRINCIPLES = 4	# Max number of principles that a Power Bloc can have
+	INITIAL_PRINCIPLE_LEVELS = 1	# Max total levels of principles that a Power Bloc can have during formation
+	FORMATION_COOLDOWN_MONTHS = 24	# Cooldown in months between the attempts to form Power Blocs
+	JOIN_COOLDOWN_MONTHS = 6	# If a Country leaves a Power Bloc they cannot re-join before X months
+	LEAVE_COOLDOWN_MONTHS = 6	# If a Country joins a Power Bloc they cannot leave within X months
+	MIN_MEMBERS = 2	# This is the minimum number of members that the bloc needs to have to be considered active. Members include the leader.
+	LEVERAGE_LOBBY_CLOUT_FACTOR = 500	# Leverage gain is increased or decreased by the Lobby's total Clout * this factor
+	INVITE_ACTION_NAME = "invite_to_power_bloc"
+	JOIN_ACTION_NAME = "join_power_bloc"
+	MAX_MANDATE_PROGRESS = 2000	# When mandate progress reaches this value, the power bloc gains one mandate
+	MAX_MANDATES = 3	# This is the maximum number of mandates that can be accumulated at once
+	PRINCIPLE_SELECTION_COOLDOWN_DAYS = 90	# Once a principle is selected, it cannot be changed for this many days. Upgrading is unaffected by the cooldown, but resets it.
+	POWER_STRUGGLE_PRESTIGE_THRESHOLD_START = 1.2	# If a power bloc member has more prestige than leader's prestige X this - power struggle starts with the member becoming contender
+	POWER_STRUGGLE_PRESTIGE_THRESHOLD_FAIL = 1.15	# If a contender has less prestige than leader's prestige X this - power struggle fails
+	POWER_STRUGGLE_DURATION_SUCCESS_MONTHS = 12	# Power struggle succeeds after this months
+	POWER_STRUGGLE_DURATION_FACTOR_FOR_FOUNDER = 0.75	# Power struggle succeeds after this X POWER_STRUGGLE_DURATION_SUCCESS_MONTHS if the contender is the founder of the power bloc
+	COHESION_WEEKLY_DRIFT_MAX = 1	# At most, Cohesion will drift by +/- this value each week
+	COHESION_TARGET_MAX = 100	# The highest value Cohesion can reach
+	POWER_BLOC_INFLUENCE_COST = 500	# Cost in Influence to form / be the leader of a Power Bloc
+	MAX_LEVERAGE = 1000	# How much "raw" Leverage can be split between parties (the country itself + each Power Bloc)
+	LEVERAGE_WEEKLY_DRIFT_FACTOR = 0.02	# The delta between current Leverage and Target Leverage will be multiplied by this to determine the weekly Leverage drift
+	LEVERAGE_WEEKLY_DRIFT_MIN = 1	# At minimum, Leverage will drift by +/- this value each week, up/down to the target
+	LEVERAGE_INIT_STARTING_POWER_BLOC_UNCLAIMED_LEVERAGE_FACTOR = 0.5	# During initialization, a Power Bloc claims this fraction of a member's unclaimed leverage resulting from Leverage Resistance and 'lost leverage' in other Power Blocs' multipliers below 
+	LEVERAGE_INIT_OTHER_BLOC_MEMBER_FACTOR = 0.3	# During initialization, multiply calculated target leverage by this if country is member of another bloc
+	LEVERAGE_INIT_NO_BLOC_FACTOR = 0.5	# During initialization, multiply calculated target leverage by this if country is not a member of any power bloc
+	COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_DIVISOR = 1000000	# Population divided by this is multiplied by country_leverage_resistance_per_population to give a certain amount of leverage per million people
+	COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_MAX_MULTIPLIER = 100	# Max multiplier given by population. With the value above at 1 000 000, this means the cap for leverage resistance is at 100 000 000.
 }
