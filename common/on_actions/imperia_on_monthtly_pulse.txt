@@ -75,7 +75,7 @@
 			every_scope_state = {
 				add_modifier = {
 					name = imperia_state_infamy
-					multiplier = imperia_infamy_multiplier
+					multiplier = root.imperia_infamy_multiplier
 				}
 			}
 		}
@@ -109,6 +109,7 @@
 		remove_modifier ?= zollverein_member_construction_penalty
 		if = {
 			limit = {
+				exists = c:PRU
 				power_bloc.power_bloc_leader ?= c:PRU
 				this != c:PRU
 			}
@@ -150,14 +151,10 @@
 				OR = {
 					has_variable = frankfurt_parliament_voted_republic
 					has_variable = frankfurt_parliament_voted_monarchy
-					has_variable = frankfurt_parliament_voted_oligarchy
 					has_variable = frankfurt_parliament_voted_wealth_suffrage
 					has_variable = frankfurt_parliament_voted_universal_suffrage
 					has_variable = frankfurt_parliament_voted_presidential
 					has_variable = frankfurt_parliament_voted_parliamentary
-					has_variable = frankfurt_parliament_voted_lesser_germany
-					has_variable = frankfurt_parliament_voted_greater_germany
-					has_variable = frankfurt_parliament_voted_greater_austria
 				}
 				# And the German Revolt is not happening
 				any_diplomatic_play = {
@@ -214,6 +211,67 @@
 				add_modifier = modifier_state_religion_health_discount
 			}
 		}
+		# Force-removing IGs from lobbies after a certain amount of time
+		every_interest_group = {
+			# First subtract from the membership timer (if it exists)
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				change_variable = {
+					name = imperia_ig_lobby_membership_timer
+					subtract = 1
+				}
+			}
+			# If the IG is part of a lobby, but doesnt have the timer; create new membership timers
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					NOT = {
+						has_variable = imperia_ig_lobby_membership_timer
+					}
+				}
+				set_variable = {
+					name = imperia_ig_lobby_membership_timer
+					# Months in lobby; 10 years so far
+					value = 120
+				}
+			}
+			# If the timer hits zero (or below, just in case); remove the IG from every lobby they're a part of
+			if = {
+				limit = {
+					has_variable = imperia_ig_lobby_membership_timer
+					var:imperia_ig_lobby_membership_timer <= 0
+				}
+				# This can be used in both country and in IGs. Is used in IG scope here to scope to lobbies the IG is a part of
+				every_political_lobby = {
+					remove_lobby_member = prev
+				}
+			}
+			# If the IG is not a member of a lobby, but has the timer-variable; remove the variable
+			if = {
+				limit = {
+					is_member_of_any_lobby = no
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				remove_variable = imperia_ig_lobby_membership_timer
+			}
+		}
+		## AI Disabling
+		# Sets the is_player variable for new/reconnecting players
+		if = {
+			limit = {
+				is_player = yes
+				NOT = {
+					has_variable = detected_player
+				}
+			}
+			# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
+			remove_variable ?= ai_disabled_timer
+			set_variable = detected_player
+		}
+
 		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
 		# after cancelling a arms deal treaty
 		if ={
