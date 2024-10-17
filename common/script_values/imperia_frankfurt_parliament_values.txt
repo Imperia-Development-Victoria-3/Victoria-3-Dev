@@ -421,10 +421,64 @@ je_imperia_frankfurt_gutter_crown_political_start_german_minors_value = {
 				country_has_primary_culture = cu:north_german
 				country_has_primary_culture = cu:south_german
 			}
+			is_in_same_power_bloc = root
+			country_rank <= rank_value:minor_power
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_puppets_value = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
 			is_in_same_power_bloc = c:GER
 			power_bloc.power_bloc_leader = c:GER
-			is_subject = no
 			country_rank <= rank_value:minor_power
+			is_direct_subject_of = c:GER
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+			}
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_value = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+				has_variable = gutter_crown_political_je_integration_considered
+				var:gutter_crown_political_je_integration_considered = yes
+			}
+			NOR = {
+				has_modifier = gutter_crown_political_je_bureaucrats_left_be_modifier
+				has_modifier = gutter_crown_political_je_internal_security_left_be_modifier
+				has_modifier = gutter_crown_political_je_home_defence_left_be_modifier
+				has_modifier = gutter_crown_political_je_land_reform_left_be_modifier
+				has_modifier = gutter_crown_political_je_policing_left_be_modifier
+			}
 		}
 		add = 1
 	}
@@ -432,5 +486,18 @@ je_imperia_frankfurt_gutter_crown_political_start_german_minors_value = {
 
 gutter_crown_political_penalty_multiplier = {
 	value = 0
-	add = 
+	## First get the current situation
+	add = {
+		value = 0
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_puppets_amount
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_amount
+	}
+	## Then divide that by the total, the goal
+	divide = {
+		add = var:je_imperia_frankfurt_gutter_crown_political_start_german_minors_amount
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+	}
+	# Then get the actual multiplier
+	subtract = 1
+	multiply = -1
 }

@@ -971,10 +971,16 @@ je_imperia_frankfurt_gutter_crown_main = {
 				has_modifier = gutter_crown_political_penalty
 			}
 			remove_modifier = gutter_crown_political_penalty
-			add_modifier = {
-				name = gutter_crown_political_penalty
-				years = 10
-				is_decaying = yes
+			if = {
+				limit = {
+					gutter_crown_political_penalty_multiplier != 0
+				}
+				add_modifier = {
+					name = gutter_crown_political_penalty
+					years = 10
+					is_decaying = yes
+					multiplier = gutter_crown_political_penalty_multiplier
+				}
 			}
 		}
 		if = {
@@ -1050,6 +1056,10 @@ je_imperia_frankfurt_gutter_crown_political = {
 			name = je_imperia_frankfurt_gutter_crown_political_start_german_minors_amount
 			value = je_imperia_frankfurt_gutter_crown_political_start_german_minors_value
 		}
+		set_variable = {
+			name = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+			value = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value
+		}
 	}
 	complete = {
 		any_subject_or_below = {
@@ -1075,8 +1085,10 @@ je_imperia_frankfurt_gutter_crown_political = {
 			count = all
 			custom_tooltip = {
 				text = gutter_crown_political_je_integration_considered_tt
-				has_variable = gutter_crown_political_je_integration_considered
-				var:gutter_crown_political_je_integration_considered = yes
+				state_region = {
+					has_variable = gutter_crown_political_je_integration_considered
+					var:gutter_crown_political_je_integration_considered = yes
+				}
 				NOR = {
 					has_modifier = gutter_crown_political_je_bureaucrats_left_be_modifier
 					has_modifier = gutter_crown_political_je_internal_security_left_be_modifier
@@ -1089,17 +1101,13 @@ je_imperia_frankfurt_gutter_crown_political = {
 	}
 	on_complete = {
 		custom_label = all_german_puppet_type_subjects_will_be_annexed_tt
-		custom_label = if_everything_was_updated_tt
-		show_as_tooltip = {
-			remove_modifier = gutter_crown_political_penalty
-		}
 		custom_label = as_it_currently_stands
 		show_as_tooltip = {
 			add_modifier = {
 				name = gutter_crown_political_penalty
 				years = 10
 				is_decaying = yes
-				multiplier = 1				# TO DO, TODO: Change this to the calculation once done~
+				multiplier = gutter_crown_political_penalty_multiplier
 			}
 		}
 		hidden_effect = {
@@ -1116,7 +1124,18 @@ je_imperia_frankfurt_gutter_crown_political = {
 					annex_with_incorporation = prev
 				}
 			}
-			# remove/change the modifier down here
+			remove_modifier = gutter_crown_political_penalty
+			if = {
+				limit = {
+					gutter_crown_political_penalty_multiplier != 0
+				}
+				add_modifier = {
+					name = gutter_crown_political_penalty
+					years = 10
+					is_decaying = yes
+					multiplier = gutter_crown_political_penalty_multiplier
+				}
+			}
 		}
 	}
 	fail = {
@@ -1125,6 +1144,20 @@ je_imperia_frankfurt_gutter_crown_political = {
 		}
 	}
 	on_weekly_pulse = {
+		effect = {
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_puppets_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_puppets_value
+			}
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value
+			}
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_value
+			}
+		}
 		random_events = {
 			chance_of_no_event = 60
 			1 = frankfurt_parliament.11			# State bureaucrat integration event
@@ -1132,7 +1165,7 @@ je_imperia_frankfurt_gutter_crown_political = {
 			1 = frankfurt_parliament.13			# State home defence
 			1 = frankfurt_parliament.14			# State land reform
 			1 = frankfurt_parliament.15			# State policing
-			#5 = frankfurt_parliament.16 # Prince integration?
+			3 = frankfurt_parliament.16			# Prince integration
 		}
 	}
 }
