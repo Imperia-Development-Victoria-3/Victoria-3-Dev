@@ -1045,6 +1045,12 @@ je_imperia_frankfurt_gutter_crown_economy = {
 je_imperia_frankfurt_gutter_crown_political = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = je_imperia_frankfurt_gutter_crown_political_start_german_minors_amount
+			value = je_imperia_frankfurt_gutter_crown_political_start_german_minors_value
+		}
+	}
 	complete = {
 		any_subject_or_below = {
 			filter = {
@@ -1071,23 +1077,47 @@ je_imperia_frankfurt_gutter_crown_political = {
 				text = gutter_crown_political_je_integration_considered_tt
 				has_variable = gutter_crown_political_je_integration_considered
 				var:gutter_crown_political_je_integration_considered = yes
+				NOR = {
+					has_modifier = gutter_crown_political_je_bureaucrats_left_be_modifier
+					has_modifier = gutter_crown_political_je_internal_security_left_be_modifier
+					has_modifier = gutter_crown_political_je_home_defence_left_be_modifier
+					has_modifier = gutter_crown_political_je_land_reform_left_be_modifier
+					has_modifier = gutter_crown_political_je_policing_left_be_modifier
+				}
 			}
 		}
 	}
 	on_complete = {
-		every_subject_or_below = {
-			limit = {
-				is_direct_subject_of = c:GER
-				OR = {
-					country_has_primary_culture = cu:north_german
-					country_has_primary_culture = cu:south_german
-				}
-			}
-			c:GER = {
-				annex_with_incorporation = prev
+		custom_label = all_german_puppet_type_subjects_will_be_annexed_tt
+		custom_label = if_everything_was_updated_tt
+		show_as_tooltip = {
+			remove_modifier = gutter_crown_political_penalty
+		}
+		custom_label = as_it_currently_stands
+		show_as_tooltip = {
+			add_modifier = {
+				name = gutter_crown_political_penalty
+				years = 10
+				is_decaying = yes
+				multiplier = 1				# TO DO, TODO: Change this to the calculation once done~
 			}
 		}
-		remove_modifier = gutter_crown_political_penalty
+		hidden_effect = {
+			every_subject_or_below = {
+				limit = {
+					is_direct_subject_of = c:GER
+					is_subject_type = subject_type_puppet
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				c:GER = {
+					annex_with_incorporation = prev
+				}
+			}
+			# remove/change the modifier down here
+		}
 	}
 	fail = {
 		NOT = {
@@ -1097,12 +1127,12 @@ je_imperia_frankfurt_gutter_crown_political = {
 	on_weekly_pulse = {
 		random_events = {
 			chance_of_no_event = 60
-			1 = frankfurt_parliament.11 # State bureaucrat integration event
-			1 = frankfurt_parliament.12 # State internal security
-			1 = frankfurt_parliament.13 # State home defence
-			1 = frankfurt_parliament.14 # State land reform
-			1 = frankfurt_parliament.15 # State policing
-			# 5 = frankfurt_parliament.16 # Prince integration hidden selector event
+			1 = frankfurt_parliament.11			# State bureaucrat integration event
+			1 = frankfurt_parliament.12			# State internal security
+			1 = frankfurt_parliament.13			# State home defence
+			1 = frankfurt_parliament.14			# State land reform
+			1 = frankfurt_parliament.15			# State policing
+			#5 = frankfurt_parliament.16 # Prince integration?
 		}
 	}
 }

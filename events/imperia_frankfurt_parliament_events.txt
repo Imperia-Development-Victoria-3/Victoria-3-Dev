@@ -1198,7 +1198,7 @@ frankfurt_parliament.11 = {
 		}
 	}
 	after = {
-		scope:integrating_state = {
+		scope:integrating_state.state_region = {
 			set_variable = {
 				name = gutter_crown_political_je_integration_considered
 				value = yes
@@ -1312,7 +1312,7 @@ frankfurt_parliament.12 = {
 		}
 	}
 	after = {
-		scope:integrating_state = {
+		scope:integrating_state.state_region = {
 			set_variable = {
 				name = gutter_crown_political_je_integration_considered
 				value = yes
@@ -1426,7 +1426,7 @@ frankfurt_parliament.13 = {
 		}
 	}
 	after = {
-		scope:integrating_state = {
+		scope:integrating_state.state_region = {
 			set_variable = {
 				name = gutter_crown_political_je_integration_considered
 				value = yes
@@ -1540,7 +1540,7 @@ frankfurt_parliament.14 = {
 		}
 	}
 	after = {
-		scope:integrating_state = {
+		scope:integrating_state.state_region = {
 			set_variable = {
 				name = gutter_crown_political_je_integration_considered
 				value = yes
@@ -1654,11 +1654,106 @@ frankfurt_parliament.15 = {
 		}
 	}
 	after = {
-		scope:integrating_state = {
+		scope:integrating_state.state_region = {
 			set_variable = {
 				name = gutter_crown_political_je_integration_considered
 				value = yes
 			}
 		}
+	}
+}
+
+frankfurt_parliament.16 = {
+	type = country_event
+	title = frankfurt_parliament.16.t
+	desc = frankfurt_parliament.16.desc
+	flavor = frankfurt_parliament.16.f
+	placement = scope:integrating_country
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_country_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_country_event_immediate = yes
+	}
+	# Integrate local prince as head of the state
+	option = {
+		name = frankfurt_parliament.16.a
+		if = {
+			limit = {
+				scope:integrating_country.country_rank = rank_value:insignificant_power
+			}
+			create_incident = {
+				country = scope:integrating_country
+				value = 2.5
+			}
+		}
+		else = {
+			create_incident = {
+				country = scope:integrating_country
+				value = 5
+			}
+		}
+		create_diplomatic_pact = {
+			country = scope:integrating_country
+			type = dominion
+		}
+	}
+	# Replace local institutions with civilian government
+	option = {
+		name = frankfurt_parliament.16.b
+		trigger = {
+			scope:integrating_country.country_rank <= rank_value:minor_power
+		}
+		default_option = yes
+		scope:integrating_country = {
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				every_scope_state = {
+					state_region = {
+						add_devastation = 25
+					}
+				}
+				root = {
+					create_incident = {
+						country = scope:integrating_country
+						value = 5
+					}
+				}
+			}
+			else = {
+				every_scope_state = {
+					state_region = {
+						add_devastation = 50
+					}
+				}
+				root = {
+					create_incident = {
+						country = scope:integrating_country
+						value = 10
+					}
+				}
+			}
+			every_scope_state = {
+				state_region = {
+					set_variable = {
+						name = gutter_crown_political_je_integration_considered
+						value = yes
+					}
+				}
+			}
+		}
+		annex_with_incorporation = scope:integrating_country
+	}
+	# Leave be
+	option = {
+		name = frankfurt_parliament.16.c
 	}
 }

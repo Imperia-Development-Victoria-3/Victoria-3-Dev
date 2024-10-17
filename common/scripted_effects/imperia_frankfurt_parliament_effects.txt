@@ -1345,6 +1345,35 @@ gutter_crown_political_integration_state_event_immediate = {
 			}
 		}
 		save_scope_as = integrating_state
+		state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = no
+			}
+		}
+	}
+}
+
+gutter_crown_political_integration_country_event_immediate = {
+	set_variable = {
+		name = gutter_crown_political_integration_event_cooldown
+		weeks = 12
+	}
+	random_country = {
+		limit = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
+			is_in_same_power_bloc = c:GER
+			power_bloc.power_bloc_leader = c:GER
+			is_subject = no
+			country_rank <= rank_value:minor_power
+			NOT = {
+				has_variable = gutter_crown_political_je_integration_considered
+			}
+		}
+		save_scope_as = integrating_country
 		set_variable = {
 			name = gutter_crown_political_je_integration_considered
 			value = no
