@@ -943,6 +943,7 @@ je_imperia_frankfurt_gutter_crown_main = {
 		}
 		trigger_event = {
 			id = frankfurt_parliament.10
+			days = 3
 			popup = yes
 		}
 	}
@@ -955,11 +956,14 @@ je_imperia_frankfurt_gutter_crown_main = {
 		}
 	}
 	on_timeout = {
+		custom_tooltip = puts_the_remaining_penalties_on_a_decaying_10_year_timer_tt
 		if = {
 			limit = {
 				has_modifier = gutter_crown_economy_penalty
 			}
-			remove_modifier = gutter_crown_economy_penalty
+			hidden_effect = {
+				remove_modifier = gutter_crown_economy_penalty
+			}
 			add_modifier = {
 				name = gutter_crown_economy_penalty
 				years = 10
@@ -970,7 +974,9 @@ je_imperia_frankfurt_gutter_crown_main = {
 			limit = {
 				has_modifier = gutter_crown_political_penalty
 			}
-			remove_modifier = gutter_crown_political_penalty
+			hidden_effect = {
+				remove_modifier = gutter_crown_political_penalty
+			}
 			if = {
 				limit = {
 					gutter_crown_political_penalty_multiplier != 0
@@ -987,7 +993,9 @@ je_imperia_frankfurt_gutter_crown_main = {
 			limit = {
 				has_modifier = gutter_crown_admin_penalty
 			}
-			remove_modifier = gutter_crown_admin_penalty
+			hidden_effect = {
+				remove_modifier = gutter_crown_admin_penalty
+			}
 			add_modifier = {
 				name = gutter_crown_admin_penalty
 				years = 10
@@ -998,7 +1006,9 @@ je_imperia_frankfurt_gutter_crown_main = {
 			limit = {
 				has_modifier = gutter_crown_military_penalty
 			}
-			remove_modifier = gutter_crown_military_penalty
+			hidden_effect = {
+				remove_modifier = gutter_crown_military_penalty
+			}
 			add_modifier = {
 				name = gutter_crown_military_penalty
 				years = 10
@@ -1191,10 +1201,12 @@ je_imperia_frankfurt_gutter_crown_admin = {
 	on_complete = {
 		remove_modifier = gutter_crown_admin_penalty
 		# Remove integration effort modifiers
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		hidden_effect = {
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		}
 	}
 	on_weekly_pulse = {
 		effect = {
@@ -1260,10 +1272,12 @@ je_imperia_frankfurt_gutter_crown_admin = {
 		}
 	}
 	on_fail = {
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
-		remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		hidden_effect = {
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		}
 	}
 	current_value = {
 		value = root.var:gutter_crown_admin_integration_var
