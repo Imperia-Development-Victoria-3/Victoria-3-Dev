@@ -3,8 +3,6 @@ import os
 
 # U stand for unmerged
 U_result = subprocess.run(["git", "diff", "--name-only", "--diff-filter=U"], capture_output=True, shell=True)
-# A stands for added
-A_result = subprocess.run(["git", "diff", "--name-only", "--diff-filter=A"], capture_output=True, shell=True)
 # M stands for modified
 M_result = subprocess.run(["git", "diff", "--name-only", "--diff-filter=M"], capture_output=True, shell=True)
 # Files that newly added in the commit, and thus act like normally added files.
@@ -12,7 +10,6 @@ simply_added_result = subprocess.run(["git", "diff", "--cached", "--name-only", 
                                      shell=True)
 
 U_result_set = set(U_result.stdout.split(b'\n'))
-A_result_set = set(A_result.stdout.split(b'\n'))
 M_result_set = set(M_result.stdout.split(b'\n'))
 simply_added_result_set = set(simply_added_result.stdout.split(b'\n'))
 
