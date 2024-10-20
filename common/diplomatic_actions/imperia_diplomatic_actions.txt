@@ -160,43 +160,42 @@ forced_embargo_pact = {
 }
 
 foreign_arms_deal = {
-	groups= {
+	groups = {
 		general
 	}
 	requires_approval = yes
 	should_notify_third_parties = yes
 	show_confirmation_box = yes
 	# confirmation_sound = "event:/SFX/UI/MapInteraction/diplomatic_action_foreign_investment_rights_request"
-
+	
 	unlocking_technologies = {
 		gunsmithing
 	}
-
+	
 	selectable = {
 		NOT = { is_country_type = decentralized }
 		is_revolutionary = no
 	}
 	
-
 	accept_effect = {
 		set_variable = {
 			name = imperia_arms_deal_active
 			value = yes
 		}
 	}
-
+	
 	potential = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 		}
-	
+		
 		NOT = {
 			has_diplomatic_pact = {
 				who = scope:target_country
 				type = foreign_arms_deal
-			}			
+			}
 		}
-
+		
 		OR = {
 			NOT = {
 				scope:target_country = {
@@ -229,30 +228,30 @@ foreign_arms_deal = {
 			}
 		}
 	}
-
+	
 	pact = {
 		cost = 200
 		recipient_pays_maintenance = yes
-
+		
 		second_modifier = {
 			country_pact_leverage_generation_add = 400
 		}
-
+		
 		is_two_sided_pact = yes
 		has_junior_participant = yes
-
-		relations_progress_per_day = 0.5  # At 100, +1 relations
+		
+		relations_progress_per_day = 0.5	# At 100, +1 relations
 		relations_improvement_max = 80
-
+		
 		can_be_used_in_sway_offers = yes
 		sway_maneuvers_cost = 30
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				has_diplomatic_relevance = scope:target_country
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -260,13 +259,13 @@ foreign_arms_deal = {
 					scope:target_country.relations:root > relations_threshold:poor
 				}
 			}
-
+			
 			show_about_to_break_warning = {
-				scope:target_country.relations:root <= -17 # this is: poor + 3
+				scope:target_country.relations:root <= -17	# this is: poor + 3
 				scope:target_country.relations_change_rate:root < 0
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -275,19 +274,19 @@ foreign_arms_deal = {
 				}
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				NOT = { has_law = law_type:law_isolationism }
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				NOT = { scope:target_country = { has_law = law_type:law_isolationism } }
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -299,17 +298,17 @@ foreign_arms_deal = {
 				}
 			}
 		}
-
+		
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = "DIPLOMATIC_PACT_REQUIREMENT_DIPLOMATIC_AUTONOMY"
 					aggressive_diplomatic_plays_permitted = yes
-					scope:target_country = { aggressive_diplomatic_plays_permitted = yes }					
+					scope:target_country = { aggressive_diplomatic_plays_permitted = yes }
 				}
 			}
 		}
-
+		
 		monthly_effect = {
 			scope:target_country = {
 				remove_variable ?= imperia_gunsmithing_treaty
@@ -380,8 +379,8 @@ foreign_arms_deal = {
 			remove_variable = imperia_arms_deal_active
 		}
 	}
-
-    ai = {
+	
+	ai = {
 		check_acceptance_for_will_break = yes
 		check_acceptance_for_will_propose = yes
 		
@@ -391,20 +390,20 @@ foreign_arms_deal = {
 			add = {
 				value = country_rank
 				multiply = 0.05
-			}			
-		}			
+			}
+		}
 
 		# This is the acceptance score for the senior part of the foreign_investment_rights (used for 'grant_foreign_investment_rights' action and checking AI in both directions)
 		accept_score = {
 			value = 0
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 				value = -100
 			}
-
+			
 			if = {
-				limit = { 
+				limit = {
 					has_diplomatic_pact = {
 						who = scope:target_country
 						type = defensive_pact
@@ -414,9 +413,9 @@ foreign_arms_deal = {
 					add = 100
 				}
 			}
-
+			
 			if = {
-				limit = { 
+				limit = {
 					has_diplomatic_pact = {
 						who = scope:target_country
 						type = alliance
@@ -426,9 +425,9 @@ foreign_arms_deal = {
 					add = 200
 				}
 			}
-
+			
 			if = {
-				limit = { 
+				limit = {
 					scope:target_country = {
 						is_subject_of = scope:actor
 					}
@@ -437,7 +436,7 @@ foreign_arms_deal = {
 					add = 200
 				}
 			}
-
+			
 			if = {
 				limit = {
 					"scope:actor.ai_ideological_opinion(root)" > 0
@@ -460,7 +459,7 @@ foreign_arms_deal = {
 					min = -20
 				}
 			}
-
+			
 			scope:target_country = {
 				if = {
 					limit = {
@@ -491,7 +490,7 @@ foreign_arms_deal = {
 					value = -1000
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_RELATIONS"
 				if = {
@@ -508,7 +507,7 @@ foreign_arms_deal = {
 					value = 50
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_INFAMY"
 				if = {
@@ -531,7 +530,7 @@ foreign_arms_deal = {
 					}
 					value = -1000
 				}
-			}		
+			}
 		}
 
 		# This is the acceptance score for the junior part of the foreign_investment_rights (used for 'foreign_investment_rights' action and checking AI in both directions)
@@ -560,7 +559,7 @@ foreign_arms_deal = {
 					min = -20
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 				if = {
@@ -587,7 +586,7 @@ foreign_arms_deal = {
 							has_attitude = {
 								who = scope:actor
 								attitude = conciliatory
-							}	
+							}
 							has_attitude = {
 								who = scope:actor
 								attitude = cooperative
@@ -624,7 +623,7 @@ foreign_arms_deal = {
 					value = -1000
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_RELATIONS"
 				if = {
@@ -641,7 +640,7 @@ foreign_arms_deal = {
 					value = 50
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_INFAMY"
 				if = {
@@ -665,21 +664,21 @@ foreign_arms_deal = {
 					value = -1000
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_RANK"
-
+				
 				if = {
 					limit = { scope:actor = { country_rank = root.country_rank } }
 					value = -50
 				}
-
+				
 				if = {
 					limit = { scope:actor = { country_rank < root.country_rank } }
 					value = -1000
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_INCOMPATIBLE_ECONOMIC_SYSTEMS"
 				if = {
@@ -698,7 +697,7 @@ foreign_arms_deal = {
 					value = -100
 				}
 			}
-
+			
 			if = {
 				limit = {
 					scope:target_country = {
@@ -716,37 +715,37 @@ foreign_arms_deal = {
 			}
 			
 			add = {
-				desc = "DIPLOMATIC_ACCEPTANCE_ACTOR_PRO_LOBBY_CLOUT"					
+				desc = "DIPLOMATIC_ACCEPTANCE_ACTOR_PRO_LOBBY_CLOUT"
 				value = "scope:actor.lobby_foreign_pro_clout(scope:target_country)"
 				multiply = 50
 				max = 25
 			}
 			
 			add = {
-				desc = "DIPLOMATIC_ACCEPTANCE_ACTOR_ANTI_LOBBY_CLOUT"					
+				desc = "DIPLOMATIC_ACCEPTANCE_ACTOR_ANTI_LOBBY_CLOUT"
 				value = "scope:actor.lobby_foreign_anti_clout(scope:target_country)"
 				multiply = -50
 				min = -25
 			}
-
+			
 			add = {
-				desc = "DIPLOMATIC_ACCEPTANCE_TARGET_PRO_LOBBY_CLOUT"					
+				desc = "DIPLOMATIC_ACCEPTANCE_TARGET_PRO_LOBBY_CLOUT"
 				value = "scope:target_country.lobby_foreign_pro_clout(scope:actor)"
 				multiply = 100
 				max = 25
 			}
 			
 			add = {
-				desc = "DIPLOMATIC_ACCEPTANCE_TARGET_ANTI_LOBBY_CLOUT"					
+				desc = "DIPLOMATIC_ACCEPTANCE_TARGET_ANTI_LOBBY_CLOUT"
 				value = "scope:target_country.lobby_foreign_anti_clout(scope:actor)"
 				multiply = -100
 				min = -25
-			}	
+			}
 		}
-
+		
 		propose_score = {
 			value = 10
-
+			
 			add = {
 				desc = "RUSSIA_WANTS_INFLUENCE_IN_MANCHURIA"
 				if = {
@@ -770,20 +769,20 @@ foreign_arms_deal = {
 					}
 					add = 25
 				}
-			}		
+			}
 		}
-
+		
 		propose_break_score = {
 			value = 10
 		}
-
+		
 		use_obligation_chance = {
 			value = 25
 		}
-
+		
 		owe_obligation_chance = {
 			value = 0
-
+			
 			add = {
 				desc = "RUSSIA_WANTS_INFLUENCE_IN_MANCHURIA"
 				if = {
@@ -807,20 +806,20 @@ foreign_arms_deal = {
 					}
 					add = 10
 				}
-			}	
+			}
 		}
 	}
 }
 
 request_foreign_arms_deal = {
-	groups= {
+	groups = {
 		general
 	}
-
+	
 	requires_approval = yes
 	can_use_obligations = yes
 	# confirmation_sound = "event:/SFX/UI/MapInteraction/diplomatic_action_foreign_investment_rights_request"
-
+	
 	selectable = {
 		NOT = { is_country_type = decentralized }
 		is_revolutionary = no
@@ -830,14 +829,14 @@ request_foreign_arms_deal = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 		}
-
+		
 		NOT = {
 			has_diplomatic_pact = {
 				who = scope:target_country
 				type = foreign_arms_deal
-			}			
+			}
 		}
-
+		
 		OR = {
 			NOT = {
 				has_technology_researched = gunsmithing
@@ -868,9 +867,9 @@ request_foreign_arms_deal = {
 			}
 		}
 	}
-
+	
 	reverse_pact = foreign_arms_deal
-
+	
 	ai = {
 		check_acceptance_for_will_propose = yes
 		
@@ -880,25 +879,24 @@ request_foreign_arms_deal = {
 			if = {
 				limit = { country_rank < rank_value:major_power }
 				add = 0.25
-			}			
-		}		
-
+			}
+		}
+		
 		propose_score = {
 			value = 10
 		}
-
+		
 		propose_break_score = {
 			value = 10
 		}
-
+		
 		use_obligation_chance = {
 			value = 0
 		}
-
+		
 		owe_obligation_chance = {
 			value = 0
 		}
 	}
 }
-
 
