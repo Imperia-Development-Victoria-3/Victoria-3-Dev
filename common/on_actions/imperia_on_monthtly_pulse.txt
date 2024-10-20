@@ -271,46 +271,19 @@
 			remove_variable ?= ai_disabled_timer
 			set_variable = detected_player
 		}
-		# Demolish non-capital statues
 		if = {
 			limit = {
-				any_scope_building = {
-					is_building_type = building_power_bloc_statue
-					state = {
-						is_capital = no
-					}
+				NOT = {
+					has_global_variable = current_max_multiculturalism_level
 				}
 			}
-			every_scope_state = {
-				limit = {
-					has_building = building_power_bloc_statue
-					is_capital = no
-				}
-				remove_building = building_power_bloc_statue
+			set_global_variable = {
+				name = current_max_multiculturalism_level
+				value = 1
 			}
-		}
-		## Global multicultural levelup cooldowns
-		# To prevent back-to-back leveling
-		if = {
-			limit = {
-				# If country has the burgeoning multiculturalism institution
-				has_institution = institution_multiculturalism
-			}
-			if = {
-				# First time cooldown here
-				limit = {
-					NOT = {
-						has_global_variable = current_max_multiculturalism_level
-					}
-				}
-				set_global_variable = {
-					name = current_max_multiculturalism_level
-					value = 1
-				}
-				set_global_variable = {
-					name = multiculturalism_upgrade_cooldown
-					years = 10
-				}
+			set_global_variable = {
+				name = multiculturalism_upgrade_cooldown
+				years = 10
 			}
 			if = {
 				limit = {
@@ -401,6 +374,44 @@
 				name = india_overlord
 				value = overlord
 			}
+		}
+
+		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
+		# after cancelling a arms deal treaty
+		if = {
+			limit = {
+				NOT = { has_variable = imperia_arms_deal_active }
+				OR = {
+					AND = {
+						NOT = { has_technology_researched = gunsmithing }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = rifling }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_caplocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = repeaters }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_repeaters
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = bolt_action_rifles }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
+						}
+					}
+				}
+			}
+			add_modifier = imperia_invalid_mobilization_option_penalty
+		}
+		else = {
+			remove_modifier ?= imperia_invalid_mobilization_option_penalty
 		}
 	}
 	random_events = {
