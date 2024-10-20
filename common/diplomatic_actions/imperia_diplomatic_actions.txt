@@ -178,9 +178,11 @@ foreign_arms_deal = {
 	}
 	
 	accept_effect = {
-		set_variable = {
-			name = imperia_arms_deal_active
-			value = yes
+		scope:target_country = {
+			set_variable = {
+				name = imperia_arms_deal_active
+				value = yes
+			}
 		}
 	}
 	
@@ -189,11 +191,12 @@ foreign_arms_deal = {
 			NOT = { is_country_type = decentralized }
 		}
 		
-		NOT = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = foreign_arms_deal
-			}
+		custom_tooltip = {
+			text = NO_ACTIVE_ARMS_DEAL
+			NOT = {
+				scope:target_country = {
+					has_variable = imperia_arms_deal_active
+				}			}
 		}
 		
 		OR = {
@@ -818,6 +821,8 @@ request_foreign_arms_deal = {
 	
 	requires_approval = yes
 	can_use_obligations = yes
+	should_notify_third_parties = yes
+
 	# confirmation_sound = "event:/SFX/UI/MapInteraction/diplomatic_action_foreign_investment_rights_request"
 	
 	selectable = {
@@ -825,18 +830,26 @@ request_foreign_arms_deal = {
 		is_revolutionary = no
 	}
 	
+
+	accept_effect = {
+		set_variable = {
+			name = imperia_arms_deal_active
+			value = yes
+		}
+	}
+
 	potential = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 		}
 		
-		NOT = {
-			has_diplomatic_pact = {
-				who = scope:target_country
-				type = foreign_arms_deal
+		custom_tooltip = {
+			text = NO_ACTIVE_ARMS_DEAL
+			NOT = {
+				has_variable = imperia_arms_deal_active
 			}
 		}
-		
+
 		OR = {
 			NOT = {
 				has_technology_researched = gunsmithing
