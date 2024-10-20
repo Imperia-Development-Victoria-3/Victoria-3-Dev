@@ -271,7 +271,111 @@
 			remove_variable ?= ai_disabled_timer
 			set_variable = detected_player
 		}
-
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = current_max_multiculturalism_level
+				}
+			}
+			set_global_variable = {
+				name = current_max_multiculturalism_level
+				value = 1
+			}
+			set_global_variable = {
+				name = multiculturalism_upgrade_cooldown
+				years = 10
+			}
+			if = {
+				limit = {
+					# If country is currently at the max (or above, I guess) allowed by the global var
+					institution_investment_level = {
+						institution = institution_multiculturalism
+						value >= global_var:current_max_multiculturalism_level
+					}
+				}
+				if = {
+					limit = {
+						# The cooldown is done
+						NOT = {
+							has_global_variable = multiculturalism_upgrade_cooldown
+						}
+					}
+					# Increase allowed max, and reset the cooldown
+					change_global_variable = {
+						name = current_max_multiculturalism_level
+						add = 1
+					}
+					set_global_variable = {
+						name = multiculturalism_upgrade_cooldown
+						years = 10
+					}
+				}
+				else_if = {
+					limit = {
+						# If country is expanding the institution rapidly, and has the cooldown active (since its an else_if)
+						# Or the institution is above its current max, just to calm my nerves
+						OR = {
+							expanding_institution = institution_multiculturalism
+							institution_investment_level = {
+								institution = institution_multiculturalism
+								value > global_var:current_max_multiculturalism_level
+							}
+						}
+					}
+					# Reset the institution to the max; SHOULD remove the expansion
+					# Cant do set_institution_investment_level dynamically, hence this "solution"
+					switch = {
+						trigger = global_var:current_max_multiculturalism_level
+						1 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 1
+							}
+						}
+						2 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 2
+							}
+						}
+						3 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 3
+							}
+						}
+						4 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 4
+							}
+						}
+						5 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 5
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				this ?= c:BIC
+				is_subject = yes
+				NOT = {
+					has_variable = bic_collapse_var
+				}
+			}
+			# Colonial India, who is a subject and haven't collapsed yet
+			# Should save their overlord so the surrounding vassals gains independence at the same time..
+			set_variable = {
+				name = india_overlord
+				value = overlord
+			}
+		}
+		
 		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
 		# after cancelling a arms deal treaty
 		if = {
