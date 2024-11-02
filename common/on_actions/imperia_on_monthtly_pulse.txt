@@ -271,19 +271,46 @@
 			remove_variable ?= ai_disabled_timer
 			set_variable = detected_player
 		}
+		# Demolish non-capital statues
 		if = {
 			limit = {
-				NOT = {
-					has_global_variable = current_max_multiculturalism_level
+				any_scope_building = {
+					is_building_type = building_power_bloc_statue
+					state = {
+						is_capital = no
+					}
 				}
 			}
-			set_global_variable = {
-				name = current_max_multiculturalism_level
-				value = 1
+			every_scope_state = {
+				limit = {
+					has_building = building_power_bloc_statue
+					is_capital = no
+				}
+				remove_building = building_power_bloc_statue
 			}
-			set_global_variable = {
-				name = multiculturalism_upgrade_cooldown
-				years = 10
+		}
+		## Global multicultural levelup cooldowns
+		# To prevent back-to-back leveling
+		if = {
+			limit = {
+				# If country has the burgeoning multiculturalism institution
+				has_institution = institution_multiculturalism
+			}
+			if = {
+				# First time cooldown here
+				limit = {
+					NOT = {
+						has_global_variable = current_max_multiculturalism_level
+					}
+				}
+				set_global_variable = {
+					name = current_max_multiculturalism_level
+					value = 1
+				}
+				set_global_variable = {
+					name = multiculturalism_upgrade_cooldown
+					years = 10
+				}
 			}
 			if = {
 				limit = {
