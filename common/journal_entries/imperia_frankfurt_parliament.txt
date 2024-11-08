@@ -1042,10 +1042,10 @@ je_imperia_frankfurt_gutter_crown_economy = {
 			}
 			any_scope_building = {
 				is_building_type = building_urban_center
-				level >= 5
+				level >= 4
 			}
 			has_building = building_railway
-			percent >= 0.8
+			percent >= 0.6
 		}
 	}
 	on_complete = {
@@ -1292,10 +1292,36 @@ je_imperia_frankfurt_gutter_crown_admin = {
 je_imperia_frankfurt_gutter_crown_military = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = gutter_crown_military_goal_var
+			value = 0
+		}
+	}
 	complete = {
-		pop_type_percent_country = {
-			pop_type = soldiers
-			percent >= 0.05
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		OR = {
+			has_law = law_type:law_localized_garrisons
+			has_law = law_type:law_national_guard
+			has_law = law_type:law_militarized_police
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					pop_type_percent_country = {
+						pop_type = soldiers
+						percent >= 0.05
+					}
+				}
+				change_variable = {
+					name = gutter_crown_military_goal_var
+					add = 1
+				}
+			}
 		}
 	}
 	on_complete = {
@@ -1306,4 +1332,11 @@ je_imperia_frankfurt_gutter_crown_military = {
 			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
 		}
 	}
+	current_value = {
+		value = root.var:gutter_crown_military_goal_var
+	}
+	goal_add_value = {
+		add = 52
+	}
+	progressbar = yes
 }
