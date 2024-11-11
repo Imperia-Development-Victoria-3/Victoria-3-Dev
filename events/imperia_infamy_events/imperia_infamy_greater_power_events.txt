@@ -1,5 +1,5 @@
 ﻿namespace = imperia_infamy_gp
-# Economic sanctions for pariah
+# Economic sanctions on pariah
 imperia_infamy_gp.1 = {
 	type = country_event
 	event_image = {
@@ -78,7 +78,7 @@ imperia_infamy_gp.1 = {
 	}
 }
 
-# Economic sanctions for pariah
+# Trade sanctions on pariah
 imperia_infamy_gp.2 = {
 	type = country_event
 	event_image = {
@@ -154,5 +154,74 @@ imperia_infamy_gp.2 = {
 				multiplier = trade_sanctioners_strength
 			}
 		}
+	}
+}
+
+# Coalition prompt against pariah
+imperia_infamy_gp.3 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_infamy_gp.3.t
+	desc = imperia_infamy_gp.3.d
+	flavor = imperia_infamy_gp.3.f
+	duration = 3
+	trigger = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		NOT = {
+			has_variable = is_in_coalition_against_pariah
+		}
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+	}
+	immediate = {
+		global_var:current_pariah = {
+			save_scope_as = pariah_scope
+		}
+		# Is set to no here, will change if they coalition
+		# Done like this so event doesnt pop multiple times
+		set_variable = {
+			name = is_in_coalition_against_pariah
+			value = no
+			years = 10
+		}
+		save_scope_value_as = {
+			name = one_tenth_pariah_infamy_value
+			value = {
+				value = scope:pariah_scope.infamy
+				divide = 10
+			}
+		}
+	}
+	option = {
+		# Coalition the pariah
+		name = imperia_infamy_gp.3.a
+		default_option = yes
+		custom_tooltip = coalition_members_will_be_called_in_automatically_tt
+		change_relations = {
+			country = scope:pariah_scope
+			value = -25
+		}
+		set_variable = {
+			name = is_in_coalition_against_pariah
+			value = yes
+			years = 10
+		}
+	}
+	option = {
+		# Take some penalties instead
+		name = imperia_infamy_gp.3.b
+		change_relations = {
+			country = scope:pariah_scope
+			value = 10
+		}
+		change_infamy = scope:one_tenth_pariah_infamy_value
 	}
 }
