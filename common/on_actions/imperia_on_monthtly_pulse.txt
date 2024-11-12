@@ -402,6 +402,44 @@
 				value = overlord
 			}
 		}
+
+		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
+		# after cancelling a arms deal treaty
+		if = {
+			limit = {
+				NOT = { has_variable = imperia_arms_deal_active }
+				OR = {
+					AND = {
+						NOT = { has_technology_researched = gunsmithing }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = rifling }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_caplocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = repeaters }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_repeaters
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = bolt_action_rifles }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
+						}
+					}
+				}
+			}
+			add_modifier = imperia_invalid_mobilization_option_penalty
+		}
+		else = {
+			remove_modifier ?= imperia_invalid_mobilization_option_penalty
+		}
 	}
 	random_events = {
 		23 = 0
