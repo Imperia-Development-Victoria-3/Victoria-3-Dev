@@ -22,22 +22,26 @@
 	possible = {
 		custom_tooltip = {
 			text = "FORCE_REGIME_CHANGE_GOV_PRINCIPLES_DIST_POWER_PROGRESSIVENESS_DIFFERENCE"
-			100 <= {
-				add = {
-					add = active_law:lawgroup_governance_principles.type.progressiveness
-					subtract = scope:target_country.active_law:lawgroup_governance_principles.type.progressiveness
-					abs = yes
+			OR = {
+				50 <= {
+					add = {
+						add = active_law:lawgroup_governance_principles.type.progressiveness
+						subtract = scope:target_country.active_law:lawgroup_governance_principles.type.progressiveness
+						abs = yes
+					}
 				}
-				add = {
-					add = active_law:lawgroup_distribution_of_power.type.progressiveness
-					subtract = scope:target_country.active_law:lawgroup_distribution_of_power.type.progressiveness
-					abs = yes
+				50 <= {
+					add = {
+						add = active_law:lawgroup_distribution_of_power.type.progressiveness
+						subtract = scope:target_country.active_law:lawgroup_distribution_of_power.type.progressiveness
+						abs = yes
+					}
 				}
 			}
 		}
 		
 		power_bloc = {
-			current_cohesion_percentage >= 0.5
+			current_cohesion_percentage >= 0.25
 		}
 		scope:target_country = {
 			tenure_in_current_power_bloc_years >= 3

@@ -43,6 +43,7 @@ bic_breakup.1 = {
 	option = {
 		name = bic_breakup.1.a
 		ai_chance = {
+<<<<<<< HEAD
 			base = 8	# this is the default pick for the AI
 		}
 		custom_tooltip = {
@@ -82,16 +83,52 @@ bic_breakup.1 = {
 			}
 		}
 		imperia_shatter_india = yes
+=======
+			base = 8 # this is the default pick for the AI
+		}
+		collapse_india_effect = yes
+>>>>>>> 53df6daa (V1.8.1)
 		change_tag = BGL
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_monarchy
+				}
+			}
+			activate_law = law_type:law_monarchy
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_oligarchy
+				}
+			}
+			activate_law = law_type:law_oligarchy
+		}		
 		hidden_effect = {
 			remove_primary_culture = cu:british
 			add_primary_culture = cu:bengali
 			set_state_religion = rel:sunni
+			india_independence_ig_effects = yes
+			if = {
+				limit = {
+					has_modifier = modifier_india_crown_rule
+				}
+				remove_modifier = modifier_india_crown_rule
+			}
+			if = {
+				limit = {
+					has_modifier = modifier_india_company_rule
+				}
+				remove_modifier = modifier_india_company_rule
+			}
+			recalculate_pop_ig_support = yes
 			every_scope_character = {
 				limit = {
 					OR = {
 						culture = cu:british
 						culture = cu:scottish
+						culture = cu:irish
 					}
 				}
 				kill_character = yes
@@ -115,7 +152,6 @@ bic_breakup.1 = {
 			add_primary_culture = cu:avadhi
 			add_primary_culture = cu:bihari
 			add_primary_culture = cu:gujarati
-			add_primary_culture = cu:kanauji
 			add_primary_culture = cu:kannada
 			add_primary_culture = cu:malayalam
 			add_primary_culture = cu:marathi
@@ -125,16 +161,73 @@ bic_breakup.1 = {
 			add_primary_culture = cu:sindi
 			add_primary_culture = cu:tamil
 			add_primary_culture = cu:telegu
-			set_state_religion = rel:hindu
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_state_atheism
+					}
+				}
+				if = {
+					limit = {
+						religion_percent_country = {  
+							target = rel:hindu  
+							value >= 0.5
+						}
+					}
+					set_state_religion = rel:hindu
+				}
+				else_if = {
+					limit = {
+						religion_percent_country = {  
+							target = rel:sunni
+							value >= 0.5
+						}
+					}
+					set_state_religion = rel:sunni
+				}
+				else = {
+					set_state_religion = rel:hindu
+				}
+			}
+			india_independence_ig_effects = yes
+			if = {
+				limit = {
+					has_modifier = modifier_india_crown_rule
+				}
+				remove_modifier = modifier_india_crown_rule
+			}
+			if = {
+				limit = {
+					has_modifier = modifier_india_company_rule
+				}
+				remove_modifier = modifier_india_company_rule
+			}
+			recalculate_pop_ig_support = yes
 			every_scope_character = {
 				limit = {
 					OR = {
 						culture = cu:british
 						culture = cu:scottish
+						culture = cu:irish
 					}
+					is_immortal = no
 				}
 				kill_character = yes
 			}
 		}
 	}
+<<<<<<< HEAD
 }
+=======
+	option = {
+		name = bic_breakup.1.c
+		ai_chance = {
+			base = 0 # AI will never do this
+		}
+		default_option = yes
+		add_radicals = {
+			value = very_large_radicals
+		}
+	}
+}
+>>>>>>> 53df6daa (V1.8.1)

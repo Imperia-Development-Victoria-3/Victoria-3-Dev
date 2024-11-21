@@ -362,12 +362,44 @@ foreign_arms_deal = {
 				desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 				value = -100
 			}
+<<<<<<< HEAD:common/diplomatic_actions/imperia_diplomatic_actions.txt
 			
 			if = {
 				limit = {
 					has_diplomatic_pact = {
 						who = scope:target_country
 						type = defensive_pact
+=======
+
+			if = {
+				limit = {
+					scope:target_country = {
+						modifier:country_construction_add <= 50
+					}
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_LOW_CONSTRUCTION"
+					value = scope:target_country.modifier:country_construction_add
+					subtract = 50
+				}
+			}
+
+			if = {
+				limit = { 
+					has_strategy = ai_strategy_economic_imperialism
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_ECONOMIC_IMPERIALISM"
+					add = 50
+				}
+			}
+
+			if = {
+				limit = {
+					any_diplomatic_catalyst = {
+						is_diplomatic_catalyst_type = catalyst_declared_bankruptcy
+						target ?= scope:actor
+>>>>>>> 53df6daa (V1.8.1):common/diplomatic_actions/27_foreign_investment_rights.txt
 					}
 				}
 				add = {
@@ -500,6 +532,31 @@ foreign_arms_deal = {
 			
 			if = {
 				limit = {
+<<<<<<< HEAD:common/diplomatic_actions/imperia_diplomatic_actions.txt
+=======
+					scope:actor = {
+						any_diplomatic_catalyst = {
+							is_diplomatic_catalyst_type = catalyst_declared_bankruptcy
+							target ?= root
+						}
+					}
+				}
+				add = {
+					desc = "catalyst_declared_bankruptcy"
+					add = 50
+				}
+			}
+
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_MUTUAL_TRADE_ROUTES"
+				value = "scope:actor.num_mutual_trade_route_levels_with_country(root)"
+				multiply = 0.5
+				max = 25
+			}
+
+			if = {
+				limit = {
+>>>>>>> 53df6daa (V1.8.1):common/diplomatic_actions/27_foreign_investment_rights.txt
 					"scope:actor.ai_ideological_opinion(root)" > 0
 				}
 				add = {
@@ -860,6 +917,7 @@ request_foreign_arms_deal = {
 		propose_break_score = {
 			value = 10
 		}
+<<<<<<< HEAD:common/diplomatic_actions/imperia_diplomatic_actions.txt
 		
 		use_obligation_chance = {
 			value = 0
@@ -868,6 +926,8 @@ request_foreign_arms_deal = {
 		owe_obligation_chance = {
 			value = 0
 		}
+=======
+>>>>>>> 53df6daa (V1.8.1):common/diplomatic_actions/27_foreign_investment_rights.txt
 	}
 }
 

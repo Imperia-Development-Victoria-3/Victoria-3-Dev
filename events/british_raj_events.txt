@@ -45,23 +45,18 @@ raj.1 = {
 			limit = {
 				has_diplomatic_pact = {
 					who = c:BIC
-					type = dominion
+					type = chartered_company
 				}
 			}
-			hidden_effect = {
-				remove_diplomatic_pact = {
-					country = c:BIC
-					type = dominion
-				}
-			}
-			create_diplomatic_pact = {
-				country = c:BIC
-				type = puppet
+			c:BIC ?= {
+				decrease_autonomy = yes
 			}
 		}
 		c:BIC = {
 			set_variable = doctrine_of_lapse_ended
 			custom_tooltip = doctrine_of_lapse_disabled
+			remove_modifier = modifier_india_company_rule
+			add_modifier = modifier_india_crown_rule
 			if = {
 				limit = {
 					NOT = {
@@ -69,6 +64,60 @@ raj.1 = {
 					}
 				}
 				activate_law = law_type:law_appointed_bureaucrats
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_autocracy
+					}
+				}
+				activate_law = law_type:law_autocracy
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_law = law_type:law_hindu_caste_enforced
+						has_law = law_type:law_hindu_caste_codified
+					}
+				}
+				activate_law = law_type:law_hindu_caste_codified
+			}
+			ig:ig_industrialists = {
+				set_interest_group_name = ig_government_of_india
+			}
+			if = {
+				limit = {
+					game_date < 1862.1.1
+				}
+				create_character = { 
+					template = BIC_charles_canning
+					on_created = {
+						set_as_interest_group_leader = yes
+						set_character_as_ruler = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					game_date < 1879.1.1
+				}
+				create_character = { 
+					template = BIC_john_lawrence
+					on_created = {
+						set_as_interest_group_leader = yes
+						set_character_as_ruler = yes
+					}
+				}
+			}
+			else = {
+				create_character = { 
+					culture = cu:british
+					interest_group = ig:ig_industrialists
+					on_created = {
+						set_as_interest_group_leader = yes
+						set_character_as_ruler = yes
+					}
+				}
 			}
 		}
 	}
@@ -80,13 +129,33 @@ raj.2 = {
 	placement = ROOT
 	
 	title = raj.2.t
-	desc = raj.2.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = raj.2.d1
+				trigger = {
+					ruler = {
+						age > 60
+					}
+					NOT = {
+						exists = heir
+					}
+				}
+			}
+			triggered_desc = {
+				desc = raj.2.d2
+				trigger = {
+					exists = heir
+				}
+			}
+		}
+	}
 	flavor = raj.2.f
 	
 	duration = 3
 	
 	event_image = {
-		video = "asia_hinduism_sikhism"
+		video = "ep1_redcoats"
 	}
 	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -94,73 +163,38 @@ raj.2 = {
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 	
 	minor_left_icon = c:BIC
+<<<<<<< HEAD
 	#minor_right_icon = scope:doctrine_of_lapse_target_country
 	
+=======
+
+>>>>>>> 53df6daa (V1.8.1)
 	immediate = {
-		random_state = {
-			limit = {
-				owner = {
-					is_subject_of = ROOT
-					is_player = no
-					OR = {
-						has_government_type = gov_princely_state_hindu
-						has_government_type = gov_princely_state_muslim
-					}
-				}
-			}
-			save_scope_as = doctrine_of_lapse_target_state_1
-		}
-		random_state = {
-			limit = {
-				owner = {
-					is_subject_of = ROOT
-					is_player = no
-					OR = {
-						has_government_type = gov_princely_state_hindu
-						has_government_type = gov_princely_state_muslim
-					}
-				}
-				NOT = { this = scope:doctrine_of_lapse_target_state_1 }
-			}
-			save_scope_as = doctrine_of_lapse_target_state_2
-		}
-		random_state = {
-			limit = {
-				owner = {
-					is_subject_of = ROOT
-					is_player = no
-					OR = {
-						has_government_type = gov_princely_state_hindu
-						has_government_type = gov_princely_state_muslim
-					}
-				}
-				NOT = { this = scope:doctrine_of_lapse_target_state_1 }
-				NOT = { this = scope:doctrine_of_lapse_target_state_2 }
-			}
-			save_scope_as = doctrine_of_lapse_target_state_3
+		c:BIC ?= {
+			save_scope_as = overlord_scope
 		}
 	}
 	
 	option = {
 		name = raj.2.a
 		default_option = yes
-		scope:doctrine_of_lapse_target_state_1 = {
-			owner = {
-				save_scope_as = target_country
-			}
-			set_state_owner = ROOT
-			add_radicals_in_state = {
-				value = very_large_radicals
-			}
+		ai_chance = {
+			base = 90
 		}
-		create_incident = {
-			country = scope:target_country
-			value = 20
+		if = {
+			limit = { # Should never happen, but just to be sure.
+				is_player = yes
+			}
+			play_as = scope:overlord_scope
+		}
+		scope:overlord_scope ?= {
+			annex = ROOT
 		}
 	}
 	
 	option = {
 		name = raj.2.b
+<<<<<<< HEAD
 		trigger = {
 			exists = scope:doctrine_of_lapse_target_state_2
 		}
@@ -243,9 +277,41 @@ raj.3 = {
 			months = normal_modifier_time
 		}
 		
+=======
+>>>>>>> 53df6daa (V1.8.1)
 		ai_chance = {
-			base = 25
+			base = 10
+			modifier = {
+				trigger = {
+					liberty_desire > 25
+				}
+				add = 10
+			}
+			modifier = {
+				trigger = {
+					liberty_desire > 50
+				}
+				add = 25
+			}
+			modifier = {
+				trigger = {
+					liberty_desire > 75
+				}
+				add = 25
+			}
+			modifier = {
+				trigger = {
+					any_country = {
+						has_diplomatic_pact = {
+							who = ROOT
+							type = guarantee_independence
+						}	
+					}
+				}
+				add = 100
+			}
 		}
+<<<<<<< HEAD
 	}
 	
 	option = {
@@ -269,6 +335,12 @@ raj.3 = {
 		
 		ai_chance = {
 			base = 75
+=======
+		create_diplomatic_play = {
+			target_country = scope:overlord_scope
+			type = dp_independence
+			add_war_goal = { holder = scope:overlord_scope target_country = ROOT type = annex_country }
+>>>>>>> 53df6daa (V1.8.1)
 		}
 	}
 }
@@ -327,7 +399,7 @@ raj.4 = {
 		}
 		
 		ai_chance = {
-			base = 25
+			base = 10
 		}
 	}
 	
@@ -337,16 +409,35 @@ raj.4 = {
 		add_radicals = {
 			pop_type = officers
 			religion = rel:hindu
-			value = large_radicals
+			value = small_radicals
 		}
 		add_radicals = {
 			pop_type = soldiers
 			religion = rel:hindu
-			value = large_radicals
+			value = small_radicals
+		}
+
+		custom_tooltip = {
+			text = sepoy_mutiny_progress_from_events_tt
+			set_variable = { 
+				name = bengal_progress_from_events_var_add_5 
+				value = -1
+				months = normal_modifier_time
+			}
+			set_variable = { 
+				name = bombay_progress_from_events_var_add_5
+				value = -1
+				months = normal_modifier_time
+			}
+			set_variable = { 
+				name = madras_progress_from_events_var_add_5
+				value = -1
+				months = normal_modifier_time
+			}
 		}
 		
 		ai_chance = {
-			base = 75
+			base = 90
 		}
 	}
 }
@@ -409,10 +500,21 @@ raj.5 = {
 			save_scope_as = missionaries_suspicion_state
 			random_scope_pop = {
 				limit = {
+					OR = {
+						religion = rel:hindu
+						religion = rel:sunni
+						religion = rel:shiite
+					}
+				}
+				save_scope_as = not_suspected_missionaries_pop
+			}
+			random_scope_pop = {
+				limit = {
 					is_pop_type = clergymen
 					religion = { has_discrimination_trait = christian }
 				}
 				religion = { save_scope_as = suspected_missionaries }
+				save_scope_as = suspected_missionaries_pop
 			}
 		}
 	}
@@ -425,11 +527,29 @@ raj.5 = {
 				name = promised_no_proselytization
 				months = long_modifier_time
 			}
+		}	
+		if = {
+			limit = {
+				AND = {
+					c:BIC ?= this
+					ig:ig_devout = {
+						leader = {
+		        			has_ideology = ideology:ideology_traditionalist_minoritarian
+		        		}
+					}
+				}		
+			}
+			ig:ig_devout = {
+				add_modifier = {
+					name = promised_no_missionaries
+					months = normal_modifier_time
+				}
+			}
 		}
-		ig:ig_devout = {
-			add_modifier = {
-				name = promised_no_missionaries
-				months = normal_modifier_time
+		scope:missionaries_suspicion_state = {
+			add_radicals_in_state = {
+				religion = scope:suspected_missionaries_pop.religion
+				value = medium_radicals
 			}
 		}
 		
@@ -443,16 +563,35 @@ raj.5 = {
 		default_option = yes
 		scope:missionaries_suspicion_state = {
 			add_radicals_in_state = {
-				religion = rel:hindu
-				value = large_radicals
+				religion = scope:not_suspected_missionaries_pop.religion
+				value = small_radicals
 			}
-			add_radicals_in_state = {
-				religion = rel:sunni
-				value = large_radicals
+			add_loyalists_in_state = {
+				religion = scope:suspected_missionaries_pop.religion
+				value = medium_radicals
 			}
-			add_radicals_in_state = {
-				religion = rel:shiite
-				value = large_radicals
+		}
+		if = {
+			limit = {
+				has_journal_entry = je_uneasy_raj
+			}
+			custom_tooltip = {
+				text = sepoy_mutiny_progress_from_events_tt
+				set_variable = { 
+					name = bengal_progress_from_events_var_add_6
+					value = -1
+					months = normal_modifier_time
+				}
+				set_variable = { 
+					name = bombay_progress_from_events_var_add_6
+					value = -1
+					months = normal_modifier_time
+				}
+				set_variable = { 
+					name = madras_progress_from_events_var_add_6
+					value = -1
+					months = normal_modifier_time
+				}
 			}
 		}
 		
@@ -462,6 +601,7 @@ raj.5 = {
 	}
 }
 
+<<<<<<< HEAD
 
 # Mutiny!
 raj.6 = {
@@ -738,6 +878,8 @@ raj.6 = {
 	}
 }
 
+=======
+>>>>>>> 53df6daa (V1.8.1)
 # End of the Company
 raj.7 = {
 	type = country_event
@@ -776,14 +918,82 @@ raj.7 = {
 		default_option = yes
 		custom_tooltip = activate_british_raj
 		custom_tooltip = doctrine_of_lapse_disabled
+		if = {
+			limit = {
+				has_company = company_type:company_east_india_company
+			}
+			remove_company = company_type:company_east_india_company
+		}
 		show_as_tooltip = {
 			c:GBR = {
 				create_diplomatic_pact = {
 					country = c:BIC
+					type = colony
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_appointed_bureaucrats
+					}
+				}
+				activate_law = law_type:law_appointed_bureaucrats
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_autocracy
+					}
+				}
+				activate_law = law_type:law_autocracy
+			}
+			if = {
+				limit = {
+					OR = {
+						NOT = {
+							has_law = law_type:law_hindu_caste_enforced
+						}
+						NOT = {
+							has_law = law_type:law_hindu_caste_codified
+						}
+					}
+				}
+				activate_law = law_type:law_hindu_caste_codified
+			}
+		}
+		# Revassalize remaining disloyal princely states
+		every_country = {
+			limit = {
+				has_variable = sepoy_mutiny_princely_state_low_loyalty_var
+			}
+			root = {
+				create_diplomatic_pact = {
+					country = prev
 					type = puppet
 				}
 			}
-			activate_law = law_type:law_appointed_bureaucrats
+		}
+		# Remove exempt from service from medium loyalty vassals
+		every_country = {
+			limit = {
+				has_variable = sepoy_mutiny_princely_state_medium_loyalty_var
+			}
+			if = {
+				limit = {
+					root = {
+						has_diplomatic_pact = {
+							who = prev
+							type = exempt_from_service
+						}
+					}
+				}
+				root = {
+					remove_diplomatic_pact = {
+						country = prev
+						type = exempt_from_service
+					}
+				}
+			}
 		}
 		add_modifier = {
 			name = british_retribution
