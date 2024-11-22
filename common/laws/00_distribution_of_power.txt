@@ -29,7 +29,6 @@ law_autocracy = {
 			activate_law = law_type:law_hereditary_bureaucrats
 		}
 		scripted_effect_parties_disappearence = yes
-		clear_legal_single_party = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
@@ -47,12 +46,18 @@ law_autocracy = {
 		country_authority_add = 400
 		country_leverage_resistance_mult = -0.10
 	}
-	possible_political_movements = {
-		law_oligarchy
-		law_landed_voting
-		law_elder_council
-		law_technocracy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	
 	can_impose = {
@@ -65,33 +70,6 @@ law_autocracy = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_ARISTOCRATS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_oligarchy
-						}
-					}
-					is_pop_type = aristocrats
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_OFFICIERS"
-			if = {
-				limit = {
-					is_pop_type = officers
-				}
-				value = 0.25
-			}
 		}
 	}
 	
@@ -139,6 +117,20 @@ law_autocracy = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -155,7 +147,6 @@ law_technocracy = {
 			activate_law = law_type:law_appointed_bureaucrats
 		}
 		scripted_effect_parties_disappearence = yes
-		clear_legal_single_party = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
@@ -178,11 +169,18 @@ law_technocracy = {
 	unlocking_technologies = {
 		central_archives
 	}
-	possible_political_movements = {
-		law_autocracy
-		law_census_voting
-		law_universal_suffrage
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	
 	can_impose = {
@@ -195,33 +193,6 @@ law_technocracy = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_ACADEMICS"
-			if = {
-				limit = {
-					is_pop_type = academics
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_CAPITALISTS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_wealth_voting
-						}
-					}
-					is_pop_type = capitalists
-				}
-				value = 0.25
-			}
 		}
 	}
 	
@@ -260,6 +231,20 @@ law_technocracy = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -287,7 +272,6 @@ law_oligarchy = {
 			activate_law = law_type:law_hereditary_bureaucrats
 		}
 		scripted_effect_parties_disappearence = yes
-		clear_legal_single_party = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
@@ -300,6 +284,7 @@ law_oligarchy = {
 		country_legitimacy_govt_total_clout_add = 130
 		country_legitimacy_govt_size_add = 1
 		country_legitimacy_ideological_incoherence_mult = 0.05
+		country_officers_pol_str_mult = 0.5
 		country_aristocrats_pol_str_mult = 0.4
 		country_capitalists_pol_str_mult = 0.25
 		country_officers_pol_str_mult = 0.1
@@ -307,12 +292,20 @@ law_oligarchy = {
 		state_political_strength_from_wealth_mult = 0.15
 		country_leverage_resistance_mult = -0.15
 	}
-	possible_political_movements = {
-		law_autocracy
-		law_landed_voting
-		law_elder_council
-		law_technocracy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				NOT = {
+					c:BIC ?= ROOT
+				}
+			}
+		}
 	}
 	
 	can_impose = {
@@ -325,38 +318,6 @@ law_oligarchy = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_ARISTOCRATS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_autocracy
-						}
-					}
-					is_pop_type = aristocrats
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_CAPITALISTS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_wealth_voting
-						}
-					}
-					is_pop_type = capitalists
-				}
-				value = 0.25
-			}
 		}
 	}
 	
@@ -404,6 +365,20 @@ law_oligarchy = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -437,7 +412,6 @@ law_elder_council = {
 			activate_law = law_type:law_hereditary_bureaucrats
 		}
 		scripted_effect_parties_disappearence = yes
-		clear_legal_single_party = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
@@ -454,14 +428,6 @@ law_elder_council = {
 		country_officers_pol_str_mult = 0.5
 		country_clergymen_pol_str_mult = 0.5
 		country_authority_add = 200
-	}
-	possible_political_movements = {
-		law_autocracy
-		law_oligarchy
-		law_landed_voting
-	}
-	pop_support = {
-		value = 0
 	}
 	
 	ai_enact_weight_modifier = {	#Petitions
@@ -496,17 +462,21 @@ law_landed_voting = {
 		country_authority_add = 200
 		country_leverage_resistance_mult = -0.05
 	}
-	possible_political_movements = {
-		law_oligarchy
-		law_autocracy
-		law_wealth_voting
-		law_census_voting
-		law_technocracy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	on_activate = {
 		scripted_effect_parties_emergence = yes
-		clear_legal_single_party = yes
 	}
 	
 	can_impose = {
@@ -520,35 +490,6 @@ law_landed_voting = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_LITERACY"
-			if = {
-				limit = {
-					OR = {
-						NOT = {
-							strata = rich
-						}
-						wealth < 30
-					}
-					owner = {
-						NOR = {
-							has_law = law_type:law_wealth_voting
-							has_law = law_type:law_census_voting
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_anarchy
-						}
-					}
-				}
-				add = {
-					value = literacy_rate
-					divide = 2
-				}
-			}
 		}
 	}
 	
@@ -596,6 +537,20 @@ law_landed_voting = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -626,16 +581,21 @@ law_wealth_voting = {
 		country_authority_add = 150
 		country_leverage_resistance_mult = -0.05
 	}
-	possible_political_movements = {
-		law_landed_voting
-		law_census_voting
-		law_universal_suffrage
-		law_technocracy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	on_activate = {
 		scripted_effect_parties_emergence = yes
-		clear_legal_single_party = yes
 	}
 	
 	can_impose = {
@@ -649,31 +609,6 @@ law_wealth_voting = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_LITERACY"
-			if = {
-				limit = {
-					NOT = {
-						strata = rich
-					}
-					owner = {
-						NOR = {
-							has_law = law_type:law_census_voting
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_anarchy
-						}
-					}
-				}
-				add = {
-					value = literacy_rate
-					divide = 2
-				}
-			}
 		}
 	}
 	
@@ -716,6 +651,20 @@ law_wealth_voting = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -738,16 +687,21 @@ law_census_voting = {
 		country_voting_power_from_literacy_add = 30
 		country_authority_add = 100
 	}
-	possible_political_movements = {
-		law_landed_voting
-		law_wealth_voting
-		law_universal_suffrage
-		law_technocracy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	on_activate = {
 		scripted_effect_parties_emergence = yes
-		clear_legal_single_party = yes
 	}
 	
 	can_impose = {
@@ -761,28 +715,6 @@ law_census_voting = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_LITERACY"
-			if = {
-				limit = {
-					wealth < 25
-					owner = {
-						NOR = {
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_anarchy
-						}
-					}
-				}
-				add = {
-					value = literacy_rate
-					divide = 2
-				}
-			}
 		}
 	}
 	
@@ -825,6 +757,20 @@ law_census_voting = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -847,15 +793,21 @@ law_universal_suffrage = {
 		country_legitimacy_ideological_incoherence_mult = -0.05
 		country_authority_add = 50
 	}
-	possible_political_movements = {
-		law_census_voting
-		law_wealth_voting
-		law_anarchy
-		law_single_party_state
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	on_activate = {
 		scripted_effect_parties_emergence = yes
-		clear_legal_single_party = yes
 	}
 	
 	can_impose = {
@@ -869,40 +821,6 @@ law_universal_suffrage = {
 				}
 			}
 			can_impose_law_default = yes
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_LITERACY"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_anarchy
-						}
-					}
-				}
-				if = {
-					limit = {
-						wealth < 15
-					}
-					add = {
-						value = literacy_rate
-						divide = 2
-					}
-				}
-				if = {
-					limit = {
-						wealth < 10
-					}
-					add = {
-						value = literacy_rate
-						divide = 2
-					}
-				}
-			}
 		}
 	}
 	
@@ -945,6 +863,20 @@ law_universal_suffrage = {
 			
 			add = base_impose_law_weight
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -967,12 +899,21 @@ law_anarchy = {
 		country_legitimacy_ideological_incoherence_mult = 0.10
 		country_leverage_resistance_mult = -0.5
 	}
-	possible_political_movements = {
-		law_universal_suffrage
+	
+	can_enact = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	on_activate = {
 		scripted_effect_parties_disappearence = yes
-		clear_legal_single_party = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
@@ -1003,19 +944,6 @@ law_anarchy = {
 		}
 	}
 	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_LITERACY"
-			if = {
-				limit = {
-					wealth < 10
-				}
-				add = literacy_rate
-			}
-		}
-	}
-	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
@@ -1037,6 +965,20 @@ law_anarchy = {
 			}
 			
 			add = base_impose_law_weight
+		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
 		}
 	}
 }
@@ -1063,6 +1005,16 @@ law_single_party_state = {
 				country_has_voting_franchise = no
 			}
 		}
+		trigger_if = {
+			limit = {
+				c:BIC ?= ROOT
+				is_subject = yes
+			}
+			custom_tooltip = {
+				text = BIC_not_able_to_change_distribution_of_power_tt
+				has_variable = britain_granted_dop_permission
+			}
+		}
 	}
 	unlocking_technologies = {
 		political_agitation
@@ -1075,40 +1027,10 @@ law_single_party_state = {
 		interest_group_in_government_attraction_mult = 0.25
 		country_leverage_resistance_mult = 0.5
 	}
-	possible_political_movements = {
-		law_universal_suffrage
-		law_anarchy
-	}
+	
 	on_activate = {
-		hidden_effect = {
-			if = {
-				limit = {
-					ROOT = {
-						ruler.interest_group = {
-							has_party = yes
-						}
-					}
-				}
-				ROOT = {
-					set_variable = { name = only_valid_party value = ruler.interest_group.party }
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						any_active_party = {
-							exists = this
-						}
-					}
-				}
-				root = { gen_ruler_party = yes }
-			}
-		}
-		hidden_effect = {
-			#Clears all currently active parties
-			deactivate_parties = yes
-		}
-		update_party_support = yes	#Reactivates precisely one legal party
+		set_only_legal_party_from_ig = ruler.interest_group
+		
 		custom_tooltip = {
 			text = sps_government_reshuffle_tt
 			every_interest_group = {
@@ -1131,6 +1053,12 @@ law_single_party_state = {
 			}
 		}
 	}
+	
+	on_deactivate = {
+		unset_only_legal_party = yes
+		update_party_support = yes
+	}
+	
 	ai_will_do = {
 		exists = ruler
 		ruler = {
@@ -1159,47 +1087,6 @@ law_single_party_state = {
 		}
 	}
 	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_ARISTOCRATS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_autocracy
-						}
-					}
-					is_pop_type = aristocrats
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_CAPITALISTS"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_wealth_voting
-						}
-					}
-					is_pop_type = capitalists
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_BUREAUCRATS"
-			if = {
-				limit = {
-					is_pop_type = bureaucrats
-				}
-				value = 0.25
-			}
-		}
-	}
-	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
@@ -1221,6 +1108,20 @@ law_single_party_state = {
 			}
 			
 			add = base_impose_law_weight
+		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= ROOT
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
 		}
 	}
 }
