@@ -1,22 +1,19 @@
-﻿imperia_ideology_centralizer = {	# Clone of VTM Modernizer for use with our historical characters.
+﻿imperia_ideology_centralizer = {
+	# Clone of VTM Modernizer for use with our historical characters.
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_particularist.dds"
-	
 	character_ideology = yes
-	
 	lawgroup_bureaucracy = {
 		law_elected_bureaucrats = disapprove
 		law_hereditary_bureaucrats = neutral
 		law_appointed_bureaucrats = approve
 		law_meritocratic_bureaucracy = approve
 	}
-	
 	lawgroup_army_model = {
 		law_mass_conscription = approve
 		law_professional_army = approve
 		law_national_militia = neutral
 		law_peasant_levies = disapprove
 	}
-	
 	lawgroup_economic_system = {
 		law_command_economy = strongly_disapprove
 		law_cooperative_ownership = strongly_disapprove
@@ -26,13 +23,11 @@
 		law_laissez_faire = disapprove
 		law_industry_banned = strongly_disapprove
 	}
-	
-	possible = {
+	non_interest_group_leader_trigger = {
 		# Agitators should be more ambitious
 		NOT = {
 			has_role = agitator
 		}
-		
 		scope:interest_group = {
 			OR = {
 				AND = {
@@ -49,7 +44,6 @@
 				is_interest_group_type = ig_armed_forces
 			}
 		}
-		
 		scope:interest_group = {
 			NOR = {
 				has_variable = communist_ig_var
@@ -60,10 +54,35 @@
 			}
 		}
 	}
-	
-	leader_weight = {
+	interest_group_leader_trigger = {
+		scope:interest_group = {
+			OR = {
+				AND = {
+					is_interest_group_type = ig_landowners
+					owner = {
+						NOT = {
+							has_law = law_type:law_serfdom
+						}
+					}
+				}
+				is_interest_group_type = ig_devout
+				is_interest_group_type = ig_intelligentsia
+				is_interest_group_type = ig_industrialists
+				is_interest_group_type = ig_armed_forces
+			}
+		}
+		scope:interest_group = {
+			NOR = {
+				has_variable = communist_ig_var
+				has_variable = chose_vanguardism
+				has_variable = chose_fascism
+				has_variable = chose_conservatism
+				has_variable = chose_ethno_nationalism
+			}
+		}
+	}
+	non_interest_group_leader_weight = {
 		value = 0
-
 		# should mainly roll for ancien regime monarchies
 		if = {
 			limit = {
@@ -72,13 +91,11 @@
 				}
 			}
 			add = 25
-
 			# more likely if the crown has something to lose
 			add = {
 				value = 4
 				multiply = owner.country_rank	# from x0 to x7 with Egypt for example being a 5
 			}
-
 			# lets be reasonable here
 			if = {
 				limit = {
@@ -99,7 +116,6 @@
 							has_law = law_type:law_interventionism
 							has_law = law_type:law_laissez_faire
 						}
-						
 						OR = {
 							has_law = law_type:law_per_capita_based_taxation
 							has_law = law_type:law_proportional_taxation
@@ -116,12 +132,10 @@
 				owner = {
 					has_law = law_type:law_monarchy
 				}
-				
 				OR = {
 					is_heir = yes
 					is_ruler = yes
 				}
-				
 				scope:interest_group = {
 					NOR = {
 						is_interest_group_type = ig_landowners
@@ -137,7 +151,8 @@
 				owner = {
 					has_law = law_type:law_monarchy
 					ruler ?= {
-						NOR = {	# by process of elimination
+						NOR = {
+							# by process of elimination
 							has_reactionary_ideology = yes
 							has_ideology = ideology:ideology_slaver
 							AND = {
@@ -152,7 +167,6 @@
 						}
 					}
 				}
-				
 				scope:interest_group = {
 					ig_approval >= 0
 				}
@@ -202,7 +216,6 @@
 			}
 			multiply = 1.1
 		}
-
 		# less likely for Landowners and Devout
 		if = {
 			limit = {
@@ -224,7 +237,180 @@
 			}
 			add = -50
 		}
-		
+		if = {
+			limit = {
+				scope:interest_group = {
+					ig_approval < 5
+				}
+			}
+			add = -50
+		}
+		# France should roll Orleanists or Bonapartists instead
+		if = {
+			limit = {
+				owner = {
+					c:FRA ?= this
+				}
+			}
+			multiply = 0
+		}
+	}
+	interest_group_leader_weight = {
+		value = 0
+		# should mainly roll for ancien regime monarchies
+		if = {
+			limit = {
+				owner = {
+					has_law = law_type:law_monarchy
+				}
+			}
+			add = 25
+			# more likely if the crown has something to lose
+			add = {
+				value = 4
+				multiply = owner.country_rank	# from x0 to x7 with Egypt for example being a 5
+			}
+			# lets be reasonable here
+			if = {
+				limit = {
+					owner = {
+						has_technology_researched = empiricism
+					}
+				}
+				multiply = 1.25
+			}
+		}
+		# more likely AS LONG AS issues are relevant
+		if = {
+			limit = {
+				owner = {
+					NAND = {
+						has_law = law_type:law_appointed_bureaucrats
+						OR = {
+							has_law = law_type:law_interventionism
+							has_law = law_type:law_laissez_faire
+						}
+						OR = {
+							has_law = law_type:law_per_capita_based_taxation
+							has_law = law_type:law_proportional_taxation
+							has_law = law_type:law_graduated_taxation
+						}
+					}
+				}
+			}
+			add = 25
+		}
+		# more likely for monarch if they belong to a liberal IG
+		if = {
+			limit = {
+				owner = {
+					has_law = law_type:law_monarchy
+				}
+				OR = {
+					is_heir = yes
+					is_ruler = yes
+				}
+				scope:interest_group = {
+					NOR = {
+						is_interest_group_type = ig_landowners
+						is_interest_group_type = ig_devout
+					}
+				}
+			}
+			add = 75
+		}
+		# more likely if monarch is liberal and we dont hate them
+		if = {
+			limit = {
+				owner = {
+					has_law = law_type:law_monarchy
+					ruler ?= {
+						NOR = {
+							# by process of elimination
+							has_reactionary_ideology = yes
+							has_ideology = ideology:ideology_slaver
+							AND = {
+								has_ideology = ideology:ideology_moderate	# Moderate is ok if the monarch doesnt belong to LO or Devout
+								interest_group = {
+									OR = {
+										is_interest_group_type = ig_landowners
+										is_interest_group_type = ig_devout
+									}
+								}
+							}
+						}
+					}
+				}
+				scope:interest_group = {
+					ig_approval >= 0
+				}
+				is_ruler = no
+			}
+			add = 25
+		}
+		# if we are in danger
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_modifier = country_humiliated
+						has_modifier = forced_market_opening
+						has_modifier = forced_slavery_ban
+					}
+				}
+			}
+			add = 50
+			if = {
+				limit = {
+					interest_group = {
+						is_interest_group_type = ig_armed_forces
+					}
+				}
+				add = 25
+			}
+		}
+		# nice tanzimeet you! 
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_journal_entry = je_sick_man_main
+						has_journal_entry = je_meiji_main
+					}
+				}
+			}
+			add = 25
+		}
+		# more likely if our IG is in government
+		if = {
+			limit = {
+				scope:interest_group = {
+					is_in_government = yes
+				}
+			}
+			multiply = 1.1
+		}
+		# less likely for Landowners and Devout
+		if = {
+			limit = {
+				scope:interest_group = {
+					OR = {
+						is_interest_group_type = ig_devout
+						is_interest_group_type = ig_landowners
+					}
+				}
+			}
+			add = -75
+		}
+		# angry IGs should roll obstructionist or revolutionary leaders
+		if = {
+			limit = {
+				scope:interest_group = {
+					ig_approval < 0
+				}
+			}
+			add = -50
+		}
 		if = {
 			limit = {
 				scope:interest_group = {

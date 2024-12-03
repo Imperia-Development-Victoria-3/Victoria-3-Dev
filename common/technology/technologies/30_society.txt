@@ -42,7 +42,7 @@ rationalism = {
 	category = society
 	modifier = {
 		country_institution_schools_max_investment_add = 1
-		state_education_access_wealth_add = 0.005
+		state_education_access_wealth_add = 0.01
 	}
 	ai_weight = {
 		value = 3	# Very important in general
@@ -118,7 +118,7 @@ romanticism = {
 	category = society
 	modifier = {
 		country_prestige_mult = 0.05
-		state_radicals_from_sol_change_mult = -0.025
+		state_radicals_from_political_movements_mult = -0.025
 		country_farmers_pol_str_mult = 0.05
 		country_clergymen_pol_str_mult = 0.05
 	}
@@ -387,6 +387,7 @@ pharmaceuticals = {
 	category = society
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
+		state_harvest_condition_disease_outbreak_impact_mult = -0.2
 	}
 	unlocking_technologies = {
 		medical_degrees
@@ -397,7 +398,6 @@ pharmaceuticals = {
 }
 
 modern_sewerage = {
-	# Unlocks Maintained Sewers PM in Urban Centers
 	era = era_2
 	texture = "gfx/interface/icons/invention_icons/modern_sewerage.dds"
 	category = society
@@ -408,6 +408,7 @@ modern_sewerage = {
 		country_max_weekly_construction_progress_add = 5
 		market_land_trade_capacity_add = 10
 		state_pollution_reduction_health_mult = -0.1
+		state_harvest_condition_flood_impact_mult = -0.1
 	}
 	unlocking_technologies = {
 		urban_planning
@@ -445,6 +446,15 @@ quinine = {
 				has_strategy = ai_strategy_colonial_expansion
 			}
 			add = 1
+			
+			if = {
+				limit = {
+					any_scope_state = {
+						state_is_in_africa = yes
+					}
+				}
+				add = 3
+			}
 		}
 	}
 }
@@ -480,6 +490,40 @@ central_archives = {
 	unlocking_technologies = {
 		centralization
 	}
+	
+	on_researched = {
+		if = {
+			limit = {
+				NOT = {
+					any_political_movement = {
+						is_political_movement_type = movement_modernizer
+					}
+				}
+				OR = {
+					AND = {
+						OR = {
+							country_is_in_south_america = yes
+							country_is_in_central_america = yes
+						}
+						country_rank <= rank_value:major_power
+					}
+					is_country_type = colonial
+					is_country_type = unrecognized
+				}
+				AND = {
+					has_law = law_type:law_protectionism
+					OR = {
+						has_law = law_type:law_interventionism
+						has_law = law_type:law_command_economy
+						has_law = law_type:law_laissez_faire
+					}
+					has_law = law_type:law_compulsory_primary_school
+				}
+			}
+			create_political_movement = { type = movement_modernizer }
+		}
+	}
+	
 	ai_weight = {
 		value = 1.5	# Important in general
 	}
@@ -613,11 +657,9 @@ nationalism = {
 				OR = {
 					country_has_primary_culture = cu:north_german
 					country_has_primary_culture = cu:south_german
-					country_has_primary_culture = cu:north_italian
-					country_has_primary_culture = cu:south_italian
 				}
 			}
-			add = 2
+			add = 4
 		}
 		
 		if = {
@@ -630,7 +672,7 @@ nationalism = {
 					has_journal_entry = je_risorgimento
 				}
 			}
-			multiply = 2
+			multiply = 4
 		}
 	}
 }
@@ -687,7 +729,7 @@ postal_savings = {
 		state_farmers_investment_pool_efficiency_mult = 0.15
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
 		building_cash_reserves_mult = 0.1
-		state_poor_standard_of_living_add = 0.5
+		state_lower_strata_standard_of_living_add = 0.5
 	}
 	unlocking_technologies = {
 		stock_exchange
@@ -809,6 +851,7 @@ steel_frame_buildings = {
 		state_building_construction_sector_max_level_add = 5
 		country_max_weekly_construction_progress_add = 5
 		market_land_trade_capacity_add = 10
+		state_harvest_condition_flood_impact_mult = -0.05
 	}
 	unlocking_technologies = {
 		modern_sewerage
@@ -859,7 +902,9 @@ anarchism = {
 	texture = "gfx/interface/icons/invention_icons/anarchy.dds"
 	category = society
 	modifier = {
-		state_radicals_from_discrimination_mult = 0.10
+		state_radicalism_increases_violent_hostility_mult = 0.1
+		state_radicalism_increases_cultural_erasure_mult = 0.1
+		state_radicalism_increases_open_prejudice_mult = 0.1
 		state_expected_sol_from_literacy = 1
 	}
 	unlocking_technologies = {
@@ -957,8 +1002,9 @@ corporatism = {
 	}
 	
 	modifier = {
-		state_radicals_from_sol_change_accepted_culture_mult = -0.10
+		state_radicalism_increases_full_acceptance_mult = -0.10
 		country_institution_workplace_safety_max_investment_add = 1
+		state_radicals_from_political_movements_mult = -0.1
 	}
 	
 	unlocking_technologies = {
@@ -1015,7 +1061,7 @@ pan-nationalism = {
 					country_has_primary_culture = cu:south_italian
 				}
 			}
-			add = 2
+			add = 5
 		}
 	}
 }
@@ -1027,8 +1073,8 @@ mutual_funds = {
 	modifier = {
 		country_minting_mult = 0.1
 		country_loan_interest_rate_add = -0.02
-		state_rich_standard_of_living_add = 1
-		state_middle_standard_of_living_add = 0.2
+		state_upper_strata_standard_of_living_add = 1
+		state_middle_strata_standard_of_living_add = 0.2
 		country_institution_workplace_exploitation_max_investment_add = 1
 	}
 	unlocking_technologies = {
@@ -1363,7 +1409,7 @@ mass_surveillance = {
 	modifier = {
 		state_tax_capacity_add = 25
 		state_turmoil_effects_mult = -0.05
-		state_radicals_from_sol_change_mult = -0.03
+		state_radicals_from_political_movements_mult = -0.03
 		country_institution_home_affairs_max_investment_add = 1
 		country_max_declared_interests_add = 1
 	}
@@ -1382,6 +1428,7 @@ antibiotics = {
 	category = society
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
+		state_harvest_condition_disease_outbreak_impact_mult = -0.15
 	}
 	unlocking_technologies = {
 		malaria_prevention
@@ -1477,7 +1524,7 @@ behaviorism = {
 		country_influence_mult = 0.1
 		country_diplomatic_play_maneuvers_add = 5
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
-		state_radicals_from_sol_change_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.05
 	}
 	unlocking_technologies = {
 		psychoanalysis
@@ -1504,14 +1551,16 @@ paved_roads = {
 	era = era_5
 	texture = "gfx/interface/icons/invention_icons/paved_roads.dds"
 	category = society
+	should_update_map = yes	# This technology adds paved roads to the map
+	
 	modifier = {
 		state_infrastructure_from_population_add = 1.5
 		state_infrastructure_from_population_max_add = 30
 		state_building_construction_sector_max_level_add = 5
 		market_land_trade_capacity_add = 10
-		state_rich_standard_of_living_add = 1
-		state_middle_standard_of_living_add = 1
-		state_poor_standard_of_living_add = 1
+		state_upper_strata_standard_of_living_add = 1
+		state_middle_strata_standard_of_living_add = 1
+		state_lower_strata_standard_of_living_add = 1
 		building_urban_center_throughput_add = 0.15
 		building_motor_industry_throughput_add = 0.05
 		

@@ -3,7 +3,8 @@
 # cost												The cost in AUT to set this Decree on a state (scales with Power Rank)
 # unlocking_technologies							A list of technologies, at least one of which must be known to the country to use this Focus
 # unlocking_laws									A list of laws, at least one which must be active in the country to use this Focus. If the country switches away from all unlocking laws the Focus will be removed
-# valid												A trigger in state context that determines if the Decree is permitted or not; should invalidate the Decree on a weekly basis if found invalid 
+# country_trigger									A trigger in country context that determines if the Decree is permitted/shown in interface or not; should invalidate the Decree on a weekly basis if found invalid 
+# state_trigger										A trigger in state context that determines if the Decree is permitted or not; should invalidate the Decree on a weekly basis if found invalid 
 # ai_weight											Scripted value which determines the chance of getting the Decree by AI
 decree_road_maintenance = {
 	# Efficient Administration
@@ -138,12 +139,10 @@ decree_violent_suppression = {
 	unlocking_technologies = {
 		standing_army
 	}
-	valid = {
-		owner = {
-			NOT = {
-				has_law = law_type:law_guaranteed_liberties
-			}
-		}
+	country_trigger = {
+		NOT = { has_law = law_type:law_guaranteed_liberties }
+	}
+	state_trigger = {
 		turmoil >= 0.25
 		NOR = {
 			has_decree = decree_emergency_relief
@@ -152,7 +151,6 @@ decree_violent_suppression = {
 	modifier = {
 		state_turmoil_effects_mult = -0.6
 		state_mortality_turmoil_mult = 0.02
-		state_political_strength_from_discrimination_mult = -0.2
 		state_political_strength_from_welfare_mult = -0.2
 	}
 	cost = 50	# was 75
@@ -189,19 +187,34 @@ decree_emergency_relief = {
 	unlocking_technologies = {
 		egalitarianism
 	}
-	valid = {
-		NOR = {
+	modifier = {
+		state_tax_collection_mult = -0.5
+		state_infrastructure_mult = 0.1
+		state_market_access_price_impact = 0.05
+		state_food_security_add = 0.05
+	}
+	
+	state_trigger = {
+		NOT = {
 			has_decree = decree_violent_suppression
 		}
+		OR = {
+			has_famine = yes
+			devastation > 0.2
+			ROOT.state_region = {
+				OR = {
+					has_harvest_condition = flood
+					has_harvest_condition = wildfire
+					has_harvest_condition = drought
+					has_harvest_condition = disease_outbreak
+					has_harvest_condition = extreme_winds
+				}
+			}
+		}
 	}
-	modifier = {
-		state_welfare_payments_add = 0.6
-		state_migration_pull_mult = 0.1
-		building_working_conditions_mult = -0.15
-		state_mortality_mult = -0.01
-		state_infrastructure_from_population_mult = 0.05	# Added instead of daily devastation reduction. Might need to balance, was conservative with value
-	}
-	cost = 50	# was 75
+	
+	cost = 50
+	
 	ai_weight = {
 		value = 0
 		if = {
@@ -225,10 +238,26 @@ decree_emergency_relief = {
 }
 
 # for love of god, Austria,please enact this
-decree_promote_social_innovation = {
-	texture = "gfx/interface/icons/decree/learning.dds"
+decree_promote_social_mobility = {
+	texture = "gfx/interface/icons/decree/decree_promote_social_mobility.dds"
 	unlocking_technologies = {
 		academia
+	}
+	state_trigger = {
+		NOT = {
+			AND = {
+				owner = {
+					OR = {
+						has_law = law_type:law_hindu_caste_enforced
+						has_law = law_type:law_hindu_caste_codified
+					}
+				}
+				religion_percent_state = {
+					target = rel:hindu
+					value >= 0.3
+				}
+			}
+		}
 	}
 	modifier = {
 		state_education_access_add = 0.08	# Was 0.25
@@ -288,7 +317,7 @@ decree_worker_exploitation = {
 	unlocking_technologies = {
 		colonization
 	}
-	valid = {
+	country_trigger = {
 		owner = {
 			is_player = yes
 			NOT = {
@@ -305,7 +334,7 @@ decree_worker_exploitation = {
 		state_engineers_mortality_mult = 0.03
 		state_peasants_mortality_mult = 0.07
 		state_slaves_mortality_mult = 0.07
-		state_radicals_from_sol_change_mult = 0.3333
+		state_radicals_from_political_movements_mult = 0.3333
 	}
 	cost = 75	# was 55,40
 }
@@ -315,7 +344,7 @@ decree_promote_national_values = {
 	unlocking_technologies = {
 		centralization
 	}
-	valid = {
+	state_trigger = {
 		OR = {
 			has_assimilating_pops = yes
 			has_converting_pops = yes
@@ -325,7 +354,7 @@ decree_promote_national_values = {
 		state_assimilation_mult = 1.50	# Was 1.25
 		state_conversion_mult = 1.50	# Was 1.25
 		# state_loyalists_from_sol_change_mult = 0.15 (Replaced to only accepted cultures)
-		state_loyalists_from_sol_change_accepted_culture_mult = 0.25
+		state_loyalism_increases_full_acceptance_mult = 0.25
 	}
 	cost = 50	# was 75
 	ai_weight = {
@@ -392,16 +421,7 @@ decree_encourage_urban_services = {
 	unlocking_technologies = {
 		urban_planning
 	}
-	#	valid = {
-	#		NOR = { 
-	#			has_decree = decree_encourage_manufacturing_industry 
-	#			has_decree = decree_encourage_agricultural_industry
-	#			has_decree = decree_encourage_resource_industry
-	#		}
-	#	}		
 	modifier = {
-		# building_group_bg_trade_throughput_add = 0.2 (non-functional)
-		# Need to add urban center output, unsure how to go about it
 		building_group_bg_service_throughput_add = 0.2
 		building_port_throughput_add = 0.2
 		building_railway_throughput_add = 0.2
@@ -454,13 +474,12 @@ decree_encourage_manufacturing_industry = {
 	unlocking_technologies = {
 		manufacturies
 	}
-	#	valid = {
-	#		NOR = { 
-	#			has_decree = decree_encourage_agricultural_industry
-	#			has_decree = decree_encourage_resource_industry
-	#			has_decree = decree_encourage_urban_services
-	#		}
-	#	}	
+	# state_trigger = {
+	# 	NOR = {
+	# 		has_decree = decree_encourage_agricultural_industry
+	# 		has_decree = decree_encourage_resource_industry
+	# 	}
+	# }
 	modifier = {
 		building_group_bg_manufacturing_throughput_add = 0.2
 	}
@@ -509,13 +528,12 @@ decree_encourage_agricultural_industry = {
 	unlocking_technologies = {
 		enclosure
 	}
-	#	valid = {
-	#		NOR = { 
-	#			has_decree = decree_encourage_manufacturing_industry 
-	#			has_decree = decree_encourage_resource_industry
-	#			has_decree = decree_encourage_urban_services
-	#		}
-	#	}		
+	# state_trigger = {
+	# 	NOR = {
+	# 		has_decree = decree_encourage_manufacturing_industry
+	# 		has_decree = decree_encourage_resource_industry
+	# 	}
+	# }
 	modifier = {
 		building_group_bg_agriculture_throughput_add = 0.2
 		building_group_bg_plantations_throughput_add = 0.2
@@ -581,13 +599,12 @@ decree_encourage_resource_industry = {
 	unlocking_technologies = {
 		shaft_mining
 	}
-	#	valid = {
-	#		NOR = { 
-	#			has_decree = decree_encourage_manufacturing_industry 
-	#			has_decree = decree_encourage_agricultural_industry
-	#			has_decree = decree_encourage_urban_services
-	#		}
-	#	}		
+	# state_trigger = {
+	# 	NOR = {
+	# 		has_decree = decree_encourage_manufacturing_industry
+	# 		has_decree = decree_encourage_agricultural_industry
+	# 	}
+	# }
 	modifier = {
 		building_group_bg_mining_throughput_add = 0.2
 		building_group_bg_logging_throughput_add = 0.2
@@ -656,7 +673,7 @@ decree_encourage_resource_industry = {
 
 decree_greener_grass_campaign = {
 	texture = "gfx/interface/icons/decree/decree_greener_grass_campaign.dds"
-	valid = {
+	state_trigger = {
 		is_isolated_from_market = no
 	}
 	modifier = {
@@ -718,7 +735,7 @@ decree_greener_grass_campaign = {
 
 decree_penal_colony = {
 	texture = "gfx/interface/icons/decree/penal.dds"
-	valid = {
+	country_trigger = {
 		owner = {
 			is_player = yes
 			NOT = {
@@ -731,8 +748,10 @@ decree_penal_colony = {
 		state_non_homeland_colony_growth_speed_mult = 0.03
 		state_migration_pull_mult = 0.5
 		state_turmoil_effects_mult = 0.15
-		state_radicals_from_discrimination_mult = 0.25
-		state_radicals_from_sol_change_mult = 0.10
+		state_radicalism_increases_violent_hostility_mult = 0.25
+		state_radicalism_increases_cultural_erasure_mult = 0.25
+		state_radicalism_increases_open_prejudice_mult = 0.25
+		state_radicals_from_political_movements_mult = 0.10
 	}
 	unlocking_technologies = {
 		colonization
@@ -753,6 +772,25 @@ decree_military_training = {
 	cost = 80	# was 140
 	ai_weight = {
 		value = 0
+		
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_barracks
+					count >= 5
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_barracks
+					count >= 10
+				}
+			}
+			add = 50
+		}
 		if = {
 			limit = {
 				any_scope_building = {
@@ -760,17 +798,21 @@ decree_military_training = {
 					count >= 25
 				}
 			}
-			add = 50
+			add = 75
 		}
+		
 		if = {
 			limit = {
-				any_scope_building = {
-					is_building_type = building_barracks
-					count >= 50
+				scope:country = {
+					OR = {
+						has_strategy = ai_strategy_unify_germany
+						has_strategy = ai_strategy_unify_italy
+					}
 				}
 			}
-			add = 50
+			multiply = 5.0
 		}
+		
 		if = {
 			limit = {
 				any_scope_building = {

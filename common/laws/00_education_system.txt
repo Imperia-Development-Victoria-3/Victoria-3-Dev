@@ -6,15 +6,13 @@
 		law_compulsory_primary_school
 	}
 	
+	modifier = {}
+	
 	can_enact = {
 		custom_tooltip = {
 			modifier:country_disallow_law_no_schools_bool = no
 			text = disallow_law_no_schools_tt
 		}
-	}
-	
-	pop_support = {
-		value = 0
 	}
 
 	# AI will never abolish institutions entirely
@@ -55,13 +53,8 @@ law_religious_schools = {
 		country_clergymen_pol_str_mult = 0.05
 		interest_group_ig_devout_pop_attraction_mult = 0.05
 		country_loyalists_from_legitimacy_mult = 0.03
-		state_accepted_birth_rate_mult = 0.012
+		state_birth_rate_mult = 0.006
 		country_leverage_resistance_mult = 0.03
-	}
-	possible_political_movements = {
-		law_patriot_schools
-		law_private_schools
-		law_public_schools
 	}
 	
 	can_impose = {
@@ -77,37 +70,6 @@ law_religious_schools = {
 		}
 	}
 	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_CLERGYMEN"
-			if = {
-				limit = {
-					is_pop_type = clergymen
-				}
-				value = 0.33
-			}
-		}
-		add = {
-			desc = "POP_POVERTY"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_public_schools
-						}
-					}
-				}
-				# SoL 14 gives 0.1 pop support, 13 -> 0.2, 12 -> 0.3, ... 5 -> 1.0
-				value = 15
-				subtract = standard_of_living
-				multiply = 0.1
-				min = 0
-				max = 1
-			}
-		}
-	}
-	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
@@ -117,12 +79,19 @@ law_religious_schools = {
 		
 		if = {
 			limit = {
-				OR = {
-					has_journal_entry = je_terakoya
-				}
 				has_law = law_type:law_no_schools
 			}
-			add = 1000
+			add = 500
+			
+			if = {
+				limit = {
+					OR = {
+						has_journal_entry = je_sick_man_liberal_education
+						has_journal_entry = je_terakoya
+					}
+				}
+				add = 500
+			}
 		}
 		if = {
 			limit = {
@@ -158,6 +127,20 @@ law_religious_schools = {
 			}
 			add = 10
 		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= this
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -179,14 +162,9 @@ law_patriot_schools = {
 		state_education_access_wealth_add = 0.004
 		interest_group_ig_petty_bourgeoisie_pop_attraction_mult = 0.03
 		interest_group_ig_armed_forces_pop_attraction_mult = 0.05
-		state_loyalists_from_sol_change_mult = 0.075
+		state_loyalists_from_political_movements_mult = 0.05
 		country_radicals_from_legitimacy_mult = -0.05
 		country_leverage_resistance_mult = 0.05
-	}
-	possible_political_movements = {
-		law_religious_schools
-		law_private_schools
-		law_public_schools
 	}
 	
 	can_impose = {
@@ -202,45 +180,6 @@ law_patriot_schools = {
 		}
 	}
 	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_SOLDIERS"
-			if = {
-				limit = {
-					is_pop_type = soldiers
-				}
-				value = 0.15
-			}
-		}
-		add = {
-			desc = "POP_OFFICERS"
-			if = {
-				limit = {
-					is_pop_type = officers
-				}
-				value = 0.33
-			}
-		}
-		add = {
-			desc = "POP_POVERTY"
-			if = {
-				limit = {
-					owner = {
-						NOT = {
-							has_law = law_type:law_public_schools
-						}
-					}
-				}
-				# SoL 14 gives 0.1 pop support, 13 -> 0.2, 12 -> 0.3, ... 5 -> 1.0
-				value = 15
-				subtract = standard_of_living
-				multiply = 0.1
-				min = 0
-				max = 1
-			}
-		}
-	}
 	ai_enact_weight_modifier = {
 		#Petitions
 		value = 0
@@ -296,11 +235,6 @@ law_private_schools = {
 		interest_group_ig_industrialists_pop_attraction_mult = 0.03
 		country_company_throughput_bonus_add = 0.02
 	}
-	possible_political_movements = {
-		law_religious_schools
-		law_patriot_schools
-		law_public_schools
-	}
 	can_impose = {
 		OR = {
 			AND = {
@@ -313,19 +247,6 @@ law_private_schools = {
 			can_impose_law_default = yes
 		}
 	}
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_WEALTH"
-			# Wealth 20 gives 0.1 pop support, 22 -> 0.2, 24 -> 0.3, ..., 30 -> 0.6
-			value = wealth
-			subtract = 18
-			divide = 2
-			multiply = 0.1
-			min = 0
-			max = 0.6
-		}
-	}
 	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
@@ -336,27 +257,19 @@ law_private_schools = {
 		
 		if = {
 			limit = {
-				OR = {
-					has_journal_entry = je_terakoya
-				}
-				OR = {
-					has_law = law_type:law_no_schools
-					has_law = law_type:law_patriot_schools
-					has_law = law_type:law_religious_schools
-				}
+				has_law = law_type:law_no_schools
 			}
-			add = 1000
-		}
-		if = {
-			limit = {
-				has_journal_entry = je_sick_man_liberal_education
-				OR = {
-					has_law = law_type:law_no_schools
-					has_law = law_type:law_patriot_schools
-					has_law = law_type:law_religious_schools
+			add = 500
+			
+			if = {
+				limit = {
+					OR = {
+						has_journal_entry = je_sick_man_liberal_education
+						has_journal_entry = je_terakoya
+					}
 				}
+				add = 500
 			}
-			add = 1000
 		}
 	}
 	
@@ -380,6 +293,20 @@ law_private_schools = {
 				power_bloc ?= { has_principle_group = principle_group:principle_group_advanced_research }
 			}
 			add = 10
+		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= this
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
 		}
 	}
 }
@@ -407,11 +334,6 @@ law_public_schools = {
 		interest_group_ig_rural_folk_pol_str_mult = 0.02
 		interest_group_ig_trade_unions_pol_str_mult = 0.03
 	}
-	possible_political_movements = {
-		law_private_schools
-		law_religious_schools
-		law_patriot_schools
-	}
 	
 	can_impose = {
 		OR = {
@@ -426,28 +348,6 @@ law_public_schools = {
 		}
 	}
 	
-	pop_support = {
-		value = 0
-		add = {
-			desc = "POP_ACADEMICS"
-			if = {
-				limit = {
-					is_pop_type = academics
-				}
-				value = 0.25
-			}
-		}
-		add = {
-			desc = "POP_POVERTY"
-			# SoL 14 gives 0.1 pop support, 13 -> 0.2, 12 -> 0.3, ... 5 -> 1.0
-			value = 15
-			subtract = standard_of_living
-			multiply = 0.1
-			min = 0
-			max = 1
-		}
-	}
-	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		if = {
@@ -457,12 +357,19 @@ law_public_schools = {
 		
 		if = {
 			limit = {
-				OR = {
-					has_journal_entry = je_terakoya
-				}
 				has_law = law_type:law_no_schools
 			}
-			add = 1000
+			add = 500
+			
+			if = {
+				limit = {
+					OR = {
+						has_journal_entry = je_sick_man_liberal_education
+						has_journal_entry = je_terakoya
+					}
+				}
+				add = 500
+			}
 		}
 		if = {
 			limit = {
@@ -497,6 +404,20 @@ law_public_schools = {
 				power_bloc ?= { has_principle_group = principle_group:principle_group_advanced_research }
 			}
 			add = 10
+		}
+		
+		if = {
+			limit = {
+				scope:target_country = {
+					c:BIC ?= this
+					OR = {
+						has_journal_entry = je_british_dictate_plantations
+						has_journal_entry = je_british_dictate_military
+						has_journal_entry = je_british_dictate_universities
+					}
+				}
+			}
+			multiply = 0
 		}
 	}
 }

@@ -4,6 +4,17 @@
 	
 	progressiveness = -50
 	
+	modifier = {
+		unit_morale_loss_mult = 0.1
+		unit_experience_gain_mult = -0.25
+		state_conscription_rate_add = 0.04
+		country_aristocrats_pol_str_mult = 0.25
+		country_military_goods_cost_mult = -0.1
+		state_building_barracks_max_level_add = 25
+		state_building_conscription_center_max_level_add = 50
+		country_leverage_resistance_mult = -0.10
+		country_officers_pol_str_mult = 1
+	}
 	can_impose = {
 		OR = {
 			AND = {
@@ -15,17 +26,6 @@
 			}
 			can_impose_law_default = yes
 		}
-	}
-	
-	modifier = {
-		unit_morale_loss_mult = 0.1
-		unit_experience_gain_mult = -0.25
-		state_conscription_rate_add = 0.04
-		country_aristocrats_pol_str_mult = 0.25
-		country_military_goods_cost_mult = -0.1
-		state_building_barracks_max_level_add = 25
-		state_building_conscription_center_max_level_add = 50
-		country_leverage_resistance_mult = -0.10
 	}
 	
 	on_enact = {
@@ -44,26 +44,6 @@
 			}
 			custom_tooltip = military_pops_af_ig_shift_effect_negative_tt
 			custom_tooltip = non_military_pops_af_ig_shift_effect_negative_tt
-		}
-	}
-	
-	possible_political_movements = {
-		law_professional_army
-		law_mass_conscription
-		law_national_militia
-	}
-	
-	pop_support = {
-		value = 0
-		# Aristocrats like feudalism
-		add = {
-			desc = "POP_ARISTOCRATS"
-			if = {
-				limit = {
-					is_pop_type = aristocrats
-				}
-				value = 0.33
-			}
 		}
 	}
 
@@ -90,6 +70,16 @@ law_professional_army = {
 	
 	unlocking_technologies = { military_drill }
 	
+	modifier = {
+		unit_morale_loss_mult = -0.1
+		state_conscription_rate_add = 0.01
+		country_officers_pol_str_mult = 0.25
+		country_soldiers_pol_str_mult = 0.1
+		state_building_barracks_max_level_add = 30
+		state_building_conscription_center_max_level_add = 25
+		unit_experience_gain_mult = 0.33333
+		country_leverage_resistance_mult = 0.10
+	}
 	can_impose = {
 		OR = {
 			AND = {
@@ -102,22 +92,6 @@ law_professional_army = {
 			can_impose_law_default = yes
 		}
 	}
-	
-	modifier = {
-		unit_morale_loss_mult = -0.1
-		state_conscription_rate_add = 0.01
-		country_officers_pol_str_mult = 0.25
-		country_soldiers_pol_str_mult = 0.1
-		state_building_barracks_max_level_add = 30
-		state_building_conscription_center_max_level_add = 25
-		unit_experience_gain_mult = 0.33333
-		country_leverage_resistance_mult = 0.10
-	}
-	
-	possible_political_movements = {
-		law_mass_conscription
-	}
-	
 	on_enact = {
 		if = {
 			limit = {
@@ -133,30 +107,6 @@ law_professional_army = {
 			}
 			custom_tooltip = non_military_pops_af_ig_shift_effect_tt
 			custom_tooltip = military_pops_af_ig_shift_effect_tt
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		# Officers like professionalism
-		add = {
-			desc = "POP_OFFICERS"
-			if = {
-				limit = {
-					is_pop_type = officers
-				}
-				value = 0.5
-			}
-		}
-		# soldiers are broadly in favor of this also
-		add = {
-			desc = "POP_SOLDIERS"
-			if = {
-				limit = {
-					is_pop_type = soldiers
-				}
-				value = 0.25
-			}
 		}
 	}
 	
@@ -183,7 +133,13 @@ law_professional_army = {
 				NOT = { has_strategy = ai_strategy_reactionary_agenda }
 				OR = {
 					NOT = { has_strategy = ai_strategy_conservative_agenda }
-					any_political_movement = { desired_law = law_type:law_professional_army }
+					any_political_movement = {
+						law_stance = {
+							law = law_type:law_professional_army
+							value > neutral
+						}
+						political_movement_support >= 0.10
+					}
 					has_technology_researched = napoleonic_warfare
 				}
 			}
@@ -218,13 +174,19 @@ law_national_militia = {
 		state_conscription_rate_add = 0.05
 		interest_group_ig_armed_forces_pol_str_mult = -0.25
 		country_leverage_resistance_mult = 0.25
+		country_officers_pol_str_mult = 1
+		country_soldiers_pol_str_mult = 1
 		state_building_barracks_max_level_add = 5
 		state_building_conscription_center_max_level_add = 100
 	}
 	
-	possible_political_movements = {
-		law_professional_army
-		law_mass_conscription
+	can_enact = {
+		OR = {
+			is_power_bloc_leader = no
+			power_bloc ?= {
+				NOT = { has_identity = identity:identity_military_treaty_organization }
+			}
+		}
 	}
 	
 	on_enact = {
@@ -240,20 +202,6 @@ law_national_militia = {
 			}
 			custom_tooltip = military_pops_af_ig_shift_effect_negative_tt
 			custom_tooltip = non_military_pops_af_ig_shift_effect_negative_tt
-		}
-	}
-	
-	pop_support = {
-		value = 0
-		# Farmers like waving a rifle around and telling people to get off their land
-		add = {
-			desc = "POP_FARMERS"
-			if = {
-				limit = {
-					is_pop_type = farmers
-				}
-				value = 0.25
-			}
 		}
 	}
 	
@@ -282,6 +230,17 @@ law_mass_conscription = {
 	
 	unlocking_technologies = { enlistment_offices }
 	
+	modifier = {
+		unit_morale_loss_mult = 0.05
+		state_conscription_rate_add = 0.03
+		country_military_goods_cost_mult = -0.05
+		building_training_rate_mult = 1
+		state_building_barracks_max_level_add = 100
+		state_building_conscription_center_max_level_add = 100
+		country_leverage_resistance_mult = 0.15
+		country_officers_pol_str_mult = 1.5
+		country_soldiers_pol_str_mult = 1
+	}
 	can_impose = {
 		OR = {
 			AND = {
@@ -293,16 +252,6 @@ law_mass_conscription = {
 			}
 			can_impose_law_default = yes
 		}
-	}
-	
-	modifier = {
-		unit_morale_loss_mult = 0.05
-		state_conscription_rate_add = 0.03
-		country_military_goods_cost_mult = -0.05
-		building_training_rate_mult = 1
-		state_building_barracks_max_level_add = 100
-		state_building_conscription_center_max_level_add = 100
-		country_leverage_resistance_mult = 0.15
 	}
 	
 	on_enact = {
@@ -321,14 +270,6 @@ law_mass_conscription = {
 		}
 	}
 	
-	possible_political_movements = {
-		law_mass_conscription
-	}
-	
-	pop_support = {
-		value = 0
-	}
-	
 	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
@@ -339,7 +280,10 @@ law_mass_conscription = {
 		
 		if = {
 			limit = {
-				has_journal_entry = je_sick_man_army
+				OR = {
+					has_journal_entry = je_sick_man_army
+					has_journal_entry = je_great_reforms_military
+				}
 				has_law = law_type:law_peasant_levies
 			}
 			add = 1000
@@ -352,7 +296,13 @@ law_mass_conscription = {
 				NOT = { has_strategy = ai_strategy_reactionary_agenda }
 				OR = {
 					NOT = { has_strategy = ai_strategy_conservative_agenda }
-					any_political_movement = { desired_law = law_type:law_professional_army }
+					any_political_movement = {
+						law_stance = {
+							law = law_type:law_mass_conscription
+							value > neutral
+						}
+						political_movement_support >= 0.10
+					}
 					has_technology_researched = napoleonic_warfare
 				}
 			}

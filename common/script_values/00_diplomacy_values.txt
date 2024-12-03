@@ -1,4 +1,16 @@
-﻿leverage_threshold_to_invite = 200	# Minimum leverage advantage from power bloc on country to be able to invite the country
+﻿leverage_threshold_to_invite = 200 	# Minimum leverage advantage from power bloc on country to be able to invite the country
+decrease_autonomy_liberty_desire_to_add = 10 	# When you decrease autonomy of one of your subject, other direct subjects increase their liberty desire by this
+
+annex_subject_max_liberty_desire_change = 25
+
+annex_subject_base_liberty_desire_change = {
+	scope:target_country ?= {
+		add = prestige
+	}
+	round = yes
+	min = 1
+	max = annex_subject_max_liberty_desire_change
+}
 
 # root = pact
 # root.first_country: first country in the pact
@@ -16,33 +28,33 @@ liberty_desire_weekly_change = {
 		add = {
 			value = -0.2
 			desc = "gov_chartered_company"
-		}
+		}	
 	}
 
 	# Special - DEI collapses if independent
 	if = {
-		limit = {
-			root.first_country = { c:NET ?= this }
-			root.second_country = { c:DEI ?= this }
+		limit = { 
+			root.first_country = { c:NET ?= this } 
+			root.second_country = { c:DEI ?= this } 
 		}
 		add = {
 			value = -0.2
 			desc = "DEI"
-		}
-	}
-
+		}	
+	}		
+	
 	# Special - Pacify the Steppes
 	if = {
-		limit = {
-			root.first_country = { has_journal_entry = je_pacify_the_steppes }
-			root.second_country = { has_government_type = gov_zhuz }
+		limit = { 
+			root.first_country = { has_journal_entry = je_pacify_the_steppes } 
+			root.second_country = { has_government_type = gov_zhuz } 
 		}
 		add = {
 			value = -0.2
 			desc = "pacify_the_steppe_modifier"
-		}
-	}
-	
+		}	
+	}		
+
 	add = {
 		if = {
 			limit = { "root.second_country.relations(root.first_country)" < relations_threshold:hostile }
@@ -90,7 +102,7 @@ liberty_desire_weekly_change = {
 			limit = { "root.second_country.relations(root.first_country)" >= relations_threshold:cordial }
 			add = {
 				add = -0.025
-				desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_RELATIONS_CORDIAL"
+				desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_RELATIONS_CORDIAL"				
 			}
 		}
 	}
@@ -122,7 +134,7 @@ liberty_desire_weekly_change = {
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_EXEMPT_FROM_SERVICE"
 		}
 	}
-	
+		
 	if = {
 		limit = { root.first_country.prestige < 1 }
 		add = {
@@ -136,16 +148,16 @@ liberty_desire_weekly_change = {
 			add = -0.10
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_NO_PRESTIGE_NEGATIVE"
 		}
-	}
+	}	
 	else_if = {
 		limit = {
 			OR = {
 				is_diplomatic_action_type = protectorate
 				is_diplomatic_action_type = tributary
 			}
-		}
+		}				
 		if = {
-			limit = {
+			limit = { 	
 				root.first_country.prestige > {
 					add = root.second_country.prestige
 					# determines the multiple of prestige the overlord must have achieved in order for prestige advantage to have a negative impact on Liberty Desire rather than positive
@@ -171,7 +183,7 @@ liberty_desire_weekly_change = {
 				max = 2.5
 				desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_PRESTIGE_DIFFERENCE_1_5_POSITIVE"
 			}
-		}
+		}	
 	}
 	else_if = {
 		limit = {
@@ -179,9 +191,9 @@ liberty_desire_weekly_change = {
 				is_diplomatic_action_type = personal_union
 				is_diplomatic_action_type = dominion
 			}
-		}
+		}				
 		if = {
-			limit = {
+			limit = { 	
 				root.first_country.prestige > {
 					add = root.second_country.prestige
 					# determines the multiple of prestige the overlord must have achieved in order for prestige advantage to have a negative impact on Liberty Desire rather than positive
@@ -207,17 +219,17 @@ liberty_desire_weekly_change = {
 				max = 2.5
 				desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_PRESTIGE_DIFFERENCE_2_0_POSITIVE"
 			}
-		}
-	}
+		}	
+	}	
 	else_if = {
 		limit = {
 			OR = {
 				is_diplomatic_action_type = puppet
 				is_diplomatic_action_type = vassal
 			}
-		}
+		}				
 		if = {
-			limit = {
+			limit = { 	
 				root.first_country.prestige > {
 					add = root.second_country.prestige
 					# determines the multiple of prestige the overlord must have achieved in order for prestige advantage to have a negative impact on Liberty Desire rather than positive
@@ -243,8 +255,8 @@ liberty_desire_weekly_change = {
 				max = 2.5
 				desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_PRESTIGE_DIFFERENCE_3_0_POSITIVE"
 			}
-		}
-	}
+		}	
+	}		
 	
 	second_country = {
 		add = {
@@ -304,7 +316,7 @@ liberty_desire_weekly_change = {
 			subtract = "root.second_country.economic_dependence(root.first_country)"
 			divide = 10
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_ECONOMIC_DEPENDENCE"
-		}
+		}		
 	}
 	else = {
 		add = {
@@ -312,7 +324,7 @@ liberty_desire_weekly_change = {
 			subtract = "root.second_country.economic_dependence(root.first_country)"
 			divide = 3
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_ECONOMIC_DEPENDENCE"
-		}
+		}	
 	}
 	
 	if = {
@@ -321,7 +333,7 @@ liberty_desire_weekly_change = {
 			root.second_country.capital = { is_isolated_from_market = yes }
 		}
 		add = {
-			value = 1
+			value = 1 
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_ISOLATED_FROM_MARKET"
 		}
 	}
@@ -330,18 +342,18 @@ liberty_desire_weekly_change = {
 			root.second_country.market = root.first_country.market
 			root.first_country.supply_network_strength < 1
 			root.second_country = { has_port = yes }
-			NOT = { root.second_country = { is_adjacent_to_country = root.first_country } }
+			NOT = { root.second_country = { is_adjacent_to_country = root.first_country }}
 		}
 		add = {
 			value = 1
 			subtract = root.first_country.supply_network_strength
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_LOW_SUPPLY_NETWORK_STRENGTH"
 		}
-	}
+	}	
 	
 	if = {
 		limit = {
-			root.first_country = {
+			root.first_country = { 
 				is_in_power_bloc = yes
 				power_bloc = {
 					has_principle = principle:principle_sacred_civics_2
@@ -349,9 +361,11 @@ liberty_desire_weekly_change = {
 				religion = root.second_country.religion
 			}
 		}
-		desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_SACRED_CIVICS"
-		add = -0.1
-	}
+		 add = { 
+		 	value = -0.1 desc = 
+		 	"LIBERTY_DESIRE_WEEKLY_CHANGE_SACRED_CIVICS"
+		 }
+	}	
 	
 	add = {
 		value = root.second_country.modifier:country_liberty_desire_add
@@ -366,7 +380,7 @@ liberty_desire_weekly_change = {
 	save_temporary_value_as = pre_scaling_value
 	
 	if = {
-		limit = {
+		limit = { 
 			scope:pre_scaling_value < 0
 			second_country = {
 				liberty_desire < 50
@@ -380,7 +394,7 @@ liberty_desire_weekly_change = {
 		max = -0.01
 	}
 	else_if = {
-		limit = {
+		limit = { 
 			scope:pre_scaling_value > 0
 			second_country = {
 				liberty_desire > 50
@@ -393,7 +407,7 @@ liberty_desire_weekly_change = {
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_SCALING_HIGH"
 		}
 		min = 0.01
-	}
+	}	
 	
 	save_temporary_value_as = pre_mult_modifiers_value
 	

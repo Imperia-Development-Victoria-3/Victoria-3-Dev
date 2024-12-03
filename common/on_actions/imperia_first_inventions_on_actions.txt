@@ -1,6 +1,35 @@
 ﻿# Root = The applicable country
 # scope:technology = The technology type they just acquired
 on_imperia_acquired_technology = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+				has_technology_researched = nationalism
+				NOT = {
+					has_global_variable = ready_for_frankfurt
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						filter = {
+							OR = {
+								country_has_primary_culture = cu:north_german
+								country_has_primary_culture = cu:south_german
+							}
+						}
+						has_technology_researched = nationalism
+						percent >= 0.65
+					}
+				}
+				set_global_variable = ready_for_frankfurt
+			}
+		}
+	}
 	events = {
 		first_inventions_events.3	#Cars
 		first_inventions_events.5	#Phones

@@ -447,10 +447,8 @@ frankfurt_parliament.2 = {
 		}
 		custom_tooltip = would_happen_upon_consolidation_tt
 		show_as_tooltip = {
-			add_modifier = {
-				name = crown_from_the_gutter
-				years = 20
-				is_decaying = yes
+			add_journal_entry = {
+				type = je_imperia_frankfurt_gutter_crown_main
 			}
 			if = {
 				limit = {
@@ -1047,5 +1045,732 @@ frankfurt_parliament.9 = {
 			}
 			post_notification = imperia_gutter_german_revolt_began
 		}
+	}
+}
+
+frankfurt_parliament.10 = {
+	type = country_event
+	title = frankfurt_parliament.10.t
+	desc = frankfurt_parliament.10.desc
+	flavor = frankfurt_parliament.10.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		add_journal_entry = {
+			type = je_imperia_frankfurt_gutter_crown_economy
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_gutter_crown_political
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_gutter_crown_admin
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_gutter_crown_military
+		}
+	}
+	option = {
+		name = frankfurt_parliament.10.a
+		default_option = yes
+		show_as_tooltip = {
+			add_journal_entry = {
+				type = je_imperia_frankfurt_gutter_crown_economy
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_gutter_crown_political
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_gutter_crown_admin
+			}
+			add_journal_entry = {
+				type = je_imperia_frankfurt_gutter_crown_military
+			}
+		}
+	}
+}
+
+# Political Integration event - state bureaucrats
+frankfurt_parliament.11 = {
+	type = country_event
+	title = frankfurt_parliament.11.t
+	desc = frankfurt_parliament.11.desc
+	flavor = frankfurt_parliament.11.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.11.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_elected_bureaucrats
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_bureaucrats_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Replacement - elected bureaucrats
+	option = {
+		name = frankfurt_parliament.11.d
+		trigger = {
+			has_law = law_type:law_elected_bureaucrats
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_elected_bureaucrats_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.11.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_hereditary_bureaucrats
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_bureaucrats_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Integration - hereditary bureaucrats
+	option = {
+		name = frankfurt_parliament.11.b
+		trigger = {
+			has_law = law_type:law_hereditary_bureaucrats
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_hereditary_bureaucrats_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.11.e
+		custom_tooltip = frankfurt_left_state_alone_tt
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_bureaucrats_left_be_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:integrating_state.state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = yes
+			}
+		}
+	}
+}
+
+# Political Integration event - state internal security
+frankfurt_parliament.12 = {
+	type = country_event
+	title = frankfurt_parliament.12.t
+	desc = frankfurt_parliament.12.desc
+	flavor = frankfurt_parliament.12.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.12.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_no_home_affairs
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_internal_security_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Replacement - no home affairs
+	option = {
+		name = frankfurt_parliament.12.d
+		trigger = {
+			has_law = law_type:law_no_home_affairs
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_no_internal_security_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.12.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_provincial_courts
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_internal_security_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Integration - provincial courts
+	option = {
+		name = frankfurt_parliament.12.b
+		trigger = {
+			has_law = law_type:law_provincial_courts
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_provincial_internal_security_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.12.e
+		custom_tooltip = frankfurt_left_state_alone_tt
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_internal_security_left_be_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:integrating_state.state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = yes
+			}
+		}
+	}
+}
+
+# Political Integration event - state Home defence
+frankfurt_parliament.13 = {
+	type = country_event
+	title = frankfurt_parliament.13.t
+	desc = frankfurt_parliament.13.desc
+	flavor = frankfurt_parliament.13.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.13.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_national_guard
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_home_defence_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Replacement - national guard
+	option = {
+		name = frankfurt_parliament.13.d
+		trigger = {
+			has_law = law_type:law_national_guard
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_national_guard_home_defence_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.13.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_localized_garrisons
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_home_defence_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Integration - local garrisons
+	option = {
+		name = frankfurt_parliament.13.b
+		trigger = {
+			has_law = law_type:law_localized_garrisons
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_local_garrisons_home_defence_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.13.e
+		custom_tooltip = frankfurt_left_state_alone_tt
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_home_defence_left_be_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:integrating_state.state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = yes
+			}
+		}
+	}
+}
+
+# Political Integration event - state land reform
+frankfurt_parliament.14 = {
+	type = country_event
+	title = frankfurt_parliament.14.t
+	desc = frankfurt_parliament.14.desc
+	flavor = frankfurt_parliament.14.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.14.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_tenant_farmers
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_land_reform_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Replacement - tenant farmers
+	option = {
+		name = frankfurt_parliament.14.d
+		trigger = {
+			has_law = law_type:law_tenant_farmers
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_tenant_farmers_land_reform_replacement_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.14.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_serfdom
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_land_reform_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Integration - serfdom
+	option = {
+		name = frankfurt_parliament.14.b
+		trigger = {
+			has_law = law_type:law_serfdom
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_serfdom_land_reform_integration_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.14.e
+		custom_tooltip = frankfurt_left_state_alone_tt
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_land_reform_left_be_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:integrating_state.state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = yes
+			}
+		}
+	}
+}
+
+# Political Integration event - state policing
+frankfurt_parliament.15 = {
+	type = country_event
+	title = frankfurt_parliament.15.t
+	desc = frankfurt_parliament.15.desc
+	flavor = frankfurt_parliament.15.f
+	placement = scope:integrating_state
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_state_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_state_event_immediate = yes
+	}
+	# Replacement
+	option = {
+		name = frankfurt_parliament.15.c
+		trigger = {
+			NOT = {
+				has_law = law_type:law_dedicated_police
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_policing_replacement_modifier
+				years = 10
+			}
+			add_radicals_in_state = {
+				value = large_radicals
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Replacement - dedicated police
+	option = {
+		name = frankfurt_parliament.15.d
+		trigger = {
+			has_law = law_type:law_dedicated_police
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_dedicated_policing_replacement_modifier
+				years = 10
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Integration
+	option = {
+		name = frankfurt_parliament.15.a
+		trigger = {
+			NOT = {
+				has_law = law_type:law_local_police
+			}
+		}
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_standard_policing_integration_modifier
+				years = 10
+			}
+			add_radicals_in_state = {
+				value = medium_radicals
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Integration - local police
+	option = {
+		name = frankfurt_parliament.15.b
+		trigger = {
+			has_law = law_type:law_local_police
+		}
+		highlighted_option = yes
+		default_option = yes
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_local_policing_integration_modifier
+				years = 10
+			}
+			add_radicals_in_state = {
+				value = 0.025
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# left be
+	option = {
+		name = frankfurt_parliament.15.e
+		custom_tooltip = frankfurt_left_state_alone_tt
+		scope:integrating_state = {
+			add_modifier = {
+				name = gutter_crown_political_je_policing_left_be_modifier
+				years = 10
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:integrating_state.state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = yes
+			}
+		}
+	}
+}
+
+frankfurt_parliament.16 = {
+	type = country_event
+	title = frankfurt_parliament.16.t
+	desc = frankfurt_parliament.16.desc
+	flavor = frankfurt_parliament.16.f
+	placement = scope:integrating_country
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 3
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	trigger = {
+		gutter_crown_political_integration_country_event_trigger = yes
+	}
+	immediate = {
+		gutter_crown_political_integration_country_event_immediate = yes
+	}
+	# Integrate local prince as head of the state, puppeting them
+	option = {
+		name = frankfurt_parliament.16.a
+		if = {
+			limit = {
+				scope:integrating_country.country_rank = rank_value:insignificant_power
+			}
+			create_incident = {
+				country = scope:integrating_country
+				value = 4
+			}
+		}
+		else = {
+			create_incident = {
+				country = scope:integrating_country
+				value = 8
+			}
+		}
+		create_diplomatic_pact = {
+			country = scope:integrating_country
+			type = dominion
+		}
+	}
+	# Replace local institutions with civilian government, annexing them
+	option = {
+		name = frankfurt_parliament.16.b
+		trigger = {
+			scope:integrating_country.country_rank <= rank_value:minor_power
+		}
+		default_option = yes
+		scope:integrating_country = {
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				every_scope_state = {
+					state_region = {
+						add_devastation = 25
+					}
+				}
+				root = {
+					create_incident = {
+						country = scope:integrating_country
+						value = 12.5
+					}
+				}
+			}
+			else = {
+				every_scope_state = {
+					state_region = {
+						add_devastation = 50
+					}
+				}
+				root = {
+					create_incident = {
+						country = scope:integrating_country
+						value = 25
+					}
+				}
+			}
+			every_scope_state = {
+				state_region = {
+					set_variable = {
+						name = gutter_crown_political_je_integration_considered
+						value = yes
+					}
+				}
+			}
+		}
+		annex_with_incorporation = scope:integrating_country
+	}
+	# Leave be, letting them stay independent
+	option = {
+		name = frankfurt_parliament.16.c
 	}
 }

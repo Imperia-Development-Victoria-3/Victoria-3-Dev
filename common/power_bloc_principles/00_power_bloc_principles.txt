@@ -707,7 +707,7 @@ principle_food_standardization_1 = {
 		has_dlc_feature = power_bloc_features
 	}
 	member_modifier = {
-		state_colony_growth_creation_mult = 0.05
+		state_colony_growth_creation_factor = 0.05
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
 	}
@@ -746,7 +746,7 @@ principle_food_standardization_2 = {
 		building_group_bg_ranching_throughput_add = 0.05
 	}
 	member_modifier = {
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
 		# Lower mortality
@@ -772,7 +772,7 @@ principle_food_standardization_3 = {
 		country_authority_mult = -0.05
 	}
 	member_modifier = {
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
 		state_mortality_mult = -0.05
@@ -856,7 +856,8 @@ principle_police_coordination_2 = {
 	institution_modifier = {
 		country_authority_add = 50
 		# Police institution reduces radicalism of political movements
-		political_movement_radicalism_mult = -0.02
+		state_radicals_from_political_movements_mult = -0.02
+		#political_movement_radicalism_mult = -0.02 # Dead as of 1.8.1
 		interest_group_ig_armed_forces_pop_attraction_mult = 0.03
 	}
 	ai_weight = {
@@ -891,7 +892,8 @@ principle_police_coordination_3 = {
 	institution_modifier = {
 		country_authority_add = 75
 		# Police institution reduces radicalism of political movements
-		political_movement_radicalism_mult = -0.04
+		state_radicals_from_political_movements_mult = -0.04
+		#political_movement_radicalism_mult = -0.04 # Dead as of 1.8.1
 		interest_group_ig_armed_forces_pop_attraction_mult = 0.05
 	}
 	ai_weight = {
@@ -1047,7 +1049,7 @@ principle_military_industry_2 = {
 		state_shopkeepers_investment_pool_efficiency_mult = 0.15
 	}
 	member_modifier = {
-		state_radicals_from_sol_change_mult = 0.1
+		state_radicals_from_political_movements_mult = 0.1
 		building_war_machine_industry_throughput_add = 0.1
 		building_arms_industry_throughput_add = 0.1
 		building_munition_plants_throughput_add = 0.1
@@ -1076,7 +1078,7 @@ principle_military_industry_3 = {
 		state_shopkeepers_investment_pool_efficiency_mult = 0.25
 	}
 	member_modifier = {
-		state_radicals_from_sol_change_mult = 0.15
+		state_radicals_from_political_movements_mult = 0.15
 		building_war_machine_industry_throughput_add = 0.15
 		building_arms_industry_throughput_add = 0.15
 		building_munition_plants_throughput_add = 0.15
@@ -1153,12 +1155,14 @@ principle_colonial_offices_2 = {
 		building_group_bg_mining_unincorporated_throughput_add = 0.05
 	}
 	non_leader_modifier = {
-		state_radicals_from_discrimination_mult = -0.1
+		state_radicalism_increases_violent_hostility_mult = 0.1
+		state_radicalism_increases_cultural_erasure_mult = 0.1
+		state_radicalism_increases_open_prejudice_mult = 0.1
 	}
 	institution = institution_colonial_affairs
 	institution_modifier = {
 		# Members get higher colony growth for each level of institution
-		state_colony_growth_creation_mult = 0.01
+		state_colony_growth_creation_factor = 0.01
 		country_infamy_generation_against_unrecognized_mult = -0.05
 	}
 	ai_weight = {
@@ -1186,12 +1190,14 @@ principle_colonial_offices_3 = {
 		building_group_bg_mining_unincorporated_throughput_add = 0.05
 	}
 	non_leader_modifier = {
-		state_radicals_from_discrimination_mult = -0.1
+		state_radicalism_increases_violent_hostility_mult = 0.1
+		state_radicalism_increases_cultural_erasure_mult = 0.1
+		state_radicalism_increases_open_prejudice_mult = 0.1
 	}
 	institution = institution_colonial_affairs
 	institution_modifier = {
 		# Modifiers from previous level(s)	
-		state_colony_growth_creation_mult = 0.03
+		state_colony_growth_creation_factor = 0.03
 		country_infamy_generation_against_unrecognized_mult = -0.07
 		country_secession_progress_mult = -0.05
 		country_liberty_desire_of_subjects_add = -0.01
@@ -1350,8 +1356,8 @@ principle_creative_legislature_2 = {
 	member_modifier = {
 		country_law_enactment_stall_mult = -0.33
 		# Members political movements to preserve and restore have lower support
-		political_movement_preserve_support_mult = -0.2
-		political_movement_restore_support_mult = -0.2
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.2
+		political_movement_radicalism_from_enactment_approval_mult = -0.2
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -1374,8 +1380,8 @@ principle_creative_legislature_3 = {
 	}
 	member_modifier = {
 		country_law_enactment_stall_mult = -0.33
-		political_movement_preserve_support_mult = -0.33
-		political_movement_restore_support_mult = -0.33
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.33
+		political_movement_radicalism_from_enactment_approval_mult = -0.33
 		# Can have one additional setback before failing a law enactment
 		country_law_enactment_max_setbacks_add = 1
 	}
@@ -1402,10 +1408,11 @@ principle_freedom_of_movement_1 = {
 	member_modifier = {
 		# Increased migration
 		state_migration_pull_mult = 0.15
-		state_colony_growth_creation_mult = 0.05
+		state_colony_growth_creation_factor = 0.05
 		interest_group_ig_rural_folk_pol_str_mult = 0.1
 		state_expected_sol_from_literacy = 1
-		political_movement_radicalism_mult = 0.05
+		state_radicals_from_political_movements_mult = 0.05
+		#political_movement_radicalism_mult = 0.05 # Dead as of 1.8.1
 	}
 	ai_weight = {
 		value = 100
@@ -1460,10 +1467,11 @@ principle_freedom_of_movement_2 = {
 	member_modifier = {
 		country_mass_migration_attraction_mult = 0.05
 		state_migration_pull_mult = 0.1
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.15
 		state_expected_sol_from_literacy = 3
-		political_movement_radicalism_mult = 0.10
+		state_radicals_from_political_movements_mult = 0.1
+		#political_movement_radicalism_mult = 0.10 # Dead as of 1.8.1
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -1478,10 +1486,11 @@ principle_freedom_of_movement_3 = {
 		country_mass_migration_attraction_mult = 0.15
 		state_migration_pull_mult = 0.15
 		state_migration_pull_unincorporated_mult = 0.1
-		state_colony_growth_creation_mult = 0.1
+		state_colony_growth_creation_factor = 0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.25
 		state_expected_sol_from_literacy = 5
-		political_movement_radicalism_mult = 0.2
+		state_radicals_from_political_movements_mult = 0.2
+		#political_movement_radicalism_mult = 0.2 # Dead as of 1.8.1
 	}
 	power_bloc_modifier = {
 		# Unlocks a new PM for Universities and Art Academies that increases migration attraction, unlocked per trigger in the PM
@@ -1556,7 +1565,10 @@ principle_divine_economics_3 = {
 	}
 	member_modifier = {
 		country_subject_income_transfer_heathen_mult = 0.5
-		# SoL changes less radical/more loyalist for accepted religion pops
+
+		# Higher wages for state religion pops
+		country_state_religion_wages_mult = 0.25
+
 		# New PM for Financial Districts/Manor Houses unlocked via trigger
 		state_clergymen_investment_pool_efficiency_mult = 0.25
 		state_clergymen_investment_pool_contribution_add = 0.05
@@ -1693,8 +1705,8 @@ principle_sacred_civics_1 = {
 		# This modifier actually has no effect and is just here to generate a tooltip, the effects are scripted in diplomactic_actions
 		country_higher_diplomatic_acceptance_same_religion_bool = yes
 		state_conversion_mult = 0.33
-		state_radicals_from_sol_change_accepted_religion_mult = -0.1
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.1
+		state_radicalism_increases_full_acceptance_mult = -0.1
+		state_loyalism_increases_full_acceptance_mult = 0.1
 	}
 	ai_weight = {
 		value = 200	# Religious PBs should tend towards picking the religious principles
@@ -1740,8 +1752,8 @@ principle_sacred_civics_2 = {
 		country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
 		country_reduced_liberty_desire_same_religion_bool = yes
 		state_conversion_mult = 0.66
-		state_radicals_from_sol_change_accepted_religion_mult = -0.15
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.15
+		state_radicalism_increases_full_acceptance_mult = -0.15
+		state_loyalism_increases_full_acceptance_mult = 0.15
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -1758,8 +1770,8 @@ principle_sacred_civics_3 = {
 		country_higher_diplomatic_acceptance_same_religion_bool = yes
 		country_reduced_liberty_desire_same_religion_bool = yes
 		state_conversion_mult = 1
-		state_radicals_from_sol_change_accepted_religion_mult = -0.25
-		state_loyalists_from_sol_change_accepted_religion_mult = 0.25
+		state_radicalism_increases_full_acceptance_mult = -0.25
+		state_loyalism_increases_full_acceptance_mult = 0.25
 	}
 	leader_modifier = {
 		# Allows leader to impose their own law onto member countries in the church_and_state law group
