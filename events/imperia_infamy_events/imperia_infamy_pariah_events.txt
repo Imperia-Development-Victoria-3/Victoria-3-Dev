@@ -1,5 +1,182 @@
 ﻿namespace = imperia_infamy_pariah
-
+# Discriminated pops wants freedom
 imperia_infamy_pariah.1 = {
-    
+	type = country_event
+	title = imperia_infamy_pariah.1.t
+	desc = imperia_infamy_pariah.1.d
+	flavor = imperia_infamy_pariah.1.f
+	placement = scope:riot_state
+	event_image = {
+		video = "unspecific_vandalized_storefront"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	duration = 3
+	trigger = {
+		# Needs a non-primary culture pop in the country, will nearly always be true
+		any_scope_pop = {
+			culture = {
+				NOT = {
+					is_primary_culture_of = root
+				}
+			}
+		}
+	}
+	immediate = {
+		# In case you got a non-primary culture w/ accompanying homeland in your country, where your primary culture(s) dont have a homeland
+		if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					NOT = {
+						is_homeland_of_country_cultures = root
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					NOT = {
+						is_homeland_of_country_cultures = root
+					}
+				}
+				random_scope_culture = {
+					limit = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Else, try again but without the requirement of primary culture non-homeland
+		else_if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				random_scope_culture = {
+					limit = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Else, try without the non-primary culture homeland requirement, but within primary homeland
+		else_if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					is_homeland_of_country_cultures = root
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					is_homeland_of_country_cultures = root
+				}
+				random_scope_culture = {
+					limit = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Finally, give up on the specifics and just grab a non-primary pop and its state
+		else = {
+			random_scope_culture = {
+				limit = {
+					NOT = {
+						is_primary_culture_of = root
+					}
+				}
+				save_scope_as = rioting_culture
+				state = {
+					save_scope_as = riot_state
+				}
+			}
+		}
+	}
+	# Clamp down on the freedom fighters
+	option = {
+		name = imperia_infamy_pariah.1.a
+		default_option = yes
+		# 2% radicals for rioting culture in entire country
+		add_radicals = {
+			value = small_radicals
+			culture = scope:rioting_culture
+		}
+		# And a further 5% for the culture in the riot state
+		scope:riot_state = {
+			add_radicals_in_state = {
+				value = medium_radicals
+				culture = scope:rioting_culture
+			}
+		}
+	}
+	# Reconciliation
+	option = {
+		name = imperia_infamy_pariah.1.b
+		# Add 1% radicals for every primary culture in the entire country
+		# And a further 2% for the primary cultures in the rioting state
+		every_primary_culture = {
+			root = {
+				add_radicals = {
+					value = 0.01
+					culture = prev
+				}
+			}
+			scope:riot_state = {
+				add_radicals_in_state = {
+					value = 0.02
+					culture = prev
+				}
+			}
+		}
+	}
 }
