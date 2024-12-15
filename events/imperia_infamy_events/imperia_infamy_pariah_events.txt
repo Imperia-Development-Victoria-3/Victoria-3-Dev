@@ -187,6 +187,7 @@ imperia_infamy_pariah.4 = {
 	title = imperia_infamy_pariah.4.t
 	desc = imperia_infamy_pariah.4.d
 	flavor = imperia_infamy_pariah.4.f
+	placement = scope:placement_state
 	event_image = {
 		video = "unspecific_vandalized_storefront"
 	}
@@ -232,7 +233,7 @@ imperia_infamy_pariah.4 = {
 			}
 			# -80% throughput
 			add_modifier = {
-				name = student_protests_modifier #TO DO
+				name = imperia_student_protests_building_modifier
 				years = 2
 				is_decaying = yes
 			}
@@ -244,13 +245,13 @@ imperia_infamy_pariah.4 = {
 		ig:ig_intelligentsia = {
 			# -4 approval
 			add_modifier = {
-				name = student_protests_crackdown_ig_modifier #TO DO
+				name = imperia_student_protests_crackdown_ig_modifier
 				years = 2
 			}
 		}
 		# 10% mortality for universities
 		add_modifier = {
-			name = student_protests_crackdown_country_modifier #TO DO
+			name = imperia_student_protests_crackdown_country_modifier
 			years = 2
 		}
 	}
@@ -261,6 +262,32 @@ imperia_infamy_pariah.4 = {
 		trigger = {
 			has_law = law_type:law_patriot_schools
 		}
-		# Re-educate the people; -2 approval to every IG that disapproves of patriot schools, +1 to every ig that approves of it
+		# Re-educate the people; -2 approval to every IG that disapproves of patriot schools, +1 to every ig that approves of it, neutrals dont care
+		every_interest_group = {
+			if = {
+				limit = {
+					law_stance = {
+						law = law_type:law_patriot_schools
+						value > neutral
+					}
+				}
+				add_modifier = {
+					name = imperia_approves_of_patriotic_reeducation_campaign
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					law_stance = {
+						law = law_type:law_patriot_schools
+						value < neutral
+					}
+				}
+				add_modifier = {
+					name = imperia_disapproves_of_patriotic_reeducation_campaign
+					years = 2
+				}
+			}
+		}
 	}
 }
