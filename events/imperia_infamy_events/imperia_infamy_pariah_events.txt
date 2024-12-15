@@ -180,3 +180,87 @@ imperia_infamy_pariah.1 = {
 		}
 	}
 }
+
+# Student protests
+imperia_infamy_pariah.4 = {
+	type = country_event
+	title = imperia_infamy_pariah.4.t
+	desc = imperia_infamy_pariah.4.d
+	flavor = imperia_infamy_pariah.4.f
+	event_image = {
+		video = "unspecific_vandalized_storefront"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	duration = 3
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_university
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				capital = {
+					any_scope_building = {
+						is_building_type = building_university
+					}
+				}
+			}
+			capital = {
+				save_scope_as = placement_state
+			}
+		}
+		else = {
+			random_scope_building = {
+				limit = {
+					is_building_type = building_university
+				}
+				state = {
+					save_scope_as = placement_state
+				}
+			}
+		}
+	}
+	# Let it run its course
+	option = {
+		name = imperia_infamy_pariah.4.a
+		default_option = yes
+		every_scope_building = {
+			limit = {
+				is_building_type = building_university
+			}
+			# -80% throughput
+			add_modifier = {
+				name = student_protests_modifier #TO DO
+				years = 2
+				is_decaying = yes
+			}
+		}
+	}
+	# Crack down on the students!
+	option = {
+		name = imperia_infamy_pariah.4.b
+		ig:ig_intelligentsia = {
+			# -4 approval
+			add_modifier = {
+				name = student_protests_crackdown_ig_modifier #TO DO
+				years = 2
+			}
+		}
+		# 10% mortality for universities
+		add_modifier = {
+			name = student_protests_crackdown_country_modifier #TO DO
+			years = 2
+		}
+	}
+	# Special option for patriot schools; re-educate the people
+	option = {
+		name = imperia_infamy_pariah.4.c
+		highlighted_option = yes
+		trigger = {
+			has_law = law_type:law_patriot_schools
+		}
+		# Re-educate the people; -2 approval to every IG that disapproves of patriot schools, +1 to every ig that approves of it
+	}
+}
