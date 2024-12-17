@@ -203,6 +203,29 @@ imperia_infamy_pariah.3 = {
 	trigger = {
 		is_at_war = no
 	}
+	immediate = {
+		# Fetch the leader of the senior group in the pro-war faction
+		ordered_interest_group = {
+			limit = {
+				OR = {
+					is_interest_group_type = ig_armed_forces
+					leader = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist_leader
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+				}
+			}
+			order_by = clout
+			position = 0
+			leader = {
+				save_scope_as = pro_war_faction_leader
+			}
+		}
+	}
 	# Favor pro-war
 	option = {
 		name = imperia_infamy_pariah.3.a
