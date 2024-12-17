@@ -10,8 +10,11 @@ imperia_infamy_pariah.1 = {
 		video = "unspecific_vandalized_storefront"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
 	duration = 3
+	cooldown = {
+		months = 24
+	}
 	trigger = {
 		# Needs a non-primary culture pop in the country, will nearly always be true
 		any_scope_pop = {
@@ -181,6 +184,104 @@ imperia_infamy_pariah.1 = {
 	}
 }
 
+# Pro-war faction VS anti-escalation/anti-war faction
+imperia_infamy_pariah.3 = {
+	type = country_event
+	title = imperia_infamy_pariah.3.t
+	desc = imperia_infamy_pariah.3.d
+	flavor = imperia_infamy_pariah.3.f
+	placement = scope:placement_state
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	trigger = {
+		is_at_war = no
+	}
+	# Favor pro-war
+	option = {
+		name = imperia_infamy_pariah.3.a
+		default_option = yes
+		every_interest_group = {
+			if = {
+				limit = {
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_pro_war_faction_favored_ig
+					years = 2
+				}
+			}
+			else = {
+				add_modifier = {
+					name = imperia_pariah_anti_war_faction_disfavored_ig
+					years = 2
+				}
+			}
+		}
+	}
+	# Favor anti-escalation
+	option = {
+		name = imperia_infamy_pariah.3.b
+		every_interest_group = {
+			if = {
+				limit = {
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_pro_war_faction_disfavored_ig
+					years = 2
+				}
+			}
+			else = {
+				add_modifier = {
+					name = imperia_pariah_anti_war_faction_favored_ig
+					years = 2
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_pariah_anti_war_faction_favored_country
+			years = 2
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			change_relations = {
+				country = root
+				value = 20
+			}
+		}
+		change_infamy = -10
+	}
+}
+
 # Student protests
 imperia_infamy_pariah.4 = {
 	type = country_event
@@ -192,8 +293,11 @@ imperia_infamy_pariah.4 = {
 		video = "unspecific_vandalized_storefront"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
 	duration = 3
+	cooldown = {
+		months = 24
+	}
 	trigger = {
 		any_scope_building = {
 			is_building_type = building_university
