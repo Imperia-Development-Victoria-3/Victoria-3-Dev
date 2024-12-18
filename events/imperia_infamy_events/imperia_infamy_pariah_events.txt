@@ -184,6 +184,143 @@ imperia_infamy_pariah.1 = {
 	}
 }
 
+# Capitalists desire better conditions
+imperia_infamy_pariah.2 = {
+	type = country_event
+	title = imperia_infamy_pariah.2.t
+	desc = imperia_infamy_pariah.2.d
+	flavor = imperia_infamy_pariah.2.f
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	# Appease capitalists
+	option = {
+		name = imperia_infamy_pariah.2.a
+		default_option = yes
+		if = {
+			limit = {
+				ig:ig_industrialists = {
+					is_in_government = no
+				}
+			}
+			add_modifier = {
+				name = imperia_pariah_appeased_capitalists_modifier_country
+				years = 2
+			}
+		}
+		# Add -4 approval to strongly anti-capitalist IGs
+		# -2 to more moderate anti-stances
+		# -1 to neutrals
+		every_interest_group = {
+			limit = {
+				# Just to be sure, capitalists shouldnt get pissed
+				NOT = {
+					is_interest_group_type = ig_industrialists
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = strongly_disapprove
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = strongly_disapprove
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					multiplier = 4
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = disapprove
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = disapprove
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					multiplier = 2
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = neutral
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = neutral
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					years = 2
+				}
+			}
+		}
+	}
+	# Double down on isolation
+	option = {
+		name = imperia_infamy_pariah.2.b
+		every_interest_group = {
+			if = {
+				limit = {
+					# Jingoist industralists shouldnt appreciate this
+					NOT = {
+						is_interest_group_type = ig_industrialists
+					}
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_doubled_down_on_isolation_modifier_ig
+					years = 2
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_pariah_doubled_down_on_isolation_modifier_country
+			years = 2
+		}
+		add_radicals = {
+			value = 0.2
+			interest_group = ig:ig_industrialists
+		}
+	}
+}
+
 # Pro-war faction VS anti-escalation/anti-war faction
 imperia_infamy_pariah.3 = {
 	type = country_event
