@@ -225,3 +225,66 @@ imperia_infamy_gp.3 = {
 		change_infamy = scope:one_tenth_pariah_infamy_value
 	}
 }
+
+# Choice of army bonus for pariah neighbours
+imperia_infamy_gp.4 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_infamy_gp.4.t
+	desc = imperia_infamy_gp.4.desc
+	flavor = imperia_infamy_gp.4.f
+	duration = 3
+	cooldown = {
+		months = 60
+	}
+	trigger = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+		has_strategic_adjacency = global_var:current_pariah
+	}
+	# Conscription rate
+	option = {
+		name = imperia_infamy_gp.4.a
+		default_option = yes
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_a
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+	}
+	# Morale
+	option = {
+		name = imperia_infamy_gp.4.b
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_b
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+	}
+	# Mobilization speed
+	option = {
+		name = imperia_infamy_gp.4.c
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_c
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+	}
+	# Arms sector production
+	option = {
+		name = imperia_infamy_gp.4.d
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_d
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+	}
+}
