@@ -591,6 +591,8 @@ dp_contain_threat = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			NOT = { is_subject_of = root }
+			# The target should be the current pariah, just to be sure everything works
+			this ?= global_var:current_pariah
 		}
 		custom_tooltip = {
 			text = DIPLO_PLAY_GREAT_POWER_TRIGGER
@@ -600,6 +602,16 @@ dp_contain_threat = {
 			text = DIPLO_PLAY_OUTRAGED_TRIGGER
 			"scope:target_country.infamy" >= infamy_threshold:pariah
 		}
+		# Must have a suitable coalition on target; meaning 5+ majors/gps
+		custom_tooltip = {
+			text = DIPLO_PLAY_SUITABLE_COALITION_TRIGGER
+			any_country = {
+				count >= 5
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				country_rank >= rank_value:major_power
+			}
+		}
 	}
 	additional_involvement_trigger = {
 		NOT = {
@@ -608,9 +620,70 @@ dp_contain_threat = {
 		country_rank >= rank_value:great_power
 		imperia_aggressive_diplomatic_plays_permitted = yes
 	}
-	on_weekly_pulse = {}
-	on_war_begins = {}
-	on_war_end = {}
+	on_weekly_pulse = {
+		# Every country who entered the coalition joins the play..
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				NOT = { is_diplomatic_play_involved_with = global_var:current_pariah }
+			}
+			root = {
+				add_initiator_backers = {
+					prev
+				}
+			}
+		}
+	}
+	on_war_begins = {
+		# And every country when the war starts will join against the pariah. No buts.
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				NOT = { is_diplomatic_play_enemy_of = global_var:current_pariah }
+			}
+			root = {
+				add_initiator_backers = {
+					prev
+				}
+			}
+			# Post a notification, just to make sure they're wide awake.
+			post_notification = diplo_play_coalition_started
+		}
+		# Clean up the coalition tag from them
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+			}
+			remove_variable = is_in_coalition_against_pariah
+		}
+	}
+	on_war_end = {
+		# On war end the modifiers and variables are removed
+		every_country = {
+			limit = {
+				OR = {
+					has_variable = is_eco_sanctioning_pariah
+					has_variable = is_trade_sanctioning_pariah
+				}
+			}
+			remove_variable ?= is_eco_sanctioning_pariah
+			remove_variable ?= is_trade_sanctioning_pariah
+		}
+		every_country = {
+			limit = {
+				OR = {
+					this ?= global_var:current_pariah
+					has_modifier = modifier_pariah_economic_sanctions
+					has_modifier = modifier_pariah_trade_sanctions
+				}
+			}
+			remove_global_variable ?= current_pariah
+			remove_modifier ?= modifier_pariah_economic_sanctions
+			remove_modifier ?= modifier_pariah_trade_sanctions
+		}
+	}
 	
 	ai_acceptance_max = 100
 }
