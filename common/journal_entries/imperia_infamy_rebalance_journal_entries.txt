@@ -38,6 +38,9 @@
 	}
 	on_complete = {
 		remove_modifier ?= modifier_pariah_neighbour
+		remove_variable ?= is_eco_sanctioning_pariah
+		remove_variable ?= is_trade_sanctioning_pariah
+		remove_variable ?= is_in_coalition_against_pariah
 	}
 	on_monthly_pulse = {
 		# Pariah neighbour events here
@@ -58,6 +61,9 @@
 	}
 	on_invalid = {
 		remove_modifier ?= modifier_pariah_neighbour
+		remove_variable ?= is_eco_sanctioning_pariah
+		remove_variable ?= is_trade_sanctioning_pariah
+		remove_variable ?= is_in_coalition_against_pariah
 	}
 	progressbar = no
 	should_be_pinned_by_default = yes
@@ -144,6 +150,7 @@ je_is_pariah = {
 					infamy >= 150
 					global_var:current_pariah = this
 				}
+				# If the pariah is still around, and the infamy is high enough, trigger the coalition invitation event
 				every_country = {
 					limit = {
 						has_journal_entry = je_pariah_neighbour

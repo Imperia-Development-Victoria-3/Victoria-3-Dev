@@ -189,6 +189,9 @@ imperia_infamy_gp.3 = {
 	flavor = imperia_infamy_gp.3.f
 	duration = 3
 	trigger = {
+		imperia_aggressive_diplomatic_plays_permitted = yes
+		is_at_war = no
+		is_subject = no
 		exists = global_var:current_pariah
 		global_var:current_pariah != this
 		NOT = {
@@ -196,6 +199,11 @@ imperia_infamy_gp.3 = {
 		}
 		NOT = {
 			has_variable = is_in_coalition_against_pariah
+		}
+		any_diplomatic_play = {
+			count = 0
+			is_diplomatic_play_type = dp_contain_threat
+			target_is = global_var:current_pariah
 		}
 		OR = {
 			is_country_type = recognized
@@ -235,7 +243,7 @@ imperia_infamy_gp.3 = {
 			value = yes
 			years = 10
 		}
-		# Remove infamy equivalent to 10% of pariahs infamy; so at least 15
+		# Remove infamy equivalent to 10% of pariahs infamy; so at least 15 at this point
 		# Just to make it more worthwhile to sign the coalition
 		change_infamy = {
 			value = scope:one_tenth_pariah_infamy_value

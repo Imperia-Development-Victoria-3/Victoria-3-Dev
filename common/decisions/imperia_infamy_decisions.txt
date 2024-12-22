@@ -12,12 +12,14 @@
 			is_country_type = colonial
 		}
 	}
-    possible = {
-        is_at_war = no
-        global_var:current_pariah = {
-            is_diplomatic_play_target = no
-        }
-    }
+	possible = {
+		is_at_war = no
+		any_diplomatic_play = {
+			count = 0
+			is_diplomatic_play_type = dp_contain_threat
+			target_is = global_var:current_pariah
+		}
+	}
 	when_taken = {
 		custom_tooltip = coalition_members_will_be_called_in_automatically_tt
 		change_relations = {
@@ -29,13 +31,16 @@
 			value = yes
 			years = 10
 		}
+		# Remove 5% of the pariah's infamy from the new coalition member
+		# Still a net negative in infamy compared to the straight up infamy reduction from just joining in the first place.
+		# -10% for straight up joining, versus +5% for joining by decision
 		change_infamy = {
 			value = global_var:current_pariah.infamy
-            divide = 10
+			multiply = 0.05
 			multiply = -1
 		}
 	}
-    ai_chance = {
-        base = 20
-    }
+	ai_chance = {
+		base = 20
+	}
 }
