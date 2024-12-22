@@ -168,12 +168,12 @@ imperia_infamy_pariah.1 = {
 	# Reconciliation
 	option = {
 		name = imperia_infamy_pariah.1.b
-		# Add 2.5% radicals for every primary culture in the entire country
+		# Add 1.5% radicals for every primary culture in the entire country
 		# And a further 5% for the primary cultures in the rioting state
 		every_primary_culture = {
 			root = {
 				add_radicals = {
-					value = 0.025
+					value = 0.015
 					culture = prev
 				}
 			}
@@ -508,16 +508,10 @@ imperia_infamy_pariah.4 = {
 	option = {
 		name = imperia_infamy_pariah.4.a
 		default_option = yes
-		every_scope_building = {
-			limit = {
-				is_building_type = building_university
-			}
-			# -80% throughput
-			add_modifier = {
-				name = imperia_student_protests_building_modifier
-				years = 2
-				is_decaying = yes
-			}
+		add_modifier = {
+			name = imperia_student_protests_country_modifier
+			years = 2
+			is_decaying = yes
 		}
 		ai_chance = {
 			base = 20
@@ -532,6 +526,10 @@ imperia_infamy_pariah.4 = {
 				name = imperia_student_protests_crackdown_ig_modifier
 				years = 2
 			}
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = academics
 		}
 		# 10% mortality for universities
 		add_modifier = {
@@ -553,6 +551,10 @@ imperia_infamy_pariah.4 = {
 		every_interest_group = {
 			if = {
 				limit = {
+					NOR = {
+						is_interest_group_type = ig_intelligentsia
+						is_interest_group_type = ig_industrialists
+					}
 					law_stance = {
 						law = law_type:law_patriot_schools
 						value > neutral
