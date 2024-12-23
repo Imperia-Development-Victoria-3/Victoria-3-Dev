@@ -701,16 +701,48 @@ imperia_qing_substates.9 = {
 					}
 				}
 				# Fire the fail event 7 days after last person has voted. It won't appear if a victor is chosen.
-				trigger_event = {
-					id = imperia_qing_substates.11
-					days = 7
+				c:CHI = {
+					every_subject_or_below = {
+						limit = {
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+							}
+						}
+						# Fire event for subjects
+						trigger_event = {
+							id = imperia_qing_substates.11
+							days = 7
+						}
+					}
+					# Fire event for Qing
+					trigger_event = {
+						id = imperia_qing_substates.11
+						days = 7
+					}
 				}
 			}
 			else = {
 				# If there is a victor, fire the victor event 7 days after the last person has voted
-				trigger_event = {
-					id = imperia_qing_substates.10
-					days = 7
+				c:CHI = {
+					every_subject_or_below = {
+						limit = {
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+							}
+						}
+						# Fire event for subjects
+						trigger_event = {
+							id = imperia_qing_substates.10
+							days = 7
+						}
+					}
+					# Fire event for Qing
+					trigger_event = {
+						id = imperia_qing_substates.10
+						days = 7
+					}
 				}
 			}
 		}
