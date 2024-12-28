@@ -62,7 +62,6 @@
 				years = 20
 			}
 		}
-		
 	}
 	current_value = {
 		value = var:sick_man_var
@@ -77,7 +76,6 @@
 	}
 	progressbar = yes
 	weight = 10000
-	
 	should_be_pinned_by_default = yes
 }
 
@@ -110,7 +108,7 @@ je_sick_man_bureaucracy = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.9	# Land registration resisted
+			10 = tanzimat_events.9			# Land registration resisted
 		}
 	}
 	invalid = {
@@ -209,7 +207,7 @@ je_sick_man_army = {
 	}
 	on_monthly_pulse = {
 		events = {
-			tanzimat_events.10	# Tanzimat Draft Question
+			tanzimat_events.10			# Tanzimat Draft Question
 		}
 	}
 	invalid = {
@@ -362,14 +360,26 @@ je_sick_man_absolute_kurdish = {
 		}
 	}
 	complete = {
-		scope:journal_entry = {
-			is_goal_complete = yes
+		OR = {
+			NOT = {
+				exists = c:KUR
+			}
+			AND = {
+				scope:journal_entry = {
+					is_goal_complete = yes
+				}
+				has_diplomatic_pact = {
+					who = c:KUR
+					type = puppet
+				}
+				NOT = {
+					has_war_with = c:KUR
+				}
+				c:KUR = {
+					liberty_desire < 10
+				}
+			}
 		}
-		has_diplomatic_pact = {
-			who = c:KUR
-			type = puppet
-		}
-		is_at_war = no
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -409,6 +419,9 @@ je_sick_man_absolute_kurdish = {
 					}
 					NOT = {
 						has_war_with = c:KUR
+					}
+					c:KUR = {
+						liberty_desire < 10
 					}
 				}
 				change_variable = {
@@ -547,7 +560,7 @@ je_sick_man_liberal_separatism = {
 		}
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5	# Paranoia Event
+			10 = tanzimat_events.5			# Paranoia Event
 		}
 	}
 	current_value = {
@@ -622,7 +635,7 @@ je_sick_man_absolute_separatism = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5	# Paranoia Event
+			10 = tanzimat_events.5			# Paranoia Event
 		}
 	}
 	invalid = {
