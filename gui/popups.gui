@@ -62,6 +62,96 @@ types notifications {
 		}
 	}
 
+	type popup_textbox = textbox {
+		autoresize = yes
+		align = nobaseline
+		parentanchor = hcenter
+		max_width = 330
+		fontsize_min = 12
+		elide = right
+
+		block "text" {
+			raw_text = "Replace me!"
+		}
+	}
+	
+	type base_general_information_window = container {
+		
+		parentanchor = center
+		using = clickthrough_blocker
+		layer = confirmation
+
+		state = {
+			trigger_on_create = yes
+			name = 1
+			next = 2
+
+			alpha = 0
+			position_y = -50
+		}
+		state = {
+			name = 2
+			duration = 0.25
+			using = Animation_Curve_Default
+
+			alpha = 1
+			position_y = 0
+		}
+
+		background = {
+			using = default_background
+		}
+		background = {
+			using = frame_small
+		}
+		
+		flowcontainer = {
+			direction = vertical
+			margin = { 40 20 }
+			spacing = 20
+			
+			textbox = {
+				block "text_size" {
+					minimumsize = { 300 -1 }
+					maximumsize = { 300 -1 }
+				}
+				
+				multiline = yes
+				text = "[GeneralInformationWindow.GetTitle]"
+				autoresize = yes
+			}
+
+			textbox = {
+				block "text_size" {
+					minimumsize = { 300 -1 }
+					maximumsize = { 300 -1 }
+				}
+				
+				multiline = yes
+				text = "[GeneralInformationWindow.GetText]"
+				autoresize = yes
+			}
+			
+			flowcontainer = {
+				direction = horizontal
+				using = default_list_position
+				spacing = 20
+
+				button = {
+					using = default_button
+					using = close_button_sound
+					size = { 140 40 }
+					text = "OK_BUTTON"
+					shortcut = "close_window"
+
+					block "answer_no_handler" {
+						onclick = "[PopupManager.CloseGeneralInformationWindow]"
+					}
+				}
+			}
+		}
+	}
+
 	### CONFIRMATION WINDOW
 	type default_confirmation_window = container {
 		parentanchor = center
@@ -98,8 +188,11 @@ types notifications {
 			spacing = 20
 
 			textbox = {
-				maximumsize = { 300 -1 }
-				minimumsize = { 300 -1 }
+				block "description_size" {
+					minimumsize = { 300 -1 }
+					maximumsize = { 300 -1 }
+				}
+				
 				multiline = yes
 				text = "[ConfirmationWindow.GetDesc]"
 				autoresize = yes
@@ -117,7 +210,7 @@ types notifications {
 					text = "CONFIRM_NO"
 					shortcut = "close_window"
 
-					block answer_ho_handler {
+					block "answer_no_handler" {
 						onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
 					}
 				}
@@ -131,7 +224,7 @@ types notifications {
 					tooltip = "CONFIRM"
 					input_action = "confirm"
 
-					block answer_yes_handler {
+					block "answer_yes_handler" {
 						onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
 					}
 				}
@@ -194,7 +287,7 @@ types notifications {
                     text = "CONFIRM_NO"
                     shortcut = "close_window"
 
-                    block answer_ho_handler {
+                    block answer_no_handler {
                         onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
                     }
                 }
@@ -217,6 +310,9 @@ types notifications {
     }
 }
 
+base_general_information_window = {
+	name = "general_information_window"
+}
 
 ### DIPLOMATIC ACTION NOTIFICATION (WITH AI REASONS)
 default_notification =  {
@@ -224,13 +320,34 @@ default_notification =  {
 
 	blockoverride "extra_info"
 	{
-		textbox = {
+		flowcontainer = {
 			visible = "[Not(PlayerMessageItem.GetCountry.IsPlayer)]"
 			datacontext = "[PlayerMessageItem.GetDiplomaticAction]"
-			text = "AI_WILL_ACCEPT_BREAKDOWN"
-			autoresize = yes
-			multiline = yes
-			maximumsize = { 480 -1 }
+			margin_top = 10
+
+			textbox = {
+				visible = "[And(Not(DiplomaticAction.IsPromisingObligation),Not(DiplomaticAction.IsCallingInObligation))]"
+				text = "[DiplomaticAction.GetWillAcceptBreakdownNoObligation]"
+				autoresize = yes
+				multiline = yes
+				maximumsize = { 420 -1 }
+			}
+
+			textbox = {
+				visible = "[DiplomaticAction.IsPromisingObligation]"
+				text = "[DiplomaticAction.GetWillAcceptBreakdownWithOweObligation]"
+				autoresize = yes
+				multiline = yes
+				maximumsize = { 480 -1 }
+			}
+
+			textbox = {
+				visible = "[DiplomaticAction.IsCallingInObligation]"
+				text = "[DiplomaticAction.GetWillAcceptBreakdownWithCallInObligation]"
+				autoresize = yes
+				multiline = yes
+				maximumsize = { 480 -1 }
+			}			
 		}
 	}
 }
@@ -827,7 +944,9 @@ notification_popup = {
 }
 
 ### DIPLO ACTION WINDOW
-default_popup =  {
+default_popup_two_lines =  {
+	datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
+
 	state = {
 		name = _show
 		#trigger_on_create = yes
@@ -849,8 +968,21 @@ default_popup =  {
 	}
 
 	blockoverride "window_header_name" {
-		text = "DIPLOMATIC_ACTION_HEADER"
 		datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
+		text = "DIPLOMATIC_ACTION_HEADER"
+	}
+
+	blockoverride "second_text" {
+		datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
+		text = "DIPLOMATIC_ACTION_SECOND_HEADER"
+	}
+
+	blockoverride "second_text_properties" {
+		position = { 0 50 }
+		align = hcenter|nobaseline
+		max_width = 510
+		fontsize_min = 12
+		elide = right
 	}
 
 	blockoverride "scrollarea_content"
@@ -865,18 +997,19 @@ default_popup =  {
 				direction = vertical
 
 				textbox = {
+					visible = "[Not(StringIsEmpty(DiplomaticAction.GetPopupDesc))]"
 					minimumsize = { 525 -1 }
 					maximumsize = { 525 -1 }
 					multiline = yes
-					align = left|top
+					align = nobaseline
 					autoresize = yes
 					margin_bottom = 10
-					text = "[DiplomaticActionWindow.GetDiplomaticAction.GetPopupDesc]"
+					text = "[DiplomaticAction.GetPopupDesc]"
 				}
-
+				
 				flowcontainer = {
 					direction = vertical
-					visible = "[And(Not(IsDataModelEmpty( AccessPlayer.AccessVioSovWars( DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry ))), DiplomaticActionWindow.GetDiplomaticAction.ViolatesSovereignty)]"
+					visible = "[And(Not(IsDataModelEmpty( AccessPlayer.AccessVioSovWars( DiplomaticAction.GetSecondCountry ))), DiplomaticAction.ViolatesSovereignty)]"
 
 					textbox = {
 						autoresize = yes
@@ -885,7 +1018,7 @@ default_popup =  {
 					}
 
 					dynamicgridbox = {
-						datamodel = "[AccessPlayer.AccessVioSovWars( DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry )]"
+						datamodel = "[AccessPlayer.AccessVioSovWars( DiplomaticAction.GetSecondCountry )]"
 
 						item = {
 							textbox = {
@@ -904,11 +1037,11 @@ default_popup =  {
 						autoresize = yes
 						align = left|nobaseline
 						text = "violate_sovereignty_countries"
-						datacontext = "[DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry]"
+						datacontext = "[DiplomaticAction.GetSecondCountry]"
 					}
 
 					dynamicgridbox = {
-						datamodel = "[AccessPlayer.AccessVioSovInterestedCountries( DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry )]"
+						datamodel = "[AccessPlayer.AccessVioSovInterestedCountries( DiplomaticAction.GetSecondCountry )]"
 						flipdirection = yes
 
 						item = {
@@ -921,7 +1054,7 @@ default_popup =  {
 					direction = horizontal
 					margin_top = 10
 					margin_bottom = 10
-					visible = "[DiplomaticActionWindow.GetDiplomaticAction.CanCallInObligation]"
+					visible = "[DiplomaticAction.CanCallInObligation]"
 
 					checkbutton = {
 						parentanchor = vcenter
@@ -942,7 +1075,7 @@ default_popup =  {
 
 				flowcontainer = {
 					direction = horizontal
-					visible = "[DiplomaticActionWindow.GetDiplomaticAction.CanPotentiallyOweObligation]"
+					visible = "[DiplomaticAction.CanPotentiallyOweObligation]"
 					margin_top = 10
 					margin_bottom = 10
 
@@ -950,7 +1083,7 @@ default_popup =  {
 						using = check_button
 						size = { 25 25 }
 						parentanchor = vcenter
-						enabled = "[DiplomaticActionWindow.GetDiplomaticAction.CanOweObligation]"
+						enabled = "[DiplomaticAction.CanOweObligation]"
 						onclick = "[DiplomaticActionWindow.ToggleOweObligation]"
 						checked = "[DiplomaticActionWindow.WillOweObligation]"
 					}
@@ -965,52 +1098,44 @@ default_popup =  {
 				
 				flowcontainer = {				
 					visible = "[Or(DiplomaticActionWindow.CanSelectFirstState,DiplomaticActionWindow.CanSelectSecondState)]"
-					minimumsize = { 600 150 }
+					parentanchor = hcenter
 					direction = horizontal
 					spacing = 10
 						
 					flowcontainer = {
 						visible = "[DiplomaticActionWindow.CanSelectFirstState]"
-						minimumsize = { 300 150 }
-						maximumsize = { 300 150 }
 						direction = vertical
-						parentanchor = hcenter
 						spacing = 10
 						margin = { 20 20 }
 
 						background = {
 							using = entry_bg_simple
 						}
-						
-						textbox = {
-							datacontext = "[DiplomaticActionWindow.GetDiplomaticAction.GetFirstCountry]"
-							text = "DIPLOMATIC_ACTION_STATE_HEADER"
-							autoresize = yes
-							align = nobaseline
-							parentanchor = hcenter
-						}					
-						
-						textbox = {
-							text = "NO_STATE_SELECTED"
-							visible = "[Not(DiplomaticActionWindow.GetFirstState.IsValid)]"
-							autoresize = yes
-							align = nobaseline
-							parentanchor = hcenter
-							using = fontsize_xxl
-							using = empty_state_text_properties
+
+						popup_textbox = {
+							datacontext = "[DiplomaticAction.GetFirstCountry]"
+
+							blockoverride "text" {
+								text = "DIPLOMATIC_ACTION_STATE_HEADER"
+							}
 						}
 
-						flowcontainer = {
-							visible = "[DiplomaticActionWindow.GetFirstState.IsValid]"
-							parentanchor = hcenter
-							spacing = 10
+						popup_textbox = {
+							visible = "[Not(DiplomaticActionWindow.GetFirstState.IsValid)]"
+							using = fontsize_xxl
+							using = empty_state_text_properties
 
-							textbox = {
+							blockoverride "text" {
+								text = "NO_STATE_SELECTED"
+							}
+						}
+
+						popup_textbox = {
+							visible = "[DiplomaticActionWindow.GetFirstState.IsValid]"
+							using = fontsize_xxl
+
+							blockoverride "text" {
 								text = "[DiplomaticActionWindow.GetFirstState.GetName]"
-								autoresize = yes
-								align = nobaseline
-								parentanchor = vcenter
-								using = fontsize_xl
 							}
 						}
 						
@@ -1020,41 +1145,34 @@ default_popup =  {
 							parentanchor = hcenter
 							size = { 140 42 }
 							text = "SELECT_STATE"
-							onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticActionWindow.GetDiplomaticAction.GetFirstCountry)]"
-						}						
+							onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticAction.GetFirstCountry)]"
+						}
 						
 						flowcontainer = {
 							visible = "[DiplomaticActionWindow.GetFirstState.IsValid]"
 							parentanchor = hcenter
-							minimumsize = { 300 42 }
-							maximumsize = { 300 42 }
 							margin = { 5 5 }
 							spacing = 10					
 
 							button = {
 								using = default_button
-								parentanchor = hcenter
 								size = { 140 42 }
 								text = "CHANGE_STATE"
-								onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticActionWindow.GetDiplomaticAction.GetFirstCountry)]"
+								onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticAction.GetFirstCountry)]"
 							}
 							
 							button = {
 								using = default_button
-								parentanchor = hcenter
 								size = { 140 42 }
 								text = "CLEAR_STATE"
 								onclick = "[DiplomaticActionWindow.ClearFirstState]"
-							}						
+							}
 						}
 					}
 
 					flowcontainer = {
 						visible = "[DiplomaticActionWindow.CanSelectSecondState]"
-						minimumsize = { 300 150 }
-						maximumsize = { 300 150 }
 						direction = vertical
-						parentanchor = hcenter
 						spacing = 10
 						margin = { 20 20 }
 
@@ -1062,35 +1180,30 @@ default_popup =  {
 							using = entry_bg_simple
 						}
 						
-						textbox = {
-							datacontext = "[DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry]"
-							text = "DIPLOMATIC_ACTION_STATE_HEADER"
-							autoresize = yes
-							align = nobaseline
-							parentanchor = hcenter
-						}					
-						
-						textbox = {
-							text = "NO_STATE_SELECTED"
-							visible = "[Not(DiplomaticActionWindow.GetSecondState.IsValid)]"
-							autoresize = yes
-							align = nobaseline
-							parentanchor = hcenter
-							using = fontsize_xxl
-							using = empty_state_text_properties
+						popup_textbox = {
+							datacontext = "[DiplomaticAction.GetSecondCountry]"
+
+							blockoverride "text" {
+								text = "DIPLOMATIC_ACTION_STATE_HEADER"
+							}
 						}
 
-						flowcontainer = {
-							visible = "[DiplomaticActionWindow.GetSecondState.IsValid]"
-							parentanchor = hcenter
-							spacing = 10
+						popup_textbox = {
+							visible = "[Not(DiplomaticActionWindow.GetSecondState.IsValid)]"
+							using = fontsize_xxl
+							using = empty_state_text_properties
 
-							textbox = {
+							blockoverride "text" {
+								text = "NO_STATE_SELECTED"
+							}
+						}
+
+						popup_textbox = {
+							visible = "[DiplomaticActionWindow.GetSecondState.IsValid]"
+							using = fontsize_xxl
+
+							blockoverride "text" {
 								text = "[DiplomaticActionWindow.GetSecondState.GetName]"
-								autoresize = yes
-								align = nobaseline
-								parentanchor = vcenter
-								using = fontsize_xl
 							}
 						}
 						
@@ -1100,102 +1213,99 @@ default_popup =  {
 							parentanchor = hcenter
 							size = { 140 42 }
 							text = "SELECT_STATE"
-							onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry)]"
-						}						
-						
+							onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticAction.GetSecondCountry)]"
+						}
+
 						flowcontainer = {
 							visible = "[DiplomaticActionWindow.GetSecondState.IsValid]"
 							parentanchor = hcenter
-							minimumsize = { 300 42 }
-							maximumsize = { 300 42 }
 							margin = { 5 5 }
 							spacing = 10					
 
 							button = {
 								using = default_button
-								parentanchor = hcenter
 								size = { 140 42 }
 								text = "CHANGE_STATE"
-								onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticActionWindow.GetDiplomaticAction.GetSecondCountry)]"
+								onclick = "[DiplomaticActionWindow.SetStateSelectionTarget(DiplomaticAction.GetSecondCountry)]"
 							}
 							
 							button = {
 								using = default_button
-								parentanchor = hcenter
 								size = { 140 42 }
 								text = "CLEAR_STATE"
 								onclick = "[DiplomaticActionWindow.ClearSecondState]"
-							}						
+							}
 						}
 					}						
 				}
 
 				flowcontainer = {
-					visible = "[DiplomaticActionWindow.GetDiplomaticAction.RequiresApproval]"
+					visible = "[DiplomaticAction.RequiresApproval]"
+					margin_top = 10
 
 					flowcontainer = {
 						visible = "[Not(DiplomaticActionWindow.IsUsingObligation)]"
-						datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
-						tooltip = "AI_WILL_ACCEPT_BREAKDOWN"
-						direction = horizontal
-						minimumsize = { 525 25 }
+						minimumsize = { 525 -1 }
+						
+						flowcontainer = {
+							direction = vertical					
 
-						textbox = {
-							text = "AI_WILL_ACCEPT"
-							visible = "[DiplomaticActionWindow.GetDiplomaticAction.WillAIAccept]"
-							autoresize = yes
-							align = left|nobaseline
-						}
-
-						textbox = {
-							text = "AI_WILL_NOT_ACCEPT"
-							visible = "[Not(DiplomaticActionWindow.GetDiplomaticAction.WillAIAccept)]"
-							autoresize = yes
-							align = left|nobaseline
-						}
+							textbox = {
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptDescNoObligation]"
+							}
+						
+							textbox = {
+								margin_left = 20
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptBreakdownNoObligation]"
+							}	
+						}						
 					}
 
 					flowcontainer = {
 						visible = "[DiplomaticActionWindow.WillCallInObligation]"
-						datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
-						tooltip = "AI_WILL_ACCEPT_BREAKDOWN_WITH_CALL_IN_OBLIGATION"
-						direction = horizontal
-						minimumsize = { 525 25 }
+						minimumsize = { 525 -1 }
 
-						textbox = {
-							text = "AI_WILL_ACCEPT"
-							visible = "[DiplomaticActionWindow.GetDiplomaticAction.WillAIAcceptWithCallInObligation]"
-							autoresize = yes
-							align = left|nobaseline
-						}
-
-						textbox = {
-							text = "AI_WILL_NOT_ACCEPT"
-							visible = "[Not(DiplomaticActionWindow.GetDiplomaticAction.WillAIAcceptWithCallInObligation)]"
-							autoresize = yes
-							align = left|nobaseline
-						}
+						flowcontainer = {
+							direction = vertical
+						
+							textbox = {
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptDescWithCallInObligation]"
+							}
+							
+							textbox = {
+								margin_left = 20
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptBreakdownWithCallInObligation]"
+							}	
+						}				
 					}
 
 					flowcontainer = {
 						visible = "[DiplomaticActionWindow.WillOweObligation]"
-						datacontext = "[DiplomaticActionWindow.GetDiplomaticAction]"
-						tooltip = "AI_WILL_ACCEPT_BREAKDOWN_WITH_OWE_OBLIGATION"
-						direction = horizontal
-						minimumsize = { 525 25 }
+						minimumsize = { 525 -1 }										
 
-						textbox = {
-							text = "AI_WILL_ACCEPT"
-							visible = "[DiplomaticActionWindow.GetDiplomaticAction.WillAIAcceptWithOweObligation]"
-							autoresize = yes
-							align = left|nobaseline
-						}
-
-						textbox = {
-							text = "AI_WILL_NOT_ACCEPT"
-							visible = "[Not(DiplomaticActionWindow.GetDiplomaticAction.WillAIAcceptWithOweObligation)]"
-							autoresize = yes
-							align = left|nobaseline
+						flowcontainer = {
+							direction = vertical
+						
+							textbox = {
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptDescWithOweObligation]"
+							}
+							
+							textbox = {
+								margin_left = 20
+								autoresize = yes
+								align = nobaseline
+								text = "[DiplomaticAction.GetWillAcceptBreakdownWithOweObligation]"
+							}	
 						}
 					}
 				}
@@ -1203,9 +1313,10 @@ default_popup =  {
 			
 			flowcontainer = {
 				visible = "[DiplomaticActionWindow.HasStateSelectionTarget]"
+				minimumsize = { 575 -1 } 
 				direction = vertical
 				parentanchor = hcenter
-				widgetanchor = hcenter	
+				widgetanchor = hcenter
 
 				flowcontainer = {
 					datamodel = "[DiplomaticActionWindow.AccessPossibleStates]"
@@ -1225,49 +1336,62 @@ default_popup =  {
 							background = {
 								using = Background_Area
 								margin = { 0 5 }
-							}							
+							}
 
 							textbox = {
-								text = "[State.GetName]"
-								position = { 10 0 }
 								parentanchor = vcenter
+								position = { 10 0 }
 								align = nobaseline
 								autoresize = yes
-							}
-							
-							textbox = {
-								text = "STATE_YEARLY_GDP"
-								position = { 255 5 }
-								parentanchor = top
-								align = nobaseline
-								autoresize = yes
-							}	
-							
-							textbox = {
-								text = "STATE_POPULATION"
-								position = { 255 30 }
-								parentanchor = top
-								align = nobaseline
-								autoresize = yes
+								max_width = 200
+								fontsize_min = 12
+								elide = right
+								raw_text = "[State.GetCountry.GetFlagTextIcon] [State.GetName]"
 							}
 
-							textbox = {
-								text = "STATE_INCORPORATED_SHORT"
-								visible = "[State.IsIncorporated]"
-								position = { 255 55 }
-								parentanchor = top
-								align = nobaseline
-								autoresize = yes
-							}	
+							flowcontainer = {
+								direction = vertical
+								position = { 220 5 }
 
-							textbox = {
-								text = "STATE_UNINCORPORATED_SHORT"
-								visible = "[Not(State.IsIncorporated)]"
-								position = { 255 55 }
-								parentanchor = top
-								align = nobaseline
-								autoresize = yes
-							}								
+								textbox = {
+									align = nobaseline
+									autoresize = yes
+									max_width = 170
+									elide = right
+									fontsize_min = 12
+									text = "STATE_YEARLY_GDP"
+								}
+								
+								textbox = {
+									align = nobaseline
+									autoresize = yes
+									max_width = 170
+									elide = right
+									fontsize_min = 12
+									text = "STATE_POPULATION_WITH_ICON"
+								}
+
+								textbox = {
+									visible = "[State.IsIncorporated]"
+									align = nobaseline
+									autoresize = yes
+									max_width = 170
+									elide = right
+									fontsize_min = 12
+									text = "STATE_INCORPORATED_SHORT_WITH_ICON"
+								}
+
+								textbox = {
+									visible = "[Not(State.IsIncorporated)]"
+									align = nobaseline
+									autoresize = yes
+									max_width = 170
+									elide = right
+									fontsize_min = 12
+									text = "STATE_UNINCORPORATED_SHORT_WITH_ICON"
+								}
+							}
+							
 
 							button = {
 								using = default_button
@@ -1279,6 +1403,16 @@ default_popup =  {
 								onclick = "[DiplomaticActionWindow.ClearStateSelectionTarget]"
 							}								
 						}
+					}
+				}
+
+				empty_state = {
+					blockoverride "visible" {
+						visible = "[IsDataModelEmpty(DiplomaticActionWindow.AccessPossibleStates)]"
+					}
+
+					blockoverride "text" {
+						text = "NO_AVAILABLE_STATES"
 					}
 				}	
 			}				
@@ -1502,6 +1636,672 @@ default_popup =  {
 		}
 	}
 }
+
+### NATIONALIZE BUILDING WINDOW
+default_popup_two_lines =  {
+	name = "nationalize_building_window"
+
+	blockoverride "window_header_name" {
+		text = "NATIONALIZE_BUILDING_HEADER"
+	}
+
+	blockoverride "second_text" {
+		text = "NATIONALIZE_BUILDINGS_DESCRIPTION"
+	}
+
+	block "header_close_button_visibility" {
+		visible = yes
+	}
+
+	blockoverride "header_close_button_visibility"
+	{
+		visible = yes
+	}
+
+	blockoverride "header_close_button" {
+		visible = yes
+
+		onclick = "[PopupManager.HideNationalizeBuildingWindow]"
+		shortcut = "close_window"
+	}
+
+	blockoverride "entire_scrollarea" {
+		widget = {
+			size = { 1220 500 }
+
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+
+				spacing = 20
+
+				hbox = {
+					name = "main_area"
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+
+					spacing = 20
+
+					vbox = {
+						name = "left_ownerships"
+						minimumsize = { 680 -1 } #not sure why i need to force the width here to be half minus the spacing and not just use layoutpolicy_horizontal = expanding. If I use layoutpolicy, the margins and spacings mess with the equal size both sides should have
+						maximumsize = { 680 -1 }
+						layoutpolicy_vertical = expanding
+
+						hbox = {
+							name = "building_list_none_all"
+							layoutpolicy_horizontal = expanding
+
+							margin = { 5 5 }
+							spacing = 10
+
+							overlappingitembox = {
+								name = "buildings"
+
+								layoutpolicy_horizontal = expanding
+								size = { 0 60 }
+
+								margin = { 5 5 }
+								spacing = 5
+
+								background = {
+									using = dark_area
+									alpha = 0.1
+								}
+
+								datamodel = "[NationalizeBuildingWindow.GetBuildingTypeGroups]"
+
+								item = {
+									button = { # must be a button to be shown at the front on mouse over
+										size = { 50 50 }
+										datacontext = "[NationalizeBuildingTypeGroup.GetBuildingType]"
+
+										tooltip = "NATIONALIZE_BUILDING_TYPE_GROUP_TOOLTIP"
+										using = tooltip_se
+
+										icon = { #nested in an icon so it does not get the highlight or click effects
+											size = { 100% 100% }
+											texture = "[BuildingType.GetIcon]"
+
+											textbox = {
+												parentanchor = right|bottom
+												autoresize = yes
+												align = nobaseline
+												using = fontsize_small
+												max_width = 50
+												elide = right
+												raw_text = "#v [NationalizeBuildingTypeGroup.GetCurrentLevels]#!/[NationalizeBuildingTypeGroup.GetMaxLevels]"
+											}
+										}
+									}
+								}
+							}
+
+							hbox = {
+								name = "none_all"
+								layoutpolicy_horizontal = preferred
+								layoutpolicy_vertical = preferred
+								spacing = 5
+
+								button = {
+									visible = "[Not(EqualTo_int32( NationalizeBuildingWindow.GetNumLevelsToNationalize, '(int32)0' ))]"
+									size = { 100 35 }
+									using = default_button
+									onclick = "[NationalizeBuildingWindow.SetNationalizeToNone]"
+
+
+									textbox = {
+										size = { 100% 100% }
+										align = hcenter|nobaseline
+										text = "NONE"
+									}
+								}
+
+								widget = {
+									visible = "[EqualTo_int32( NationalizeBuildingWindow.GetNumLevelsToNationalize, '(int32)0' )]"
+									size = { 100 35 }
+
+									background = {
+										using = paper_bg
+									}
+
+									textbox = {
+										size = { 100% 100% }
+										align = hcenter|nobaseline
+										text = "NONE"
+									}
+									
+									icon = {
+										using = highlighted_square_selection
+									}
+								}
+
+								button = {
+									visible =  "[Not(NationalizeBuildingWindow.IsNationalizingAll)]"
+									size = { 100 35 }
+									using = default_button
+									enabled = "[NationalizeBuildingWindow.HasNationalizableGroup]"
+									onclick = "[NationalizeBuildingWindow.SetNationalizeToAll]"
+
+									textbox = {
+										size = { 100% 100% }
+										align = hcenter|nobaseline
+										text = "ALL"
+									}
+								}
+
+								widget = {
+									visible =  "[NationalizeBuildingWindow.IsNationalizingAll]"
+									size = { 100 35 }
+
+									background = {
+										using = paper_bg
+									}
+
+									textbox = {
+										size = { 100% 100% }
+										align = hcenter|nobaseline
+										text = "ALL"
+									}
+									
+									icon = {
+										using = highlighted_square_selection
+									}
+								}
+							}
+						}
+
+						hbox = {
+							name = "sort_buttons"
+							layoutpolicy_horizontal = expanding
+
+							sort_button = {
+								layoutpolicy_horizontal = expanding
+								text = "OWNER"
+								tooltip = "SORT_BY_OWNERSHIP"
+								align = nobaseline
+								onclick = "[NationalizeBuildingWindow.Sort('ownership')]"
+							}
+
+							sort_button = {
+								layoutpolicy_horizontal = expanding
+								text = "concept_building_levels_short"
+								tooltip = "SORT_BY_OWNED_LEVELS"
+								align = nobaseline
+								onclick = "[NationalizeBuildingWindow.Sort('levels')]"
+							}
+						}
+
+
+						scrollarea = {
+							name = "ownerships_scrollarea"
+							layoutpolicy_vertical = expanding
+							layoutpolicy_horizontal = expanding
+
+							scrollbarpolicy_horizontal = always_off
+
+							scrollbar_vertical = {
+								using = vertical_scrollbar
+							}
+
+							background = {
+								using = default_background
+							}
+
+							scrollwidget = {
+
+								vbox = {
+									layoutpolicy_horizontal = expanding
+									vbox = {
+										layoutpolicy_horizontal = expanding
+										datamodel = "[NationalizeBuildingWindow.GetBuildingGroups]"
+
+										item = {
+											hbox = {
+												enabled = "[NationalizeBuildingGroup.IsNationalizable]"
+												name = "ownership_group_entry"
+												layoutpolicy_horizontal = expanding
+												tooltip = "NATIONALIZE_BUILD_GROUP_TOOLTIP"
+
+												margin = { 10 5 }
+												margin_right = 20
+												spacing = 10
+
+												background = {
+													using = fade_right_entry_header_colored
+
+													color = "[NationalizeBuildingGroup.GetColor]"
+												}
+
+												hbox = {
+													name = "icon_and_name"
+													layoutpolicy_horizontal = expanding
+													spacing = 5
+													datacontext = "[NationalizeBuildingGroup.GetInvestor]"
+
+													widget = {
+														name = "icon"
+														size = { 35 35 }
+
+														tiny_flag_no_interact = {
+															parentanchor = center
+														}
+													}
+
+													textbox = {
+														layoutpolicy_horizontal = expanding
+														text = "[NationalizeBuildingGroup.GetName]"
+														align = nobaseline
+														elide = right
+													}
+
+													widget = {
+														size = { 35 35 }
+														visible = "[NationalizeBuildingGroup.IsPrivate]"
+													
+														button_icon_round = {
+															visible = "[NationalizeBuildingGroup.HasFilter('all')]"
+															size = { 35 35 }
+															onclick = "[RightClickMenuManager.ToggleNationalizePrivatelyOwnedFilter(NationalizeBuildingGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+															tooltip = "PRIVATELY_OWNED_FILTER_BUTTON_TOOLTIP_ALL"
+	
+															blockoverride "icon" {
+																texture = "gfx/interface/icons/building_icons/building_browser_filter_icons/filter_icons_all.dds"
+															}
+	
+															blockoverride "icon_size" {
+																size = { 75% 75% }
+															}
+														}
+	
+														button_icon_round = {
+															visible = "[NationalizeBuildingGroup.HasFilter('companies')]"
+															size = { 32 32 }
+															onclick = "[RightClickMenuManager.ToggleNationalizePrivatelyOwnedFilter(NationalizeBuildingGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+															tooltip = "PRIVATELY_OWNED_FILTER_BUTTON_TOOLTIP_COMPANIES"
+	
+															blockoverride "icon" {
+																texture = "gfx/interface/main_hud/companies_btn.dds"
+															}
+														}
+	
+														button_icon_round = {
+															visible = "[NationalizeBuildingGroup.HasFilter('manor_house')]"
+															size = { 32 32 }
+															onclick = "[RightClickMenuManager.ToggleNationalizePrivatelyOwnedFilter(NationalizeBuildingGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+															tooltip = "PRIVATELY_OWNED_FILTER_BUTTON_TOOLTIP_MANOR_HOUSE"
+	
+															blockoverride "icon" {
+																texture = "[GetBuildingType('building_manor_house').GetIcon]"
+															}
+														}
+	
+														button_icon_round = {
+															visible = "[NationalizeBuildingGroup.HasFilter('financial_district')]"
+															size = { 32 32 }
+															onclick = "[RightClickMenuManager.ToggleNationalizePrivatelyOwnedFilter(NationalizeBuildingGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+															tooltip = "PRIVATELY_OWNED_FILTER_BUTTON_TOOLTIP_FINANCIAL_DISTRICT"
+	
+															blockoverride "icon" {
+																texture = "[GetBuildingType('building_financial_district').GetIcon]"
+															}
+														}
+														
+														button_icon_round = {
+															visible = "[NationalizeBuildingGroup.HasFilter('self')]"
+															size = { 32 32 }
+															onclick = "[RightClickMenuManager.ToggleNationalizePrivatelyOwnedFilter(NationalizeBuildingGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+															tooltip = "PRIVATELY_OWNED_FILTER_BUTTON_TOOLTIP_WORKER_OWNED"
+	
+															blockoverride "icon" {
+																texture = "gfx/interface/icons/generic_icons/population.dds"
+															}
+														}
+													}
+												}
+												
+												widget = {
+													name = "levels_input"
+													size = { 320 28 }
+
+													scrollbar = {
+														parentanchor = vcenter
+														direction = horizontal
+														size = { 200 20 }
+														value = "[NationalizeBuildingGroup.GetNumSelectedLevels]"
+														onvaluechanged = "[NationalizeBuildingGroup.OnSelectedLevelsSliderValueChanged]"
+
+														min = 0.0
+														max = "[IntToFixedPoint(NationalizeBuildingGroup.GetMaxLevels)]"
+														step = 1.0
+														wheelstep = 1.0 #crollwheel input
+
+														track = {
+															using = SettingsValueTrack
+														}
+
+														slider = {
+															block "settings_value_slider"
+															{
+																button = {
+																	using = scrollbar_slider
+																	size = { 12 20 }
+																	parentanchor = vcenter
+																}
+															}
+														}
+
+														dec_button = {
+															using = SettingsValueDecButton
+														}
+
+														inc_button = {
+															using = SettingsValueIncButton
+														}
+													}
+
+													flowcontainer = {
+														parentanchor = vcenter
+														position = { 210 0 }
+														layoutpolicy_horizontal = preferred
+
+														widget = {
+															name = "editbox_area"
+															size = { 60 28 }
+															parentanchor = vcenter
+
+															editbox = {
+																background = {
+																	using = text_edit_bg
+																}
+
+																text = "[NationalizeBuildingGroup.GetNumSelectedLevels]"
+																ontextedited = "[NationalizeBuildingGroup.OnSelectedLevelsEditboxValueChanged]"
+
+																size = { 100% 100% }
+																align = left|nobaseline #would be nice to align right, but it makes the text cursor appear in the wrong spot
+																margin = { 5 5 }
+
+																maxcharacters = 5
+																alwaystransparent = no
+															}
+														}
+
+														textbox = {
+															parentanchor = vcenter
+															autoresize = yes
+															align = nobaseline
+															raw_text = "/[NationalizeBuildingGroup.GetMaxLevels]"
+														}
+													}
+
+												}
+											}
+										}
+									}
+
+									expand = {}
+								}
+							}
+						}
+					}
+
+					vertical_divider = {
+						blockoverride "size"
+						{
+							layoutpolicy_vertical = expanding
+						}
+					}
+
+					vbox = {
+						name = "right_effects"
+						minimumsize = { 490 -1 } #not sure why i need to force the width here to be half minus the spacing and not just use layoutpolicy_horizontal = expanding. If I use layoutpolicy, the margins and spacings mess with the equal size both sides should have
+						maximumsize = { 490 -1 }
+						layoutpolicy_vertical = expanding
+						spacing = 10
+
+						vbox = {
+							layoutpolicy_horizontal = expanding
+
+							textbox = {
+								layoutpolicy_horizontal = expanding
+								text = "NATIONALIZE_EFFECTS_HEADER"
+								autoresize = yes
+								align = hcenter|nobaseline
+								margin_bottom = 2
+							}
+
+							nationalize_effect_divider = {}
+						}
+
+						scrollarea = {
+							name = "effects_scrollarea"
+							layoutpolicy_vertical = expanding
+							layoutpolicy_horizontal = expanding
+
+							scrollbarpolicy_horizontal = always_off
+
+							scrollbar_vertical = {
+								using = vertical_scrollbar
+							}
+
+							scrollwidget = {
+
+								vbox = {
+									margin_right = 10
+
+									vbox = {
+										layoutpolicy_horizontal = expanding
+										max_width = 200
+
+										margin = { 0 20 }
+										spacing = 10
+
+										background = {
+											using = default_background
+										}
+
+										nationalize_effect = {
+											layoutpolicy_horizontal = expanding
+
+											blockoverride "nationalize_effect_icon"
+											{
+												texture = "gfx/interface/icons/topbar/bureaucracy_icon.dds"
+											}
+
+											blockoverride "nationalize_effect_text"
+											{
+												text = "NATIONALIZE_EFFECTS_MAINTENANCE"
+											}
+
+										}
+
+										nationalize_effect_divider = {
+											visible = "[Not(NationalizeBuildingWindow.WillGiveCompensation)]"
+										}
+
+										nationalize_effect = {
+											visible = "[Not(NationalizeBuildingWindow.WillGiveCompensation)]"
+
+											layoutpolicy_horizontal = expanding
+
+											blockoverride "nationalize_effect_icon"
+											{
+												texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+											}
+
+											blockoverride "nationalize_effect_text"
+											{
+												text = "BUILDING_NATIONALIZE_NO_COMPENSATION_DESC"
+											}
+
+										}
+
+										nationalize_effect_divider = {
+											visible = "[Not(StringIsEmpty(NationalizeBuildingWindow.GetDamagedRelationsListDesc))]"
+										}
+
+										nationalize_effect = {
+											visible = "[Not(StringIsEmpty(NationalizeBuildingWindow.GetDamagedRelationsListDesc))]"
+
+											layoutpolicy_horizontal = expanding
+
+											blockoverride "nationalize_effect_icon"
+											{
+												texture = "gfx/interface/icons/lens_toolbar_icons/damage_relations.dds"
+											}
+
+											blockoverride "nationalize_effect_text"
+											{
+												text = "NATIONALIZE_EFFECT_RELATIONS"
+											}
+										}
+
+										nationalize_effect_divider = {
+											visible = "[Not(StringIsEmpty(NationalizeBuildingWindow.GetPopRadicalizationListDesc))]"
+
+										}
+
+										nationalize_effect = {
+											visible = "[Not(StringIsEmpty(NationalizeBuildingWindow.GetPopRadicalizationListDesc))]"
+
+											layoutpolicy_horizontal = expanding
+
+											blockoverride "nationalize_effect_icon"
+											{
+												texture = "gfx/interface/icons/generic_icons/population_radical.dds"
+											}
+
+											blockoverride "nationalize_effect_text"
+											{
+												text = "NATIONALIZE_EFFECT_RADICALS"
+											}
+										}
+
+										expand = {}
+									}
+
+									expand = {}
+								}
+							}
+						}
+
+						vbox = {
+							name = "compensation"
+							layoutpolicy_horizontal = expanding
+							margin = { 10 10 }
+							spacing = 5
+
+							background = {
+								using = entry_bg_simple
+							}
+
+
+							hbox = {
+								name = "line1"
+								layoutpolicy_horizontal = expanding
+								spacing = 5
+
+							  	button_checkbox = {
+									onclick = "[NationalizeBuildingWindow.ToggleGiveCompensation]"
+									enabled = "[NationalizeBuildingWindow.CanToggleCompensation]"
+									checked = "[NationalizeBuildingWindow.WillGiveCompensation]"
+									size = { 30 30 }
+									using = check_button_sound
+									tooltip = "[NationalizeBuildingWindow.GetCanToggleCompensationTooltip]"
+									using = tooltip_ne
+								}
+
+								textbox = {
+									layoutpolicy_horizontal = expanding
+									autoresize = yes
+									align = nobaseline
+									text = "BUILDING_NATIONALIZATION_WITH_COMPENSATION"
+								}
+							}
+							textbox = {
+								name = "line2"
+								layoutpolicy_horizontal = expanding
+								autoresize = yes
+								align = nobaseline
+								text = "NATIONALIZE_COMPENSATION_AMOUNT"
+							}
+						}
+					}
+				}
+
+				hbox = {
+					name = "bottom_area"
+					layoutpolicy_horizontal = expanding
+
+					button = {
+						using = default_button
+						using = close_button_sound
+						size = { 400 42 }
+						text = "CANCEL"
+						onclick = "[PopupManager.HideNationalizeBuildingWindow]"
+						shortcut = "close_window"
+					}
+
+					button = {
+						using = default_button_primary_action
+						size = { 400 42 }
+						text = "NATIONALIZE"
+						enabled = "[NationalizeBuildingWindow.NationalizeBuildingGroupsIsValid]"
+						onclick = "[NationalizeBuildingWindow.NationalizeBuildingGroupsConfirm]"
+						onclick = "[PopupManager.HideNationalizeBuildingWindow]"
+						clicksound = "event:/SFX/UI/BuildingOwnership/building_nationalize_confirm"
+						tooltip = "[NationalizeBuildingWindow.NationalizeBuildingGroupsGetDesc]"
+					}
+				}
+			}
+		}
+	}
+}
+
+types nationalize_popup_types
+{
+	type nationalize_effect_divider = divider_clean {
+		blockoverride "size"
+		{
+			size =  { 400 2 }
+		}
+	}
+
+	type nationalize_effect = hbox {
+		spacing = 20
+		margin_left = 20
+
+		icon = {
+			name = "icon"
+			block "nationalize_effect_icon"
+			{
+				visible = no
+				#texture = ?
+			}
+
+			size = { 50 50 }
+		}
+
+		textbox = {
+			name = "text"
+			block "nationalize_effect_text"
+			{
+				visible = no
+				#text = ?
+			}
+
+			autoresize = yes
+			multiline = yes
+			align = nobaseline
+			min_width = 370
+			max_width = 370
+		}
+
+		expand = {}
+	}
+}
+
 
 ### SWAY OFFER
 default_popup = {
@@ -2277,6 +3077,15 @@ default_confirmation_window = {
 	blockoverride "answer_yes_handler" {
 		onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
 		onclick = "[GetVariableSystem.Toggle('reform_government')]"
+	}
+}
+
+default_confirmation_window = {
+	name = "company_confirmation_window"
+
+	blockoverride "description_size" {
+		maximumsize = { 400 -1 }
+		minimumsize = { 400 -1 }
 	}
 }
 

@@ -1,0 +1,72 @@
+name: vic3-tiger-check
+
+on:
+  pull_request:
+    branches:
+      - Imperia-Core
+    types:
+      - synchronize
+      - opened
+      - labeled
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout current repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{github.event.pull_request.head.ref}}
+
+    - name: Clone Rust program repository
+      run: git clone --branch main https://github.com/amtep/ck3-tiger vic3-tiger
+
+    - uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ secrets.BUGHUNT_BOT_ID }}
+        private-key: ${{ secrets.BUGHUNT_BOT_TOKEN }}
+        owner: ${{ github.repository_owner }}
+    
+    - name: Checkout vanilla game data repository
+      uses: actions/checkout@v4
+      with:
+        repository: Imperia-Development-Victoria-3/Vanilla
+        ref: main
+        path: vanilla-game
+        token: ${{ steps.app-token.outputs.token }}  # GitHub token for authentication
+
+    - name: Build Rust program
+      run: |
+        cd vic3-tiger
+        cargo build --release -p vic3-tiger
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" --suppress ${{ github.workspace }}/files/current_errors.json  > ../error.log
+
+    - name: Check if error log is empty
+      id: check_error_log
+      run: |
+          if [ -s ./error.log ]; then
+            echo "has_errors=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_errors=false" >> $GITHUB_OUTPUT
+          fi
+
+    - name: Fail PR if error log is not empty
+      if: ${{ steps.check_error_log.outputs.has_errors == 'true' && !contains( github.event.pull_request.labels.*.name, 'override') }}
+      run: |
+        cat error.log
+        exit 1
+
+    - name: Update the suppressed error json
+      if: ${{ steps.check_error_log.outputs.has_errors == 'true' && contains( github.event.pull_request.labels.*.name, 'override') }}
+      run: |
+        cd vic3-tiger
+        cargo run --release -p vic3-tiger "${{ github.workspace }}" --json --game "${{ github.workspace }}/vanilla-game" > ../files/current_errors.json
+        cd "${{ github.workspace }}"
+        git status
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git add files/current_errors.json
+        git diff-index --quiet HEAD || git commit -m "Added systemic errors to our suppression list" &&  git push origin "HEAD:${{ github.head_ref }}"
+

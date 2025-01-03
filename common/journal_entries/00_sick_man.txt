@@ -25,11 +25,42 @@
 			}
 		}
 	}
-	timeout = 19710
+	timeout = 17900
 	on_timeout = {
 		remove_modifier ?= sick_man_of_europe
 		trigger_event = {
 			id = sick_man.3
+		}
+	}
+	fail = {
+		NOR = {
+			owns_entire_state_region = STATE_NORTHERN_THRACE
+			owns_entire_state_region = STATE_WESTERN_THRACE
+			owns_entire_state_region = STATE_EASTERN_THRACE
+		}
+		OR = {
+			has_technology_researched = nationalism
+			has_technology_researched = labor_movement
+		}
+	}
+	on_fail = {
+		remove_modifier ?= sick_man_of_europe
+		trigger_event = {
+			id = sick_man.3
+		}
+		if = {
+			limit = {
+				is_in_power_bloc = yes
+				is_power_bloc_leader = yes
+			}
+			custom_tooltip = sick_man_of_europe_lose_power_bloc
+		}
+		custom_tooltip = {
+			text = je_sick_man_main_failure_movements_tt
+			set_variable = {
+				name = failed_tanzimat
+				years = 20
+			}
 		}
 	}
 	current_value = {
@@ -77,7 +108,7 @@ je_sick_man_bureaucracy = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.9			# Land registration resisted
+			10 = tanzimat_events.9	# Land registration resisted
 		}
 	}
 	invalid = {
@@ -100,11 +131,12 @@ je_sick_man_economy = {
 			filter = {
 				is_incorporated = yes
 			}
-			state_has_building_type_levels = {  
-				target = bt:building_urban_center
-				value >= 3
+			any_scope_building = {
+				is_building_type = building_urban_center
+				occupancy > 0.9
+				level >= 3
 			}
-			percent >= 0.25
+			percent >= 0.33333
 		}
 	}
 	on_complete = {
@@ -135,7 +167,7 @@ je_sick_man_army = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 	complete = {
-		army_size >= 150
+		army_size >= 135
 		OR = {
 			has_law = law_type:law_professional_army
 			has_law = law_type:law_mass_conscription
@@ -143,7 +175,7 @@ je_sick_man_army = {
 		has_technology_researched = napoleonic_warfare
 		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks				
+				is_building_type = building_barracks
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_organization
@@ -156,7 +188,7 @@ je_sick_man_army = {
 				any_combat_unit = {
 					has_unit_type = unit_type:combat_unit_type_irregular_infantry
 				}
-				percent >= 0.10
+				percent >= 0.1
 			}
 		}
 	}
@@ -175,7 +207,7 @@ je_sick_man_army = {
 	}
 	on_monthly_pulse = {
 		events = {
-			tanzimat_events.10			# Tanzimat Draft Question
+			tanzimat_events.10	# Tanzimat Draft Question
 		}
 	}
 	invalid = {
@@ -193,7 +225,7 @@ je_sick_man_navy = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	group = je_group_historical_content
 	complete = {
-		navy_size >= 50
+		navy_size >= 40
 		OR = {
 			has_law = law_type:law_professional_army
 			has_law = law_type:law_mass_conscription
@@ -201,7 +233,7 @@ je_sick_man_navy = {
 		has_technology_researched = power_of_the_purse
 		NOR = {
 			any_scope_building = {
-				is_building_type = building_naval_base				
+				is_building_type = building_naval_base
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_naval_theory
@@ -328,14 +360,26 @@ je_sick_man_absolute_kurdish = {
 		}
 	}
 	complete = {
-		scope:journal_entry = {
-			is_goal_complete = yes
+		OR = {
+			NOT = {
+				exists = c:KUR
+			}
+			AND = {
+				scope:journal_entry = {
+					is_goal_complete = yes
+				}
+				has_diplomatic_pact = {
+					who = c:KUR
+					type = puppet
+				}
+				NOT = {
+					has_war_with = c:KUR
+				}
+				c:KUR = {
+					liberty_desire < 10
+				}
+			}
 		}
-		has_diplomatic_pact = {
-			who = c:KUR
-			type = puppet
-		}
-		is_at_war = no
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -376,6 +420,9 @@ je_sick_man_absolute_kurdish = {
 					NOT = {
 						has_war_with = c:KUR
 					}
+					c:KUR = {
+						liberty_desire < 10
+					}
 				}
 				change_variable = {
 					name = sick_man_kurdish_absolute_var
@@ -402,7 +449,11 @@ je_sick_man_liberal_separatism = {
 			turmoil <= 0.6
 		}
 		has_law = law_type:law_no_migration_controls
-		has_law = law_type:law_cultural_exclusion
+		OR = {
+			has_law = law_type:law_cultural_exclusion
+			has_law = law_type:law_multicultural
+			has_law = law_type:law_true_multicultural
+		}
 	}
 	immediate = {
 		rel:catholic = {
@@ -495,7 +546,11 @@ je_sick_man_liberal_separatism = {
 						turmoil <= 0.6
 					}
 					has_law = law_type:law_no_migration_controls
-					has_law = law_type:law_cultural_exclusion
+					OR = {
+						has_law = law_type:law_cultural_exclusion
+						has_law = law_type:law_multicultural
+						has_law = law_type:law_true_multicultural
+					}
 				}
 				change_variable = {
 					name = sick_man_separatist_var
@@ -505,7 +560,7 @@ je_sick_man_liberal_separatism = {
 		}
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5			# Paranoia Event
+			10 = tanzimat_events.5	# Paranoia Event
 		}
 	}
 	current_value = {
@@ -580,7 +635,7 @@ je_sick_man_absolute_separatism = {
 	on_monthly_pulse = {
 		random_events = {
 			100 = 0
-			10 = tanzimat_events.5			# Paranoia Event
+			10 = tanzimat_events.5	# Paranoia Event
 		}
 	}
 	invalid = {
@@ -688,7 +743,7 @@ je_sick_man_absolute_education = {
 	progressbar = yes
 }
 
-# Liberalism
+# Liberalism / Constitution
 je_sick_man_liberal_voting = {
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 	group = je_group_historical_content
@@ -720,11 +775,11 @@ je_sick_man_liberal_voting = {
 		}
 		add_loyalists = {
 			value = 0.1
-			strata = poor
+			strata = lower
 		}
 		add_radicals = {
 			value = 0.15
-			strata = rich
+			strata = upper
 		}
 		add_modifier = {
 			name = sick_man_liberal_voting
@@ -796,7 +851,6 @@ je_sick_man_liberal_secularism = {
 			country_or_subject_owns_entire_state_region = STATE_NORTHERN_SERBIA
 			country_or_subject_owns_entire_state_region = STATE_WALLACHIA
 			country_or_subject_owns_entire_state_region = STATE_BULGARIA
-
 			any_scope_state = {
 				state_region = s:STATE_MONTENEGRO
 			}
@@ -1143,7 +1197,7 @@ je_sick_man_absolute_islam = {
 					AND = {
 						has_law = law_type:law_state_religion
 						has_law = law_type:law_inquisition
-						has_law = law_type:law_legal_guardianship
+						has_law = law_type:law_no_womens_rights
 						has_law = law_type:law_tenant_farmers
 					}
 					OR = {

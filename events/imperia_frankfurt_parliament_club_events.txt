@@ -1,0 +1,460 @@
+﻿namespace = frankfurt_parliament_clubs
+# Strengthen own side, costs Influence
+frankfurt_parliament_clubs.1 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament_clubs.1.t
+	desc = frankfurt_parliament_clubs.1.desc
+	flavor = frankfurt_parliament_clubs.1.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+		set_variable = {
+			name = club_random_event_cooldown
+			months = 2
+		}
+		save_scope_value_as = {
+			name = big_boost
+			value = 60
+		}
+		save_scope_value_as = {
+			name = medium_boost
+			value = 25
+		}
+		save_scope_value_as = {
+			name = small_boost
+			value = 18
+		}
+		if = {
+			limit = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+			save_scope_value_as = {
+				name = club_value
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = frankfurt_parliament_supports_center_club
+			}
+			save_scope_value_as = {
+				name = club_value
+				value = 2
+			}
+		}
+	}
+	trigger = {
+		is_player = yes
+		NOT = {
+			has_variable = club_random_event_cooldown
+		}
+		OR = {
+			has_variable = frankfurt_parliament_supports_left_club
+			has_variable = frankfurt_parliament_supports_center_club
+		}
+		# Must be before the last vote
+		global_var:frankfurt_parliament_current_vote < 6
+	}
+	# Focus the influence; 1 target
+	# Costs 75
+	option = {
+		trigger = {
+			influence > club_influence_1_target
+		}
+		name = frankfurt_parliament_clubs.1.a
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.6
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 3
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_1_target
+			months = 6
+		}
+	}
+	# Spread the influence evenly; 3 targets
+	# Costs 300
+	option = {
+		trigger = {
+			influence > club_influence_3_targets
+		}
+		default_option = yes
+		name = frankfurt_parliament_clubs.1.b
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.25
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 2
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.25
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 2
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.25
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 2
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_3_targets
+			months = 6
+		}
+	}
+	# Spread the influence thin; 5 targets
+	# Costs 550
+	option = {
+		trigger = {
+			influence > club_influence_5_targets
+		}
+		name = frankfurt_parliament_clubs.1.c
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.18
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.18
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.18
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.18
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_BOOST_club = {
+				BOOST = 0.18
+			}
+			imperia_frankfurt_parliament_CLUB_influence_BOOST_label = {
+				CLUB = scope:club_value
+				BOOST = 1
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_5_targets
+			months = 6
+		}
+	}
+	# Nothankyou
+	option = {
+		name = frankfurt_parliament_clubs.1.d
+	}
+}
+
+# Sabotage the other side
+frankfurt_parliament_clubs.2 = {
+	type = country_event
+	placement = scope:frankfurt_location_scope
+	title = frankfurt_parliament_clubs.2.t
+	desc = frankfurt_parliament_clubs.2.desc
+	flavor = frankfurt_parliament_clubs.2.f
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	event_image = {
+		texture = "gfx/event_pictures/frankfurt_parliament.dds"
+	}
+	duration = 2
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		random_state = {
+			limit = {
+				imperia_is_frankfurt_city_state = yes
+			}
+			save_scope_as = frankfurt_location_scope
+		}
+		set_variable = {
+			name = club_random_event_cooldown
+			months = 2
+		}
+		save_scope_value_as = {
+			name = big_boost
+			value = 40
+		}
+		save_scope_value_as = {
+			name = medium_boost
+			value = 16.6
+		}
+		save_scope_value_as = {
+			name = small_boost
+			value = 12
+		}
+		if = {
+			limit = {
+				has_variable = frankfurt_parliament_supports_left_club
+			}
+			save_scope_value_as = {
+				name = club_value
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = frankfurt_parliament_supports_center_club
+			}
+			save_scope_value_as = {
+				name = club_value
+				value = 2
+			}
+		}
+	}
+	trigger = {
+		is_player = yes
+		NOT = {
+			has_variable = club_random_event_cooldown
+		}
+		OR = {
+			has_variable = frankfurt_parliament_supports_left_club
+			has_variable = frankfurt_parliament_supports_center_club
+		}
+		# Must be before the last vote
+		global_var:frankfurt_parliament_current_vote < 6
+	}
+	# Sabotage the influence; 1 target
+	# Costs 75
+	option = {
+		trigger = {
+			influence > club_influence_1_target
+		}
+		name = frankfurt_parliament_clubs.2.a
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.4
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 3
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_1_target
+			months = 6
+		}
+	}
+	# Spread the influence evenly; 3 targets
+	# Costs 300
+	option = {
+		trigger = {
+			influence > club_influence_3_targets
+		}
+		default_option = yes
+		name = frankfurt_parliament_clubs.2.b
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.166
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 2
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.166
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 2
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.166
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 2
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_3_targets
+			months = 6
+		}
+	}
+	# Spread the influence thin; 5 targets
+	# Costs 550
+	option = {
+		trigger = {
+			influence > club_influence_5_targets
+		}
+		name = frankfurt_parliament_clubs.2.c
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.12
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.12
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.12
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.12
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 1
+			}
+		}
+		random_country = {
+			limit = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				is_player = no
+			}
+			imperia_frankfurt_parliament_SABOTAGE_club = {
+				SABOTAGE = 0.12
+			}
+			imperia_frankfurt_parliament_CLUB_influence_SABOTAGE_label = {
+				CLUB = scope:club_value
+				SABOTAGE = 1
+			}
+		}
+		add_modifier = {
+			name = supported_club_in_other_country
+			multiplier = club_influence_5_targets
+			months = 6
+		}
+	}
+	# Nothankyou
+	option = {
+		name = frankfurt_parliament_clubs.2.d
+	}
+}

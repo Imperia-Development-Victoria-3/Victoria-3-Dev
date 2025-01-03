@@ -1,0 +1,58 @@
+﻿# Root = Country
+on_imperia_capitulation = {
+	effect = {
+		## Gutter German Revolt
+		# If the Gutter King lost
+		if = {
+			limit = {
+				has_variable = accepted_gutter_crown
+				NOT = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+				}
+				has_global_variable = frankfurt_parliament_civil_war_happened
+			}
+			every_country = {
+				limit = {
+					has_diplomatic_relevance = root
+				}
+				post_notification = imperia_gutter_german_revolt_major_won
+			}
+			imperia_frankfurt_parliament_dissolve_gutter_germany = yes
+		}
+		# If the german establishment lost
+		if = {
+			limit = {
+				has_variable = german_establishment_leader
+				NOT = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+				has_global_variable = frankfurt_parliament_civil_war_happened
+			}
+			# First save scopes for notification
+			save_scope_as = german_major
+			random_country = {
+				limit = {
+					has_variable = accepted_gutter_crown
+				}
+				save_scope_as = gutter_king
+			}
+			every_country = {
+				limit = {
+					has_diplomatic_relevance = root
+				}
+				post_notification = imperia_gutter_german_revolt_king_won
+			}
+			# Then do the whole unify thing in a separate event
+			random_country = {
+				limit = {
+					has_variable = accepted_gutter_crown
+				}
+				make_independent = yes
+				trigger_event = {
+					id = frankfurt_parliament.8
+					days = 1
+				}
+			}
+		}
+	}
+}

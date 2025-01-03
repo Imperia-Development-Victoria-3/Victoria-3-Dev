@@ -1,0 +1,60 @@
+﻿# scope:notification_target = is the one who "won"
+# scope:actor = the one who backed down
+# Root = Diplomatic Play
+on_imperia_diplo_play_back_down = {
+	effect = {
+		### If one sides backs down in the Gutter german civil war
+		if = {
+			limit = {
+				is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+			}
+			# If the Gutter King submits
+			if = {
+				limit = {
+					scope:actor = {
+						has_variable = accepted_gutter_crown
+					}
+				}
+				every_country = {
+					limit = {
+						has_diplomatic_relevance = scope:actor
+					}
+					post_notification = imperia_gutter_german_revolt_major_won
+				}
+				# Dissolve Gutter Germany
+				scope:actor = {
+					imperia_frankfurt_parliament_dissolve_gutter_germany = yes
+				}
+			}
+			# If the German establishment submits
+			else_if = {
+				limit = {
+					scope:actor = {
+						has_variable = german_establishment_leader
+					}
+				}
+				# Save scopes for notification
+				scope:actor = {
+					save_scope_as = german_major
+				}
+				scope:notification_target = {
+					save_scope_as = gutter_king
+				}
+				every_country = {
+					limit = {
+						has_diplomatic_relevance = scope:actor
+					}
+					post_notification = imperia_gutter_german_revolt_king_won
+				}
+				# Then actually do the thing in a separate event (after the diplo play has ended)
+				scope:notification_target = {
+					make_independent = yes
+					trigger_event = {
+						id = frankfurt_parliament.8
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}

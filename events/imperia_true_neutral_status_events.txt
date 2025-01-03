@@ -223,3 +223,63 @@ imperia_true_neutral_status.2 = {
 		default_option = yes
 	}
 }
+
+# Event to remove true neutral
+imperia_true_neutral_status.3 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	title = imperia_true_neutral_status.3.t
+	desc = imperia_true_neutral_status.3.d
+	flavor = imperia_true_neutral_status.3.f
+	duration = 3
+	immediate = {
+		# This event should not be fireable multiple times, at the same time
+		set_variable = considering_abolishing_neutrality
+	}
+	# No, keep
+	option = {
+		default_option = yes
+		name = imperia_true_neutral_status.3.a
+		ai_chance = {
+			base = 100
+		}
+	}
+	# yes, abolish
+	option = {
+		name = imperia_true_neutral_status.3.b
+		remove_modifier = imperia_true_neutral
+		add_radicals = {
+			# +10% radicals in the country
+			value = 0.1
+		}
+		every_country = {
+			limit = {
+				OR = {
+					country_rank >= rank_value:great_power
+					is_adjacent_to_country = root
+				}
+				NOR = {
+					is_country_type = unrecognized
+					is_country_type = decentralized
+				}
+			}
+			# Change relations with every power that would've considered the neutrality treaty
+			change_relations = {
+				country = root
+				value = -35
+			}
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	after = {
+		# Remove the event-variable when an option is taken
+		remove_variable = considering_abolishing_neutrality
+	}
+}

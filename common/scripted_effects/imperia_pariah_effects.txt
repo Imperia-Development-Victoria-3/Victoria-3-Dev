@@ -1,0 +1,26 @@
+﻿imperia_pariah_neighbour_army_buff_common_effect = {
+	add_modifier = {
+		name = imperia_pariah_neighbour_army_buff_common
+		years = 5
+	}
+	set_relations = {
+		country = global_var:current_pariah
+		value = -100
+	}
+	# If - has pops of Pariah’s Primary culture that aren’t your primary culture, those pops get 50% radicalized
+	global_var:current_pariah = {
+		every_primary_culture = {
+			limit = {
+				NOT = {
+					is_primary_culture_of = root
+				}
+			}
+			root = {
+				add_radicals = {
+					value = 0.5
+					culture = prev
+				}
+			}
+		}
+	}
+}

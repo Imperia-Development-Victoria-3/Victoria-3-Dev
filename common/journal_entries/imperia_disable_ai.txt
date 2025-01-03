@@ -1,0 +1,29 @@
+﻿je_disable_ai = {
+	icon = "gfx/interface/icons/invention_icons/wargaming.dds"
+	group = je_group_internal_affairs
+	is_shown_when_inactive = {
+		is_ai = yes
+	}
+	possible = {
+		is_ai = yes
+		OR = {
+			has_variable = detected_player
+			# Once the timer is up, this JE will disappear
+			has_variable = ai_disabled_timer
+		}
+	}
+	modifiers_while_active = {
+		# This modifier disables downsizing and privatization
+		imperia_ai_disabled
+	}
+	immediate = {
+		remove_variable = detected_player
+		set_variable = {
+			name = ai_disabled_timer
+			years = 8
+		}
+	}
+	# The deactivating returns it promptly to being inactive, if the possible section equals false. But also means no "on_x" (complete, invalid, fail) can trigger. 
+	can_deactivate = yes
+	# The variables are therefore handled in the on_actions, no on_complete or anything, since those wouldnt be used.
+}

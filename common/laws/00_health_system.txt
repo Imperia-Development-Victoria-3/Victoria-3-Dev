@@ -4,27 +4,18 @@
 	
 	progressiveness = 0
 	
-	modifier = {
-	}
+	modifier = {}
 
-	pop_support = {
-		value = 0
-	}
-	
 	# AI shouldn't try to abolish institutions
 	ai_will_do = {
 		always = no
 	}
-
-	ai_enact_weight_modifier = { #Petitions
+	
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -38,23 +29,24 @@ law_charitable_health_system = {
 	
 	unlocking_technologies = {
 		medical_degrees
-	}	
+	}
 	modifier = {
-		country_institution_health_system_max_investment_add = 2
-		country_bureaucracy_investment_cost_factor_mult = 0.05
-	}	
-
+		country_institution_cost_institution_health_system_mult = 0.4
+	}
+	
 	institution = institution_health_system
 	institution_modifier = {
 		interest_group_ig_devout_pol_str_mult = 0.1
 		interest_group_ig_devout_pop_attraction_mult = 0.05
-		state_mortality_mult = -0.03
-		state_conversion_mult = 0.05
+		state_mortality_mult = -0.02
+		state_conversion_mult = 0.08
 		state_pollution_reduction_health_mult = -0.1
-		state_poor_standard_of_living_add = 0.3
-		state_middle_standard_of_living_add = 0.15
+		state_lower_strata_standard_of_living_add = 0.3
+		state_middle_strata_standard_of_living_add = 0.2
+		state_capitalists_investment_pool_efficiency_mult = -0.02
+		state_food_security_add = 0.02
 	}
-	
+
 	# Don't return to charity if we have something more advanced
 	ai_will_do = {
 		NOR = {
@@ -63,34 +55,11 @@ law_charitable_health_system = {
 		}
 	}
 	
-	pop_support = {
-		value = 0	
-		add = {
-			desc = "POP_POVERTY"			
-			if = {
-				limit = { 
-					owner = { NOT = { has_law = law_type:law_public_health_insurance } }
-				}
-
-				# SoL 14 gives 0.1 pop support, 13 -> 0.2, 12 -> 0.3, ... 5 -> 1.0
-				value = 15
-				subtract = standard_of_living
-				multiply = 0.1
-				min = 0
-				max = 1
-			}					
-		}
-	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -107,9 +76,8 @@ law_private_health_insurance = {
 	}
 	
 	modifier = {
-		country_institution_health_system_max_investment_add = 2
-		country_bureaucracy_investment_cost_factor_mult = -0.15
-	}	
+		country_max_companies_add = 1
+	}
 	
 	institution = institution_health_system
 	institution_modifier = {
@@ -117,33 +85,16 @@ law_private_health_insurance = {
 		interest_group_ig_petty_bourgeoisie_pop_attraction_mult = 0.04
 		state_mortality_wealth_mult = -0.0025
 		state_pollution_reduction_health_mult = -0.1
-		state_rich_standard_of_living_add = 1.5
-		state_middle_standard_of_living_add = 0.3
+		state_upper_strata_standard_of_living_add = 2
+		state_middle_strata_standard_of_living_add = 0.3
+		state_capitalists_investment_pool_efficiency_mult = 0.03
 	}
 	
-	pop_support = {
-		value = 0	
-		add = {
-			desc = "POP_WEALTH"			
-			# Wealth 20 gives 0.1 pop support, 22 -> 0.2, 24 -> 0.3, ..., 30 -> 0.6
-			value = wealth
-			subtract = 18
-			divide = 2
-			multiply = 0.1
-			min = 0
-			max = 0.6
-		}
-	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}
@@ -160,43 +111,26 @@ law_public_health_insurance = {
 	}
 	
 	modifier = {
-		country_institution_health_system_max_investment_add = 2
-		country_bureaucracy_investment_cost_factor_mult = 0.15
-	}		
+		country_institution_cost_institution_health_system_mult = 1.5
+	}
 	
 	institution = institution_health_system
 	institution_modifier = {
 		interest_group_ig_rural_folk_pop_attraction_mult = 0.03
-		interest_group_ig_trade_unions_pop_attraction_mult = 0.02
+		interest_group_ig_trade_unions_pop_attraction_mult = 0.06
 		state_dependent_political_participation_add = 0.04
 		state_dependent_wage_mult = 0.05
 		state_mortality_mult = -0.04
 		state_pollution_reduction_health_mult = -0.15
 		state_standard_of_living_add = 0.5
+		state_capitalists_investment_pool_efficiency_mult = -0.03
 	}
 	
-	pop_support = {
-		value = 0	
-		add = {
-			desc = "POP_POVERTY"			
-			# SoL 14 gives 0.1 pop support, 13 -> 0.2, 12 -> 0.3, ... 5 -> 1.0
-			value = 15
-			subtract = standard_of_living
-			multiply = 0.1
-			min = 0
-			max = 1			
-		}
-	}
-
-	ai_enact_weight_modifier = { #Petitions
+	ai_enact_weight_modifier = {	#Petitions
 		value = 0
 		
 		if = {
-			limit = { 
-				has_journal_entry = je_government_petition
-				has_variable = desired_law_var
-                scope:law = var:desired_law_var
-			}
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
 	}

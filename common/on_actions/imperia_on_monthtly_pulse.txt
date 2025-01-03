@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50					# counting from 50 infrasturucture
-					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50	# counting from 50 infrasturucture
+					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -75,7 +75,7 @@
 			every_scope_state = {
 				add_modifier = {
 					name = imperia_state_infamy
-					multiplier = imperia_infamy_multiplier
+					multiplier = root.imperia_infamy_multiplier
 				}
 			}
 		}
@@ -104,6 +104,19 @@
 			}
 			remove_modifier = player_construction_bonus
 		}
+		# Zollverein member construction nerf to prevent them from funding Prussia to the moon
+		# Kleinstaaterei is the term for these countries, localised as Kleinstaat
+		remove_modifier ?= zollverein_member_construction_penalty
+		if = {
+			limit = {
+				exists = c:PRU
+				power_bloc.power_bloc_leader ?= c:PRU
+				this != c:PRU
+			}
+			add_modifier = {
+				name = zollverein_member_construction_penalty
+			}
+		}
 		# Random events while congress is in session
 		if = {
 			limit = {
@@ -129,6 +142,30 @@
 				multiplier = local_var:tmp_imperia_china_infamy_penalty_value
 			}
 		}
+		# Frankfurt Parliament variable cleanup
+		# Done here to maintain stability in inter-JE functions
+		if = {
+			limit = {
+				imperia_frankfurt_parliament_is_in_session = no
+				# And has at least one of the following variables; meaning they participated in the Parliament
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voted_parliamentary
+				}
+				# And the German Revolt is not happening
+				any_diplomatic_play = {
+					count = 0
+					is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+				}
+			}
+			# Assume the thing is over, and variables havent been cleaned up
+			# So clean them up
+			imperia_frankfurt_parliament_clean_variables = yes
+		}
 		# Add money transfer variables to countries that doesnt have them yet
 		if = {
 			limit = {
@@ -141,9 +178,275 @@
 				value = 0
 			}
 		}
+		remove_modifier ?= modifier_state_religion_home_defence_discount
+		remove_modifier ?= modifier_state_religion_home_affairs_discount
+		remove_modifier ?= modifier_state_religion_education_discount
+		remove_modifier ?= modifier_state_religion_health_discount
+		if = {
+			limit = {
+				has_law = law_type:law_state_religion
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_faith_orders
+				}
+				add_modifier = modifier_state_religion_home_defence_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_inquisition
+				}
+				add_modifier = modifier_state_religion_home_affairs_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_religious_schools
+				}
+				add_modifier = modifier_state_religion_education_discount
+			}
+			if = {
+				limit = {
+					has_law = law_type:law_charitable_health_system
+				}
+				add_modifier = modifier_state_religion_health_discount
+			}
+		}
+		# Force-removing IGs from lobbies after a certain amount of time
+		every_interest_group = {
+			# First subtract from the membership timer (if it exists)
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				change_variable = {
+					name = imperia_ig_lobby_membership_timer
+					subtract = 1
+				}
+			}
+			# If the IG is part of a lobby, but doesnt have the timer; create new membership timers
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					NOT = {
+						has_variable = imperia_ig_lobby_membership_timer
+					}
+				}
+				set_variable = {
+					name = imperia_ig_lobby_membership_timer
+					# Months in lobby; 10 years so far
+					value = 120
+				}
+			}
+			# If the timer hits zero (or below, just in case); remove the IG from every lobby they're a part of
+			if = {
+				limit = {
+					has_variable = imperia_ig_lobby_membership_timer
+					var:imperia_ig_lobby_membership_timer <= 0
+				}
+				# This can be used in both country and in IGs. Is used in IG scope here to scope to lobbies the IG is a part of
+				every_political_lobby = {
+					remove_lobby_member = prev
+				}
+			}
+			# If the IG is not a member of a lobby, but has the timer-variable; remove the variable
+			if = {
+				limit = {
+					is_member_of_any_lobby = no
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				remove_variable = imperia_ig_lobby_membership_timer
+			}
+		}
+		## AI Disabling
+		# Sets the is_player variable for new/reconnecting players
+		if = {
+			limit = {
+				is_player = yes
+				NOT = {
+					has_variable = detected_player
+				}
+			}
+			# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
+			remove_variable ?= ai_disabled_timer
+			set_variable = detected_player
+		}
+		# Demolish non-capital statues
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_power_bloc_statue
+					state = {
+						is_capital = no
+					}
+				}
+			}
+			every_scope_state = {
+				limit = {
+					has_building = building_power_bloc_statue
+					is_capital = no
+				}
+				remove_building = building_power_bloc_statue
+			}
+		}
+		## Global multicultural levelup cooldowns
+		# To prevent back-to-back leveling
+		if = {
+			limit = {
+				# If country has the burgeoning multiculturalism institution
+				has_institution = institution_multiculturalism
+			}
+			if = {
+				# First time cooldown here
+				limit = {
+					NOT = {
+						has_global_variable = current_max_multiculturalism_level
+					}
+				}
+				set_global_variable = {
+					name = current_max_multiculturalism_level
+					value = 1
+				}
+				set_global_variable = {
+					name = multiculturalism_upgrade_cooldown
+					years = 10
+				}
+			}
+			if = {
+				limit = {
+					# If country is currently at the max (or above, I guess) allowed by the global var
+					institution_investment_level = {
+						institution = institution_multiculturalism
+						value >= global_var:current_max_multiculturalism_level
+					}
+				}
+				if = {
+					limit = {
+						# The cooldown is done
+						NOT = {
+							has_global_variable = multiculturalism_upgrade_cooldown
+						}
+					}
+					# Increase allowed max, and reset the cooldown
+					change_global_variable = {
+						name = current_max_multiculturalism_level
+						add = 1
+					}
+					set_global_variable = {
+						name = multiculturalism_upgrade_cooldown
+						years = 10
+					}
+				}
+				else_if = {
+					limit = {
+						# If country is expanding the institution rapidly, and has the cooldown active (since its an else_if)
+						# Or the institution is above its current max, just to calm my nerves
+						OR = {
+							expanding_institution = institution_multiculturalism
+							institution_investment_level = {
+								institution = institution_multiculturalism
+								value > global_var:current_max_multiculturalism_level
+							}
+						}
+					}
+					# Reset the institution to the max; SHOULD remove the expansion
+					# Cant do set_institution_investment_level dynamically, hence this "solution"
+					switch = {
+						trigger = global_var:current_max_multiculturalism_level
+						1 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 1
+							}
+						}
+						2 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 2
+							}
+						}
+						3 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 3
+							}
+						}
+						4 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 4
+							}
+						}
+						5 = {
+							set_institution_investment_level = {
+								institution = institution_multiculturalism
+								level = 5
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				this ?= c:BIC
+				is_subject = yes
+				NOT = {
+					has_variable = bic_collapse_var
+				}
+			}
+			# Colonial India, who is a subject and haven't collapsed yet
+			# Should save their overlord so the surrounding vassals gains independence at the same time..
+			set_variable = {
+				name = india_overlord
+				value = overlord
+			}
+		}
+
+		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
+		# after cancelling a arms deal treaty
+		if = {
+			limit = {
+				NOT = { has_variable = imperia_arms_deal_active }
+				OR = {
+					AND = {
+						NOT = { has_technology_researched = gunsmithing }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = rifling }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_caplocks
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = repeaters }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_repeaters
+						}
+					}
+					AND = {
+						NOT = { has_technology_researched = bolt_action_rifles }
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
+						}
+					}
+				}
+			}
+			add_modifier = imperia_invalid_mobilization_option_penalty
+		}
+		else = {
+			remove_modifier ?= imperia_invalid_mobilization_option_penalty
+		}
+	}
+	random_events = {
+		23 = 0
+		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1		#updates provinces each month
+		infamy_rebalance.1	#updates provinces each month
 	}
 }
 
@@ -160,50 +463,6 @@ on_imperia_monthly_pulse_store_infamy = {
 				has_global_highest_gdp = yes
 			}
 			imperia_vienna_congress_compile_lists = yes
-		}
-	}
-}
-
-on_imperia_monthly_pulse_state = {
-	effect = {
-		imperia_arable_land_green_grass_effect = yes
-		### Dis/allow incorporation
-		if = {
-			limit = {
-				is_incorporated = no
-				incorporation_progress = 0
-			}
-			if = {
-				limit = {
-					owner = {
-						has_law = law_type:law_imperialism
-					}
-				}
-				if = {
-					limit = {
-						any_scope_culture = {
-							NOT = {
-								culture_is_discriminated_in = prev.owner
-							}
-							has_homeland = root
-						}
-					}
-					remove_modifier ?= modifier_state_disallow_incorporation
-				}
-				else_if = {
-					limit = {
-						NOT = {
-							has_modifier = modifier_state_disallow_incorporation
-						}
-					}
-					add_modifier = {
-						name = modifier_state_disallow_incorporation
-					}
-				}
-			}
-			else = {
-				remove_modifier ?= modifier_state_disallow_incorporation
-			}
 		}
 	}
 }
@@ -263,7 +522,7 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 				if = {
 					# If the voting weight is at or above 45 (and you're not supporting)
 					limit = {
-						imperia_discord_ai_voting_weight >= 45
+						imperia_congress_ai_voting_weight >= 45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_1
@@ -280,7 +539,7 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 				else_if = {
 					# Else if the voting weight is at or below -45 (and you're not opposing)
 					limit = {
-						imperia_discord_ai_voting_weight <= -45
+						imperia_congress_ai_voting_weight <= -45
 						NOT = {
 							is_target_in_global_variable_list = {
 								name = current_congress_members_on_stance_3
@@ -303,18 +562,18 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 									name = current_congress_members_on_stance_1
 									target = this
 								}
-								imperia_discord_ai_voting_weight <= 25
+								imperia_congress_ai_voting_weight <= 25
 							}
 							AND = {
-								imperia_discord_ai_voting_weight <= 25
-								imperia_discord_ai_voting_weight >= -25
+								imperia_congress_ai_voting_weight <= 25
+								imperia_congress_ai_voting_weight >= -25
 							}
 							AND = {
 								is_target_in_global_variable_list = {
 									name = current_congress_members_on_stance_3
 									target = this
 								}
-								imperia_discord_ai_voting_weight >= -25
+								imperia_congress_ai_voting_weight >= -25
 							}
 						}
 						NOT = {
@@ -361,248 +620,6 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 				}
 				remove_global_variable = imperia_vienna_congress_in_session
 				remove_global_variable = congress_random_events_enabled
-			}
-		}
-	}
-}
-
-on_imperia_monthly_pulse_ai_executive_decisions = {
-	effect = {
-		if = {
-			limit = {
-				is_player = no
-			}
-			set_local_variable = {
-				name = prefers_expansionsism
-				value = 0
-			}
-			set_local_variable = {
-				name = prefers_imperialism
-				value = 0
-			}
-			set_local_variable = {
-				name = prefers_armed_neutrality
-				value = 0
-			}
-			set_local_variable = {
-				name = prefers_pacifist
-				value = 0
-			}
-			set_local_variable = {
-				name = prefers_anti_imperialist
-				value = 0
-			}
-			set_local_variable = {
-				name = counter_expansionsism
-				value = 0
-			}
-			set_local_variable = {
-				name = counter_imperialism
-				value = 0
-			}
-			set_local_variable = {
-				name = counter_armed_neutrality
-				value = 0
-			}
-			set_local_variable = {
-				name = counter_pacifist
-				value = 0
-			}
-			set_local_variable = {
-				name = counter_anti_imperialist
-				value = 0
-			}
-			every_interest_group = {
-				if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = law_type:law_expansionism
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
-						}
-					}
-					change_local_variable = {
-						name = prefers_expansionsism
-						add = 1
-					}
-				}
-				else_if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type
-							comparison_law = law_type:law_expansionism
-						}
-					}
-					change_local_variable = {
-						name = counter_expansionsism
-						add = 1
-					}
-				}
-				if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = law_type:law_imperialism
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
-						}
-					}
-					change_local_variable = {
-						name = prefers_imperialism
-						add = 1
-					}
-				}
-				else_if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type
-							comparison_law = law_type:law_imperialism
-						}
-					}
-					change_local_variable = {
-						name = counter_imperialism
-						add = 1
-					}
-				}
-				if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = law_type:law_armed_neutrality
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
-						}
-					}
-					change_local_variable = {
-						name = prefers_armed_neutrality
-						add = 1
-					}
-				}
-				else_if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type
-							comparison_law = law_type:law_armed_neutrality
-						}
-					}
-					change_local_variable = {
-						name = counter_armed_neutrality
-						add = 1
-					}
-				}
-				if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = law_type:law_pacifist
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
-						}
-					}
-					change_local_variable = {
-						name = prefers_pacifist
-						add = 1
-					}
-				}
-				else_if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type
-							comparison_law = law_type:law_pacifist
-						}
-					}
-					change_local_variable = {
-						name = counter_pacifist
-						add = 1
-					}
-				}
-				if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = law_type:law_anti_imperialist
-							comparison_law = root.active_law:lawgroup_diplomatic_stance.type
-						}
-					}
-					change_local_variable = {
-						name = prefers_anti_imperialist
-						add = 1
-					}
-				}
-				else_if = {
-					limit = {
-						is_in_government = yes
-						prefers_law = {
-							law = root.active_law:lawgroup_diplomatic_stance.type
-							comparison_law = law_type:law_anti_imperialist
-						}
-					}
-					change_local_variable = {
-						name = counter_anti_imperialist
-						add = 1
-					}
-				}
-			}
-			if = {
-				limit = {
-					law_type:law_true_neutrality != root.active_law:lawgroup_diplomatic_stance.type
-				}
-				if = {
-					limit = {
-						law_type:law_expansionism != root.active_law:lawgroup_diplomatic_stance.type
-						local_var:prefers_expansionsism > local_var:prefers_imperialism
-						local_var:prefers_expansionsism > local_var:prefers_armed_neutrality
-						local_var:prefers_expansionsism > local_var:prefers_pacifist
-						local_var:prefers_expansionsism > local_var:prefers_anti_imperialist
-						local_var:prefers_expansionsism > local_var:counter_expansionsism
-					}
-					activate_law = law_type:law_expansionism
-				}
-				else_if = {
-					limit = {
-						law_type:law_imperialism != root.active_law:lawgroup_diplomatic_stance.type
-						local_var:prefers_imperialism > local_var:prefers_expansionsism
-						local_var:prefers_imperialism > local_var:prefers_armed_neutrality
-						local_var:prefers_imperialism > local_var:prefers_pacifist
-						local_var:prefers_imperialism > local_var:prefers_anti_imperialist
-						local_var:prefers_imperialism > local_var:counter_imperialism
-					}
-					activate_law = law_type:law_imperialism
-				}
-				else_if = {
-					limit = {
-						law_type:law_armed_neutrality != root.active_law:lawgroup_diplomatic_stance.type
-						local_var:prefers_armed_neutrality > local_var:prefers_expansionsism
-						local_var:prefers_armed_neutrality > local_var:prefers_imperialism
-						local_var:prefers_armed_neutrality > local_var:prefers_pacifist
-						local_var:prefers_armed_neutrality > local_var:prefers_anti_imperialist
-						local_var:prefers_armed_neutrality > local_var:counter_armed_neutrality
-					}
-					activate_law = law_type:law_armed_neutrality
-				}
-				else_if = {
-					limit = {
-						law_type:law_pacifist != root.active_law:lawgroup_diplomatic_stance.type
-						local_var:prefers_pacifist > local_var:prefers_expansionsism
-						local_var:prefers_pacifist > local_var:prefers_armed_neutrality
-						local_var:prefers_pacifist > local_var:prefers_imperialism
-						local_var:prefers_pacifist > local_var:prefers_anti_imperialist
-						local_var:prefers_pacifist > local_var:counter_pacifist
-					}
-					activate_law = law_type:law_pacifist
-				}
-				else_if = {
-					limit = {
-						law_type:law_anti_imperialist != root.active_law:lawgroup_diplomatic_stance.type
-						local_var:prefers_anti_imperialist > local_var:prefers_expansionsism
-						local_var:prefers_anti_imperialist > local_var:prefers_armed_neutrality
-						local_var:prefers_anti_imperialist > local_var:prefers_pacifist
-						local_var:prefers_anti_imperialist > local_var:prefers_imperialism
-						local_var:prefers_anti_imperialist > local_var:counter_anti_imperialist
-					}
-					activate_law = law_type:law_anti_imperialist
-				}
 			}
 		}
 	}

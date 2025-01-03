@@ -42,6 +42,7 @@ types budget
 				blockoverride "illu" {
 					texture = "gfx/interface/illustrations/top_illus/top_illu_budget.dds"
 				}
+
 				textbox = {
 					name = "tutorial_highlight_weekly_balance_budget"
 					parentanchor = center
@@ -50,6 +51,34 @@ types budget
 					autoresize = yes
 					align = center|nobaseline
 					using = money_tooltip_with_graph
+				}
+
+				map_modes_single_button_minimized = {
+					datacontext = "[BudgetPanel.GetMapModeList]"
+					parentanchor = right
+					position = { -10 10 }
+
+					blockoverride "button_click" {
+						onclick = "[RightClickMenuManager.ToggleMapModes(MapModeList.AccessSelf, PdxGuiWidget.AccessSelf)]"
+					}
+
+					blockoverride "button_icon" {
+						texture = "gfx/interface/main_hud/lens_map_info.dds"
+					}
+
+					blockoverride "button_text" {
+						text = "[MapModeList.GetSelectedMapMode.GetName]"
+						margin = { 15 0 }
+						max_width = 160
+					}
+
+					blockoverride "expanded_size" {
+						size = { 190 45 }
+					}
+
+					blockoverride "right_icon_size" {
+						size = { 25 25 }
+					}
 				}
 			}
 
@@ -299,16 +328,19 @@ types budget
 						}	
 		
 						flowcontainer = {
+							margin_bottom = 10
+
 							dynamicgridbox = {
 								flipdirection = yes
-								datamodel_wrap = 5
+								datamodel_wrap = 10
 								datamodel = "[BudgetPanel.AccessTaxedGoods]"
 								item = {		
 									button_icon_round = {
 										size = { 35 35 }
 										onclick = "[InformationPanelBar.OpenGoodsPanel(AccessPlayer.AccessFirstMarket.Self, Goods.Self)]"
 										onrightclick = "[RightClickMenuManager.ShowForGoods(Goods.AccessSelf)]"
-										tooltip = "BUDGET_CONSUMPTION_TAX_TOOLTIP"													
+										tooltip = "BUDGET_CONSUMPTION_TAX_TOOLTIP"
+										using = tooltip_se
 
 										blockoverride "icon" {
 											texture = "[Goods.GetTexture]"
@@ -466,7 +498,7 @@ types budget
 									margin_bottom = 10
 									flowcontainer = {
 										direction = horizontal
-										spacing = 10
+										spacing = 20
 										
 										flowcontainer = {
 											direction = vertical
@@ -476,7 +508,7 @@ types budget
 												name = "tutorial_highlight_pause_all_construction"
 
 												using = default_button_action
-												size = { 190 35 }
+												size = { 210 35 }
 												text = "PAUSE_ALL_CONSTRUCTION_BUTTON"
 												onclick = "[Execute(PauseAllConstruction)]"
 												enabled = "[IsValid(PauseAllConstruction)]"
@@ -488,7 +520,7 @@ types budget
 
 											button = {
 												using = default_button_action
-												size = { 190 35 }
+												size = { 210 35 }
 												text = "RESUME_ALL_CONSTRUCTION_BUTTON"
 												onclick = "[Execute(ResumeAllConstruction)]"
 												enabled = "[IsValid(ResumeAllConstruction)]"
@@ -507,13 +539,13 @@ types budget
 											
 											item = {
 												widget = {
-													size = { 45 52 }
+													size = { 46 52 }
 													tooltip = "[ChangeAllConstructionSpeedTooltip(ProductionMethod.Self)]"
 													using = tooltip_above
 													
 													button_icon_round_action = {
 														visible = "[Not(IsCurrentProductionMethod(ProductionMethod.Self))]"
-														size = { 45 45 }
+														size = { 46 46 }
 														onclick = "[Execute(ChangeAllConstructionSpeed(ProductionMethod.Self))]"
 														using = confirm_button_sound
 														enabled = "[IsValid(ChangeAllConstructionSpeed(ProductionMethod.Self))]"
@@ -528,7 +560,7 @@ types budget
 													
 													#selected PM
 													widget = {
-														size = { 45 45 }
+														size = { 46 46 }
 														visible = "[IsCurrentProductionMethod(ProductionMethod.Self)]"
 														using = default_fade_in_out
 
@@ -1065,7 +1097,7 @@ types budget
 										
 										align = right|nobaseline
 										raw_text = "#variable @money![State.GetGovernmentExpenses|+d]#!"
-										tooltip = "[State.GetGovernmentExpensesTooltip]"
+										using = state_government_expenses_with_table
 										alpha = "[TransparentIfZero(State.GetGovernmentExpenses)]"
 									}
 
@@ -1344,7 +1376,6 @@ types budget
 								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
-								align = center
 								parentanchor = center
 							}
 						}
@@ -1353,7 +1384,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End)]"
-								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000000')).End)]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1392,7 +1423,6 @@ types budget
 								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
-								align = center
 								parentanchor = center
 							}
 						}
@@ -1401,7 +1431,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End)]"
-								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000000')).End)]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1456,7 +1486,6 @@ types budget
 								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
-								align = center
 								parentanchor = center
 							}
 						}
@@ -1465,7 +1494,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End)]"
-								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)100000')).End)]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1504,7 +1533,6 @@ types budget
 								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
-								align = center
 								parentanchor = center
 							}
 						}
@@ -1513,7 +1541,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End)]"
-								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)10000')).End)]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1552,7 +1580,6 @@ types budget
 								fontsize = 45
 								autoresize = yes
 								margin = { 10 10 }
-								align = center
 								parentanchor = center
 							}
 						}
@@ -1561,7 +1588,7 @@ types budget
 							button = {
 								using = default_button
 								onclick = "[GetScriptedGui('change_money_transfer_amount').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End)]"
-								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End))]"
+								enabled = "[GetScriptedGui('can_press_money_transfer_down_button').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('up', MakeScopeValue('(CFixedPoint)0')).AddScope('amount', MakeScopeValue('(CFixedPoint)1000')).End)]"
 								resizeparent = yes
 								minimumsize = { 50 50 }
 								icon = {
@@ -1592,12 +1619,10 @@ types budget
                 divider_clean = {}
 				flowcontainer = {
 					direction = vertical
-					align = center
 					parentanchor = hcenter
 					spacing = 20
 					flowcontainer = {
 						direction = horizontal
-						align = center
 						parentanchor = top|hcenter
 						textbox = {
 							raw_text = "#b Select Strategic Region of Recipient#!"
@@ -1627,7 +1652,6 @@ types budget
 					money_transfer_send_money_confirmation = {}
 					# Strategic Region listing
 					flowcontainer = {
-						align = center
 						parentanchor = hcenter
 						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
 						dynamicgridbox = {
@@ -1654,7 +1678,6 @@ types budget
 					}
 					# Countries in selected strategic region listing
 					flowcontainer = {
-						align = center
 						parentanchor = hcenter
 						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 						dynamicgridbox = {

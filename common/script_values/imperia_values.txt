@@ -40,152 +40,6 @@ imperia_vienna_congress_severity_max_negative = {
 	multiply = -1
 }
 
-imperia_ai_foreign_law_state_wargoal_weight = {
-	value = 1
-	if = {
-		limit = {
-			has_law = law_type:law_expansionism
-			scope:target_state = {
-				region = {
-					NOR = {
-						any_scope_state = {
-							owner = root
-							is_incorporated = yes
-						}
-						any_neighbouring_state = {
-							owner = root
-							is_incorporated = yes
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_imperialism
-			scope:target_country = {
-				NOT = {
-					is_country_type = unrecognized
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_armed_neutrality
-			scope:target_country = {
-				NOT = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_anti_imperialist
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_no_colonial_affairs
-					NOT = {
-						any_primary_culture = {
-							shares_heritage_and_other_trait_with_any_primary_culture = root
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_pacifist
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_true_neutrality
-		}
-		multiply = 0
-	}
-}
-
-imperia_ai_foreign_law_country_wargoal_weight = {
-	value = 1
-	if = {
-		limit = {
-			has_law = law_type:law_expansionism
-			scope:target_country = {
-				NOT = {
-					any_neighbouring_state = {
-						owner = root
-						is_incorporated = yes
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_imperialism
-			scope:target_country = {
-				NOT = {
-					is_country_type = unrecognized
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_armed_neutrality
-			scope:target_country = {
-				NOT = {
-					any_primary_culture = {
-						shares_heritage_and_other_trait_with_any_primary_culture = root
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_anti_imperialist
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_no_colonial_affairs
-					NOT = {
-						any_primary_culture = {
-							shares_heritage_and_other_trait_with_any_primary_culture = root
-						}
-					}
-				}
-			}
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_pacifist
-		}
-		multiply = 0
-	}
-	if = {
-		limit = {
-			has_law = law_type:law_true_neutrality
-		}
-		multiply = 0
-	}
-}
-
 imperia_get_primary_culture_fraction_rough = {
 	value = 0
 	every_scope_culture = {
@@ -422,11 +276,6 @@ imperia_get_primary_culture_fraction_rough = {
 	}
 }
 
-imperia_get_primary_culture_percentage_refined = {
-	value = imperia_get_primary_culture_fraction_rough
-	multiply = 100
-}
-
 imperia_get_state_religion_fraction_rough = {
 	value = 0
 	if = {
@@ -656,19 +505,14 @@ imperia_get_state_religion_fraction_rough = {
 	}
 }
 
-imperia_get_state_religion_percentage_refined = {
-	value = imperia_get_state_religion_fraction_rough
-	multiply = 100
-}
-
 imperia_infamy_multiplier = {
 	if = {
 		limit = {
 			infamy > 20
 		}
 		add = root.infamy
-		subtract = 20		# Remove 'excess' infamy from calculations
-		divide = 80		# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
+		subtract = 20	# Remove 'excess' infamy from calculations
+		divide = 80	# Since there's only 80 steps now, on the flipside going above 100 infamy becomes even more dangerous
 	}
 	else = {
 		value = 0
@@ -730,7 +574,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_major_power
 				}
 			}
-			value = 5
+			value = 4
 		}
 		else_if = {
 			limit = {
@@ -739,7 +583,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_regional_power
 				}
 			}
-			value = 10
+			value = 8
 		}
 		else_if = {
 			limit = {
@@ -748,7 +592,7 @@ imperia_player_construction_bonus_multiplier = {
 					country_rank = rank_value:unrecognized_power
 				}
 			}
-			value = 15
+			value = 12
 		}
 	}
 	else_if = {
@@ -1015,15 +859,14 @@ imperia_qing_fragile_unity_value = {
 	}
 	if = {
 		limit = {
-			# All state regions that are manchu homelands must be owned by c:CHI or one of their subjects
+			# If China loses Amur and Outer Manchuria
 			# Hardcoded for now
-			country_or_subject_owns_entire_state_region = STATE_SHENGJING
-			country_or_subject_owns_entire_state_region = STATE_OUTER_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_SOUTHERN_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_NORTHERN_MANCHURIA
-			country_or_subject_owns_entire_state_region = STATE_TRANS_BAIKAL
+			NOT = {
+				country_or_subject_owns_entire_state_region = STATE_AMUR
+				country_or_subject_owns_entire_state_region = STATE_OUTER_MANCHURIA
+			}
 		}
-		subtract = 5
+		add = 5
 	}
 	### JE completions
 	# je_end_han_discrimination
@@ -1207,7 +1050,7 @@ imperia_qing_fragile_unity_value = {
 		limit = {
 			has_variable = imperia_taiping_appeared
 		}
-		add = 20
+		add = 10
 	}
 	# Boxer rebvellion timed out
 	if = {
@@ -1229,6 +1072,19 @@ imperia_qing_fragile_unity_value = {
 			}
 		}
 		add = 5
+	}
+	#Opium Epidemic JE
+	if = {
+		limit = {
+			has_modifier = modifier_opium_eradicated
+		}
+		subtract = 10
+	}
+	if = {
+		limit = {
+			has_modifier = modifier_opium_ascendant
+		}
+		add = 10
 	}
 	#These go last
 	min = 0
@@ -1663,7 +1519,7 @@ masked_ball_max_afford = {
 }
 
 # scope : AI voting country
-imperia_discord_ai_voting_weight = {
+imperia_congress_ai_voting_weight = {
 	value = 0
 	# Positive value = set to support
 	# Negative value = set to oppose
@@ -1690,37 +1546,6 @@ imperia_discord_ai_voting_weight = {
 	}
 }
 
-imperia_weekly_customs_union_minting_cost = {
-	if = {
-		limit = {
-			has_variable = previous_minting_cost
-		}
-		value = {
-			add = modifier:country_minting_add
-			subtract = var:previous_minting_cost
-		}
-	}
-	else = {
-		value = modifier:country_minting_add
-	}
-	divide = {
-		add = 1
-		divide = 0.6		# old $DIVISOR$ 
-	}
-	if = {
-		limit = {
-			has_variable = previous_minting_cost
-		}
-		subtract = {
-			add = modifier:country_minting_add
-			subtract = var:previous_minting_cost
-		}
-	}
-	else = {
-		subtract = modifier:country_minting_add
-	}
-}
-
 imperia_china_infamy_penalty_value = {
 	value = 0
 	if = {
@@ -1744,7 +1569,7 @@ imperia_china_infamy_penalty_value = {
 					}
 				}
 			}
-			add = 6
+			add = 4
 		}
 		every_subject_or_below = {
 			limit = {
@@ -1768,7 +1593,7 @@ imperia_china_infamy_penalty_value = {
 						}
 					}
 				}
-				add = 6
+				add = 4
 			}
 		}
 	}
@@ -1779,7 +1604,7 @@ imperia_money_transfer_ten_million_counter = {
 	add = {
 		value = var:imperia_money_transfer_amount
 		divide = 10000000
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1789,7 +1614,7 @@ imperia_money_transfer_one_million_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 1000000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1799,7 +1624,7 @@ imperia_money_transfer_one_hundred_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 100000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1809,7 +1634,7 @@ imperia_money_transfer_ten_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 10000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1819,7 +1644,7 @@ imperia_money_transfer_one_k_counter = {
 		value = var:imperia_money_transfer_amount
 		divide = 1000
 		modulo = 10
-		floor = 1
+		floor = yes
 	}
 }
 
@@ -1848,4 +1673,480 @@ imperia_true_neutral_remaining_signers_value = {
 	# scope : true neutral applicant
 	value = var:true_neutral_required_signers_var
 	subtract = var:true_neutral_current_signers_var
+}
+
+imperia_dead_man_republican_laws_value = {
+	# scope : country, specifically Dead Man Turkey/Ottomans
+	# value is set to 0 first, that way we will just add to it down the line
+	value = 0
+	# First off, if the country has either of the voting laws, increase the value by 1
+	# Could be split up, if you want different values for the two
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_technocracy
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+			}
+		}
+		add = 1
+	}
+	# If you do split them up, they should look like the following
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_national_supremacy
+				has_law = law_type:law_cultural_exclusion
+			}
+		}
+		add = 1
+	}
+	# ... And so forth
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_freedom_of_conscience
+				has_law = law_type:law_total_separation
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_guaranteed_liberties
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_private_paramilitaries
+				has_law = law_type:law_emergency_relief_services
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_commercialized_agriculture
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_private_schools
+				has_law = law_type:law_public_schools
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_private_health_insurance
+		}
+		add = 1
+	}
+	divide = 4
+}
+
+imperia_dead_man_theocracy_laws_value = {
+	# scope : country, specifically Dead Man Turkey/Ottomans
+	# value is set to 0 first, that way we will just add to it down the line
+	value = 0
+	# First off, if the country has either of the voting laws, increase the value by 1
+	# Could be split up, if you want different values for the two
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_autocracy
+				has_law = law_type:law_oligarchy
+				has_law = law_type:law_landed_voting
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_national_supremacy
+				has_law = law_type:law_racial_segregation
+			}
+		}
+		add = 1
+	}
+	# ... And so forth
+	if = {
+		limit = {
+			has_law = law_type:law_state_religion
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_provincial_courts
+				has_law = law_type:law_inquisition
+				has_law = law_type:law_empowered_gendarmerie
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_faith_orders
+				has_law = law_type:law_national_guard
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_serfdom
+				has_law = law_type:law_tenant_farmers
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_patriot_schools
+				has_law = law_type:law_religious_schools
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_charitable_health_system
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_no_womens_rights
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_slave_trade
+				has_law = law_type:law_legacy_slavery
+			}
+		}
+		add = 1
+	}
+	divide = 2.5
+}
+
+imperia_dead_man_communist_laws_value = {
+	# scope : country, specifically Dead Man Turkey/Ottomans
+	# value is set to 0 first, that way we will just add to it down the line
+	value = 0
+	# First off, if the country has either of the voting laws, increase the value by 1
+	# Could be split up, if you want different values for the two
+	if = {
+		limit = {
+			has_law = law_type:law_universal_suffrage
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_multicultural
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_total_separation
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_guaranteed_liberties
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_emergency_relief_services
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_disarmed_police
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_public_schools
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_public_health_insurance
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_women_in_the_workplace
+				has_law = law_type:law_womens_suffrage
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_law_pro_workers_rights = yes
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_wage_subsidies
+				has_law = law_type:law_old_age_pension
+			}
+		}
+		add = 1
+	}
+	divide = 5.5
+}
+
+biggest_culture_percentage_in_state = {
+	if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.55
+					}
+				}
+			}
+		}
+		value = 0.55
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.5
+					}
+				}
+			}
+		}
+		value = 0.5
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.45
+					}
+				}
+			}
+		}
+		value = 0.45
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.4
+					}
+				}
+			}
+		}
+		value = 0.4
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.35
+					}
+				}
+			}
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.3
+					}
+				}
+			}
+		}
+		value = 0.3
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.25
+					}
+				}
+			}
+		}
+		value = 0.25
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.2
+					}
+				}
+			}
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.15
+					}
+				}
+			}
+		}
+		value = 0.15
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.1
+					}
+				}
+			}
+		}
+		value = 0.1
+	}
+	else_if = {
+		limit = {
+			any_scope_culture = {
+				prev = {
+					culture_percent_state = {
+						target = prev
+						value >= 0.05
+					}
+				}
+			}
+		}
+		value = 0.05
+	}
+}
+
+economic_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_eco_sanctioning_pariah
+				var:is_eco_sanctioning_pariah = yes
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:great_power
+				}
+				add = 1
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:major_power
+				}
+				add = 0.333
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:minor_power
+				}
+				add = 0.111
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				add = 0.037
+			}
+		}
+	}
+}
+
+trade_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_trade_sanctioning_pariah
+				var:is_trade_sanctioning_pariah = yes
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:great_power
+				}
+				add = 1
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:major_power
+				}
+				add = 0.333
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:minor_power
+				}
+				add = 0.111
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				add = 0.037
+			}
+		}
+	}
 }

@@ -13,9 +13,9 @@ sa_migration.1 = {
 	event_image = {
 		video = "southamerica_factory_opening"
 	}
-
+	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
+	
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	
 	duration = 3
@@ -23,7 +23,7 @@ sa_migration.1 = {
 	trigger = {
 		# triggered by southamerica_migration_button
 	}
-
+	
 	immediate = {
 		# Note that this closely reflects triggers in the button. Do not change one without changing both
 		random_country = {
@@ -68,13 +68,12 @@ sa_migration.1 = {
 					save_scope_as = migration_culture
 				}
 			}
-
 		}
 		ordered_scope_state = {
 			limit = {
 				trigger_if = {
-					limit = { 
-						ROOT = { 
+					limit = {
+						ROOT = {
 							has_journal_entry = je_central_america_migration
 						}
 					}
@@ -107,18 +106,26 @@ sa_migration.1 = {
 			order_by = migration_pull
 			save_scope_as = migration_target_state
 		}
+		scope:migration_target_state = {
+			create_mass_migration = {
+				origin = scope:migration_country
+				culture = scope:migration_culture
+			}
+		}
 	}
-
+	
 	option = {
 		name = sa_migration.1.a
 		add_modifier = {
 			name = sa_migration_cost
 			months = normal_modifier_time
 		}
-		scope:migration_target_state = {
-			create_mass_migration = {
-				origin = scope:migration_country
-				culture = scope:migration_culture
+		show_as_tooltip = {
+			scope:migration_target_state = {
+				create_mass_migration = {
+					origin = scope:migration_country
+					culture = scope:migration_culture
+				}
 			}
 		}
 	}
@@ -136,9 +143,9 @@ sa_migration.2 = {
 	event_image = {
 		video = "asia_poor_people_moving"
 	}
-
+	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
+	
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	
 	duration = 3
@@ -146,7 +153,7 @@ sa_migration.2 = {
 	trigger = {
 		# triggered by je_south_america_migration
 	}
-
+	
 	option = {
 		name = sa_migration.2.a
 		default_option = yes
@@ -194,7 +201,7 @@ sa_migration.2 = {
 				}
 			}
 		}
-
+		
 		if = {
 			limit = {
 				has_journal_entry = je_american_west_migration
@@ -242,9 +249,9 @@ sa_migration.3 = {
 	event_image = {
 		video = "africa_construction_colony"
 	}
-
+	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
+	
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	
 	duration = 3
@@ -252,7 +259,7 @@ sa_migration.3 = {
 	trigger = {
 		# triggered by je_south_america_migration
 	}
-
+	
 	option = {
 		name = sa_migration.3.a
 		add_modifier = {
@@ -273,9 +280,9 @@ sa_migration.5 = {
 	event_image = {
 		video = "southamerica_factory_opening"
 	}
-
+	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
+	
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	
 	duration = 3
@@ -285,7 +292,7 @@ sa_migration.5 = {
 		c:ONT ?= THIS
 		NOT = { has_variable = canada_migration_var }
 	}
-
+	
 	immediate = {
 		set_variable = canada_migration_var
 		c:GBR = {
@@ -298,7 +305,7 @@ sa_migration.5 = {
 			save_scope_as = migration_target_state
 		}
 	}
-
+	
 	option = {
 		name = sa_migration.5.a
 		default_option = yes

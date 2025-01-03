@@ -1,0 +1,525 @@
+﻿# Swaying
+sway_authority_cost = 20
+sway_low_spend_authority = 50
+sway_medium_spend_authority = 100
+sway_high_spend_authority = 250
+sway_very_high_spend_authority = 500
+# Roughly ~ 75*(TARGETS^1.25)
+club_influence_1_target = 75
+club_influence_3_targets = 300
+club_influence_5_targets = 550
+# Integration (from the admin integration JE)
+# If the bureaucracy values are changed, change the modifiers as well
+frankfurt_integration_low_bureaucracy = 125
+frankfurt_integration_medium_bureaucracy = 250
+frankfurt_integration_large_bureaucracy = 500
+frankfurt_integration_low_money_divisor = 1120
+frankfurt_integration_medium_money_divisor = 560
+frankfurt_integration_large_money_divisor = 280
+# AI willingness to press buttons
+imperia_frankfurt_parliament_left_percentage = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = {
+			value = var:frankfurt_parliament_left_faction_influence
+			divide = {
+				value = var:frankfurt_parliament_left_faction_influence
+				add = var:frankfurt_parliament_center_faction_influence
+			}
+		}
+		multiply = 100
+	}
+	else = {
+		value = 50
+	}
+}
+
+imperia_frankfurt_parliament_center_percentage = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = {
+			value = var:frankfurt_parliament_center_faction_influence
+			divide = {
+				value = var:frankfurt_parliament_center_faction_influence
+				add = var:frankfurt_parliament_left_faction_influence
+			}
+		}
+		multiply = 100
+	}
+	else = {
+		value = 50
+	}
+}
+
+imperia_frankfurt_parliament_current_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_journal_entry = je_imperia_frankfurt_parliament
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_republic_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_republic
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_monarchy_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_monarchy
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_wealth_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_wealth_suffrage
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_universal_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_universal_suffrage
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_presidential_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_presidential
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_parliamentary_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voted_parliamentary
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_internal_focus_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voting_internal_focus
+		}
+		add = 1
+	}
+}
+
+imperia_frankfurt_parliament_external_focus_voters_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_variable = frankfurt_parliament_voting_external_focus
+		}
+		add = 1
+	}
+}
+
+gutter_german_claimed_states_amount = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				imperia_is_lesser_german_state = yes
+			}
+		}
+		add = 1
+	}
+}
+
+gutter_king_ratio_over_gutter_german_claims = {
+	value = 0
+	every_state_region = {
+		limit = {
+			any_scope_state = {
+				imperia_is_lesser_german_state = yes
+				owner = {
+					OR = {
+						has_variable = accepted_gutter_crown
+						overlord ?= {
+							has_variable = accepted_gutter_crown
+						}
+					}
+				}
+			}
+		}
+		add = 1
+	}
+	divide = gutter_german_claimed_states_amount
+}
+
+imperia_frankfurt_parliament_left_faction_percent_of_influence = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_left_faction_influence
+		}
+		value = var:frankfurt_parliament_left_faction_influence
+		divide = {
+			value = var:frankfurt_parliament_left_faction_influence
+			add = var:frankfurt_parliament_center_faction_influence
+		}
+		multiply = 100
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_frankfurt_parliament_center_faction_percent_of_influence = {
+	if = {
+		limit = {
+			has_variable = frankfurt_parliament_center_faction_influence
+		}
+		value = var:frankfurt_parliament_center_faction_influence
+		divide = {
+			value = var:frankfurt_parliament_left_faction_influence
+			add = var:frankfurt_parliament_center_faction_influence
+		}
+		multiply = 100
+	}
+	else = {
+		value = 0
+	}
+}
+
+imperia_frankfurt_parliament_gutter_king_authority_spent_on_princes = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = gutter_king_start_sway
+				has_modifier = german_major_solid_sway
+			}
+		}
+		add = sway_authority_cost
+	}
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = gutter_king_solid_sway
+				has_modifier = german_major_start_sway
+			}
+		}
+		add = {
+			value = sway_authority_cost
+			multiply = 2
+		}
+	}
+	every_country = {
+		limit = {
+			has_modifier = gutter_king_complete_sway
+		}
+		add = {
+			value = sway_authority_cost
+			multiply = 3
+		}
+	}
+}
+
+imperia_frankfurt_parliament_german_major_authority_spent_on_princes = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = german_major_start_sway
+				has_modifier = gutter_king_solid_sway
+			}
+		}
+		add = sway_authority_cost
+	}
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = german_major_solid_sway
+				has_modifier = gutter_king_start_sway
+			}
+		}
+		add = {
+			value = sway_authority_cost
+			multiply = 2
+		}
+	}
+	every_country = {
+		limit = {
+			has_modifier = german_major_complete_sway
+		}
+		add = {
+			value = sway_authority_cost
+			multiply = 3
+		}
+	}
+	# Spread out equally between the German Majors, in case there are more of them
+	if = {
+		limit = {
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+			}
+		}
+		divide = {
+			value = 0
+			every_country = {
+				limit = {
+					has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				}
+				add = 1
+			}
+		}
+	}
+}
+
+imperia_frankfurt_outside_pressure_for_left = {
+	# Goes from 0 (in case of no friends who for the left) to 45 (in case of besties in the left faction)
+	# They take previous votes into account here, just because
+	value = 0
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:cordial
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:amicable
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:friendly
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_republic
+					has_variable = frankfurt_parliament_voted_universal_suffrage
+					has_variable = frankfurt_parliament_voted_parliamentary
+					has_variable = frankfurt_parliament_voting_external_focus
+				}
+			}
+		}
+		add = 15
+	}
+}
+
+imperia_frankfurt_outside_pressure_for_center = {
+	# Goes from 0 (in case of no friends who for the center) to 45 (in case of besties in the center faction)
+	# They take previous votes into account here, just because
+	value = 0
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:cordial
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:amicable
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = {
+			country_rank < rank_value:major_power
+			any_country = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				relations:root >= relations_threshold:friendly
+				country_rank >= rank_value:major_power
+				OR = {
+					has_variable = frankfurt_parliament_voted_monarchy
+					has_variable = frankfurt_parliament_voted_wealth_suffrage
+					has_variable = frankfurt_parliament_voted_presidential
+					has_variable = frankfurt_parliament_voting_internal_focus
+				}
+			}
+		}
+		add = 15
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_start_german_minors_value = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
+			is_in_same_power_bloc = root
+			country_rank <= rank_value:minor_power
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_puppets_value = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
+			is_in_same_power_bloc = c:GER
+			power_bloc.power_bloc_leader = c:GER
+			country_rank <= rank_value:minor_power
+			is_direct_subject_of = c:GER
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+			}
+		}
+		add = 1
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_value = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+				has_variable = gutter_crown_political_je_integration_considered
+				var:gutter_crown_political_je_integration_considered = yes
+			}
+			NOR = {
+				has_modifier = gutter_crown_political_je_bureaucrats_left_be_modifier
+				has_modifier = gutter_crown_political_je_internal_security_left_be_modifier
+				has_modifier = gutter_crown_political_je_home_defence_left_be_modifier
+				has_modifier = gutter_crown_political_je_land_reform_left_be_modifier
+				has_modifier = gutter_crown_political_je_policing_left_be_modifier
+			}
+		}
+		add = 1
+	}
+}
+
+gutter_crown_political_penalty_multiplier = {
+	value = 0
+	## First get the current situation
+	add = {
+		value = 0
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_puppets_amount
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_amount
+	}
+	## Then divide that by the total, the goal
+	divide = {
+		add = var:je_imperia_frankfurt_gutter_crown_political_start_german_minors_amount
+		add = var:je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+	}
+	# Then get the actual multiplier
+	subtract = 1
+	multiply = -1
+}
+
+frankfurt_integration_spendable_bureaucracy = {
+	value = bureaucracy
+	if = {
+		limit = {
+			has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+		}
+		add = frankfurt_integration_low_bureaucracy
+	}
+	if = {
+		limit = {
+			has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+		}
+		add = frankfurt_integration_medium_bureaucracy
+	}
+	if = {
+		limit = {
+			has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+		}
+		add = frankfurt_integration_large_bureaucracy
+	}
+}

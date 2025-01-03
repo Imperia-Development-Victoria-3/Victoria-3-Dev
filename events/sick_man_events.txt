@@ -12,8 +12,7 @@ sick_man.1 = {
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-	trigger = {
-	}
+	trigger = {}
 	immediate = {
 		set_variable = {
 			name = sick_man_var
@@ -99,8 +98,7 @@ sick_man.2 = {
 		video = "europenorthamerica_london_center"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	trigger = {
-	}
+	trigger = {}
 	immediate = {
 		set_variable = sick_man_complete
 		remove_modifier ?= sick_man_of_europe
@@ -123,7 +121,7 @@ sick_man.2 = {
 		}
 		add_loyalists = {
 			value = 0.1
-			strata = rich
+			strata = upper
 		}
 		add_modifier = {
 			name = sick_man_liberal_western_happy
@@ -172,10 +170,18 @@ sick_man.2 = {
 			country = c:USA
 			value = 30
 		}
+		ig:ig_intelligentsia = {
+			if = {
+				limit = {
+					has_ideology = ideology:ideology_constitutionalist
+				}
+				remove_ideology = ideology_constitutionalist
+				add_ideology = ideology_republican
+			}
+		}
 	}
 	option = {
 		name = sick_man.2.b
-		default_option = yes
 		add_loyalists = {
 			value = 0.05
 		}
@@ -190,7 +196,6 @@ sick_man.2 = {
 	}
 	option = {
 		name = sick_man.2.c
-		default_option = yes
 		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
 			value = 0.15
@@ -235,7 +240,6 @@ sick_man.2 = {
 	}
 	option = {
 		name = sick_man.2.d
-		default_option = yes
 		# Change to Religion-based when Paradox Fixes
 		add_loyalists = {
 			value = 0.15
@@ -274,13 +278,13 @@ sick_man.3 = {
 		video = "unspecific_factory_closed"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	trigger = {
-	}
+	trigger = {}
 	immediate = {
 		set_variable = sick_man_complete
 		ruler = {
 			save_scope_as = ottoman_sultan
 		}
+		remove_modifier ?= sick_man_of_europe
 	}
 	option = {
 		name = sick_man.3.a
@@ -316,6 +320,8 @@ sick_man.3 = {
 						is_subject_type = subject_type_protectorate
 						is_subject_type = subject_type_dominion
 						is_subject_type = subject_type_puppet
+						is_subject_type = subject_type_colony
+						is_subject_type = subject_type_chartered_company
 					}
 				}
 				make_independent = yes
@@ -325,12 +331,8 @@ sick_man.3 = {
 		ruler = {
 			kill_character = yes
 		}
-		add_modifier = {
-			name = dead_man_of_europe
-		}
-		set_country_type = unrecognized
-		ruler = {
-			kill_character = yes
+		trigger_event = {
+			id = dead_man.1
 		}
 	}
 }
@@ -406,6 +408,8 @@ sick_man.4 = {
 			leader = {
 				set_ideology = ideology:ideology_jingoist_leader
 			}
+			remove_ideology = ideology_republican
+			add_ideology = ideology_constitutionalist
 		}
 	}
 }
@@ -423,8 +427,7 @@ sick_man.5 = {
 		video = "europenorthamerica_london_center"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	trigger = {
-	}
+	trigger = {}
 	immediate = {
 		set_variable = sick_man_complete
 		remove_modifier ?= sick_man_of_europe
@@ -443,7 +446,6 @@ sick_man.5 = {
 	}
 	option = {
 		name = sick_man.5.a
-		default_option = yes
 		ig:ig_intelligentsia = {
 			remove_ideology = ideology_anti_clerical
 			remove_ideology = ideology_republican
@@ -520,7 +522,6 @@ sick_man.5 = {
 	}
 	option = {
 		name = sick_man.5.b
-		default_option = yes
 		ig:ig_trade_unions = {
 			remove_ideology = ideology_populist
 			add_ideology = ideology_militant_populism
@@ -595,7 +596,6 @@ sick_man.5 = {
 	}
 	option = {
 		name = sick_man.5.c
-		default_option = yes
 		ig:ig_industrialists = {
 			remove_ideology = ideology_plutocratic
 			add_ideology = ideology_neo_feudalistic

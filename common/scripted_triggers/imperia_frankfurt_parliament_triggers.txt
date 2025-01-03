@@ -1,0 +1,359 @@
+﻿frankfurt_parliament_has_majority_for_republic = {
+	OR = {
+		# Either theres more republic voters than monarchy voters
+		imperia_frankfurt_parliament_republic_voters_value > imperia_frankfurt_parliament_monarchy_voters_value
+		AND = {
+			# Or a tiebreaker in favor of it
+			imperia_frankfurt_parliament_republic_voters_value = imperia_frankfurt_parliament_monarchy_voters_value
+			any_country = {
+				imperia_country_owns_frankfurt_city = yes
+				has_variable = frankfurt_parliament_voted_republic
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_wealth = {
+	# Either...
+	OR = {
+		# wealth beat the 2 others
+		imperia_frankfurt_parliament_wealth_voters_value > imperia_frankfurt_parliament_universal_voters_value
+		# Or a tiebreaker in favor of it
+		AND = {
+			imperia_frankfurt_parliament_wealth_voters_value >= imperia_frankfurt_parliament_universal_voters_value
+			any_country = {
+				imperia_country_owns_frankfurt_city = yes
+				has_variable = frankfurt_parliament_voted_wealth_suffrage
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_universal = {
+	# Either...
+	OR = {
+		# universal suffrage beat the other
+		imperia_frankfurt_parliament_universal_voters_value > imperia_frankfurt_parliament_wealth_voters_value
+		# Or a tiebreaker in favor of it
+		AND = {
+			imperia_frankfurt_parliament_universal_voters_value >= imperia_frankfurt_parliament_wealth_voters_value
+			any_country = {
+				imperia_country_owns_frankfurt_city = yes
+				has_variable = frankfurt_parliament_voted_universal_suffrage
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_presidential_republic = {
+	has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+	OR = {
+		imperia_frankfurt_parliament_presidential_voters_value > imperia_frankfurt_parliament_parliamentary_voters_value
+		AND = {
+			imperia_frankfurt_parliament_presidential_voters_value = imperia_frankfurt_parliament_parliamentary_voters_value
+			any_country = {
+				imperia_country_owns_frankfurt_city = yes
+				has_variable = frankfurt_parliament_voted_presidential
+			}
+		}
+	}
+}
+
+frankfurt_parliament_has_majority_for_parliamentary_republic = {
+	has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+	OR = {
+		imperia_frankfurt_parliament_parliamentary_voters_value > imperia_frankfurt_parliament_presidential_voters_value
+		AND = {
+			imperia_frankfurt_parliament_parliamentary_voters_value = imperia_frankfurt_parliament_presidential_voters_value
+			any_country = {
+				imperia_country_owns_frankfurt_city = yes
+				has_variable = frankfurt_parliament_voted_parliamentary
+			}
+		}
+		has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+	}
+}
+
+frankfurt_parliament_has_majority_for_internal_focus = {
+	has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+	has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+	imperia_frankfurt_parliament_internal_focus_voters_value > imperia_frankfurt_parliament_external_focus_voters_value
+}
+
+frankfurt_parliament_has_majority_for_external_focus = {
+	has_global_variable = frankfurt_parliament_has_majority_for_republic_var
+	has_global_variable = frankfurt_parliament_has_majority_for_universal_var
+	imperia_frankfurt_parliament_internal_focus_voters_value < imperia_frankfurt_parliament_external_focus_voters_value
+}
+
+frankfurt_parliament_prince_will_join_gutter_king = {
+	# scope = GUTTER KING
+	# root = PRINCE
+	# GP princes will NEVER join the Gutter King
+	OR = {
+		AND = {
+			country_rank = rank_value:major_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:minor_power
+			root.country_rank <= rank_value:major_power
+		}
+		AND = {
+			country_rank = rank_value:insignificant_power
+			root.country_rank <= rank_value:minor_power
+			# Special mention for Bavaria and Hanover, who didnt join the Frankfurt-led German empire...
+			trigger_if = {
+				limit = {
+					exists = c:BAV
+				}
+				root != c:BAV
+			}
+			trigger_if = {
+				limit = {
+					exists = c:HAN
+				}
+				root != c:HAN
+			}
+		}
+	}
+}
+
+frankfurt_parliament_gutter_king_is_consolidating = {
+	any_state_region = {
+		filter = {
+			any_scope_state = {
+				imperia_is_lesser_german_state = yes
+			}
+		}
+		any_scope_state = {
+			owner = {
+				OR = {
+					this = root
+					is_subject_of = root
+				}
+			}
+		}
+		percent >= 0.75
+	}
+}
+
+imperia_frankfurt_parliament_is_in_session = {
+	custom_tooltip = {
+		text = imperia_frankfurt_parliament_is_in_session_tt
+		any_country = {
+			count >= 1
+			OR = {
+				has_journal_entry = je_imperia_frankfurt_parliament
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+				has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+				has_variable = frankfurt_parliament_voting_for_gutter_king
+				has_variable = frankfurt_parliament_considering_gutter_crown
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_country_has_sway_targets = {
+	any_country = {
+		has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+		custom_tooltip = {
+			text = frankfurt_been_6_weeks_since_last_sway_on_this_country_tt
+			NOT = {
+				has_variable = je_frankfurt_minor_recently_swayed
+			}
+		}
+		trigger_if = {
+			limit = {
+				root = {
+					has_variable = sway_target_north
+				}
+			}
+			country_has_primary_culture = cu:north_german
+		}
+		trigger_else_if = {
+			limit = {
+				root = {
+					has_variable = sway_target_south
+				}
+			}
+			country_has_primary_culture = cu:south_german
+		}
+		trigger_if = {
+			limit = {
+				root = {
+					has_variable = sway_loyalty_min
+				}
+			}
+			trigger_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				OR = {
+					has_modifier = german_major_solid_sway
+					has_modifier = german_major_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				root = {
+					has_variable = sway_loyalty_max
+				}
+			}
+			trigger_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				NOT = {
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					root = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				NOT = {
+					has_modifier = german_major_complete_sway
+				}
+			}
+		}
+	}
+}
+
+imperia_frankfurt_parliament_TARGET_can_be_swayed_by_SWAYER = {
+	# TARGET : german minor
+	# SWAYER : german major/gutter king
+	$TARGET$ = {
+		has_journal_entry = je_imperia_frankfurt_german_consolidation_german_minor
+		NOT = {
+			has_variable = je_frankfurt_minor_recently_swayed
+		}
+		trigger_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_target_north
+				}
+			}
+			country_has_primary_culture = cu:north_german
+		}
+		trigger_else_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_target_south
+				}
+			}
+			country_has_primary_culture = cu:south_german
+		}
+		trigger_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_loyalty_min
+				}
+			}
+			trigger_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				OR = {
+					has_modifier = german_major_solid_sway
+					has_modifier = german_major_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				OR = {
+					has_modifier = gutter_king_solid_sway
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				$SWAYER$ = {
+					has_variable = sway_loyalty_max
+				}
+			}
+			trigger_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_gutter_king
+					}
+				}
+				NOT = {
+					has_modifier = gutter_king_complete_sway
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					$SWAYER$ = {
+						has_journal_entry = je_imperia_frankfurt_german_consolidation_german_major
+					}
+				}
+				NOT = {
+					has_modifier = german_major_complete_sway
+				}
+			}
+		}
+	}
+}
+
+gutter_crown_political_integration_state_event_trigger = {
+	any_scope_state = {
+		state_region = {
+			OR = {
+				is_homeland = cu:north_german
+				is_homeland = cu:south_german
+			}
+			NOT = {
+				has_variable = gutter_crown_political_je_integration_considered
+			}
+		}
+	}
+	NOT = {
+		has_variable = gutter_crown_political_integration_event_cooldown
+	}
+}
+
+gutter_crown_political_integration_country_event_trigger = {
+	any_country = {
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:south_german
+		}
+		is_in_same_power_bloc = c:GER
+		power_bloc.power_bloc_leader = c:GER
+		is_subject = no
+		country_rank <= rank_value:minor_power
+		NOT = {
+			has_variable = gutter_crown_political_je_integration_considered
+		}
+	}
+	NOT = {
+		has_variable = gutter_crown_political_integration_event_cooldown
+	}
+}

@@ -1,0 +1,348 @@
+﻿namespace = imperia_infamy_gp
+# Economic sanctions on pariah
+imperia_infamy_gp.1 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/vandalized_storefront"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	title = imperia_infamy_gp.1.t
+	desc = imperia_infamy_gp.1.d
+	flavor = imperia_infamy_gp.1.f
+	duration = 3
+	trigger = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		NOT = {
+			is_diplomatic_play_involved_with = global_var:current_pariah
+		}
+		NOT = {
+			has_variable = is_eco_sanctioning_pariah
+		}
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+	}
+	immediate = {
+		global_var:current_pariah = {
+			save_scope_as = pariah_scope
+		}
+		# Is set to no here, will change if they sanction
+		# Done like this so event doesnt pop multiple times
+		set_variable = {
+			name = is_eco_sanctioning_pariah
+			value = no
+			years = 10
+		}
+		save_scope_value_as = {
+			name = one_tenth_pariah_infamy_value
+			value = {
+				value = scope:pariah_scope.infamy
+				divide = 10
+			}
+		}
+	}
+	option = {
+		# Sanction the pariah
+		name = imperia_infamy_gp.1.a
+		default_option = yes
+		custom_tooltip = worsen_sanctions_tt
+		change_relations = {
+			country = scope:pariah_scope
+			value = -25
+		}
+		set_variable = {
+			name = is_eco_sanctioning_pariah
+			value = yes
+			years = 10
+		}
+		ai_chance = {
+			base = 90
+		}
+	}
+	option = {
+		# Take some penalties instead
+		name = imperia_infamy_gp.1.b
+		change_relations = {
+			country = scope:pariah_scope
+			value = 10
+		}
+		change_infamy = scope:one_tenth_pariah_infamy_value
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:pariah_scope = {
+			remove_modifier ?= modifier_pariah_economic_sanctions
+			# The modifier gets worse the more/stronger the sanctioners are
+			add_modifier = {
+				name = modifier_pariah_economic_sanctions
+				multiplier = economic_sanctioners_strength
+			}
+		}
+	}
+}
+
+# Trade sanctions on pariah
+imperia_infamy_gp.2 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_vandalized_storefront.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/vandalized_storefront"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	title = imperia_infamy_gp.2.t
+	desc = imperia_infamy_gp.2.d
+	flavor = imperia_infamy_gp.2.f
+	duration = 3
+	trigger = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		NOT = {
+			is_diplomatic_play_involved_with = global_var:current_pariah
+		}
+		NOT = {
+			has_variable = is_trade_sanctioning_pariah
+		}
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+	}
+	immediate = {
+		global_var:current_pariah = {
+			save_scope_as = pariah_scope
+		}
+		# Is set to no here, will change if they sanction
+		# Done like this so event doesnt pop multiple times
+		set_variable = {
+			name = is_trade_sanctioning_pariah
+			value = no
+			years = 10
+		}
+		save_scope_value_as = {
+			name = one_tenth_pariah_infamy_value
+			value = {
+				value = scope:pariah_scope.infamy
+				divide = 10
+			}
+		}
+	}
+	option = {
+		# Sanction the pariah
+		name = imperia_infamy_gp.2.a
+		default_option = yes
+		custom_tooltip = worsen_sanctions_tt
+		change_relations = {
+			country = scope:pariah_scope
+			value = -25
+		}
+		set_variable = {
+			name = is_trade_sanctioning_pariah
+			value = yes
+			years = 10
+		}
+		ai_chance = {
+			base = 90
+		}
+	}
+	option = {
+		# Take some penalties instead
+		name = imperia_infamy_gp.2.b
+		change_relations = {
+			country = scope:pariah_scope
+			value = 10
+		}
+		change_infamy = scope:one_tenth_pariah_infamy_value
+		ai_chance = {
+			base = 10
+		}
+	}
+	after = {
+		scope:pariah_scope = {
+			remove_modifier ?= modifier_pariah_trade_sanctions
+			# The modifier gets worse the more/stronger the sanctioners are
+			add_modifier = {
+				name = modifier_pariah_trade_sanctions
+				multiplier = trade_sanctioners_strength
+			}
+		}
+	}
+}
+
+# Coalition prompt against pariah
+imperia_infamy_gp.3 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_signed_contract.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/signed_contract"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	title = imperia_infamy_gp.3.t
+	desc = imperia_infamy_gp.3.d
+	flavor = imperia_infamy_gp.3.f
+	duration = 3
+	trigger = {
+		imperia_aggressive_diplomatic_plays_permitted = yes
+		is_at_war = no
+		is_subject = no
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		NOT = {
+			is_diplomatic_play_involved_with = global_var:current_pariah
+		}
+		NOT = {
+			has_variable = is_in_coalition_against_pariah
+		}
+		any_diplomatic_play = {
+			count = 0
+			is_diplomatic_play_type = dp_contain_threat
+			target_is = global_var:current_pariah
+		}
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+	}
+	immediate = {
+		global_var:current_pariah = {
+			save_scope_as = pariah_scope
+		}
+		# Is set to no here, will change if they coalition
+		# Done like this so event doesnt pop multiple times
+		set_variable = {
+			name = is_in_coalition_against_pariah
+			value = no
+			years = 10
+		}
+		save_scope_value_as = {
+			name = one_tenth_pariah_infamy_value
+			value = {
+				value = scope:pariah_scope.infamy
+				divide = 10
+			}
+		}
+	}
+	option = {
+		# Coalition the pariah
+		name = imperia_infamy_gp.3.a
+		default_option = yes
+		custom_tooltip = coalition_members_will_be_called_in_automatically_tt
+		change_relations = {
+			country = scope:pariah_scope
+			value = -25
+		}
+		set_variable = {
+			name = is_in_coalition_against_pariah
+			value = yes
+			years = 10
+		}
+		# Remove infamy equivalent to 10% of pariahs infamy; so at least 15 at this point
+		# Just to make it more worthwhile to sign the coalition
+		change_infamy = {
+			value = scope:one_tenth_pariah_infamy_value
+			multiply = -1
+		}
+		ai_chance = {
+			base = 90
+		}
+	}
+	option = {
+		# Take some penalties instead
+		name = imperia_infamy_gp.3.b
+		change_relations = {
+			country = scope:pariah_scope
+			value = 10
+		}
+		change_infamy = scope:one_tenth_pariah_infamy_value
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# Choice of army bonus for pariah neighbours
+imperia_infamy_gp.4 = {
+	type = country_event
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	title = imperia_infamy_gp.4.t
+	desc = imperia_infamy_gp.4.desc
+	flavor = imperia_infamy_gp.4.f
+	duration = 3
+	cooldown = {
+		months = 60
+	}
+	trigger = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+		has_strategic_adjacency = global_var:current_pariah
+	}
+	immediate = {
+		global_var:current_pariah = {
+			save_scope_as = pariah_scope
+		}
+	}
+	# Conscription rate
+	option = {
+		name = imperia_infamy_gp.4.a
+		default_option = yes
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_a
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+		ai_chance = {
+			base = 25
+		}
+	}
+	# Morale
+	option = {
+		name = imperia_infamy_gp.4.b
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_b
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+		ai_chance = {
+			base = 25
+		}
+	}
+	# Mobilization speed
+	option = {
+		name = imperia_infamy_gp.4.c
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_c
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+		ai_chance = {
+			base = 25
+		}
+	}
+	# Arms sector production
+	option = {
+		name = imperia_infamy_gp.4.d
+		add_modifier = {
+			name = imperia_pariah_neighbour_army_buff_d
+			years = 5
+		}
+		imperia_pariah_neighbour_army_buff_common_effect = yes
+		ai_chance = {
+			base = 25
+		}
+	}
+}
