@@ -99,7 +99,7 @@ imperia_hungary.2 = {
 	# 1 Month to choose
 	duration = 1
 	immediate = {
-		# Done like this because root might be Hungary..?
+		# Done like this because root might be Hungary, if I remember event-chaining correctly..?
 		this = {
 			save_scope_as = this_scope
 		}
@@ -166,12 +166,38 @@ imperia_hungary.2 = {
 					target_country = c:HUN
 					type = make_dominion
 				}
-                set_variable = hungarian_revolution_var
+				set_variable = hungarian_revolution_var
 			}
 		}
-        set_global_variable = hungarian_revolution_started
+		set_global_variable = hungarian_revolution_started
 		ai_chance = {
 			base = 100
+		}
+	}
+	after = {
+		# After the ultimatum, no matter what, transfer the characters loyal to Austria back home
+		c:HUN = {
+			every_scope_character = {
+				limit = {
+					has_variable = character_loyal_to_austria
+				}
+				transfer_character = c:AUS
+			}
+			
+			# Set Lajos Kossuth as its president
+			if = {
+				limit = {
+					any_scope_character = {
+						has_template = imperia_lajos_kossuth_template
+					}
+				}
+				random_scope_character = {
+					limit = {
+						has_template = imperia_lajos_kossuth_template
+					}
+					set_character_as_ruler = yes
+				}
+			}
 		}
 	}
 }
