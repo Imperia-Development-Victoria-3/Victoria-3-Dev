@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -402,33 +402,42 @@
 				value = overlord
 			}
 		}
-
 		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
 		# after cancelling a arms deal treaty
 		if = {
 			limit = {
-				NOT = { has_variable = imperia_arms_deal_active }
+				NOT = {
+					has_variable = imperia_arms_deal_active
+				}
 				OR = {
 					AND = {
-						NOT = { has_technology_researched = gunsmithing }
+						NOT = {
+							has_technology_researched = gunsmithing
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = rifling }
+						NOT = {
+							has_technology_researched = rifling
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_caplocks
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = repeaters }
+						NOT = {
+							has_technology_researched = repeaters
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_repeaters
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = bolt_action_rifles }
+						NOT = {
+							has_technology_researched = bolt_action_rifles
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
 						}
@@ -440,13 +449,43 @@
 		else = {
 			remove_modifier ?= imperia_invalid_mobilization_option_penalty
 		}
+		## Mark the lost_hungarian_revolution variable if the Hungarian Revolution is lost
+		if = {
+			limit = {
+				NOT = {
+					c:HUN ?= {
+						has_variable = lost_hungarian_revolution
+					}
+				}
+				has_global_variable = hungarian_revolution_started
+				any_diplomatic_play = {
+					count = 0
+					has_variable = hungarian_revolution_var
+				}
+				c:HUN ?= {
+					is_independent = no
+					is_at_war = no
+				}
+			}
+			c:HUN ?= {
+				set_variable = lost_hungarian_revolution
+			}
+			if = {
+				limit = {
+					c:HUN.overlord ?= c:AUS
+				}
+				c:AUS = {
+					add_journal_entry = { type = je_imperia_bachs_absolutism }
+				}
+			}
+		}
 	}
 	random_events = {
 		23 = 0
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 

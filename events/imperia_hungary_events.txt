@@ -1,0 +1,177 @@
+﻿namespace = imperia_hungary
+# Choose what kind of Hungary you want to send as ultimatum for the 1st Hungarian Revolution
+imperia_hungary.1 = {
+	type = country_event
+	title = imperia_hungary.1.t
+	desc = imperia_hungary.1.desc
+	flavor = imperia_hungary.1.f
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	immediate = {
+		overlord = {
+			save_scope_as = overlord_scope
+		}
+	}
+	# Greater Hungary
+	option = {
+		name = imperia_hungary.1.a
+		default_option = yes
+		custom_label = if_they_accept_tt
+		show_as_tooltip = {
+			make_independent = yes
+		}
+		set_variable = {
+			name = hungary_sent_greater_hungary_ultimatum_to_overlord
+			value = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	# Lesser Hungary
+	option = {
+		name = imperia_hungary.1.b
+		custom_label = if_they_accept_tt
+		show_as_tooltip = {
+			every_scope_state = {
+				limit = {
+					state_region = {
+						NOR = {
+							this = s:STATE_TRANSDANUBIA
+							this = s:STATE_CENTRAL_HUNGARY
+							this = s:STATE_BEKES
+							this = s:STATE_WEST_SLOVAKIA
+							this = s:STATE_EAST_SLOVAKIA
+						}
+					}
+				}
+				set_state_owner = scope:overlord_scope
+			}
+			make_independent = yes
+		}
+		set_variable = {
+			name = hungary_sent_greater_hungary_ultimatum_to_overlord
+			value = no
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	option = {
+		name = imperia_hungary.1.c
+		remove_global_variable = hungary_sent_ultimatum_to_overlord
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+# Austria gets to answer the ultimatum
+imperia_hungary.2 = {
+	type = country_event
+	title = imperia_hungary.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = imperia_hungary.2.desc
+				trigger = {
+					c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = yes
+				}
+			}
+			triggered_desc = {
+				desc = imperia_hungary.2.desc2
+				trigger = {
+					always = yes
+				}
+			}
+		}
+	}
+	flavor = imperia_hungary.2.f
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	# 1 Month to choose
+	duration = 1
+	immediate = {
+		# Done like this because root might be Hungary..?
+		this = {
+			save_scope_as = this_scope
+		}
+	}
+	# Accept greater Hungary
+	option = {
+		name = imperia_hungary.2.a
+		trigger = {
+			c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = yes
+		}
+		c:HUN = {
+			make_independent = yes
+		}
+		# ~1% chance of accepting the greater ultimatum
+		ai_chance = {
+			base = 1
+		}
+	}
+	# Accept lesser Hungary
+	option = {
+		name = imperia_hungary.2.b
+		trigger = {
+			c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = no
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					state_region = {
+						# Keep these states
+						NOR = {
+							this = s:STATE_TRANSDANUBIA
+							this = s:STATE_CENTRAL_HUNGARY
+							this = s:STATE_BEKES
+							this = s:STATE_WEST_SLOVAKIA
+							this = s:STATE_EAST_SLOVAKIA
+						}
+					}
+				}
+				set_state_owner = scope:this_scope
+			}
+			make_independent = yes
+		}
+		# ~2% chance of accepting the lesser ultimatum
+		ai_chance = {
+			base = 2
+		}
+	}
+	# Decline the ultimatum
+	option = {
+		name = imperia_hungary.2.c
+		default_option = yes
+		c:HUN = {
+			create_diplomatic_play = {
+				name = hungarian_revolution
+				target_country = scope:this_scope
+				type = dp_independence
+				add_war_goal = {
+					holder = c:HUN
+					target_country = scope:this_scope
+					type = independence
+				}
+				add_war_goal = {
+					holder = scope:this_scope
+					target_country = c:HUN
+					type = make_dominion
+				}
+                set_variable = hungarian_revolution_var
+			}
+		}
+        set_global_variable = hungarian_revolution_started
+		ai_chance = {
+			base = 100
+		}
+	}
+}
