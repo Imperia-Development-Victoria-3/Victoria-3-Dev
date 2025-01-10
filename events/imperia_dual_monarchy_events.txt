@@ -232,44 +232,42 @@ imperia_dual_monarchy.3 = {
 	on_opened_soundeffect = "event:/SFX/Events/misc/2Characters"
 	# 2 Month to choose
 	duration = 2
+	trigger = {
+		ruler = {
+			has_template = aus_ferdinand_I_habsburg_template
+		}
+		heir = {
+			has_template = aus_franz_joseph_habsburg_template
+		}
+	}
 	immediate = {
-		if = {
-			limit = {
-				ruler = {
-					has_template = aus_ferdinand_I_habsburg_template
-				}
-				heir = {
-					has_template = aus_franz_joseph_habsburg_template
-				}
-			}
-			ruler = {
-				save_scope_as = ruler_scope
-			}
-			heir = {
-				save_scope_as = heir_scope
-				set_character_as_ruler = yes
-			}
+		ruler = {
+			save_scope_as = ruler_scope
+		}
+		heir = {
+			save_scope_as = heir_scope
+			set_character_as_ruler = yes
 		}
 	}
 	option = {
 		name = imperia_dual_monarchy.3.a
 		default_option = yes
-		custom_tooltip = has_happened_tt
+		custom_tooltip = following_has_happened_tt
 		show_as_tooltip = {
 			scope:heir_scope = {
 				set_character_as_ruler = yes
 			}
-		}
-		add_journal_entry = {
-			type = je_imperia_austrian_neo_absolutism
-		}
-		if = {
-			limit = {
-				c:HUN.overlord = c:AUS
-			}
-			c:HUN = {
+			if = {
+				limit = {
+					c:HUN.overlord = c:AUS
+				}
 				add_journal_entry = {
-					type = je_imperia_passive_resistance
+					type = je_imperia_austrian_neo_absolutism
+				}
+				c:HUN = {
+					add_journal_entry = {
+						type = je_imperia_passive_resistance
+					}
 				}
 			}
 		}
