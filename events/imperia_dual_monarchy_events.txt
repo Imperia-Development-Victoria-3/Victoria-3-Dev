@@ -1,10 +1,10 @@
-﻿namespace = imperia_hungary
-# Choose what kind of Hungary you want to send as ultimatum for the 1st Hungarian Revolution
-imperia_hungary.1 = {
+﻿namespace = imperia_dual_monarchy
+# Choose what kind of Hungary you (HUN) want to send as ultimatum for the 1st Hungarian Revolution
+imperia_dual_monarchy.1 = {
 	type = country_event
-	title = imperia_hungary.1.t
-	desc = imperia_hungary.1.desc
-	flavor = imperia_hungary.1.f
+	title = imperia_dual_monarchy.1.t
+	desc = imperia_dual_monarchy.1.desc
+	flavor = imperia_dual_monarchy.1.f
 	event_image = {
 		video = "unspecific_ruler_speaking_to_people"
 	}
@@ -18,7 +18,7 @@ imperia_hungary.1 = {
 	}
 	# Greater Hungary
 	option = {
-		name = imperia_hungary.1.a
+		name = imperia_dual_monarchy.1.a
 		default_option = yes
 		custom_label = if_they_accept_tt
 		show_as_tooltip = {
@@ -34,7 +34,7 @@ imperia_hungary.1 = {
 	}
 	# Lesser Hungary
 	option = {
-		name = imperia_hungary.1.b
+		name = imperia_dual_monarchy.1.b
 		custom_label = if_they_accept_tt
 		show_as_tooltip = {
 			every_scope_state = {
@@ -62,7 +62,7 @@ imperia_hungary.1 = {
 		}
 	}
 	option = {
-		name = imperia_hungary.1.c
+		name = imperia_dual_monarchy.1.c
 		remove_global_variable = hungary_sent_ultimatum_to_overlord
 		ai_chance = {
 			base = 0
@@ -71,26 +71,26 @@ imperia_hungary.1 = {
 }
 
 # Austria gets to answer the ultimatum
-imperia_hungary.2 = {
+imperia_dual_monarchy.2 = {
 	type = country_event
-	title = imperia_hungary.2.t
+	title = imperia_dual_monarchy.2.t
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = imperia_hungary.2.desc
+				desc = imperia_dual_monarchy.2.desc
 				trigger = {
 					c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = yes
 				}
 			}
 			triggered_desc = {
-				desc = imperia_hungary.2.desc2
+				desc = imperia_dual_monarchy.2.desc2
 				trigger = {
 					always = yes
 				}
 			}
 		}
 	}
-	flavor = imperia_hungary.2.f
+	flavor = imperia_dual_monarchy.2.f
 	event_image = {
 		video = "unspecific_ruler_speaking_to_people"
 	}
@@ -106,7 +106,7 @@ imperia_hungary.2 = {
 	}
 	# Accept greater Hungary
 	option = {
-		name = imperia_hungary.2.a
+		name = imperia_dual_monarchy.2.a
 		trigger = {
 			c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = yes
 		}
@@ -120,7 +120,7 @@ imperia_hungary.2 = {
 	}
 	# Accept lesser Hungary
 	option = {
-		name = imperia_hungary.2.b
+		name = imperia_dual_monarchy.2.b
 		trigger = {
 			c:HUN.var:hungary_sent_greater_hungary_ultimatum_to_overlord = no
 		}
@@ -149,7 +149,7 @@ imperia_hungary.2 = {
 	}
 	# Decline the ultimatum
 	option = {
-		name = imperia_hungary.2.c
+		name = imperia_dual_monarchy.2.c
 		default_option = yes
 		c:HUN = {
 			create_diplomatic_play = {
@@ -166,7 +166,7 @@ imperia_hungary.2 = {
 					target_country = c:HUN
 					type = make_dominion
 				}
-				set_variable = hungarian_revolution_var
+				set_variable = diplo_play_is_hungarian_revolution
 			}
 		}
 		set_global_variable = hungarian_revolution_started
@@ -183,7 +183,16 @@ imperia_hungary.2 = {
 				}
 				transfer_character = c:AUS
 			}
-			
+			# Activate something resembling the 12 points of the Hungarian Revolution
+			activate_law = law_type:law_parliamentary_republic
+			activate_law = law_type:law_universal_suffrage
+			activate_law = law_type:law_elected_bureaucrats
+			activate_law = law_type:law_total_separation
+			activate_law = law_type:law_national_guard
+			activate_law = law_type:law_interventionism
+			activate_law = law_type:law_proportional_taxation
+			activate_law = law_type:law_homesteading
+			activate_law = law_type:law_protected_speech
 			# Set Lajos Kossuth as its president
 			if = {
 				limit = {
@@ -198,6 +207,67 @@ imperia_hungary.2 = {
 					set_character_as_ruler = yes
 				}
 			}
+		}
+	}
+}
+
+# Austrian emperor Ferdinand I abdicates in favour of Franz Joseph
+imperia_dual_monarchy.3 = {
+	type = country_event
+	title = imperia_dual_monarchy.3.t
+	desc = imperia_dual_monarchy.3.desc
+	flavor = imperia_dual_monarchy.3.f
+	gui_window = event_window_2char
+	left_icon = scope:ruler_scope
+	right_icon = scope:heir_scope
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/misc/2Characters"
+	# 2 Month to choose
+	duration = 2
+	immediate = {
+		if = {
+			limit = {
+				ruler = {
+					has_template = aus_ferdinand_I_habsburg_template
+				}
+				heir = {
+					has_template = aus_franz_joseph_habsburg_template
+				}
+			}
+			ruler = {
+				save_scope_as = ruler_scope
+			}
+			heir = {
+				save_scope_as = heir_scope
+				set_character_as_ruler = yes
+			}
+		}
+	}
+	option = {
+		name = imperia_dual_monarchy.3.a
+		default_option = yes
+		custom_tooltip = has_happened_tt
+		show_as_tooltip = {
+			scope:heir_scope = {
+				set_character_as_ruler = yes
+			}
+		}
+		add_journal_entry = {
+			type = je_imperia_austrian_neo_absolutism
+		}
+		if = {
+			limit = {
+				c:HUN.overlord = c:AUS
+			}
+			c:HUN = {
+				add_journal_entry = {
+					type = je_imperia_passive_resistance
+				}
+			}
+		}
+		ai_chance = {
+			base = 100
 		}
 	}
 }

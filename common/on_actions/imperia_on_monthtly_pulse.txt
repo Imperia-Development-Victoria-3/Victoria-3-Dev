@@ -449,9 +449,10 @@
 		else = {
 			remove_modifier ?= imperia_invalid_mobilization_option_penalty
 		}
-		## Mark the lost_hungarian_revolution variable if the Hungarian Revolution is lost
+		# Losing the Hungarian revolution
 		if = {
 			limit = {
+				exists = c:HUN
 				NOT = {
 					c:HUN ?= {
 						has_variable = lost_hungarian_revolution
@@ -460,7 +461,7 @@
 				has_global_variable = hungarian_revolution_started
 				any_diplomatic_play = {
 					count = 0
-					has_variable = hungarian_revolution_var
+					has_variable = diplo_play_is_hungarian_revolution
 				}
 				c:HUN ?= {
 					is_independent = no
@@ -469,13 +470,21 @@
 			}
 			c:HUN ?= {
 				set_variable = lost_hungarian_revolution
+				copy_laws = overlord
 			}
 			if = {
 				limit = {
 					c:HUN.overlord ?= c:AUS
 				}
 				c:AUS = {
-					add_journal_entry = { type = je_imperia_bachs_absolutism }
+					trigger_event = {
+						id = imperia_austria.1
+						popup = yes
+					}
+					add_journal_entry = { type = je_imperia_austrian_neo_absolutism }
+				}
+				c:HUN = {
+					add_journal_entry = { type = je_imperia_passive_resistance }
 				}
 			}
 		}
