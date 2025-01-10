@@ -481,12 +481,68 @@
 						id = imperia_austria.1
 						popup = yes
 					}
-					add_journal_entry = { type = je_imperia_austrian_neo_absolutism }
+					add_journal_entry = {
+						type = je_imperia_austrian_neo_absolutism
+					}
+					create_diplomatic_pact = {
+						country = c:HUN
+						type = crownland
+					}
 				}
 				c:HUN = {
-					add_journal_entry = { type = je_imperia_passive_resistance }
+					add_journal_entry = {
+						type = je_imperia_passive_resistance
+					}
 				}
 			}
+		}
+		## Crownland construction bonus
+		# Crownland construction penalty
+		if = {
+			limit = {
+				is_subject_type = subject_type_crownland
+			}
+			remove_modifier ?= modifier_crownland_construction_penalty
+			add_modifier = {
+				name = modifier_crownland_construction_penalty
+				multiplier = crownland_construction_penalty_multiplier
+			}
+		}
+		# Remove penalty if no longer crownland
+		else_if = {
+			limit = {
+				has_modifier = modifier_crownland_construction_penalty
+				NOT = {
+					is_subject_type = subject_type_crownland
+				}
+			}
+			remove_modifier = modifier_crownland_construction_penalty
+		}
+		# Add bonus if you have a crownland subject
+		# Done without else_if here to allow for chaining of crownlands, if we ever expand the crownland feature to other countries than Austria
+		if = {
+			limit = {
+				any_direct_subject = {
+					is_subject_type = subject_type_crownland
+				}
+			}
+			remove_modifier ?= modifier_crownland_construction_bonus
+			add_modifier = {
+				name = modifier_crownland_construction_bonus
+				modifier = crownland_construction_bonus_multiplier
+			}
+		}
+		# Remove bonus if you no longer have a crownland subject and still have modifier
+		else_if = {
+			limit = {
+				has_modifier = modifier_crownland_construction_bonus
+				NOT = {
+					any_direct_subject = {
+						is_subject_type = subject_type_crownland
+					}
+				}
+			}
+			remove_modifier = modifier_crownland_construction_bonus
 		}
 	}
 	random_events = {

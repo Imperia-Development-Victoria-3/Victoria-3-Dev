@@ -3,6 +3,7 @@ imperia_vienna_congress_state_claim_severity_requirement = 0.5
 imperia_vienna_congress_embargo_severity_requirement = 0.2
 imperia_vienna_congress_recognition_severity_requirement = 0.75
 imperia_vienna_congress_severity_max = 0.8
+imperia_crownland_construction_transfer_percentage = 0.75 # 75% is transferred to the overlord
 imperia_vienna_congress_current_type_severity_requirement = {
 	if = {
 		limit = {
@@ -2143,5 +2144,20 @@ trade_sanctioners_strength = {
 				add = 0.037
 			}
 		}
+	}
+}
+
+crownland_construction_penalty_value = {
+	value = modifier:country_construction_add
+	multiply = imperia_crownland_construction_penalty
+}
+
+crownland_construction_penalty_bonus_value = {
+	value = 0
+	every_direct_subject = {
+		limit = {
+			is_subject_type = subject_type_crownland
+		}
+		add = crownland_construction_penalty_value
 	}
 }
