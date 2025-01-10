@@ -502,10 +502,14 @@
 			limit = {
 				is_subject_type = subject_type_crownland
 			}
+			set_variable = {
+				name = crownland_construction_penalty_value_variable
+				value = crownland_construction_penalty_value
+			}
 			remove_modifier ?= modifier_crownland_construction_penalty
 			add_modifier = {
 				name = modifier_crownland_construction_penalty
-				multiplier = crownland_construction_penalty_multiplier
+				multiplier = var:crownland_construction_penalty_value_variable
 			}
 		}
 		# Remove penalty if no longer crownland
@@ -516,6 +520,7 @@
 					is_subject_type = subject_type_crownland
 				}
 			}
+			remove_variable ?= crownland_construction_penalty_value_variable
 			remove_modifier = modifier_crownland_construction_penalty
 		}
 		# Add bonus if you have a crownland subject
@@ -529,7 +534,7 @@
 			remove_modifier ?= modifier_crownland_construction_bonus
 			add_modifier = {
 				name = modifier_crownland_construction_bonus
-				modifier = crownland_construction_bonus_multiplier
+				multiplier = crownland_construction_bonus_value
 			}
 		}
 		# Remove bonus if you no longer have a crownland subject and still have modifier

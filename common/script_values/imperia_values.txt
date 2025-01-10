@@ -2149,15 +2149,23 @@ trade_sanctioners_strength = {
 
 crownland_construction_penalty_value = {
 	value = modifier:country_construction_add
-	multiply = imperia_crownland_construction_penalty
+	# If the country has a variable for the penalty, add it
+	# Here so it doesnt start flip flopping like we saw with currency transfer
+	if = {
+		limit = {
+			has_variable = crownland_construction_penalty_value_variable
+		}
+		add = var:crownland_construction_penalty_value_variable
+	}
+	multiply = imperia_crownland_construction_transfer_percentage
 }
 
-crownland_construction_penalty_bonus_value = {
+crownland_construction_bonus_value = {
 	value = 0
 	every_direct_subject = {
 		limit = {
 			is_subject_type = subject_type_crownland
 		}
-		add = crownland_construction_penalty_value
+		add = var:crownland_construction_penalty_value_variable
 	}
 }
