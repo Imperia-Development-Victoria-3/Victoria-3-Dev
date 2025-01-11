@@ -8,18 +8,282 @@
 		base = 15
 	}
 	possible = {
-        has_technology_researched = nationalism
+		has_technology_researched = nationalism
+		hidden_trigger = {
+			NOT = {
+				has_global_variable = hungary_sent_ultimatum_to_overlord
+			}
+		}
 	}
 	selected = {
-		NOT = {
-			has_global_variable = hungary_sent_ultimatum_to_overlord
-		}
+		has_global_variable = hungary_sent_ultimatum_to_overlord
 	}
 	effect = {
 		set_global_variable = hungary_sent_ultimatum_to_overlord
 		trigger_event = {
 			id = imperia_dual_monarchy.1
-            popup = yes
+			popup = yes
+		}
+	}
+}
+
+imperia_austria_punish_extra_land_button = {
+	name = "imperia_austria_punish_extra_land_button"
+	desc = "imperia_austria_punish_extra_land_button_desc"
+	visible = {
+		# Only visible if Hungary has gained territory after game start
+		c:HUN = {
+			any_scope_state = {
+				NOT = {
+					state_region = s:STATE_NORTHERN_TRANSYLVANIA
+					state_region = s:STATE_SOUTHERN_TRANSYLVANIA
+					state_region = s:STATE_BEKES
+					state_region = s:STATE_BANAT
+					state_region = s:STATE_DELVIDEK
+					state_region = s:STATE_SLAVONIA
+					state_region = s:STATE_CROATIA
+					state_region = s:STATE_CENTRAL_HUNGARY
+					state_region = s:STATE_TRANSDANUBIA
+					state_region = s:STATE_WEST_SLOVAKIA
+					state_region = s:STATE_EAST_SLOVAKIA
+				}
+			}
+		}
+	}
+	ai_chance = {
+		# This should ideally be pressed first
+		base = 100
+	}
+	possible = {
+		custom_tooltip = {
+			text = austria_punish_one_year_since_last_tt
+			NOT = {
+				has_variable = hungary_punishmnent_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = hungary_punishmnent_timer
+			years = 1
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					NOT = {
+						state_region = s:STATE_NORTHERN_TRANSYLVANIA
+						state_region = s:STATE_SOUTHERN_TRANSYLVANIA
+						state_region = s:STATE_BEKES
+						state_region = s:STATE_BANAT
+						state_region = s:STATE_DELVIDEK
+						state_region = s:STATE_SLAVONIA
+						state_region = s:STATE_CROATIA
+						state_region = s:STATE_CENTRAL_HUNGARY
+						state_region = s:STATE_TRANSDANUBIA
+						state_region = s:STATE_WEST_SLOVAKIA
+						state_region = s:STATE_EAST_SLOVAKIA
+					}
+				}
+				set_state_owner = c:AUS
+				imperia_passive_resistance_state_confiscation_punishment_effect = yes
+			}
+		}
+	}
+}
+
+imperia_austria_punish_transylvania_button = {
+	name = "imperia_austria_punish_transylvania_button"
+	desc = "imperia_austria_punish_transylvania_button_desc"
+	visible = {
+		c:HUN = {
+			any_scope_state = {
+				OR = {
+					state_region = s:STATE_NORTHERN_TRANSYLVANIA
+					state_region = s:STATE_SOUTHERN_TRANSYLVANIA
+				}
+			}
+		}
+	}
+	ai_chance = {
+		base = 30
+	}
+	possible = {
+		custom_tooltip = {
+			text = austria_punish_one_year_since_last_tt
+			NOT = {
+				has_variable = hungary_punishmnent_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = hungary_punishmnent_timer
+			years = 1
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					OR = {
+						state_region = s:STATE_NORTHERN_TRANSYLVANIA
+						state_region = s:STATE_SOUTHERN_TRANSYLVANIA
+					}
+				}
+				set_state_owner = c:AUS
+				imperia_passive_resistance_state_confiscation_punishment_effect = yes
+			}
+		}
+	}
+}
+
+imperia_austria_punish_vojvodina_button = {
+	name = "imperia_austria_punish_vojvodina_button"
+	desc = "imperia_austria_punish_vojvodina_button_desc"
+	visible = {
+		c:HUN = {
+			any_scope_state = {
+				OR = {
+					state_region = s:STATE_BANAT
+					state_region = s:STATE_DELVIDEK
+				}
+			}
+		}
+	}
+	ai_chance = {
+		base = 20
+	}
+	possible = {
+		custom_tooltip = {
+			text = austria_punish_one_year_since_last_tt
+			NOT = {
+				has_variable = hungary_punishmnent_timer
+			}
+		}
+		# This should only be possible if Hungary has have had Croatia OR Transylvania confiscated
+		# Else there wouldnt be a way towards the Vojvodina
+		OR = {
+			AND = {
+				any_scope_state = {
+					state_region = s:STATE_NORTHERN_TRANSYLVANIA
+				}
+				any_scope_state = {
+					state_region = s:STATE_SOUTHERN_TRANSYLVANIA
+				}
+			}
+			AND = {
+				any_scope_state = {
+					state_region = s:STATE_SLAVONIA
+				}
+				any_scope_state = {
+					state_region = s:STATE_CROATIA
+				}
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = hungary_punishmnent_timer
+			years = 1
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					OR = {
+						state_region = s:STATE_BANAT
+						state_region = s:STATE_DELVIDEK
+					}
+				}
+				set_state_owner = c:AUS
+				imperia_passive_resistance_state_confiscation_punishment_effect = yes
+			}
+		}
+	}
+}
+
+imperia_austria_punish_croatia_button = {
+	name = "imperia_austria_punish_croatia_button"
+	desc = "imperia_austria_punish_croatia_button_desc"
+	visible = {
+		c:HUN = {
+			any_scope_state = {
+				OR = {
+					state_region = s:STATE_SLAVONIA
+					state_region = s:STATE_CROATIA
+				}
+			}
+		}
+	}
+	ai_chance = {
+		base = 30
+	}
+	possible = {
+		custom_tooltip = {
+			text = austria_punish_one_year_since_last_tt
+			NOT = {
+				has_variable = hungary_punishmnent_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = hungary_punishmnent_timer
+			years = 1
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					OR = {
+						state_region = s:STATE_SLAVONIA
+						state_region = s:STATE_CROATIA
+					}
+				}
+				set_state_owner = c:AUS
+				imperia_passive_resistance_state_confiscation_punishment_effect = yes
+			}
+		}
+	}
+}
+
+imperia_austria_punish_slovakia_button = {
+	name = "imperia_austria_punish_slovakia_button"
+	desc = "imperia_austria_punish_slovakia_button_desc"
+	visible = {
+		c:HUN = {
+			any_scope_state = {
+				OR = {
+					state_region = s:STATE_WEST_SLOVAKIA
+					state_region = s:STATE_EAST_SLOVAKIA
+				}
+			}
+		}
+	}
+	# This did not happen in real life, so it should be less likely
+	ai_chance = {
+		base = 10
+	}
+	possible = {
+		custom_tooltip = {
+			text = austria_punish_one_year_since_last_tt
+			NOT = {
+				has_variable = hungary_punishmnent_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = hungary_punishmnent_timer
+			years = 1
+		}
+		c:HUN = {
+			every_scope_state = {
+				limit = {
+					OR = {
+						state_region = s:STATE_WEST_SLOVAKIA
+						state_region = s:STATE_EAST_SLOVAKIA
+					}
+				}
+				set_state_owner = c:AUS
+				imperia_passive_resistance_state_confiscation_punishment_effect = yes
+			}
 		}
 	}
 }

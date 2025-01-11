@@ -1,0 +1,29 @@
+﻿imperia_crownland_construction_transfer_percentage = 0.75 # 75% is transferred to the overlord
+imperia_passive_resistance_punishment_suppression_per_confiscated_state = 10
+imperia_passive_resistance_punishment_liberty_desire_per_confiscated_state = {
+    value = imperia_passive_resistance_punishment_suppression_per_confiscated_state
+    multiply = 0.8
+}
+crownland_construction_penalty_value = {
+	value = modifier:country_construction_add
+	# If the country has a variable for the penalty, add it
+	# Here so it doesnt start flip flopping like we saw with currency transfer
+	if = {
+		limit = {
+			has_variable = crownland_construction_penalty_value_variable
+		}
+		add = var:crownland_construction_penalty_value_variable
+	}
+	multiply = imperia_crownland_construction_transfer_percentage
+}
+
+crownland_construction_bonus_value = {
+	value = 0
+	every_direct_subject = {
+		limit = {
+			is_subject_type = subject_type_crownland
+		}
+		add = var:crownland_construction_penalty_value_variable
+	}
+}
+

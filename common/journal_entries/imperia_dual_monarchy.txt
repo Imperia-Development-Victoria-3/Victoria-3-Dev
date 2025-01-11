@@ -1,67 +1,153 @@
-﻿je_imperia_hungarian_revolution = {
+﻿# 1st Hungarian Revolution, happens after Frankfurt ends
+je_imperia_hungarian_revolution = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
 	scripted_button = imperia_je_imperia_hungarian_revolution_ultimatum_button
-    is_shown_when_inactive = {
-        OR = {
-            has_global_variable = peoples_springtime_happening
-            has_global_variable = peoples_springtime_happened
-        }
-        c:HUN ?= root
-        is_subject = yes
-    }
-    possible = {
+	is_shown_when_inactive = {
+		OR = {
+			has_global_variable = peoples_springtime_happening
+			has_global_variable = peoples_springtime_happened
+		}
+		exists = c:HUN
+		c:HUN = root
+		is_subject = yes
+	}
+	possible = {
 		custom_tooltip = {
 			text = frankfurt_parliament_is_over_tt
 			imperia_frankfurt_parliament_is_in_session = no
 			has_global_variable = frankfurt_parliament_held
-        }
-    }
-    immediate = {
-
-    }
-    fail = {
-        custom_tooltip = {
-            text = lost_hungarian_revolution_tt
-            has_variable = lost_hungarian_revolution
-        }
-        every_scope_character = {
-            limit = {
-                has_template = agitator_lajos_kossuth
-            }
-            exile_character = yes
-        }
-    }
-    complete = {
-        is_independent = yes
-        is_at_war = no
-    }
+		}
+	}
+	immediate = {
+		set_global_variable = je_imperia_hungarian_revolution_was_here
+	}
+	fail = {
+		custom_tooltip = {
+			text = lost_hungarian_revolution_tt
+			has_variable = lost_hungarian_revolution
+		}
+	}
+	on_fail = {
+		every_scope_character = {
+			limit = {
+				has_template = agitator_lajos_kossuth
+			}
+			exile_character = yes
+		}
+	}
+	complete = {
+		is_subject = no
+		is_at_war = no
+	}
 	weight = 5000
 	should_be_pinned_by_default = yes
 }
 
+## The two next journal entries are pairs, and should ALWAYS be triggered at the exact same time.
+# Austrian neo absolutism
+# Identical to the Hungarian passive resistance, just inverse
 je_imperia_austrian_neo_absolutism = {
-    icon = "gfx/interface/icons/event_icons/event_skull.dds"
-    group = je_group_historical_content
-    immediate = {
-    }
-    fail = {
-    }
-    complete = {
-    }
-    weight = 5000
-    should_be_pinned_by_default = yes
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	scripted_button = imperia_austria_punish_extra_land_button
+	scripted_button = imperia_austria_punish_transylvania_button
+	scripted_button = imperia_austria_punish_vojvodina_button
+	scripted_button = imperia_austria_punish_croatia_button
+	scripted_button = imperia_austria_punish_slovakia_button
+	scripted_progress_bar = imperia_passive_resistance_suppression_progress_bar
+	scripted_progress_bar = imperia_passive_resistance_liberty_desire_progress_bar
+	scripted_progress_bar = imperia_passive_resistance_deadlock_progress_bar
+	fail = {
+		je:je_imperia_austrian_neo_absolutism ?= {
+			OR = {
+				imperia_passive_resistance_liberty_desire_won_trigger = yes
+				imperia_passive_resistance_deadlock_won_trigger = yes
+			}
+		}
+	}
+	on_fail = {
+		show_as_tooltip = {
+			custom_label = if_je_completed_from_liberty_desire_tt
+			imperia_passive_resistance_liberty_desire_won_effect = yes
+		}
+		show_as_tooltip = {
+			custom_label = if_je_completed_from_deadlock_tt
+			imperia_passive_resistance_deadlock_won_effect = yes
+		}
+	}
+	complete = {
+		je:je_imperia_austrian_neo_absolutism ?= {
+			imperia_passive_resistance_suppression_won_trigger = yes
+		}
+	}
+	on_complete = {
+		imperia_passive_resistance_suppression_won_effect = yes
+	}
+	invalid = {
+		c:HUN = {
+			is_subject = no
+		}
+	}
+	weight = 5000
+	should_be_pinned_by_default = yes
 }
 
+# Hungarian passive resistance
+# Identical to the Austrian neo absolutism, just inverse
 je_imperia_passive_resistance = {
-    icon = "gfx/interface/icons/event_icons/event_protest.dds"
-    group = je_group_historical_content
-    immediate = {
-    }
-    fail = {
-    }
-    complete = {
-    }
-    weight = 5000
-    should_be_pinned_by_default = yes
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	group = je_group_historical_content
+	scripted_progress_bar = imperia_passive_resistance_suppression_progress_bar
+	scripted_progress_bar = imperia_passive_resistance_liberty_desire_progress_bar
+	scripted_progress_bar = imperia_passive_resistance_deadlock_progress_bar
+	immediate = {
+		set_variable = {
+			name = passive_resistance_deadlock_difference
+			value = {
+				value = 0
+				add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
+				subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+			}
+		}
+	}
+	fail = {
+		je:je_imperia_austrian_neo_absolutism ?= {
+			OR = {
+				imperia_passive_resistance_suppression_won_trigger = yes
+				imperia_passive_resistance_deadlock_won_trigger = yes
+			}
+		}
+	}
+	on_fail = {
+		show_as_tooltip = {
+			custom_label = if_je_completed_from_suppression_tt
+			imperia_passive_resistance_suppression_won_effect = yes
+		}
+		show_as_tooltip = {
+			custom_label = if_je_completed_from_deadlock_tt
+			imperia_passive_resistance_deadlock_won_effect = yes
+		}
+	}
+	complete = {
+		imperia_passive_resistance_liberty_desire_won_trigger = yes
+	}
+	on_complete = {
+		imperia_passive_resistance_liberty_desire_won_effect = yes
+	}
+	invalid = {
+		is_subject = no
+	}
+	on_weekly_pulse = {
+		set_variable = {
+			name = passive_resistance_deadlock_difference
+			value = {
+				value = 0
+				add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
+				subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+			}
+		}
+	}
+	weight = 5000
+	should_be_pinned_by_default = yes
 }

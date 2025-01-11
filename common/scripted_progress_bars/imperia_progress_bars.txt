@@ -1,0 +1,77 @@
+﻿imperia_passive_resistance_suppression_progress_bar = {
+	name = "imperia_passive_resistance_suppression_progress_bar"
+	desc = "imperia_passive_resistance_suppression_progress_bar_desc"
+	default_bad = yes
+	weekly_progress = {
+		if = {
+			limit = {
+				exists = c:HUN
+				exists = c:AUS
+			}
+			add = {
+				desc = "passive_resistance_suppression_progress_from_sol_tt"
+				value = c:AUS.average_sol
+				subtract = c:HUN.average_sol
+				divide = 4
+			}
+		}
+	}
+	start_value = 20
+	min_value = 0
+	max_value = 200
+}
+
+imperia_passive_resistance_liberty_desire_progress_bar = {
+	name = "imperia_passive_resistance_liberty_desire_progress_bar"
+	desc = "imperia_passive_resistance_liberty_desire_progress_bar_desc"
+	default_green = yes
+	weekly_progress = {
+		if = {
+			limit = {
+				exists = c:HUN
+				exists = c:AUS
+			}
+			add = {
+				desc = "passive_resistance_liberty_desire_progress_from_turmoil_tt"
+				value = c:HUN.country_turmoil
+				divide = 4
+			}
+		}
+	}
+	start_value = 20
+	min_value = 0
+	max_value = 200
+}
+
+imperia_passive_resistance_deadlock_progress_bar = {
+	name = "imperia_passive_resistance_deadlock_progress_bar"
+	desc = "imperia_passive_resistance_deadlock_progress_bar_desc"
+	default = yes
+	weekly_progress = {
+		if = {
+			limit = {
+				exists = c:HUN
+				exists = c:AUS
+			}
+			if = {
+				limit = {
+					c:HUN.var:passive_resistance_deadlock_difference < 10
+					c:HUN.var:passive_resistance_deadlock_difference > -10
+				}
+				add = {
+					desc = "passive_resistance_deadlock_progress_from_deadlock_tt"
+					value = 0.25
+				}
+			}
+			else = {
+				add = {
+					desc = "passive_resistance_deadlock_progress_from_lead_tt"
+					value = -0.5
+				}
+			}
+		}
+	}
+	start_value = 20
+	min_value = 0
+	max_value = 200
+}

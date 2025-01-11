@@ -183,10 +183,20 @@ imperia_dual_monarchy.2 = {
 	}
 	after = {
 		# After the ultimatum, no matter what, transfer the characters loyal to Austria back home
+		# The governor and his son, and any commanders not of Hungarian culture
 		c:HUN = {
 			every_scope_character = {
 				limit = {
-					has_variable = character_loyal_to_austria
+					OR = {
+						has_template = imperia_joseph_habsburg_template
+						has_template = imperia_stephen_habsburg_template
+						AND = {
+							commander_rank > 0
+							NOT = {
+								has_culture = cu:hungarian
+							}
+						}
+					}
 				}
 				transfer_character = c:AUS
 			}
