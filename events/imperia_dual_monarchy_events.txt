@@ -283,3 +283,149 @@ imperia_dual_monarchy.3 = {
 		}
 	}
 }
+
+# Great powers, European majors and Austrian neighbours can send aid in the conflict
+imperia_dual_monarchy.4 = {
+	type = country_event
+	title = imperia_dual_monarchy.4.t
+	desc = imperia_dual_monarchy.4.desc
+	flavor = imperia_dual_monarchy.4.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 2
+	# Help Austria with a unique effect
+	option = {
+		name = imperia_dual_monarchy.4.a
+		trigger = {
+			imperia_hungarian_revolution_country_has_unique_aid_effects = yes
+		}
+		c:AUS = {
+			# This automagically checks which country is sending aid, and gives the appropriate effect
+			imperia_hungarian_revolution_foreign_aid_effect = yes
+		}
+		ai_chance = {
+			base = 75
+			modifier = {
+				# Ottomans, France and Britain gets bad effects from helping Austria, so is less likely to do so
+				trigger = {
+					OR = {
+						this = c:TUR
+						this = c:FRA
+						this = c:GBR
+					}
+				}
+				add = -50
+			}
+		}
+	}
+	# Helps Hungary with a unique effect
+	option = {
+		name = imperia_dual_monarchy.4.b
+		trigger = {
+			imperia_hungarian_revolution_country_has_unique_aid_effects = yes
+		}
+		c:HUN = {
+			# This automagically checks which country is sending aid, and gives the appropriate effect
+			imperia_hungarian_revolution_foreign_aid_effect = yes
+		}
+		ai_chance = {
+			base = 25
+			modifier = {
+				# France gets good effects from helping Hungary, so is more likely to do so
+				trigger = {
+					this = c:FRA
+				}
+				add = 50
+			}
+			modifier = {
+				# Ottomans gets significantly bad effects from helping Hungary, so is less likely to do so
+				trigger = {
+					this = c:TUR
+				}
+				add = -10
+			}
+			modifier = {
+				# Spain, Netherlands and Two Sicilies gets mixed effects from helping Hungary, so is a bit more likely to do so
+				trigger = {
+					OR = {
+						this = c:SPA
+						this = c:NET
+						this = c:SIC
+					}
+				}
+				add = 10
+			}
+		}
+	}
+	# Help Austria with a generic effect
+	option = {
+		name = imperia_dual_monarchy.4.c
+		trigger = {
+			imperia_hungarian_revolution_country_has_unique_aid_effects = no
+		}
+		c:AUS = {
+			add_modifier = {
+				name = hungarian_revolution_generic_aid_modifier
+			}
+		}
+		ai_chance = {
+			base = 25
+		}
+	}
+	# Help Hungary with a generic effect
+	option = {
+		name = imperia_dual_monarchy.4.d
+		trigger = {
+			imperia_hungarian_revolution_country_has_unique_aid_effects = no
+		}
+		c:HUN = {
+			add_modifier = {
+				name = hungarian_revolution_generic_aid_modifier
+			}
+		}
+		ai_chance = {
+			base = 25
+		}
+	}
+	# No help
+	option = {
+		name = imperia_dual_monarchy.4.e
+		# If you're one of the unique aid countries, you will usually get an effect from not helping
+		if = {
+			limit = {
+				imperia_hungarian_revolution_country_has_unique_aid_effects = yes
+			}
+			imperia_hungarian_revolution_foreign_aid_effect = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				# Prussia and Ottomans gets minor bad effects from not helping, so is less likely to do so
+				trigger = {
+					OR = {
+						this = c:PRU
+						this = c:TUR
+					}
+				}
+				add = -10
+			}
+			modifier = {
+				# Russia gets bad effects from not helping, so is less likely to do so
+				trigger = {
+					this = c:RUS
+				}
+				add = -25
+			}
+			modifier = {
+				# France gets mixed effect from not helping
+				trigger = {
+					this = c:FRA
+				}
+				add = 10
+			}
+		}
+	}
+}

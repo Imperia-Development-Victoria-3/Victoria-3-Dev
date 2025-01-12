@@ -1,0 +1,36 @@
+# Root = Diplomatic Play
+on_imperia_diplo_play_war_start = {
+	effect = {
+        # If this is a Hungarian revolt against Austria, send the foreign aid event to neighbours (of Hungary or Austria), Great Powers and European majors
+		if = {
+			limit = {
+				initiator_is = c:HUN
+				target_is = c:AUS
+				is_diplomatic_play_type = dp_independence
+			}
+            every_country = {
+                limit = {
+                    OR = {
+                        neighbors_power_bloc = c:AUS.power_bloc
+                        country_rank >= rank_value:great_power
+                        AND = {
+                            country_rank >= rank_value:major_power
+                            country_is_in_europe = yes
+                        }
+                    }
+                    # Should also not be countries that are already at war with Austria/Hungary
+                    NOR = {
+                        is_diplomatic_play_participant_with = c:AUS
+                        is_diplomatic_play_participant_with = c:HUN
+                    }
+                }
+                # Trigger the foreign aid event for them
+                trigger_event = {
+                    id = imperia_dual_monarchy.4
+                    days = 7
+                    popup = yes
+                }
+            }
+		}
+	}
+}
