@@ -1,25 +1,29 @@
 ﻿dp_imperia_unify_america = {
 	war_goal = annex_country
 	requires_interest_marker = no
-	
 	texture = "gfx/interface/icons/war_goals/annex_country.dds"
-	
 	selectable_in_lens = {
 		OR = {
 			country_has_primary_culture = cu:yankee
 			country_has_primary_culture = cu:dixie
 		}
 	}
-	
 	possible = {
-		NOT = { is_country_type = decentralized }
+		NOT = {
+			is_country_type = decentralized
+		}
 		aggressive_diplomatic_plays_permitted = yes
-		NOT = { is_subject_of = scope:target_country }
+		NOT = {
+			is_subject_of = scope:target_country
+		}
 		has_technology_researched = nationalism
-		
 		scope:target_country = {
-			NOT = { is_subject_of = root }
-			NOT = { is_country_type = decentralized }
+			NOT = {
+				is_subject_of = root
+			}
+			NOT = {
+				is_country_type = decentralized
+			}
 			country_is_in_north_america = yes
 			OR = {
 				country_has_primary_culture = cu:yankee
@@ -29,12 +33,12 @@
 			}
 		}
 	}
-	
-	on_weekly_pulse = {}
-	
-	on_war_begins = {}
-	
-	on_war_end = {}
+	on_weekly_pulse = {
+	}
+	on_war_begins = {
+	}
+	on_war_end = {
+	}
 }
 
 dp_imperia_great_war = {
@@ -42,15 +46,22 @@ dp_imperia_great_war = {
 	war_goal = humiliation
 	texture = "gfx/interface/icons/war_goals/great_war.dds"
 	possible = {
-		NOT = { is_country_type = decentralized }
+		NOT = {
+			is_country_type = decentralized
+		}
 		imperia_aggressive_diplomatic_plays_permitted = yes
-		NOT = { is_subject_of = scope:target_country }
+		NOT = {
+			is_subject_of = scope:target_country
+		}
 		has_technology_researched = multilateral_alliances
 		has_global_variable = trench_works_invented_global
-		
 		scope:target_country = {
-			NOT = { is_country_type = decentralized }
-			NOT = { is_subject_of = root }
+			NOT = {
+				is_country_type = decentralized
+			}
+			NOT = {
+				is_subject_of = root
+			}
 			has_technology_researched = multilateral_alliances
 		}
 		custom_tooltip = {
@@ -58,7 +69,6 @@ dp_imperia_great_war = {
 			scope:target_country.relations:root < relations_threshold:cordial
 		}
 	}
-	
 	on_weekly_pulse = {
 		every_scope_play_involved = {
 			root.war = {
@@ -69,7 +79,6 @@ dp_imperia_great_war = {
 							value < 0
 						}
 					}
-					
 					add_war_war_support = {
 						target = prev
 						value = 10
@@ -78,10 +87,10 @@ dp_imperia_great_war = {
 			}
 		}
 	}
-	
-	on_war_begins = {}
-	
-	on_war_end = {}
+	on_war_begins = {
+	}
+	on_war_end = {
+	}
 }
 
 dp_imperia_gutter_german_revolt = {
@@ -97,9 +106,91 @@ dp_imperia_gutter_german_revolt = {
 	possible = {
 		always = no
 	}
-	on_weekly_pulse = {}
-	
-	on_war_begins = {}
-	
-	on_war_end = {}
+	on_weekly_pulse = {
+	}
+	on_war_begins = {
+	}
+	on_war_end = {
+	}
+}
+
+# Should only ever be used by Hungary against Austria
+dp_imperia_hungarian_revolt = {
+	allow_negotiated_peace = no
+	requires_interest_marker = no
+	initiator_can_add_war_goals = no
+	target_can_add_war_goals = no
+	war_goal = independence
+	texture = "gfx/interface/icons/war_goals/independence.dds"
+	confirmation_sound = "event:/SFX/UI/SubjectInteractions/subject_button_small_independence"
+	selectable_in_lens = {
+		always = no
+	}
+	possible = {
+		always = no
+	}
+	on_weekly_pulse = {
+	}
+	on_war_begins = {
+		every_country = {
+			limit = {
+				OR = {
+					neighbors_power_bloc = c:AUS.power_bloc
+					country_rank >= rank_value:great_power
+					AND = {
+						country_rank >= rank_value:major_power
+						country_is_in_europe = yes
+					}
+					imperia_hungarian_revolution_country_has_unique_aid_effects = yes
+				}
+				# Should also not be countries that are already at odds with Austria/Hungary
+				# Would like to use a diplomatic play participant check against the play in root, but that's seemingly not possible..?
+				NOR = {
+					has_war_with = c:AUS
+					has_war_with = c:HUN
+				}
+			}
+			# Trigger the foreign aid event for them
+			trigger_event = {
+				id = imperia_dual_monarchy.4
+				days = 7
+				popup = yes
+			}
+		}
+	}
+	on_war_end = {
+		every_country = {
+			# Ideally we'd check if the country got the event, but... Oh well
+			# Luckily doesnt do anything if the country doesnt have any of the modifiers
+			imperia_hungarian_revolution_remove_aid_effect = yes
+		}
+		# Furthermore, if the Hungarian revolt is lost, exile all agitators and set the lost revolution variable
+		if = {
+			limit = {
+				c:HUN.overlord = c:AUS
+			}
+			c:HUN = {
+				set_variable = lost_hungarian_revolution
+				# Remember to get all the laws
+				copy_laws = overlord
+				add_journal_entry = {
+					type = je_imperia_passive_resistance
+				}
+			}
+			c:AUS = {
+				trigger_event = {
+					id = imperia_dual_monarchy.3
+					popup = yes
+				}
+				add_journal_entry = {
+					type = je_imperia_austrian_neo_absolutism
+				}
+				# Just to make sure Austria doesnt make Hungary a dominion or something
+				create_diplomatic_pact = {
+					country = c:HUN
+					type = crownland
+				}
+			}
+		}
+	}
 }
