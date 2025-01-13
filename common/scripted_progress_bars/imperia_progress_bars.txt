@@ -36,11 +36,15 @@ imperia_passive_resistance_liberty_desire_progress_bar = {
 				value = c:HUN.country_turmoil
 				divide = 4
 			}
-			add	= {
+			add = {
 				desc = "passive_resistance_liberty_desire_progress_from_diplomatic_liberty_desire_tt"
 				value = c:HUN.liberty_desire
 				divide = 100
 				add = -0.25
+			}
+			add = {
+				desc = "passive_resistance_liberty_desire_progress_from_intelligentsia_tt"
+				value = c:HUN.ig:ig_intelligentsia.ig_clout
 			}
 		}
 	}
@@ -59,17 +63,25 @@ imperia_passive_resistance_deadlock_progress_bar = {
 				exists = c:HUN
 				exists = c:AUS
 			}
+			# Deadlock when the values are within 10 points of each other
 			if = {
 				limit = {
-					c:HUN.var:passive_resistance_deadlock_difference < 10
-					c:HUN.var:passive_resistance_deadlock_difference > -10
+					global_var:passive_resistance_deadlock_difference < 10
+					global_var:passive_resistance_deadlock_difference > -10
 				}
 				add = {
 					desc = "passive_resistance_deadlock_progress_from_deadlock_tt"
 					value = 0.25
 				}
 			}
-			else = {
+			# Lead when the values are more than 20 points apart
+			else_if = {
+				limit = {
+					OR = {
+						global_var:passive_resistance_deadlock_difference > 20
+						global_var:passive_resistance_deadlock_difference < -20
+					}
+				}
 				add = {
 					desc = "passive_resistance_deadlock_progress_from_lead_tt"
 					value = -0.5

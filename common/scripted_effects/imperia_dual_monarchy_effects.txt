@@ -10,16 +10,61 @@
 				type = annex_country
 			}
 		}
+		if = {
+			limit = {
+				var:passive_resistance_underground_network_strength > 1
+			}
+			hidden_effect = {
+				remove_modifier ?= passive_resistance_underground_network
+			}
+			# The strength is increased per button press after the addition of the modifier, so we subtract 1 here
+			add_modifier = {
+				name = passive_resistance_underground_network
+				multiplier = {
+					value = c:HUN.var:passive_resistance_underground_network_strength
+					subtract = 1
+				}
+				is_decaying = yes
+				years = 2
+			}
+		}
+		remove_variable ?= passive_resistance_underground_network_strength
+		remove_variable ?= hungarian_art_type
+		remove_global_variable ?= passive_resistance_deadlock_difference
 	}
 }
 
 imperia_passive_resistance_suppression_won_effect = {
+	remove_global_variable ?= passive_resistance_deadlock_difference
 	c:AUS = {
 		annex = c:HUN
 	}
 }
 
 imperia_passive_resistance_deadlock_won_effect = {
+	c:HUN = {
+		if = {
+			limit = {
+				var:passive_resistance_underground_network_strength > 1
+			}
+			hidden_effect = {
+				remove_modifier ?= passive_resistance_underground_network
+			}
+			# The strength is increased per button press after the addition of the modifier, so we subtract 1 here
+			add_modifier = {
+				name = passive_resistance_underground_network
+				multiplier = {
+					value = c:HUN.var:passive_resistance_underground_network_strength
+					subtract = 1
+				}
+				is_decaying = yes
+				years = 2
+			}
+		}
+		remove_variable ?= passive_resistance_underground_network_strength
+		remove_variable ?= hungarian_art_type
+		remove_global_variable ?= passive_resistance_deadlock_difference
+	}
 	# Compromise event here
 }
 
@@ -51,6 +96,36 @@ imperia_passive_resistance_state_confiscation_punishment_effect = {
 		}
 		add_progress = {
 			value = imperia_passive_resistance_punishment_liberty_desire_per_confiscated_state
+			name = imperia_passive_resistance_liberty_desire_progress_bar
+		}
+	}
+}
+
+imperia_passive_resistance_change_suppression = {
+	c:AUS.je:je_imperia_austrian_neo_absolutism ?= {
+		add_progress = {
+			value = $VALUE$
+			name = imperia_passive_resistance_suppression_progress_bar
+		}
+	}
+	c:HUN.je:je_imperia_passive_resistance ?= {
+		add_progress = {
+			value = $VALUE$
+			name = imperia_passive_resistance_suppression_progress_bar
+		}
+	}
+}
+
+imperia_passive_resistance_change_liberty_desire = {
+	c:AUS.je:je_imperia_austrian_neo_absolutism ?= {
+		add_progress = {
+			value = $VALUE$
+			name = imperia_passive_resistance_liberty_desire_progress_bar
+		}
+	}
+	c:HUN.je:je_imperia_passive_resistance ?= {
+		add_progress = {
+			value = $VALUE$
 			name = imperia_passive_resistance_liberty_desire_progress_bar
 		}
 	}

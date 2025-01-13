@@ -287,3 +287,160 @@ imperia_austria_punish_slovakia_button = {
 		}
 	}
 }
+
+imperia_passive_resistance_commission_art_button = {
+	name = "imperia_passive_resistance_commission_art_button"
+	desc = "imperia_passive_resistance_commission_art_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 20
+	}
+	possible = {
+		custom_tooltip = {
+			text = hungary_resistance_timer_done_tt
+			NOT = {
+				has_variable = recent_hungarian_resistance_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = recent_hungarian_resistance_timer
+			months = 12
+		}
+		hidden_effect = {
+			random_list = {
+				# Set next to be a poem
+				10 = {
+					set_variable = {
+						name = hungarian_art_type
+						value = 1
+					}
+				}
+				# Set next to be a play
+				10 = {
+					set_variable = {
+						name = hungarian_art_type
+						value = 2
+					}
+				}
+				# Set next to be a piece of music
+				10 = {
+					set_variable = {
+						name = hungarian_art_type
+						value = 3
+					}
+				}
+			}
+		}
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 5
+		}
+		custom_tooltip = passive_resistance_5_liberty_desire_increase_tt
+		custom_tooltip = {
+			text = decreases_relations_with_austro_friendlies_by_x_tt
+			every_country = {
+				limit = {
+					"relations(c:AUS)" >= relations_threshold:amicable
+				}
+				change_relations = {
+					country = c:HUN
+					value = -5
+				}
+			}
+		}
+	}
+}
+
+imperia_passive_resistance_underground_network_button = {
+	name = "imperia_passive_resistance_underground_network_button"
+	desc = "imperia_passive_resistance_underground_network_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 20
+	}
+	possible = {
+		custom_tooltip = {
+			text = hungary_resistance_timer_done_tt
+			NOT = {
+				has_variable = recent_hungarian_resistance_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = recent_hungarian_resistance_timer
+			months = 12
+		}
+		hidden_effect = {
+			remove_modifier ?= passive_resistance_underground_network
+		}
+		add_modifier = {
+			name = passive_resistance_underground_network
+			multiplier = c:HUN.var:passive_resistance_underground_network_strength
+		}
+		# Changes this for 1 for the next button press
+		# Done this way for localisations sake
+		change_variable = {
+			name = passive_resistance_underground_network_strength
+			add = 1
+		}
+	}
+}
+
+imperia_passive_resistance_publish_essay_button = {
+	name = "imperia_passive_resistance_publish_essay_button"
+	desc = "imperia_passive_resistance_publish_essay_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 20
+	}
+	possible = {
+		custom_tooltip = {
+			text = hungary_resistance_timer_done_tt
+			NOT = {
+				has_variable = recent_hungarian_resistance_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = recent_hungarian_resistance_timer
+			months = 12
+		}
+		custom_tooltip = {
+			text = pro_hungarian_sentiments_in_europe_tt
+			every_country = {
+				limit = {
+					NOR = {
+						this = c:AUS
+						this = c:HUN
+					}
+					country_is_in_europe = yes
+				}
+				change_relations = {
+					country = c:HUN
+					value = 2
+				}
+				change_relations = {
+					country = c:AUS
+					value = -2
+				}
+			}
+		}
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 5
+		}
+		custom_tooltip = passive_resistance_5_liberty_desire_increase_tt
+		imperia_passive_resistance_change_suppression = {
+			VALUE = 4
+		}
+		custom_tooltip = passive_resistance_4_suppression_increase_tt
+	}
+}

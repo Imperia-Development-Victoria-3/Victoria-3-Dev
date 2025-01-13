@@ -502,6 +502,27 @@
 			}
 			remove_modifier = modifier_crownland_construction_bonus
 		}
+		## Remove the Passive Resistance modifier from states
+		# Only if root has a passive resistance state, and Hungary has no passive resistance journal entry
+		# Also removes the modifier from root if Hungary no longer exists
+		if = {
+			limit = {
+				any_scope_state = {
+					has_modifier = imperia_passive_resistance_state_modifier
+				}
+				OR = {
+					NOT = {
+						c:HUN ?= {
+							has_journal_entry = je_imperia_passive_resistance
+						}
+					}
+					this = c:HUN
+				}
+			}
+			every_scope_state = {
+				remove_modifier ?= imperia_passive_resistance_state_modifier
+			}
+		}
 	}
 	random_events = {
 		23 = 0
