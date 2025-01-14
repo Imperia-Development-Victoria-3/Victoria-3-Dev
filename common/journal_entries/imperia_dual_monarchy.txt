@@ -19,9 +19,6 @@ je_imperia_hungarian_revolution = {
 			has_global_variable = frankfurt_parliament_held
 		}
 	}
-	immediate = {
-		set_global_variable = je_imperia_hungarian_revolution_was_here
-	}
 	fail = {
 		custom_tooltip = {
 			text = lost_hungarian_revolution_tt
@@ -58,6 +55,9 @@ je_imperia_austrian_neo_absolutism = {
 	scripted_progress_bar = imperia_passive_resistance_suppression_progress_bar
 	scripted_progress_bar = imperia_passive_resistance_liberty_desire_progress_bar
 	scripted_progress_bar = imperia_passive_resistance_deadlock_progress_bar
+	modifiers_while_active = {
+		je_imperia_austrian_neo_absolutism_modifier
+	}
 	fail = {
 		any_diplomatic_play = {
 			count = 0
@@ -78,6 +78,26 @@ je_imperia_austrian_neo_absolutism = {
 			custom_label = if_je_completed_from_deadlock_tt
 			imperia_passive_resistance_deadlock_won_effect = yes
 		}
+		hidden_effect = {
+			if = {
+				limit = {
+					imperia_passive_resistance_liberty_desire_won_trigger = yes
+				}
+				imperia_passive_resistance_liberty_desire_won_effect = yes
+			}
+			if = {
+				limit = {
+					imperia_passive_resistance_deadlock_won_trigger = yes
+				}
+				imperia_passive_resistance_deadlock_won_effect = yes
+			}
+			every_scope_state = {
+				limit = {
+					has_modifier = imperia_passive_resistance_state_modifier
+				}
+				remove_modifier = imperia_passive_resistance_state_modifier
+			}
+		}
 	}
 	complete = {
 		any_diplomatic_play = {
@@ -89,11 +109,30 @@ je_imperia_austrian_neo_absolutism = {
 	}
 	on_complete = {
 		imperia_passive_resistance_suppression_won_effect = yes
+		hidden_effect = {
+			every_scope_state = {
+				limit = {
+					has_modifier = imperia_passive_resistance_state_modifier
+				}
+				remove_modifier = imperia_passive_resistance_state_modifier
+			}
+		}
 	}
 	invalid = {
 		c:HUN = {
 			is_subject = no
 		}
+	}
+	on_invalid = {
+		hidden_effect = {
+			every_scope_state = {
+				limit = {
+					has_modifier = imperia_passive_resistance_state_modifier
+				}
+				remove_modifier = imperia_passive_resistance_state_modifier
+			}
+		}
+		remove_global_variable ?= passive_resistance_deadlock_difference
 	}
 	weight = 5000
 	should_be_pinned_by_default = yes
@@ -104,16 +143,53 @@ je_imperia_austrian_neo_absolutism = {
 je_imperia_passive_resistance = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 	group = je_group_historical_content
+	scripted_button = imperia_passive_resistance_commission_art_button
+	scripted_button = imperia_passive_resistance_underground_network_button
+	scripted_button = imperia_passive_resistance_publish_essay_button
+	scripted_button = imperia_passive_resistance_petition_austria_button
 	scripted_progress_bar = imperia_passive_resistance_suppression_progress_bar
 	scripted_progress_bar = imperia_passive_resistance_liberty_desire_progress_bar
 	scripted_progress_bar = imperia_passive_resistance_deadlock_progress_bar
+	modifiers_while_active = {
+		je_imperia_passive_resistance_modifier
+	}
 	immediate = {
+		scope:journal_entry = {
+			set_global_variable = {
+				name = passive_resistance_deadlock_difference
+				value = {
+					value = 0
+					add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
+					subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+				}
+			}
+		}
 		set_variable = {
-			name = passive_resistance_deadlock_difference
-			value = {
-				value = 0
-				add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
-				subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+			name = passive_resistance_underground_network_strength
+			value = 1
+		}
+		# Set the art type to be commissioned...
+		random_list = {
+			# Set next to be a poem
+			10 = {
+				set_variable = {
+					name = hungarian_art_type
+					value = 1
+				}
+			}
+			# Set next to be a play
+			10 = {
+				set_variable = {
+					name = hungarian_art_type
+					value = 2
+				}
+			}
+			# Set next to be a piece of music
+			10 = {
+				set_variable = {
+					name = hungarian_art_type
+					value = 3
+				}
 			}
 		}
 	}
@@ -137,6 +213,20 @@ je_imperia_passive_resistance = {
 			custom_label = if_je_completed_from_deadlock_tt
 			imperia_passive_resistance_deadlock_won_effect = yes
 		}
+		hidden_effect = {
+			if = {
+				limit = {
+					imperia_passive_resistance_suppression_won_trigger = yes
+				}
+				imperia_passive_resistance_suppression_won_effect = yes
+			}
+			if = {
+				limit = {
+					imperia_passive_resistance_deadlock_won_trigger = yes
+				}
+				imperia_passive_resistance_deadlock_won_effect = yes
+			}
+		}
 	}
 	complete = {
 		any_diplomatic_play = {
@@ -153,12 +243,31 @@ je_imperia_passive_resistance = {
 		is_subject = no
 	}
 	on_weekly_pulse = {
-		set_variable = {
-			name = passive_resistance_deadlock_difference
-			value = {
-				value = 0
-				add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
-				subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+		effect = {
+			scope:journal_entry = {
+				set_global_variable = {
+					name = passive_resistance_deadlock_difference
+					value = {
+						value = 0
+						add = "scripted_bar_progress(imperia_passive_resistance_liberty_desire_progress_bar)"
+						subtract = "scripted_bar_progress(imperia_passive_resistance_suppression_progress_bar)"
+					}
+				}
+			}
+		}
+	}
+	on_monthly_pulse = {
+		effect = {
+			# Removes the passive resistance modifier from states Austria confiscated if they get passed back to Hungary on a monthly basis
+			if = {
+				limit = {
+					any_scope_state = {
+						has_modifier = imperia_passive_resistance_state_modifier
+					}
+				}
+				every_scope_state = {
+					has_modifier ?= imperia_passive_resistance_state_modifier
+				}
 			}
 		}
 	}
