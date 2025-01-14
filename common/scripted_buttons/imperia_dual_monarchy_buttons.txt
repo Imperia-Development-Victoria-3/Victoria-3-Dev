@@ -444,3 +444,73 @@ imperia_passive_resistance_publish_essay_button = {
 		custom_tooltip = passive_resistance_4_suppression_increase_tt
 	}
 }
+
+imperia_passive_resistance_petition_austria_button = {
+	name = "imperia_passive_resistance_petition_austria_button"
+	desc = "imperia_passive_resistance_petition_austria_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 40
+	}
+	possible = {
+		custom_tooltip = {
+			text = hungary_resistance_timer_done_tt
+			NOT = {
+				has_variable = recent_hungarian_resistance_timer
+			}
+		}
+	}
+	effect = {
+		set_variable = {
+			name = recent_hungarian_resistance_timer
+			months = 12
+		}
+		c:AUS = {
+			trigger_event = {
+				id = imperia_dual_monarchy.5
+				popup = yes
+			}
+		}
+		custom_tooltip = if_they_accept_tt
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 5
+		}
+		custom_tooltip = passive_resistance_5_liberty_desire_increase_tt
+		imperia_passive_resistance_change_suppression = {
+			VALUE = -5
+		}
+		custom_tooltip = passive_resistance_5_suppression_decrease_tt
+		custom_tooltip = if_they_decline_tt
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 10
+		}
+		custom_tooltip = passive_resistance_10_liberty_desire_increase_tt
+		imperia_passive_resistance_change_suppression = {
+			VALUE = 7
+		}
+		custom_tooltip = passive_resistance_7_suppression_increase_tt
+		custom_tooltip = {
+			text = austrian_relations_with_euro_democracies_decrease_tt
+			every_country = {
+				limit = {
+					NOR = {
+						this = c:AUS
+						this = c:HUN
+					}
+					country_is_in_europe = yes
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+						has_law = law_type:law_universal_suffrage
+					}
+				}
+				change_relations = {
+					country = c:AUS
+					value = -5
+				}
+			}
+		}
+	}
+}

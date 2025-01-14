@@ -435,3 +435,83 @@ imperia_dual_monarchy.4 = {
 		}
 	}
 }
+
+# Austria can refuse or consider the Hungarian Petition
+imperia_dual_monarchy.5 = {
+	type = country_event
+	title = imperia_dual_monarchy.5.t
+	desc = imperia_dual_monarchy.5.desc
+	flavor = imperia_dual_monarchy.5.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 2
+	immediate = {
+		c:HUN = {
+			save_scope_as = hungary_scope
+		}
+		c:AUS = {
+			save_scope_as = austria_scope
+		}
+	}
+	# Consider the petition
+	option = {
+		name = imperia_dual_monarchy.5.a
+		default_option = yes
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 5
+		}
+		custom_tooltip = passive_resistance_5_liberty_desire_increase_tt
+		imperia_passive_resistance_change_suppression = {
+			VALUE = -5
+		}
+		custom_tooltip = passive_resistance_5_suppression_decrease_tt
+		c:HUN = {
+			post_notification = austria_accepts_our_petition
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Reject the petition
+	option = {
+		name = imperia_dual_monarchy.5.b
+		imperia_passive_resistance_change_liberty_desire = {
+			VALUE = 10
+		}
+		custom_tooltip = passive_resistance_10_liberty_desire_increase_tt
+		imperia_passive_resistance_change_suppression = {
+			VALUE = 7
+		}
+		custom_tooltip = passive_resistance_7_suppression_increase_tt
+		custom_tooltip = {
+			text = austrian_relations_with_euro_democracies_decrease_tt
+			every_country = {
+				limit = {
+					NOR = {
+						this = c:AUS
+						this = c:HUN
+					}
+					country_is_in_europe = yes
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+						has_law = law_type:law_universal_suffrage
+					}
+				}
+				change_relations = {
+					country = c:AUS
+					value = -5
+				}
+			}
+		}
+		c:HUN = {
+			post_notification = austria_rejects_our_petition
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
