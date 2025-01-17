@@ -11,12 +11,22 @@
 	ai_will_do = { has_technology_researched = pan-nationalism }
 	
 	possible = {
-		AND = {
-			has_technology_researched = pan-nationalism
-			custom_tooltip = {
-				text = je_german_unification_idea_trigger_desc
-				has_variable = je_german_unification_idea
+		has_technology_researched = pan-nationalism
+		# Every German major must have pan-nationalism
+		any_country = {
+			filter = {
+				OR = {
+					country_has_primary_culture = cu:south_german
+					country_has_primary_culture = cu:north_german
+				}
+				country_rank >= rank_value:major_power
 			}
+			has_technology_researched = pan-nationalism
+			percent >= 1
+		}
+		custom_tooltip = {
+			text = je_german_unification_idea_trigger_desc
+			has_variable = je_german_unification_idea
 		}
 		custom_tooltip = {
 			text = no_confederation_of_the_rhine_tt
