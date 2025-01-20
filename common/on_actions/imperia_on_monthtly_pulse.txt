@@ -450,7 +450,25 @@
 			remove_modifier ?= imperia_invalid_mobilization_option_penalty
 		}
 		## German Pan-Nationalism tech spread
-		# Gives X amounts of points per country having pan-nationalism
+		# Set the imperia_german_pan_nationalism_spread global variable to the number of Germans having pan-nationalism
+		# Only once per month, to prevent spamming
+		if = {
+			limit = {
+				has_global_highest_gdp = yes
+				any_country = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					has_technology_researched = pan-nationalism
+				}
+			}
+			set_global_variable = {
+				name = imperia_german_pan_nationalism_spread
+				value = num_of_german_pan_nationalist_countries
+			}
+		}
+		# Gives 200 points per country having pan-nationalism
 		if = {
 			limit = {
 				OR = {
@@ -468,24 +486,17 @@
 					# Will complain if the prerequisites are not met
 					has_technology_researched = nationalism
 				}
-				# Just to showcase they're getting it, COULD add a custom modifier type here..
 				add_modifier = {
 					name = imperia_german_pan_nationalism_spread
+					multiplier = global_var:imperia_german_pan_nationalism_spread
 				}
-				# Since progress MUST be a number, and cannot be a dynamic in any shape, we do a stupid-ass loop here to circumvent that restriction.
-				every_country = {
-					limit = {
-						OR = {
-							country_has_primary_culture = cu:north_german
-							country_has_primary_culture = cu:south_german
-						}
-						has_technology_researched = pan-nationalism
-					}
-					root = {
-						add_technology_progress = {
-							technology = pan-nationalism
-							progress = 200
-						}
+				while = {
+					count = global_var:imperia_german_pan_nationalism_spread
+					# Add 200 points per country; if 200 changes, change the 200 in the add_technology_progress and in the imperia_german_pan_nationalism_spread modifier
+					# A bit of a hack.
+					add_technology_progress = {
+						technology = pan-nationalism
+						progress = 200
 					}
 				}
 			}
