@@ -29,8 +29,8 @@
 				value = {
 					add = local_var:total_infrastructure
 					divide = local_var:number_of_states
-					subtract = 50	# counting from 50 infrasturucture
-					divide = 8	# every 8 infrastructure average is 1 land_trade capacity
+					subtract = 50					# counting from 50 infrasturucture
+					divide = 8					# every 8 infrastructure average is 1 land_trade capacity
 				}
 			}
 			if = {
@@ -402,33 +402,42 @@
 				value = overlord
 			}
 		}
-
 		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
 		# after cancelling a arms deal treaty
 		if = {
 			limit = {
-				NOT = { has_variable = imperia_arms_deal_active }
+				NOT = {
+					has_variable = imperia_arms_deal_active
+				}
 				OR = {
 					AND = {
-						NOT = { has_technology_researched = gunsmithing }
+						NOT = {
+							has_technology_researched = gunsmithing
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = rifling }
+						NOT = {
+							has_technology_researched = rifling
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_caplocks
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = repeaters }
+						NOT = {
+							has_technology_researched = repeaters
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_repeaters
 						}
 					}
 					AND = {
-						NOT = { has_technology_researched = bolt_action_rifles }
+						NOT = {
+							has_technology_researched = bolt_action_rifles
+						}
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
 						}
@@ -440,13 +449,54 @@
 		else = {
 			remove_modifier ?= imperia_invalid_mobilization_option_penalty
 		}
+		## German Pan-Nationalism tech spread
+		# Gives X amounts of points per country having pan-nationalism
+		if = {
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+				has_global_variable = imperia_german_pan_nationalism_spread
+			}
+			remove_modifier ?= imperia_german_pan_nationalism_spread
+			if = {
+				limit = {
+					NOT = {
+						has_technology_researched = pan-nationalism
+					}
+					# Will complain if the prerequisites are not met
+					has_technology_researched = nationalism
+				}
+				# Just to showcase they're getting it, COULD add a custom modifier type here..
+				add_modifier = {
+					name = imperia_german_pan_nationalism_spread
+				}
+				# Since progress MUST be a number, and cannot be a dynamic in any shape, we do a stupid-ass loop here to circumvent that restriction.
+				every_country = {
+					limit = {
+						OR = {
+							country_has_primary_culture = cu:north_german
+							country_has_primary_culture = cu:south_german
+						}
+						has_technology_researched = pan-nationalism
+					}
+					root = {
+						add_technology_progress = {
+							technology = pan-nationalism
+							progress = 200
+						}
+					}
+				}
+			}
+		}
 	}
 	random_events = {
 		23 = 0
 		1 = dead_man.3
 	}
 	events = {
-		infamy_rebalance.1	#updates provinces each month
+		infamy_rebalance.1		#updates provinces each month
 	}
 }
 
