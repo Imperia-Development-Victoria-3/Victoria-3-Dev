@@ -1,0 +1,147 @@
+# COPY-PASTED FOR NOW
+@panel_width_minus_10 = 530			# used to be 450
+@panel_width = 540  				# used to be 460
+@panel_width_half = 270				# used to be 230
+@panel_width_plus_10 = 550  		# used to be 470
+@panel_width_plus_14 = 554			# used to be 474
+@panel_width_plus_14_half = 277		# used to be 237
+@panel_width_plus_20 = 560			# used to be 480
+@panel_width_plus_30 = 570			# used to be 490
+@panel_width_plus_70 = 610			# used to be 530
+
+types imperia_information_panels_types
+{
+	type imperia_enactable_generic_law = flowcontainer {
+		direction = vertical
+		visible = "[And(Law.IsVisible, GetScriptedGui('imperia_quick_enact_law').IsShown(GuiScope.SetRoot(Law.MakeScope).AddScope('country', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End))]" # just removing true neutrality from the list
+		margin_bottom = 5
+
+		background = {
+			visible = "[Law.IsActive]"
+			using = highlighted_square_selection
+			margin = { 5 0 }
+		}
+
+		background = {
+			visible = "[Not(Law.IsActive)]"
+			using = entry_bg
+		}
+
+		widget = {
+			size = { @panel_width 90 }
+
+			tooltipwidget = {
+				FancyTooltip_Law = {}
+			}
+
+			flowcontainer = {
+				position = { 10 0 }
+				parentanchor = vcenter
+				spacing = 5
+
+				law_icon = {
+					size = { 70 70 }
+				}
+
+				flowcontainer = {
+					parentanchor = vcenter
+					direction = vertical
+
+					block "lawgroup"
+					{
+						textbox = {
+							text = "[Law.GetGroup.GetNameNoFormatting]"
+							align = left|nobaseline
+							size = { 250 20 }
+							elide = right
+						}
+					}
+
+					textbox = {
+						text = "LAW"
+						align = left|nobaseline
+						size = { 250 30 }
+						using = fontsize_xl
+						elide = right
+					}
+				}
+			}
+			approval_info_small = {
+				parentanchor = right|vcenter
+				position = { -10 0 }
+
+				blockoverride "progressbar_size" {
+					size = { 100 9 }
+				}
+			}
+		}
+
+		imperia_law_enactment_controls = {}
+
+		textbox = {
+			text = CURRENTLY_ACTIVE_LAW
+			size = { @panel_width 44 }
+			visible = "[Law.IsActive]"
+			align = hcenter|nobaseline
+			using = fontsize_large
+		}
+	}
+
+	type imperia_law_enactment_controls = flowcontainer {
+		visible = "[Not(Law.IsActive)]"
+		tooltip = "[GetPlayer.GetLawEnactmentProgressDesc]"
+		using = default_list_position
+
+		button = {
+			name = "tutorial_highlight_enact"
+			parentanchor = vcenter
+			using = default_button_action
+			visible = "[Not(Law.IsBeingEnacted)]"
+			size = { @panel_width_minus_10 40 }
+			tooltip = "IMPERIA_TOOLTIP_ENACT_LAW"
+
+			textbox = {
+				text = EXECUTIVE_ORDER_ENACT
+				autoresize = yes
+				align = nobaseline
+				parentanchor = center
+			}
+			
+
+			enabled = "[GetScriptedGui('imperia_quick_enact_law').IsValid(GuiScope.SetRoot(Law.MakeScope).AddScope('country', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+			onclick = "[GetScriptedGui('imperia_quick_enact_law').Execute(GuiScope.SetRoot(Law.MakeScope).AddScope('country', GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+		}
+
+		widget = {
+			size = { 450 40 }
+			visible = "[Law.IsBeingEnacted]"
+
+			default_progressbar_horizontal = {
+				position = { 5 2 }
+				size = { 390 20 }
+				blockoverride "values" {
+					value = "[FixedPointToFloat(Law.GetCheckpointProgress)]" #replace with 30 day tick
+					min = 0
+					max = 1
+				}
+				parentanchor = vcenter
+
+				textbox = {
+					autoresize = yes
+					text = "[FixedPointToFloat(Law.GetCheckpointProgress)|%v1]" #replace with 30 day tick
+					align = center|nobaseline
+					using = fontsize_xl
+					parentanchor = center
+				}
+			}
+
+			button_icon_cancel = {
+				size = { 40 40 }
+				parentanchor = right
+				tooltip = IMPERIA_TOOLTIP_CANCEL_LAW
+				enabled = "[IsValid( Law.StopEnacting )]"
+				onclick = "[PopupManager.AskConfirmation( Law.StopEnacting )]"
+			}
+		}
+	}
+}
