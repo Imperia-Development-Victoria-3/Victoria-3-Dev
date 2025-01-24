@@ -187,6 +187,25 @@ types diplomatic_panel
 				blockoverride "fourth_button_selected" {
 					text = "concept_countries"
 				}
+				# Foreign Policy
+				blockoverride "fifth_button" {
+					text = "FOREIGN_POLICY"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "FOREIGN_POLICY"
+				}
+				blockoverride "fifth_button_click" {
+					onclick = "[InformationPanel.SelectTab('foreign_policy')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					visible = "[InformationPanel.IsTabSelected('foreign_policy')]"
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					visible = "[Not( InformationPanel.IsTabSelected('foreign_policy') )]"
+				}
+				blockoverride "fifth_button_selected" {
+					raw_text = "Foreign Policy"
+				}
 			}
 		}
 
@@ -207,6 +226,45 @@ types diplomatic_panel
 
 				country_browser_tab_content = {
 					visible = "[InformationPanel.IsTabSelected('country_browser')]"
+				}
+				
+				### Foreign Policy
+				container = {
+					minimumsize = { @panel_width_plus_20 -1 }
+					maximumsize = { @panel_width_plus_20 -1 }
+					visible = "[InformationPanel.IsTabSelected('foreign_policy')]"
+					using = default_content_fade
+					
+					flowcontainer = {
+						parentanchor = hcenter
+						direction = vertical
+						#visible = "[Not(IsDataModelEmpty(AccessPlayer.AccessReleasableCountries))]"	
+						datacontext = "[GetMetaPlayer.GetPlayedOrObservedCountry.GetActiveLawFromGroup('lawgroup_diplomatic_stance')]"
+	
+						spacing = 10
+
+						default_header = {
+							blockoverride = "text" {
+								text = "FOREIGN_POLICY"
+							}
+						}
+
+						flowcontainer = {
+							parentanchor = hcenter
+							direction = vertical
+							datamodel = "[Law.GetLawAlternatives]"
+							spacing = 5
+						
+							item = {
+								flowcontainer = {
+									margin_bottom = 15
+									imperia_enactable_generic_law = {
+										datacontext = "[Scope.AccessLaw]"
+									}	
+								}
+							}
+						}	
+					}			
 				}
 			}
 		}
