@@ -1,0 +1,46 @@
+﻿imperia_join_coalition_against_pariah_decision = {
+	is_shown = {
+		exists = global_var:current_pariah
+		global_var:current_pariah != this
+		NOT = {
+			is_diplomatic_play_involved_with = global_var:current_pariah
+		}
+		has_variable = is_in_coalition_against_pariah
+		var:is_in_coalition_against_pariah = no
+		OR = {
+			is_country_type = recognized
+			is_country_type = colonial
+		}
+	}
+	possible = {
+		is_at_war = no
+		any_diplomatic_play = {
+			count = 0
+			is_diplomatic_play_type = dp_contain_threat
+			target_is = global_var:current_pariah
+		}
+	}
+	when_taken = {
+		custom_tooltip = coalition_members_will_be_called_in_automatically_tt
+		change_relations = {
+			country = global_var:current_pariah
+			value = -25
+		}
+		set_variable = {
+			name = is_in_coalition_against_pariah
+			value = yes
+			years = 10
+		}
+		# Remove 5% of the pariah's infamy from the new coalition member
+		# Still a net negative in infamy compared to the straight up infamy reduction from just joining in the first place.
+		# -10% for straight up joining, versus +5% for joining by decision
+		change_infamy = {
+			value = global_var:current_pariah.infamy
+			multiply = 0.05
+			multiply = -1
+		}
+	}
+	ai_chance = {
+		base = 20
+	}
+}

@@ -1080,7 +1080,6 @@ imperia_qing_fragile_unity_value = {
 		}
 		subtract = 10
 	}
-	
 	if = {
 		limit = {
 			has_modifier = modifier_opium_ascendant
@@ -1520,7 +1519,7 @@ masked_ball_max_afford = {
 }
 
 # scope : AI voting country
-imperia_discord_ai_voting_weight = {
+imperia_congress_ai_voting_weight = {
 	value = 0
 	# Positive value = set to support
 	# Negative value = set to oppose
@@ -1912,10 +1911,7 @@ imperia_dead_man_communist_laws_value = {
 	}
 	if = {
 		limit = {
-			OR = {
-				has_law = law_type:law_regulatory_bodies
-				has_law = law_type:law_worker_protections
-			}
+			has_law_pro_workers_rights = yes
 		}
 		add = 1
 	}
@@ -1951,12 +1947,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.50
+						value >= 0.5
 					}
 				}
 			}
 		}
-		value = 0.50
+		value = 0.5
 	}
 	else_if = {
 		limit = {
@@ -1977,12 +1973,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.40
+						value >= 0.4
 					}
 				}
 			}
 		}
-		value = 0.40
+		value = 0.4
 	}
 	else_if = {
 		limit = {
@@ -2003,12 +1999,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.30
+						value >= 0.3
 					}
 				}
 			}
 		}
-		value = 0.30
+		value = 0.3
 	}
 	else_if = {
 		limit = {
@@ -2029,12 +2025,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.20
+						value >= 0.2
 					}
 				}
 			}
 		}
-		value = 0.20
+		value = 0.2
 	}
 	else_if = {
 		limit = {
@@ -2055,12 +2051,12 @@ biggest_culture_percentage_in_state = {
 				prev = {
 					culture_percent_state = {
 						target = prev
-						value >= 0.10
+						value >= 0.1
 					}
 				}
 			}
 		}
-		value = 0.10
+		value = 0.1
 	}
 	else_if = {
 		limit = {
@@ -2074,5 +2070,83 @@ biggest_culture_percentage_in_state = {
 			}
 		}
 		value = 0.05
+	}
+}
+
+economic_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_eco_sanctioning_pariah
+				var:is_eco_sanctioning_pariah = yes
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:great_power
+				}
+				add = 1
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:major_power
+				}
+				add = 0.333
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:minor_power
+				}
+				add = 0.111
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				add = 0.037
+			}
+		}
+	}
+}
+
+trade_sanctioners_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = global_var:current_pariah
+		}
+		every_country = {
+			limit = {
+				has_variable = is_trade_sanctioning_pariah
+				var:is_trade_sanctioning_pariah = yes
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:great_power
+				}
+				add = 1
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:major_power
+				}
+				add = 0.333
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:minor_power
+				}
+				add = 0.111
+			}
+			if = {
+				limit = {
+					country_rank = rank_value:insignificant_power
+				}
+				add = 0.037
+			}
+		}
 	}
 }

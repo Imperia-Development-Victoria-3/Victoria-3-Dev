@@ -45,53 +45,48 @@ bic_breakup.1 = {
 		ai_chance = {
 			base = 8	# this is the default pick for the AI
 		}
-		custom_tooltip = {
-			text = india_princes_independent_tt
-			every_country = {
-				limit = {
-					OR = {
-						is_subject_of = ROOT
-						AND = {
-							OR = {
-								is_subject_of = ROOT.top_overlord
-								is_subject_of = scope:previous_overlord
-							}
-							OR = {
-								any_scope_state = {
-									is_coastal = no
-								}
-								THIS = ROOT
-							}
-							OR = {
-								capital.region = sr:region_north_india
-								capital.region = sr:region_south_india
-								capital.region = sr:region_persia
-								capital.region = sr:region_indochina
-								capital.region = sr:region_himalayas
-							}
-						}
-					}
-				}
-				make_independent = yes
-				scope:previous_overlord.power_bloc ?= {
-					add_leverage = {
-						target = PREV
-						value = -500
-					}
+		collapse_india_effect = yes
+		change_tag = BGL
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_monarchy
 				}
 			}
+			activate_law = law_type:law_monarchy
 		}
-		imperia_shatter_india = yes
-		change_tag = BGL
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_oligarchy
+				}
+			}
+			activate_law = law_type:law_oligarchy
+		}
 		hidden_effect = {
 			remove_primary_culture = cu:british
 			add_primary_culture = cu:bengali
 			set_state_religion = rel:sunni
+			india_independence_ig_effects = yes
+			if = {
+				limit = {
+					has_modifier = modifier_india_crown_rule
+				}
+				remove_modifier = modifier_india_crown_rule
+			}
+			if = {
+				limit = {
+					has_modifier = modifier_india_company_rule
+				}
+				remove_modifier = modifier_india_company_rule
+			}
+			recalculate_pop_ig_support = yes
 			every_scope_character = {
 				limit = {
 					OR = {
 						culture = cu:british
 						culture = cu:scottish
+						culture = cu:irish
 					}
 				}
 				kill_character = yes
@@ -115,7 +110,6 @@ bic_breakup.1 = {
 			add_primary_culture = cu:avadhi
 			add_primary_culture = cu:bihari
 			add_primary_culture = cu:gujarati
-			add_primary_culture = cu:kanauji
 			add_primary_culture = cu:kannada
 			add_primary_culture = cu:malayalam
 			add_primary_culture = cu:marathi
@@ -125,16 +119,69 @@ bic_breakup.1 = {
 			add_primary_culture = cu:sindi
 			add_primary_culture = cu:tamil
 			add_primary_culture = cu:telegu
-			set_state_religion = rel:hindu
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_state_atheism
+					}
+				}
+				if = {
+					limit = {
+						religion_percent_country = {
+							target = rel:hindu
+							value >= 0.5
+						}
+					}
+					set_state_religion = rel:hindu
+				}
+				else_if = {
+					limit = {
+						religion_percent_country = {
+							target = rel:sunni
+							value >= 0.5
+						}
+					}
+					set_state_religion = rel:sunni
+				}
+				else = {
+					set_state_religion = rel:hindu
+				}
+			}
+			india_independence_ig_effects = yes
+			if = {
+				limit = {
+					has_modifier = modifier_india_crown_rule
+				}
+				remove_modifier = modifier_india_crown_rule
+			}
+			if = {
+				limit = {
+					has_modifier = modifier_india_company_rule
+				}
+				remove_modifier = modifier_india_company_rule
+			}
+			recalculate_pop_ig_support = yes
 			every_scope_character = {
 				limit = {
 					OR = {
 						culture = cu:british
 						culture = cu:scottish
+						culture = cu:irish
 					}
+					is_immortal = no
 				}
 				kill_character = yes
 			}
+		}
+	}
+	option = {
+		name = bic_breakup.1.c
+		ai_chance = {
+			base = 0	# AI will never do this
+		}
+		default_option = yes
+		add_radicals = {
+			value = very_large_radicals
 		}
 	}
 }

@@ -38,16 +38,17 @@
 	}
 	on_complete = {
 		remove_modifier ?= modifier_pariah_neighbour
+		remove_variable ?= is_eco_sanctioning_pariah
+		remove_variable ?= is_trade_sanctioning_pariah
+		remove_variable ?= is_in_coalition_against_pariah
 	}
 	on_monthly_pulse = {
+		# Pariah neighbour events here
 		random_events = {
-			9 = 0
-			1 = infamy_rebalance.4	#penalty for states bordering pariah
-			1 = infamy_rebalance.5	#start of coalition
-			1 = infamy_rebalance.8	#wartime event for coalition member
+			chance_of_no_event = 75
+			1 = imperia_infamy_gp.4	# Choice of army bonus for pariah neighbours
 		}
 	}
-	fail = {}
 	invalid = {
 		trigger_if = {
 			limit = {
@@ -60,6 +61,9 @@
 	}
 	on_invalid = {
 		remove_modifier ?= modifier_pariah_neighbour
+		remove_variable ?= is_eco_sanctioning_pariah
+		remove_variable ?= is_trade_sanctioning_pariah
+		remove_variable ?= is_in_coalition_against_pariah
 	}
 	progressbar = no
 	should_be_pinned_by_default = yes
@@ -82,12 +86,12 @@ je_is_pariah = {
 		}
 	}
 	complete = {
-		infamy < infamy_threshold:pariah
+		infamy < 90
 	}
 	on_complete = {
 		remove_modifier ?= modifier_international_pariah
 		remove_modifier ?= modifier_pariah_economic_sanctions
-		remove_modifier ?= modifier_pariah_international_isolation
+		remove_modifier ?= modifier_pariah_trade_sanctions
 		if = {
 			limit = {
 				global_var:current_pariah ?= this
@@ -109,20 +113,62 @@ je_is_pariah = {
 					value = this
 				}
 			}
-		}
-		events = {
-			infamy_rebalance.10	#Economic sanctions
-			infamy_rebalance.11	#Price of infamy
-			infamy_rebalance.12	#International Isolation
+			# If economic sanctions gets into play
+			if = {
+				limit = {
+					infamy >= 110
+					global_var:current_pariah = this
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_pariah_neighbour
+					}
+					trigger_event = {
+						# If this event is triggered by non-GPs the effects are scaled down the smaller their rank
+						id = imperia_infamy_gp.1
+					}
+				}
+			}
+			# If trade sanctions gets into play
+			if = {
+				limit = {
+					infamy >= 130
+					global_var:current_pariah = this
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_pariah_neighbour
+					}
+					trigger_event = {
+						# If this event is triggered by non-GPs the effects are scaled down the smaller their rank
+						id = imperia_infamy_gp.2
+					}
+				}
+			}
+			if = {
+				limit = {
+					infamy >= 150
+					global_var:current_pariah = this
+				}
+				# If the pariah is still around, and the infamy is high enough, trigger the coalition invitation event
+				every_country = {
+					limit = {
+						has_journal_entry = je_pariah_neighbour
+					}
+					trigger_event = {
+						id = imperia_infamy_gp.3
+					}
+				}
+			}
 		}
 		random_events = {
-			#Fires the pariah wartime event roughly once every 4 months. 
-			3 = 0
-			1 = infamy_rebalance.9	#wartime event for pariah
+			chance_of_no_event = 75
+			1 = imperia_infamy_pariah.1	# Minority freedom fighting
+			1 = imperia_infamy_pariah.2	# Capitalists desire better conditions
+			1 = imperia_infamy_pariah.3	# Pro-war vs anti-war faction
+			1 = imperia_infamy_pariah.4	# Student protests
 		}
 	}
-	fail = {}
-	invalid = {}
 	progressbar = no
 	should_be_pinned_by_default = yes
 }

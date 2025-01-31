@@ -1,0 +1,589 @@
+﻿namespace = imperia_infamy_pariah
+# Discriminated pops wants freedom
+imperia_infamy_pariah.1 = {
+	type = country_event
+	title = imperia_infamy_pariah.1.t
+	desc = imperia_infamy_pariah.1.d
+	flavor = imperia_infamy_pariah.1.f
+	placement = scope:riot_state
+	event_image = {
+		video = "unspecific_vandalized_storefront"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	trigger = {
+		# Needs a non-primary culture pop in the country, will nearly always be true
+		any_scope_pop = {
+			culture = {
+				NOT = {
+					is_primary_culture_of = root
+				}
+			}
+		}
+	}
+	immediate = {
+		# In case you got a non-primary culture w/ accompanying homeland in your country, where your primary culture(s) dont have a homeland
+		if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					NOT = {
+						is_homeland_of_country_cultures = root
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					NOT = {
+						is_homeland_of_country_cultures = root
+					}
+				}
+				random_scope_culture = {
+					limit = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Else, try again but without the requirement of primary culture non-homeland
+		else_if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				random_scope_culture = {
+					limit = {
+						has_homeland = prev
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Else, try without the non-primary culture homeland requirement, but within primary homeland
+		else_if = {
+			limit = {
+				any_scope_state = {
+					any_scope_culture = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					is_homeland_of_country_cultures = root
+				}
+			}
+			random_scope_state = {
+				limit = {
+					any_scope_culture = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					is_homeland_of_country_cultures = root
+				}
+				random_scope_culture = {
+					limit = {
+						NOT = {
+							is_primary_culture_of = root
+						}
+					}
+					save_scope_as = rioting_culture
+				}
+				save_scope_as = riot_state
+			}
+		}
+		# Finally, give up on the specifics and just grab a non-primary pop and its state
+		else = {
+			random_scope_pop = {
+				limit = {
+					NOT = {
+						culture = {
+							is_primary_culture_of = root
+						}
+					}
+				}
+				culture = {
+					save_scope_as = rioting_culture
+				}
+				state = {
+					save_scope_as = riot_state
+				}
+			}
+		}
+	}
+	# Clamp down on the freedom fighters
+	option = {
+		name = imperia_infamy_pariah.1.a
+		default_option = yes
+		# 5% radicals for rioting culture in entire country
+		add_radicals = {
+			value = 0.05
+			culture = scope:rioting_culture
+		}
+		# And a further 10% for the culture in the riot state
+		scope:riot_state = {
+			add_radicals_in_state = {
+				value = 0.1
+				culture = scope:rioting_culture
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Reconciliation
+	option = {
+		name = imperia_infamy_pariah.1.b
+		# Add 1.5% radicals for every primary culture in the entire country
+		# And a further 5% for the primary cultures in the rioting state
+		every_primary_culture = {
+			root = {
+				add_radicals = {
+					value = 0.015
+					culture = prev
+				}
+			}
+			scope:riot_state = {
+				add_radicals_in_state = {
+					value = 0.05
+					culture = prev
+				}
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Capitalists desire better conditions
+imperia_infamy_pariah.2 = {
+	type = country_event
+	title = imperia_infamy_pariah.2.t
+	desc = imperia_infamy_pariah.2.d
+	flavor = imperia_infamy_pariah.2.f
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	# Appease capitalists
+	option = {
+		name = imperia_infamy_pariah.2.a
+		default_option = yes
+		if = {
+			limit = {
+				ig:ig_industrialists = {
+					is_in_government = no
+				}
+			}
+			add_modifier = {
+				name = imperia_pariah_appeased_capitalists_modifier_country
+				years = 2
+			}
+		}
+		# Add -4 approval to strongly anti-capitalist IGs
+		# -2 to more moderate anti-stances
+		# -1 to neutrals
+		every_interest_group = {
+			limit = {
+				# Just to be sure, capitalists shouldnt get pissed
+				NOT = {
+					is_interest_group_type = ig_industrialists
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = strongly_disapprove
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = strongly_disapprove
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					multiplier = 4
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = disapprove
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = disapprove
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					multiplier = 2
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						law_stance = {
+							law = law_type:law_laissez_faire
+							value = neutral
+						}
+						law_stance = {
+							law = law_type:law_free_trade
+							value = neutral
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_appeased_capitalists_modifier_ig
+					years = 2
+				}
+			}
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+	# Double down on isolation
+	option = {
+		name = imperia_infamy_pariah.2.b
+		every_interest_group = {
+			if = {
+				limit = {
+					# Jingoist industralists shouldnt appreciate this
+					NOT = {
+						is_interest_group_type = ig_industrialists
+					}
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_doubled_down_on_isolation_modifier_ig
+					years = 2
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_pariah_doubled_down_on_isolation_modifier_country
+			years = 2
+		}
+		add_radicals = {
+			value = 0.2
+			interest_group = ig:ig_industrialists
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+# Pro-war faction VS anti-escalation/anti-war faction
+imperia_infamy_pariah.3 = {
+	type = country_event
+	title = imperia_infamy_pariah.3.t
+	desc = imperia_infamy_pariah.3.d
+	flavor = imperia_infamy_pariah.3.f
+	event_image = {
+		video = "unspecific_military_parade"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	trigger = {
+		is_at_war = no
+	}
+	immediate = {
+		# Fetch the leader of the senior group in the pro-war faction
+		ordered_interest_group = {
+			limit = {
+				OR = {
+					is_interest_group_type = ig_armed_forces
+					leader = {
+						OR = {
+							has_ideology = ideology:ideology_jingoist_leader
+							has_ideology = ideology:ideology_fascist
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+						}
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			leader = {
+				save_scope_as = pro_war_faction_leader
+			}
+		}
+	}
+	# Favor pro-war
+	option = {
+		name = imperia_infamy_pariah.3.a
+		default_option = yes
+		every_interest_group = {
+			if = {
+				limit = {
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_pro_war_faction_favored_ig
+					years = 2
+				}
+			}
+			else = {
+				add_modifier = {
+					name = imperia_pariah_anti_war_faction_disfavored_ig
+					years = 2
+				}
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Favor anti-escalation
+	option = {
+		name = imperia_infamy_pariah.3.b
+		every_interest_group = {
+			if = {
+				limit = {
+					OR = {
+						is_interest_group_type = ig_armed_forces
+						leader = {
+							OR = {
+								has_ideology = ideology:ideology_jingoist_leader
+								has_ideology = ideology:ideology_fascist
+								has_ideology = ideology:ideology_ethno_nationalist
+								has_ideology = ideology:ideology_integralist
+							}
+						}
+					}
+				}
+				add_modifier = {
+					name = imperia_pariah_pro_war_faction_disfavored_ig
+					years = 2
+				}
+			}
+			else = {
+				add_modifier = {
+					name = imperia_pariah_anti_war_faction_favored_ig
+					years = 2
+				}
+			}
+		}
+		add_modifier = {
+			name = imperia_pariah_anti_war_faction_favored_country
+			years = 2
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			change_relations = {
+				country = root
+				value = 20
+			}
+		}
+		change_infamy = -10
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Student protests
+imperia_infamy_pariah.4 = {
+	type = country_event
+	title = imperia_infamy_pariah.4.t
+	desc = imperia_infamy_pariah.4.d
+	flavor = imperia_infamy_pariah.4.f
+	placement = scope:placement_state
+	event_image = {
+		video = "unspecific_vandalized_storefront"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/infamy_icons/pariah.dds"
+	duration = 3
+	cooldown = {
+		months = 24
+	}
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_university
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				capital = {
+					any_scope_building = {
+						is_building_type = building_university
+					}
+				}
+			}
+			capital = {
+				save_scope_as = placement_state
+			}
+		}
+		else = {
+			random_scope_building = {
+				limit = {
+					is_building_type = building_university
+				}
+				state = {
+					save_scope_as = placement_state
+				}
+			}
+		}
+	}
+	# Let it run its course
+	option = {
+		name = imperia_infamy_pariah.4.a
+		default_option = yes
+		add_modifier = {
+			name = imperia_student_protests_country_modifier
+			years = 2
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Crack down on the students!
+	option = {
+		name = imperia_infamy_pariah.4.b
+		ig:ig_intelligentsia = {
+			# -4 approval
+			add_modifier = {
+				name = imperia_student_protests_crackdown_ig_modifier
+				years = 2
+			}
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = academics
+		}
+		# 10% mortality for universities
+		add_modifier = {
+			name = imperia_student_protests_crackdown_country_modifier
+			years = 2
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Special option for patriot schools; re-educate the people
+	option = {
+		name = imperia_infamy_pariah.4.c
+		highlighted_option = yes
+		trigger = {
+			has_law = law_type:law_patriot_schools
+		}
+		# Re-educate the people; -2 approval to every IG that disapproves of patriot schools, +1 to every ig that approves of it, neutrals dont care
+		every_interest_group = {
+			if = {
+				limit = {
+					NOR = {
+						is_interest_group_type = ig_intelligentsia
+						is_interest_group_type = ig_industrialists
+					}
+					law_stance = {
+						law = law_type:law_patriot_schools
+						value > neutral
+					}
+				}
+				add_modifier = {
+					name = imperia_approves_of_patriotic_reeducation_campaign
+					years = 2
+				}
+			}
+			else_if = {
+				limit = {
+					law_stance = {
+						law = law_type:law_patriot_schools
+						value < neutral
+					}
+				}
+				add_modifier = {
+					name = imperia_disapproves_of_patriotic_reeducation_campaign
+					years = 2
+				}
+			}
+		}
+		ai_chance = {
+			base = 200
+		}
+	}
+}

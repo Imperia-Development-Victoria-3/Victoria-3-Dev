@@ -13,7 +13,6 @@ imperia_qing_substates.1 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	option = {
 		name = imperia_qing_substates.1.a
 		default_option = yes
@@ -43,7 +42,6 @@ imperia_qing_substates.2 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	option = {
 		name = imperia_qing_substates.2.a
 		default_option = yes
@@ -103,7 +101,6 @@ imperia_qing_substates.3 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	option = {
 		#Let them fight
 		name = imperia_qing_substates.3.a
@@ -160,7 +157,6 @@ imperia_qing_substates.4 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	option = {
 		#Do nothing
 		name = imperia_qing_substates.4.a
@@ -221,7 +217,6 @@ imperia_qing_substates.5 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	option = {
 		#Let them fight
 		name = imperia_qing_substates.5.a
@@ -254,7 +249,6 @@ imperia_qing_substates.6 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	immediate = {
 		set_variable = qing_language_conference_local_dialect	# Qing will always advocate for Beijing Mandarin
 		set_variable = has_called_chinese_language_conference
@@ -339,7 +333,6 @@ imperia_qing_substates.7 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	# Vote and advocate for local dialect
 	option = {
 		# Only these tags get to advocate for their dialect. Qing will always advocate for theirs, and they do not get this event
@@ -390,7 +383,6 @@ imperia_qing_substates.8 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
 	# Set up on Qing
 	immediate = {
 		# This is a slightly hacky way to reference qing's variables in the loc for other tags
@@ -508,11 +500,6 @@ imperia_qing_substates.9 = {
 				name = qing_language_conference_formosa_votes
 				value = 0
 			}
-			# This is the fail event. It won't appear if a victor is chosen
-			trigger_event = {
-				id = imperia_qing_substates.11
-				days = 91
-			}
 		}
 	}
 	# Beijing Dialect - always an option
@@ -540,10 +527,6 @@ imperia_qing_substates.9 = {
 								has_variable = qing_language_conference_local_dialect
 								has_modifier = modifier_chinese_diglossia
 							}
-						}
-						trigger_event = {
-							id = imperia_qing_substates.10
-							days = 1
 						}
 						remove_variable = qing_language_conference_can_vote
 					}
@@ -581,10 +564,6 @@ imperia_qing_substates.9 = {
 								has_modifier = modifier_chinese_diglossia
 							}
 						}
-						trigger_event = {
-							id = imperia_qing_substates.10
-							days = 1
-						}
 						remove_variable = qing_language_conference_can_vote
 					}
 				}
@@ -620,10 +599,6 @@ imperia_qing_substates.9 = {
 								has_variable = qing_language_conference_local_dialect
 								has_modifier = modifier_chinese_diglossia
 							}
-						}
-						trigger_event = {
-							id = imperia_qing_substates.10
-							days = 1
 						}
 						remove_variable = qing_language_conference_can_vote
 					}
@@ -661,10 +636,6 @@ imperia_qing_substates.9 = {
 								has_modifier = modifier_chinese_diglossia
 							}
 						}
-						trigger_event = {
-							id = imperia_qing_substates.10
-							days = 1
-						}
 						remove_variable = qing_language_conference_can_vote
 					}
 				}
@@ -701,11 +672,76 @@ imperia_qing_substates.9 = {
 								has_modifier = modifier_chinese_diglossia
 							}
 						}
+						remove_variable = qing_language_conference_can_vote
+					}
+				}
+			}
+		}
+	}
+	after = {
+		if = {
+			# If theres nobody left who can vote
+			limit = {
+				any_country = {
+					count = 0
+					has_variable = qing_language_conference_can_vote
+				}
+			}
+			# And theres no victor
+			if = {
+				limit = {
+					c:CHI = {
+						NOR = {
+							has_variable = qing_language_conference_beijing_victorious
+							has_variable = qing_language_conference_sichuan_victorious
+							has_variable = qing_language_conference_liangguang_victorious
+							has_variable = qing_language_conference_huguang_victorious
+							has_variable = qing_language_conference_formosa_victorious
+						}
+					}
+				}
+				# Fire the fail event 7 days after last person has voted. It won't appear if a victor is chosen.
+				c:CHI = {
+					every_subject_or_below = {
+						limit = {
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+							}
+						}
+						# Fire event for subjects
+						trigger_event = {
+							id = imperia_qing_substates.11
+							days = 7
+						}
+					}
+					# Fire event for Qing
+					trigger_event = {
+						id = imperia_qing_substates.11
+						days = 7
+					}
+				}
+			}
+			else = {
+				# If there is a victor, fire the victor event 7 days after the last person has voted
+				c:CHI = {
+					every_subject_or_below = {
+						limit = {
+							OR = {
+								has_variable = qing_language_conference_just_voting
+								has_variable = qing_language_conference_local_dialect
+							}
+						}
+						# Fire event for subjects
 						trigger_event = {
 							id = imperia_qing_substates.10
-							days = 1
+							days = 7
 						}
-						remove_variable = qing_language_conference_can_vote
+					}
+					# Fire event for Qing
+					trigger_event = {
+						id = imperia_qing_substates.10
+						days = 7
 					}
 				}
 			}
@@ -727,7 +763,11 @@ imperia_qing_substates.10 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
-	trigger = {}
+	immediate = {
+		c:CHI = {
+			save_scope_as = qing_scope
+		}
+	}
 	# Our language was victorious
 	option = {
 		name = imperia_qing_substates.10.a
@@ -809,6 +849,9 @@ imperia_qing_substates.11 = {
 				c:CHI = THIS
 			}
 			set_variable = qing_language_conference_no_winner
+		}
+		c:CHI = {
+			save_scope_as = qing_scope
 		}
 	}
 	option = {
@@ -892,7 +935,6 @@ imperia_qing_substates.13 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
-	trigger = {}
 	option = {
 		name = imperia_qing_substates.13.a
 		default_option = yes

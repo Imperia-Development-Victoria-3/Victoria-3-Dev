@@ -127,7 +127,6 @@ dp_return_state = {
 		NOT = { is_subject_of = scope:target_country }
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
-			NOT = { is_subject_of = root }
 		}
 		diplomatic_play_has_no_relations_blockers = yes
 	}
@@ -332,6 +331,24 @@ dp_make_tributary = {
 	on_war_end = {}
 }
 
+dp_make_dominion = {
+	war_goal = make_dominion
+	
+	texture = "gfx/interface/icons/war_goals/make_dominion.dds"
+	
+	possible = {
+		aggressive_diplomatic_plays_permitted = yes
+	}
+	
+	ai_acceptance_max = 90
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+	
+	on_war_end = {}
+}
+
 dp_make_protectorate = {
 	war_goal = make_protectorate
 	
@@ -349,6 +366,25 @@ dp_make_protectorate = {
 	
 	on_war_end = {}
 }
+
+# TODO PRCAL-36324 - add this diplo play back in when we get rid of Colonial country type
+#dp_make_dominion = {
+#	war_goal = make_dominion
+#	
+#	texture = "gfx/interface/icons/war_goals/make_dominion.dds"
+#	
+#	possible = {	
+#		aggressive_diplomatic_plays_permitted = yes				
+#	}
+#	
+#	ai_acceptance_max = 90
+#	
+#	on_weekly_pulse = {}
+#	
+#	on_war_begins = {}
+#
+#	on_war_end = {}
+#}
 
 dp_transfer_subject = {
 	war_goal = transfer_subject
@@ -380,12 +416,32 @@ dp_annex_subject = {
 	texture = "gfx/interface/icons/war_goals/annex_country.dds"
 	confirmation_sound = "event:/SFX/UI/SubjectInteractions/subject_button_small_annex"
 	possible = {
+		trigger_if = {
+			limit = {
+				c:BIC ?= this
+				is_at_war = no
+				NOT = { has_variable = doctrine_of_lapse_cooldown }
+				NOT = { has_variable = doctrine_of_lapse_ended }
+				scope:target_country = {
+					is_subject_of = ROOT
+					has_variable = princely_state
+					NOT = { country_tier = empire }
+					is_player = no
+				}
+			}
+			custom_tooltip = {
+				text = CAN_USE_DOCTRINE_OF_LAPSE_INSTEAD
+				always = no
+			}
+		}
+		
 		NOT = { is_country_type = decentralized }
 		imperia_relaxed_diplomatic_plays_permitted = yes
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			is_direct_subject_of = root
 			OR = {
+				has_diplomatic_pact = { who = root type = colony }
 				has_diplomatic_pact = { who = root type = puppet }
 				has_diplomatic_pact = { who = root type = vassal }
 			}
@@ -407,12 +463,11 @@ dp_annex_subject = {
 	
 	on_war_begins = {
 		scope:initiator = {
-			every_subject_or_below = {
+			every_direct_subject = {
 				limit = {
-					is_direct_subject_of = scope:initiator
 					NOT = { this = scope:target_country }
 				}
-				add_liberty_desire = 25
+				add_liberty_desire = annex_subject_base_liberty_desire_change
 				add_modifier = {
 					name = modifier_has_annexed_another_subject
 					months = 60
@@ -423,6 +478,20 @@ dp_annex_subject = {
 	}
 	
 	on_war_end = {}
+	
+	on_demand_accepted = {
+		every_direct_subject = {
+			limit = {
+				NOT = { this = scope:target_country }
+			}
+			add_liberty_desire = annex_subject_base_liberty_desire_change
+			add_modifier = {
+				name = modifier_has_annexed_another_subject
+				months = 60
+				is_decaying = no
+			}
+		}
+	}
 }
 
 dp_revolution = {
@@ -486,24 +555,22 @@ dp_secession = {
 		always = no
 	}
 	possible = {
-		scope:target_country = {
-			is_secessionist = yes
-		}
+		scope:initiator = { is_secessionist = yes }
 	}
 	additional_involvement_trigger = {
 		NOT = { is_country_type = decentralized }
 		aggressive_diplomatic_plays_permitted = yes
 		
-		scope:target_country = {
+		scope:initiator = {
 			capital = {
 				region = {
-					save_temporary_scope_as = target_capital_region
+					save_temporary_scope_as = secession_capital_region
 				}
 			}
 		}
 		OR = {
-			has_interest_marker_in_region = scope:target_capital_region
-			is_home_country_for = scope:target_country
+			has_interest_marker_in_region = scope:secession_capital_region
+			is_home_country_for = scope:initiator
 		}
 	}
 	on_weekly_pulse = {}
@@ -524,6 +591,8 @@ dp_contain_threat = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			NOT = { is_subject_of = root }
+			# The target should be the current pariah, just to be sure everything works
+			global_var:current_pariah ?= this
 		}
 		custom_tooltip = {
 			text = DIPLO_PLAY_GREAT_POWER_TRIGGER
@@ -533,6 +602,16 @@ dp_contain_threat = {
 			text = DIPLO_PLAY_OUTRAGED_TRIGGER
 			"scope:target_country.infamy" >= infamy_threshold:pariah
 		}
+		# Must have a suitable coalition on target; meaning 5+ majors/gps
+		custom_tooltip = {
+			text = DIPLO_PLAY_SUITABLE_COALITION_TRIGGER
+			any_country = {
+				count >= 5
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				country_rank >= rank_value:major_power
+			}
+		}
 	}
 	additional_involvement_trigger = {
 		NOT = {
@@ -541,9 +620,70 @@ dp_contain_threat = {
 		country_rank >= rank_value:great_power
 		imperia_aggressive_diplomatic_plays_permitted = yes
 	}
-	on_weekly_pulse = {}
-	on_war_begins = {}
-	on_war_end = {}
+	on_weekly_pulse = {
+		# Every country who entered the coalition joins the play..
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				NOT = { is_diplomatic_play_involved_with = global_var:current_pariah }
+			}
+			root = {
+				add_initiator_backers = {
+					prev
+				}
+			}
+		}
+	}
+	on_war_begins = {
+		# And every country when the war starts will join against the pariah. No buts.
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+				var:is_in_coalition_against_pariah = yes
+				NOT = { is_diplomatic_play_enemy_of = global_var:current_pariah }
+			}
+			root = {
+				add_initiator_backers = {
+					prev
+				}
+			}
+			# Post a notification, just to make sure they're wide awake.
+			post_notification = diplo_play_coalition_started
+		}
+		# Clean up the coalition tag from them
+		every_country = {
+			limit = {
+				has_variable = is_in_coalition_against_pariah
+			}
+			remove_variable = is_in_coalition_against_pariah
+		}
+	}
+	on_war_end = {
+		# On war end the modifiers and variables are removed
+		every_country = {
+			limit = {
+				OR = {
+					has_variable = is_eco_sanctioning_pariah
+					has_variable = is_trade_sanctioning_pariah
+				}
+			}
+			remove_variable ?= is_eco_sanctioning_pariah
+			remove_variable ?= is_trade_sanctioning_pariah
+		}
+		every_country = {
+			limit = {
+				OR = {
+					this ?= global_var:current_pariah
+					has_modifier = modifier_pariah_economic_sanctions
+					has_modifier = modifier_pariah_trade_sanctions
+				}
+			}
+			remove_global_variable ?= current_pariah
+			remove_modifier ?= modifier_pariah_economic_sanctions
+			remove_modifier ?= modifier_pariah_trade_sanctions
+		}
+	}
 	
 	ai_acceptance_max = 100
 }
@@ -795,16 +935,27 @@ dp_unify_china = {
 	war_goal = conquer_state
 	texture = "gfx/interface/icons/war_goals/conquer_state.dds"
 	selectable_in_lens = {
-		has_modifier = modifier_warlord_era
+		OR = {
+			has_journal_entry = je_reunify_china
+			global_var:chinese_central_government ?= THIS
+		}
 	}
 	possible = {
 		NOT = { exists = c:CHI }
 		NOT = { is_country_type = decentralized }
-		has_modifier = modifier_warlord_era
+		is_subject = no
+		OR = {
+			has_journal_entry = je_reunify_china
+			global_var:chinese_central_government ?= THIS
+		}
+		
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
-			imperia_aggressive_diplomatic_plays_permitted = yes
-			has_modifier = modifier_warlord_era
+			aggressive_diplomatic_plays_permitted = yes
+			OR = {
+				has_journal_entry = je_reunify_china
+				global_var:chinese_central_government ?= THIS
+			}
 		}
 	}
 	on_weekly_pulse = {}
@@ -995,5 +1146,28 @@ dp_humiliation = {
 	}
 	on_weekly_pulse = {}
 	on_war_begins = {}
+	on_war_end = {}
+}
+
+dp_sepoy_mutiny = {
+	war_goal = annex_country
+	
+	allow_negotiated_peace = no
+	add_infamy_for_starting_initiator_wargoals = no
+	
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	
+	selectable_in_lens = {
+		always = no
+	}
+	
+	possible = {}
+	
+	ai_acceptance_max = 75
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {}
+	
 	on_war_end = {}
 }

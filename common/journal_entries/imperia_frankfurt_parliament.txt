@@ -23,20 +23,15 @@
 			country_has_primary_culture = cu:north_german
 			country_has_primary_culture = cu:south_german
 		}
-		# Should only happen before 1850
-		# Replace with a global variable check, when possible!
-		year < 1850
+		NOT = {
+			# This variable gets created during the republic vs monarchy vote, just to allow countries to actually get the JE
+			has_global_variable = frankfurt_parliament_started
+		}
 	}
 	possible = {
-		any_country = {
-			filter = {
-				OR = {
-					country_has_primary_culture = cu:north_german
-					country_has_primary_culture = cu:south_german
-				}
-			}
-			has_technology_researched = nationalism
-			percent >= 0.65
+		custom_tooltip = {
+			text = ready_for_frankfurt_tt
+			has_global_variable = ready_for_frankfurt
 		}
 	}
 	immediate = {
@@ -54,27 +49,29 @@
 			popup = yes
 			days = 14
 		}
-		imperia_frankfurt_parliament_initialise_club_variables = yes
-		imperia_frankfurt_parliament_update_club_influence = yes
-		if = {
-			limit = {
-				NOT = {
-					exists = global_var:frankfurt_parliament_voting_period
+		hidden_effect = {
+			imperia_frankfurt_parliament_initialise_club_variables = yes
+			imperia_frankfurt_parliament_update_club_influence = yes
+			if = {
+				limit = {
+					NOT = {
+						exists = global_var:frankfurt_parliament_voting_period
+					}
 				}
-			}
-			set_global_variable = {
-				name = frankfurt_parliament_voting_period
-				value = 0
-			}
-			set_global_variable = {
-				name = frankfurt_parliament_current_vote
-				value = 0
-			}
-			set_global_variable = frankfurt_parliament_held
-			# This one is just initialised here, will be "populated" on completion
-			set_global_variable = {
-				name = frankfurt_eligible_german_leader_voters
-				value = 0
+				set_global_variable = {
+					name = frankfurt_parliament_voting_period
+					value = 0
+				}
+				set_global_variable = {
+					name = frankfurt_parliament_current_vote
+					value = 0
+				}
+				set_global_variable = frankfurt_parliament_held
+				# This one is just initialised here, will be "populated" on completion
+				set_global_variable = {
+					name = frankfurt_eligible_german_leader_voters
+					value = 0
+				}
 			}
 		}
 	}
@@ -209,6 +206,14 @@
 						value = 0
 					}
 					# Save result to a global var, performance enhancing code
+					if = {
+						# Once everyone has (had a chance to) join(ed)
+						limit = {
+							global_var:frankfurt_parliament_current_vote = 0
+						}
+						# Global variable so multiple parliaments arent held..
+						set_global_variable = frankfurt_parliament_started
+					}
 					if = {
 						# monarchy vs republic
 						limit = {
@@ -918,4 +923,420 @@ je_imperia_frankfurt_german_consolidation_german_minor = {
 	progressbar = yes
 	weight = 5000
 	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_gutter_crown_main = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	immediate = {
+		add_modifier = {
+			name = gutter_crown_economy_penalty
+		}
+		add_modifier = {
+			name = gutter_crown_political_penalty
+		}
+		add_modifier = {
+			name = gutter_crown_admin_penalty
+		}
+		add_modifier = {
+			name = gutter_crown_military_penalty
+		}
+		trigger_event = {
+			id = frankfurt_parliament.10
+			days = 3
+			popup = yes
+		}
+	}
+	complete = {
+		NOR = {
+			has_modifier = gutter_crown_economy_penalty
+			has_modifier = gutter_crown_political_penalty
+			has_modifier = gutter_crown_admin_penalty
+			has_modifier = gutter_crown_military_penalty
+		}
+	}
+	on_timeout = {
+		custom_tooltip = puts_the_remaining_penalties_on_a_decaying_10_year_timer_tt
+		if = {
+			limit = {
+				has_modifier = gutter_crown_economy_penalty
+			}
+			hidden_effect = {
+				remove_modifier = gutter_crown_economy_penalty
+			}
+			add_modifier = {
+				name = gutter_crown_economy_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_political_penalty
+			}
+			hidden_effect = {
+				remove_modifier = gutter_crown_political_penalty
+			}
+			if = {
+				limit = {
+					gutter_crown_political_penalty_multiplier != 0
+				}
+				add_modifier = {
+					name = gutter_crown_political_penalty
+					years = 10
+					is_decaying = yes
+					multiplier = gutter_crown_political_penalty_multiplier
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_admin_penalty
+			}
+			hidden_effect = {
+				remove_modifier = gutter_crown_admin_penalty
+			}
+			add_modifier = {
+				name = gutter_crown_admin_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = gutter_crown_military_penalty
+			}
+			hidden_effect = {
+				remove_modifier = gutter_crown_military_penalty
+			}
+			add_modifier = {
+				name = gutter_crown_military_penalty
+				years = 10
+				is_decaying = yes
+			}
+		}
+	}
+	# 5 years timer
+	timeout = 1826
+	can_revolution_inherit = no
+	transferable = no
+	weight = 10000	# Important
+	should_be_pinned_by_default = yes
+}
+
+je_imperia_frankfurt_gutter_crown_economy = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	complete = {
+		# Pretty much copied from the Meiji eco JE
+		in_default = no
+		any_scope_state = {
+			filter = {
+				is_incorporated = yes
+				state_region = {
+					OR = {
+						is_homeland = cu:north_german
+						is_homeland = cu:south_german
+					}
+				}
+			}
+			any_scope_building = {
+				is_building_type = building_urban_center
+				level >= 4
+			}
+			has_building = building_railway
+			percent >= 0.6
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_economy_penalty
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_political = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = je_imperia_frankfurt_gutter_crown_political_start_german_minors_amount
+			value = je_imperia_frankfurt_gutter_crown_political_start_german_minors_value
+		}
+		set_variable = {
+			name = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+			value = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value
+		}
+	}
+	complete = {
+		any_subject_or_below = {
+			filter = {
+				is_direct_subject_of = c:GER
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+			}
+			count = all
+			is_subject_type = subject_type_puppet
+		}
+		any_scope_state = {
+			filter = {
+				state_region = {
+					OR = {
+						is_homeland = cu:north_german
+						is_homeland = cu:south_german
+					}
+				}
+			}
+			count = all
+			custom_tooltip = {
+				text = gutter_crown_political_je_integration_considered_tt
+				state_region = {
+					has_variable = gutter_crown_political_je_integration_considered
+					var:gutter_crown_political_je_integration_considered = yes
+				}
+				NOR = {
+					has_modifier = gutter_crown_political_je_bureaucrats_left_be_modifier
+					has_modifier = gutter_crown_political_je_internal_security_left_be_modifier
+					has_modifier = gutter_crown_political_je_home_defence_left_be_modifier
+					has_modifier = gutter_crown_political_je_land_reform_left_be_modifier
+					has_modifier = gutter_crown_political_je_policing_left_be_modifier
+				}
+			}
+		}
+	}
+	on_complete = {
+		custom_label = all_german_puppet_type_subjects_will_be_annexed_tt
+		custom_label = as_it_currently_stands
+		show_as_tooltip = {
+			add_modifier = {
+				name = gutter_crown_political_penalty
+				years = 10
+				is_decaying = yes
+				multiplier = gutter_crown_political_penalty_multiplier
+			}
+		}
+		hidden_effect = {
+			every_subject_or_below = {
+				limit = {
+					is_direct_subject_of = c:GER
+					is_subject_type = subject_type_puppet
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+				}
+				c:GER = {
+					annex_with_incorporation = prev
+				}
+			}
+			remove_modifier = gutter_crown_political_penalty
+			if = {
+				limit = {
+					gutter_crown_political_penalty_multiplier != 0
+				}
+				add_modifier = {
+					name = gutter_crown_political_penalty
+					years = 10
+					is_decaying = yes
+					multiplier = gutter_crown_political_penalty_multiplier
+				}
+			}
+		}
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_puppets_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_puppets_value
+			}
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_states_owned_value
+			}
+			set_variable = {
+				name = je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_amount
+				value = je_imperia_frankfurt_gutter_crown_political_current_german_states_fixed_value
+			}
+		}
+		random_events = {
+			chance_of_no_event = 50
+			1 = frankfurt_parliament.11	# State bureaucrat integration event
+			1 = frankfurt_parliament.12	# State internal security
+			1 = frankfurt_parliament.13	# State home defence
+			1 = frankfurt_parliament.14	# State land reform
+			1 = frankfurt_parliament.15	# State policing
+			3 = frankfurt_parliament.16	# Prince integration
+		}
+	}
+}
+
+je_imperia_frankfurt_gutter_crown_admin = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_no_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_small_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_medium_effort_button
+	scripted_button = je_imperia_frankfurt_gutter_crown_admin_large_effort_button
+	immediate = {
+		set_variable = {
+			name = gutter_crown_admin_integration_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_admin_penalty
+		# Remove integration effort modifiers
+		hidden_effect = {
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			## Resyncs the money cost modifier each week
+			# And of course adds progress
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+			if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 1
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 5% of weekly
+						divide = frankfurt_integration_low_money_divisor
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 2
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 10% of weekly
+						divide = frankfurt_integration_medium_money_divisor
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_modifier = imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+				}
+				change_variable = {
+					name = gutter_crown_admin_integration_var
+					add = 4
+				}
+				add_modifier = {
+					name = imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+					multiplier = {
+						value = gdp
+						# 20% of weekly
+						divide = frankfurt_integration_large_money_divisor
+					}
+				}
+			}
+		}
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+	on_fail = {
+		hidden_effect = {
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_small_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_medium_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_large_effort_modifier
+			remove_modifier ?= imperia_frankfurt_gutter_crown_admin_money_cost_modifier
+		}
+	}
+	current_value = {
+		value = root.var:gutter_crown_admin_integration_var
+	}
+	goal_add_value = {
+		# 15 months of 20% gdp spending = 3x your countrys worth, probably
+		add = 240
+	}
+	progressbar = yes
+}
+
+je_imperia_frankfurt_gutter_crown_military = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_historical_content
+	immediate = {
+		set_variable = {
+			name = gutter_crown_military_goal_var
+			value = 0
+		}
+	}
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		OR = {
+			has_law = law_type:law_localized_garrisons
+			has_law = law_type:law_national_guard
+			has_law = law_type:law_militarized_police
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					pop_type_percent_country = {
+						pop_type = soldiers
+						percent >= 0.05
+					}
+				}
+				change_variable = {
+					name = gutter_crown_military_goal_var
+					add = 1
+				}
+			}
+		}
+	}
+	on_complete = {
+		remove_modifier = gutter_crown_military_penalty
+	}
+	fail = {
+		NOT = {
+			has_journal_entry = je_imperia_frankfurt_gutter_crown_main
+		}
+	}
+	current_value = {
+		value = root.var:gutter_crown_military_goal_var
+	}
+	goal_add_value = {
+		add = 52
+	}
+	progressbar = yes
 }

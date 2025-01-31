@@ -1,0 +1,236 @@
+﻿namespace = imperia_sinosphere
+imperia_sinosphere.1 = {
+	type = country_event
+	placement = root
+	title = imperia_sinosphere.1.t
+	desc = imperia_sinosphere.1.d
+	flavor = imperia_sinosphere.1.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	trigger = {}
+	
+	option = {
+		name = imperia_sinosphere.1.a
+	}
+	
+	option = {
+		name = imperia_sinosphere.1.b
+		default_option = yes
+		
+		add_modifier = {
+			name = modifier_mixed_script_korea
+		}
+		add_modifier = {
+			name = modifier_writing_system_transition
+			months = 60
+			is_decaying = yes
+		}
+		if = {
+			limit = {
+				AND = {
+					exists = c:CHI
+					is_subject_of = c:CHI
+				}
+			}
+			create_diplomatic_catalyst = {
+				type = catalyst_event_negative
+				target = c:CHI
+			}
+			change_relations = {
+				country = c:CHI
+				value = -50
+			}
+		}
+		if = {
+			limit = {
+				AND = {
+					exists = c:TPG
+					is_subject_of = c:TPG
+				}
+			}
+			create_diplomatic_catalyst = {
+				type = catalyst_event_negative
+				target = c:TPG
+			}
+			change_relations = {
+				country = c:TPG
+				value = -50
+			}
+		}
+	}
+	
+	option = {
+		name = imperia_sinosphere.1.c
+		
+		trigger = {
+			NOR = {
+				is_subject_of = c:CHI
+				is_subject_of = c:TPG
+			}
+		}
+		
+		add_modifier = {
+			name = modifier_hangul
+		}
+		add_modifier = {
+			name = modifier_writing_system_transition
+			months = 120
+			is_decaying = yes
+		}
+	}
+}
+
+imperia_sinosphere.2 = {
+	type = country_event
+	placement = root
+	title = imperia_sinosphere.2.t
+	desc = imperia_sinosphere.2.d
+	flavor = imperia_sinosphere.2.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	trigger = {}
+	option = {
+		name = imperia_sinosphere.2.a
+	}
+	
+	option = {
+		name = imperia_sinosphere.2.b
+		default_option = yes
+		
+		add_modifier = {
+			name = modifier_mixed_script_vietnam
+		}
+		add_modifier = {
+			name = modifier_writing_system_transition
+			months = 60
+			is_decaying = yes
+		}
+		if = {
+			limit = {
+				AND = {
+					exists = c:CHI
+					is_subject_of = c:CHI
+				}
+			}
+			create_diplomatic_catalyst = {
+				type = catalyst_event_negative
+				target = c:CHI
+			}
+			change_relations = {
+				country = c:CHI
+				value = -50
+			}
+		}
+		if = {
+			limit = {
+				AND = {
+					exists = c:TPG
+					is_subject_of = c:TPG
+				}
+			}
+			create_diplomatic_catalyst = {
+				type = catalyst_event_negative
+				target = c:TPG
+			}
+			change_relations = {
+				country = c:TPG
+				value = -50
+			}
+		}
+		
+	}
+	
+	option = {
+		name = imperia_sinosphere.2.c
+		
+		trigger = {
+			NOR = {
+				is_subject_of = c:CHI
+				is_subject_of = c:TPG
+			}
+		}
+		
+		add_modifier = {
+			name = modifier_chu_quoc_ngu
+		}
+		add_modifier = {
+			name = modifier_writing_system_transition
+			months = 120
+			is_decaying = yes
+		}
+	}
+}
+
+imperia_sinosphere.3 = {
+	type = country_event
+	placement = root
+	title = imperia_sinosphere.3.t
+	desc = imperia_sinosphere.3.d
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/asia_union_leader.bk2"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	trigger = {}
+	option = {
+		name = imperia_sinosphere.3.a	#Continue Han dominance
+		default_option = yes
+		
+		add_radicals = {
+			culture = cu:uighur
+			value = 0.2
+		}
+		add_loyalists = {
+			culture = cu:han
+			value = 0.1
+		}
+	}
+	
+	option = {
+		name = imperia_sinosphere.3.b	#The Uighurs take back control
+		
+		remove_primary_culture = cu:han
+		add_primary_culture = cu:uighur
+		
+		add_radicals = {
+			culture = cu:han
+			value = 0.2
+		}
+		add_loyalists = {
+			culture = cu:uighur
+			value = 0.1
+		}
+		
+	}
+	
+	option = {
+		name = imperia_sinosphere.3.c	#Can't we both just coexist?
+		
+		add_primary_culture = cu:uighur
+		
+		add_radicals = {
+			culture = cu:uighur
+			value = 0.1
+		}
+		add_radicals = {
+			culture = cu:han
+			value = 0.1
+		}
+		
+	}
+}

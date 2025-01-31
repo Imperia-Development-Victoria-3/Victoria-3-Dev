@@ -648,6 +648,7 @@ imperia_frankfurt_parliament_update_club_influence = {
 		name = frankfurt_parliament_center_faction_influence
 		value = 0
 	}
+	# Go through characters
 	every_scope_character = {
 		limit = {
 			is_character_alive = yes
@@ -690,6 +691,69 @@ imperia_frankfurt_parliament_update_club_influence = {
 			}
 		}
 	}
+	## Check the rulers interest here
+	# For a perfect 20% the total should be 33.33~~ to one variable, but since we evaluate both suffrage and government form, each of those gives 20 points.
+	# First their opinion on republics versus monarchies
+	if = {
+		limit = {
+			ruler = {
+				interest_group = {
+					OR = {
+						prefers_law = {
+							law = law_type:law_presidential_republic
+							comparison_law = law_type:law_monarchy
+						}
+						prefers_law = {
+							law = law_type:law_parliamentary_republic
+							comparison_law = law_type:law_monarchy
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			add = 20
+		}
+	}
+	else = {
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			add = 20
+		}
+	}
+	# Now suffrage
+	if = {
+		limit = {
+			ruler = {
+				interest_group = {
+					prefers_law = {
+						law = law_type:law_universal_suffrage
+						comparison_law = law_type:law_wealth_voting
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = frankfurt_parliament_left_faction_influence
+			add = 20
+		}
+	}
+	else = {
+		change_variable = {
+			name = frankfurt_parliament_center_faction_influence
+			add = 20
+		}
+	}
+	## Now outside influences
+	change_variable = {
+		name = frankfurt_parliament_left_faction_influence
+		add = imperia_frankfurt_outside_pressure_for_left
+	}
+	change_variable = {
+		name = frankfurt_parliament_center_faction_influence
+		add = imperia_frankfurt_outside_pressure_for_center
+	}
 	if = {
 		limit = {
 			has_variable = frankfurt_parliament_left_club_boost
@@ -715,6 +779,26 @@ imperia_frankfurt_parliament_update_club_influence = {
 	round_variable = {
 		name = frankfurt_parliament_center_faction_influence
 		nearest = 1
+	}
+	random_list = {
+		0 = {
+			modifier = {
+				add = imperia_frankfurt_parliament_left_percentage
+			}
+			set_variable = {
+				name = frankfurt_parliament_country_votes_left
+				value = yes
+			}
+		}
+		0 = {
+			modifier = {
+				add = imperia_frankfurt_parliament_center_percentage
+			}
+			set_variable = {
+				name = frankfurt_parliament_country_votes_left
+				value = no
+			}
+		}
 	}
 }
 
@@ -1012,11 +1096,6 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 				}
 			}
 		}
-		add_modifier = {
-			name = crown_from_the_gutter
-			years = 20
-			is_decaying = yes
-		}
 		if = {
 			limit = {
 				has_global_variable = frankfurt_parliament_has_majority_for_republic_var
@@ -1046,6 +1125,9 @@ imperia_frankfurt_parliament_consolidate_gutter_king = {
 				}
 				add_claim = $GUTTER_KING$
 			}
+		}
+		add_journal_entry = {
+			type = je_imperia_frankfurt_gutter_crown_main
 		}
 		if = {
 			limit = {
@@ -1242,5 +1324,59 @@ imperia_frankfurt_parliament_sway_TARGET_to_SWAYER = {
 	set_variable = {
 		name = je_frankfurt_minor_recently_swayed
 		days = 42
+	}
+}
+
+gutter_crown_political_integration_state_event_immediate = {
+	set_variable = {
+		name = gutter_crown_political_integration_event_cooldown
+		weeks = 10
+	}
+	random_scope_state = {
+		limit = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+				}
+				NOT = {
+					has_variable = gutter_crown_political_je_integration_considered
+				}
+			}
+		}
+		save_scope_as = integrating_state
+		state_region = {
+			set_variable = {
+				name = gutter_crown_political_je_integration_considered
+				value = no
+			}
+		}
+	}
+}
+
+gutter_crown_political_integration_country_event_immediate = {
+	set_variable = {
+		name = gutter_crown_political_integration_event_cooldown
+		weeks = 12
+	}
+	random_country = {
+		limit = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
+			is_in_same_power_bloc = c:GER
+			power_bloc.power_bloc_leader = c:GER
+			is_subject = no
+			country_rank <= rank_value:minor_power
+			NOT = {
+				has_variable = gutter_crown_political_je_integration_considered
+			}
+		}
+		save_scope_as = integrating_country
+		set_variable = {
+			name = gutter_crown_political_je_integration_considered
+			value = no
+		}
 	}
 }
