@@ -1,1 +1,71 @@
-﻿
+﻿je_kurd_pacification = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	scripted_progress_bar = kurd_pacification_core_progress_bar
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				# Below 13
+				trigger = {
+					scope:journal_entry = {
+						scripted_bar_progress = {
+							name = kurd_pacification_core_progress_bar
+							value < 13
+						}
+					}
+				}
+				desc = je_kurd_pacification_status_governorship
+			}
+			triggered_desc = {
+				# Above 13
+				trigger = {
+					scope:journal_entry = {
+						scripted_bar_progress = {
+							name = kurd_pacification_core_progress_bar
+							value > 13
+						}
+					}
+				}
+				desc = je_kurd_pacification_status_revolt
+			}
+			triggered_desc = {
+				# Exact 13
+				trigger = {
+					scope:journal_entry = {
+						scripted_bar_progress = {
+							name = kurd_pacification_core_progress_bar
+							value = 13
+						}
+					}
+				}
+				desc = je_kurd_pacification_status_balanced
+			}
+		}
+	}
+	complete = {
+		custom_tooltip = {
+			text = je_kurd_pacification_progress_bar_full
+			scope:journal_entry = {
+				scripted_bar_progress = {
+					name = kurd_pacification_core_progress_bar
+					value = 25
+				}
+			}
+		}
+	}
+	fail = {
+		custom_tooltip = {
+			text = je_kurd_pacification_progress_bar_empty
+			scope:journal_entry = {
+				scripted_bar_progress = {
+					name = kurd_pacification_core_progress_bar
+					value = 0
+				}
+			}
+		}
+	}
+	invalid = {
+		is_subject = no
+	}
+	should_be_pinned_by_default = yes
+}

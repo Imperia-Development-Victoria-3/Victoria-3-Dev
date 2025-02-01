@@ -1,0 +1,20 @@
+﻿kurdistan_power_balance_advantage = {
+	value = 0
+	if = {
+		limit = {
+			has_journal_entry = je_kurd_pacification
+		}
+        # Set the number to its current value relative to 13, the middle value
+		je:je_kurd_pacification ?= {
+			add = "scripted_bar_progress(kurd_pacification_core_progress_bar)"
+			subtract = 13
+            # And turn it around if it is below 13, meaning its proccing for the governorship
+			if = {
+				limit = {
+					"scripted_bar_progress(kurd_pacification_core_progress_bar)" < 13
+				}
+				multiply = -1
+			}
+		}
+	}
+}
