@@ -1206,6 +1206,7 @@ kurd_pacification_ottoman_progress_1 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
 	}
 }
 
@@ -1218,6 +1219,7 @@ kurd_pacification_ottoman_progress_2 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
 	}
 }
 
@@ -1230,6 +1232,7 @@ kurd_pacification_ottoman_progress_3 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
 	}
 }
 
@@ -1242,6 +1245,7 @@ kurd_pacification_kurdistan_progress_1 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
 	}
 }
 
@@ -1254,6 +1258,7 @@ kurd_pacification_kurdistan_progress_2 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
 	}
 }
 
@@ -1266,5 +1271,46 @@ kurd_pacification_kurdistan_progress_3 = {
 				name = kurd_pacification_core_progress_bar
 			}
 		}
+		kurd_pacification_progress_bar_modifier_update = yes
+	}
+}
+
+kurd_pacification_progress_bar_modifier_update = {
+	c:KUR = {
+		remove_modifier ?= kurd_pacification_progress_bar_governor_modifier
+		remove_modifier ?= kurd_pacification_progress_bar_revolt_modifier
+		if = {
+			limit = {
+				# If the progress is below 13, the governor leads the pacification
+				je:je_kurd_pacification = {
+					"scripted_bar_progress(kurd_pacification_core_progress_bar)" < 13
+				}
+			}
+			# Gives a percentage of the modifiers full strength depending on current progress.
+			# The current balancing towards either side is divided by 12 since that would be a full bar, meaning 100%.
+			add_modifier = {
+				name = kurd_pacification_progress_bar_governor_modifier
+				multiplier = {
+					value = kurdistan_power_balance_advantage
+					divide = 12
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				# If the progress is above 13, the revolt leads the pacification
+				je:je_kurd_pacification = {
+					"scripted_bar_progress(kurd_pacification_core_progress_bar)" > 13
+				}
+			}
+			add_modifier = {
+				name = kurd_pacification_progress_bar_revolt_modifier
+				multiplier = {
+					value = kurdistan_power_balance_advantage
+					divide = 12
+				}
+			}
+		}
+		# A result of 13 is a tie, so both modifiers gets removed (above if/else_if triggers)
 	}
 }
