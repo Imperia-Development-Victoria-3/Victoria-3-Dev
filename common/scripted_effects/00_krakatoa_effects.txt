@@ -1,16 +1,25 @@
 ﻿krakatoa_tsunami_effect = {
-	every_state_region = {
+	every_scope_state = {
 		limit = {
 			OR = {
 				region = sr:region_indochina
 				region = sr:region_indonesia
 				region = sr:region_south_china
 			}
+			is_coastal = yes
+			state_region = {
+				NOT = {
+					has_variable = krakatoa_tsunami_hit
+				}
+			}
 		}
-		add_devastation = 30
+		state_region = {
+			set_variable = krakatoa_tsunami_hit
+			add_devastation = 30
+			start_harvest_condition = flood
+		}
 	}
-		
-	every_state_region = {
+	every_scope_state = {
 		limit = {
 			OR = {
 				region = sr:region_zanj
@@ -22,7 +31,17 @@
 				region = sr:region_japan
 				region = sr:region_oceania
 			}
+			is_coastal = yes
+			state_region = {
+				NOT = {
+					has_variable = krakatoa_tsunami_hit
+				}
+			}
 		}
-		add_devastation = 10
+		state_region = {
+			set_variable = krakatoa_tsunami_hit
+			add_devastation = 10
+			start_harvest_condition = flood
+		}
 	}
 }
