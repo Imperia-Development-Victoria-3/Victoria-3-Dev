@@ -79,29 +79,28 @@ imperia_passive_resistance_state_confiscation_punishment_effect = {
 	# Boosts the suppression and liberty desire progress bars PER CONFISCATED STATE!!
 	# Currently set to 10 suppression and 8 (10x0.8) liberty desire
 	# Changed from within the "imperia_dual_monarchy_values.txt" file
-	c:AUS.je:je_imperia_austrian_neo_absolutism ?= {
-		add_progress = {
-			value = imperia_passive_resistance_punishment_suppression_per_confiscated_state
-			name = imperia_passive_resistance_suppression_progress_bar
-		}
-		add_progress = {
-			value = imperia_passive_resistance_punishment_hungarian_resistance_per_confiscated_state
-			name = imperia_passive_resistance_hungarian_resistance_progress_bar
-		}
+	imperia_passive_resistance_change_suppression = {
+		VALUE = imperia_passive_resistance_punishment_suppression_per_confiscated_state
 	}
-	c:HUN.je:je_imperia_passive_resistance ?= {
-		add_progress = {
-			value = imperia_passive_resistance_punishment_suppression_per_confiscated_state
-			name = imperia_passive_resistance_suppression_progress_bar
-		}
-		add_progress = {
-			value = imperia_passive_resistance_punishment_hungarian_resistance_per_confiscated_state
-			name = imperia_passive_resistance_hungarian_resistance_progress_bar
-		}
+	imperia_passive_resistance_change_hungarian_resistance = {
+		VALUE = imperia_passive_resistance_punishment_hungarian_resistance_per_confiscated_state
 	}
 }
 
 imperia_passive_resistance_change_suppression = {
+	save_temporary_scope_value_as = {
+		name = amount
+		value = $VALUE$
+	}
+	if = {
+		limit = {
+			root ?= c:AUS
+		}
+		custom_tooltip = passive_resistance_x_suppression_change_positive_tt
+	}
+	else = {
+		custom_tooltip = passive_resistance_x_suppression_change_negative_tt
+	}
 	c:AUS.je:je_imperia_austrian_neo_absolutism ?= {
 		add_progress = {
 			value = $VALUE$
@@ -116,7 +115,20 @@ imperia_passive_resistance_change_suppression = {
 	}
 }
 
-imperia_passive_resistance_change_liberty_desire = {
+imperia_passive_resistance_change_hungarian_resistance = {
+	save_temporary_scope_value_as = {
+		name = amount
+		value = $VALUE$
+	}
+	if = {
+		limit = {
+			root ?= c:HUN
+		}
+		custom_tooltip = passive_resistance_x_hungarian_resistance_change_positive_tt
+	}
+	else = {
+		custom_tooltip = passive_resistance_x_hungarian_resistance_change_negative_tt
+	}
 	c:AUS.je:je_imperia_austrian_neo_absolutism ?= {
 		add_progress = {
 			value = $VALUE$
