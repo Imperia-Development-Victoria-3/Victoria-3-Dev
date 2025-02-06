@@ -501,6 +501,35 @@
 				}
 			}
 		}
+		## Check that every german major has pan-nationalism
+		# Checked once in the world (per month)
+		if = {
+			limit = {
+				has_global_highest_gdp = yes
+			}
+			# If the condition is true, set the variable
+			if = {
+				limit = {
+					any_country = {
+						filter = {
+							OR = {
+								country_has_primary_culture = cu:south_german
+								country_has_primary_culture = cu:north_german
+							}
+							country_rank >= rank_value:major_power
+						}
+						has_technology_researched = pan-nationalism
+						percent >= 1
+					}
+				}
+				set_global_variable = every_german_major_has_pan_nationalism
+			}
+			# If it's not true, remove the variable (if it exists)
+			# Included in case the majors change
+			else = {
+				remove_global_variable ?= every_german_major_has_pan_nationalism
+			}
+		}
 	}
 	random_events = {
 		23 = 0
