@@ -21,6 +21,26 @@ on_diplo_play_back_down = {
 	}
 }
 
+# Root owner Country of the Law
+# executed when the law is activated for any reason. It's usually because it
+# has been enacted, but script can activate laws directly without going through
+# the enactment process. Normally, it's immediately preceded by
+# on_law_enactment_ended, but if a law is directly set by script, thus
+# bypassing the enactment process, this will execute while
+# on_law_enactment_ended will not
+#
+# NOTE: unlike the other on_law_<something> on-actions, at the point in time
+# when this is triggered the law that was enacted is no longer considered being
+# enacted. Therefore using the `currently_enacting_law` link will return the
+# null law
+## IMPERIA EDIT: VTM found root is actually the law, not the country
+# Poor VTM guy, looks to have been a headache for him
+on_law_activated = {
+	on_actions = {
+		on_imperia_law_activated
+	}
+}
+
 # Root = Country
 # scope:target = Uprising country
 on_revolution_start = {
