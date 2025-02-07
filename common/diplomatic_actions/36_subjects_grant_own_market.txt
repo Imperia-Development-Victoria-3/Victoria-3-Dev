@@ -128,7 +128,17 @@
 					has_port = yes
 					scope:target_country = { has_port = yes }
 				}
-			}			
+			}
+			# If the overlord is Austria and the target is Hungary, Austria will only revoke Hungarys own market when Hungary has the passive resistance journal entry
+			trigger_if = {
+				limit = {
+					root = c:AUS
+					scope:target_country = c:HUN
+				}
+				scope:target_country = {
+					has_journal_entry = je_imperia_passive_resistance
+				}
+			}		
 		}		
 	}
 }
