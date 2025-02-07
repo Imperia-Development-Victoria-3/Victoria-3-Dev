@@ -9,16 +9,30 @@
 				exists = c:AUS
 			}
 			add = {
-				desc = "passive_resistance_suppression_progress_from_sol_tt"
-				value = c:AUS.average_sol
-				subtract = c:HUN.average_sol
+				desc = "passive_resistance_suppression_progress_from_economic_dependence_tt"
+				value = global_var:hun_economic_dependence_on_aus
 				divide = 4
+			}
+			add = {
+				desc = "passive_resistance_suppression_progress_from_sol_tt"
+				if = {
+					limit = {
+						c:HUN.average_sol > 12
+					}
+					value = -0.1
+				}
+				if = {
+					limit = {
+						c:HUN.average_sol < 12
+					}
+					value = 0.05
+				}
 			}
 		}
 	}
 	start_value = 20
 	min_value = 0
-	max_value = 200
+	max_value = 500
 }
 
 imperia_passive_resistance_hungarian_resistance_progress_bar = {
@@ -50,7 +64,7 @@ imperia_passive_resistance_hungarian_resistance_progress_bar = {
 	}
 	start_value = 20
 	min_value = 0
-	max_value = 200
+	max_value = 500
 }
 
 imperia_passive_resistance_deadlock_progress_bar = {
@@ -89,7 +103,7 @@ imperia_passive_resistance_deadlock_progress_bar = {
 			}
 		}
 	}
-	start_value = 20
+	start_value = 0
 	min_value = 0
-	max_value = 200
+	max_value = 100
 }

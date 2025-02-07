@@ -154,12 +154,21 @@ je_imperia_passive_resistance = {
 		je_imperia_passive_resistance_modifier
 	}
 	immediate = {
-		add_radicals = {  
+		# Reset radicals and loyalists
+		add_radicals = {
 			value = -0.8
 		}
 		add_loyalists = {
 			value = 0.8
 		}
+		# Unify the markets
+		overlord = {
+			remove_diplomatic_pact = {
+				country = root
+				type = grant_own_market
+			}
+		}
+		# Set liberty desire to 0 (autonomy cannot change when Hungary has this JE)
 		add_liberty_desire = -100
 		scope:journal_entry = {
 			set_global_variable = {
@@ -199,7 +208,11 @@ je_imperia_passive_resistance = {
 				}
 			}
 		}
-
+		# First time setting the economic dependence variable
+		set_global_variable = {
+			name = hun_economic_dependence_on_aus
+			value = "c:HUN.economic_dependence(c:AUS)"
+		}
 	}
 	fail = {
 		any_diplomatic_play = {
@@ -276,6 +289,12 @@ je_imperia_passive_resistance = {
 				every_scope_state = {
 					has_modifier ?= imperia_passive_resistance_state_modifier
 				}
+			}
+			# Economic dependence is calculated on a monthly basis, despite being used weekly.
+			# Paradox warns that the dependence is an expensive calculation... So thats why.
+			set_global_variable = {
+				name = hun_economic_dependence_on_aus
+				value = "c:HUN.economic_dependence(c:AUS)"
 			}
 		}
 	}
