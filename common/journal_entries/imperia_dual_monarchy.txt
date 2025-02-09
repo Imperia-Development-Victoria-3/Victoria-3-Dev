@@ -155,11 +155,27 @@ je_imperia_passive_resistance = {
 	}
 	immediate = {
 		# Reset radicals and loyalists
+		save_temporary_scope_value_as = {
+			name = minus_80_radicals
+			value = {
+				value = radical_population_fraction
+				multiply = 0.8
+				multiply = -1
+			}
+		}
 		add_radicals = {
-			value = -0.8
+			value = scope:minus_80_radicals
+		}
+		save_temporary_scope_value_as = {
+			name = minus_80_loyalists
+			value = {
+				value = loyalist_fraction
+				multiply = 0.8
+				multiply = -1
+			}
 		}
 		add_loyalists = {
-			value = 0.8
+			value = scope:minus_80_loyalists
 		}
 		# Unify the markets
 		overlord = {
@@ -263,6 +279,10 @@ je_imperia_passive_resistance = {
 	invalid = {
 		is_subject = no
 	}
+    timeout = 4383 # 12 years
+    on_timeout = {
+		imperia_passive_resistance_deadlock_won_effect = yes
+    }
 	on_weekly_pulse = {
 		effect = {
 			scope:journal_entry = {
