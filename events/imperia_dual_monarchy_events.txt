@@ -511,3 +511,151 @@ imperia_dual_monarchy.5 = {
 		}
 	}
 }
+
+# Austria - Bachs Regime; execute the Hungarian seccessionists?
+imperia_dual_monarchy.6 = {
+	type = country_event
+	title = imperia_dual_monarchy.6.t
+	desc = imperia_dual_monarchy.6.desc
+	flavor = imperia_dual_monarchy.6.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	# Execute the seccessionists
+	option = {
+		name = imperia_dual_monarchy.6.a
+		default_option = yes
+		add_modifier = {
+			name = austria_executed_arad_martyrs
+			is_decaying = yes
+			years = 5
+		}
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = 10
+		}
+		imperia_passive_resistance_change_suppression = {
+			VALUE = 25
+		}
+		c:HUN = {
+			trigger_event = {
+				id = imperia_dual_monarchy.7
+				popup = yes
+			}
+			custom_tooltip = would_happen_tt
+			show_as_tooltip = {
+				every_scope_politician = {
+					limit = {
+						has_culture = cu:hungarian
+					}
+					kill_character = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Pardon the seccessionists
+	option = {
+		name = imperia_dual_monarchy.6.b
+		add_modifier = {
+			name = austria_pardoned_arad_martyrs
+			is_decaying = yes
+			years = 5
+		}
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = -35
+		}
+		imperia_passive_resistance_change_suppression = {
+			VALUE = -25
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Hungary - Arad martyrs; choose response to the Austrian execution of our politicians
+imperia_dual_monarchy.7 = {
+	type = country_event
+	title = imperia_dual_monarchy.7.t
+	desc = imperia_dual_monarchy.7.desc
+	flavor = imperia_dual_monarchy.7.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	# Public Reprimand
+	option = {
+		name = imperia_dual_monarchy.7.a
+		default_option = yes
+		every_scope_politician = {
+			limit = {
+				has_culture = cu:hungarian
+			}
+			kill_character = yes
+		}
+		# Austrian relations with major powers decrease
+		every_country = {
+			limit = {
+				NOR = {
+					this = c:AUS
+					this = c:HUN
+				}
+				country_rank >= rank_value:major_power
+			}
+			change_relations = {
+				country = c:AUS
+				value = -10
+			}
+		}
+		c:AUS = {
+			add_radicals = {
+				value = small_radicals
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+		}
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = 30
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Riot!
+	option = {
+		name = imperia_dual_monarchy.7.b
+		every_scope_politician = {
+			limit = {
+				has_culture = cu:hungarian
+			}
+			kill_character = yes
+		}
+		c:AUS = {
+			add_radicals = {
+				value = medium_radicals
+			}
+		}
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = 50
+		}
+		imperia_passive_resistance_change_suppression = {
+			VALUE = 5
+		}
+		add_modifier = {
+			name = arad_martyrs_riot
+			is_decaying = yes
+			years = 2
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
