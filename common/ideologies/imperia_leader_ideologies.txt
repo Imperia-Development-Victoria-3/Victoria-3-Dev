@@ -36,7 +36,7 @@
 		NOT = {
 			has_role = agitator
 		}
-		scope:interest_group = {
+		interest_group = {
 			OR = {
 				AND = {
 					is_interest_group_type = ig_landowners
@@ -51,8 +51,6 @@
 				is_interest_group_type = ig_industrialists
 				is_interest_group_type = ig_armed_forces
 			}
-		}
-		scope:interest_group = {
 			NOR = {
 				has_variable = communist_ig_var
 				has_variable = chose_vanguardism
@@ -63,30 +61,26 @@
 		}
 	}
 	interest_group_leader_trigger = {
-		scope:interest_group = {
-			OR = {
-				AND = {
-					is_interest_group_type = ig_landowners
-					owner = {
-						NOT = {
-							has_law = law_type:law_serfdom
-						}
+		OR = {
+			AND = {
+				is_interest_group_type = ig_landowners
+				owner = {
+					NOT = {
+						has_law = law_type:law_serfdom
 					}
 				}
-				is_interest_group_type = ig_devout
-				is_interest_group_type = ig_intelligentsia
-				is_interest_group_type = ig_industrialists
-				is_interest_group_type = ig_armed_forces
 			}
+			is_interest_group_type = ig_devout
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_industrialists
+			is_interest_group_type = ig_armed_forces
 		}
-		scope:interest_group = {
-			NOR = {
-				has_variable = communist_ig_var
-				has_variable = chose_vanguardism
-				has_variable = chose_fascism
-				has_variable = chose_conservatism
-				has_variable = chose_ethno_nationalism
-			}
+		NOR = {
+			has_variable = communist_ig_var
+			has_variable = chose_vanguardism
+			has_variable = chose_fascism
+			has_variable = chose_conservatism
+			has_variable = chose_ethno_nationalism
 		}
 	}
 	non_interest_group_leader_weight = {
@@ -144,7 +138,7 @@
 					is_heir = yes
 					is_ruler = yes
 				}
-				scope:interest_group = {
+				interest_group = {
 					NOR = {
 						is_interest_group_type = ig_landowners
 						is_interest_group_type = ig_devout
@@ -175,7 +169,7 @@
 						}
 					}
 				}
-				scope:interest_group = {
+				interest_group = {
 					ig_approval >= 0
 				}
 				is_ruler = no
@@ -218,7 +212,7 @@
 		# more likely if our IG is in government
 		if = {
 			limit = {
-				scope:interest_group = {
+				interest_group = {
 					is_in_government = yes
 				}
 			}
@@ -227,7 +221,7 @@
 		# less likely for Landowners and Devout
 		if = {
 			limit = {
-				scope:interest_group = {
+				interest_group = {
 					OR = {
 						is_interest_group_type = ig_devout
 						is_interest_group_type = ig_landowners
@@ -239,7 +233,7 @@
 		# angry IGs should roll obstructionist or revolutionary leaders
 		if = {
 			limit = {
-				scope:interest_group = {
+				interest_group = {
 					ig_approval < 0
 				}
 			}
@@ -247,7 +241,7 @@
 		}
 		if = {
 			limit = {
-				scope:interest_group = {
+				interest_group = {
 					ig_approval < 5
 				}
 			}
@@ -308,54 +302,6 @@
 			}
 			add = 25
 		}
-		# more likely for monarch if they belong to a liberal IG
-		if = {
-			limit = {
-				owner = {
-					has_law = law_type:law_monarchy
-				}
-				OR = {
-					is_heir = yes
-					is_ruler = yes
-				}
-				scope:interest_group = {
-					NOR = {
-						is_interest_group_type = ig_landowners
-						is_interest_group_type = ig_devout
-					}
-				}
-			}
-			add = 75
-		}
-		# more likely if monarch is liberal and we dont hate them
-		if = {
-			limit = {
-				owner = {
-					has_law = law_type:law_monarchy
-					ruler ?= {
-						NOR = {
-							# by process of elimination
-							has_reactionary_ideology = yes
-							has_ideology = ideology:ideology_slaver
-							AND = {
-								has_ideology = ideology:ideology_moderate	# Moderate is ok if the monarch doesnt belong to LO or Devout
-								interest_group = {
-									OR = {
-										is_interest_group_type = ig_landowners
-										is_interest_group_type = ig_devout
-									}
-								}
-							}
-						}
-					}
-				}
-				scope:interest_group = {
-					ig_approval >= 0
-				}
-				is_ruler = no
-			}
-			add = 25
-		}
 		# if we are in danger
 		if = {
 			limit = {
@@ -370,9 +316,7 @@
 			add = 50
 			if = {
 				limit = {
-					interest_group = {
-						is_interest_group_type = ig_armed_forces
-					}
+					is_interest_group_type = ig_armed_forces
 				}
 				add = 25
 			}
@@ -392,20 +336,16 @@
 		# more likely if our IG is in government
 		if = {
 			limit = {
-				scope:interest_group = {
-					is_in_government = yes
-				}
+				is_in_government = yes
 			}
 			multiply = 1.1
 		}
 		# less likely for Landowners and Devout
 		if = {
 			limit = {
-				scope:interest_group = {
-					OR = {
-						is_interest_group_type = ig_devout
-						is_interest_group_type = ig_landowners
-					}
+				OR = {
+					is_interest_group_type = ig_devout
+					is_interest_group_type = ig_landowners
 				}
 			}
 			add = -75
@@ -413,17 +353,14 @@
 		# angry IGs should roll obstructionist or revolutionary leaders
 		if = {
 			limit = {
-				scope:interest_group = {
-					ig_approval < 0
-				}
+				ig_approval < 0
+				
 			}
 			add = -50
 		}
 		if = {
 			limit = {
-				scope:interest_group = {
-					ig_approval < 5
-				}
+				ig_approval < 5
 			}
 			add = -50
 		}
