@@ -524,6 +524,9 @@ imperia_dual_monarchy.6 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	duration = 3
+	immediate = {
+		set_variable = bach_regime
+	}
 	# Execute the seccessionists
 	option = {
 		name = imperia_dual_monarchy.6.a
@@ -654,6 +657,124 @@ imperia_dual_monarchy.7 = {
 			is_decaying = yes
 			years = 2
 		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Austria - Loss of Lombardy
+imperia_dual_monarchy.8 = {
+	type = country_event
+	title = imperia_dual_monarchy.8.t
+	desc = imperia_dual_monarchy.8.desc
+	flavor = imperia_dual_monarchy.8.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	# Lean into compromising with the Hungarians
+	trigger = {
+		NOT = {
+			has_variable = lombardy_lost
+		}
+		any_scope_state = {
+			count = 0
+			state_region = s:STATE_LOMBARDY
+			owner = {
+				OR = {
+					this = c:AUS
+					overlord = c:AUS
+				}
+			}
+		}
+	}
+	immediate = {
+		set_variable = lombardy_lost
+	}
+	option = {
+		name = imperia_dual_monarchy.8.a
+		default_option = yes
+		imperia_passive_resistance_change_deadlock = {
+			VALUE = 10
+		}
+		c:HUN = {
+			add_loyalists = {
+				culture = cu:hungarian
+				value = medium_radicals
+			}
+		}
+		add_modifier = {
+			name = austria_compromising_with_hungary_lombardy
+			is_decaying = yes
+			years = 10
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Lean into suppressing the Hungarians
+	option = {
+		name = imperia_dual_monarchy.8.b
+		c:HUN = {
+			add_modifier = {
+				name = hungary_punished_for_lombardy_hungary
+				years = 10
+			}
+		}
+		add_modifier = {
+			name = hungary_punished_for_lombardy_austria
+			years = 10
+		}
+		add_radicals = {
+			value = medium_radicals
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	after = {
+		# Trigger resignation of Bach after 1 year
+		# Due to the way the code works, the triggers for .9 is checked here already
+		trigger_event = {
+			id = imperia_dual_monarchy.9
+			years = 1
+			popup = yes
+		}
+	}
+}
+
+# Austria - Bach resigns
+imperia_dual_monarchy.9 = {
+	type = country_event
+	title = imperia_dual_monarchy.9.t
+	desc = imperia_dual_monarchy.9.desc
+	flavor = imperia_dual_monarchy.9.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	trigger = {
+		has_variable = bach_regime
+	}
+	immediate = {
+		remove_variable = bach_regime
+	}
+	# Bach resigns - reconcilliation
+	option = {
+		name = imperia_dual_monarchy.9.a
+		default_option = yes
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Bach resigns - suppression
+	option = {
+		name = imperia_dual_monarchy.9.b
 		ai_chance = {
 			base = 20
 		}
