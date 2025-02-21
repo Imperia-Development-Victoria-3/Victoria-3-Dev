@@ -125,9 +125,7 @@ demand_return_claim = {
 	second_state_trigger = {
 		owner = scope:target_country
 		any_country = {
-			limit = {
-				is_at_war = yes
-			}
+			is_at_war = yes
 			has_claim = root
 		}
 		NOT = {
@@ -332,22 +330,6 @@ demand_war_reps = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.1
-		}
-		will_propose = {
-			has_game_rule = ai_wargoals_allowed
-			NOT = {
-				root = {
-					infamy >= 24.9
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_ban_slavery = {
@@ -424,38 +406,9 @@ demand_ban_slavery = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.1
-		}
-		if = {
-			limit = {
-				country_rank >= rank_value:major_power
-			}
-			add = {
-				value = country_rank
-				multiply = 0.01
-			}
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
-demand_iraqi_freedom = {
+demand_regime_change = {
 	groups = {
 		general
 	}
@@ -527,35 +480,6 @@ demand_iraqi_freedom = {
 				max = 16
 				min = 12
 			}
-		}
-	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		if = {
-			limit = {
-				country_rank >= rank_value:major_power
-			}
-			add = {
-				value = country_rank
-				multiply = 0.01
-			}
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
 		}
 	}
 }
@@ -634,26 +558,6 @@ demand_containment = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_standard_oil = {
@@ -727,26 +631,6 @@ demand_standard_oil = {
 				max = 21
 				min = 14
 			}
-		}
-	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
 		}
 	}
 }
@@ -825,26 +709,6 @@ demand_humiliation = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_dominion = {
@@ -857,15 +721,13 @@ demand_dominion = {
 	show_effect_in_tooltip = yes
 	can_use_obligations = no
 	potential = {
-		rank_value:great_power
+		country_rank = rank_value:great_power
 		has_war_with = scope:target_country
 		is_player = yes
 		scope:target_country = {
 			is_secessionist = no
 			is_revolutionary = no
-			NOT = {
-				rank_value:great_power
-			}
+			country_rank != rank_value:great_power
 		}
 	}
 	possible = {
@@ -925,26 +787,6 @@ demand_dominion = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_protectorate2 = {
@@ -965,15 +807,13 @@ demand_protectorate2 = {
 		}
 	}
 	potential = {
-		rank_value:great_power
+		country_rank = rank_value:great_power
 		has_war_with = scope:target_country
 		is_player = yes
 		scope:target_country = {
 			is_secessionist = no
 			is_revolutionary = no
-			NOT = {
-				rank_value:great_power
-			}
+			country_rank != rank_value:great_power
 		}
 	}
 	possible = {
@@ -1025,26 +865,6 @@ demand_protectorate2 = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_transfer_subject = {
@@ -1057,7 +877,7 @@ demand_transfer_subject = {
 	show_effect_in_tooltip = yes
 	can_use_obligations = no
 	potential = {
-		rank_value:great_power
+		country_rank = rank_value:great_power
 		has_war_with = scope:target_country
 		is_player = yes
 		scope:target_country = {
@@ -1123,26 +943,6 @@ demand_transfer_subject = {
 			}
 		}
 	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
-		}
-	}
 }
 
 demand_liberate_subject = {
@@ -1155,7 +955,7 @@ demand_liberate_subject = {
 	show_effect_in_tooltip = yes
 	can_use_obligations = no
 	potential = {
-		rank_value:great_power
+		country_rank = rank_value:great_power
 		has_war_with = scope:target_country
 		is_player = yes
 		scope:target_country = {
@@ -1219,26 +1019,6 @@ demand_liberate_subject = {
 				max = 23
 				min = 16
 			}
-		}
-	}
-	ai = {
-		evaluation_chance = {
-			value = 0.03
-		}
-		will_propose = {
-			OR = {
-				NOT = {
-					root = {
-						infamy >= 24.9
-					}
-				}
-				NOT = {
-					has_game_rule = ai_wargoals_blocked
-				}
-			}
-		}
-		propose_score = {
-			value = 10
 		}
 	}
 }
