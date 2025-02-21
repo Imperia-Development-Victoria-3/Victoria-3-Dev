@@ -1,0 +1,1586 @@
+﻿## Demand conquer state
+demand_conquest = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/diplomatic_action_icons/take_state.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		is_under_colonization = no
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			random_diplomatic_play = {
+				limit = {
+					is_war = yes
+					any_scope_play_involved = {
+						THIS = scope:target_country
+					}
+				}
+				add_war_goal = {
+					holder = root
+					type = conquer_state
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			create_incident = {
+				country = root
+				value = {
+					value = "scope:second_state.ai_state_value(scope:target_country)"
+					divide = 8
+					max = 50
+					min = 10
+				}
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.25
+		}
+		will_select_as_second_state = {
+			is_incorporated = no
+		}
+		will_propose_with_states = {
+			exists = scope:second_state
+			# The AI only uses take state on disconnected colonial bits of subjects which are adjacent to their own lands
+			NOT = {
+				any_neighbouring_state = {
+					owner = root.owner
+					is_incorporated = yes
+				}
+			}
+			scope:second_state = {
+				any_neighbouring_state = {
+					owner = root
+				}
+			}
+		}
+		will_propose = {
+			has_game_rule = ai_wargoals_allowed
+			NOT = {
+				root = {
+					infamy >= 24.9
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+demand_return_claim = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/return_state.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			any_state = {
+				has_claim_by = root
+			}
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		any_country = {
+			limit = {
+				is_at_war = yes
+			}
+			has_claim = root
+		}
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			random_diplomatic_play = {
+				limit = {
+					is_war = yes
+					any_scope_play_involved = {
+						THIS = scope:target_country
+					}
+				}
+				add_war_goal = {
+					holder = root
+					type = return_state
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			create_incident = {
+				country = root
+				value = {
+					value = "scope:second_state.ai_state_value(scope:target_country)"
+					divide = 12
+					max = 38
+					min = 10
+				}
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.25
+		}
+		will_select_as_second_state = {
+			is_incorporated = no
+		}
+		will_propose_with_states = {
+			exists = scope:second_state
+			# The AI only uses take state on disconnected colonial bits of subjects which are adjacent to their own lands
+			NOT = {
+				any_neighbouring_state = {
+					owner = root.owner
+					is_incorporated = yes
+				}
+			}
+			scope:second_state = {
+				any_neighbouring_state = {
+					owner = root
+				}
+			}
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+		}
+	}
+}
+
+demand_treaty_port = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/take_treaty_port.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		country_rank > rank_value:minor_power
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		is_coastal = yes
+		is_under_colonization = no
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			random_diplomatic_play = {
+				limit = {
+					is_war = yes
+					any_scope_play_involved = {
+						THIS = scope:target_country
+					}
+				}
+				add_war_goal = {
+					holder = root
+					type = take_treaty_port
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			create_incident = {
+				country = root
+				value = {
+					value = "scope:second_state.ai_state_value(scope:target_country)"
+					divide = 8
+					max = 50
+					min = 10
+				}
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.25
+
+		}
+		will_select_as_second_state = {
+			is_incorporated = no
+		}
+		will_propose_with_states = {
+			exists = scope:second_state
+			# The AI only uses take state on disconnected colonial bits of subjects which are adjacent to their own lands
+			NOT = {
+				any_neighbouring_state = {
+					owner = root.owner
+					is_incorporated = yes
+				}
+			}
+			scope:second_state = {
+				any_neighbouring_state = {
+					owner = root
+				}
+			}
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_war_reps = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	texture = "gfx/interface/icons/war_goals/war_reparations.dds"
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = war_reparations
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = war_reparations
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 10
+				divide = 1
+				max = 10
+				min = 5
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+		will_propose = {
+			has_game_rule = ai_wargoals_allowed
+			NOT = {
+				root = {
+					infamy >= 24.9
+				}
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_ban_slavery = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/ban_slavery.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = ban_slavery
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = ban_slavery
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 9
+				divide = 1
+				max = 12
+				min = 5
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.1
+		}
+		if = {
+			limit = {
+				country_rank >= rank_value:major_power
+			}
+			add = {
+				value = country_rank
+				multiply = 0.01
+			}
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_iraqi_freedom = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/regime_change.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = regime_change
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = regime_change
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 16
+				divide = 1
+				max = 16
+				min = 12
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		if = {
+			limit = {
+				country_rank >= rank_value:major_power
+			}
+			add = {
+				value = country_rank
+				multiply = 0.01
+			}
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_containment = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/contain_threat.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country.infamy >= infamy_threshold:pariah
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = contain_threat
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = contain_threat
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 0
+				max = 0
+				min = 0
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_standard_oil = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/foreign_investment_rights.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = foreign_investment_rights
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = foreign_investment_rights
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 16
+				max = 21
+				min = 14
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_humiliation = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/humiliation.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = humiliation
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = humiliation
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 16
+				divide = 1
+				max = 18
+				min = 4
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_dominion = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/make_dominion.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		rank_value:great_power
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			NOT = {
+				rank_value:great_power
+			}
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = make_dominion
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = make_dominion
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 40
+				divide = 1
+				max = 46
+				min = 32
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_protectorate2 = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/make_protectorate.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	custom_tooltip = {
+		text = "WARGOAL_ON_COOLDOWN"
+		ROOT = {
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+	}
+	potential = {
+		rank_value:great_power
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			NOT = {
+				rank_value:great_power
+			}
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = make_protectorate
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = make_protectorate
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 42
+				divide = 1
+				max = 45
+				min = 36
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_transfer_subject = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/transfer_subject.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		rank_value:great_power
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			is_subject = yes
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = transfer_subject
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = transfer_subject
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 26
+				divide = 1
+				max = 32
+				min = 16
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
+
+demand_liberate_subject = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/liberate_subject.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	potential = {
+		rank_value:great_power
+		has_war_with = scope:target_country
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			is_subject = yes
+		}
+	}
+	possible = {
+		OR = {
+			ROOT = {
+				limit = {
+					is_ai = yes
+				}
+				has_game_rule = ai_wargoals_allowed
+				NOT = {
+					root = {
+						infamy >= 49.9
+					}
+				}
+				should_set_wargoal = yes
+			}
+			ROOT = {
+				is_ai = no
+			}
+		}
+		custom_tooltip = {
+			text = "WAR_NOT_WELL_ENOUGH"
+			ROOT = {
+				NOT = {
+					enemy_occupation > 0.15
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			ROOT = {
+				NOT = {
+					has_variable = war_goal_add_cooldown
+				}
+			}
+		}
+		ROOT = {
+			NOT = {
+				war_participant_has_war_goal_of_type_against = {
+					type = liberate_subject
+					target = scope:target_country
+				}
+			}
+		}
+	}
+	accept_effect = {
+		ROOT = {
+			set_variable = {
+				name = war_goal_add_cooldown
+				months = 12
+			}
+		}
+		random_diplomatic_play = {
+			limit = {
+				is_war = yes
+				any_scope_play_involved = {
+					THIS = scope:target_country
+				}
+			}
+			add_war_goal = {
+				holder = root
+				type = liberate_subject
+				primary_demand = no
+				target_country = scope:target_country
+			}
+		}
+		create_incident = {
+			country = root
+			value = {
+				value = 22
+				divide = 1
+				max = 23
+				min = 16
+			}
+		}
+	}
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+		}
+		will_propose = {
+			OR = {
+				NOT = {
+					root = {
+						infamy >= 24.9
+					}
+				}
+				NOT = {
+					has_game_rule = ai_wargoals_blocked
+				}
+
+
+			}
+		}
+		propose_score = {
+			value = 10
+
+		}
+	}
+}
