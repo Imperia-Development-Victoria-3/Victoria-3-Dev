@@ -1,4 +1,5 @@
-﻿imperia_set_guns_treaty = {
+﻿# GUNS TREATY
+imperia_set_guns_treaty = {
 	if = {
 		limit = {
 			scope:actor = {
@@ -46,4 +47,123 @@ imperia_reset_guns_treaty = {
 	remove_variable ?= imperia_rifling_treaty
 	remove_variable ?= imperia_repeaters_treaty
 	remove_variable ?= imperia_bolt_action_rifles_treaty
+}
+
+# ADDING WAR GOALS
+imperia_add_war_goal_effect = {
+	random_diplomatic_play = {
+		limit = {
+			is_war = yes
+			any_scope_play_involved = {
+				this = scope:target_country
+			}
+			any_scope_play_involved = {
+				this = root
+			}
+		}
+
+		if = {
+			limit = {
+				scope:initiator = root
+			}
+			every_scope_initiator_ally = {
+				imperia_compensate_war_support = yes
+			}
+		} 
+		else = {
+			every_scope_initiator_ally = {
+				imperia_compensate_war_support = yes
+			}
+		}
+	}
+}
+
+
+imperia_compensate_war_support = {
+	prev.war = {
+		if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -90
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 110
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -70
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 90
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -70
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 90
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -50
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 70
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -30
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 50
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -10
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 30
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < 0
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 20
+			}
+		}
+	}
 }
