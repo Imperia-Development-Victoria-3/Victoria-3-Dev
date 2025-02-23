@@ -1,0 +1,56 @@
+﻿namespace = lignite
+lignite.1 = {
+	#lignite discovered in state
+	type = state_event
+	placement = ROOT
+	title = lignite.1.t
+	desc = lignite.1.d
+	flavor = lignite.1.f
+	duration = 3
+	event_image = {
+		video = "europenorthamerica_gold_prospectors"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+	trigger = {
+		has_potential_resource = bg_lignite_mining
+		state_region = {
+			remaining_undepleted = {
+				type = bg_lignite_mining
+				amount > 1
+			}
+		}
+		NOT = {
+			has_modifier = state_lignite_rush
+		}
+	}
+	option = {
+		#wooh lignite
+		name = lignite.1.a
+		default_option = yes
+		trigger = {
+			owner = {
+				NOT = {
+					has_law = law_type:law_child_labor_allowed
+				}
+			}
+		}
+		add_modifier = {
+			name = state_lignite_rush
+			months = short_modifier_time
+		}
+	}
+	option = {
+		#the children yearn for the mines
+		name = lignite.1.b
+		trigger = {
+			owner = {
+				has_law = law_type:law_child_labor_allowed
+			}
+		}
+		add_modifier = {
+			name = state_lignite_rush
+			months = short_modifier_time
+		}
+	}
+}
