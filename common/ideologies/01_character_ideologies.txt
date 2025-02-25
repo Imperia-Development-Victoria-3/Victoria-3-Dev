@@ -1175,17 +1175,18 @@ ideology_feminist = {
 				add = -100
 			}
 			# more likely if character is a woman after mass propaganda
-			if = {
-				limit = {
-					owner = {
-						has_technology_researched = mass_propaganda
-					}
-					is_female = yes
-				}
-				multiply = {
-					value = 2
-				}
-			}
+			# Uncomment once PDX fixes scopes
+			# if = {
+			# 	limit = {
+			# 		owner = {
+			# 			has_technology_researched = mass_propaganda
+			# 		}
+			# 		is_female = yes
+			# 	}
+			# 	multiply = {
+			# 		value = 2
+			# 	}
+			# }
 			# more likely with limited women's rights
 			if = {
 				limit = {
@@ -1489,7 +1490,9 @@ ideology_slaver = {
 		}
 		if = {
 			limit = {
-				has_trait = bigoted
+				leader = {
+					has_trait = bigoted
+				}
 			}
 			add = 75
 		}
@@ -5265,7 +5268,7 @@ ideology_liberal_leader = {
 			}
 			add = -75
 		}
-		#BAB Armed Forces and Devout care less
+		# IMP Armed Forces and Devout care less
 		if = {
 			limit = {
 				owner = {
@@ -5275,12 +5278,10 @@ ideology_liberal_leader = {
 						has_law = law_type:law_technocracy
 						has_law = law_type:law_single_party_state
 					}
-					scope:interest_group = {
-						OR = {
-							is_interest_group_type = ig_devout
-							is_interest_group_type = ig_armed_forces
-						}
-					}
+				}
+				OR = {
+					is_interest_group_type = ig_devout
+					is_interest_group_type = ig_armed_forces
 				}
 			}
 			add = -50

@@ -1,0 +1,31 @@
+﻿change_british_flag = {
+	is_shown = {
+		root ?= c:GBR
+		has_variable = can_change_british_flag
+	}
+	possible = {
+		OR = {
+			has_law = law_type:law_parliamentary_republic
+			has_law = law_type:law_presidential_republic
+		}
+	}
+	when_taken = {
+		remove_variable = can_change_british_flag
+		trigger_event = {
+			id = british_republican_flag_events.1
+			popup = yes
+		}
+	}
+	ai_chance = {
+		base = 0
+		# AI will only do if flag haven't been set before
+		modifier = {
+			trigger = {
+				NOT = {
+					has_variable = british_republican_flag_variant
+				}
+			}
+			add = 100
+		}
+	}
+}

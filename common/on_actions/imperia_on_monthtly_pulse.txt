@@ -470,6 +470,87 @@
 			}
 			activate_law = law_type:law_neutral
 		}
+		## German Pan-Nationalism tech spread
+		# Set the imperia_german_pan_nationalism_spread global variable to the number of Germans having pan-nationalism
+		# Only once per month, to prevent spamming
+		if = {
+			limit = {
+				has_global_highest_gdp = yes
+				any_country = {
+					OR = {
+						country_has_primary_culture = cu:north_german
+						country_has_primary_culture = cu:south_german
+					}
+					has_technology_researched = pan-nationalism
+				}
+			}
+			set_global_variable = {
+				name = imperia_german_pan_nationalism_spread
+				value = num_of_german_pan_nationalist_countries
+			}
+		}
+		# Gives 200 points per country having pan-nationalism
+		if = {
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:north_german
+					country_has_primary_culture = cu:south_german
+				}
+				has_global_variable = imperia_german_pan_nationalism_spread
+			}
+			remove_modifier ?= imperia_german_pan_nationalism_spread
+			if = {
+				limit = {
+					NOT = {
+						has_technology_researched = pan-nationalism
+					}
+					# Will complain if the prerequisites are not met
+					has_technology_researched = nationalism
+				}
+				add_modifier = {
+					name = imperia_german_pan_nationalism_spread
+					multiplier = global_var:imperia_german_pan_nationalism_spread
+				}
+				while = {
+					count = global_var:imperia_german_pan_nationalism_spread
+					# Add 200 points per country; if 200 changes, change the 200 in the add_technology_progress and in the imperia_german_pan_nationalism_spread modifier
+					# A bit of a hack.
+					add_technology_progress = {
+						technology = pan-nationalism
+						progress = 200
+					}
+				}
+			}
+		}
+		## Check that every german major has pan-nationalism
+		# Checked once in the world (per month)
+		if = {
+			limit = {
+				has_global_highest_gdp = yes
+			}
+			# If the condition is true, set the variable
+			if = {
+				limit = {
+					any_country = {
+						filter = {
+							OR = {
+								country_has_primary_culture = cu:south_german
+								country_has_primary_culture = cu:north_german
+							}
+							country_rank >= rank_value:major_power
+						}
+						has_technology_researched = pan-nationalism
+						percent >= 1
+					}
+				}
+				set_global_variable = every_german_major_has_pan_nationalism
+			}
+			# If it's not true, remove the variable (if it exists)
+			# Included in case the majors change
+			else = {
+				remove_global_variable ?= every_german_major_has_pan_nationalism
+			}
+		}
 	}
 	random_events = {
 		23 = 0
