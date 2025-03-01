@@ -780,3 +780,74 @@ imperia_dual_monarchy.9 = {
 		}
 	}
 }
+
+# Easter Article - Hungary (after 4 essays published)
+imperia_dual_monarchy.10 = {
+	type = country_event
+	title = imperia_dual_monarchy.10.t
+	desc = imperia_dual_monarchy.10.desc
+	flavor = imperia_dual_monarchy.10.f
+	event_image = {
+		video = "unspecific_politicians_arguing"
+	}
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	duration = 3
+	# Spread article as propaganda abroad
+	option = {
+		name = imperia_dual_monarchy.10.a
+		default_option = yes
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = 30
+		}
+		imperia_passive_resistance_change_deadlock = {
+			VALUE = 5
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+			}
+			change_relations = {
+				country = c:HUN
+				value = 25
+			}
+			change_relations = {
+				country = c:AUS
+				value = -10
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+		}
+		c:AUS = {
+			add_modifier = {
+				name = austria_getting_shafted_by_easter_article
+				years = 10
+			}
+			post_notification = hungary_spreading_easter_article_abroad
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+	# Use article to rally local support
+	option = {
+		name = imperia_dual_monarchy.10.b
+		imperia_passive_resistance_change_hungarian_resistance = {
+			VALUE = 40
+		}
+		imperia_passive_resistance_change_deadlock = {
+			VALUE = -10
+		}
+		add_modifier = {
+			name = hungary_getting_buffed_by_easter_article
+			years = 10
+		}
+		add_loyalists = {
+			value = large_radicals
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
