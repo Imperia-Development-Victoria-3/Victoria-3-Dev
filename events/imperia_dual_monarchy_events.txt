@@ -525,7 +525,12 @@ imperia_dual_monarchy.6 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	duration = 3
 	immediate = {
-		set_variable = bach_regime
+		create_character = {
+			template = imperia_alexander_von_bach_template
+			ig_leader = yes
+			save_scope_as = bach_scope
+			set_variable = alexander_von_bach
+		}
 	}
 	# Execute the seccessionists
 	option = {
@@ -759,15 +764,42 @@ imperia_dual_monarchy.9 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	duration = 3
 	trigger = {
-		has_variable = bach_regime
+		any_scope_character = {
+			has_variable = alexander_von_bach
+			NOT = {
+				has_variable = about_to_resign
+			}
+		}
 	}
 	immediate = {
-		remove_variable = bach_regime
+		c:AUS = {
+			every_scope_character = {
+				limit = {
+					has_variable = alexander_von_bach
+				}
+				save_scope_as = bach_scope
+				set_variable = about_to_resign
+			}
+		}
 	}
 	# Bach resigns - reconcilliation
 	option = {
 		name = imperia_dual_monarchy.9.a
 		default_option = yes
+		custom_tooltip = bach_resigns_tt
+		hidden_effect = {
+			c:AUS = {
+				every_scope_character = {
+					limit = {
+						has_variable = alexander_von_bach
+					}
+					kill_character = {
+						hidden = yes
+						value = yes
+					}
+				}
+			}
+		}
 		ai_chance = {
 			base = 80
 		}
@@ -775,6 +807,20 @@ imperia_dual_monarchy.9 = {
 	# Bach resigns - suppression
 	option = {
 		name = imperia_dual_monarchy.9.b
+		custom_tooltip = bach_resigns_tt
+		hidden_effect = {
+			c:AUS = {
+				every_scope_character = {
+					limit = {
+						has_variable = alexander_von_bach
+					}
+					kill_character = {
+						hidden = yes
+						value = yes
+					}
+				}
+			}
+		}
 		ai_chance = {
 			base = 20
 		}
