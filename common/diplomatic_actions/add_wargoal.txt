@@ -11,7 +11,6 @@ demand_conquest = {
 	second_state_list = second_country
 	can_use_obligations = no
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -51,10 +50,18 @@ demand_conquest = {
 			create_incident = {
 				country = scope:target_country
 				value = {
-					value = "scope:second_state.ai_state_value(scope:target_country)"
-					divide = 8
-					max = 50
-					min = 10
+					value = 6					# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
 				}
 			}
 		}
@@ -73,7 +80,6 @@ demand_return_claim = {
 	second_state_list = second_country
 	can_use_obligations = no
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -116,10 +122,18 @@ demand_return_claim = {
 			create_incident = {
 				country = scope:target_country
 				value = {
-					value = "scope:second_state.ai_state_value(scope:target_country)"
-					divide = 12
-					max = 38
-					min = 10
+					value = 2.5					# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
 				}
 			}
 		}
@@ -138,7 +152,6 @@ demand_treaty_port = {
 	second_state_list = second_country
 	can_use_obligations = no
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -180,10 +193,18 @@ demand_treaty_port = {
 			create_incident = {
 				country = scope:target_country
 				value = {
-					value = "scope:second_state.ai_state_value(scope:target_country)"
-					divide = 8
-					max = 50
-					min = 10
+					value = 2					# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
 				}
 			}
 		}
@@ -200,7 +221,6 @@ demand_war_reps = {
 	can_use_obligations = no
 	texture = "gfx/interface/icons/war_goals/war_reparations.dds"
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -234,7 +254,20 @@ demand_war_reps = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 10
+			value = {
+				value = 0.3
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -249,7 +282,6 @@ demand_ban_slavery = {
 	show_effect_in_tooltip = yes
 	can_use_obligations = no
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -283,7 +315,20 @@ demand_ban_slavery = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 9
+			value = {
+				value = 0.4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -298,7 +343,6 @@ demand_regime_change = {
 	show_effect_in_tooltip = yes
 	can_use_obligations = no
 	show_in_lens = no
-	
 	potential = {
 		has_war_with = scope:target_country
 		is_player = yes
@@ -332,7 +376,20 @@ demand_regime_change = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 16
+			value = {
+				value = 0.8				# Twice the base value of a regime change
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -425,7 +482,20 @@ demand_investment_rights = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 16
+			value = {
+				value = 0.2
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -473,7 +543,20 @@ demand_humiliation = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 16
+			value = {
+				value = 0.6
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -523,7 +606,20 @@ demand_dominion = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 40
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -573,7 +669,20 @@ demand_protectorate = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 42
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -623,7 +732,20 @@ demand_transfer_subject = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 26
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
@@ -673,7 +795,20 @@ demand_liberate_subject = {
 		}
 		create_incident = {
 			country = scope:target_country
-			value = 22
+			value = {
+				value = 3
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
 		}
 	}
 }
