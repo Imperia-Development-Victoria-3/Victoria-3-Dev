@@ -228,6 +228,12 @@ demand_war_reps = {
 			is_secessionist = no
 			is_revolutionary = no
 		}
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = war_reparations
+				target = scope:target_country
+			}
+		}
 	}
 	possible = {
 		custom_tooltip = {
@@ -237,12 +243,6 @@ demand_war_reps = {
 			}
 		}
 		imperia_add_wargoal_permitted = yes
-		NOT = {
-			war_participant_has_war_goal_of_type_against = {
-				type = war_reparations
-				target = scope:target_country
-			}
-		}
 	}
 	accept_effect = {
 		set_variable = {
@@ -289,6 +289,7 @@ demand_ban_slavery = {
 			is_secessionist = no
 			is_revolutionary = no
 		}
+		has_law = law_type:law_slavery_banned
 	}
 	possible = {
 		custom_tooltip = {
@@ -351,6 +352,7 @@ demand_regime_change = {
 			is_secessionist = no
 			is_revolutionary = no
 		}
+		"ai_ideological_opinion(scope:target_country)" < -5	# Theres a max of -5 ideological_opinion defined in 'WAR_GOAL_REGIME_CHANGE_MAX_IDEOLOGICAL_OPINION', above that regime_change doesnt work
 	}
 	possible = {
 		custom_tooltip = {
@@ -366,7 +368,6 @@ demand_regime_change = {
 				target = scope:target_country
 			}
 		}
-		"ai_ideological_opinion(scope:target_country)" < -5	# Theres a max of -5 ideological_opinion defined in 'WAR_GOAL_REGIME_CHANGE_MAX_IDEOLOGICAL_OPINION', above that regime_change doesnt work
 	}
 	accept_effect = {
 		set_variable = {
@@ -458,6 +459,7 @@ demand_investment_rights = {
 			is_secessionist = no
 			is_revolutionary = no
 		}
+		country_rank >= scope:target_country.country_rank
 	}
 	possible = {
 		custom_tooltip = {
@@ -519,6 +521,12 @@ demand_humiliation = {
 			is_secessionist = no
 			is_revolutionary = no
 		}
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = humiliation
+				target = scope:target_country
+			}
+		}
 	}
 	possible = {
 		custom_tooltip = {
@@ -528,12 +536,6 @@ demand_humiliation = {
 			}
 		}
 		imperia_add_wargoal_permitted = yes
-		NOT = {
-			war_participant_has_war_goal_of_type_against = {
-				type = humiliation
-				target = scope:target_country
-			}
-		}
 	}
 	accept_effect = {
 		set_variable = {
