@@ -43,17 +43,24 @@ imperia_add_wargoal_permitted = {
 	}
 	any_diplomatic_play = {
 		is_war = yes
-		any_scope_play_involved = {
-			this = scope:target_country
-		}
-		any_scope_play_involved = {
-			this = root
-		}
-		war = {
-			has_war_support = {
-				target = root
-				value > 0
+		trigger_if = {
+			limit = {
+				any_scope_play_involved = {
+					this = scope:target_country
+				}
+				any_scope_play_involved = {
+					this = root
+				}
 			}
+			war = {
+				has_war_support = {
+					target = root
+					value > 0
+				}
+			}
+		}
+		trigger_else = {
+			always = no
 		}
 	}
 }
