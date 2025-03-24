@@ -1,4 +1,5 @@
-﻿imperia_relaxed_diplomatic_plays_permitted = {
+﻿# DIPLOMATIC PLAYS
+imperia_relaxed_diplomatic_plays_permitted = {
 	# For true neutral countries in very specific use-cases; meaning the subject autonomy relevant diplo plays for now
 	# Add new blockers to this trigger, in general
 	aggressive_diplomatic_plays_permitted = yes
@@ -28,5 +29,38 @@ imperia_aggressive_diplomatic_plays_permitted = {
 	imperia_relaxed_diplomatic_plays_permitted = yes
 	NOT = {
 		has_modifier = imperia_true_neutral
+	}
+}
+
+# DIPLOMATIC ACTIONS
+imperia_add_wargoal_permitted = {
+	has_war_with = scope:target_country
+	NOT = {
+		war_participant_has_war_goal_of_type_against = {
+			type = annex_country
+			target = scope:target_country
+		}
+	}
+	any_diplomatic_play = {
+		is_war = yes
+		trigger_if = {
+			limit = {
+				any_scope_play_involved = {
+					this = scope:target_country
+				}
+				any_scope_play_involved = {
+					this = root
+				}
+			}
+			war = {
+				has_war_support = {
+					target = root
+					value > 0
+				}
+			}
+		}
+		trigger_else = {
+			always = no
+		}
 	}
 }
