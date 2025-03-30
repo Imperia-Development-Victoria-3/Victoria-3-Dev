@@ -3,51 +3,46 @@
 		remove_modifier ?= imperia_private_allocation_modifier
 		set_variable = {
 			name = imperia_private_allocation_var
-			value = scope:current_option
+			value = $ALLOCATION$
 		}
 	}
 	add_modifier = {
 		name = imperia_private_allocation_modifier
-		multiplier = scope:current_option
+		multiplier = $ALLOCATION$
 	}
 }
 
 imperia_auto_apply_private_allocation = {
 	if = {
 		limit = {
-			75_percent_private_allocation_trigger = yes
+			10_percent_private_allocation_trigger = yes
 		}
-		save_scope_value_as = {
-			name = current_option
-			value = 0.75
-		}
-	}
-	else_if = {
-		limit = {
-			50_percent_private_allocation_trigger = yes
-		}
-		save_scope_value_as = {
-			name = current_option
-			value = 0.5
+		imperia_apply_private_allocation = {
+			ALLOCATION = 0.1
 		}
 	}
 	else_if = {
 		limit = {
 			25_percent_private_allocation_trigger = yes
 		}
-		save_scope_value_as = {
-			name = current_option
-			value = 0.25
+		imperia_apply_private_allocation = {
+			ALLOCATION = 0.25
 		}
 	}
 	else_if = {
 		limit = {
-			10_percent_private_allocation_trigger = yes
+			50_percent_private_allocation_trigger = yes
 		}
-		save_scope_value_as = {
-			name = current_option
-			value = 0.1
+		imperia_apply_private_allocation = {
+			ALLOCATION = 0.5
 		}
 	}
-	imperia_apply_private_allocation = yes
+	else_if = {
+		limit = {
+			75_percent_private_allocation_trigger = yes
+		}
+		imperia_apply_private_allocation = {
+			ALLOCATION = 0.75
+		}
+	}
 }
