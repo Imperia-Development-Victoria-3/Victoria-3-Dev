@@ -457,6 +457,27 @@
 			imperia_auto_apply_private_allocation = yes
 		}
 
+		# Change AI foreign policy if applicable
+		ai_update_foreign_policy = yes
+		# Change to/from true neutrality
+		if = {
+			limit = {
+				has_modifier = imperia_true_neutral
+				NOT = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			activate_law = law_type:law_true_neutrality
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_modifier = imperia_true_neutral
+				}
+				has_law = law_type:law_true_neutrality
+			}
+			activate_law = law_type:law_neutral
+		}
 		## German Pan-Nationalism tech spread
 		# Set the imperia_german_pan_nationalism_spread global variable to the number of Germans having pan-nationalism
 		# Only once per month, to prevent spamming
