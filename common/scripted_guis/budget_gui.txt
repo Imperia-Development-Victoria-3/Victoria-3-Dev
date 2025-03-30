@@ -184,15 +184,9 @@ send_money_to_target = {
 can_set_100_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_traditionalism
-			has_law = law_type:law_interventionism
-			has_law = law_type:law_agrarianism
-			has_law = law_type:law_industry_banned
-			has_law = law_type:law_extraction_economy
-			has_law = law_type:law_laissez_faire
-			has_law = law_type:law_cooperative_ownership
-			has_law = law_type:law_command_economy
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_100_percent
+			100_percent_private_allocation_trigger = yes
 		}
 	}
 }
@@ -200,41 +194,29 @@ can_set_100_percent_private_allocation = {
 can_set_75_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_traditionalism
-			has_law = law_type:law_interventionism
-			has_law = law_type:law_agrarianism
-			has_law = law_type:law_industry_banned
-			has_law = law_type:law_extraction_economy
-			has_law = law_type:law_laissez_faire
-			has_law = law_type:law_cooperative_ownership
-			has_law = law_type:law_command_economy
-		}
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_75_percent
+				75_percent_private_allocation_trigger = yes
+		}	
 	}
 }
 
 can_set_50_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_traditionalism
-			has_law = law_type:law_interventionism
-			has_law = law_type:law_agrarianism
-			has_law = law_type:law_industry_banned
-			has_law = law_type:law_extraction_economy
-			has_law = law_type:law_cooperative_ownership
-			has_law = law_type:law_command_economy
-		}
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_50_percent
+				50_percent_private_allocation_trigger = yes
+		}	
 	}
 }
 
 can_set_25_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_industry_banned
-			has_law = law_type:law_cooperative_ownership
-			has_law = law_type:law_command_economy
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_25_percent
+				25_percent_private_allocation_trigger = yes
 		}
 	}
 }
@@ -242,19 +224,20 @@ can_set_25_percent_private_allocation = {
 can_set_10_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_cooperative_ownership
-			has_law = law_type:law_command_economy
-		}
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_10_percent
+				10_percent_private_allocation_trigger = yes
+		}		
 	}
 }
 
 can_set_0_percent_private_allocation = {
 	scope = country
 	is_valid = {
-		OR = {
-			has_law = law_type:law_command_economy
-		}
+		custom_tooltip =  {
+			text = imperia_private_allocation_trigger_0_percent
+				0_percent_private_allocation_trigger = yes
+		}	
 	}
 }
 
@@ -266,16 +249,12 @@ select_percent_private_allocation = {
 	
 	is_valid = {
 		NOT = {
-			modifier:country_private_construction_allocation_mult = scope:current_option
+			var:imperia_private_allocation_var ?= scope:current_option
 		}
+		custom_tooltip = conditions_private_allocation_tt
 	}
 	
 	effect = {
-		remove_modifier ?= imperia_private_allocation_modifier
-		add_modifier = {
-			name = imperia_private_allocation_modifier
-			multiplier = scope:current_option
-		}
-		debug_log_scopes = yes
+		imperia_apply_private_allocation = yes
 	}
 }
