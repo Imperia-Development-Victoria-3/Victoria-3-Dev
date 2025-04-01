@@ -1,0 +1,101 @@
+﻿kurd_pacification_agitate_ottomans_button = {
+	name = "kurd_pacification_agitate_ottomans_button"
+	desc = "kurd_pacification_agitate_ottomans_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 10
+		modifier = {
+			trigger = {
+				# The progress bar is below 13, meaning Kurdistan has chosen the governorate administration path
+				je:je_kurd_pacification = {
+					"scripted_bar_progress(kurd_pacification_core_progress_bar)" < 13
+				}
+			}
+			add = -10
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = kurd_pacification_button_not_on_cooldown_tt
+			NOT = {
+				has_variable = kurd_pacification_button_cooldown
+			}
+		}
+	}
+	effect = {
+        trigger_event = {
+            id = kurd_pacification.1
+        }
+		set_variable = {
+			name = kurd_pacification_button_cooldown
+			year = 1
+		}
+	}
+}
+
+kurd_pacification_centralize_tribes_button = {
+	name = "kurd_pacification_centralize_tribes_button"
+	desc = "kurd_pacification_centralize_tribes_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 10
+	}
+	possible = {
+		custom_tooltip = {
+			text = kurd_pacification_button_not_on_cooldown_tt
+			NOT = {
+				has_variable = kurd_pacification_button_cooldown
+			}
+		}
+	}
+	effect = {
+		trigger_event = {
+			id = kurd_pacification.2
+		}
+		set_variable = {
+			name = kurd_pacification_button_cooldown
+			year = 2
+		}
+	}
+}
+
+kurd_pacification_ottoman_cooperation_button = {
+	name = "kurd_pacification_ottoman_cooperation_button"
+	desc = "kurd_pacification_ottoman_cooperation_button_desc"
+	visible = {
+		always = yes
+	}
+	ai_chance = {
+		base = 10
+		modifier = {
+			trigger = {
+				# The progress bar is above 13, meaning Kurdistan is in the emir route
+				je:je_kurd_pacification = {
+					"scripted_bar_progress(kurd_pacification_core_progress_bar)" > 13
+				}
+			}
+			add = -10
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = kurd_pacification_button_not_on_cooldown_tt
+			NOT = {
+				has_variable = kurd_pacification_button_cooldown
+			}
+		}
+	}
+	effect = {
+		trigger_event = {
+			id = kurd_pacification.3
+		}
+		set_variable = {
+			name = kurd_pacification_button_cooldown
+			year = 2
+		}
+	}
+}

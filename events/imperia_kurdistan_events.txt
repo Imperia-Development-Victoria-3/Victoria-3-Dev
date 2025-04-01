@@ -1,4 +1,4 @@
-﻿namespace = sick_man
+﻿namespace = kurd_pacification
 # start event
 kurd_pacification.0 = {
 	type = country_event
@@ -12,8 +12,6 @@ kurd_pacification.0 = {
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-	trigger = {
-	}
 	immediate = {
 		add_journal_entry = {
 			type = je_kurd_pacification
@@ -32,7 +30,9 @@ kurd_pacification.0 = {
 				name = kurd_emir_comp
 			}
 		}
-		kurd_pacification_ottoman_progress_2 = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -2
+		}
 	}
 	option = {
 		name = kurd_pacification.0.b
@@ -47,6 +47,192 @@ kurd_pacification.0 = {
 				name = kurd_emir_comp
 			}
 		}
-		kurd_pacification_kurdistan_progress_2 = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 2
+		}
+	}
+}
+
+# Agitate the Ottomans
+kurd_pacification.1 = {
+	type = country_event
+	placement = root
+	title = kurd_pacification.1.t
+	desc = kurd_pacification.1.desc
+	flavor = kurd_pacification.1.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	# Increase radicals of Kurds
+	option = {
+		name = kurd_pacification.1.a
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -2
+		}
+		c:TUR = {
+			add_radicals = {
+				value = 0.05
+				culture = cu:kurdish
+			}
+			trigger_event = {
+				id = otto_kurd.1
+			}
+		}
+	}
+	# Sabotage Ottoman Kurdish state
+	option = {
+		name = kurd_pacification.1.b
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		c:TUR = {
+			random_scope_building = {
+				limit = {
+					state.state_region = {
+						is_homeland = cu:kurdish
+					}
+				}
+				add_modifier = {
+					name = kurd_pacification_sabotage
+					years = 1
+					is_decaying = yes
+				}
+			}
+			trigger_event = {
+				id = otto_kurd.1
+			}
+		}
+	}
+	# Raid for resources
+	option = {
+		name = kurd_pacification.1.c
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		c:TUR = {
+			trigger_event = {
+				id = otto_kurd.2
+			}
+		}
+	}
+}
+
+# Centralize Tribes
+# Meet with X prominent tribe, chance for success with corresponding modifiers.
+# Assert Dominance over tribe, 60/40 chance for success, gives positive modifier if successful and negative modifier if not.
+# Develop infrastructure in tribal holding, +10 Infrastructure State Modifier option for each state owned by Kurds, can’t do more than once. Per state.
+
+kurd_pacification.2 = {
+	type = country_event
+	placement = root
+	title = kurd_pacification.2.t
+	desc = kurd_pacification.2.desc
+	flavor = kurd_pacification.2.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	immediate = {
+		random_scope_state = {
+			limit = {
+				NOT = {
+					has_modifier = kurd_pacification_developed_state_infrastructure
+				}
+			}
+			save_scope_as = random_state
+		}
+	}
+	# Meet with X prominent tribe, chance for success with corresponding modifiers.
+	option = {
+		name = kurd_pacification.2.a
+		random = {
+			chance = 33
+			# Add the modifier, whatever it is
+			custom_tooltip = "positive modifier"
+		}
+	}
+	# Assert Dominance over tribe, 60/40 chance for success, gives positive modifier if successful and negative modifier if not.
+	option = {
+		name = kurd_pacification.2.b
+		random_list = {
+			60 = {
+				# Success!
+				# Add positive modifier
+				custom_tooltip = "positive modifier"
+			}
+			40 = {
+				# Failure!
+				# Add negative modifier
+				custom_tooltip = "negative modifier"
+			}
+		}
+	}
+	# Develop infrastructure in tribal holding, +10 Infrastructure State Modifier option for each state owned by Kurds, can’t do more than once. Per state.
+	option = {
+		name = kurd_pacification.2.c
+		trigger = {
+			exists = scope:random_state
+		}
+		scope:random_state ?= {
+			add_modifier = {
+				name = kurd_pacification_developed_state_infrastructure
+			}
+		}
+	}
+}
+#Entreat Ottomans for help
+#Ottoman Investments into the region, +2 Governor, Spawns Otto Event 3
+#Ottoman Support for Iran Raids, Spawn Otto Event 4
+#Ottoman Support for Centralizing Tribes, +1 Governor, Spawn Otto 5
+
+kurd_pacification.3 = {
+	type = country_event
+	placement = root
+	title = kurd_pacification.3.t
+	desc = kurd_pacification.3.desc
+	flavor = kurd_pacification.3.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	# Ottoman Investments into the region
+	option = {
+		name = kurd_pacification.3.a
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 2
+		}
+		c:TUR = {
+			trigger_event = {
+				id = otto_kurd.3
+			}
+		}
+	}
+	# Ottoman Support for Iran Raids
+	option = {
+		name = kurd_pacification.3.b
+		c:TUR = {
+			trigger_event = {
+				id = otto_kurd.4
+			}
+		}
+	}
+	# Ottoman Support for Centralizing Tribes
+	option = {
+		name = kurd_pacification.3.c
+		c:TUR = {
+			kurd_pacification_change_progress_bar = {
+				CHANGE = 1
+			}
+			trigger_event = {
+				id = otto_kurd.5
+			}
+		}
 	}
 }

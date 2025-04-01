@@ -1197,77 +1197,46 @@ imperia_balkan_disintegrate_partial = {
 }
 
 ## KURDISTAN EFFECTS
-kurd_pacification_ottoman_progress_1 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_ottoman_increases_1_tt
-		c:KUR.je:je_kurd_pacification = {
-			add_progress = {
-				value = -1
-				name = kurd_pacification_core_progress_bar
+kurd_pacification_change_progress_bar = {
+	## Localisation related
+	# Make a scope value for the localisation, remove the negative denominator if present
+	if = {
+		limit = {
+			$CHANGE$ < 0
+		}
+		save_scope_value_as = {
+			name = change
+			value = {
+				value = $CHANGE$
+				multiply = -1
 			}
 		}
-		kurd_pacification_progress_bar_modifier_update = yes
 	}
-}
-
-kurd_pacification_ottoman_progress_2 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_ottoman_increases_2_tt
-		c:KUR.je:je_kurd_pacification = {
-			add_progress = {
-				value = -2
-				name = kurd_pacification_core_progress_bar
-			}
+	else = {
+		save_scope_value_as = {
+			name = change
+			value = $CHANGE$
 		}
-		kurd_pacification_progress_bar_modifier_update = yes
 	}
-}
-
-kurd_pacification_ottoman_progress_3 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_ottoman_increases_3_tt
-		c:KUR.je:je_kurd_pacification = {
-			add_progress = {
-				value = -3
-				name = kurd_pacification_core_progress_bar
-			}
+	# If change is positive, give points towards governorship
+	if = {
+		limit = {
+			$CHANGE$ > 0
 		}
-		kurd_pacification_progress_bar_modifier_update = yes
+		custom_tooltip = kurd_pacification_change_progress_bar_towards_ottomans_tt
 	}
-}
-
-kurd_pacification_kurdistan_progress_1 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_kurdistan_increases_1_tt
-		c:KUR.je:je_kurd_pacification = {
-			add_progress = {
-				value = 1
-				name = kurd_pacification_core_progress_bar
-			}
+	# If change is negative, give points towards revolt
+	else_if = {
+		limit = {
+			$CHANGE$ < 0
 		}
-		kurd_pacification_progress_bar_modifier_update = yes
+		custom_tooltip = kurd_pacification_change_progress_bar_towards_kurdistan_tt
 	}
-}
-
-kurd_pacification_kurdistan_progress_2 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_kurdistan_increases_2_tt
+	## Actual effect
+	hidden_effects = {
 		c:KUR.je:je_kurd_pacification = {
 			add_progress = {
-				value = 2
-				name = kurd_pacification_core_progress_bar
-			}
-		}
-		kurd_pacification_progress_bar_modifier_update = yes
-	}
-}
-
-kurd_pacification_kurdistan_progress_3 = {
-	custom_tooltip = {
-		text = kurd_pacification_points_kurdistan_increases_3_tt
-		c:KUR.je:je_kurd_pacification = {
-			add_progress = {
-				value = 3
+				value = $CHANGE$
 				name = kurd_pacification_core_progress_bar
 			}
 		}

@@ -1,0 +1,81 @@
+﻿namespace = otto_kurd
+# Kurdish Agitations Warrant a Response from the Porte, Here’s what the Ottomans can do to fight back:
+# Decimate Kurdish Tribe, +1 Revolt, Negative modifiers for Kurds, prevents agitation for an additional year.
+# Propaganda Campaign, +1 Governor, Negative modifiers for Ottomans, but gives kurdish loyalists
+# [Police] Crack down on Kurdish Insurgents, +2 Governor, higher negative modifiers, more radicals, but less turmoil effects.
+# [Inquisition, Empowered Gendarmerie, or Secret Police] Use connections to root out dissidents, +1 Governor, less negative modifiers, reduce radicals but no loyalists
+otto_kurd.1 = {
+	type = country_event
+	placement = root
+	title = otto_kurd.1.t
+	desc = otto_kurd.1.desc
+	flavor = otto_kurd.1.f
+	duration = 3
+	event_image = {
+		video = "unspecific_factory_closed"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	# Decimate Kurdish tribe, +1 Revolt, Negative modifiers for Kurds, prevents agitation for an additional year.
+	option = {
+		name = otto_kurd.1.a
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+        c:KUR = {
+            custom_tooltip = "negative modifier"
+            custom_tooltip = "prevents agitation for an additional year"
+        }
+	}
+	# Propaganda campaign, +1 Governor, Negative modifiers for Ottomans, but gives Kurdish loyalists
+	option = {
+		name = otto_kurd.1.b
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 1
+		}
+        custom_tooltip = "negative modifier"
+        add_loyalist = {
+            value = 0.05
+            culture = cu:kurdish
+        }
+	}
+	# [Police] Crack down on Kurdish insurgents, +2 Governor, higher negative modifiers, more radicals, but less turmoil effects.
+	option = {
+		name = otto_kurd.1.c
+        trigger = {
+            OR = {
+                has_law = law_type:law_dedicated_police
+                has_law = law_type:law_militarized_police
+            }
+        }
+		highlighted_option = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 2
+		}
+        custom_tooltip = "higher negative modifier"
+        add_radicals = {
+            value = 0.1
+            culture = cu:kurdish
+        }
+        custom_tooltip = "less turmoil effects"
+	}
+	# [Inquisition, Empowered Gendarmerie, or Secret Police] Use connections to root out dissidents, +1 Governor, less negative modifiers, reduce radicals but no loyalists
+	option = {
+		name = otto_kurd.1.d
+        trigger = {
+            OR = {
+                has_law = law_type:law_inquisition
+                has_law = law_type:law_empowered_gendarmerie
+                has_law = law_type:law_secret_police
+            }
+        }
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 1
+		}
+        custom_tooltip = "less negative modifier"
+        add_radicals = {
+            value = -0.05
+            culture = cu:kurdish
+        }
+	}
+}
