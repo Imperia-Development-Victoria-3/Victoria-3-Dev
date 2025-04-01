@@ -1,0 +1,821 @@
+﻿## Demand conquer state
+demand_conquest = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/diplomatic_action_icons/take_state.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		is_under_colonization = no
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			imperia_add_war_goal_effect = {
+				WARGOAL = 1
+			}
+			create_incident = {
+				country = scope:target_country
+				value = {
+					value = 6	# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_return_claim = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/return_state.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			any_scope_state = {
+				has_claim_by = root
+			}
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		has_claim_by = scope:country
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			imperia_add_war_goal_effect = {
+				WARGOAL = 2
+			}
+			create_incident = {
+				country = scope:target_country
+				value = {
+					value = 2.5	# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_treaty_port = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/take_treaty_port.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	state_selection = second_required
+	second_state_list = second_country
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		country_rank > rank_value:minor_power
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+	}
+	second_state_trigger = {
+		owner = scope:target_country
+		is_coastal = yes
+		is_under_colonization = no
+		NOT = {
+			is_target_of_wargoal = scope:target_country
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		if = {
+			limit = {
+				exists = scope:second_state
+			}
+			imperia_add_war_goal_effect = {
+				WARGOAL = 3
+			}
+			create_incident = {
+				country = scope:target_country
+				value = {
+					value = 2	# Twice the base value
+					multiply = {
+						value = 1
+						add = {
+							value = 3
+							multiply = {
+								value = scope:second_state.state_population
+								divide = 1000000
+							}
+							max = 5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_war_reps = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	texture = "gfx/interface/icons/war_goals/war_reparations.dds"
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = war_reparations
+				target = scope:target_country
+			}
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 4
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 0.3
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_ban_slavery = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/ban_slavery.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+		has_law = law_type:law_slavery_banned
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = ban_slavery
+				target = scope:target_country
+			}
+			has_law = law_type:law_slavery_banned
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 5
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 0.4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_regime_change = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/regime_change.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+		"ai_ideological_opinion(scope:target_country)" < -5	# Theres a max of -5 ideological_opinion defined in 'WAR_GOAL_REGIME_CHANGE_MAX_IDEOLOGICAL_OPINION', above that regime_change doesnt work
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = regime_change
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 6
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 0.8	# Twice the base value of a regime change
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_containment = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/contain_threat.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country.infamy >= infamy_threshold:pariah
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = contain_threat
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 7
+		}
+	}
+}
+
+demand_investment_rights = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/foreign_investment_rights.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+		country_rank >= scope:target_country.country_rank
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = foreign_investment_rights
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 8
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 0.2
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_humiliation = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/humiliation.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+		}
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = humiliation
+				target = scope:target_country
+			}
+		}
+		any_rival_country = {
+			this = scope:target_country
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 9
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 0.6
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_dominion = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/make_dominion.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		country_rank = rank_value:great_power
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			country_rank != rank_value:great_power
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = make_dominion
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 10
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_protectorate = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/make_protectorate.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		country_rank = rank_value:great_power
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			country_rank != rank_value:great_power
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = make_protectorate
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 11
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_transfer_subject = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/transfer_subject.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		country_rank = rank_value:great_power
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			is_subject = yes
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = transfer_subject
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 12
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 4
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}
+
+demand_liberate_subject = {
+	groups = {
+		general
+	}
+	texture = "gfx/interface/icons/war_goals/liberate_subject.dds"
+	requires_approval = no
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	can_use_obligations = no
+	show_in_lens = no
+	potential = {
+		country_rank = rank_value:great_power
+		has_war_with = scope:target_country
+		is_player = yes
+		scope:target_country = {
+			is_secessionist = no
+			is_revolutionary = no
+			is_subject = yes
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = "WARGOAL_ON_COOLDOWN"
+			NOT = {
+				has_variable = war_goal_add_cooldown
+			}
+		}
+		imperia_add_wargoal_permitted = yes
+		NOT = {
+			war_participant_has_war_goal_of_type_against = {
+				type = liberate_subject
+				target = scope:target_country
+			}
+		}
+	}
+	accept_effect = {
+		set_variable = {
+			name = war_goal_add_cooldown
+			months = 12
+		}
+		imperia_add_war_goal_effect = {
+			WARGOAL = 13
+		}
+		create_incident = {
+			country = scope:target_country
+			value = {
+				value = 3
+				multiply = {
+					value = 1
+					add = {
+						value = 3
+						multiply = {
+							value = scope:target_country.total_population
+							divide = 1000000
+						}
+						max = 50
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,4 +1,5 @@
-﻿imperia_set_guns_treaty = {
+﻿# GUNS TREATY
+imperia_set_guns_treaty = {
 	if = {
 		limit = {
 			scope:actor = {
@@ -46,4 +47,255 @@ imperia_reset_guns_treaty = {
 	remove_variable ?= imperia_rifling_treaty
 	remove_variable ?= imperia_repeaters_treaty
 	remove_variable ?= imperia_bolt_action_rifles_treaty
+}
+
+# ADDING WAR GOALS
+imperia_add_war_goal_effect = {
+	random_diplomatic_play = {
+		limit = {
+			is_war = yes
+			any_scope_play_involved = {
+				this = scope:target_country
+			}
+			any_scope_play_involved = {
+				this = root
+			}
+		}
+		
+		if = {
+			limit = {
+				initiator = root
+			}
+			target = {
+				imperia_compensate_war_support = yes
+				add_modifier = {
+					name = imperia_adding_wargoal_defense
+					years = 2
+				}
+			}
+			every_scope_target_ally = {
+				imperia_compensate_war_support = yes
+				add_modifier = {
+					name = imperia_adding_wargoal_defense
+					years = 2
+				}
+			}
+		}
+		else = {
+			initiator = {
+				imperia_compensate_war_support = yes
+				add_modifier = {
+					name = imperia_adding_wargoal_defense
+					years = 2
+				}
+			}
+			every_scope_initiator_ally = {
+				imperia_compensate_war_support = yes
+				add_modifier = {
+					name = imperia_adding_wargoal_defense
+					years = 2
+				}
+			}
+		}
+		
+		switch = {
+			trigger = $WARGOAL$
+			1 = {
+				add_war_goal = {
+					holder = root
+					type = conquer_state
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			2 = {
+				add_war_goal = {
+					holder = root
+					type = return_state
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			3 = {
+				add_war_goal = {
+					holder = root
+					type = take_treaty_port
+					target_state = scope:second_state
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			4 = {
+				add_war_goal = {
+					holder = root
+					type = war_reparations
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			5 = {
+				add_war_goal = {
+					holder = root
+					type = ban_slavery
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			6 = {
+				add_war_goal = {
+					holder = root
+					type = regime_change
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			7 = {
+				add_war_goal = {
+					holder = root
+					type = contain_threat
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			8 = {
+				add_war_goal = {
+					holder = root
+					type = foreign_investment_rights
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			9 = {
+				add_war_goal = {
+					holder = root
+					type = humiliation
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			10 = {
+				add_war_goal = {
+					holder = root
+					type = make_dominion
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			11 = {
+				add_war_goal = {
+					holder = root
+					type = make_protectorate
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			12 = {
+				add_war_goal = {
+					holder = root
+					type = transfer_subject
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+			13 = {
+				add_war_goal = {
+					holder = root
+					type = liberate_subject
+					primary_demand = no
+					target_country = scope:target_country
+				}
+			}
+		}
+	}
+}
+
+imperia_compensate_war_support = {
+	prev.war = {
+		if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -90
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 110
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -70
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 90
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -70
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 90
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -50
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 70
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -30
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 50
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < -10
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 30
+			}
+		}
+		else_if = {
+			limit = {
+				has_war_support = {
+					target = prev
+					value < 0
+				}
+			}
+			add_war_war_support = {
+				target = prev
+				value = 20
+			}
+		}
+	}
 }

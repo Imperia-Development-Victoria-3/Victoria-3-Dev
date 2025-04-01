@@ -1,0 +1,167 @@
+﻿ai_update_foreign_policy = {
+	# This only works for AI countries
+	if = {
+		limit = {
+			is_player = no
+		}
+		update_foreign_policy = yes
+	}
+}
+
+update_foreign_policy = {
+	# This one also works for players, used in the initial GLOBAL
+	if = {
+		# This should only work if theres no cooldown currently active
+		limit = {
+			NOT = {
+				has_variable = modifier_imperia_foreign_policy_cooldown
+			}
+		}
+		# First check for true neutrality
+		if = {
+			limit = {
+				has_modifier = imperia_true_neutral
+				NOT = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			activate_law = law_type:law_true_neutrality
+			add_foreign_policy_cooldown = yes
+		}
+		# Check for isolationism (trade policy)
+		else_if = {
+			limit = {
+				has_law = law_type:law_isolationism
+				NOT = {
+					has_law = law_type:law_foreign_isolationism
+				}
+			}
+			activate_law = law_type:law_foreign_isolationism
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_maintain_power_balance
+				NOT = {
+					has_law = law_type:law_realpolitik
+				}
+			}
+			activate_law = law_type:law_realpolitik
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_territorial_expansion
+					has_strategy = ai_strategy_restore_natural_borders	# French unique strategy for the Rhine
+				}
+				NOT = {
+					has_law = law_type:law_expansionism
+				}
+			}
+			activate_law = law_type:law_expansionism
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_colonial_expansion
+				NOT = {
+					has_law = law_type:law_imperialism
+				}
+			}
+			activate_law = law_type:law_imperialism
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_armed_isolationism
+				NOT = {
+					has_law = law_type:law_armed_neutrality
+				}
+			}
+			activate_law = law_type:law_armed_neutrality
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_economic_imperialism
+				NOT = {
+					has_law = law_type:law_splendid_isolationism
+				}
+			}
+			activate_law = law_type:law_splendid_isolationism
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_unify_germany
+					has_strategy = ai_strategy_unify_italy
+					has_strategy = ai_strategy_unify_ethiopia
+					has_strategy = ai_strategy_unify_china
+				}
+				NOT = {
+					has_law = law_type:law_unification_nationalism
+				}
+			}
+			activate_law = law_type:law_unification_nationalism
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_anti_imperialism
+					has_strategy = ai_strategy_world_revolution
+					has_strategy = ai_strategy_socialism_in_one_country
+				}
+				NOT = {
+					has_law = law_type:law_anti_imperialist
+				}
+			}
+			activate_law = law_type:law_anti_imperialist
+			add_foreign_policy_cooldown = yes
+		}
+		# Subject-specific laws
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_subject_overlord_compliance
+				NOT = {
+					has_law = law_type:law_subject_loyalty
+				}
+			}
+			activate_law = law_type:law_subject_loyalty
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_subject_maintain_autonomy
+					has_strategy = ai_strategy_subject_strengthen_self
+				}
+				NOT = {
+					has_law = law_type:law_subject_maintain_autonomy
+				}
+			}
+			activate_law = law_type:law_subject_maintain_autonomy
+			add_foreign_policy_cooldown = yes
+		}
+		else_if = {
+			limit = {
+				has_strategy = ai_strategy_subject_break_free
+				NOT = {
+					has_law = law_type:law_subject_break_free
+				}
+			}
+			activate_law = law_type:law_subject_break_free
+			add_foreign_policy_cooldown = yes
+		}
+	}
+}
+
+add_foreign_policy_cooldown = {
+	set_variable = {
+		name = modifier_imperia_foreign_policy_cooldown
+		value = yes
+		months = 6
+	}
+}

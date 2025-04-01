@@ -1,15 +1,25 @@
 ﻿GLOBAL = {
-	### Infamy setup ###
 	every_country = {
+		### Infamy setup ###
 		set_variable = {
 			name = infamy_on_month_start
 			value = infamy
 		}
-	}
-	### STRATEGIC REGIONS LIST FOR VIENNA CONGRESS ###
-	make_strategic_region_list = yes
-	### TECHNOLOGIES ###
-	every_country = {
+		### GAME START BUREAUCURACY BONUS ###
+		add_modifier = {
+			name = game_start_bureaucracy_bonus
+			is_decaying = yes
+			months = 121
+		}
+		### MONEY TRANSFER ###
+		set_variable = {
+			name = imperia_money_transfer_amount
+			value = 0
+		}
+		### SET STARTING FOREIGN POLICY ###
+		update_foreign_policy = yes
+		remove_variable ?= modifier_imperia_foreign_policy_cooldown	# To allow players to change from the get-go
+		### TECHNOLOGIES ###
 		if = {
 			limit = {
 				any_state = {
@@ -25,21 +35,8 @@
 			add_technology_researched = propellers
 		}
 	}
-	### GAME START BUREAUCURACY BONUS ###
-	every_country = {
-		add_modifier = {
-			name = game_start_bureaucracy_bonus
-			is_decaying = yes
-			months = 121
-		}
-	}
-	### MONEY TRANSFER ###
-	every_country = {
-		set_variable = {
-			name = imperia_money_transfer_amount
-			value = 0
-		}
-	}
+	### STRATEGIC REGIONS LIST FOR VIENNA CONGRESS ###
+	make_strategic_region_list = yes
 	# British East India Company subjects start with a mortality modifier
 	c:BIC ?= {
 		every_subject_or_below = {
