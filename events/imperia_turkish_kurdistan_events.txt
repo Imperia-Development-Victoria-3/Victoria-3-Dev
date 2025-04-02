@@ -20,62 +20,216 @@ otto_kurd.1 = {
 	option = {
 		name = otto_kurd.1.a
 		kurd_pacification_change_progress_bar = {
-			CHANGE = -1
+			CHANGE = 1
 		}
-        c:KUR = {
-            custom_tooltip = "negative modifier"
-            custom_tooltip = "prevents agitation for an additional year"
-        }
+		c:KUR = {
+			custom_tooltip = " negative modifier"
+			custom_tooltip = {
+				text = " prevents agitation for an additional year"
+				remove_variable ?= kurd_pacification_button_cooldown
+				set_variable = {
+					name = kurd_pacification_button_cooldown
+					year = 2
+				}
+			}
+		}
 	}
 	# Propaganda campaign, +1 Governor, Negative modifiers for Ottomans, but gives Kurdish loyalists
 	option = {
 		name = otto_kurd.1.b
 		kurd_pacification_change_progress_bar = {
-			CHANGE = 1
+			CHANGE = -1
 		}
-        custom_tooltip = "negative modifier"
-        add_loyalist = {
-            value = 0.05
-            culture = cu:kurdish
-        }
+		custom_tooltip = " negative modifier"
+		add_loyalist = {
+			value = 0.05
+			culture = cu:kurdish
+		}
 	}
 	# [Police] Crack down on Kurdish insurgents, +2 Governor, higher negative modifiers, more radicals, but less turmoil effects.
 	option = {
 		name = otto_kurd.1.c
-        trigger = {
-            OR = {
-                has_law = law_type:law_dedicated_police
-                has_law = law_type:law_militarized_police
-            }
-        }
+		trigger = {
+			OR = {
+				has_law = law_type:law_dedicated_police
+				has_law = law_type:law_militarized_police
+			}
+		}
 		highlighted_option = yes
 		kurd_pacification_change_progress_bar = {
-			CHANGE = 2
+			CHANGE = -2
 		}
-        custom_tooltip = "higher negative modifier"
-        add_radicals = {
-            value = 0.1
-            culture = cu:kurdish
-        }
-        custom_tooltip = "less turmoil effects"
+		custom_tooltip = " higher negative modifier"
+		add_radicals = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		custom_tooltip = " less turmoil effects"
 	}
 	# [Inquisition, Empowered Gendarmerie, or Secret Police] Use connections to root out dissidents, +1 Governor, less negative modifiers, reduce radicals but no loyalists
 	option = {
 		name = otto_kurd.1.d
-        trigger = {
-            OR = {
-                has_law = law_type:law_inquisition
-                has_law = law_type:law_empowered_gendarmerie
-                has_law = law_type:law_secret_police
-            }
-        }
-		kurd_pacification_change_progress_bar = {
-			CHANGE = 1
+		trigger = {
+			OR = {
+				has_law = law_type:law_inquisition
+				has_law = law_type:law_empowered_gendarmerie
+				has_law = law_type:law_secret_police
+			}
 		}
-        custom_tooltip = "less negative modifier"
-        add_radicals = {
-            value = -0.05
-            culture = cu:kurdish
-        }
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		custom_tooltip = " less negative modifier"
+		add_radicals = {
+			value = -0.05
+			culture = cu:kurdish
+		}
+	}
+}
+
+# When raid occurs, Ottomans get options to respond to the raid; 
+# Failed Raid = slight mortality increase + org reduction for Kurds for 9 months, +1 Governor;
+# Moderate Raid = 2000 Minting Taken from Ottomans, -50 Authority, Devastation in one state;
+# Successful Raid = 4000 Minting Taken from Ottomans, -150 Authority, Devastation in Ottoman-held states adjacent to Kurdish ones, +1 Revolt.
+otto_kurd.2 = {
+	type = country_event
+	placement = root
+	title = otto_kurd.2.t
+	desc = otto_kurd.2.desc
+	flavor = otto_kurd.2.f
+	duration = 3
+	event_image = {
+		video = "unspecific_factory_closed"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	#Rally Militia Forces, 15% Failed Raid, 35% Moderate Raid, 50% Successful Raid, -Minting Costs
+	option = {
+		name = otto_kurd.2.a
+		add_modifier = {
+			name = otto_kurd_rallied_militia_forces
+			years = 1
+		}
+		random_list = {
+			15 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			35 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			50 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
+	}
+	#Send in Governor’s Forces, 25% Failed Raid, 50% Moderate Raid, 25% Successful Raid, -Army Modifier
+	option = {
+		name = otto_kurd.2.b
+		add_modifier = {
+			name = otto_kurd_sending_in_governors_forces
+			years = 1
+		}
+		random_list = {
+			25 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			50 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			25 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
+	}
+	#Tighten our Belts, 5% Failed Raid, 25% Moderate Raid, 70% Successful Raid, no cost
+	option = {
+		name = otto_kurd.2.c
+		random_list = {
+			5 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			25 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			70 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
+	}
+	#Muster Local Garrisons, 40% Failed Raid, 15% Moderate Raid, 45% Successful Raid, -Some kind of Landowner/Aristo thing, Scales with Local Garrisons
+	option = {
+		name = otto_kurd.2.d
+		trigger = {
+			has_law = law_type:law_localized_garrisons
+		}
+		highlighted_option = yes
+		add_modifier = {
+			name = otto_kurd_muster_local_garrisons
+			years = 1
+			# Gives a base multiplier of 1 for the first level of localized garrisons, and then scales with the level of local garrisons going forward = 1 level giving half a multiplier.
+			multiplier = {
+				value = 0.5
+				add = {
+					value = institution_home_defence.investment
+					multiply = 0.5
+				}
+			}
+		}
+		random_list = {
+			40 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			15 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			45 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
+	}
+	#Deploy National Guard, 50% Failed Raid, 35% Moderate Raid, 15% Successful Raid, High cost but effective, Requires National Guard
+	option = {
+		name = otto_kurd.2.e
+		trigger = {
+			has_law = law_type:law_national_guard
+		}
+		highlighted_option = yes
+		add_modifier = {
+			name = otto_kurd_deploy_national_guard
+			years = 1
+		}
+		random_list = {
+			50 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			35 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			15 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
+	}
+	#Emergency Services, 10% Failed Raid, 25% Moderate Raid, 65% Successful Raid, gives benefits to Ottomans to mitigate losses.
+	option = {
+		name = otto_kurd.2.g
+		trigger = {
+			has_law = law_type:law_emergency_relief_services
+		}
+		highlighted_option = yes
+		add_modifier = {
+			name = otto_kurd_emergency_services
+			years = 1
+		}
+		random_list = {
+			10 = {
+				kurd_pacification_failed_raid_on_ottomans = yes
+			}
+			25 = {
+				kurd_pacification_moderate_raid_on_ottomans = yes
+			}
+			65 = {
+				kurd_pacification_successful_raid_on_ottomans = yes
+			}
+		}
 	}
 }

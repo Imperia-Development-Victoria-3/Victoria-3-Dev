@@ -1218,22 +1218,22 @@ kurd_pacification_change_progress_bar = {
 			value = $CHANGE$
 		}
 	}
-	# If change is positive, give points towards governorship
+	# If change is negative, give points towards governorship
 	if = {
 		limit = {
-			$CHANGE$ > 0
+			$CHANGE$ < 0
 		}
 		custom_tooltip = kurd_pacification_change_progress_bar_towards_ottomans_tt
 	}
-	# If change is negative, give points towards revolt
+	# If change is positive, give points towards revolt
 	else_if = {
 		limit = {
-			$CHANGE$ < 0
+			$CHANGE$ > 0
 		}
 		custom_tooltip = kurd_pacification_change_progress_bar_towards_kurdistan_tt
 	}
 	## Actual effect
-	hidden_effects = {
+	hidden_effect = {
 		c:KUR.je:je_kurd_pacification = {
 			add_progress = {
 				value = $CHANGE$
@@ -1281,5 +1281,74 @@ kurd_pacification_progress_bar_modifier_update = {
 			}
 		}
 		# A result of 13 is a tie, so both modifiers gets removed (above if/else_if triggers)
+	}
+}
+
+kurd_pacification_failed_raid_on_ottomans = {
+	c:KUR = {
+		add_modifier = {
+			name = otto_kurd_failed_raid_on_ottomans
+			months = 9
+		}
+		post_notification = failed_kurdish_raid_on_ottomans
+	}
+	c:TUR = {
+		post_notification = failed_kurdish_raid_on_ottomans
+	}
+	kurd_pacification_change_progress_bar = {
+		value = -1
+	}
+}
+
+kurd_pacification_moderate_raid_on_ottomans = {
+	c:KUR = {
+		add_modifier = {
+			name = otto_kurd_moderate_raid_on_ottomans
+			months = 9
+		}
+		post_notification = moderate_kurdish_raid_on_ottomans
+	}
+	c:TUR = {
+		add_modifier = {
+			name = otto_kurd_moderately_raided_by_kurdistan
+			months = 9
+		}
+		random_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = c:KUR
+				}
+			}
+			state_region = { add_devastation = 20 }
+		}
+		post_notification = moderate_kurdish_raid_on_ottomans
+	}
+}
+
+kurd_pacification_successful_raid_on_ottomans = {
+	c:KUR = {
+		add_modifier = {
+			name = otto_kurd_successful_raid_on_ottomans
+			months = 9
+		}
+		post_notification = successful_kurdish_raid_on_ottomans
+	}
+	c:TUR = {
+		add_modifier = {
+			name = otto_kurd_sucessfully_raided_by_kurdistan
+			months = 9
+		}
+		every_scope_state = {
+			limit = {
+				any_neighbouring_state = {
+					owner = c:KUR
+				}
+			}
+			state_region = { add_devastation = 30 }
+		}
+		post_notification = successful_kurdish_raid_on_ottomans
+	}
+	kurd_pacification_change_progress_bar = {
+		value = 1
 	}
 }
