@@ -19,6 +19,7 @@ otto_kurd.1 = {
 	# Decimate Kurdish tribe, +1 Revolt, Negative modifiers for Kurds, prevents agitation for an additional year.
 	option = {
 		name = otto_kurd.1.a
+		default_option = yes
 		kurd_pacification_change_progress_bar = {
 			CHANGE = 1
 		}
@@ -46,6 +47,9 @@ otto_kurd.1 = {
 				}
 			}
 		}
+		ai_chance = {
+			base = 20
+		}
 	}
 	# Propaganda campaign, +1 Governor, Negative modifiers for Ottomans, but gives Kurdish loyalists
 	option = {
@@ -60,6 +64,9 @@ otto_kurd.1 = {
 		add_loyalist = {
 			value = 0.05
 			culture = cu:kurdish
+		}
+		ai_chance = {
+			base = 20
 		}
 	}
 	# [Police] Crack down on Kurdish insurgents, +2 Governor, higher negative modifiers, more radicals, but less turmoil effects.
@@ -83,6 +90,9 @@ otto_kurd.1 = {
 			value = 0.1
 			culture = cu:kurdish
 		}
+		ai_chance = {
+			base = 40
+		}
 	}
 	# [Inquisition, Empowered Gendarmerie, or Secret Police] Use connections to root out dissidents, +1 Governor, less negative modifiers, reduce radicals but no loyalists
 	option = {
@@ -94,6 +104,7 @@ otto_kurd.1 = {
 				has_law = law_type:law_secret_police
 			}
 		}
+		highlighted_option = yes
 		kurd_pacification_change_progress_bar = {
 			CHANGE = -1
 		}
@@ -104,6 +115,9 @@ otto_kurd.1 = {
 		add_radicals = {
 			value = -0.05
 			culture = cu:kurdish
+		}
+		ai_chance = {
+			base = 40
 		}
 	}
 }
@@ -126,6 +140,7 @@ otto_kurd.2 = {
 	#Rally Militia Forces, 15% Failed Raid, 35% Moderate Raid, 50% Successful Raid, -Minting Costs
 	option = {
 		name = otto_kurd.2.a
+		default_option = yes
 		add_modifier = {
 			name = otto_kurd_rallied_militia_forces
 			years = 1
@@ -140,6 +155,9 @@ otto_kurd.2 = {
 			50 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
+		}
+		ai_chance = {
+			base = 20
 		}
 	}
 	#Send in Governor’s Forces, 25% Failed Raid, 50% Moderate Raid, 25% Successful Raid, -Army Modifier
@@ -160,6 +178,9 @@ otto_kurd.2 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
 		}
+		ai_chance = {
+			base = 20
+		}
 	}
 	#Tighten our Belts, 5% Failed Raid, 25% Moderate Raid, 70% Successful Raid, no cost
 	option = {
@@ -174,6 +195,9 @@ otto_kurd.2 = {
 			70 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
+		}
+		ai_chance = {
+			base = 10
 		}
 	}
 	#Muster Local Garrisons, 40% Failed Raid, 15% Moderate Raid, 45% Successful Raid, -Some kind of Landowner/Aristo thing, Scales with Local Garrisons
@@ -206,6 +230,9 @@ otto_kurd.2 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
 		}
+		ai_chance = {
+			base = 40
+		}
 	}
 	#Deploy National Guard, 50% Failed Raid, 35% Moderate Raid, 15% Successful Raid, High cost but effective, Requires National Guard
 	option = {
@@ -229,6 +256,9 @@ otto_kurd.2 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
 		}
+		ai_chance = {
+			base = 40
+		}
 	}
 	#Emergency Services, 10% Failed Raid, 25% Moderate Raid, 65% Successful Raid, gives benefits to Ottomans to mitigate losses.
 	option = {
@@ -251,6 +281,628 @@ otto_kurd.2 = {
 			65 = {
 				kurd_pacification_successful_raid_on_ottomans = yes
 			}
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+# Kurdish Tribes Want Ottoman Investments, you can help out in multiple ways:
+# Incentivize Private Investors, reduce investment efficiency in Ottomans but increase it in Kurdistan
+# Offer Developer Incentives, decreases construction in Ottomans for slightly less increase in Kurdistan
+# Bolster Military Forces, Costs money and military approval for Ottomans (landowners if levies, AF if anything else), Positive modifiers for Kurdistan
+# [Foreign Investment?]
+# Reject Their offer, +3 Revolt (net +1)
+otto_kurd.3 = {
+	type = country_event
+	placement = root
+	title = otto_kurd.3.t
+	desc = otto_kurd.3.desc
+	flavor = otto_kurd.3.f
+	duration = 3
+	event_image = {
+		video = "unspecific_factory_closed"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	immediate = {
+		# Saved to scope for use in the event, so it doesnt fluctuate
+		save_scope_value_as = {
+			name = otto_investment_pool_income
+			value = c:TUR.investment_pool_income
+		}
+		c:KUR.market_capital.market = {
+			# Get the most wanted good in Kurdistan, and save it to a scope for use in the event
+			ordered_market_goods = {
+				limit = {
+					# Should be a common good that Kurdistan can produce themselves
+					OR = {
+						# Grain
+						AND = {
+							goods = g:grain
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_wheat_farm
+								}
+							}
+						}
+						# Cotton // Fabric
+						AND = {
+							goods = g:fabric
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_cotton_plantation
+								}
+							}
+						}
+						# Tea
+						AND = {
+							goods = g:tea
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_tea_plantation
+								}
+							}
+						}
+						# Tobacco
+						AND = {
+							goods = g:tobacco
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_tobacco_plantation
+								}
+							}
+						}
+						# Coal
+						AND = {
+							goods = g:coal
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_coal_mine
+								}
+							}
+						}
+						# Iron
+						AND = {
+							goods = g:iron
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_iron_mine
+								}
+							}
+						}
+						# Oil
+						AND = {
+							goods = g:oil
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_oil_rig
+								}
+							}
+						}
+						# Rubber
+						AND = {
+							goods = g:rubber
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_rubber_plantation
+								}
+							}
+						}
+						# Steel
+						AND = {
+							goods = g:steel
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_steel_mills
+								}
+							}
+						}
+						# Clothing
+						AND = {
+							OR = {
+								goods = g:clothes
+								goods = g:luxury_clothes
+							}
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_textile_mills
+								}
+							}
+						}
+						# Glass
+						AND = {
+							goods = g:glass
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_glassworks
+								}
+							}
+						}
+						# Wood
+						AND = {
+							goods = g:wood
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_logging_camp
+								}
+							}
+						}
+						# Paper
+						AND = {
+							goods = g:paper
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_paper_mills
+								}
+							}
+						}
+						# Tools
+						AND = {
+							goods = g:tools
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_tooling_workshops
+								}
+							}
+						}
+						# Furniture
+						AND = {
+							goods = g:furniture
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_furniture_manufacturies
+								}
+							}
+						}
+						# Groceries
+						AND = {
+							goods = g:groceries
+							c:KUR = {
+								any_scope_state = {
+									can_construct_building = building_food_industry
+								}
+							}
+						}
+					}
+					market_goods_buy_orders > market_goods_sell_orders
+				}
+				order_by = market_goods_shortage_ratio
+				position = 0
+				goods = {
+					save_scope_as = kurdish_most_wanted_goods
+				}
+			}
+		}
+	}
+	#Incentivize Private Investors, reduce investment efficiency in Ottomans but increase it in Kurdistan
+	option = {
+		name = otto_kurd.3.a
+		default_option = yes
+		add_modifier = {
+			name = otto_kurd_incentivize_private_investors
+			years = 1
+		}
+		c:KUR = {
+			add_modifier = {
+				name = otto_kurd_investment_efficiency_increase
+				years = 1
+			}
+			post_notification = otto_kurd_ottomans_increased_investment_efficiency
+			add_investment_pool = {
+				value = {
+					add = scope:otto_investment_pool_income
+					multiply = 10
+				}
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	#Offer Developer Incentives, decreases construction in Ottomans for slightly less increase in Kurdistan
+	option = {
+		name = otto_kurd.3.b
+		add_modifier = {
+			name = otto_kurd_offer_developer_incentives
+			years = 1
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_increased_construction
+			add_modifier = {
+				name = otto_kurd_developer_construction_increase
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	#Bolster Military Forces, Costs money and military approval for Ottomans (landowners if levies, AF if anything else), Positive modifiers for Kurdistan
+	option = {
+		name = otto_kurd.3.c
+		if = {
+			limit = {
+				has_law = law_type:law_peasant_levies
+			}
+			add_modifier = {
+				name = otto_kurd_military_forces_nerf_landowners
+				years = 1
+			}
+		}
+		else = {
+			add_modifier = {
+				name = otto_kurd_military_forces_nerf_armed_forces
+				years = 1
+			}
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_increased_military_forces
+			add_modifier = {
+				name = otto_kurd_military_forces_buff
+				years = 1
+			}
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	#[Foreign Investment?]
+	option = {
+		name = otto_kurd.3.d
+		trigger = {
+			# There should be a wanted good for Kurdistan. In a trigger to prevent an empty option.
+			exists = scope:kurdish_most_wanted_goods
+		}
+		# Long switch to create a building for the wanted good in Kurdistan, if it exists.
+		custom_tooltip = {
+			text = create_building_kurdish_most_wanted_goods_tt
+			switch = {
+				trigger = scope:kurdish_most_wanted_goods
+				g:grain = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_wheat_farm
+							}
+							create_building = {
+								building = building_wheat_farm
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:fabric = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_cotton_plantation
+							}
+							create_building = {
+								building = building_cotton_plantation
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:tea = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_tea_plantation
+							}
+							create_building = {
+								building = building_tea_plantation
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:tobacco = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_tobacco_plantation
+							}
+							create_building = {
+								building = building_tobacco_plantation
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:coal = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_coal_mine
+							}
+							create_building = {
+								building = building_coal_mine
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:iron = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_iron_mine
+							}
+							create_building = {
+								building = building_iron_mine
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:oil = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_oil_rig
+							}
+							create_building = {
+								building = building_oil_rig
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:rubber = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_rubber_plantation
+							}
+							create_building = {
+								building = building_rubber_plantation
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:steel = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_steel_mills
+							}
+							create_building = {
+								building = building_steel_mills
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:clothes = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_textile_mills
+							}
+							create_building = {
+								building = building_textile_mills
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:luxury_clothes = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_textile_mills
+							}
+							create_building = {
+								building = building_textile_mills
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:glass = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_glassworks
+							}
+							create_building = {
+								building = building_glassworks
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:wood = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_logging_camp
+							}
+							create_building = {
+								building = building_logging_camp
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:paper = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_paper_mills
+							}
+							create_building = {
+								building = building_paper_mills
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:tools = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_tooling_workshops
+							}
+							create_building = {
+								building = building_tooling_workshops
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:furniture = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_furniture_manufacturies
+							}
+							create_building = {
+								building = building_furniture_manufacturies
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+				g:groceries = {
+					c:KUR = {
+						random_scope_state = {
+							limit = {
+								can_construct_building = building_food_industry
+							}
+							create_building = {
+								building = building_food_industry
+								reserves = 1
+								add_ownership = {
+									country = {
+										country = "c:TUR"
+										levels = 1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_built_needed_building
+		}
+		add_treasury = -50000
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Reject offer, +3 Revolt (net +1)
+	option = {
+		name = otto_kurd.3.e
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_rejected_development_petition
+		}
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 3
+		}
+		ai_chance = {
+			base = 10
 		}
 	}
 }
