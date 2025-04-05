@@ -1,4 +1,5 @@
-﻿change_money_transfer_amount = {
+﻿# MONEY TRANSFER
+change_money_transfer_amount = {
 	scope = country
 	saved_scopes = {
 		up
@@ -175,5 +176,94 @@ send_money_to_target = {
 	}
 	is_valid = {
 		can_send_money_to_recipient_trigger = yes
+	}
+}
+
+
+# PRIVATE CONSTRUCTION ALLOCATION
+can_set_100_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_100_percent
+			100_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+can_set_75_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_75_percent
+			75_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+can_set_50_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_50_percent
+			50_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+can_set_25_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_25_percent
+			25_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+can_set_10_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_10_percent
+			10_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+can_set_0_percent_private_allocation = {
+	scope = country
+	is_valid = {
+		custom_tooltip = {
+			text = imperia_private_allocation_trigger_0_percent
+			0_percent_private_allocation_trigger = yes
+		}
+	}
+}
+
+select_percent_private_allocation = {
+	scope = country
+	saved_scopes = {
+		current_option
+	}
+	
+	is_valid = {
+		NOT = {
+			var:imperia_private_allocation_var ?= scope:current_option
+		}
+	}
+	
+	effect = {
+		hidden_effect = {
+			remove_modifier ?= imperia_private_allocation_modifier
+			set_variable = {
+				name = imperia_private_allocation_var
+				value = scope:current_option
+			}
+		}
+		add_modifier = {
+			name = imperia_private_allocation_modifier
+			multiplier = scope:current_option
+		}
 	}
 }
