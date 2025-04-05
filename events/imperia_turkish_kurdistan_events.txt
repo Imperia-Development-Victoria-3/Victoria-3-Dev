@@ -137,6 +137,7 @@ otto_kurd.2 = {
 		video = "unspecific_factory_closed"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 	#Rally Militia Forces, 15% Failed Raid, 35% Moderate Raid, 50% Successful Raid, -Minting Costs
 	option = {
 		name = otto_kurd.2.a
@@ -147,13 +148,13 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			15 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			35 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			50 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -169,13 +170,13 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			25 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			50 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			25 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -187,13 +188,13 @@ otto_kurd.2 = {
 		name = otto_kurd.2.c
 		random_list = {
 			5 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			25 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			70 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -221,13 +222,13 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			40 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			15 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			45 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -247,13 +248,13 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			50 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			35 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			15 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -273,13 +274,13 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			10 = {
-				kurd_pacification_failed_raid_on_ottomans = yes
+				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			25 = {
-				kurd_pacification_moderate_raid_on_ottomans = yes
+				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
 			}
 			65 = {
-				kurd_pacification_successful_raid_on_ottomans = yes
+				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
 			}
 		}
 		ai_chance = {
@@ -305,6 +306,7 @@ otto_kurd.3 = {
 		video = "unspecific_factory_closed"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 	immediate = {
 		# Saved to scope for use in the event, so it doesnt fluctuate
 		save_scope_value_as = {
@@ -903,6 +905,203 @@ otto_kurd.3 = {
 		}
 		ai_chance = {
 			base = 10
+		}
+	}
+}
+
+#The Kurds Plan a Raid against Iran
+#Provide direct military aid, -Iran relations, Iran Very Strong Raid event, -2500 Minting, +2 Governor
+#Offer them funding but nothing else, -Iran Relations, Iran Strong Raid event, -1000 Minting, +1 Governor
+#Denounce the Raids for inciting tensions, +Iran Relations, +2 Revolt, Iran Weak Raid event, -50 influence
+#Simply Reject the Request, +1 Revolt, -3% Prestige, Iran Moderate Raid
+#[Local Garrisons/Faith Orders/National Guard] Send a strike team, +1 Governor, -Iran Relations, Iran Very Strong Raid, lower cost
+#[Inquisition/Secret Police/Empowered Gendarmerie], Publicly declare neutrality, but take advantage of the chaos to exploit Iran, +1 Governor, Iran Moderate Raid Event, malus to Iran
+otto_kurd.4 = {
+	type = country_event
+	placement = root
+	title = otto_kurd.4.t
+	desc = otto_kurd.4.desc
+	flavor = otto_kurd.4.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	# Provide direct military aid, -Iran relations, Iran Very Strong Raid event, -2500 Minting, +2 Governor
+	option = {
+		name = otto_kurd.4.a
+		default_option = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -2
+		}
+		change_relations = {
+			country = c:PER
+			value = -50
+		}
+		add_modifier = {
+			name = otto_kurd_sending_direct_military_aid_to_kurdish_raid_on_persia
+			years = 1
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.1
+				popup = yes
+			}
+			post_notification = otto_kurd_ottomans_provided_direct_military_aid_for_kurdish_raid_on_persia
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_provided_direct_military_aid_for_kurdish_raid_on_persia
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Offer them funding but nothing else, -Iran Relations, Iran Strong Raid event, -1000 Minting, +1 Governor
+	option = {
+		name = otto_kurd.4.b
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		change_relations = {
+			country = c:PER
+			value = -25
+		}
+		add_modifier = {
+			name = otto_kurd_offering_funding_to_kurdish_raid_on_persia
+			years = 1
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.2
+				popup = yes
+			}
+			post_notification = otto_kurd_ottomans_offered_funding_for_kurdish_raid_on_persia
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_offered_funding_for_kurdish_raid_on_persia
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	# Denounce the Raids for inciting tensions, +Iran Relations, +2 Revolt, Iran Weak Raid event, -50 influence
+	option = {
+		name = otto_kurd.4.c
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 2
+		}
+		change_relations = {
+			country = c:PER
+			value = 25
+		}
+		add_modifier = {
+			name = otto_kurd_denouncing_kurdish_raid_on_persia
+			years = 1
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.4
+				popup = yes
+			}
+			post_notification = otto_kurd_ottomans_denounced_kurdish_raid_on_persia
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_denounced_kurdish_raid_on_persia
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	# Simply Reject the Request, +1 Revolt, -3% Prestige, Iran Moderate Raid
+	option = {
+		name = otto_kurd.4.d
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 1
+		}
+		add_modifier = {
+			name = otto_kurd_rejecting_kurdish_raid_on_persia
+			years = 1
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_rejected_kurdish_raid_on_persia
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.3
+				popup = yes
+			}
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	#[Local Garrisons/Faith Orders/National Guard] Send a strike team, +1 Governor, -Iran Relations, Iran Very Strong Raid, lower cost
+	option = {
+		name = otto_kurd.4.e
+		trigger = {
+			OR = {
+				has_law = law_type:law_localized_garrisons
+				has_law = law_type:law_faith_orders
+				has_law = law_type:law_national_guard
+			}
+		}
+		highlighted_option = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		change_relations = {
+			country = c:PER
+			value = -50
+		}
+		add_modifier = {
+			name = otto_kurd_sending_strike_team_to_kurdish_raid_on_persia
+			years = 1
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.1
+				popup = yes
+			}
+			post_notification = otto_kurd_ottomans_sent_strike_team_for_kurdish_raid_on_persia
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_sent_strike_team_for_kurdish_raid_on_persia
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	#[Inquisition/Secret Police/Empowered Gendarmerie], Publicly declare neutrality, but take advantage of the chaos to exploit Iran, +1 Governor, Iran Moderate Raid Event, malus to Iran
+	option = {
+		name = otto_kurd.4.f
+		trigger = {
+			OR = {
+				has_law = law_type:law_inquisition
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_empowered_gendarmerie
+			}
+		}
+		highlighted_option = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		c:PER = {
+			trigger_event = {
+				id = kurd_persian_raid.3
+				popup = yes
+			}
+			add_modifier = {
+				name = kurd_persian_raid_chaos_exploited
+				years = 1
+			}
+			post_notification = otto_kurd_ottomans_declared_neutrality_on_kurdish_raid_on_persia
+		}
+		c:KUR = {
+			post_notification = otto_kurd_ottomans_declared_neutrality_on_kurdish_raid_on_persia
+		}
+		ai_chance = {
+			base = 20
 		}
 	}
 }
