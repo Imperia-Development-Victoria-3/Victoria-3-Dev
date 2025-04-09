@@ -148,13 +148,19 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			15 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			35 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			50 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -170,13 +176,19 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			25 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			50 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			25 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -188,13 +200,19 @@ otto_kurd.2 = {
 		name = otto_kurd.2.c
 		random_list = {
 			5 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			25 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			70 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -222,13 +240,19 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			40 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			15 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			45 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -248,13 +272,19 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			50 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			35 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			15 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -274,13 +304,19 @@ otto_kurd.2 = {
 		}
 		random_list = {
 			10 = {
-				kurd_pacification_failed_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_failed_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			25 = {
-				kurd_pacification_moderate_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_moderate_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 			65 = {
-				kurd_pacification_successful_raid_on_TARGET = { TARGET = c:TUR }
+				kurd_pacification_successful_raid_on_TARGET = {
+					TARGET = c:TUR
+				}
 			}
 		}
 		ai_chance = {
@@ -1111,6 +1147,107 @@ otto_kurd.4 = {
 		}
 		ai_chance = {
 			base = 20
+		}
+	}
+}
+
+#Ottomans Requested for help to Centralize Tribes
+#Negotiate centralization of Tribes for Kurds, +1 Governor (net +2), positive state modifier on one state that doesn’t already have it.
+#Pacify a Tribe and force the Emir to submit to the Governor, +1 Revolt (net +0), mixed state modifier, Kurd positive modifier,  Otto positive modifier
+#Demand Additional Tribute instead, +2 Revolt (net +1), negative Kurds modifier, positive Ottoman one
+#Do not give assistance, +1 Revolt (net +0), negative Kurds modifier
+otto_kurd.5 = {
+	type = country_event
+	placement = root
+	title = otto_kurd.5.t
+	desc = otto_kurd.5.desc
+	flavor = otto_kurd.5.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	immediate = {
+		save_scope_as = turkey_scope
+		c:KUR = {
+			save_scope_as = kurdistan_scope
+			random_scope_state = {
+				limit = {
+					NOR = {
+						has_modifier = otto_kurd_ottomans_centralized_tribes_for_kurds_state_modifier
+						has_modifier = otto_kurd_ottomans_pacified_tribe_for_kurds_state_modifier
+					}
+				}
+				save_scope_as = selected_kurdish_state
+			}
+		}
+	}
+	# Negotiate centralization of Tribes for Kurds, +1 Governor (net +2), positive state modifier on one state that doesn’t already have it.
+	option = {
+		name = otto_kurd.5.a
+		default_option = yes
+		kurd_pacification_change_progress_bar = {
+			CHANGE = -1
+		}
+		scope:selected_kurdish_state = {
+			add_modifier = {
+				name = otto_kurd_ottomans_centralized_tribes_for_kurds_state_modifier
+				years = 10
+			}
+		}
+	}
+	# Pacify a Tribe and force the Emir to submit to the Governor, +1 Revolt (net +0), mixed state modifier, Kurd positive modifier,  Otto positive modifier
+	option = {
+		name = otto_kurd.5.b
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 1
+		}
+		scope:selected_kurdish_state = {
+			add_modifier = {
+				name = otto_kurd_ottomans_pacified_tribe_for_kurds_state_modifier
+				years = 10
+			}
+		}
+		c:KUR = {
+			add_modifier = {
+				name = otto_kurd_ottomans_pacified_tribe_kurdistan_modifier
+				years = 4
+			}
+		}
+		add_modifier = {
+			name = otto_kurd_ottomans_pacified_tribe_ottoman_modifier
+			years = 4
+		}
+	}
+	# Demand Additional Tribute instead, +2 Revolt (net +1), negative Kurds modifier, positive Ottoman one
+	option = {
+		name = otto_kurd.5.c
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 2
+		}
+		c:KUR = {
+			add_modifier = {
+				name = otto_kurd_ottomans_demanded_additional_tribute_kurdistan_modifier
+				years = 4
+			}
+		}
+		add_modifier = {
+			name = otto_kurd_ottomans_demanded_additional_tribute_ottoman_modifier
+			years = 4
+		}
+	}
+	# Do not give assistance, +1 Revolt (net +0), negative Kurds modifier
+	option = {
+		name = otto_kurd.5.d
+		kurd_pacification_change_progress_bar = {
+			CHANGE = 1
+		}
+		c:KUR = {
+			add_modifier = {
+				name = otto_kurd_ottomans_did_not_give_assistance_kurdistan_modifier
+				years = 4
+			}
 		}
 	}
 }
