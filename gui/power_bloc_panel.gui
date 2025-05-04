@@ -406,7 +406,7 @@ types power_bloc_panel_types
 						# Leave button for Leader
 						button = {
 							using = default_button_action
-							size = { 150 50 }
+							size = { 100 50 }
 							using = fontsize_large
 							onclick = "[PopupManager.AskConfirmationWithSound(GetPlayer.LeavePowerBloc, 'event:/SFX/UI/SubjectInteractions/power_bloc_leave')]"
 							enabled = "[IsValid(GetPlayer.LeavePowerBloc)]"
@@ -426,10 +426,36 @@ types power_bloc_panel_types
 							}
 						}
 
+						# Switch Identity button
+						# Courtesy of Kate the Sibyl
+						button = {
+							using = default_button_action
+							size = { 210 50 }
+							using = fontsize_large
+							onclick = "[InformationPanelBar.OpenPowerBlocFormationPanel]"
+							enabled = "[IsValid(GetPlayer.LeavePowerBloc)]"
+							# No such rule in Imperia, always visible
+							#visible = "[GetScriptedGui('kates_power_bloc_rule_enable_identity_switch_gui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							tooltip = "SWITCH_POWER_BLOC_IDENTITY_TT"
+							using = tooltip_above
+							using = default_content_fade
+
+							flowcontainer = {
+								parentanchor = center
+
+								textbox = {
+									parentanchor = vcenter
+									autoresize = yes
+									align = center|nobaseline
+									text = "SWITCH_POWER_BLOC_IDENTITY"
+								}
+							}
+						}
+
 						# Invite Countries button
 						button = {
 							using = default_button_map_interaction
-							size = { 380 50 }
+							size = { 210 50 }
 							using = fontsize_large
 							onclick = "[PowerBlocPanel.OnClickInviteCountries]"
 							enabled = yes
