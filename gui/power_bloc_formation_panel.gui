@@ -82,6 +82,25 @@ types power_bloc_formation
 								default_format = "#title"
 								text = "POWER_BLOC_FORMATION_CLICK_TO_CHANGE_NAME"
 							}
+
+							# Courtesy of Kate the Sibyl
+							button = {
+					    		alpha = 0
+					    		name = reform_power_bloc_button_hidden
+					    		visible = "[GetScriptedGui('power_bloc_reform').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					        	using = default_button
+					        	size = { 0% 0% }
+						        state = {
+						            name = _show
+						            start_sound = {
+						                soundeffect = "event:/SFX/UI/SideBar/journal"
+						            }
+						            on_start = "[GetScriptedGui('power_bloc_reform').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						            on_start = "[Execute(GetPlayer.LeavePowerBloc)]"
+						            on_start = "[Execute(PowerBlocFormation.Confirm)]"
+						            on_start = "[GetScriptedGui('power_bloc_reform_2').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						        }
+					    	}
 						}
 
 						# Show a generated name if the DLC is disabled
@@ -637,6 +656,7 @@ types power_bloc_formation
 					parentanchor = hcenter
 					size = { 540 50 }
 					using = fontsize_large
+					visible = "[Not(GetScriptedGui('power_bloc_prereform').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ))]" # Kates addition
 					enabled = "[IsValid(PowerBlocFormation.Confirm)]"
 					onclick = "[PopupManager.AskConfirmationWithSound(PowerBlocFormation.Confirm, 'event:/SFX/UI/SubjectInteractions/power_bloc_formation')]"
 					tooltip = "FORM_POWER_BLOC_CONFIRM_BUTTON_TOOLTIP"
@@ -650,6 +670,31 @@ types power_bloc_formation
 							autoresize = yes
 							align = hcenter|nobaseline
 							text = "FORM_THIS_POWER_BLOC"
+						}
+					}
+				}
+
+				# Kate the Sibyl's addition
+				button = {
+					name = "reform_power_bloc"
+					using = default_button_primary_big_action
+					parentanchor = hcenter
+					size = { 540 50 }
+					using = fontsize_large
+					visible = "[GetScriptedGui('power_bloc_prereform').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]" # Minor tweak to remove the ruleset
+					enabled = "[Not(GreaterThan_int32(PowerBlocFormation.GetPrinciplePointsRemainingRaw, '(int32)0'))]"
+					onclick = "[GetScriptedGui('power_bloc_prereform').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					tooltip = "FORM_POWER_BLOC_CONFIRM_REFORM_BUTTON_TOOLTIP"
+					using = default_content_fade
+
+					flowcontainer = {
+						parentanchor = center
+
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							align = hcenter|nobaseline
+							text = "REFORM_THIS_POWER_BLOC"
 						}
 					}
 				}
