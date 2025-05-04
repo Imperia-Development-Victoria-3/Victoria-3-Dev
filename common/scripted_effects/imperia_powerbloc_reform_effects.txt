@@ -1,0 +1,86 @@
+# Courtesy of Kate the Sibyl
+power_bloc_reform_action = {
+	save_scope_as = root_scope
+	power_bloc = {
+		every_power_bloc_member = {
+			limit = {
+				NOT = {
+					this = scope:root_scope
+				}
+			}
+			save_scope_as = member
+			add_to_global_variable_list = {
+				name = bloc_members_to_readd
+				target = scope:member
+			}
+			set_variable = {
+				name = power_bloc_owner
+				value = scope:root_scope
+			}
+			set_variable = {
+				name = saved_leverage
+				value = "prev.leverage_advantage(scope:member)"
+			}
+			change_variable = {
+				name = saved_leverage
+				multiply = 0.3
+			}
+			set_variable = power_bloc_disband
+		}
+	}
+	set_variable = {
+		name = saved_mandates
+		value = power_bloc_identity_change_mandates
+	}
+	add_modifier = {
+		name = kates_temp_influence_modifier
+	}
+}
+
+power_bloc_reform_action_2 = {
+	remove_modifier = kates_temp_influence_modifier
+	save_scope_as = root_scope
+	remove_variable = power_bloc_disband
+	every_in_global_list = {
+		variable = bloc_members_to_readd
+		limit = {
+			var:power_bloc_owner = scope:root_scope
+		}
+		save_scope_as = member_scope
+		join_power_bloc = scope:root_scope
+		while = {
+			limit = {
+				"scope:root_scope.power_bloc.leverage_advantage(scope:member_scope)" < scope:member_scope.var:saved_leverage
+			}
+			scope:root_scope.power_bloc = {
+				add_leverage = {
+					target = scope:member_scope
+					value = 10
+				}
+			}
+		}
+		change_relations = {
+			country = scope:root_scope
+			value = -30
+		}
+		if = {
+			limit = {
+				is_subject = yes
+			}
+			add_liberty_desire = 30
+		}
+		remove_variable = power_bloc_owner
+		remove_variable = power_bloc_disband
+		remove_variable = saved_leverage
+	}
+	clear_global_variable_list = bloc_members_to_readd
+	power_bloc = {
+		add_modifier = {
+			name = kates_free_mandates_modifier
+			multiplier = prev.var:saved_mandates
+			days = 14
+		}
+		add_cohesion_percent = -1
+	}
+	remove_variable = saved_mandates
+}
