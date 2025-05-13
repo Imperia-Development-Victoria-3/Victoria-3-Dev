@@ -5,7 +5,6 @@
 	scripted_button = kurd_pacification_agitate_ottomans_button
 	scripted_button = kurd_pacification_centralize_tribes_button
 	scripted_button = kurd_pacification_ottoman_cooperation_button
-	
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -77,8 +76,103 @@
 			}
 		}
 	}
+	on_fail = {
+		add_journal_entry = {
+			type = je_kurd_governorate_main
+		}
+	}
 	invalid = {
 		is_subject = no
 	}
 	should_be_pinned_by_default = yes
+}
+
+je_kurd_governorate_main = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	immediate = {
+		add_journal_entry = {
+			type = je_kurd_governorate_institute_ottomanism
+		}
+		add_journal_entry = {
+			type = je_kurd_governorate_new_jannisaries
+		}
+		add_journal_entry = {
+			type = je_kurd_governorate_crush_the_emirs
+		}
+	}
+	complete = {
+		NOR = {
+			has_journal_entry = je_kurd_governorate_institute_ottomanism
+			has_journal_entry = je_kurd_governorate_new_jannisaries
+			has_journal_entry = je_kurd_governorate_crush_the_emirs
+		}
+	}
+	invalid = {
+		is_subject = no
+	}
+	on_complete = {
+		# Add a special modifier for being a loyal subject
+	}
+}
+
+je_kurd_governorate_institute_ottomanism = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	scripted_progress_bar = je_kurd_governorate_institute_ottomanism_progress_bar
+	complete = {
+		OR = {
+			has_law = law_type:law_racial_segregation
+			has_law = law_type:law_cultural_exclusion
+		}
+		OR = {
+			has_law = law_type:law_public_schools
+			has_law = law_type:law_private_schools
+		}
+		# 52 weeks must have passed with no insurrectionary movements
+		scope:journal_entry = {
+			"scripted_bar_progress(je_kurd_governorate_institute_ottomanism_progress_bar)" = 52
+		}
+	}
+	on_complete = {
+		remove_modifier = kurd_rebellious_pop
+		add_modifier = {
+			name = kurd_governed_pop
+		}
+		remove_primary_culture = cu:kurdish
+	}
+}
+
+je_kurd_governorate_new_jannisaries = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	complete = {
+		has_law = law_type:law_professional_army
+	}
+	on_complete = {
+		remove_modifier = kurd_tribal_heritage
+		add_modifier = {
+			name = kurd_hamidiye_cavalry
+		}
+	}
+}
+
+# JE has increased political movement support to bring back national supremacy with 50% Radicalism, +-% Loyalists/Radicals from Legitimacy modifier.
+# Goal is to not have a civil war for 7 years.
+# Upon completion, replace negative modifier with Loyal Vilayet
+je_kurd_governorate_crush_the_emirs = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	group = je_group_historical_content
+	modifiers_while_active = {
+		kurd_emirs_last_stand
+	}
+	complete = {
+		# Dont have a civil war for 7 years
+	}
+	on_complete = {
+		remove_modifier = kurd_emir_comp
+		add_modifier = {
+			name = kurd_loyal_vilayet
+		}
+	}
 }

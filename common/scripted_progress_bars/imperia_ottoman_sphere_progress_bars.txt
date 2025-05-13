@@ -1,11 +1,52 @@
 ﻿kurd_pacification_core_progress_bar = {
-    name = "kurd_pacification_core_progress_bar_name"
-    desc = "kurd_pacification_core_progress_bar_ottoman_governor_desc"
-    second_desc = "kurd_pacification_core_progress_bar_kurdish_revolt_desc"
+	name = "kurd_pacification_core_progress_bar_name"
+	desc = "kurd_pacification_core_progress_bar_ottoman_governor_desc"
+	second_desc = "kurd_pacification_core_progress_bar_kurdish_revolt_desc"
+	double_sided_gold = yes
+	start_value = 13
+	min_value = 0
+	max_value = 25
+}
 
-    double_sided_gold = yes
-
-    start_value = 13
-    min_value = 0
-    max_value = 25
+je_kurd_governorate_institute_ottomanism_progress_bar = {
+	name = "je_kurd_governorate_institute_ottomanism_progress_bar"
+	desc = "je_kurd_governorate_institute_ottomanism_progress_bar_desc"
+	default_green = yes
+	weekly_progress = {
+		# Advance progress bar by 1 if there are no insurrectionary movements
+		if = {
+			limit = {
+				any_political_movement = {
+					count = all
+					is_insurrectionary = no
+				}
+			}
+			add = {
+				desc = "no_insurrectionary_movements"
+				value = 1
+			}
+		}
+		###
+		# Do a reset to 0 if there are insurrectionary movements present (or a civil war)
+		# Done this way because honestly I'm not entirely sure how the civil war triggers work
+		if = {
+			limit = {
+				OR = {
+					any_political_movement = {
+						is_insurrectionary = yes
+					}
+					any_civil_war = {
+						count > 0
+					}
+				}
+			}
+			add = {
+				desc = "insurrectionary_movement_present"
+				value = -52
+			}
+		}
+	}
+	start_value = 0
+	min_value = 0
+	max_value = 52
 }
