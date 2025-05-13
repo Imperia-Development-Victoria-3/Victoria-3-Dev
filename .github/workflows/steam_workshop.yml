@@ -1,0 +1,33 @@
+# .github/workflows/release.yml
+on:
+    push
+    
+    # :
+    #   tags:
+    #   - 'v*.*.*'
+  
+    # future https://github.com/SteamTimeIdler/stidler/wiki/Getting-your-%27shared_secret%27-code-for-use-with-Auto-Restarter-on-Mobile-Authentication
+    # https://github.com/Weilbyte/steam-workshop-upload
+  
+  
+  jobs:
+    upload_to_steam:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        - name: Set VERSION env
+          run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+  
+        - name: Upload to Steam Workshop
+          uses: weilbyte/steam-workshop-upload@v1
+          with:
+            appid: '754116'             
+            itemid: '3475926565'          
+            path: 'releases/'                
+          env:
+            STEAM_USERNAME: ${{ secrets.STEAM_ACCOUNT_ID }}
+            STEAM_PASSWORD: ${{ secrets.STEAM_ACCOUNT_PASSWORD }}
+  
