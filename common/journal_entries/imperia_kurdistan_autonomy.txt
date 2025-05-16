@@ -116,6 +116,29 @@ je_kurd_governorate_main = {
 			name = kurd_loyal_population
 		}
 	}
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					ruler = {
+						NOT = {
+							has_culture = cu:turkish
+							is_interest_group_type = ig:ig_armed_forces
+						}
+					}
+				}
+				# If the ruler/governor is not Turkish and not from the Armed Forces IG
+				# Add a new ruler of turkish culture and from the armed forces
+				create_character = {
+					culture = cu:turkish
+					interest_group = ig_armed_forces
+					ruler = yes
+					female = no
+					noble = no
+				}
+			}
+		}
+	}
 }
 
 je_kurd_governorate_institute_ottomanism = {
@@ -168,11 +191,18 @@ je_kurd_governorate_new_jannisaries = {
 je_kurd_governorate_crush_the_emirs = {
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 	group = je_group_historical_content
+	scripted_progress_bar = je_kurd_governorate_crush_emirs_progress_bar
 	modifiers_while_active = {
 		kurd_emirs_last_stand
 	}
 	complete = {
 		# Dont have a civil war for 7 years
+		custom_tooltip = {
+			text = je_7_years_without_revolt_tt
+			scope:journal_entry = {
+				"scripted_bar_progress(je_kurd_governorate_crush_emirs_progress_bar)" = 365
+			}
+		}
 	}
 	on_complete = {
 		remove_modifier = kurd_emir_comp
