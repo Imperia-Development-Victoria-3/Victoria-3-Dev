@@ -4,3 +4,31 @@ on_imperia_resource_discovered = {
 		lignite.1
 	}
 }
+
+# Root = owner Country of the Law
+# Executed when the end of a checkpoint is reached and the result is debate
+on_imperia_law_checkpoint_debate = {
+	effect = {
+		if = {
+			# This section should only happen to Kurdistan
+			# These events depends on the Kurdistan law events trigger-sections
+			limit = {
+				root ?= c:KUR
+			}
+			random = {
+				# 20% chance of Kurds protesting identity erasure, if possible
+				chance = 20
+				trigger_event = {
+					id = kurdistan_law_events.1
+					popup = yes
+				}
+			}
+			# Should trigger the Ottomanism doctrine event on the first debate
+			# Only happens once, per the events trigger
+			trigger_event = {
+				id = kurdistan_law_events.2
+				popup = yes
+			}
+		}
+	}
+}

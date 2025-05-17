@@ -1,76 +1,169 @@
 ﻿namespace = kurdistan_law_events
+# Kurds protest identity erasure
 kurdistan_law_events.1 = {
 	type = country_event
 	placement = ROOT
-	
 	title = kurdistan_law_events.1.t
 	desc = kurdistan_law_events.1.d
 	flavor = kurdistan_law_events.1.f
-	
 	category = enactment
-	
 	event_image = {
-		video = "europenorthamerica_russian_serfs"
+		video = "middleeast_police_breaking_door"
 	}
-	
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	
-	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-	
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 	duration = 3
-	
-	cooldown = { months = normal_modifier_time }
-	
+	cooldown = {
+		months = normal_modifier_time
+	}
 	trigger = {
-        has_journal_entry = je_kurd_governorate_institute_ottomanism
+		has_journal_entry = je_kurd_governorate_institute_ottomanism
 		OR = {
 			is_enacting_law = law_type:law_racial_segregation
 			is_enacting_law = law_type:law_cultural_exclusion
-			is_enacting_law = law_type:law_public_schools
-			is_enacting_law = law_type:law_private_schools
 		}
 	}
-	
 	immediate = {
 		currently_enacting_law = {
 			save_scope_as = current_law_scope
 		}
 	}
-	
 	cancellation_trigger = {
-		NOT = { currently_enacting_law = scope:current_law_scope }
+		NOT = {
+			currently_enacting_law = scope:current_law_scope
+		}
 	}
-	
+	# Force the law through
 	option = {
-        # Force the law through
 		name = kurdistan_law_events.1.a
 		default_option = yes
-        add_radicals = {
-            value = 0.2
-            culture = cu:kurdish
-        }
-		add_enactment_modifier = {
-			name = kurdistan_law_events_faster_enactment
-            multiplier = 15
+		add_radicals = {
+			value = 0.2
+			culture = cu:kurdish
 		}
-        add_modifier = {
-            name = kurdistan_law_events_forced_identity_erasure_law
-            years = 5
-        }
+		add_enactment_modifier = {
+			name = kurdistan_law_forced_through
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_events_forced_identity_erasure
+			years = 5
+		}
 	}
-	
+	# Try to moderate and propagandize the law
 	option = {
-        # Try to moderate and propagandize the law
 		name = kurdistan_law_events.1.b
-		scope:serf_mistreaters = {
+		add_radicals = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_enactment_modifier = {
+			name = kurdistan_law_moderated_and_propagandized
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_events_moderate_and_propagandize
+			years = 5
+		}
+	}
+}
+
+# Schooling seen as a threat to Kurdish culture
+kurdistan_law_events.2 = {
+	type = country_event
+	placement = ROOT
+	title = kurdistan_law_events.2.t
+	desc = kurdistan_law_events.2.d
+	flavor = kurdistan_law_events.2.f
+	category = enactment
+	event_image = {
+		video = "middleeast_police_breaking_door"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+	duration = 3
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		has_journal_entry = je_kurd_governorate_institute_ottomanism
+		OR = {
+			is_enacting_law = law_type:law_public_schools
+			is_enacting_law = law_type:law_private_schools
+		}
+		# This event should only pop once, since it adds a permanent effect
+		NOR = {
+			has_variable = ottomanism_doctrine_education
+			has_variable = mixed_education_doctrine_education
+		}
+	}
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+	cancellation_trigger = {
+		NOT = {
+			currently_enacting_law = scope:current_law_scope
+		}
+	}
+	# Ottomanism doctrine
+	option = {
+		# +15% Kurdish Radicals, +30% Turkish Loyalists, -150 Authority, +10% Enactment Chance, -15% Enactment Time/5 years
+		# Upon completion of entry, +15% Assimilation
+		name = kurdistan_law_events.2.a
+		default_option = yes
+		add_radicals = {
+			value = 0.15
+			culture = cu:kurdish
+		}
+		add_loyalists = {
+			value = 0.3
+			culture = cu:turkish
+		}
+		add_enactment_modifier = {
+			name = kurdistan_law_ottomanism_doctrine_enactment_modifier
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_ottomanism_doctrine_country_modifier
+			years = 5
+		}
+		show_as_tooltip = {
+			custom_tooltip = upon_instituting_ottomanism_tt
 			add_modifier = {
-				name = serf_mistreaters_demonized
-				months = short_modifier_time
+				name = kurdistan_permanent_ottomanism_doctrine
 			}
 		}
-		# law success chance
-		add_enactment_modifier = {
-			name = serf_mistreaters_demonized_enactment
+		set_variable = ottomanism_doctrine_education
+	}
+	# Mixed-education schooling
+	option = {
+		# +5% Kurdish Loyalists, +20% Turkish Radicals, -100 Bureaucracy, +25% Enactment Time/5 years,
+		# Upon completion of entry, +5% Education Access
+		name = kurdistan_law_events.2.b
+		add_radicals = {
+			value = 0.2
+			culture = cu:turkish
 		}
+		add_loyalists = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_enactment_modifier = {
+			name = kurdistan_law_mixed_education_enactment_modifier
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_mixed_education_country_modifier
+			years = 5
+		}
+		show_as_tooltip = {
+			custom_tooltip = upon_instituting_ottomanism_tt
+			add_modifier = {
+				name = kurdistan_permanent_mixed_education
+			}
+		}
+		set_variable = kurdish_mixed_education
 	}
 }
