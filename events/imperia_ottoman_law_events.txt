@@ -1,0 +1,76 @@
+﻿namespace = kurdistan_law_events
+kurdistan_law_events.1 = {
+	type = country_event
+	placement = ROOT
+	
+	title = kurdistan_law_events.1.t
+	desc = kurdistan_law_events.1.d
+	flavor = kurdistan_law_events.1.f
+	
+	category = enactment
+	
+	event_image = {
+		video = "europenorthamerica_russian_serfs"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	
+	duration = 3
+	
+	cooldown = { months = normal_modifier_time }
+	
+	trigger = {
+        has_journal_entry = je_kurd_governorate_institute_ottomanism
+		OR = {
+			is_enacting_law = law_type:law_racial_segregation
+			is_enacting_law = law_type:law_cultural_exclusion
+			is_enacting_law = law_type:law_public_schools
+			is_enacting_law = law_type:law_private_schools
+		}
+	}
+	
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+	
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+	
+	option = {
+        # Force the law through
+		name = kurdistan_law_events.1.a
+		default_option = yes
+        add_radicals = {
+            value = 0.2
+            culture = cu:kurdish
+        }
+		add_enactment_modifier = {
+			name = kurdistan_law_events_faster_enactment
+            multiplier = 15
+		}
+        add_modifier = {
+            name = kurdistan_law_events_forced_identity_erasure_law
+            years = 5
+        }
+	}
+	
+	option = {
+        # Try to moderate and propagandize the law
+		name = kurdistan_law_events.1.b
+		scope:serf_mistreaters = {
+			add_modifier = {
+				name = serf_mistreaters_demonized
+				months = short_modifier_time
+			}
+		}
+		# law success chance
+		add_enactment_modifier = {
+			name = serf_mistreaters_demonized_enactment
+		}
+	}
+}
