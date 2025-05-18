@@ -167,3 +167,71 @@ kurdistan_law_events.2 = {
 		set_variable = kurdish_mixed_education
 	}
 }
+
+# Kurds protest the "New Janissary" (pro. army) law
+kurdistan_law_events.3 = {
+	type = country_event
+	placement = ROOT
+	title = kurdistan_law_events.3.t
+	desc = kurdistan_law_events.3.d
+	flavor = kurdistan_law_events.3.f
+	category = enactment
+	event_image = {
+		video = "middleeast_battlefield_trenches"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	duration = 3
+	cooldown = {
+		months = normal_modifier_time
+	}
+	trigger = {
+		has_journal_entry = je_kurd_governorate_new_jannisaries
+		is_enacting_law = law_type:law_professional_army
+	}
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+	}
+	cancellation_trigger = {
+		NOT = {
+			currently_enacting_law = scope:current_law_scope
+		}
+	}
+	# [Try to force enactment of the law at the cost of Kurdish Radicals]
+	# +10% Kurdish Radicals,  -20% Enactment Time, +10 Training Rate, +15% Officers Political Strength
+	option = {
+		name = kurdistan_law_events.3.a
+		default_option = yes
+		add_radicals = {
+			value = 0.1
+			culture = cu:kurdish
+		}
+		add_enactment_modifier = {
+			name = kurdistan_law_new_jannisaries_forced_enactment_modifier
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_new_jannisaries_forced_country_modifier
+			years = 5
+		}
+	}
+	# [Compromise with Kurds but slow progress of law]
+	# +5% Kurdish Loyalists, +15% Enactment Time, +15% Servicemen PS
+	option = {
+		name = kurdistan_law_events.3.b
+		add_radicals = {
+			value = 0.05
+			culture = cu:kurdish
+		}
+		add_enactment_modifier = {
+			name = kurdistan_law_new_jannisaries_compromise_enactment_modifier
+			years = 5
+		}
+		add_modifier = {
+			name = kurdistan_law_new_jannisaries_compromise_country_modifier
+			years = 5
+		}
+	}
+}
