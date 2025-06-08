@@ -55,10 +55,10 @@ def process_dds(file_path, output_dir):
         file_path
     ]
 
-    # try:
-    subprocess.run(command, check=True)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"❌ texconv failed for {file_path}: {e}")
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"❌ texconv failed for {file_path}: {e}")
 
 
 def scan_folder(folder_path):
