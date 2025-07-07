@@ -927,15 +927,61 @@ AFS = {	#African Free State
 		trigger = {
 			scope:actor ?= {
 				capital = { region = sr:region_nile_basin }
-				any_state = {
-					owner = c:AFS
-					is_capital = yes
+				any_scope_state = {
 					region = sr:region_north_africa
 				}
 			}
 		}
 	}
 	
+}
+
+AZB = {	# Azerbaijan
+	dynamic_country_name = {
+		name = dyn_c_baku
+		adjective = dyn_c_baku_adj
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor = {
+				is_country_type = unrecognized
+				NOT = {
+					has_technology_researched = nationalism
+				}
+			}
+		}
+	}
+	
+	dynamic_country_name = {
+		name = dyn_c_baku_commune
+		adjective = dyn_c_baku_commune_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_independent_trigger = yes
+			coa_def_communist_flag_trigger = yes
+			owns_entire_state_region = STATE_AZERBAIJAN
+		}
+	}
+	
+	dynamic_country_name = {
+		name = dyn_c_centrocaspian_dictatorship
+		adjective = dyn_c_centrocaspian_dictatorship_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+			
+			coa_def_british_ensign_trigger = yes
+		}
+	}
 }
 
 BAV = {	# Bavaria
@@ -3703,54 +3749,6 @@ GEO = {
 	}
 }
 
-AZB = {	# Azerbaijan
-	dynamic_country_name = {
-		name = dyn_c_baku
-		adjective = dyn_c_baku_adj
-		
-		is_main_tag_only = yes
-		priority = 1
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor = {
-				is_country_type = unrecognized
-				NOT = {
-					has_technology_researched = nationalism
-				}
-			}
-		}
-	}
-	
-	dynamic_country_name = {
-		name = dyn_c_baku_commune
-		adjective = dyn_c_baku_commune_adj
-		
-		is_main_tag_only = yes
-		priority = 0
-		
-		trigger = {
-			coa_def_independent_trigger = yes
-			coa_def_communist_flag_trigger = yes
-			owns_entire_state_region = STATE_AZERBAIJAN
-		}
-	}
-	
-	dynamic_country_name = {
-		name = dyn_c_centrocaspian_dictatorship
-		adjective = dyn_c_centrocaspian_dictatorship_adj
-		
-		is_main_tag_only = yes
-		priority = 0
-		
-		trigger = {
-			coa_def_dictatorship_flag_trigger = yes
-			
-			coa_def_british_ensign_trigger = yes
-		}
-	}
-}
-
 LUR = {
 	dynamic_country_name = {
 		name = dyn_c_bakhtiari
@@ -4245,6 +4243,22 @@ BGL = {
 				any_overlord_or_above = {
 					has_variable = selected_federal_solution_var
 				}
+			}
+		}
+	}
+}
+
+SIB = {
+	dynamic_country_name = {
+		name = dyn_c_cyberia
+		adjective = dyn_c_cyberia_adj
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			scope:actor = {
+				has_government_type = gov_cybernetic_state
 			}
 		}
 	}
