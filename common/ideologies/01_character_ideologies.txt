@@ -943,114 +943,114 @@ ideology_radical = {
 						turmoil >= 0.25
 					}
 				}
+				add = 100
 			}
-			add = 100
-		}
-		if = {
-			limit = {
-				owner = {
+			if = {
+				limit = {
+					owner = {
+						OR = {
+							has_law = law_type:law_censorship
+							has_law = law_type:law_landed_voting
+						}
+						any_scope_state = {
+							is_incorporated = yes
+							turmoil >= 0.5
+						}
+					}
+				}
+				add = 50
+			}
+			# less likely if issues are not relevant
+			if = {
+				limit = {
+					owner = {
+						NOR = {
+							has_law = law_type:law_national_guard
+							has_law = law_type:law_secret_police
+							has_law = law_type:law_outlawed_dissent
+							has_law = law_type:law_autocracy
+							has_law = law_type:law_oligarchy
+						}
+					}
+				}
+				add = -75
+			}
+			# very unlikely for trade unions after socialism is researched
+			if = {
+				limit = {
+					is_interest_group_type = ig_trade_unions
+					owner = {
+						has_technology_researched = socialism
+					}
+				}
+				add = -200
+			}
+			if = {
+				limit = {
+					owner = {
+						has_global_variable = peoples_springtime_happening
+						OR = {
+							capital.region = sr:region_north_germany
+							capital.region = sr:region_south_germany
+							capital.region = sr:region_england
+							capital.region = sr:region_iberia
+							capital.region = sr:region_france
+							capital.region = sr:region_occitania
+							capital.region = sr:region_rhine
+							capital.region = sr:region_italy
+							capital.region = sr:region_poland
+							capital.region = sr:region_danubia
+							capital.region = sr:region_balkans
+							capital.region = sr:region_baltic
+						}
+					}
+				}
+				multiply = {
+					value = 2.5
+				}
+			}
+			if = {
+				limit = {
+					owner = { has_modifier = post_revolutionary_fervor }
+				}
+				multiply = { value = 2 }
+			}
+			if = {
+				limit = {
+					owner = { has_modifier = counter_revolutionary_fervor }
+				}
+				multiply = { value = 0.5 }
+			}
+			# liberal and/or radical leaders have a higher spawn chance if the Dreyfusards won.
+			if = {
+				limit = {
+					has_variable = dreyfusard_victory
+				}
+				add = 50
+			}
+			# Pedro JE victory
+			if = {
+				limit = {
+					owner = {
+						has_variable = brz_enduring_empire
+					}
+				}
+				add = -25
+			}
+			if = {
+				limit = {
 					OR = {
-						has_law = law_type:law_censorship
-						has_law = law_type:law_landed_voting
-					}
-					any_scope_state = {
-						is_incorporated = yes
-						turmoil >= 0.5
-					}
-				}
-			}
-			add = 50
-		}
-		# less likely if issues are not relevant
-		if = {
-			limit = {
-				owner = {
-					NOR = {
-						has_law = law_type:law_national_guard
-						has_law = law_type:law_secret_police
-						has_law = law_type:law_outlawed_dissent
-						has_law = law_type:law_autocracy
-						has_law = law_type:law_oligarchy
+						has_variable = communist_ig_var
+						has_variable = chose_vanguardism
+						has_variable = chose_anarchism
+						has_variable = chose_communism
+						has_variable = chose_ethno_nationalism
+						has_variable = chose_conservatism
+						has_variable = chose_fascism
 					}
 				}
+				multiply = 0.1
 			}
-			add = -75
-		}
-		# very unlikely for trade unions after socialism is researched
-		if = {
-			limit = {
-				is_interest_group_type = ig_trade_unions
-				owner = {
-					has_technology_researched = socialism
-				}
-			}
-			add = -200
-		}
-		if = {
-			limit = {
-				owner = {
-					has_global_variable = peoples_springtime_happening
-					OR = {
-						capital.region = sr:region_north_germany
-						capital.region = sr:region_south_germany
-						capital.region = sr:region_england
-						capital.region = sr:region_iberia
-						capital.region = sr:region_france
-						capital.region = sr:region_occitania
-						capital.region = sr:region_rhine
-						capital.region = sr:region_italy
-						capital.region = sr:region_poland
-						capital.region = sr:region_danubia
-						capital.region = sr:region_balkans
-						capital.region = sr:region_baltic
-					}
-				}
-			}
-			multiply = {
-				value = 2.5
-			}
-		}
-		if = {
-			limit = {
-				owner = { has_modifier = post_revolutionary_fervor }
-			}
-			multiply = { value = 2 }
-		}
-		if = {
-			limit = {
-				owner = { has_modifier = counter_revolutionary_fervor }
-			}
-			multiply = { value = 0.5 }
-		}
-		# liberal and/or radical leaders have a higher spawn chance if the Dreyfusards won.
-		if = {
-			limit = {
-				has_variable = dreyfusard_victory
-			}
-			add = 50
-		}
-		# Pedro JE victory
-		if = {
-			limit = {
-				owner = {
-					has_variable = brz_enduring_empire
-				}
-			}
-			add = -25
-		}
-		if = {
-			limit = {
-				OR = {
-					has_variable = communist_ig_var
-					has_variable = chose_vanguardism
-					has_variable = chose_anarchism
-					has_variable = chose_communism
-					has_variable = chose_ethno_nationalism
-					has_variable = chose_conservatism
-					has_variable = chose_fascism
-				}
-			}
-			multiply = 0.1
 		}
 	}
 	
