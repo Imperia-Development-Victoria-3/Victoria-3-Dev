@@ -189,14 +189,29 @@ victoria.3 = {
 		}
 		default_option = yes
 		c:GBR = {
+			save_temporary_scope_value_as = {
+				name = war_reparations_amount
+				value = {
+					value = c:HAN.income
+					multiply = define:NDiplomacy|DEFAULT_WAR_REPARATIONS_MONEY_TRANSFER
+				}
+			}
 			create_diplomatic_play = {
 				name = hannover_succession_war
 				target_country = c:HAN
 				type = dp_humiliation
 				add_war_goal = {
 					holder = c:GBR
-					type = war_reparations
+					type = enforce_treaty_article
 					target_country = c:HAN
+					article = {
+						article = money_transfer
+						source_country = c:GBR
+						target_country = c:HAN
+						inputs = {
+							{ quantity = scope:war_reparations_amount }
+						}
+					}
 				}
 				add_war_goal = {
 					holder = c:HAN
