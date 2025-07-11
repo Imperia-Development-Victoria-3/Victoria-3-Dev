@@ -42,7 +42,7 @@ template diplomatic_action_button_properties {
 	icon = {
 		visible = "[DiplomaticAction.IsActivePact]"
 		using = highlighted_square_selection
-	}	
+	}
 }
 
 template diplomatic_action_button_after_label {
@@ -77,7 +77,7 @@ template diplomatic_action_button_after_label {
 
 		widget = {
 			size = { 30 30 }
-			
+
 			diplomatic_action_acceptance_icon = {
 				visible = "[Not(DiplomaticAction.GetType.CanSelectAnyState)]"
 			}
@@ -344,7 +344,7 @@ types country_panel_types
 
 			button_icon_zoom = {
 				onclick = "[State.ZoomToCapital]"
-				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"			
+				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"
 				visible = "[Not(GetVariableSystem.Exists('zoom_close_to_capital'))]"
 
 				tooltip = "ZOOM_TO_STATE"
@@ -354,7 +354,7 @@ types country_panel_types
 
 			button_icon_zoom = {
 				onclick = "[State.ZoomExtraCloseToCapital]"
-				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"			
+				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"
 				visible = "[GetVariableSystem.Exists('zoom_close_to_capital')]"
 
 				tooltip = "ZOOM_CLOSE_TO_STATE"
@@ -423,7 +423,7 @@ types country_panel_types
 				}
 			}
 
-			
+
 
 			flowcontainer = {
 				parentanchor = bottom
@@ -434,7 +434,7 @@ types country_panel_types
 					parentanchor = right
 
 					spacing = -2 #this flowcontainer is a BIT too wide compared to the government info below it
- 
+
 					# DIPLOMATIC PACTS
 					flowcontainer = {
 						datamodel = "[Country.AccessActiveDiplomaticPactTypes]"
@@ -474,7 +474,7 @@ types country_panel_types
 						blockoverride "commander_order_icon" {}
 					}
 				}
-				
+
 				#GOVERNMENT
 				flowcontainer = {
 					direction = vertical
@@ -642,7 +642,7 @@ types country_panel_types
 					blockoverride "stats_label" {
 						text = "[concept_rank]"
 					}
-					
+
 					blockoverride "stats_value" {
 						raw_text = "#v [Country.GetRank]#!"
 					}
@@ -1391,7 +1391,7 @@ types country_panel_types
 				}
 			}
 		}
-	}	
+	}
 }
 
 types diplomatic
@@ -1697,9 +1697,9 @@ types diplomatic
 						text = "YOUR_LIBERTY_DESIRE"
 					}
 				}
-			}	
+			}
 
-			### OVERLORD - PLAYER LIBERTY DESIRE BAR 
+			### OVERLORD - PLAYER LIBERTY DESIRE BAR
 			liberty_desire_bar_and_buttons = {
 
 				parentanchor = hcenter|bottom
@@ -1824,7 +1824,7 @@ types diplomatic
 		}
 
 		block "liberty_desire_overlord_datacontext" {}
-		
+
 		# PROGRESSBAR AND FRAME
 		widget = {
 			block "progressbar_and_frame_parentanchor" {
@@ -1866,7 +1866,7 @@ types diplomatic
 					blockoverride "last_level" {
 						visible = "[Not(EqualTo_CFixedPoint( LibertyDesireLevel.GetUpperBound, '(CFixedPoint)100' ))]"
 					}
-				}		
+				}
 			}
 
 			block "liberty_desire_frame" {
@@ -1887,7 +1887,7 @@ types diplomatic
 			# Unfortunately we cannot simply use GetPlayer.IsSubject here because that's less specific than IsSubjectOf.
 			# We need to use IsSubjectOf cause we want to make sure we're dealing with a direct subject.
 			visible = "[Not(Or(GetPlayer.IsSubjectOf(Country.Self), Country.IsSubjectOf(GetPlayer.Self)))]"
-			
+
 			block "buttons_widget_position_and_size" {
 				position = { 0 1 }
 				size { 294 40 }
@@ -1900,7 +1900,7 @@ types diplomatic
 				block "autonomy_button_size" {
 					size = { 40	40 }
 				}
-				
+
 				icon = {
 					visible = "[SubjectType.GetLowerAutonomySubjectType(Country.Self).IsValid]"
 					parentanchor = center
@@ -1927,7 +1927,7 @@ types diplomatic
 				block "autonomy_button_size" {
 					size = { 40	40 }
 				}
-				
+
 				icon = {
 					visible = "[SubjectType.GetHigherAutonomySubjectType(Country.Self).IsValid]"
 					parentanchor = center
@@ -1952,7 +1952,7 @@ types diplomatic
 		widget = {
 			parentanchor = center
 			visible = "[Or(GetPlayer.IsSubjectOf(Country.Self), Country.IsSubjectOf(GetPlayer.Self))]"
-			
+
 			block "buttons_widget_position_and_size" {
 				position = { 0 1 }
 				size { 294 40 }
@@ -2359,7 +2359,7 @@ types country_panel_treaties_types
 								spacing = 2
 								margin_right = 10
 								alpha = "[TransparentIfTrue(IsDataModelEmpty(Country.GetUnenforcedTreatiesWith(GetPlayer.Self)))]"
-								
+
 								icon = {
 									parentanchor = vcenter
 									size = { 30 30 }
@@ -2487,6 +2487,7 @@ types country_panel_treaties_types
 						item = {
 							flowcontainer = {
 								datamodel = "[Treaty.GetMutualAgreements]"
+								alpha = "[TransparentIfTrue(Treaty.IsFrozenForBothCountries)]"
 
 								item = {
 									article_icon_all_items = {
@@ -2530,13 +2531,13 @@ types country_panel_treaties_types
 						spacing = 2
 						margin_right = 10
 						alpha = "[TransparentIfTrue(IsDataModelEmpty(CountryPanel.GetCountry.GetUnenforcedTreatiesWith(Country.Self)))]"
-						
+
 						icon = {
 							parentanchor = vcenter
 							size = { 30 30 }
 							texture = "gfx/interface/icons/generic_icons/diplomatic_treaties.dds"
 						}
-						
+
 						textbox = {
 							parentanchor = vcenter
 							autoresize = yes
@@ -2642,7 +2643,7 @@ types country_panel_treaties_types
 					align = nobaseline
 					using = elide_fontsize_min
 					text = "[Treaty.GetName]"
-					
+
 					block "treaty_name_max_width" {
 						max_width = 300
 					}
@@ -2783,7 +2784,7 @@ types country_panel_treaties_types
 				margin = { 0 10 }
 				margin_left = 10
 				datacontext = "[Treaty.GetLeftCountry]"
-				alpha = "[TransparentIfTrue(NotZero(GetDataModelSize(Treaty.GetNonFulfilledArticlesFromSource(Treaty.GetOtherCountry(Country.Self).Self))))]"
+				alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
 
 				dynamicgridbox = {
 					flipdirection = yes
@@ -2804,18 +2805,18 @@ types country_panel_treaties_types
 				parentanchor = hcenter
 				margin = { 0 10 }
 				spacing = 10
-				
+
 
 				flowcontainer = {
 					parentanchor = vcenter
 					direction = vertical
 					datacontext = "[Treaty.GetLeftCountry]"
-					
+
 					widget = {
 						visible = "[And(Treaty.GetLeftCountry.IsPlayer, Not(Or(And(Treaty.DoesOweObligation(Country.Self), Treaty.AreObligationsEffectuated), And(Treaty.DoesOweObligation(Country.Self), Not(Treaty.AreObligationsEffectuated)))))]"
 						parentanchor = vcenter
 						size = { 20 20 }
-					}				
+					}
 
 					widget = {
 						visible = "[Not(Country.IsPlayer)]"
@@ -2886,6 +2887,7 @@ types country_panel_treaties_types
 				dynamicgridbox = {
 					datacontext = "[Treaty.GetLeftCountry]"
 					datamodel = "[Treaty.GetMutualAgreements]"
+					alpha = "[TransparentIfTrue(Treaty.IsFrozenForBothCountries)]"
 
 					item = {
 						article_icon_all_items = {}
@@ -2975,7 +2977,7 @@ types country_panel_treaties_types
 				margin = { 0 10 }
 				margin_right = 10
 				datacontext = "[Treaty.GetRightCountry]"
-				alpha = "[TransparentIfTrue(NotZero(GetDataModelSize(Treaty.GetNonFulfilledArticlesFromSource(Treaty.GetOtherCountry(Country.Self).Self))))]"
+				alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
 
 				dynamicgridbox = {
 					layoutanchor = topright
@@ -3030,7 +3032,7 @@ types country_panel_treaties_types
 					align = nobaseline
 					using = elide_fontsize_min
 					text = "[Treaty.GetName]"
-					
+
 					block "treaty_name_max_width" {
 						max_width = 300
 					}
@@ -3226,7 +3228,7 @@ types country_panel_treaties_types
 				block "article_texture" {
 					texture = "[Article.GetIcon]"
 				}
-				
+
 				block "icon_size" {
 					size = { 40 40 }
 				}
@@ -3328,7 +3330,7 @@ types country_panel_treaties_types
 					size = { 30 30  }
 					position = { -2 -2 }
 					texture = "gfx/interface/backgrounds/round_button_bg.dds"
-				
+
 
 					icon = {
 						parentanchor = center
@@ -3828,7 +3830,7 @@ types war_panel
 				texture = "[ContextualDiplomaticActionType.GetDiplomaticActionType.GetTexture]"
 				size = { 40 40 }
 				parentanchor = vcenter
-				
+
 				datacontext = "[ContextualDiplomaticActionType.GetDiplomaticActionType]"
 				tooltipwidget = {
 					FancyTooltip_DiplomaticActionType = {
@@ -3891,7 +3893,7 @@ types war_panel
 					size = { 30 30 }
 				}
 			}
-			
+
 			icon = {
 				visible = "[And(Not(DiplomaticAction.WillAIAcceptNoObligation),DiplomaticAction.WillAIMaybeAcceptNoObligation)]"
 				texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
@@ -3899,7 +3901,7 @@ types war_panel
 				block "icon_size" {
 					size = { 30 30 }
 				}
-			}			
+			}
 
 			container = {
 				visible = "[And(Not(DiplomaticAction.WillAIAcceptNoObligation),Not(DiplomaticAction.WillAIMaybeAcceptNoObligation))]"
@@ -3917,7 +3919,7 @@ types war_panel
 					visible = "[Or(DiplomaticAction.WillAIAcceptWithOweObligation,DiplomaticAction.WillAIMaybeAcceptWithOweObligation)]"
 					alpha = 0.5
 					texture = "gfx/interface/icons/generic_icons/obligation.dds"
-					
+
 					block "icon_size" {
 						size = { 30 30 }
 					}
@@ -3926,7 +3928,7 @@ types war_panel
 				icon = {
 					visible = "[And(Not(Or(DiplomaticAction.WillAIAcceptWithOweObligation,DiplomaticAction.WillAIMaybeAcceptWithOweObligation)), Not(And( DiplomaticAction.CanCallInObligation, Or(DiplomaticAction.WillAIAcceptWithCallInObligation,DiplomaticAction.WillAIMaybeAcceptWithCallInObligation))))]"
 					texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
-					
+
 					block "icon_size" {
 						size = { 30 30 }
 					}
@@ -3939,7 +3941,7 @@ types war_panel
 
 			icon = {
 				texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
-				
+
 				block "icon_size" {
 					size = { 30 30 }
 				}
@@ -3952,7 +3954,7 @@ types war_panel
 		size = { @panel_width 50 }
 		enabled = "[IsValid(DiplomaticAction.ExecuteAction)]"
 		onclick = "[DiplomaticAction.ExecuteWithConfirmation]"
-		
+
 		block "sound" {
 			using = generic_diplomatic_action_sound
 		}
@@ -3960,7 +3962,7 @@ types war_panel
 		tooltipwidget = {
 			FancyTooltip_DiplomaticActionWithTargetCountry = {}
     	}
-		
+
 		icon = {
 			parentanchor = vcenter
 			position = { 10 0 }
@@ -4019,7 +4021,7 @@ types war_panel
 		onclick = "[DiplomaticPlayType.ShowConfirmationCountry(Country.Self)]"
 		onmousehierarchyenter = "[AccessHighlightManager.HighlightCountry(Country.Self)]"
 		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
-		
+
 		blockoverride "sound" {
 			using = diplomatic_play_confirmation_sound
 		}
@@ -4052,7 +4054,7 @@ types war_panel
 		onclick = "[DiplomaticPlayType.ShowConfirmationState(State.Self)]"
 		onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
 		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
-		
+
 		blockoverride "sound" {
 			using = confirm_button_sound
 		}
@@ -4268,7 +4270,7 @@ types country_info
 	type panel_dropdown = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
-			
+
 		section_header_button = {
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -4335,7 +4337,7 @@ types country_info
 				block "empty_state_text" {
 					raw_text = "No items"
 				}
-			}				
+			}
 		}
 
 		block "second_list" {
