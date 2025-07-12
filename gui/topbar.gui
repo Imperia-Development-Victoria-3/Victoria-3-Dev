@@ -150,7 +150,7 @@ types topbar_components
 					using = tooltip_below
 					onmousehierarchyenter = "[SetTempMapModeByKey('mm_radicals')]"
 					onmousehierarchyleave = "[RemoveTempMapMode]"
-					alpha = "[TransparentIfZero_int32(Country.GetNumRadicals)]"
+					alpha = "[TransparentIfZero_int64(Country.GetNumRadicals)]"
 					alwaystransparent = no
 			
 					icon = {
@@ -173,7 +173,7 @@ types topbar_components
 					using = tooltip_below
 					onmousehierarchyenter = "[SetTempMapModeByKey('mm_loyalists')]"
 					onmousehierarchyleave = "[RemoveTempMapMode]"
-					alpha = "[TransparentIfZero_int32(Country.GetNumLoyalists)]"
+					alpha = "[TransparentIfZero_int64(Country.GetNumLoyalists)]"
 					alwaystransparent = no
 			
 					icon = {
@@ -625,6 +625,55 @@ types topbar_components
 										}
 										blockoverride "value_right" {
 											value = "[FixedPointToFloat(GetPlayer.GetExcessPowerRatioForProgressBar('influence'))]"
+										}
+									}
+								}
+							}
+
+							block "convoys_info" {
+								button = {
+									name = "tutorial_highlight_convoys"
+									using = glow_button
+									size = { 100 40 }
+									tooltip = "CONVOY_TOPBAR_TOOLTIP"
+									using = tooltip_below
+									onclick = "[InformationPanelBar.OpenMarketPanel(AccessPlayer.AccessFirstMarket.Self)]"
+									enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
+									alpha = "[TransparentIfZero(GetPlayer.GetSupplyNetworkStrength)]"
+
+									widget = {
+										size = { 32 32 }
+										name = convoys_icon
+										parentanchor = vcenter
+										position = { 0 2 }
+
+										icon = {
+											parentanchor = center
+											size = { 28 28 }
+											texture = "gfx/interface/icons/topbar/convoys.dds"
+										}
+
+									}
+									textbox = {
+										position = { 35 -3 }
+										name = capital_value
+										raw_text = "#bold [GetPlayer.GetNumAvailableConvoys|=+D]#!"
+										align = left|nobaseline
+										using = fontsize_large
+										autoresize = yes
+										parentanchor = vcenter
+									}
+
+									double_direction_progressbar = {
+										size = { 60 6 }
+										position = { 40 -3 }
+										parentanchor = bottom
+
+										blockoverride "value_left" {
+											value = "[Negate_float(FixedPointToFloat(GetPlayer.GetDeficitConvoyRatioForProgressBar))]"
+										}
+										blockoverride "value_right" {
+											value = "[FixedPointToFloat(GetPlayer.GetExcessConvoyRatioForProgressBar)]"
 										}
 									}
 								}

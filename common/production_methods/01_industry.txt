@@ -413,12 +413,12 @@ pm_elastics = {
 	
 	building_modifiers = {
 		workforce_scaled = {
-			# input goods	
+			# input goods
 			goods_input_rubber_add = 10	# x40 = -400
 			goods_input_silk_add = 35	# x40 = -1400
 			goods_input_fabric_add = -35	# x20 =  600
 
-			# output goods	
+			# output goods
 			goods_output_clothes_add = -70	# x30 = -2100
 			goods_output_luxury_clothes_add = 70	# x60 =  4200
 		}
@@ -1070,7 +1070,7 @@ pm_assembly_lines_building_tooling_workshops = {
 	
 	state_modifiers = {
 		workforce_scaled = {
-			state_pollution_generation_add = 10
+			state_pollution_generation_add = 5
 		}
 	}
 	
@@ -1810,41 +1810,6 @@ pm_diesel_engines = {
 	}
 }
 
-pm_automobiles_disabled = {
-	texture = "gfx/interface/icons/production_method_icons/no_automobiles.dds"
-}
-
-pm_automobile_production = {
-	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
-	}
-	
-	unlocking_technologies = {
-		combustion_engine
-	}
-	
-	building_modifiers = {
-		workforce_scaled = {
-			# input goods
-			goods_output_engines_add = -20
-			goods_input_rubber_add = 10
-			goods_input_oil_add = 10
-
-			# output goods
-			goods_output_automobiles_add = 30
-		}
-		
-		level_scaled = {
-			# employment
-			building_employment_machinists_add = 1000
-			building_employment_engineers_add = 500
-		}
-	}
-}
-
 pm_watertube_boiler_building_motor_industry = {
 	texture = "gfx/interface/icons/production_method_icons/watertube_boiler.dds"
 	
@@ -1900,6 +1865,35 @@ pm_rotary_valve_engine_building_motor_industry = {
 }
 
 pm_assembly_lines_building_motor_industry = {
+	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+	
+	unlocking_technologies = {
+		conveyors
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# input goods
+			goods_input_tools_add = 5
+			goods_input_oil_add = 5
+			goods_input_electricity_add = 5
+		}
+		
+		level_scaled = {
+			building_employment_laborers_add = -1500
+			building_employment_machinists_add = -500
+		}
+	}
+	
+	required_input_goods = electricity
+}
+
+pm_assembly_lines_building_automotive_industry = {
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 	state_modifiers = {
 		workforce_scaled = {
@@ -2158,27 +2152,94 @@ pm_military_shipbuilding_steam_2 = {
 	required_input_goods = electricity
 }
 
-pm_aeroplane_production = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+pm_automobile_production = {
+	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	unlocking_technologies = {
+		combustion_engine
+	}
 	
 	building_modifiers = {
 		workforce_scaled = {
 			# input goods
 			goods_input_engines_add = 10
-			goods_input_hardwood_add = 20
-			goods_input_fabric_add = 20
-			goods_input_oil_add = 20
+			goods_input_rubber_add = 5
+			goods_input_oil_add = 5
 
 			# output goods
-			goods_output_aeroplanes_add = 50
+			goods_output_automobiles_add = 30
 		}
 		
 		level_scaled = {
-			# employment
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1500
+			building_employment_engineers_add = 1000
+		}
+	}
+}
+
+pm_mass_automobile_production = {
+	texture = "gfx/interface/icons/production_method_icons/standardized_automobiles.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+	
+	unlocking_technologies = {
+		compression_ignition
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# input goods
+			goods_input_engines_add = 10
+			goods_input_rubber_add = 10
+			goods_input_oil_add = 10
+
+			# output goods
+			goods_output_automobiles_add = 60
+		}
+		
+		level_scaled = {
 			building_employment_shopkeepers_add = 500
 			building_employment_laborers_add = 1500
-			building_employment_machinists_add = 2000
-			building_employment_engineers_add = 1000
+			building_employment_machinists_add = 1500
+			building_employment_engineers_add = 1500
+		}
+	}
+}
+
+pm_no_aeroplane_production = {
+	texture = "gfx/interface/icons/production_method_icons/no_aeroplanes.dds"
+}
+
+pm_aeroplane_production = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	
+	unlocking_technologies = {
+		military_aviation
+	}
+	
+	building_modifiers = {
+		workforce_scaled = {
+			# input goods
+			goods_input_hardwood_add = 4
+			goods_input_fabric_add = 4
+
+			# output goods
+			goods_output_automobiles_add = -10
+			goods_output_aeroplanes_add = 10
+		}
+		
+		level_scaled = {
+			building_employment_engineers_add = 250
 		}
 	}
 }
@@ -2197,18 +2258,15 @@ pm_tank_production = {
 	building_modifiers = {
 		workforce_scaled = {
 			# input goods
-			goods_input_engines_add = 10
-			goods_input_steel_add = 20
-			goods_input_oil_add = 10
-			goods_output_aeroplanes_add = -10
+			goods_input_steel_add = 5
 
 			# output goods
-			goods_output_tanks_add = 40
+			goods_output_automobiles_add = -20
+			goods_output_tanks_add = 20
 		}
 		
 		level_scaled = {
-			# employment
-			building_employment_engineers_add = 500
+			building_employment_engineers_add = 250
 		}
 	}
 }

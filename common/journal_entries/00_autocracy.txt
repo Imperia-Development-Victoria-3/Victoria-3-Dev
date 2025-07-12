@@ -20,6 +20,9 @@
 			name = autocracy_var
 			value = 1
 		}
+		random_primary_culture = {
+			save_scope_as = primary_culture_scope
+		}
 	}
 	on_monthly_pulse = {
 		effect = {
@@ -38,8 +41,11 @@
 				}
 			}
 		}
+	}
+	
+	on_yearly_pulse = {
 		random_events = {
-			10 = 0
+			5 = 0
 			1 = autocracy.2	#Secret Societies event. Punish or let be an IG against authoritarianism - Intelligentsia only?
 			1 = autocracy.3	#Blessed are the Meek. Extra loyalists/less radicals from SoL changes
 		}
@@ -63,8 +69,20 @@
 			name = chose_autocracy
 		}
 	}
+	
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_autocracy.1_tt
+			}
+		}
+	}
+	
 	fail = {
-		is_autocratic = no
+		OR = {
+			NOT = { has_law = law_type:law_state_religion }
+			NOT = { has_law = law_type:law_autocracy }
+		}
 	}
 	current_value = {
 		value = {

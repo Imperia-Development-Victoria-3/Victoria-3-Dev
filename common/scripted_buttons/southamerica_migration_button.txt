@@ -4,15 +4,13 @@
 	
 	visible = { always = yes }
 	
+	cooldown = { days = normal_modifier_time }
+	
 	possible = {
 		hidden_trigger = {
 			has_variable = enable_sa_migration_button
 		}
 		# Note that this closely reflects triggers in the event. Do not change one without changing both
-		custom_tooltip = {
-			text = migration_button_cooldown_tt
-			NOT = { has_variable = sa_migration_cooldown }
-		}
 		average_sol >= 10
 		any_country = {
 			custom_tooltip = {
@@ -76,15 +74,11 @@
 		}
 		NOR = {
 			has_law = law_type:law_closed_borders
-			has_law = law_type:law_isolationism
+			has_law_or_variant = law_type:law_isolationism
 		}
 	}
 	
 	effect = {
-		set_variable = {
-			name = sa_migration_cooldown
-			months = normal_modifier_time
-		}
 		custom_tooltip = {
 			text = mass_migration_button_tt
 		}
@@ -92,13 +86,13 @@
 		show_as_tooltip = {
 			add_modifier = {
 				name = sa_migration_cost
-				months = normal_modifier_time
+				days = normal_modifier_time
 			}
 		}
 	}
 	
 	ai_chance = {
-		base = 1
+		value = 1
 	}
 }
 
@@ -127,11 +121,11 @@ patagonia_button = {
 	effect = {
 		add_modifier = {
 			name = patagonia_campaign
-			months = long_modifier_time
+			days = long_modifier_time
 		}
 	}
 	
 	ai_chance = {
-		base = 10
+		value = 10
 	}
 }

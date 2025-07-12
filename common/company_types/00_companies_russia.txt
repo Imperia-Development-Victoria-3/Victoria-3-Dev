@@ -5,9 +5,20 @@ company_vodka_monopoly = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_INGRIA STATE_MOSCOW }
+	
 	building_types = {
 		building_food_industry
 		building_vineyard_plantation
+	}
+	
+	extension_building_types = {
+		building_wheat_farm
+		building_rye_farm
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_smirnoff_vodka
 	}
 	
 	potential = {
@@ -29,6 +40,28 @@ company_vodka_monopoly = {
 		state_radicals_from_political_movements_mult = -0.15
 	}
 	
+	ai_will_do = {
+		NOT = { has_law = law_type:law_laissez_faire }
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_INGRIA
+				state_region = s:STATE_MOSCOW
+			}
+		}
+	}
+	
+	ai_construction_targets = {
+		building_food_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_INGRIA
+					state_region = s:STATE_MOSCOW
+				}
+			}
+		}
+	}
+	
 	ai_weight = {
 		value = 3	# Higher base value for flavored companies
 	}
@@ -41,10 +74,27 @@ company_putilov_company = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_INGRIA }
+	
 	building_types = {
 		building_motor_industry
 		building_military_shipyards
 		building_artillery_foundries
+	}
+	
+	extension_building_types = {
+		building_munition_plants
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_artillery
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_artillery_complete_tt
+			has_variable = prestige_good_generic_artillery_var
+		}
 	}
 	
 	potential = {
@@ -60,6 +110,7 @@ company_putilov_company = {
 	}
 	
 	possible = {
+		has_technology_researched = railways
 		any_scope_state = {
 			state_region = s:STATE_INGRIA
 			is_incorporated = yes
@@ -69,15 +120,43 @@ company_putilov_company = {
 					is_building_type = building_military_shipyards
 					is_building_type = building_artillery_foundries
 				}
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = railways
 	}
 	
 	prosperity_modifier = {
 		building_railway_throughput_add = 0.1
 		state_infrastructure_mult = 0.05
+	}
+	
+	ai_will_do = {
+		has_technology_researched = railways
+		any_scope_state = {
+			state_region = s:STATE_INGRIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_military_shipyards = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_INGRIA
+			}
+		}
+		building_artillery_foundries = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_INGRIA
+			}
+		}
+		building_motor_industry = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_INGRIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -92,8 +171,18 @@ company_branobel = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_AZERBAIJAN }
+	
 	building_types = {
 		building_oil_rig
+	}
+	
+	extension_building_types = {
+		building_power_plant
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_baku_oil
 	}
 	
 	potential = {
@@ -109,6 +198,7 @@ company_branobel = {
 	}
 	
 	possible = {
+		has_technology_researched = pumpjacks
 		any_scope_state = {
 			state_region = s:STATE_AZERBAIJAN
 			any_scope_building = {
@@ -116,12 +206,27 @@ company_branobel = {
 				level >= 5
 			}
 		}
-		has_technology_researched = pumpjacks
 	}
 	
 	prosperity_modifier = {
 		state_migration_pull_mult = 0.1
 		building_railway_throughput_add = 0.05
+	}
+	
+	ai_will_do = {
+		has_technology_researched = pumpjacks
+		any_scope_state = {
+			state_region = s:STATE_AZERBAIJAN
+		}
+	}
+	
+	ai_construction_targets = {
+		building_oil_rig = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_AZERBAIJAN
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -136,9 +241,27 @@ company_izhevsk_arms_plant = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_PERM }
+	
 	building_types = {
 		building_arms_industry
 		building_munition_plants
+	}
+	
+	extension_building_types = {
+		building_artillery_foundries
+		building_steel_mills
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_small_arms
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_small_arms_complete_tt
+			has_variable = prestige_good_generic_small_arms_var
+		}
 	}
 	
 	potential = {
@@ -154,20 +277,36 @@ company_izhevsk_arms_plant = {
 	}
 	
 	possible = {
+		has_technology_researched = rifling	# corresponds roughly with the Izhevsk plant's incorporation as a private commercial enterprise, and not a state arsenal.
 		any_scope_state = {
 			state_region = s:STATE_PERM
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_arms_industry
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = rifling	# corresponds roughly with the Izhevsk plant's incorporation as a private commercial enterprise, and not a state arsenal.
 	}
 	
 	prosperity_modifier = {
 		building_arms_industry_throughput_add = 0.1
 		building_artillery_foundries_throughput_add = 0.1
+	}
+	
+	ai_will_do = {
+		has_technology_researched = rifling
+		any_scope_state = {
+			state_region = s:STATE_PERM
+		}
+	}
+	
+	ai_construction_targets = {
+		building_arms_industry = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_PERM
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -182,8 +321,25 @@ company_savva_morozov = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_MOSCOW }
+	
 	building_types = {
 		building_textile_mills
+	}
+	
+	extension_building_types = {
+		building_cotton_plantation
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_clothes
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_clothes_complete_tt
+			has_variable = prestige_good_generic_clothes_var
+		}
 	}
 	
 	potential = {
@@ -199,20 +355,37 @@ company_savva_morozov = {
 	}
 	
 	possible = {
+		has_technology_researched = joint_stock_companies
 		any_scope_state = {
 			state_region = s:STATE_MOSCOW
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_textile_mills
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = joint_stock_companies
 	}
 	
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
 		interest_group_ig_industrialists_pop_attraction_mult = 0.1
+	}
+	
+	ai_will_do = {
+		has_technology_researched = joint_stock_companies
+		any_scope_state = {
+			state_region = s:STATE_MOSCOW
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_arms_industry = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_MOSCOW
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -227,10 +400,20 @@ company_john_hughes = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_KHARKOV STATE_TAURIDA }
+	
 	building_types = {
 		building_steel_mills
 		building_coal_mine
 		building_iron_mine
+	}
+	
+	extension_building_types = {
+		building_railway
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_russia_iron
 	}
 	
 	potential = {
@@ -240,14 +423,21 @@ company_john_hughes = {
 	attainable = {
 		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
 			any_scope_state = {
-				state_region = s:STATE_KHARKOV
+				OR = {
+					state_region = s:STATE_KHARKOV
+					state_region = s:STATE_TAURIDA
+				}
 			}
 		}
 	}
 	
 	possible = {
+		has_technology_researched = bessemer_process
 		any_scope_state = {
-			state_region = s:STATE_KHARKOV
+			OR = {
+				state_region = s:STATE_KHARKOV
+				state_region = s:STATE_TAURIDA
+			}
 			is_incorporated = yes
 			any_scope_building = {
 				OR = {
@@ -255,15 +445,58 @@ company_john_hughes = {
 					is_building_type = building_coal_mine
 					is_building_type = building_iron_mine
 				}
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = bessemer_process
 	}
 	
 	prosperity_modifier = {
 		building_railway_throughput_add = 0.1
 		interest_group_ig_industrialists_approval_add = 2
+	}
+	
+	ai_will_do = {
+		has_technology_researched = bessemer_process
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_KHARKOV
+				state_region = s:STATE_TAURIDA
+			}
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_steel_mills = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KHARKOV
+					state_region = s:STATE_TAURIDA
+				}
+				is_incorporated = yes
+			}
+		}
+		building_coal_mine = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KHARKOV
+					state_region = s:STATE_TAURIDA
+				}
+				is_incorporated = yes
+			}
+		}
+		building_iron_mine = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KHARKOV
+					state_region = s:STATE_TAURIDA
+				}
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {

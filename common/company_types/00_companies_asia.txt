@@ -11,12 +11,25 @@ company_east_india_company = {
 		building_opium_plantation
 	}
 	
+	extension_building_types = {
+		building_silk_plantation
+		building_sugar_plantation
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_bengal_opium
+	}
+	
 	potential = {
-		c:BIC ?= this
+		c:GBR ?= this
 	}
 	
 	possible = {
-		c:BIC ?= this
+		c:GBR ?= this
+		OR = {
+			has_law = law_type:law_mercantilism
+			has_law = law_type:law_protectionism
+		}
 		any_scope_state = {
 			OR = {
 				region = sr:region_madras
@@ -31,18 +44,70 @@ company_east_india_company = {
 					is_building_type = building_tobacco_plantation
 					is_building_type = building_opium_plantation
 				}
-				level >= 3
+				level >= 5
 			}
-			count >= 4
-		}
-		OR = {
-			has_law = law_type:law_mercantilism
-			has_law = law_type:law_protectionism
+			count >= 3
 		}
 	}
 	
 	prosperity_modifier = {
 		country_convoys_capacity_mult = 0.2
+	}
+	
+	ai_will_do = {
+		c:GBR ?= this
+		OR = {
+			has_law = law_type:law_mercantilism
+			has_law = law_type:law_protectionism
+		}
+		any_scope_state = {
+			OR = {
+				region = sr:region_madras
+				region = sr:region_bombay
+				region = sr:region_bengal
+				region = sr:region_central_india
+				region = sr:region_punjab
+			}
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tea_plantation = {
+			level = 5
+			state_trigger = {
+				OR = {
+					region = sr:region_madras
+					region = sr:region_bombay
+					region = sr:region_bengal
+					region = sr:region_central_india
+					region = sr:region_punjab
+				}
+			}
+		}
+		building_tobacco_plantation = {
+			level = 5
+			state_trigger = {
+				OR = {
+					region = sr:region_madras
+					region = sr:region_bombay
+					region = sr:region_bengal
+					region = sr:region_central_india
+					region = sr:region_punjab
+				}
+			}
+		}
+		building_opium_plantation = {
+			level = 5
+			state_trigger = {
+				OR = {
+					region = sr:region_madras
+					region = sr:region_bombay
+					region = sr:region_bengal
+					region = sr:region_central_india
+					region = sr:region_punjab
+				}
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -57,8 +122,14 @@ company_imperial_arsenal = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_EASTERN_THRACE }
+	
 	building_types = {
 		building_military_shipyards
+	}
+	
+	extension_building_types = {
+		building_shipyards
 	}
 	
 	potential = {
@@ -74,20 +145,37 @@ company_imperial_arsenal = {
 	}
 	
 	possible = {
+		has_technology_researched = hydraulic_cranes
 		any_scope_state = {
 			state_region = s:STATE_EASTERN_THRACE
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_military_shipyards
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = hydraulic_cranes
 	}
 	
 	prosperity_modifier = {
 		unit_convoy_requirements_mult = -0.10
 		country_military_tech_spread_mult = 0.05
+	}
+	
+	ai_will_do = {
+		has_technology_researched = hydraulic_cranes
+		any_scope_state = {
+			state_region = s:STATE_EASTERN_THRACE
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_military_shipyards = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_EASTERN_THRACE
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -106,11 +194,23 @@ company_ottoman_tobacco_regie = {
 		building_tobacco_plantation
 	}
 	
+	extension_building_types = {
+		building_opium_plantation
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_turkish_tobacco
+	}
+	
 	potential = {
 		country_has_primary_culture = cu:turkish
 	}
 	
 	possible = {
+		NOR = {
+			has_modifier = sick_man_of_europe
+			is_country_type = unrecognized
+		}
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_building = {
@@ -119,14 +219,31 @@ company_ottoman_tobacco_regie = {
 			}
 			count >= 4
 		}
-		NOR = {
-			has_modifier = sick_man_of_europe
-			is_country_type = unrecognized
-		}
 	}
 	
 	prosperity_modifier = {
 		country_production_tech_spread_mult = 0.1
+	}
+	
+	ai_will_do = {
+		NOR = {
+			has_modifier = sick_man_of_europe
+			is_country_type = unrecognized
+		}
+		any_scope_state = {
+			is_incorporated = yes
+			has_potential_resource = bg_tobacco_plantations
+			count >= 4
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tobacco_plantation = {
+			level = 5
+			state_trigger = {
+				has_potential_resource = bg_tobacco_plantations
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -141,9 +258,26 @@ company_allatini_mills = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_MACEDONIA }
+	
 	building_types = {
 		building_wheat_farm
 		building_rye_farm
+	}
+	
+	extension_building_types = {
+		building_food_industry
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_grain
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_grain_complete_tt
+			has_variable = prestige_good_generic_grain_var
+		}
 	}
 	
 	potential = {
@@ -159,20 +293,17 @@ company_allatini_mills = {
 	}
 	
 	possible = {
+		NOR = {
+			has_modifier = sick_man_of_europe
+			is_country_type = unrecognized
+		}
 		any_scope_state = {
 			state_region = s:STATE_MACEDONIA
 			is_incorporated = yes
 			any_scope_building = {
-				OR = {
-					is_building_type = building_wheat_farm
-					is_building_type = building_rye_farm
-				}
-				level >= 3
+				is_building_type = building_wheat_farm
+				level >= 5
 			}
-		}
-		NOR = {
-			has_modifier = sick_man_of_europe
-			is_country_type = unrecognized
 		}
 	}
 	
@@ -181,6 +312,26 @@ company_allatini_mills = {
 		state_radicalism_increases_violent_hostility_mult = -0.05
 		state_radicalism_increases_cultural_erasure_mult = -0.05
 		state_radicalism_increases_open_prejudice_mult = -0.05
+	}
+	
+	ai_will_do = {
+		NOR = {
+			has_modifier = sick_man_of_europe
+			is_country_type = unrecognized
+		}
+		any_scope_state = {
+			state_region = s:STATE_MACEDONIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_wheat_farm = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_MACEDONIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -195,8 +346,14 @@ company_orient_express = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_EASTERN_THRACE }
+	
 	building_types = {
 		building_railway
+	}
+	
+	extension_building_types = {
+		building_motor_industry
 	}
 	
 	potential = {
@@ -211,20 +368,44 @@ company_orient_express = {
 	}
 	
 	possible = {
-		any_scope_state = {
-			region = sr:region_balkans
-			is_incorporated = yes
-			has_building = building_railway
-			count >= 4
-		}
 		NOR = {
 			has_modifier = sick_man_of_europe
 			is_country_type = unrecognized
+		}
+		any_scope_state = {
+			region = sr:region_balkans
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_railway
+				level >= 5
+			}
+			count >= 3
 		}
 	}
 	
 	prosperity_modifier = {
 		country_prestige_mult = 0.1
+	}
+	
+	ai_will_do = {
+		NOR = {
+			has_modifier = sick_man_of_europe
+			is_country_type = unrecognized
+		}
+		any_scope_state = {
+			region = sr:region_balkans
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_railway = {
+			level = 5
+			state_trigger = {
+				region = sr:region_balkans
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -241,6 +422,10 @@ company_great_indian_railway = {
 	
 	building_types = {
 		building_railway
+	}
+	
+	extension_building_types = {
+		building_iron_mine
 	}
 	
 	potential = {
@@ -268,6 +453,7 @@ company_great_indian_railway = {
 	}
 	
 	possible = {
+		has_technology_researched = railways
 		any_scope_state = {
 			OR = {
 				region = sr:region_madras
@@ -277,14 +463,47 @@ company_great_indian_railway = {
 				region = sr:region_punjab
 			}
 			is_incorporated = yes
-			has_building = building_railway
-			count >= 6
+			any_scope_building = {
+				is_building_type = building_railway
+				level >= 5
+			}
+			count >= 3
 		}
 	}
 	
 	prosperity_modifier = {
 		state_infrastructure_from_population_add = 0.5
 		state_infrastructure_from_population_max_add = 20
+	}
+	
+	ai_will_do = {
+		has_technology_researched = railways
+		any_scope_state = {
+			OR = {
+				region = sr:region_madras
+				region = sr:region_bombay
+				region = sr:region_bengal
+				region = sr:region_central_india
+				region = sr:region_punjab
+			}
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_railway = {
+			level = 5
+			state_trigger = {
+				OR = {
+					region = sr:region_madras
+					region = sr:region_bombay
+					region = sr:region_bengal
+					region = sr:region_central_india
+					region = sr:region_punjab
+				}
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -299,9 +518,27 @@ company_tata = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_BOMBAY }
+	
 	building_types = {
 		building_textile_mills
 		building_steel_mills
+	}
+	
+	extension_building_types = {
+		building_iron_mine
+		building_motor_industry
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_clothes
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_clothes_complete_tt
+			has_variable = prestige_good_generic_clothes_var
+		}
 	}
 	
 	potential = {
@@ -325,7 +562,7 @@ company_tata = {
 					is_building_type = building_textile_mills
 					is_building_type = building_steel_mills
 				}
-				level >= 3
+				level >= 5
 			}
 		}
 	}
@@ -333,6 +570,28 @@ company_tata = {
 	prosperity_modifier = {
 		building_construction_sector_throughput_add = 0.05
 		country_max_weekly_construction_progress_add = 10
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_BOMBAY
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_textile_mills = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_BOMBAY
+			}
+		}
+		building_steel_mills = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_BOMBAY
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -352,6 +611,22 @@ company_sunhwaguk = {
 		building_rice_farm
 	}
 	
+	extension_building_types = {
+		building_food_industry
+		building_chemical_plants
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_grain
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_grain_complete_tt
+			has_variable = prestige_good_generic_grain_var
+		}
+	}
+	
 	potential = {
 		has_interest_marker_in_region = region_manchuria
 	}
@@ -365,6 +640,7 @@ company_sunhwaguk = {
 	}
 	
 	possible = {
+		has_technology_researched = central_planning
 		any_scope_state = {
 			state_region = {
 				is_homeland = cu:korean
@@ -372,14 +648,34 @@ company_sunhwaguk = {
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_tobacco_plantation
-				level >= 10
+				level >= 5
 			}
 		}
-		has_technology_researched = central_planning
 	}
 	
 	prosperity_modifier = {
 		country_tech_spread_mult = 0.1
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = {
+				is_homeland = cu:korean
+			}
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tobacco_plantation = {
+			level = 5
+			state_trigger = {
+				state_region = {
+					is_homeland = cu:korean
+				}
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -394,8 +690,26 @@ company_nam_dinh = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_TONKIN }
+	
 	building_types = {
 		building_textile_mills
+	}
+	
+	extension_building_types = {
+		building_cotton_plantation
+		building_silk_plantation
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_clothes
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_clothes_complete_tt
+			has_variable = prestige_good_generic_clothes_var
+		}
 	}
 	
 	potential = {
@@ -416,7 +730,7 @@ company_nam_dinh = {
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_textile_mills
-				level >= 3
+				level >= 5
 			}
 		}
 		has_technology_researched = corporate_charters
@@ -424,6 +738,22 @@ company_nam_dinh = {
 	
 	prosperity_modifier = {
 		country_tech_spread_mult = 0.1
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_TONKIN
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_textile_mills = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_TONKIN
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -442,6 +772,10 @@ company_imperial_tobacco = {
 		building_tobacco_plantation
 	}
 	
+	extension_building_types = {
+		building_opium_plantation
+	}
+	
 	potential = {
 		has_interest_marker_in_region = region_persia
 	}
@@ -455,6 +789,7 @@ company_imperial_tobacco = {
 	}
 	
 	possible = {
+		has_technology_researched = corporate_charters
 		any_scope_state = {
 			region = sr:region_persia
 			is_incorporated = yes
@@ -464,12 +799,31 @@ company_imperial_tobacco = {
 			}
 			count >= 4
 		}
-		has_technology_researched = corporate_charters
 	}
 	
 	prosperity_modifier = {
 		country_tech_spread_mult = 0.2
 		interest_group_ig_rural_folk_approval_add = -2
+	}
+	
+	ai_will_do = {
+		has_technology_researched = corporate_charters
+		any_scope_state = {
+			region = sr:region_persia
+			is_incorporated = yes
+			has_potential_resource = bg_tobacco_plantations
+			count >= 4
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tobacco_plantation = {
+			level = 5
+			state_trigger = {
+				region = sr:region_persia
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -488,6 +842,23 @@ company_san_miguel = {
 		building_food_industry
 	}
 	
+	extension_building_types = {
+		building_wheat_farm
+		building_maize_farm
+		building_rye_farm
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_groceries
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_groceries_complete_tt
+			has_variable = prestige_good_generic_groceries_var
+		}
+	}
+	
 	potential = {
 		has_interest_marker_in_region = region_indonesia
 	}
@@ -501,19 +872,37 @@ company_san_miguel = {
 	}
 	
 	possible = {
+		has_technology_researched = corporate_charters
 		any_scope_state = {
 			region = sr:region_indonesia
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_food_industry
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = corporate_charters
 	}
 	
 	prosperity_modifier = {
 		state_radicals_from_political_movements_mult = -0.1
+	}
+	
+	ai_will_do = {
+		has_technology_researched = corporate_charters
+		any_scope_state = {
+			region = sr:region_indonesia
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_food_industry = {
+			level = 5
+			state_trigger = {
+				region = sr:region_indonesia
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -528,8 +917,26 @@ company_william_sandford = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_NEW_SOUTH_WALES }
+	
 	building_types = {
 		building_steel_mills
+	}
+	
+	extension_building_types = {
+		building_iron_mine
+		building_coal_mine
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_steel
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_steel_complete_tt
+			has_variable = prestige_good_generic_steel_var
+		}
 	}
 	
 	potential = {
@@ -545,19 +952,36 @@ company_william_sandford = {
 	}
 	
 	possible = {
+		has_technology_researched = bessemer_process
 		any_scope_state = {
 			state_region = s:STATE_NEW_SOUTH_WALES
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_steel_mills
-				level >= 3
+				level >= 5
 			}
 		}
-		has_technology_researched = bessemer_process
 	}
 	
 	prosperity_modifier = {
 		building_railway_throughput_add = 0.15
+	}
+	
+	ai_will_do = {
+		has_technology_researched = bessemer_process
+		any_scope_state = {
+			state_region = s:STATE_NEW_SOUTH_WALES
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_steel_mills = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_NEW_SOUTH_WALES
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -572,8 +996,25 @@ company_b_grimm = {
 	
 	flavored_company = yes
 	
+	preferred_headquarters = { STATE_BANGKOK }
+	
 	building_types = {
 		building_rice_farm	# aided in irrigation projects
+	}
+	
+	extension_building_types = {
+		building_chemical_plants
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_generic_grain
+	}
+	
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_grain_complete_tt
+			has_variable = prestige_good_generic_grain_var
+		}
 	}
 	
 	potential = {
@@ -594,7 +1035,7 @@ company_b_grimm = {
 			is_incorporated = yes
 			any_scope_building = {
 				is_building_type = building_rice_farm
-				level >= 3
+				level >= 5
 			}
 		}
 	}
@@ -602,6 +1043,22 @@ company_b_grimm = {
 	prosperity_modifier = {
 		state_infrastructure_from_population_mult = 0.1
 		building_food_industry_throughput_add = 0.1
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_BANGKOK
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_rice_farm = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_BANGKOK
+			}
+		}
 	}
 	
 	ai_weight = {
