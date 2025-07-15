@@ -115,6 +115,35 @@ HNA = {
 	}
 }
 
+FRS = {
+	dynamic_country_name = {
+		name = frs_taiwan	# This can be left empty, and then default tag name will be used
+		adjective = frs_taiwan_adj	# This can be left empty, and then default tag adjective will be used
+		is_main_tag_only = yes	# default no, if yes then only the primary country for a definition can use this name (ie Poland, not dynamic Silesia-Poland)
+		priority = 1	# default 0, if multiple names have valid triggers, higher priority is used. If same priority, first one in file is used
+		trigger = {
+			# Scripted trigger, country-scope
+			exists = scope:actor
+			scope:actor = {
+				OR = {
+					AND = {
+						is_subject = yes
+						any_overlord_or_above = {
+							OR = {
+								country_has_primary_culture = cu:han
+								country_has_primary_culture = cu:manchu
+								country_has_primary_culture = cu:japanese
+								country_has_primary_culture = cu:korean
+							}
+						}
+					}
+					is_subject = no
+				}
+			}
+		}
+	}
+}
+
 XIN = {
 	dynamic_country_name = {
 		name = xin_xinjiang	# This can be left empty, and then default tag name will be used
