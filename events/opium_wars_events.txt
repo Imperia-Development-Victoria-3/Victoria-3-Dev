@@ -33,36 +33,8 @@ opium_wars.1 = {
 				has_variable = opium_wars_target
 			}
 		}
-		any_scope_state = {
-			any_scope_building = {
-				is_building_type = building_trade_center
-			}
-		}
 		is_subject = no
 		NOT = { has_law = law_type:law_free_trade }
-		any_market = {
-			root.market = {
-				market_imports_reliance = { target = prev goods = opium value > 0.25 }
-			}
-			owner = {
-				country_rank >= rank_value:major_power
-				NOR = {
-					any_scope_state = {
-						is_treaty_port = yes
-						any_neighbouring_state = {
-							owner = ROOT
-						}
-					}
-					any_scope_treaty = {
-						binds = ROOT
-						any_scope_article = {
-							has_type = foreign_investment_rights
-							source_country = root
-						}
-					}
-				}
-			}
-		}
 		NOT = {
 			has_modifier = opium_wars_addiction_modifier
 		}
@@ -76,34 +48,7 @@ opium_wars.1 = {
 			}
 			save_scope_as = addicted_culture
 		}
-		random_market = {
-			limit = {
-				root.market = {
-					market_imports_reliance = { target = prev goods = opium value > 0.25 }
-				}
-				owner = {
-					country_rank >= rank_value:major_power
-					NOR = {
-						any_scope_state = {
-							is_treaty_port = yes
-							any_neighbouring_state = {
-								owner = ROOT
-							}
-						}
-						any_scope_treaty = {
-							binds = ROOT
-							any_scope_article = {
-								has_type = foreign_investment_rights
-								source_country = root
-							}
-						}
-					}
-				}
-			}
-			owner = {
-				save_scope_as = opium_exporter
-			}
-		}
+		c:GBR = { save_scope_as = opium_exporter }
 	}
 	
 	option = {
@@ -117,35 +62,8 @@ opium_wars.1 = {
 		add_journal_entry = {
 			type = je_opium_obsession
 		}
-		# send events to all applicable powers
-		# can't just use the scope because we want to catch multiple countries if we can
-		random_market = {
-			limit = {
-				root.market = {
-					market_imports_reliance = { target = prev goods = opium value > 0.25 }
-				}
-				owner = {
-					country_rank >= rank_value:major_power
-					NOR = {
-						any_scope_state = {
-							is_treaty_port = yes
-							any_neighbouring_state = {
-								owner = ROOT
-							}
-						}
-						any_scope_treaty = {
-							binds = ROOT
-							any_scope_article = {
-								has_type = foreign_investment_rights
-								source_country = root
-							}
-						}
-					}
-				}
-			}
-			owner = {
-				trigger_event = { id = opium_wars.2 }
-			}
+		scope:opium_exporter = {
+			trigger_event = { id = opium_wars.2 }
 		}
 		add_modifier = {
 			name = opium_wars_addiction_modifier
