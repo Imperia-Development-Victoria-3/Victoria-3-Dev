@@ -251,7 +251,7 @@ imperia_sinosphere.4 = { #Prince Mongkut leaves monkhood?
 	}
 	trigger = {
 		c:SIA ?= this
-		C:SIA = {
+		c:SIA = {
 			has_law = law_type:law_monarchy
 			ruler ?= {
 				has_template = SIA_nangklao_chakri
@@ -277,11 +277,20 @@ imperia_sinosphere.4 = { #Prince Mongkut leaves monkhood?
 			template = imperia_sia_king_mongkut_template
 			ruler = yes
 		}
-		create_character = {
-			template = imperia_sia_king_chulalongkorn_template
-			heir = yes
+		hidden_effect = {
+			trigger_event = {
+				id = imperia_sinosphere.6
+				days = 950
+			}
 		}
-
+		change_relations = {
+			country = c:GBR
+			value = 20
+		}
+		create_diplomatic_catalyst = {
+			type = catalyst_relations_level_increased  
+			target = c:GBR
+		}
 	}
 	option = {
 		name = imperia_sinosphere.4.b #Pinklao takes the throne
@@ -313,7 +322,7 @@ imperia_sinosphere.5 = { #Mindon's Coup
 		c:BUR = {
 			has_law = law_type:law_monarchy
 			NOT = {
-				owns_entire_state_region = 	STATE_PEGU
+				owns_entire_state_region = STATE_PEGU
 			}
 		}
 		game_date >= 1853.1.1
@@ -335,6 +344,19 @@ imperia_sinosphere.5 = { #Mindon's Coup
 		}
 		create_character = {
 			template = imperia_bur_kananung_mintha_template
+			heir = yes
+		}
+		add_radicals = 0.1
+	}
+}
+
+imperia_sinosphere.6 = {
+	type = country_event
+	hidden = yes
+	orphan = yes
+	immediate = {
+		create_character = {
+			template = imperia_sia_king_chulalongkorn_template
 			heir = yes
 		}
 	}
