@@ -197,8 +197,8 @@ je_investigate_military_reform = {
 	}
 	complete = {
 		has_technology_researched = line_infantry
-		NOT = {
-			has_law = law_type:law_peasant_levies
+		ig:ig_armed_forces = {
+			ig_approval >= 10
 		}
 	}
 	on_complete = {
@@ -271,12 +271,12 @@ je_reform_the_banner_system_local = {
 		trigger_event = {
 			id = imperia_qing.4
 		}
-		remove_modifier = modifier_crumbling_banner_system
+
 		set_variable = chose_yong_ying
 	}
 	invalid = {
 		NOT = {
-			has_modifier = modifier_crumbling_banner_system
+			has_law = law_type:law_banner_system
 		}
 	}
 	current_value = {
@@ -328,12 +328,11 @@ je_reform_the_banner_system_modern = {
 		trigger_event = {
 			id = imperia_qing.4
 		}
-		remove_modifier = modifier_crumbling_banner_system
 		set_variable = chose_new_army
 	}
 	invalid = {
 		NOT = {
-			has_modifier = modifier_crumbling_banner_system
+			has_law = law_type:law_banner_system
 		}
 	}
 	weight = 1000
@@ -368,19 +367,6 @@ je_establish_local_armies = {
 				exists = c:CHI
 				is_subject_of = c:CHI
 			}
-			c:CHI = {
-				change_variable = {
-					name = yong_ying_var
-					add = 1
-				}
-			}
-			add_modifier = {
-				name = modifier_local_armies
-				months = 240
-			}
-		}
-		else = {
-			remove_modifier = modifier_crumbling_banner_system
 			c:CHI ?= {
 				change_variable = {
 					name = yong_ying_var
@@ -388,6 +374,7 @@ je_establish_local_armies = {
 				}
 			}
 		}
+		activate_law = law_type:law_peasant_levies
 	}
 	fail = {
 		NOT = {
@@ -395,10 +382,16 @@ je_establish_local_armies = {
 		}
 	}
 	on_fail = {
-		remove_modifier = modifier_crumbling_banner_system
+		activate_law = law_type:law_peasant_levies
 	}
 	invalid = {
-		has_global_variable = china_shatters
+		OR = {
+			has_global_variable = china_shatters
+			NOT = {
+				has_law = law_type:law_banner_system
+			}
+		}
+
 	}
 	weight = 1000
 }
