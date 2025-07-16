@@ -22,18 +22,12 @@ opium_wars.1 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 	
 	trigger = {
+		exists = c:CHI
+		root = c:CHI
 		NOT = { has_variable = opium_wars_start_var }
-		any_primary_culture = {
-			has_cultural_obsession = opium
-		}
-		is_country_type = unrecognized
-		total_population > 5000000
 		NOT = {
-			any_country = {
-				has_variable = opium_wars_target
-			}
+			has_variable = opium_wars_target
 		}
-		is_subject = no
 		NOT = { has_law = law_type:law_free_trade }
 		NOT = {
 			has_modifier = opium_wars_addiction_modifier
@@ -42,10 +36,7 @@ opium_wars.1 = {
 	
 	immediate = {
 		set_variable = opium_wars_start_var
-		random_primary_culture = {
-			limit = {
-				has_cultural_obsession = opium
-			}
+		cu:han = {
 			save_scope_as = addicted_culture
 		}
 		c:GBR = { save_scope_as = opium_exporter }
@@ -121,15 +112,9 @@ opium_wars.2 = {
 	
 	immediate = {
 		save_scope_as = opium_wars_aggressor_country
-		random_country = {
-			limit = {
-				has_variable = opium_wars_target
-			}
+		c:CHI = {
 			save_scope_as = opium_wars_target_country
-			random_primary_culture = {
-				limit = {
-					has_cultural_obsession = opium
-				}
+			cu:han = {
 				save_scope_as = opium_addicted_culture
 			}
 		}
@@ -268,10 +253,7 @@ opium_wars.3 = {
 			limit = { has_modifier = opium_wars_addiction_modifier }
 			remove_modifier = opium_wars_addiction_modifier
 		}
-		random_primary_culture = {
-			limit = {
-				has_cultural_obsession = opium
-			}
+		cu:han = {
 			save_scope_as = addicted_culture
 		}
 		if = {
@@ -302,7 +284,7 @@ opium_wars.3 = {
 	option = {
 		name = opium_wars.3.a
 		default_option = yes
-		every_primary_culture = {
+		cu:han = {
 			remove_cultural_obsession = opium
 		}
 		add_modifier = {
@@ -317,7 +299,7 @@ opium_wars.3 = {
 	
 	option = {
 		name = opium_wars.3.b
-		every_primary_culture = {
+		cu:han = {
 			remove_cultural_obsession = opium
 		}
 		add_modifier = {
