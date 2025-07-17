@@ -101,6 +101,16 @@ is_congress_initiator = {
 }
 
 end_congress = {
+	confirm_title = "CONGRESS_REALLY_END_CONGRESS"
+	confirm_text = "CONGRESS_REALLY_END_CONGRESS_AGAINST_TARGET"
+	scope = country
+	is_valid = {
+		exists = global_var:imperia_vienna_congress_session_initiator
+		root = global_var:imperia_vienna_congress_session_initiator
+		NOT = {
+			has_global_variable = imperia_vienna_congress_minimum_time
+		}
+	}
 	effect = {
 		end_congress_scripted_effect = yes
 	}
@@ -367,12 +377,22 @@ has_states_in_congress_basket = {
 }
 
 start_congress = {
+	confirm_title = "CONGRESS_REALLY_START_CONGRESS"
+	confirm_text = "CONGRESS_REALLY_START_CONGRESS_AGAINST_TARGET"
 	scope = country
+	saved_scopes = {
+		target_country
+	}
+	is_valid = {
+		NOT = {
+			has_global_variable = imperia_vienna_congress_in_session
+		}
+	}
 	effect = {
 		congress_start_conference = {
 			TYPE = var:congress_proposal_type
 			INITIATOR = root
-			TARGET = var:set_congress_target_country
+			TARGET = scope:target_country
 		}
 		remove_variable ?= set_congress_target_country
 		clear_variable_list ?= congress_target_state_basket
