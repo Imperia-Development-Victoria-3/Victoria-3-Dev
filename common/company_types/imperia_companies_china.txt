@@ -241,23 +241,23 @@ company_tsingtao_brewery = {
 	}
 }
 
-#Qingxi Ironworks
-company_qingxi_ironworks = {
+#Lingnan Steelworks
+company_lingnan_steelworks = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_hanyang_arsenal.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 
 	flavored_company = yes
 
-	preferred_headquarters = { STATE_GUANGXI }
+	preferred_headquarters = { STATE_SHAOZHOU }
 
 	building_types = {
-		building_iron_mine
+		building_coal_mine
 		building_steel_mills
-		building_arms_industry
+		building_military_shipyards
 	}
 
 	extension_building_types = {
-		building_coal_mine
+		building_iron_mine
 		building_artillery_foundries
 	}
 
@@ -279,39 +279,57 @@ company_qingxi_ironworks = {
 	attainable = {
 		hidden_trigger = { # Hide attainable if it's always fulfilled by possible
 			any_scope_state = {
-				state_region = s:STATE_GUANGXI
+				state_region = s:STATE_SHAOZHOU
 			}
 		}
 	}
 
 	possible = {
+		any_country = {
+			limit = {
+				owns_entire_state_region = s:STATE_SVEALAND
+			}
+			custom_tooltip = {
+				text = relations_amicable_nocontext_tt
+				relations:root >= relations_threshold:amicable
+			}
+		}
 		any_scope_state = {
-			state_region = s:STATE_GUANGXI
+			state_region = s:STATE_SHAOZHOU
 			is_incorporated = yes
-				any_scope_building = {
+			any_scope_building = {
+				AND = {
 					is_building_type = building_steel_mills
-					level >= 5
+					is_building_type = building_charcoal_kiln						
 				}
+			}
+			level >= 3
 		}
 	}
 
 	prosperity_modifier = {
-		country_military_goods_cost_mult = -0.05
-		building_arms_industry_throughput_add = 0.1
+		country_weekly_innovation_max_add = 5
+		interest_group_ig_industrialists_approval_add = 3
 	}
 
 	ai_will_do = {
 		any_scope_state = {
-			state_region = s:STATE_GUANGXI
+			state_region = s:STATE_SHAOZHOU
 			is_incorporated = yes
 		}
 	}
 
 	ai_construction_targets = {
 		building_steel_mills = {
-			level = 5
+			level = 3
 			state_trigger = {
-				state_region = s:STATE_GUANGXI
+				state_region = s:STATE_SHAOZHOU
+			}
+		}
+		building_charcoal_kiln = {
+			level = 3
+			state_trigger = {
+				state_region = s:STATE_SHAOZHOU
 			}
 		}
 	}
@@ -464,24 +482,24 @@ company_canton_cohong = {
 	}
 }
 
-#Benxi Coal & Iron Co.
-company_benxi = {
+#Qingxi Ironworks
+company_qingxi_ironworks = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_hanyang_arsenal.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 
 	flavored_company = yes
 
-	preferred_headquarters = { STATE_SICHUAN }
+	preferred_headquarters = { STATE_GUIZHOU }
 
 	building_types = {
-		building_iron_mine
 		building_coal_mine
 		building_steel_mills
+		building_arms_industry
 	}
 
 	extension_building_types = {
-		building_explosives_factory
-		building_tooling_workshops
+		building_iron_mine
+		building_artillery_foundries
 	}
 
 	possible_prestige_goods = {
@@ -502,40 +520,39 @@ company_benxi = {
 	attainable = {
 		hidden_trigger = { # Hide attainable if it's always fulfilled by possible
 			any_scope_state = {
-				state_region = s:STATE_SICHUAN
+				state_region = s:STATE_GUIZHOU
 			}
 		}
 	}
 
 	possible = {
-		has_technology_researched = nitroglycerin
 		any_scope_state = {
-			state_region = s:STATE_SICHUAN
+			state_region = s:STATE_GUIZHOU
 			is_incorporated = yes
 				any_scope_building = {
-					is_building_type = building_coal_mine
+					is_building_type = building_steel_mills
 					level >= 5
 				}
 		}
 	}
 
 	prosperity_modifier = {
-		building_iron_mine_throughput_add = 0.1
-		building_railway_throughput_add = 0.05
+		country_military_goods_cost_mult = -0.05
+		building_arms_industry_throughput_add = 0.1
 	}
 
 	ai_will_do = {
 		any_scope_state = {
-			state_region = s:STATE_SICHUAN
+			state_region = s:STATE_GUIZHOU
 			is_incorporated = yes
 		}
 	}
 
 	ai_construction_targets = {
-		building_coal_mine = {
+		building_steel_mills = {
 			level = 5
 			state_trigger = {
-				state_region = s:STATE_SICHUAN
+				state_region = s:STATE_GUIZHOU
 			}
 		}
 	}
@@ -686,6 +703,87 @@ company_harbin_brewery = {
 			level = 5
 			state_trigger = {
 				state_region = s:STATE_SOUTHERN_MANCHURIA
+			}
+		}
+	}
+
+	ai_weight = {
+		value = 3 # Higher base value for flavored companies
+	}
+}
+
+#Benxi Coal & Iron Co.
+company_benxi = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_hanyang_arsenal.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+
+	flavored_company = yes
+
+	preferred_headquarters = { STATE_SHENGJING }
+
+	building_types = {
+		building_iron_mine
+		building_coal_mine
+		building_steel_mills
+	}
+
+	extension_building_types = {
+		building_explosives_factory
+		building_tooling_workshops
+	}
+
+	possible_prestige_goods = {
+		prestige_good_generic_steel
+	}
+
+	prestige_goods_trigger = {
+		custom_tooltip = {
+			text = je_prestige_goods_steel_complete_tt
+			has_variable = prestige_good_generic_steel_var
+		}
+	}
+
+	potential = {
+		has_interest_marker_in_region = region_manchuria
+	}
+
+	attainable = {
+		hidden_trigger = { # Hide attainable if it's always fulfilled by possible
+			any_scope_state = {
+				state_region = s:STATE_SHENGJING
+			}
+		}
+	}
+
+	possible = {
+		has_technology_researched = nitroglycerin
+		any_scope_state = {
+			state_region = s:STATE_SHENGJING
+			is_incorporated = yes
+				any_scope_building = {
+					is_building_type = building_iron_mine
+					level >= 5
+				}
+		}
+	}
+
+	prosperity_modifier = {
+		building_iron_mine_throughput_add = 0.1
+		building_railway_throughput_add = 0.05
+	}
+
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_SHENGJING
+			is_incorporated = yes
+		}
+	}
+
+	ai_construction_targets = {
+		building_iron_mine = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_SHENGJING
 			}
 		}
 	}
