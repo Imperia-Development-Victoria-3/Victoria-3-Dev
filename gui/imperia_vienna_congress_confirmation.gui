@@ -87,32 +87,4 @@ types confirmation_widgets
             onclick = "[GetVariableSystem.Toggle('imperia_vienna_congress_state_selector_open')]"
         }
     }
-
-    type money_transfer_send_money_confirmation = default_confirmation_widget {
-        name = "money_transfer_send_money_confirmation"
-		parentanchor = top|center
-		layer = popups
-        using = clickthrough_blocker
-        alwaystransparent = no
-        size = { 380 100 }
-        visible = "[GetVariableSystem.Exists('money_transfer_send_money_confirmation')]"
-        textbox = {
-            parentanchor = top|hcenter
-            using = header_font_fancy
-            using = fontsize_xxl
-            text = "MONEY_TRANSFER_REALLY_SEND_MONEY"
-            autoresize = yes
-        }
-        blockoverride "answer_yes_handler" {
-            onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
-            enabled = "[GetScriptedGui('can_send_money_to_recipient').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target',GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.Var('money_transfer_target_country').GetCountry.MakeScope).End)]"
-            onclick = "[GetScriptedGui('send_money_to_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
-            onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
-            tooltip = "CANT_SEND_MONEY_EXPLANATION"
-        }
-        blockoverride "answer_no_handler" {
-            onclick = "[GetVariableSystem.Clear('money_transfer_send_money_confirmation')]"
-            onclick = "[PopupManager.AnswerNo(ConfirmationWindow.Self)]"
-        }
-    }
 }

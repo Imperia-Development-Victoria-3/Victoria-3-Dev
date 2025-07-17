@@ -1775,14 +1775,12 @@ types budget
 							visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 						}
 					}
-					money_transfer_send_money_confirmation = {}
 					# Strategic Region listing
 					flowcontainer = {
 						parentanchor = hcenter
 						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
 						dynamicgridbox = {
 							datamodel = "[GetGlobalList('strategic_region_list')]"
-							#datacontext = "[GetStrategicRegion]"
 							datamodel_wrap = 2
 							flipdirection = yes
 							item = {
@@ -1808,16 +1806,16 @@ types budget
 						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 						dynamicgridbox = {
 							datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')]"
-							#datacontext = "[GetCountry]"
 							datamodel_wrap = 2
 							flipdirection = yes
 							item = {
 								button = {
 									using = default_button
 									size = { 210 70 }
+        						    enabled = "[GetScriptedGui('send_money_to_target').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
 									onclick = "[GetScriptedGui('set_money_transfer_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
 									onclick = "[GetScriptedGui('send_money_to_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
-									#onclick = "[GetVariableSystem.Toggle('money_transfer_send_money_confirmation')]"
+									tooltip = "[GetScriptedGui('send_money_to_target').IsValidTooltip(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
 									textbox = {
 										autoresize = yes
 										raw_text = "[Scope.GetCountry.GetName]"
