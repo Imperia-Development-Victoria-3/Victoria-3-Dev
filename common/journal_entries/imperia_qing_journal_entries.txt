@@ -715,34 +715,43 @@ je_silk_march = {
 	}
 	complete = {
 		AND = {
-			institution_investment_level = {
-				institution = institution_home_defence
-				value >= 3
-			}
 			OR = {
 				has_law = law_type:law_national_guard
 				has_law = law_type:law_localized_garrisons
 			}
-			any_scope_state = {
-				count = all
-				custom_tooltip = {
-					text = tax_capacity_greater_than
-					tax_capacity >= tax_capacity_usage
+			AND = {
+				has_company = company_type:company_gansu_military_farms
+				any_company = {
+					AND =  {
+						is_company_type = company_type:company_gansu_military_farms
+						company_is_prosperous = yes
+					}
+
 				}
 			}
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
 		}
 	}
 	on_complete = {
-		add_modifier = {
-			name = modifier_silk_march
+		every_state = {
+			limit = {
+				OR = {
+					state_region = s:STATE_GANSU
+					state_region = s:STATE_NINGXIA
+				}
+			}
+			add_modifier = modifier_silk_march
 		}
+		remove_company = company_type:company_gansu_military_farms
+		add_company = company_type:company_shaan_gan_development
+	}
 		c:CHI ?= {
 			custom_tooltip = {
 				text = fragile_unity_minor_remove_tt
 				set_variable = je_silk_march_completed
 			}
 		}
-	}
 	weight = 5000
 	should_be_pinned_by_default = yes
 }
