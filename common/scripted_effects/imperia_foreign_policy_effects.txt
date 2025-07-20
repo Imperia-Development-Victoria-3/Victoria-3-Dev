@@ -165,3 +165,24 @@ add_foreign_policy_cooldown = {
 		months = 6
 	}
 }
+
+make_list_of_foreign_policies = {
+	# It can be reset, for debugging purposes
+	clear_global_variable_list ?= imperia_foreign_policy_list
+	# This is technically country scope, so is used in India
+	every_law = {
+		if = {
+			limit = {
+				# A smidge hacky
+				# Had to reverse it like this because of spaghet reasons
+				law_type:law_true_neutrality = {
+					is_same_law_group_as = prev.type
+				}
+			}
+			add_to_global_variable_list = {
+				name = imperia_foreign_policy_list
+				target = this.type
+			}
+		}
+	}
+}

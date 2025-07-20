@@ -14,7 +14,7 @@ types diplomatic_panel
 	type diplomatic_overview_panel = default_block_window {
 		name = "diplomatic_overview_panel"
 		enabled = yes
-		datacontext = "[AccessPlayer]" # using AccessPlayer instead of GetPlayer here because sorting subjects requires a non-const country
+		datacontext = "[GetPlayer]" # using AccessPlayer instead of GetPlayer here because sorting subjects requires a non-const country
 		
 		blockoverride "animation_state_block" {
 			state = {
@@ -207,27 +207,26 @@ types diplomatic_panel
 						parentanchor = hcenter
 						direction = vertical
 						#visible = "[Not(IsDataModelEmpty(AccessPlayer.AccessReleasableCountries))]"	
-						datacontext = "[GetMetaPlayer.GetPlayedOrObservedCountry.GetActiveLawFromGroup('lawgroup_diplomatic_stance')]"
-	
+						#datacontext = "[GetMetaPlayer.GetPlayedOrObservedCountry.GetActiveLawFromGroup('lawgroup_diplomatic_stance')]"			
 						spacing = 10
 
 						default_header = {
 							blockoverride = "text" {
-								text = "FOREIGN_POLICY"
+								text = "[GetLawGroup('lawgroup_diplomatic_stance').GetName]"
 							}
 						}
 
 						flowcontainer = {
 							parentanchor = hcenter
 							direction = vertical
-							datamodel = "[Law.GetLawAlternatives]"
+							datamodel = "[GetGlobalList('imperia_foreign_policy_list')]"
 							spacing = 5
 						
 							item = {
 								flowcontainer = {
 									margin_bottom = 15
 									imperia_enactable_generic_law = {
-										datacontext = "[Law]"
+										datacontext = "[Scope.GetLawType]"
 									}	
 								}
 							}
