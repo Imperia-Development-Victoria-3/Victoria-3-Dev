@@ -1,0 +1,133 @@
+﻿player_diplomatic_backlash = {
+	groups = {
+		general
+	}
+	requires_approval = yes
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	show_confirmation_box = no
+	is_hostile = yes
+	selectable = {
+		is_player = yes
+	}
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_player = yes
+		}
+		has_diplomatic_relevance = scope:target_country
+	}
+	possible = {
+		always = yes
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_COLD_OR_LESS_NOT
+			scope:target_country.relations:root > relations_threshold:cold
+		}
+	}
+	accept_effect = {
+		change_relations = {
+			country = scope:target_country
+			value = {
+				add = relations_threshold:cold
+				subtract = scope:target_country.relations:root
+			}
+		}
+	}
+	ai = {
+		will_propose = {
+			always = no
+		}
+		accept_score = {
+			value = -1000
+		}
+	}
+}
+
+player_diplomatic_support = {
+	groups = {
+		general
+	}
+	requires_approval = yes
+	should_notify_third_parties = yes
+	show_effect_in_tooltip = yes
+	show_confirmation_box = no
+	is_hostile = no
+	selectable = {
+		is_player = yes
+	}
+	potential = {
+		NOT = {
+			is_country_type = decentralized
+		}
+		scope:target_country = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			is_player = yes
+		}
+		has_diplomatic_relevance = scope:target_country
+	}
+	possible = {
+		always = yes
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
+			scope:target_country.relations:root < relations_threshold:amicable
+		}
+	}
+	accept_effect = {
+		change_relations = {
+			country = scope:target_country
+			value = {
+				add = relations_threshold:amicable
+				subtract = scope:target_country.relations:root
+			}
+		}
+	}
+	ai = {
+		will_propose = {
+			always = no
+		}
+		accept_score = {
+			value = -1000
+		}
+	}
+}
+
+minor_war_reparations = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = no
+	can_select_to_break = no
+	selectable = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+	pact = {
+		is_two_sided_pact = no
+		income_transfer = 0.025
+		second_country_gets_income_transfer = no
+		income_transfer_based_on_second_country = yes
+		requirement_to_maintain = {
+			trigger = {
+				has_truce_with = scope:target_country
+			}
+		}
+		requirement_to_maintain = {
+			trigger = {
+				NOT = {
+					has_war_with = scope:target_country
+				}
+			}
+		}
+	}
+}
+
