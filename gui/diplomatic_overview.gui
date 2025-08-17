@@ -136,23 +136,43 @@ types diplomatic_panel
 					text = "RELEASE_SUBJECT"
 				}
 
-				# Countries
+				# Nation Formation
 				blockoverride "fourth_button" {
-					text = "concept_countries"
+					text = "NATION_FORMATION"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "concept_countries"
+					tooltip = "NATION_FORMATION"
 				}
 				blockoverride "fourth_button_click" {
-					onclick = "[InformationPanel.SelectTab('country_browser')]"
+					onclick = "[InformationPanel.SelectTab('nation_formation')]"
 				}
 				blockoverride "fourth_button_visibility" {
-					visible = "[InformationPanel.IsTabSelected('country_browser')]"
+					visible = "[InformationPanel.IsTabSelected('nation_formation')]"
 				}
 				blockoverride "fourth_button_visibility_checked" {
-					visible = "[Not( InformationPanel.IsTabSelected('country_browser') )]"
+					visible = "[Not( InformationPanel.IsTabSelected('nation_formation') )]"
 				}
 				blockoverride "fourth_button_selected" {
+					text = "NATION_FORMATION"
+				}
+
+				# Countries
+				blockoverride "fifth_button" {
+					text = "concept_countries"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "concept_countries"
+				}
+				blockoverride "fifth_button_click" {
+					onclick = "[InformationPanel.SelectTab('country_browser')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					visible = "[InformationPanel.IsTabSelected('country_browser')]"
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					visible = "[Not( InformationPanel.IsTabSelected('country_browser') )]"
+				}
+				blockoverride "fifth_button_selected" {
 					text = "concept_countries"
 				}
 				# Foreign Policy
@@ -190,6 +210,10 @@ types diplomatic_panel
 
 				release_subject_tab_content = {
 					visible = "[InformationPanel.IsTabSelected('release_subject')]"
+				}
+
+				nation_formation_tab_content = {
+					visible = "[InformationPanel.IsTabSelected('nation_formation')]"
 				}
 
 				country_browser_tab_content = {
@@ -1650,6 +1674,49 @@ types diplomatic_panel
 				}
 			}	
 		}			
+	}
+
+	type nation_formation_tab_content = container {
+		minimumsize = { @panel_width_plus_20 -1 }
+		maximumsize = { @panel_width_plus_20 -1 }
+		using = default_content_fade
+
+		### NATION FORMATION
+		flowcontainer = {
+			visible = "[InformationPanel.IsTabSelected('nation_formation')]"
+			using = default_list_position
+			direction = vertical
+			using = default_content_fade
+
+			flowcontainer = {
+				using = default_list_position
+				direction = vertical
+				margin_bottom = 10
+				using = default_content_fade
+
+
+				empty_state = {
+					blockoverride "visible" {
+						visible = "[IsDataModelEmpty(AccessPlayer.AccessFormableCountries)]"
+					}
+					blockoverride "text" {
+						text = "NO_FORMABLE_COUNTRIES"
+					}
+				}	
+
+				flowcontainer = {
+					parentanchor = hcenter
+					direction = vertical
+					visible = "[Not(IsDataModelEmpty(AccessPlayer.AccessFormableCountries))]"
+					datamodel = "[AccessPlayer.AccessFormableCountries]"
+					using = default_content_fade
+
+					item = {
+						formable_country_button = {}
+					}
+				}
+			}
+		}
 	}
 
 	type releasable_country_button = container {
