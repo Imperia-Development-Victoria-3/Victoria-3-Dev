@@ -277,7 +277,7 @@ types budget
 							}
 
 							blockoverride "text_lower" {
-								datacontext = "[AccessPlayer.AccessActiveLawFromGroup('lawgroup_economic')]"
+								datacontext = "[AccessPlayer.AccessActiveLawFromGroup('lawgroup_economic_system')]"
 								text = "[Law.GetNameNoFormatting]"
 								tooltipwidget = {
 									FancyTooltip_Law = {
@@ -290,14 +290,15 @@ types budget
 								raw_text = "#v [Multiply_CFixedPoint(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetVariable('imperia_private_allocation_var').GetValue, '(CFixedPoint)100')]#!%"
 							}
 							
+
 							blockoverride "zero_element_visible" {
 								visible = yes
 							}
-							blockoverride "setvisible_zero" {
+							blockoverride "is_selected_visibility_zero" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0')).End))]"
 							}
-							blockoverride "setvisible_zero_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0')).End)]"
+							blockoverride "is_clickable_alpha_zero" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0')).End))]"
 							}
 							blockoverride "button_0_click" {
 								enabled = "[GetScriptedGui('can_set_0_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -308,11 +309,11 @@ types budget
 							}
 
 
-							blockoverride "setvisible_very_low" {
+							blockoverride "is_selected_visibility_very_low" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.1')).End))]"
 							}
-							blockoverride "setvisible_very_low_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.1')).End)]"
+							blockoverride "is_clickable_alpha_very_low" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.1')).End))]"
 							}
 							blockoverride "button_1_click" {
 								enabled = "[GetScriptedGui('can_set_10_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -322,11 +323,11 @@ types budget
 								texture = "gfx/interface/icons/private_allocation/state_construction_medium.dds"
 							}
 
-							blockoverride "setvisible_low" {
+							blockoverride "is_selected_visibility_low" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.25')).End))]"
 							}
-							blockoverride "setvisible_low_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.25')).End)]"
+							blockoverride "is_clickable_alpha_low" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.25')).End))]"
 							}
 							blockoverride "button_2_click" {
 								enabled = "[GetScriptedGui('can_set_25_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -336,12 +337,11 @@ types budget
 								texture = "gfx/interface/icons/private_allocation/state_construction_light.dds"
 							}
 
-
-							blockoverride "setvisible_medium" {
+							blockoverride "is_selected_visibility_medium" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.50')).End))]"
 							}
-							blockoverride "setvisible_medium_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.50')).End)]"
+							blockoverride "is_clickable_alpha_medium" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.50')).End))]"
 							}
 							blockoverride "button_3_click" {
 								enabled = "[GetScriptedGui('can_set_50_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -351,11 +351,11 @@ types budget
 								texture = "gfx/interface/icons/private_allocation/private_construction_light.dds"
 							}
 
-							blockoverride "setvisible_high" {
+							blockoverride "is_selected_visibility_high" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.75')).End))]"
 							}
-							blockoverride "setvisible_high_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.75')).End)]"
+							blockoverride "is_clickable_alpha_high" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)0.75')).End))]"
 							}
 							blockoverride "button_4_click" {
 								enabled = "[GetScriptedGui('can_set_75_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -365,11 +365,11 @@ types budget
 								texture = "gfx/interface/icons/private_allocation/private_construction_medium.dds"
 							}
 							
-							blockoverride "setvisible_very_high" {
+							blockoverride "is_selected_visibility_very_high" {
 								visible = "[Not(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)1.0')).End))]"
 							}
-							blockoverride "setvisible_very_high_2" {
-								visible = "[GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)1.0')).End)]"
+							blockoverride "is_clickable_alpha_very_high" {
+								alpha = "[TransparentIfFalse(GetScriptedGui('select_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('current_option', MakeScopeValue('(CFixedPoint)1.0')).End))]"
 							}	
 							blockoverride "button_5_click" {
 								enabled = "[GetScriptedGui('can_set_100_percent_private_allocation').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
@@ -1775,14 +1775,12 @@ types budget
 							visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 						}
 					}
-					money_transfer_send_money_confirmation = {}
 					# Strategic Region listing
 					flowcontainer = {
 						parentanchor = hcenter
 						visible = "[IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer'))]"
 						dynamicgridbox = {
 							datamodel = "[GetGlobalList('strategic_region_list')]"
-							datacontext = "[Scope.AccessStrategicRegion]"
 							datamodel_wrap = 2
 							flipdirection = yes
 							item = {
@@ -1793,7 +1791,7 @@ types budget
 									enabled = "[GetScriptedGui('any_valid_money_transfer_country_in_strategic_region').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
 									textbox = {
 										autoresize = yes
-										text = "[Scope.AccessStrategicRegion.GetName]"
+										text = "[Scope.GetStrategicRegion.GetName]"
 										align = center|nobaseline
 										using = fontsize_large
 										parentanchor = center
@@ -1808,18 +1806,19 @@ types budget
 						visible = "[Not(IsDataModelEmpty(AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')))]"
 						dynamicgridbox = {
 							datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region_money_transfer')]"
-							datacontext = "[Scope.AccessCountry]"
 							datamodel_wrap = 2
 							flipdirection = yes
 							item = {
 								button = {
 									using = default_button
 									size = { 210 70 }
+        						    enabled = "[GetScriptedGui('send_money_to_target').IsValid(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
 									onclick = "[GetScriptedGui('set_money_transfer_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
-									onclick = "[GetVariableSystem.Toggle('money_transfer_send_money_confirmation')]"
+									onclick = "[GetScriptedGui('send_money_to_target').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
+									tooltip = "[GetScriptedGui('send_money_to_target').IsValidTooltip(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
 									textbox = {
 										autoresize = yes
-										raw_text = "[Scope.AccessCountry.GetName]"
+										raw_text = "[Scope.GetCountry.GetName]"
 										align = center|nobaseline
 										parentanchor = center
 									}
@@ -2310,11 +2309,11 @@ types budget
 					enabled = "[GetPlayer.HasAnyTaxes]"
 				}
 			}
-			blockoverride "setvisible" {
-				block "setvisible_zero" {}
+			blockoverride "is_selected_visibility" {
+				block "is_selected_visibility_zero" {}
 			}
-			blockoverride "setvisible_2" {
-				block "setvisible_zero_2" {}
+			blockoverride "is_clickable_alpha" {
+				block "is_clickable_alpha_zero" {}
 			}
 		}
 		### VERY LOW

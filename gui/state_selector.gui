@@ -29,7 +29,6 @@ types state_selectors
 					scrollwidget = {
 						fixedgridbox = {
 							datamodel = "[GetGlobalList('strategic_region_list')]"
-							datacontext = "[Scope.AccessStrategicRegion]"
 
 							addcolumn = 210
 							addrow = 70
@@ -47,7 +46,7 @@ types state_selectors
 									enabled = "[GetScriptedGui('any_valid_state_in_strategic_region').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('strategic_region',Scope.GetStrategicRegion.MakeScope).End)]"
 									textbox = {
 										autoresize = yes
-										text = "[Scope.AccessStrategicRegion.GetName]"
+										text = "[Scope.GetStrategicRegion.GetName]"
 										align = center|nobaseline
 										using = fontsize_large
 										parentanchor = center
@@ -70,7 +69,6 @@ types state_selectors
 					scrollwidget = {
 						fixedgridbox = {
 							datamodel = "[AccessPlayer.MakeScope.GetList('countries_in_selected_strategic_region')]"
-							datacontext = "[Scope.AccessCountry]"
 
 							addcolumn = 210
 							addrow = 70
@@ -87,15 +85,15 @@ types state_selectors
 									onclick = "[GetScriptedGui('set_congress_target_country').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target', Scope.GetCountry.MakeScope).End)]"
          							onclick = "[GetScriptedGui('set_congress_target_state_basket').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target_state', Scope.GetCountry.GetCapital.MakeScope).End)]"
 
-									onclick = "[GetVariableSystem.Toggle('start_congress_confirmation_countries')]"
 									onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
+									onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).AddScope('target_country', Scope.GetCountry.MakeScope).End)]"
 									flowcontainer = {
 										parentanchor = vcenter
 										direction = horizontal
 										margin_left = 15
 										textbox = {
 											autoresize = yes
-											raw_text = "[Scope.AccessCountry.GetName]"
+											raw_text = "[Scope.GetCountry.GetName]"
 											align = left|nobaseline
 											using = fontsize_large
 											using = tooltip_above
@@ -124,9 +122,7 @@ types state_selectors
 						scrollbarpolicy_horizontal = always_off
 						scrollwidget = {
 							fixedgridbox = {
-								datamodel = "[AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"
-								datacontext = "[Scope.AccessState]"
-	
+								datamodel = "[AccessPlayer.MakeScope.GetList('states_in_selected_strategic_region')]"	
 								# NEEDS to reference to a getList for example: GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetList('current_states')
 	
 								addcolumn = 210
@@ -169,17 +165,17 @@ types state_selectors
 											direction = horizontal
 											margin_left = 75
 											spacing = 5
+											datacontext = "[Scope.GetState.GetOwner]"
 											tiny_flag = {
 												using = tooltip_above
-												datacontext = "[Scope.AccessState.AccessOwner]"
-												align = left|vcenter
+												#align = left|vcenter
 												blockoverride "flag_tooltip" {
 													tooltip = "[ContextualDiplomaticPact.GetTooltip]"
 												}
 											}
 											textbox = {
 												autoresize = yes
-												raw_text = "[Scope.AccessState.GetName]"
+												raw_text = "[Scope.GetState.GetName]"
 												align = left|vcenter
 												using = fontsize_small
 											}
@@ -200,7 +196,6 @@ types state_selectors
 						scrollwidget = {
 							fixedgridbox = {
 								datamodel = "[AccessPlayer.MakeScope.GetList('congress_target_state_basket')]"
-								datacontext = "[Scope.AccessState]"
 	
 								# NEEDS to reference to a getList for example: GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope.GetList('current_states')
 	
@@ -244,17 +239,17 @@ types state_selectors
 											direction = horizontal
 											margin_left = 75
 											spacing = 5
+											datacontext = "[Scope.GetState.GetOwner]"
 											tiny_flag = {
 												using = tooltip_above
-												datacontext = "[Scope.AccessState.AccessOwner]"
-												align = left|vcenter
+												#align = left|vcenter
 												blockoverride "flag_tooltip" {
 													tooltip = "[ContextualDiplomaticPact.GetTooltip]"
 												}
 											}
 											textbox = {
 												autoresize = yes
-												raw_text = "[Scope.AccessState.GetName]"
+												raw_text = "[Scope.GetState.GetName]"
 												align = left|vcenter
 												using = fontsize_small
 											}
@@ -271,9 +266,8 @@ types state_selectors
 				# Start congress button
 				button = {
 					using = default_button
-					onclick = "[GetVariableSystem.Toggle('start_congress_confirmation_states')]"
 					onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
-
+					onclick = "[GetScriptedGui('start_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 					visible = "[GetVariableSystem.HasValue('state_selector_mode','states')]"
 					enabled = "[GetScriptedGui('has_states_in_congress_basket').IsShown(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
 					parentanchor = center|top
@@ -332,8 +326,6 @@ types state_selectors
 				onclick = "[GetVariableSystem.Clear('imperia_vienna_congress_state_selector_open')]"
 			}
 		}
-		start_congress_confirmation_countries = {}
-		start_congress_confirmation_states = {}
 	}
 }
 

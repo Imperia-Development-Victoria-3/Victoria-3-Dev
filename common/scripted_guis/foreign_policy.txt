@@ -1,5 +1,5 @@
 ﻿imperia_quick_enact_law = {
-	scope = law
+	scope = law_type
 	saved_scopes = {
 		country
 	}
@@ -9,12 +9,12 @@
 			if = {
 				limit = {
 					NOT = {
-						has_law = prev.type
+						has_law = prev
 					}
 				}
 				custom_tooltip = {
 					text = EXECUTIVE_ORDER_DESC
-					activate_law = prev.type
+					activate_law = prev
 				}
 				add_foreign_policy_cooldown = yes
 			}
@@ -24,16 +24,25 @@
 	is_valid = {
 		scope:country = {
 			NOT = {
-				has_law = prev.type
+				has_law = prev
 				custom_tooltip = {
 					text = CANNOT_HAVE_EXECUTIVE_ORDER_COOLDOWN
 					has_variable = modifier_imperia_foreign_policy_cooldown
 				}
 			}
+			any_law = {
+				type = root
+				law_is_available = yes
+			}
 		}
 	}
 	
 	is_shown = {
-		type != law_type:law_true_neutrality
+		scope:country = {
+			any_law = {
+				type = root
+				law_is_available = yes
+			}
+		}
 	}
 }
