@@ -39,7 +39,7 @@ types imperia_vienna_congress
                     item = {
                         large_flag = {
                             using = tooltip_above
-                            datacontext = "[Scope.AccessCountry]"						
+                            datacontext = "[Scope.GetCountry]"						
                             blockoverride "flag_tooltip" {
                                 tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                             }
@@ -47,7 +47,7 @@ types imperia_vienna_congress
                                 autoresize = yes
                                 margin_top = 65
                                 margin_left = 35
-                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                raw_text = "[Scope.GetCountry.GetPrestige]"
                                 align = center
                             }
                         }			
@@ -80,22 +80,23 @@ types imperia_vienna_congress
                     flipdirection = yes
                     datamodel = "[GetGlobalList('imperia_congress_major_powers')]"
                     item = {
-
                         small_flag = {
                             parentanchor = vcenter
                             using = tooltip_above
-                            datacontext = "[Scope.AccessCountry]"
-                            blockoverride "flag_tooltip" {
-                                tooltip = "[ContextualDiplomaticPact.GetTooltip]"
-                            }
+                            datacontext = "[Scope.GetCountry]"
                             textbox = {
                                 autoresize = yes
                                 margin_top = 30
                                 margin_left = 15
-                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                raw_text = "[Scope.GetCountry.GetPrestige]"
                                 align = center
+                                blockoverride "flag_tooltip" {
+                                    # Despite this blockoverrides placement, its shown when hovering the flag itself, not the text
+                                    # Is needed like this when using small_flag
+                                    tooltip = "[ContextualDiplomaticPact.GetTooltip]"
+                                }
                             }
-                        }
+                        }	
                     }
                 }
             }
@@ -162,7 +163,7 @@ types imperia_vienna_congress
                                 item = {
                                     tiny_flag = {
                                         using = tooltip_above
-                                        datacontext = "[Scope.AccessCountry]"						
+                                        datacontext = "[Scope.GetCountry]"								
                                         blockoverride "flag_tooltip" {
                                             tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                         }
@@ -223,7 +224,7 @@ types imperia_vienna_congress
                                     item = {
                                         large_flag = {
                                             using = tooltip_above
-                                            datacontext = "[Scope.AccessCountry]"						
+                                            datacontext = "[Scope.GetCountry]"
                                             blockoverride "flag_tooltip" {
                                                 tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                             }
@@ -231,7 +232,7 @@ types imperia_vienna_congress
                                                 autoresize = yes
                                                 margin_top = 65
                                                 margin_left = 35
-                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                raw_text = "[Scope.GetCountry.GetPrestige]"
                                                 align = center
                                             }
                                         }			
@@ -291,7 +292,7 @@ types imperia_vienna_congress
                                     item = {
                                         large_flag = {
                                             using = tooltip_above
-                                            datacontext = "[Scope.AccessCountry]"						
+                                            datacontext = "[Scope.GetCountry]"					
                                             blockoverride "flag_tooltip" {
                                                 tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                             }
@@ -299,7 +300,7 @@ types imperia_vienna_congress
                                                 autoresize = yes
                                                 margin_top = 65
                                                 margin_left = 35
-                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                raw_text = "[Scope.GetCountry.GetPrestige]"
                                                 align = center
                                             }
                                         }			
@@ -359,7 +360,7 @@ types imperia_vienna_congress
                                     item = {
                                         large_flag = {
                                             using = tooltip_above
-                                            datacontext = "[Scope.AccessCountry]"						
+                                            datacontext = "[Scope.GetCountry]"						
                                             blockoverride "flag_tooltip" {
                                                 tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                             }
@@ -367,7 +368,7 @@ types imperia_vienna_congress
                                                 autoresize = yes
                                                 margin_top = 65
                                                 margin_left = 35
-                                                raw_text = "[Scope.AccessCountry.GetPrestige]"
+                                                raw_text = "[Scope.GetCountry.GetPrestige]"
                                                 align = center
                                             }
                                         }			
@@ -391,7 +392,7 @@ types imperia_vienna_congress
                                 item = {
                                     tiny_flag = {
                                         using = tooltip_above
-                                        datacontext = "[Scope.AccessCountry]"						
+                                        datacontext = "[Scope.GetCountry]"					
                                         blockoverride "flag_tooltip" {
                                             tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                         }
@@ -428,8 +429,8 @@ types imperia_vienna_congress
                     # End congress button
                     button = {
                         using = default_button
-                        onclick = "[GetVariableSystem.Toggle('end_congress_confirmation')]"
-                        enabled = "[And(GetScriptedGui('is_congress_initiator').IsShown( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End), Not(GetGlobalVariable('imperia_vienna_congress_minimum_time').IsSet))]"
+                        enabled = "[GetScriptedGui('end_congress').IsValid( GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
+                        onclick = "[GetScriptedGui('end_congress').Execute(GuiScope.SetRoot(GetMetaPlayer.GetPlayedOrObservedCountry.MakeScope).End)]"
                         parentanchor = center|top
                         margin_top = 20
                         textbox = {
@@ -457,7 +458,7 @@ types imperia_vienna_congress
                             item = {
                                 tiny_flag = {
                                     using = tooltip_above
-                                    datacontext = "[Scope.AccessCountry]"						
+                                    datacontext = "[Scope.GetCountry]"				
                                     blockoverride "flag_tooltip" {
                                         tooltip = "[ContextualDiplomaticPact.GetTooltip]"
                                     }
