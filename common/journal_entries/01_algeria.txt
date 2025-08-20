@@ -1,8 +1,6 @@
 ﻿je_conquest_of_algeria = {
 	icon = "gfx/interface/icons/event_icons/bicorne_hat.dds"
-
 	group = je_group_france_expansion
-
 	complete = {
 		country_or_subject_owns_entire_state_region = STATE_ORAN
 		country_or_subject_owns_entire_state_region = STATE_ALGIERS
@@ -19,7 +17,6 @@
 			}
 		}
 	}
-
 	on_complete = {
 		custom_tooltip = je_conquest_of_algeria_tt
 		trigger_event = algeria_events.1
@@ -39,36 +36,34 @@
 			}
 		}
 	}
-
 	fail = {
-		NOT = { has_state_in_state_region = STATE_ORAN }
-		NOT = { has_state_in_state_region = STATE_ALGIERS }
-		NOT = { has_state_in_state_region = STATE_CONSTANTINE }
+		NOT = {
+			has_state_in_state_region = STATE_ORAN
+		}
+		NOT = {
+			has_state_in_state_region = STATE_ALGIERS
+		}
+		NOT = {
+			has_state_in_state_region = STATE_CONSTANTINE
+		}
 	}
-
 	on_fail = {
 		trigger_event = algeria_events.3
 	}
-
 	on_monthly_pulse = {
 		random_events = {
 			90 = 0
-			10 = algeria_events.5 # Raid Event
+			10 = algeria_events.5			# Raid Event
 		}
 	}
-
 	transferable = no
-
 	should_be_pinned_by_default = yes
-
 	weight = 5000
 }
 
 je_the_algerian_departements = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
 	group = je_group_france_expansion
-
 	immediate = {
 		random_scope_state = {
 			limit = {
@@ -116,16 +111,16 @@ je_the_algerian_departements = {
 			text = je_the_algerian_departements_tt_1
 			OR = {
 				any_scope_state = {
-				state_region = s:STATE_ALGIERS
-				is_incorporated = yes
+					state_region = s:STATE_ALGIERS
+					is_incorporated = yes
 				}
 				any_scope_state = {
-				state_region = s:STATE_ORAN
-				is_incorporated = yes
+					state_region = s:STATE_ORAN
+					is_incorporated = yes
 				}
 				any_scope_state = {
-				state_region = s:STATE_CONSTANTINE
-				is_incorporated = yes
+					state_region = s:STATE_CONSTANTINE
+					is_incorporated = yes
 				}
 			}
 			any_scope_state = {
@@ -151,52 +146,61 @@ je_the_algerian_departements = {
 					state_region = s:STATE_ALGIERS
 					culture_percent_state = {
 						target = cu:french
-					    value >= 0.2
+						value >= 0.2
 					}
 				}
 				any_scope_state = {
 					state_region = s:STATE_ORAN
 					culture_percent_state = {
 						target = cu:french
-					    value >= 0.2
+						value >= 0.2
 					}
 				}
 				any_scope_state = {
 					state_region = s:STATE_CONSTANTINE
 					culture_percent_state = {
 						target = cu:french
-					    value >= 0.2
+						value >= 0.2
 					}
 				}
 			}
 			AND = {
-				cultural_acceptance_base = { target = cu:maghrebi value >= acceptance_status_4 }
-				cultural_acceptance_base = { target = cu:berber value >= acceptance_status_4 }
+				cultural_acceptance_base = {
+					target = cu:maghrebi
+					value >= acceptance_status_4
+				}
+				cultural_acceptance_base = {
+					target = cu:berber
+					value >= acceptance_status_4
+				}
 			}
 		}
 	}
-
 	on_complete = {
 		trigger_event = algeria_events.4
 	}
-
 	fail = {
-		NOT = { has_state_in_state_region = STATE_ORAN }
-		NOT = { has_state_in_state_region = STATE_ALGIERS }
-		NOT = { has_state_in_state_region = STATE_CONSTANTINE }
+		NOT = {
+			has_state_in_state_region = STATE_ORAN
+		}
+		NOT = {
+			has_state_in_state_region = STATE_ALGIERS
+		}
+		NOT = {
+			has_state_in_state_region = STATE_CONSTANTINE
+		}
 	}
-
 	on_fail = {
 		trigger_event = algeria_events.3
 	}
-
 	on_monthly_pulse = {
 		random_events = {
 			90 = 0
 			10 = algeria_events.6
 		}
 		effect = {
-			every_scope_state = { # In case the states are lost as a result of a secession or the like
+			every_scope_state = {
+				# In case the states are lost as a result of a secession or the like
 				limit = {
 					OR = {
 						state_region = s:STATE_ORAN
@@ -215,19 +219,14 @@ je_the_algerian_departements = {
 			}
 		}
 	}
-
 	transferable = no
-
 	should_be_pinned_by_default = yes
-
 	weight = 5000
 }
 
 je_reconquest_of_algeria = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
 	group = je_group_historical_content
-
 	complete = {
 		custom_tooltip = {
 			text = je_reconquest_of_algeria_tt
@@ -238,35 +237,36 @@ je_reconquest_of_algeria = {
 		owns_entire_state_region = STATE_ALGIERS
 		owns_entire_state_region = STATE_CONSTANTINE
 	}
-
 	on_complete = {
 		trigger_event = algeria_events.8
 	}
-
 	fail = {
-		NOT = { has_state_in_state_region = STATE_ORAN }
-		NOT = { has_state_in_state_region = STATE_ALGIERS }
-		NOT = { has_state_in_state_region = STATE_CONSTANTINE }
+		NOT = {
+			has_state_in_state_region = STATE_ORAN
+		}
+		NOT = {
+			has_state_in_state_region = STATE_ALGIERS
+		}
+		NOT = {
+			has_state_in_state_region = STATE_CONSTANTINE
+		}
 		trigger_if = {
 			limit = {
 				c:TUG ?= this
 			}
-			NOT = { has_state_in_state_region = STATE_EAST_SAHARA }
+			NOT = {
+				has_state_in_state_region = STATE_EAST_SAHARA
+			}
 		}
 	}
-
 	transferable = yes
-
 	should_be_pinned_by_default = yes
-
 	weight = 5000
 }
 
 je_french_foreign_legion = {
 	icon = "gfx/interface/icons/event_icons/bicorne_hat.dds"
-
 	group = je_group_france_expansion
-
 	complete = {
 		any_scope_state = {
 			region = sr:region_north_africa
@@ -278,20 +278,23 @@ je_french_foreign_legion = {
 			count >= 3
 		}
 	}
-
 	on_complete = {
-		trigger_event = { id = algeria_events.9 }
+		trigger_event = {
+			id = algeria_events.9
+		}
 	}
-
 	fail = {
-		NOT = { has_state_in_state_region = STATE_ORAN }
-		NOT = { has_state_in_state_region = STATE_ALGIERS }
-		NOT = { has_state_in_state_region = STATE_CONSTANTINE }
+		NOT = {
+			has_state_in_state_region = STATE_ORAN
+		}
+		NOT = {
+			has_state_in_state_region = STATE_ALGIERS
+		}
+		NOT = {
+			has_state_in_state_region = STATE_CONSTANTINE
+		}
 	}
-
 	transferable = yes
-
 	should_be_pinned_by_default = yes
-
 	weight = 5000
 }
