@@ -1,55 +1,4 @@
-﻿# GUNS TREATY
-imperia_set_guns_treaty = {
-	if = {
-		limit = {
-			scope:actor = {
-				has_technology_researched = gunsmithing
-			}
-		}
-		scope:target_country = {
-			set_variable = imperia_gunsmithing_treaty
-		}
-	}
-	if = {
-		limit = {
-			scope:actor = {
-				has_technology_researched = rifling
-			}
-		}
-		scope:target_country = {
-			set_variable = imperia_rifling_treaty
-		}
-	}
-	if = {
-		limit = {
-			scope:actor = {
-				has_technology_researched = repeaters
-			}
-		}
-		scope:target_country = {
-			set_variable = imperia_repeaters_treaty
-		}
-	}
-	if = {
-		limit = {
-			scope:actor = {
-				has_technology_researched = bolt_action_rifles
-			}
-		}
-		scope:target_country = {
-			set_variable = imperia_bolt_action_rifles_treaty
-		}
-	}
-}
-
-imperia_reset_guns_treaty = {
-	remove_variable ?= imperia_gunsmithing_treaty
-	remove_variable ?= imperia_rifling_treaty
-	remove_variable ?= imperia_repeaters_treaty
-	remove_variable ?= imperia_bolt_action_rifles_treaty
-}
-
-# ADDING WAR GOALS
+﻿# ADDING WAR GOALS
 imperia_add_war_goal_effect = {
 	random_diplomatic_play = {
 		limit = {
@@ -128,11 +77,27 @@ imperia_add_war_goal_effect = {
 				}
 			}
 			4 = {
+				# War reparations
+				# Implementation roughly taken from the vanilla Sepoy Mutiny effect
+				save_temporary_scope_value_as = {
+					name = war_reparations_amount
+					value = {
+						value = scope:target_country.income
+						multiply = define:NDiplomacy|DEFAULT_WAR_REPARATIONS_MONEY_TRANSFER
+					}
+				}
 				add_war_goal = {
 					holder = root
-					type = war_reparations
-					primary_demand = no
 					target_country = scope:target_country
+					type = enforce_treaty_article
+					article = {
+						article = money_transfer
+						source_country = scope:target_country
+						target_country = root
+						inputs = {
+{ quantity = scope:war_reparations_amount }
+						}
+					}
 				}
 			}
 			5 = {

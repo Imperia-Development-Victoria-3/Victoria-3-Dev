@@ -164,6 +164,18 @@
 			}
 			ig:ig_landowners = {
 				set_interest_group_name = ig_landed_gentry
+				remove_ideology = ideology_paternalistic
+				add_ideology = ideology_magnatial
+			}
+		}
+		# Polish Landowners
+		else_if = {
+			limit = {
+				country_has_primary_culture = cu:polish
+			}
+			ig:ig_landowners = {
+				remove_ideology = ideology_paternalistic
+				add_ideology = ideology_magnatial
 			}
 		}
 		# Yangban Officials
@@ -485,6 +497,25 @@
 		value = 2.0
 	}
 	
+	executive_weight = {
+		value = 0.25
+
+		# The company owning BIC should not get non-industrialist executives
+		if = {
+			limit = {
+				exists = scope:company
+				exists = c:BIC
+				c:BIC = {
+					exists = owning_company
+					owning_company = scope:company
+				}
+			}
+			multiply = {
+				value = 0
+			}
+		}
+	}
+	
 	noble_chance = {
 		value = 1.0
 	}
@@ -505,6 +536,10 @@
 			}
 			
 		}
+	}
+	
+	female_executive_chance = {
+		value = 0.0
 	}
 	
 	female_politician_chance = {
@@ -568,5 +603,11 @@
 	commander_leader_chance = {
 		value = 0.5
 		multiply = ig_commander_leader_chance_mult
+	}
+
+	# The chance that a executive belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular executive in the IG
+	executive_leader_chance = {
+		value = 0.1
 	}
 }

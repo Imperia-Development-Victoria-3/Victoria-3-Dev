@@ -3,8 +3,8 @@
 # cost												The cost in AUT to set this Decree on a state (scales with Power Rank)
 # unlocking_technologies							A list of technologies, at least one of which must be known to the country to use this Focus
 # unlocking_laws									A list of laws, at least one which must be active in the country to use this Focus. If the country switches away from all unlocking laws the Focus will be removed
-# country_trigger									A trigger in country context that determines if the Decree is permitted/shown in interface or not; should invalidate the Decree on a weekly basis if found invalid 
-# state_trigger										A trigger in state context that determines if the Decree is permitted or not; should invalidate the Decree on a weekly basis if found invalid 
+# country_trigger									A trigger in country context that determines if the Decree is permitted/shown in interface or not; should invalidate the Decree on a weekly basis if found invalid
+# state_trigger										A trigger in state context that determines if the Decree is permitted or not; should invalidate the Decree on a weekly basis if found invalid
 # ai_weight											Scripted value which determines the chance of getting the Decree by AI
 decree_road_maintenance = {
 	# Efficient Administration
@@ -164,29 +164,22 @@ decree_emergency_relief = {
 	}
 	
 	state_trigger = {
-		trigger_if = {
-			limit = {
-				has_decree = decree_emergency_relief
+		OR = {
+			has_famine = yes
+			devastation > 0.2
+			ROOT.state_region = {
+				OR = {
+					has_harvest_condition = flood
+					has_harvest_condition = wildfire
+					has_harvest_condition = drought
+					has_harvest_condition = disease_outbreak
+					has_harvest_condition = extreme_winds
+					has_harvest_condition = tsunami
+				}
 			}
 			any_scope_pop = {
 				percent >= 0.2
-				
 				is_in_starvation = yes
-			}
-		}
-		trigger_else = {
-			OR = {
-				has_famine = yes
-				devastation > 0.2
-				ROOT.state_region = {
-					OR = {
-						has_harvest_condition = flood
-						has_harvest_condition = wildfire
-						has_harvest_condition = drought
-						has_harvest_condition = disease_outbreak
-						has_harvest_condition = extreme_winds
-					}
-				}
 			}
 		}
 	}
@@ -224,7 +217,7 @@ decree_promote_social_mobility = {
 	state_trigger = {
 		NOT = {
 			AND = {
-				owner = {
+				owner ?= {
 					OR = {
 						has_law = law_type:law_hindu_caste_enforced
 						has_law = law_type:law_hindu_caste_codified
@@ -263,6 +256,12 @@ decree_promote_social_mobility = {
 				literacy_rate < 0.75
 			}
 			add = 50
+		}
+		if = {
+			limit = {
+				scope:country = { has_journal_entry = je_hawaii }
+			}
+			add = 1000
 		}
 		if = {
 			limit = {
@@ -342,13 +341,13 @@ decree_promote_national_values = {
 				scope:country = {
 					OR = {
 						has_strategy = ai_strategy_reactionary_agenda
-						has_strategy = ai_strategy_maintain_mandate_of_heaven
+						has_strategy = ai_strategy_conservative_agenda
 					}
 				}
 			}
 			add = 100
 		}
-		if = {
+		else_if = {
 			limit = {
 				scope:country = {
 					has_strategy = ai_strategy_nationalist_agenda
@@ -356,40 +355,70 @@ decree_promote_national_values = {
 			}
 			add = 200
 		}
+		
 		if = {
 			limit = {
-				state_population < 100000
+				scope:country = {
+					OR = {
+						has_law = law_type:law_ethnostate
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_theocracy
+					}
+				}
+			}
+			multiply = 2.0
+		}
+		else_if = {
+			limit = {
+				scope:country = {
+					OR = {
+						has_law = law_type:law_cultural_exclusion
+						has_law = law_type:law_freedom_of_conscience
+					}
+				}
+			}
+			multiply = 0.5
+		}
+		else_if = {
+			limit = {
+				scope:country = {
+					OR = {
+						has_law = law_type:law_multicultural
+						has_law = law_type:law_total_separation
+					}
+				}
+			}
+			multiply = 0.1
+		}
+		
+		if = {	# Deliberately placed here since we want the AI to ignore laws for this
+			limit = {
+				scope:country = {
+					has_journal_entry = je_south_american_national_identity
+				}
+			}
+			add = 500
+		}
+		
+		if = {
+			limit = {
+				primary_cultures_percent_state > 0.9
+				religion_percent_state = {
+					target = scope:country.religion
+					value > 0.9
+				}
 			}
 			multiply = 0
 		}
-		if = {
+		else_if = {
 			limit = {
-				state_population < 300000
-			}
-			multiply = 0.5
-		}
-		if = {
-			limit = {
-				scope:country = {
-					OR = {
-						has_strategy = ai_strategy_reactionary_agenda
-						has_strategy = ai_strategy_conservative_agenda
-						has_strategy = ai_strategy_maintain_mandate_of_heaven
-					}
+				primary_cultures_percent_state > 0.5
+				religion_percent_state = {
+					target = scope:country.religion
+					value > 0.5
 				}
 			}
 			multiply = 0.5
-		}
-		if = {
-			limit = {
-				scope:country = {
-					OR = {
-						has_strategy = ai_strategy_progressive_agenda
-						has_strategy = ai_strategy_egalitarian_agenda
-					}
-				}
-			}
-			multiply = 1.5
 		}
 	}
 }
@@ -693,6 +722,42 @@ decree_greener_grass_campaign = {
 		}
 		if = {
 			limit = {
+				scope:country = {
+					has_journal_entry = je_the_algerian_departements
+				}
+				state_region = {
+					OR = {
+						this = s:STATE_ORAN
+						this = s:STATE_ALGIERS
+						this = s:STATE_CONSTANTINE
+					}
+				}
+				culture_percent_state = {
+					target = cu:french
+					value <= 0.25	# Bit of a buffer since we need 20%
+				}
+			}
+			add = 500
+		}
+		if = {
+			limit = {
+				is_incorporated = yes
+				any_scope_building = {
+					is_subsistence_building = yes
+					occupancy < 0.9
+				}
+				scope:country = {
+					OR = {
+						has_journal_entry = je_south_america_migration
+						has_journal_entry = je_central_america_migration
+						has_journal_entry = je_american_west_migration
+					}
+				}
+			}
+			add = 500
+		}
+		if = {
+			limit = {
 				is_incorporated = no
 				scope:country = {
 					NOT = {
@@ -785,6 +850,7 @@ decree_military_training = {
 					OR = {
 						has_strategy = ai_strategy_unify_germany
 						has_strategy = ai_strategy_unify_italy
+						has_journal_entry = je_war_of_the_confederation
 					}
 				}
 			}

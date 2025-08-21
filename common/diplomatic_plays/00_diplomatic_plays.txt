@@ -1,9 +1,10 @@
 ﻿# This play is only used as a 'default diplomatic play' for certain triggers etc, and potentially for scripted content
 # It can never actually be launched in the normal way
-dp_war_reparations = {
-	war_goal = war_reparations
+dp_default_treaty_article = {
+	# This defaults to a standard money transfer article
+	war_goal = enforce_treaty_article
 	
-	texture = "gfx/interface/icons/war_goals/war_reparations.dds"
+	texture = "gfx/interface/icons/war_goals/enforce_treaty_article.dds"
 	
 	selectable_in_lens = {
 		always = no
@@ -25,11 +26,6 @@ dp_war_reparations = {
 dp_open_market = {
 	war_goal = open_market
 	texture = "gfx/interface/icons/war_goals/open_market.dds"
-	
-	selectable_in_lens = {
-		# Replaced by foreign investment rights
-		NOT = { has_dlc_feature = foreign_investment }
-	}
 	
 	possible = {
 		NOT = { is_country_type = decentralized }
@@ -370,17 +366,17 @@ dp_make_protectorate = {
 # TODO PRCAL-36324 - add this diplo play back in when we get rid of Colonial country type
 #dp_make_dominion = {
 #	war_goal = make_dominion
-#	
+#
 #	texture = "gfx/interface/icons/war_goals/make_dominion.dds"
-#	
-#	possible = {	
-#		aggressive_diplomatic_plays_permitted = yes				
+#
+#	possible = {
+#		aggressive_diplomatic_plays_permitted = yes
 #	}
-#	
+#
 #	ai_acceptance_max = 90
-#	
+#
 #	on_weekly_pulse = {}
-#	
+#
 #	on_war_begins = {}
 #
 #	on_war_end = {}
@@ -803,6 +799,7 @@ dp_give_foreign_investment_rights = {
 
 dp_native_uprising = {
 	war_goal = colonization_rights
+	target_can_add_war_goals = no
 	
 	requires_interest_marker = no
 	add_infamy_for_starting_initiator_wargoals = no
@@ -823,10 +820,20 @@ dp_annex_war = {
 	war_goal = annex_country
 	texture = "gfx/interface/icons/war_goals/annex_country.dds"
 	selectable_in_lens = {
-		always = no
+		aggressive_diplomatic_plays_permitted = yes
 	}
 	
-	possible = {}
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			NOT = { is_subject_of = root }
+			country_rank <= rank_value:insignificant_power
+		}
+		diplomatic_play_has_no_relations_blockers = yes
+	}
 	
 	ai_acceptance_max = 75
 	
@@ -913,16 +920,13 @@ dp_unify_ethiopia = {
 	war_goal = annex_country
 	texture = "gfx/interface/icons/war_goals/annex_country.dds"
 	selectable_in_lens = {
-		can_form_nation = ETH
+		has_journal_entry = je_age_of_princes
 	}
 	possible = {
 		NOT = { exists = c:ETH }
 		NOT = { is_country_type = decentralized }
 		is_subject = no
-		custom_tooltip = {
-			text = ETH_tt
-			can_form_nation = ETH
-		}
+		has_journal_entry = je_age_of_princes
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			imperia_aggressive_diplomatic_plays_permitted = yes
@@ -930,6 +934,7 @@ dp_unify_ethiopia = {
 				text = ETH_tt
 				can_form_nation = ETH
 			}
+			aggressive_diplomatic_plays_permitted = yes
 		}
 	}
 	on_weekly_pulse = {}
@@ -944,15 +949,16 @@ dp_unify_china = {
 		OR = {
 			has_journal_entry = je_reunify_china
 			global_var:chinese_central_government ?= THIS
+			c:CHI ?= this
 		}
 	}
 	possible = {
-		NOT = { exists = c:CHI }
 		NOT = { is_country_type = decentralized }
 		is_subject = no
 		OR = {
 			has_journal_entry = je_reunify_china
 			global_var:chinese_central_government ?= THIS
+			c:CHI ?= this
 		}
 		
 		scope:target_country = {
@@ -961,6 +967,8 @@ dp_unify_china = {
 			OR = {
 				has_journal_entry = je_reunify_china
 				global_var:chinese_central_government ?= THIS
+				country_has_primary_culture = cu:han
+				country_has_primary_culture = cu:manchu
 			}
 		}
 	}
@@ -1000,23 +1008,37 @@ dp_unify_india = {
 	war_goal = annex_country
 	texture = "gfx/interface/icons/war_goals/annex_country.dds"
 	selectable_in_lens = {
-		can_form_nation = BHT
+		OR = {
+			can_form_nation = BHT
+			c:BHT ?= this
+		}
 	}
 	possible = {
-		NOT = { exists = c:BHT }
 		NOT = { is_country_type = decentralized }
 		has_technology_researched = pan-nationalism
 		is_subject = no
-		custom_tooltip = {
-			text = BHT_tt
-			can_form_nation = BHT
+		OR = {
+			custom_tooltip = {
+				text = BHT_tt
+				can_form_nation = BHT
+			}
+			c:BHT ?= this
 		}
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			imperia_aggressive_diplomatic_plays_permitted = yes
-			custom_tooltip = {
-				text = BHT_tt
-				can_form_nation = BHT
+			OR = {
+				custom_tooltip = {
+					text = BHT_tt
+					can_form_nation = BHT
+				}
+				AND = {
+					country_is_in_india = yes
+					custom_tooltip = {
+						text = indian_primary_culture_tt
+						has_indian_primary_culture = yes
+					}
+				}
 			}
 		}
 	}

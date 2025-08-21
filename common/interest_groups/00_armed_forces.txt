@@ -497,6 +497,25 @@
 		value = 5.0
 	}
 	
+	executive_weight = {
+		value = 0.2
+
+		# The company owning BIC should not get non-industrialist executives
+		if = {
+			limit = {
+				exists = scope:company
+				exists = c:BIC
+				c:BIC = {
+					exists = owning_company
+					owning_company = scope:company
+				}
+			}
+			multiply = {
+				value = 0
+			}
+		}
+	}
+	
 	noble_chance = {
 		value = 0.5
 	}
@@ -517,6 +536,11 @@
 			}
 		}
 	}
+	
+	female_executive_chance = {
+		value = 0.0
+	}
+	
 	female_politician_chance = {
 		value = 0.0
 	}
@@ -566,5 +590,11 @@
 	commander_leader_chance = {
 		value = 0.75
 		multiply = ig_commander_leader_chance_mult
+	}
+
+	# The chance that a executive belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular executive in the IG
+	executive_leader_chance = {
+		value = 0.1
 	}
 }

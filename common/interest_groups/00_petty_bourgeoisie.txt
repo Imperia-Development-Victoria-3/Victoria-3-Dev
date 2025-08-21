@@ -167,6 +167,8 @@
 			pop_employment_building_group = bg_manufacturing
 			pop_employment_building_group = bg_service
 			pop_employment_building_group = bg_urban_facilities
+			pop_employment_building_group = bg_private_infrastructure
+			pop_employment_building_group = bg_financial_districts
 			pop_employment_building_group = bg_government
 			pop_employment_building_group = bg_logging
 			pop_employment_building_group = bg_mining
@@ -200,7 +202,7 @@
 			}
 			add = {
 				desc = "POP_BASE_ATTRACTION"
-				value = 25
+				value = 15
 			}
 		}
 		else_if = {
@@ -209,7 +211,7 @@
 			}
 			add = {
 				desc = "POP_BASE_ATTRACTION"
-				value = 50
+				value = 30
 			}
 		}
 		
@@ -219,7 +221,7 @@
 				limit = {
 					is_pop_type = shopkeepers
 				}
-				value = 250
+				value = 150
 			}
 		}
 		
@@ -459,6 +461,25 @@
 		value = 1.0
 	}
 	
+	executive_weight = {
+		value = 1.5
+
+		# The company owning BIC should not get non-industrialist executives
+		if = {
+			limit = {
+				exists = scope:company
+				exists = c:BIC
+				c:BIC = {
+					exists = owning_company
+					owning_company = scope:company
+				}
+			}
+			multiply = {
+				value = 0
+			}
+		}
+	}
+	
 	noble_chance = {
 		value = 0.1
 	}
@@ -479,6 +500,10 @@
 			}
 			
 		}
+	}
+	
+	female_executive_chance = {
+		value = 0.0
 	}
 	
 	female_politician_chance = {
@@ -542,5 +567,11 @@
 	commander_leader_chance = {
 		value = 0.25
 		multiply = ig_commander_leader_chance_mult
+	}
+
+	# The chance that a executive belonging to this IG takes over leadership when it changes
+	# scope:character is the most popular executive in the IG
+	executive_leader_chance = {
+		value = 0.5
 	}
 }
