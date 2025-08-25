@@ -348,6 +348,103 @@ je_reform_the_banner_system_modern = {
 	weight = 1000
 }
 
+je_hundred_days_reform = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
+	scripted_button = je_hundred_days_reform_modernizer_conversion_button
+	scripted_button = je_hundred_days_reform_enthusiasm_button
+	scripted_button = je_hundred_days_reform_force_law_button
+	scripted_progress_bar = hundred_days_reform_enthusiasm_progress_bar
+	modifiers_while_active = {
+		modifier_hundred_days_reform_momentum
+	}
+	complete = {
+		# Promote Capitalism (Interventionism or Laissez Faire, Protectionism, Commercialized Agriculture)
+		AND = {
+			OR = {
+				has_law = law_type:law_interventionism
+				has_law = law_type:law_laissez_faire
+			}
+			has_law = law_type:law_protectionism
+			has_law = law_type:law_commercialized_agriculture
+		}
+		# Adopt Modern Military Training (army has repeaters or bolt-actions activated and advanced tactics training)
+		AND = {
+			OR = {
+				army_mobilization_option_fraction = {
+					target = mobilization_option:mobilization_option_repeaters
+					value >= 0.8
+				}
+				army_mobilization_option_fraction = {
+					target = mobilization_option:mobilization_option_bolt_actions
+					value >= 0.8
+				}
+			}
+			# And advanced tactics training for 80% of army
+			any_scope_building = {
+				filter = {
+					is_building_type = building_barracks
+				}
+				has_active_production_method = pm_advanced_tactics_training
+				percent = 0.8
+			}
+		}
+		# Establish a constitution (wealth, census or universal suffrage)
+		OR = {
+			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_universal_suffrage
+		}
+		# Standardize the Chinese Language (Establish National Language JE completion, either has Prestige Dialect or supported Prestige Dialect modifier.)
+		OR = {
+			has_modifier = modifier_prestige_dialect
+			has_modifier = modifier_accepted_prestige_dialect
+		}
+		# Abolish 'Booi Aha'
+		### REPLACE ME ###
+		NOR = {
+			has_law = law_type:law_serfdom
+			has_law = law_type:law_tenant_farmers
+		}
+		custom_tooltip = {
+			text = je_hundred_days_reform_100_enthusiasm_tt
+			scope:journal_entry ?= {
+				"scripted_bar_progress(hundred_days_reform_enthusiasm_progress_bar)" >= 100
+			}
+		}
+	}
+	on_complete = {
+	}
+	fail = {
+		custom_tooltip = {
+			text = je_hundred_days_reform_0_enthusiasm_tt
+			scope:journal_entry ?= {
+				"scripted_bar_progress(hundred_days_reform_enthusiasm_progress_bar)" <= 0
+			}
+		}
+	}
+	on_fail = {
+		custom_tooltip = {
+			text = fragile_unity_significant_add_tt
+			set_variable = je_hundred_days_reform_failed
+		}
+		add_modifier = {
+			name = modifier_hundred_days_reform_failure
+			years = 20
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_autocracy
+				}
+			}
+			activate_law = law_type:law_autocracy
+		}
+	}
+	weight = 1000
+	should_be_pinned_by_default = yes
+}
+
 ##Local Entries
 je_establish_local_armies = {
 	#Common
