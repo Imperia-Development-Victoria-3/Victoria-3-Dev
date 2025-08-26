@@ -360,51 +360,66 @@ je_hundred_days_reform = {
 	}
 	complete = {
 		# Promote Capitalism (Interventionism or Laissez Faire, Protectionism, Commercialized Agriculture)
-		AND = {
-			OR = {
-				has_law = law_type:law_interventionism
-				has_law = law_type:law_laissez_faire
+		custom_tooltip = {
+			text = concept_qing_reform_promote_capitalism_tt
+			AND = {
+				OR = {
+					has_law = law_type:law_interventionism
+					has_law = law_type:law_laissez_faire
+				}
+				has_law = law_type:law_protectionism
+				has_law = law_type:law_commercialized_agriculture
 			}
-			has_law = law_type:law_protectionism
-			has_law = law_type:law_commercialized_agriculture
 		}
 		# Adopt Modern Military Training (army has repeaters or bolt-actions activated and advanced tactics training)
-		AND = {
-			OR = {
-				army_mobilization_option_fraction = {
-					target = mobilization_option:mobilization_option_repeaters
-					value >= 0.8
+		custom_tooltip = {
+			text = concept_qing_reform_adopt_modern_military_tt
+			AND = {
+				OR = {
+					army_mobilization_option_fraction = {
+						target = mobilization_option:mobilization_option_repeaters
+						value >= 0.8
+					}
+					army_mobilization_option_fraction = {
+						target = mobilization_option:mobilization_option_bolt_actions
+						value >= 0.8
+					}
 				}
-				army_mobilization_option_fraction = {
-					target = mobilization_option:mobilization_option_bolt_actions
-					value >= 0.8
+				# And advanced tactics training for 80% of army
+				any_scope_building = {
+					filter = {
+						is_building_type = building_barracks
+					}
+					has_active_production_method = pm_advanced_tactics_training
+					percent = 0.8
 				}
-			}
-			# And advanced tactics training for 80% of army
-			any_scope_building = {
-				filter = {
-					is_building_type = building_barracks
-				}
-				has_active_production_method = pm_advanced_tactics_training
-				percent = 0.8
 			}
 		}
 		# Establish a constitution (wealth, census or universal suffrage)
-		OR = {
-			has_law = law_type:law_wealth_voting
-			has_law = law_type:law_census_voting
-			has_law = law_type:law_universal_suffrage
+		custom_tooltip = {
+			text = concept_qing_reform_adopt_constitution_tt
+			OR = {
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_universal_suffrage
+			}
 		}
 		# Standardize the Chinese Language (Establish National Language JE completion, either has Prestige Dialect or supported Prestige Dialect modifier.)
-		OR = {
-			has_modifier = modifier_prestige_dialect
-			has_modifier = modifier_accepted_prestige_dialect
+		custom_tooltip = {
+			text = concept_qing_reform_standardize_language_tt
+			OR = {
+				has_modifier = modifier_prestige_dialect
+				has_modifier = modifier_accepted_prestige_dialect
+			}
 		}
 		# Abolish 'Booi Aha'
 		### REPLACE ME ###
-		NOR = {
-			has_law = law_type:law_serfdom
-			has_law = law_type:law_tenant_farmers
+		custom_tooltip = {
+			text = concept_qing_reform_abolish_boii_aha_tt
+			NOR = {
+				has_law = law_type:law_serfdom
+				has_law = law_type:law_tenant_farmers
+			}
 		}
 		custom_tooltip = {
 			text = je_hundred_days_reform_100_enthusiasm_tt
