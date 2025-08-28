@@ -126,10 +126,20 @@ je_hundred_days_reform_force_enactment_button = {
 
 	effect = {
 		set_variable = je_hundred_days_reform_force_enactment_button_used
-		activate_law = currently_enacting_law.type
-		add_progress = {
-			value = -50
-			name = hundred_days_reform_enthusiasm_progress_bar
+		if = {
+			limit = {
+				enacting_any_law = yes
+			}
+			activate_law = currently_enacting_law.type
+		}
+		custom_tooltip = {
+			text = je_hundred_days_reform_progress_bar_decreases_tt
+			scope:journal_entry = {
+				add_progress = {
+					value = -50
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
 		}
 	}
 }

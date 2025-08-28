@@ -353,10 +353,52 @@ je_hundred_days_reform = {
 	group = je_group_historical_content
 	scripted_button = je_hundred_days_reform_modernizer_conversion_button
 	scripted_button = je_hundred_days_reform_enthusiasm_button
-	scripted_button = je_hundred_days_reform_force_law_button
+	scripted_button = je_hundred_days_reform_force_enactment_button
+	# Progress Bar
 	scripted_progress_bar = hundred_days_reform_enthusiasm_progress_bar
 	modifiers_while_active = {
 		modifier_hundred_days_reform_momentum
+	}
+	is_shown_when_inactive = {
+		root ?= c:CHI
+		# Done this way to show it a bit earlier and more dynamically depending on conditions, requirements are still the same
+		calc_true_if = {
+			amount >= 4
+			year >= 1880
+			ruler = {
+				age >= define:NCharacters|ADULT_AGE
+			}
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_modernizer_leader
+					# Will rapidly spit errors if this is used directly on a character while the JE is not triggered... 
+					# Looks a bit uggo, but better than 1000 errors a second
+					interest_group = {
+						NOT = {
+							is_interest_group_type = ig_landowners
+						}
+					}
+				}
+			}
+			has_law = law_type:law_monarchy
+			has_journal_entry = je_warlord_china
+		}
+	}
+	possible = {
+		year >= 1880
+		ruler = {
+			age >= define:NCharacters|ADULT_AGE
+			OR = {
+				has_ideology = ideology:ideology_modernizer_leader
+				interest_group = {
+					NOT = {
+						is_interest_group_type = ig_landowners
+					}
+				}
+			}
+		}
+		has_law = law_type:law_monarchy
+		has_journal_entry = je_warlord_china
 	}
 	complete = {
 		# Promote Capitalism (Interventionism or Laissez Faire, Protectionism, Commercialized Agriculture)
