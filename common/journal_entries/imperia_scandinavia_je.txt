@@ -4,7 +4,7 @@
 	# Make a global_variable progress bar
 	# Done as a global so the Nordics can share the progress
 	current_value = {
-		value = global_variable:scandinavian_nationalism_progress
+		value = global_var:scandinavian_nationalism_progress
 	}
 	goal_add_value = {
 		# The progress bar should be between 0 and 1000 to allow for more granularity
@@ -55,7 +55,7 @@
 	complete = {
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_100p_tt
-			global_variable:scandinavian_nationalism_progress >= 1000
+			global_var:scandinavian_nationalism_progress >= 1000
 		}
 	}
 	# A special status description for the Scandinavian Nationalism progress bar
@@ -97,7 +97,7 @@ je_scandinavian_currency_union = {
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_25p_tt
 			# Remember this is out of 1000
-			global_variable:scandinavian_nationalism_progress >= 250
+			global_var:scandinavian_nationalism_progress >= 250
 		}
 	}
 	complete = {
@@ -144,31 +144,43 @@ je_scandinavian_freedom_of_movement_act = {
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_50p_tt
 			# Remember this is out of 1000
-			global_variable:scandinavian_nationalism_progress >= 500
+			global_var:scandinavian_nationalism_progress >= 500
 		}
 	}
 	complete = {
 		has_technology_researched = pan-nationalism
-		any_country = {
-			## TO DO ##
-			# Check for a single independent Scandi country here
-			# Maybe include that it should have at least 1 Scandi subject?
-			has_journal_entry = je_scandinavian_freedom_of_movement_act
+		OR = {
+		has_journal_entry = je_scandinavian_freedom_of_movement_act
 		}
 		OR = {
-			has_law = law_type:law_no_migration_controls
+			any_country = {
+				count = 1
+				any_primary_culture = {
+					has_discrimination_trait = scandinavian_culture_group
+				}
+				is_subject = no
+				any_subject_or_below = {
+					any_primary_culture = {
+					has_discrimination_trait = scandinavian_culture_group
+					}
+				}
+			}
+
 			any_country = {
 				filter = {
 					has_journal_entry = je_scandinavian_freedom_of_movement_act
 				}
 				count = all
 				OR = {
+					has_law = law_type:law_no_migration_controls
 					this.market = ROOT.market
-					overlord ?= {
-						has_journal_entry = je_scandinavian_freedom_of_movement_act
 					}
-				}
 			}
+		}
+	}
+	on_complete = {
+		add_modifier = {
+			name = scandinavian_freedom_of_movement_act
 		}
 	}
 }
@@ -176,4 +188,55 @@ je_scandinavian_freedom_of_movement_act = {
 je_scandinavian_mutual_defense_act = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
+
+	possible = {
+		any_primary_culture = {
+			has_discrimination_trait = scandinavian_culture_group
+		}
+		overlord ?= {
+			any_primary_culture = {
+				has_discrimination_trait = scandinavian_culture_group
+			}
+		}
+		has_journal_entry = je_scandinavian_nationalism
+		has_modifier = scandinavian_currency_union
+		has_modifier = scandinavian_freedom_of_movement_act
+		custom_tooltip = {
+			text = scandinavian_nationalism_progress_at_75p_tt
+			# Remember this is out of 1000
+			global_var:scandinavian_nationalism_progress >= 750
+		}
+	}
+	complete = {
+		has_technology_researched = pan-nationalism
+		has_technology_researched = multilateral_alliances
+		OR = {
+		has_journal_entry = je_scandinavian_freedom_of_movement_act
+		}
+		OR = {
+			any_country = {
+				count = 1
+				any_primary_culture = {
+					has_discrimination_trait = scandinavian_culture_group
+				}
+				is_subject = no
+				any_subject_or_below = {
+					any_primary_culture = {
+					has_discrimination_trait = scandinavian_culture_group
+					}
+				}
+			}
+
+			any_country = {
+				filter = {
+					has_journal_entry = je_scandinavian_mutual_defense_act
+				}
+				count = all
+				OR = {
+					has_law = law_type:law_no_migration_controls
+					this.market = ROOT.market
+					}
+			}
+		}
+	}
 }
