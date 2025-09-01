@@ -85,7 +85,12 @@
 		
 		requirement_to_maintain = {
 			trigger = {
-				has_diplomatic_relevance = scope:target_country
+				OR = {
+					has_diplomatic_relevance = scope:target_country
+					scope:target_country = {
+						has_modifier = forced_embargo
+					}
+				}
 			}
 		}
 		
@@ -127,7 +132,12 @@
 			trigger = {
 				custom_tooltip = {
 					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
-					scope:target_country.relations:root <= relations_threshold:poor
+					OR = {
+						scope:target_country.relations:root <= relations_threshold:poor
+						scope:target_country = {
+							has_modifier = forced_embargo
+						}
+					}
 				}
 			}
 			
