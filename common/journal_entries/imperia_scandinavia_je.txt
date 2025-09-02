@@ -11,7 +11,6 @@
 		add = 1000
 	}
 	progressbar = yes
-	
 	immediate = {
 		# This section pops immediately when the JE starts
 		# Initialize the progress bar, hopefully just once
@@ -56,6 +55,82 @@
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_100p_tt
 			global_var:scandinavian_nationalism_progress >= 1000
+		}
+	}
+	weekly_pulse = {
+		effects = {
+			# If the current country has okay relations with another Scandi country...
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						relations:root >= relations_threshold:cordial
+					}
+				}
+				change_global_variable = {
+					name = scandinavian_nationalism_progress
+					add = {
+						# Add to the progress bar, depending on how positive the relations are
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root >= relations_threshold:cordial
+							}
+							add = 1
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root >= relations_threshold:amicable
+							}
+							add = 1
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root >= relations_threshold:friendly
+							}
+							add = 1
+						}
+					}
+				}
+			}
+			# And if the current country has poor relations with another Scandi country...
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						relations:root <= relations_threshold:poor
+					}
+				}
+				change_global_variable = {
+					name = scandinavian_nationalism_progress
+					add = { # This is gonna be a negative given the below conditions, so its fine to use add here
+						# Subtract from the progress bar, depending on how negative the relations are
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root <= relations_threshold:poor
+							}
+							subtract = 1
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root <= relations_threshold:cold
+							}
+							subtract = 1
+						}
+						every_country = {
+							limit = {
+								has_journal_entry = je_scandinavian_nationalism
+								relations:root <= relations_threshold:hostile
+							}
+							subtract = 1
+						}
+					}
+				}
+			}
 		}
 	}
 	# A special status description for the Scandinavian Nationalism progress bar
@@ -150,7 +225,7 @@ je_scandinavian_freedom_of_movement_act = {
 	complete = {
 		has_technology_researched = pan-nationalism
 		OR = {
-		has_journal_entry = je_scandinavian_freedom_of_movement_act
+			has_journal_entry = je_scandinavian_freedom_of_movement_act
 		}
 		OR = {
 			any_country = {
@@ -161,11 +236,10 @@ je_scandinavian_freedom_of_movement_act = {
 				is_subject = no
 				any_subject_or_below = {
 					any_primary_culture = {
-					has_discrimination_trait = scandinavian_culture_group
+						has_discrimination_trait = scandinavian_culture_group
 					}
 				}
 			}
-
 			any_country = {
 				filter = {
 					has_journal_entry = je_scandinavian_freedom_of_movement_act
@@ -174,7 +248,7 @@ je_scandinavian_freedom_of_movement_act = {
 				OR = {
 					has_law = law_type:law_no_migration_controls
 					this.market = ROOT.market
-					}
+				}
 			}
 		}
 	}
@@ -188,7 +262,6 @@ je_scandinavian_freedom_of_movement_act = {
 je_scandinavian_mutual_defense_act = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
-
 	possible = {
 		any_primary_culture = {
 			has_discrimination_trait = scandinavian_culture_group
@@ -211,7 +284,7 @@ je_scandinavian_mutual_defense_act = {
 		has_technology_researched = pan-nationalism
 		has_technology_researched = multilateral_alliances
 		OR = {
-		has_journal_entry = je_scandinavian_freedom_of_movement_act
+			has_journal_entry = je_scandinavian_freedom_of_movement_act
 		}
 		OR = {
 			any_country = {
@@ -222,11 +295,10 @@ je_scandinavian_mutual_defense_act = {
 				is_subject = no
 				any_subject_or_below = {
 					any_primary_culture = {
-					has_discrimination_trait = scandinavian_culture_group
+						has_discrimination_trait = scandinavian_culture_group
 					}
 				}
 			}
-
 			any_country = {
 				filter = {
 					has_journal_entry = je_scandinavian_mutual_defense_act
@@ -235,7 +307,7 @@ je_scandinavian_mutual_defense_act = {
 				OR = {
 					has_law = law_type:law_no_migration_controls
 					this.market = ROOT.market
-					}
+				}
 			}
 		}
 	}
