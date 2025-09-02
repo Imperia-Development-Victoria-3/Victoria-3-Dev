@@ -57,8 +57,8 @@
 			global_var:scandinavian_nationalism_progress >= 1000
 		}
 	}
-	weekly_pulse = {
-		effects = {
+	on_weekly_pulse = {
+		effect = {
 			# If the current country has okay relations with another Scandi country...
 			if = {
 				limit = {
@@ -76,21 +76,21 @@
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root >= relations_threshold:cordial
 							}
-							add = 1
+							add = scandinavian_nationalism_progress_tick_small
 						}
 						every_country = {
 							limit = {
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root >= relations_threshold:amicable
 							}
-							add = 1
+							add = scandinavian_nationalism_progress_tick_small
 						}
 						every_country = {
 							limit = {
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root >= relations_threshold:friendly
 							}
-							add = 1
+							add = scandinavian_nationalism_progress_tick_small
 						}
 					}
 				}
@@ -105,31 +105,84 @@
 				}
 				change_global_variable = {
 					name = scandinavian_nationalism_progress
-					add = { # This is gonna be a negative given the below conditions, so its fine to use add here
+					add = {
+						# This is gonna be a negative given the below conditions, so its fine to use add here
 						# Subtract from the progress bar, depending on how negative the relations are
 						every_country = {
 							limit = {
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root <= relations_threshold:poor
 							}
-							subtract = 1
+							subtract = scandinavian_nationalism_progress_tick_small
 						}
 						every_country = {
 							limit = {
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root <= relations_threshold:cold
 							}
-							subtract = 1
+							subtract = scandinavian_nationalism_progress_tick_small
 						}
 						every_country = {
 							limit = {
 								has_journal_entry = je_scandinavian_nationalism
 								relations:root <= relations_threshold:hostile
 							}
-							subtract = 1
+							subtract = scandinavian_nationalism_progress_tick_small
 						}
 					}
 				}
+			}
+			# If at war with fellow Scandinavian
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_at_war_with = root
+					}
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_at_war_with = root
+					}
+					change_global_variable = {
+						name = scandinavian_nationalism_progress
+						subtract = scandinavian_nationalism_progress_tick_large
+					}
+				}
+			}
+			# If in a war against non-Scandi country, with an independent Scandi as your ally
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_diplomatic_play_ally_of = root
+					}
+					NOT = {
+						any_country = {
+							has_journal_entry = je_scandinavian_nationalism
+							is_diplomatic_play_enemy_of = root
+						}
+					}
+				}
+				# This is a bit wonky.. If there's a diplo play against a non-Scandi featuring 2 Scandis, and an inter-Scandi war going on it'll cancel each other out
+				every_country = {
+					limit = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_diplomatic_play_ally_of = root
+					}
+					change_global_variable = {
+						name = scandinavian_nationalism_progress
+						add = scandinavian_nationalism_progress_tick_medium
+					}
+				}
+			}
+			## END OF WEEKLY CALCULATIONS
+			# Clamp that variable so it stays between 0 and 1000
+			clamp_global_variable = {
+				name = scandinavian_nationalism_progress
+				min = 0
+				max = 1000
 			}
 		}
 	}
