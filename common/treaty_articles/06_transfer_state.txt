@@ -1,42 +1,42 @@
 ﻿state_transfer = {
 	kind = directed
 	cost = 0
-
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/transfer_state.dds"
-
+	
 	flags = {
 		causes_state_transfer
 		giftable
 	}
-
+	
 	usage_limit = once_per_side_with_same_inputs
-
+	
 	maintenance_paid_by = source_country
-
-    required_inputs = {
+	
+	required_inputs = {
 		state
-    }
-
+	}
+	
 	can_ratify = {
 		scope:source_country = {
 			num_states >= 2
 		}
-
+		
 		custom_tooltip = {
-            text = DUPLICATE_ARTICLE_SAME_INPUTS
-            scope:treaty ?= {
-                NOT = {
-                    any_scope_article_option = {
-                        count > 1
-                        has_type = state_transfer
-                        source_country = scope:source_country
-                        input_state = root.input_state
-                    }
-                }
-            }
-        }
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			scope:treaty ?= {
+				NOT = {
+					any_scope_article_option = {
+						count > 1
+						has_type = state_transfer
+						source_country = scope:source_country
+						input_state = root.input_state
+					}
+				}
+			}
+		}
 	}
-
+	
 	state_valid_trigger = {
 		scope:input = {
 			owner = root
@@ -51,7 +51,7 @@
 			}
 		}
 	}
-
+	
 	on_entry_into_force = {
 		scope:article_options = {
 			target_country = {
@@ -60,12 +60,12 @@
 			source_country = {
 				save_scope_as = state_giver
 			}
-
+			
 			if = {
 				limit = { exists = input_state }
 				input_state = { set_state_owner = scope:state_taker }
 			}
-
+			
 			scope:state_taker ?= {
 				if = {
 					limit = {
@@ -86,8 +86,7 @@
 					}
 				}
 			}
-
-
+			
 			scope:state_giver ?= {
 				if = {
 					limit = {
@@ -109,7 +108,7 @@
 			}
 		}
 	}
-
+	
 	on_withdrawal = {}
 	on_break = {
 		scope:withdrawing_country = {
@@ -147,29 +146,29 @@
 			}
 		}
 	}
-
+	
 	ai = {
-
+		
 		treaty_categories = {
 			expansion
 		}
-
+		
 		evaluation_chance = {
 			value = 0.1
 		}
-
+		
 		article_ai_usage = {
-            request
-        }
-
+			request
+		}
+		
 		inherent_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					exists = scope:is_renegotiation
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ALREADY_TRADED_STATE"
 					value = -1000
@@ -186,7 +185,7 @@
 					desc = "DIPLOMATIC_ACCEPTANCE_TRADE_STATE_SOURCE"
 					value = scope:article.input_state.ai_state_value:root
 					min = 100
-
+					
 					if = {
 						limit = {
 							scope:article.input_state = {
@@ -201,7 +200,7 @@
 						}
 						min = 200
 					}
-
+					
 					if = {
 						limit = {
 							scope:source_country.country_rank > scope:target_country.country_rank
@@ -214,7 +213,7 @@
 						}
 					}
 				}
-
+				
 				if = {
 					limit = {
 						exists = scope:target_country.var:recently_traded_states_counter
@@ -222,7 +221,7 @@
 					}
 					add = {
 						desc = "DIPLOMATIC_ACCEPTANCE_RECENTLY_TRADED_STATES"
-
+						
 						value = -50
 						multiply = scope:target_country.var:recently_traded_states_counter
 					}

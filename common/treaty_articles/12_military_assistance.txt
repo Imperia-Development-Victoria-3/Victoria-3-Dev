@@ -1,69 +1,67 @@
 ﻿military_assistance = {
 	kind = directed
 	cost = 35
-
+	
 	relations_progress_per_day = 0.5
 	relations_improvement_max = 50
-
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/military_assistance_treaties.dds"
-
+	
 	flags = {
 		can_be_renegotiated
 		giftable
 		friendly
 	}
-
+	
 	maintenance_paid_by = source_country
-
+	
 	unlocked_by_technologies = {
 		general_staff
 	}
-
+	
 	usage_limit = once_per_treaty
-
+	
 	source_modifier = {
 		unit_experience_gain_mult = 0.25
 		country_military_goods_cost_mult = 0.10
 	}
-
+	
 	target_modifier = {
 		country_treaty_leverage_generation_add = 300
 	}
-
+	
 	target_modifier = {
 		unit_experience_gain_mult = 0.5
 		building_training_rate_mult = 0.2
 		country_military_goods_cost_mult = -0.1
 		country_military_tech_spread_mult = 0.1
 	}
-
-	visible = {
-
-	}
-
+	
+	visible = {}
+	
 	possible = {
-
+		
 		army_power_projection > scope:other_country.army_power_projection
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:source_country.country_rank >= scope:target_country.country_rank
 		}
 	}
-
-    non_fulfillment = {
-        consequences = freeze
-
-        conditions = {
-            weekly = {
+	
+	non_fulfillment = {
+		consequences = freeze
+		
+		conditions = {
+			weekly = {
 				scope:article = {
 					source_country = { army_power_projection < prev.target_country.army_power_projection }
 				}
-            }
-        }
-    }
-
+			}
+		}
+	}
+	
 	can_ratify = {
 		scope:source_country = {
 			is_revolutionary = no
@@ -86,15 +84,15 @@
 						target_country = scope:target_country
 					}
 				}
-			}		
+			}
 		}
-        custom_tooltip = {
-            text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
-            NOT = {
-                scope:source_country = {
-                    any_scope_treaty = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
 						binds = scope:target_country
-                        hidden_trigger = {
+						hidden_trigger = {
 							OR = {
 								scope:treaty = {
 									is_renegotiation = no
@@ -106,12 +104,12 @@
 							has_type = military_assistance
 							source_country = scope:source_country
 						}
-                    }
-                }
-            }
-        }
+					}
+				}
+			}
+		}
 	}
-
+	
 	on_entry_into_force = {
 		hidden_effect = {
 			scope:article_options.target_country = {
@@ -122,36 +120,36 @@
 			}
 		}
 	}
-
+	
 	on_withdrawal = {}
 	on_break = {
 		scope:withdrawing_country = {
 			change_relations = { country = scope:non_withdrawing_country value = -10 }
 		}
 	}
-
+	
 	ai = {
-
+		
 		treaty_categories = {
 			military
 		}
-
+		
 		evaluation_chance = {
 			value = 0.1
-
+			
 			add = {
 				value = country_rank
 				multiply = 0.05
 			}
 		}
-
+		
 		article_ai_usage = {
 			request
 		}
-
+		
 		inherent_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					scope:source_country ?= this
@@ -164,12 +162,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = actor
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 					value = -10
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "scope:source_country.ai_army_comparison(scope:target_country)"
@@ -177,8 +175,7 @@
 					min = -30
 					max = 30
 				}
-
-
+				
 				if = {
 					limit = {
 						has_strategic_adjacency = scope:target_country
@@ -188,7 +185,7 @@
 						value = 5
 					}
 				}
-
+				
 				if = {
 					limit = {
 						has_strategy = ai_strategy_armed_isolationism
@@ -198,7 +195,7 @@
 						add = -25
 					}
 				}
-
+				
 				if = {
 					limit = {
 						has_strategy = ai_strategy_maintain_power_balance
@@ -217,7 +214,7 @@
 						add = 10
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 					if = {
@@ -244,7 +241,7 @@
 						value = -1000
 					}
 				}
-
+				
 				add = {
 					desc = "GREAT_GAME_BONUS"
 					if = {
@@ -287,7 +284,7 @@
 						value = 25
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_alliances_and_defensive_pacts_with_rivals(scope:target_country)" > 0
@@ -298,7 +295,7 @@
 						multiply = -15
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_alliances_and_defensive_pacts_with_allies(scope:target_country)" > 0
@@ -309,7 +306,7 @@
 						multiply = 10
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_shared_rivals(scope:target_country)" > 0
@@ -321,7 +318,7 @@
 						max = 30
 					}
 				}
-
+				
 				if = {
 					limit = {
 						NOT = {
@@ -354,7 +351,7 @@
 						multiply = -10
 					}
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country = {
@@ -383,7 +380,7 @@
 						multiply = -10
 					}
 				}
-
+				
 				add = {
 					desc = "AT_WAR_WITH_FRIENDLY_COUNTRY"
 					if = {
@@ -398,7 +395,7 @@
 						add = -100
 					}
 				}
-
+				
 				add = {
 					desc = "AT_WAR_WITH_UNFRIENDLY_COUNTRY"
 					if = {
@@ -422,12 +419,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = target
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 					value = -10
 				}
-
+				
 				if = {
 					limit = {
 						has_strategic_adjacency = scope:source_country
@@ -437,7 +434,7 @@
 						value = 10
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "scope:source_country.ai_army_comparison(scope:target_country)"
@@ -445,8 +442,7 @@
 					min = -25
 					max = 50
 				}
-
-
+				
 				if = {
 					limit = {
 						is_subject_of = scope:source_country
@@ -460,7 +456,7 @@
 						max = 25
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 					if = {
@@ -496,7 +492,7 @@
 						value = -1000
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_alliances_and_defensive_pacts_with_rivals(scope:source_country)" > 0
@@ -507,7 +503,7 @@
 						multiply = -15
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_alliances_and_defensive_pacts_with_allies(scope:source_country)" > 0
@@ -518,7 +514,7 @@
 						multiply = 10
 					}
 				}
-
+				
 				if = {
 					limit = {
 						"num_shared_rivals(scope:source_country)" > 0
@@ -530,7 +526,7 @@
 						max = 30
 					}
 				}
-
+				
 				if = {
 					limit = {
 						is_at_war = yes
@@ -545,7 +541,7 @@
 					}
 				}
 			}
-
+			
 			if = {
 				limit = {
 					NOT = { exists = scope:is_treaty_active }
@@ -564,10 +560,10 @@
 				}
 			}
 		}
-
+		
 		contextual_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					scope:treaty ?= {
@@ -593,7 +589,7 @@
 						value = 50
 					}
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country = {
@@ -620,7 +616,7 @@
 						value = 10
 					}
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country = {

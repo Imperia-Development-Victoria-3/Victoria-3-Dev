@@ -15,7 +15,7 @@
 grant_command_to_ruler = {
 	icon = "gfx/interface/character_panel/grant_command.dds"
 	clicksound = "event:/SFX/UI/Military/command_grant"
-
+	
 	potential = {
 		is_ruler = yes
 		NOR = {
@@ -24,7 +24,7 @@ grant_command_to_ruler = {
 		}
 		owner ?= scope:actor
 	}
-
+	
 	possible = {
 		age >= define:NCharacters|ADULT_AGE
 		is_female = no
@@ -33,11 +33,11 @@ grant_command_to_ruler = {
 		}
 		exists = owner.capital.land_hq
 	}
-
+	
 	effect = {
 		add_character_role = general
 	}
-
+	
 	ai_chance = {
 		value = 0
 		if = {
@@ -64,23 +64,23 @@ grant_command_to_ruler = {
 remove_command_from_ruler = {
 	icon = "gfx/interface/character_panel/grant_command_not.dds"
 	clicksound = "event:/SFX/UI/Military/command_remove"
-
+	
 	potential = {
 		is_ruler = yes
 		has_role = general
 		owner ?= scope:actor
 	}
-
+	
 	possible = {
 		commander_military_formation = {
 			is_mobilized = no
 		}
 	}
-
+	
 	effect = {
 		remove_character_role = general
 	}
-
+	
 	ai_chance = {
 		value = 0
 		if = {
@@ -102,14 +102,14 @@ remove_command_from_ruler = {
 grant_leadership_to_agitator = {
 	icon = "gfx/interface/character_panel/grant_command_not.dds"
 	clicksound = "event:/SFX/DLC/1.3_ip1/UI/agitator_promote"
-
+	
 	potential = {
 		has_dlc_feature = agitators
 		has_role = agitator
 		exists = owner
 		owner ?= scope:actor
 	}
-
+	
 	possible = {
 		interest_group = {
 			is_in_government = yes
@@ -146,7 +146,7 @@ grant_leadership_to_agitator = {
 			}
 		}
 	}
-
+	
 	effect = {
 		remove_character_role = agitator
 		add_character_role = politician
@@ -155,9 +155,9 @@ grant_leadership_to_agitator = {
 			set_as_interest_group_leader = yes
 		}
 	}
-
+	
 	cooldown = { days = normal_modifier_time }
-
+	
 	ai_chance = {
 		value = -50
 		if = {
@@ -198,7 +198,7 @@ grant_leadership_to_agitator = {
 grant_command_to_agitator = {
 	icon = "gfx/interface/character_panel/grant_command.dds"
 	clicksound = "event:/SFX/UI/Military/command_grant"
-
+	
 	potential = {
 		has_dlc_feature = agitators
 		has_role = agitator
@@ -206,19 +206,19 @@ grant_command_to_agitator = {
 		NOT = { has_role = admiral }
 		owner ?= scope:actor
 	}
-
+	
 	possible = {
 		age >= define:NCharacters|ADULT_AGE
 		is_female = no
 		exists = owner.capital.land_hq
 	}
-
+	
 	effect = {
 		add_character_role = general
 	}
-
+	
 	cooldown = { days = normal_modifier_time }
-
+	
 	ai_chance = {
 		value = 0
 		if = {
@@ -250,7 +250,7 @@ grant_command_to_agitator = {
 				owner ?= {
 					any_scope_war = {
 						any_scope_front = {
-							is_vulnerable_front = root
+							is_vulnerable_front = root.owner
 						}
 					}
 				}
@@ -263,7 +263,7 @@ grant_command_to_agitator = {
 marry_ruler_or_heir = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_royalist.dds"
 	clicksound = "event:/SFX/UI/Military/command_grant"
-
+	
 	potential = {
 		owner ?= scope:actor
 		OR = {
@@ -280,7 +280,7 @@ marry_ruler_or_heir = {
 		NOT = { has_variable = spouse_seeker }
 		NOT = { has_variable = is_married }
 	}
-
+	
 	possible = {
 		any_country = {
 			NOT = { THIS = scope:actor }
@@ -304,7 +304,7 @@ marry_ruler_or_heir = {
 		}
 	}
 	cooldown = { days = normal_modifier_time }
-
+	
 	ai_chance = {
 		value = 25
 	}
@@ -313,7 +313,7 @@ marry_ruler_or_heir = {
 abdicate_monarch = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_republican.dds"
 	clicksound = "event:/SFX/UI/Military/command_grant"
-
+	
 	potential = {
 		has_dlc_feature = voice_of_the_people_content
 		owner ?= scope:actor
@@ -324,7 +324,7 @@ abdicate_monarch = {
 		exists = owner.heir
 		is_immortal = no
 	}
-
+	
 	possible = {
 		OR = {
 			interest_group = {
@@ -333,7 +333,7 @@ abdicate_monarch = {
 			popularity <= -50
 			has_trait = psychological_affliction
 			age >= 75
-			owner ?= { # Our thanks to UHM for reporting this
+			owner ?= {	# Our thanks to UHM for reporting this
 				trigger_if = {
 					limit = {
 						any_political_movement = {
@@ -392,7 +392,7 @@ abdicate_monarch = {
 			}
 		}
 	}
-
+	
 	effect = {
 		custom_tooltip = leader_abdicates_the_throne_display_tt
 		if = {
@@ -410,14 +410,14 @@ abdicate_monarch = {
 		}
 		else = {
 			owner ?= {
-				trigger_event = { id = wedding.3 popup = yes}
+				trigger_event = { id = wedding.3 popup = yes }
 			}
 		}
 	}
-
+	
 	cooldown = { months = 360 }
 	show_confirmation_box = yes
-
+	
 	ai_chance = {
 		value = -50
 		if = {
@@ -465,7 +465,7 @@ abdicate_monarch = {
 
 exile_character = {
 	clicksound = "event:/SFX/DLC/1.3_ip1/UI/exile_character"
-
+	
 	potential = {
 		is_in_exile_pool = no
 		is_in_void = no
@@ -477,9 +477,9 @@ exile_character = {
 			has_role = agitator
 		}
 	}
-
+	
 	show_requirements = yes
-
+	
 	possible = {
 		owner ?= {
 			NOT = {
@@ -491,7 +491,7 @@ exile_character = {
 			limit = {
 				has_role = agitator
 			}
-
+			
 			political_movement ?= { is_insurrectionary = no }
 		}
 		trigger_else = {
@@ -539,7 +539,7 @@ exile_character = {
 			}
 		}
 	}
-
+	
 	effect = {
 		this.interest_group = {
 			save_scope_as = relevant_ig
@@ -731,10 +731,10 @@ exile_character = {
 			exile_character_with_martyrdom = yes
 		}
 	}
-
+	
 	cooldown = { days = short_modifier_time }
 	show_confirmation_box = yes
-
+	
 	ai_chance = {
 		value = -50
 		if = {
@@ -832,16 +832,16 @@ invite_exile = {
 	should_ai_evaluate = {
 		empty_agitator_slots >= 1
 	}
-
+	
 	potential = {
 		is_in_exile_pool = yes
 	}
-
+	
 	show_requirements = yes
 
 	# required for AI to evaluate if interaction is possible on characters in exile pool
 	ai_considers_exiles = yes
-
+	
 	possible = {
 		scope:actor ?= { empty_agitator_slots >= 1 }
 		# Devout exiles must have country religion
@@ -849,10 +849,10 @@ invite_exile = {
 			limit = {
 				is_interest_group_type = ig_devout
 			}
-		    custom_tooltip = {
-		        text = invite_exile_devout_tt
-		        religion = scope:actor.religion
-		    }
+			custom_tooltip = {
+				text = invite_exile_devout_tt
+				religion = scope:actor.religion
+			}
 		}
 		# If you have state religion, exiles must have your religion
 		trigger_if = {
@@ -876,7 +876,7 @@ invite_exile = {
 		# Agitator must be able to start or join a movement
 		can_agitate = scope:actor
 	}
-
+	
 	effect = {
 		transfer_character = scope:actor
 		set_variable = exile_to_ruler_var
@@ -951,9 +951,9 @@ invite_exile = {
 			}
 		}
 	}
-
+	
 	cooldown = { days = short_modifier_time }
-
+	
 	ai_chance = {
 		value = -85
 		if = {
@@ -971,7 +971,7 @@ invite_exile = {
 		if = {
 			limit = {
 				culture = {
-					is_primary_culture_of = root
+					is_primary_culture_of = root.owner
 				}
 			}
 			add = 50
@@ -1020,13 +1020,13 @@ invite_exile = {
 retire_commander = {
 	# icon = ""
 	clicksound = "event:/SFX/UI/Military/commander_retire"
-
+	
 	potential = {
 		owner ?= scope:actor
 		is_commander = yes
 		is_ruler = no
 	}
-
+	
 	possible = {
 		is_ruler = no
 		interest_group = {
@@ -1035,7 +1035,7 @@ retire_commander = {
 		commander_is_available = yes
 		years_of_service >= 1
 	}
-
+	
 	effect = {
 		hidden_effect = {
 			if = {
@@ -1051,7 +1051,7 @@ retire_commander = {
 				remove_character_role = admiral
 			}
 		}
-
+		
 		interest_group = {
 			add_modifier = {
 				name = retired_commander_interest_group_impact
@@ -1061,16 +1061,16 @@ retire_commander = {
 					add = 1
 					min = 1
 					multiply = root.commander_rank
-					round = 1
+					round = yes
 				}
 				years = 5
 				is_decaying = yes
 			}
 		}
 	}
-
+	
 	show_confirmation_box = yes
-
+	
 	ai_chance = {
 		value = -50
 		if = {
@@ -1168,7 +1168,7 @@ retire_commander = {
 				owner ?= {
 					any_scope_war = {
 						any_scope_front = {
-							is_vulnerable_front = root
+							is_vulnerable_front = root.owner
 						}
 					}
 				}
@@ -1179,7 +1179,7 @@ retire_commander = {
 }
 
 return_to_home_country = {
-
+	
 	potential = {
 		is_in_exile_pool = no
 		has_role = agitator
@@ -1191,9 +1191,9 @@ return_to_home_country = {
 		exists = root.home_country
 		NOT = { root.home_country = this.owner }
 	}
-
+	
 	show_requirements = yes
-
+	
 	possible = {
 		home_country = {
 			empty_agitator_slots >= 1
@@ -1206,7 +1206,7 @@ return_to_home_country = {
 			}
 		}
 	}
-
+	
 	effect = {
 		this = {
 			save_scope_as = repatriated_scope
@@ -1222,10 +1222,10 @@ return_to_home_country = {
 			trigger_event = { id = exiles_events.100 }
 		}
 	}
-
+	
 	cooldown = { days = short_modifier_time }
 	show_confirmation_box = yes
-
+	
 	ai_chance = {
 		value = -50
 	}
@@ -1243,9 +1243,9 @@ foster_national_agitation = {
 			has_technology_researched = nationalism
 		}
 	}
-
+	
 	show_requirements = yes
-
+	
 	possible = {
 		root.culture = {
 			save_temporary_scope_as = agitator_culture
@@ -1287,7 +1287,7 @@ foster_national_agitation = {
 			}
 		}
 	}
-
+	
 	effect = {
 		root.culture = {
 			save_scope_as = agitation_culture
@@ -1331,14 +1331,14 @@ foster_national_agitation = {
 			owner ?= {
 				post_notification = nationalism_national_agitation_occurred
 				change_relations = {
-					country = root.owner value = -10
+					country = root.owner					value = -10
 				}
 			}
 		}
 	}
-
+	
 	cooldown = { days = short_modifier_time }
-
+	
 	ai_chance = {
 		value = 100
 	}
