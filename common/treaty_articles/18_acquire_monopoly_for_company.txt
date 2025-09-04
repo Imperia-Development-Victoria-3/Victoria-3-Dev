@@ -1,33 +1,33 @@
 ﻿acquire_monopoly_for_company = {
-    kind = directed
-    cost = 30
-
+	kind = directed
+	cost = 30
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/acquire_monopoly_for_company_treaties.dds"
-
+	
 	flags = {
 		can_be_enforced
 		can_be_renegotiated
 		is_monopoly_for_company
 	}
-
+	
 	usage_limit = once_per_side_with_same_inputs
-
+	
 	maintenance_paid_by = target_country
-
-    required_inputs = {
+	
+	required_inputs = {
 		company
-        building_type
-    }
-
-    unlocked_by_technologies = {
-        corporate_charters
-    }
-
-	visible = {
-
-        has_dlc_feature = mp1_treaties
+		building_type
 	}
-
+	
+	unlocked_by_technologies = {
+		corporate_charters
+	}
+	
+	visible = {
+		
+		has_dlc_feature = mp1_treaties
+	}
+	
 	possible = {
 		scope:other_country = {
 			any_company = {
@@ -35,8 +35,8 @@
 			}
 		}
 	}
-
-    can_ratify = {
+	
+	can_ratify = {
 		OR = {
 			trigger_if = {
 				limit = {
@@ -53,9 +53,9 @@
 			}
 			custom_description = {
 				text = has_treaty_foreign_investment_rights_with_trigger
-				subject = scope:target_country # Country
-				object = scope:source_country # Country
-
+				subject = scope:target_country	# Country
+				object = scope:source_country	# Country
+				
 				hidden_trigger = {
 					OR = {
 						scope:treaty ?= {
@@ -89,8 +89,8 @@
 				}
 			}
 		}
-        custom_tooltip = {
-            text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
 			trigger_if = {
 				limit = {
 					exists = root.input_building_type
@@ -115,11 +115,11 @@
 					}
 				}
 			}
-        }
-    }
-
-    on_entry_into_force = {}
-
+		}
+	}
+	
+	on_entry_into_force = {}
+	
 	on_withdrawal = {}
 	on_break = {
 		scope:withdrawing_country = {
@@ -140,23 +140,23 @@
 			change_relations = { country = scope:non_withdrawing_country value = -10 }
 		}
 	}
-
-    company_valid_trigger = {
+	
+	company_valid_trigger = {
 		always = yes
-    }
-
+	}
+	
 	building_type_valid_trigger = {
 		always = yes
 	}
-
+	
 	ai = {
-        treaty_categories = {
+		treaty_categories = {
 			economy
 		}
-
+		
 		evaluation_chance = {
 			value = 0
-
+			
 			if = {
 				limit = { country_rank >= rank_value:major_power }
 				add = {
@@ -165,17 +165,17 @@
 				}
 			}
 		}
-
+		
 		article_ai_usage = {
-            request
-        }
-
+			request
+		}
+		
 		combined_acceptance_cap_max = 50
 		combined_acceptance_cap_min = -500
-
+		
 		inherent_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					exists = scope:article.input_building_type
@@ -189,7 +189,7 @@
 				scope:target_country = {
 					save_temporary_scope_as = actor
 				}
-
+				
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
@@ -208,7 +208,7 @@
 						value = -200
 					}
 				}
-
+				
 				if = {
 					limit = {
 						country_rank >= scope:target_country.country_rank
@@ -222,10 +222,10 @@
 						multiply = 10
 					}
 				}
-
+				
 				subtract = {
 					desc = "DIPLOMATIC_ACCEPTANCE_VALUE_OF_BUILDING_TYPE"
-
+					
 					if = {
 						limit = {
 							any_scope_building = {
@@ -249,8 +249,7 @@
 					}
 					if = {
 						limit = {
-							scope:article.input_building_type = {
-							}
+							scope:article.input_building_type = {}
 							any_scope_state = {
 								"num_potential_resources(scope:article.input_building_type.group)" > 0
 							}
@@ -281,11 +280,10 @@
 				scope:source_country = {
 					save_temporary_scope_as = actor
 				}
-
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_VALUE_OF_BUILDING_TYPE"
-
+					
 					scope:source_country ?= {
 						if = {
 							limit = {
@@ -330,45 +328,45 @@
 			}
 		}
 	}
-
+	
 	wargoal = {
 		execution_priority = 21
 		contestion_type = control_target_country_capital
-
+		
 		maneuvers = {
 			value = 0
-
+			
 			add = {
 				desc = "MANEUVERS_BASE_VALUE"
 				value = 2.5
 			}
-
+			
 			scope:target_country = {
 				multiply = {
 					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
 					value = total_population
 					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
 					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
-                    max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
 				}
 			}
 		}
-
+		
 		infamy = {
 			value = 0
-
+			
 			add = {
 				desc = "INFAMY_BASE_VALUE"
 				value = 0.5
 			}
-
+			
 			scope:target_country = {
 				multiply = {
 					desc = "INFAMY_TARGET_COUNTRY_POPULATION_FACTOR"
 					value = total_population
 					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
 					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
-                    max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
 				}
 			}
 		}

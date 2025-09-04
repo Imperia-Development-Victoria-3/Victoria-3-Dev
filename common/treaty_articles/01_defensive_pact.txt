@@ -1,40 +1,38 @@
 ﻿defensive_pact = {
 	kind = mutual
 	cost = 100
-
+	
 	relations_progress_per_day = 1
 	relations_improvement_max = 80
-
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/defensive_pact_treaties.dds"
-
+	
 	flags = {
 		is_defensive_pact
 		can_be_renegotiated
 		friendly
 	}
-
+	
 	usage_limit = once_per_treaty
-
+	
 	mutual_exclusions = {
 		alliance
 		defensive_pact
 		guarantee_independence
 	}
-
+	
 	unlocked_by_technologies = {
 		international_relations
 	}
-
+	
 	mutual_modifier = {
 		country_treaty_leverage_generation_add = 300
 	}
-
-	visible = {
-	}
-
-	possible = {
-	}
-
+	
+	visible = {}
+	
+	possible = {}
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:first_country = {
@@ -42,7 +40,7 @@
 			}
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			custom_tooltip = {
@@ -52,7 +50,7 @@
 			}
 		}
 	}
-
+	
 	can_ratify = {
 		scope:first_country = {
 			NOR = {
@@ -60,7 +58,7 @@
 					text = has_treaty_alliance_with_trigger
 					subject = this
 					object = scope:second_country
-
+					
 					any_scope_treaty = {
 						binds = scope:second_country
 						hidden_trigger = {
@@ -76,12 +74,12 @@
 						}
 					}
 				}
-
+				
 				custom_description = {
 					text = has_treaty_defensive_pact_with_trigger
-					subject = this # Country
-					object = scope:second_country # Country
-
+					subject = this	# Country
+					object = scope:second_country	# Country
+					
 					any_scope_treaty = {
 						binds = scope:second_country
 						hidden_trigger = {
@@ -100,7 +98,7 @@
 			}
 		}
 	}
-
+	
 	on_entry_into_force = {
 		scope:article_options.first_country = {
 			add_lobby_appeasement_from_diplomacy_bidirectional = {
@@ -112,7 +110,7 @@
 			}
 		}
 	}
-
+	
 	on_withdrawal = {
 		scope:withdrawing_country = {
 			create_bidirectional_truce = { country = scope:non_withdrawing_country months = 12 }
@@ -147,60 +145,59 @@
 			}
 		}
 	}
-
-
+	
 	ai = {
-
+		
 		treaty_categories = {
 			military_defense
 		}
-
+		
 		evaluation_chance = {
 			value = 0.1
-
+			
 			add = {
 				value = country_rank
 				multiply = 0.05
 			}
 			
-			if =  {
-				limit = { 
-					num_defensive_pacts < 1 
+			if = {
+				limit = {
+					num_defensive_pacts < 1
 					country_rank >= rank_value:minor_power
 				}
 				multiply = 2
 			}
-			else_if =  {
-				limit = { 
+			else_if = {
+				limit = {
 					num_defensive_pacts >= 3
 				}
 				multiply = 0
-			}			
+			}
 		}
 		
 		proposal_weight = {
 			value = 1
-		
-			if =  {
-				limit = { 
-					num_defensive_pacts < 1 
+			
+			if = {
+				limit = {
+					num_defensive_pacts < 1
 					country_rank >= rank_value:minor_power
 				}
 				add = 2
-			}	
-			if =  {
-				limit = { 
-					num_defensive_pacts < 2 
+			}
+			if = {
+				limit = {
+					num_defensive_pacts < 2
 					country_rank >= rank_value:major_power
 				}
 				add = 2
-			}			
+			}
 		}
-
+		
 		article_ai_usage = {
-            offer
-        }
-
+			offer
+		}
+		
 		inherent_accept_score = {
 			value = 0
 
@@ -209,12 +206,12 @@
 			scope:other_country = {
 				save_temporary_scope_as = actor
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 				value = -10
 			}
-
+			
 			if = {
 				limit = {
 					has_strategic_adjacency = scope:other_country
@@ -224,7 +221,7 @@
 					value = 10
 				}
 			}
-
+			
 			if = {
 				limit = {
 					OR = {
@@ -240,7 +237,7 @@
 					value = -100
 				}
 			}
-
+			
 			if = {
 				limit = {
 					has_strategy = ai_strategy_armed_isolationism
@@ -250,7 +247,7 @@
 					add = -25
 				}
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 				value = "scope:other_country.ai_army_comparison(root)"
@@ -259,7 +256,7 @@
 				min = -200
 				max = 50
 			}
-
+			
 			add = {
 				desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 				if = {
@@ -319,7 +316,7 @@
 					value = -50
 				}
 			}
-
+			
 			if = {
 				limit = {
 					"num_alliances_and_defensive_pacts_with_rivals(scope:other_country)" > 0
@@ -330,7 +327,7 @@
 					multiply = -15
 				}
 			}
-
+			
 			if = {
 				limit = {
 					"num_alliances_and_defensive_pacts_with_allies(scope:other_country)" > 0
@@ -341,7 +338,7 @@
 					multiply = 10
 				}
 			}
-
+			
 			if = {
 				limit = {
 					"num_shared_rivals(scope:other_country)" > 0
@@ -353,7 +350,7 @@
 					max = 30
 				}
 			}
-
+			
 			if = {
 				limit = {
 					NOT = {
@@ -378,7 +375,7 @@
 							limit = {
 								any_scope_article = {
 									has_type = defensive_pact
-						 		}
+								}
 							}
 							add = 1
 						}
@@ -386,11 +383,11 @@
 					multiply = -15
 				}
 			}
-
+			
 			if = {
 				limit = {
 					exists = power_bloc
-					exists = scope:other_country.power_bloc			
+					exists = scope:other_country.power_bloc
 				}
 				if = {
 					limit = {
@@ -404,7 +401,7 @@
 				else_if = {
 					limit = {
 						is_power_bloc_leader = no
-						scope:other_country = { is_power_bloc_leader = no }							
+						scope:other_country = { is_power_bloc_leader = no }
 					}
 					add = {
 						desc = "DIPLOMATIC_ACCEPTANCE_DIFFERENT_POWER_BLOC"
@@ -412,7 +409,7 @@
 					}
 				}
 			}
-
+			
 			if = {
 				limit = {
 					NOT = { exists = scope:is_treaty_active }
@@ -428,7 +425,7 @@
 				}
 			}
 		}
-
+		
 		contextual_accept_score = {
 			if = {
 				limit = {
@@ -455,7 +452,7 @@
 						value = 50
 					}
 				}
-
+				
 				if = {
 					limit = {
 						scope:other_country = {
@@ -482,7 +479,7 @@
 						value = 10
 					}
 				}
-
+				
 				if = {
 					limit = {
 						scope:other_country = {

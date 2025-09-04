@@ -1,39 +1,39 @@
 ﻿guarantee_independence = {
 	kind = directed
 	cost = 30
-
+	
 	relations_progress_per_day = 1
 	relations_improvement_max = 80
-
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/guarantee_independence_treaties.dds"
-
+	
 	flags = {
 		is_guarantee_independence
 		can_be_renegotiated
 		giftable
 		friendly
 	}
-
+	
 	maintenance_paid_by = source_country
 	usage_limit = once_per_side
-
+	
 	mutual_exclusions = {
 		alliance
 		defensive_pact
 	}
-
+	
 	unlocked_by_technologies = {
 		international_relations
 	}
-
+	
 	target_modifier = {
 		country_treaty_leverage_generation_add = 300
 	}
-
+	
 	visible = {
 		is_subject = no
 	}
-
+	
 	possible = {
 		country_rank > scope:other_country.country_rank
 		save_temporary_scope_as = actor
@@ -45,13 +45,13 @@
 			scope:other_country.relations:root > relations_threshold:poor
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:source_country.country_rank >= scope:target_country.country_rank
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:source_country = {
@@ -59,7 +59,7 @@
 			}
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:target_country = {
@@ -67,7 +67,7 @@
 			}
 		}
 	}
-
+	
 	can_ratify = {
 		scope:source_country = {
 			NOR = {
@@ -93,7 +93,7 @@
 					text = has_treaty_alliance_with_trigger
 					subject = this
 					object = scope:target_country
-
+					
 					any_scope_treaty = {
 						binds = scope:target_country
 						hidden_trigger = {
@@ -109,12 +109,12 @@
 						}
 					}
 				}
-
+				
 				custom_description = {
 					text = has_treaty_defensive_pact_with_trigger
-					subject = this # Country
-					object = scope:target_country # Country
-
+					subject = this	# Country
+					object = scope:target_country	# Country
+					
 					any_scope_treaty = {
 						binds = scope:target_country
 						hidden_trigger = {
@@ -133,9 +133,9 @@
 			}
 		}
 	}
-
+	
 	on_entry_into_force = {}
-
+	
 	on_withdrawal = {
 		scope:withdrawing_country = {
 			create_bidirectional_truce = { country = scope:non_withdrawing_country months = 12 }
@@ -160,16 +160,16 @@
 			change_relations = { country = scope:non_withdrawing_country value = -10 }
 		}
 	}
-
+	
 	ai = {
-
+		
 		treaty_categories = {
 			military_defense
 		}
-
+		
 		evaluation_chance = {
 			value = 0.0
-
+			
 			if = {
 				limit = { country_rank >= rank_value:major_power }
 				add = {
@@ -178,15 +178,15 @@
 				}
 			}
 		}
-
+		
 		article_ai_usage = {
 			offer
 			request
 		}
-
+		
 		inherent_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					scope:source_country ?= this
@@ -199,12 +199,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = actor
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 					value = -10
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "ai_army_comparison(scope:target_country)"
@@ -212,7 +212,7 @@
 					min = -50
 					max = 0
 				}
-
+				
 				if = {
 					limit = {
 						NOT = { is_country_type = unrecognized }
@@ -223,7 +223,7 @@
 						value = -25
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 					if = {
@@ -287,12 +287,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = target
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = 5
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "ai_army_comparison(scope:source_country)"
@@ -300,7 +300,7 @@
 					min = 0
 					max = 50
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country.power_bloc ?= {
@@ -316,7 +316,7 @@
 					}
 				}
 			}
-
+			
 			if = {
 				limit = {
 					NOT = { exists = scope:is_treaty_active }

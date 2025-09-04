@@ -1,43 +1,41 @@
 ﻿support_independence = {
 	kind = directed
 	cost = 50
-
+	
 	relations_progress_per_day = 1
 	relations_improvement_max = 80
-
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/support_independence_treaties.dds"
-
+	
 	flags = {
 		is_support_independence
 		can_be_renegotiated
 		giftable
 		friendly
 	}
-
+	
 	maintenance_paid_by = source_country
-
+	
 	automatically_support = {
 		dp_independence
 		dp_increase_autonomy
 		dp_annex_subject
 	}
-
+	
 	usage_limit = once_per_side
-
+	
 	unlocked_by_technologies = {
 		international_relations
 	}
-
+	
 	target_modifier = {
 		country_treaty_leverage_generation_add = 300
 	}
-
-	visible = {
-	}
-
-	possible = {
-	}
-
+	
+	visible = {}
+	
+	possible = {}
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:source_country = {
@@ -45,13 +43,13 @@
 			}
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:target_country = { is_subject = yes }
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			scope:target_country = {
@@ -71,7 +69,7 @@
 			}
 		}
 	}
-
+	
 	requirement_to_maintain = {
 		trigger = {
 			trigger_if = {
@@ -83,7 +81,7 @@
 			}
 		}
 	}
-
+	
 	can_ratify = {
 		scope:target_country.overlord ?= {
 			NOT = {
@@ -98,13 +96,13 @@
 				}
 			}
 		}
-        custom_tooltip = {
-            text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
-            NOT = {
-                scope:source_country = {
-                    any_scope_treaty = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS_TREATY
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
 						binds = scope:target_country
-                        hidden_trigger = {
+						hidden_trigger = {
 							OR = {
 								scope:treaty = {
 									is_renegotiation = no
@@ -116,10 +114,10 @@
 							has_type = support_independence
 							source_country = scope:source_country
 						}
-                    }
-                }
-            }
-        }
+					}
+				}
+			}
+		}
 		scope:target_country = {
 			NOR = {
 				play_participant_has_war_goal_of_type_against = {
@@ -133,9 +131,9 @@
 			}
 		}
 	}
-
+	
 	on_entry_into_force = {}
-
+	
 	on_withdrawal = {
 		scope:withdrawing_country = {
 			create_bidirectional_truce = { country = scope:non_withdrawing_country months = 12 }
@@ -168,16 +166,16 @@
 			}
 		}
 	}
-
+	
 	ai = {
-
+		
 		treaty_categories = {
 			military_defense
 		}
-
+		
 		evaluation_chance = {
 			value = 0.1
-
+			
 			add = {
 				value = country_rank
 				multiply = 0.05
@@ -195,15 +193,15 @@
 				add = 1.0
 			}
 		}
-
+		
 		article_ai_usage = {
-            offer
-            request
-        }
-
+			offer
+			request
+		}
+		
 		inherent_accept_score = {
 			value = 0
-
+			
 			if = {
 				limit = {
 					scope:source_country ?= this
@@ -216,12 +214,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = actor
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 					value = -20
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country = {
@@ -234,7 +232,7 @@
 						value = 50
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "scope:source_country.ai_army_comparison(scope:target_country)"
@@ -242,7 +240,7 @@
 					min = -50
 					max = 50
 				}
-
+				
 				if = {
 					limit = {
 						NOT = { is_country_type = unrecognized }
@@ -253,7 +251,7 @@
 						value = -25
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 					if = {
@@ -285,7 +283,7 @@
 						value = -1000
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE_TOWARDS_ACTOR_OVERLORD"
 					if = {
@@ -334,12 +332,12 @@
 				scope:target_country = {
 					save_temporary_scope_as = target
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL"
 					value = -10
 				}
-
+				
 				if = {
 					limit = {
 						scope:source_country = {
@@ -352,7 +350,7 @@
 						value = 25
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH"
 					value = "scope:source_country.ai_army_comparison(scope:target_country)"
@@ -360,11 +358,11 @@
 					min = -50
 					max = 50
 				}
-
+				
 				if = {
 					limit = {
 						scope:target_country ?= {
-							is_subject = yes # For arcane reasons that I will not go into we are repeating this check here
+							is_subject = yes	# For arcane reasons that I will not go into we are repeating this check here
 						}
 						scope:source_country ?= {
 							is_subject = no
@@ -378,7 +376,7 @@
 						max = 50
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE_TOWARDS_OWN_OVERLORD"
 					if = {
@@ -415,7 +413,7 @@
 						value = -1000
 					}
 				}
-
+				
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
 					if = {
@@ -452,7 +450,7 @@
 					}
 				}
 			}
-
+			
 			if = {
 				limit = {
 					NOT = { exists = scope:is_treaty_active }
