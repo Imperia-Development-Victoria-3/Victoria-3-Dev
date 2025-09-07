@@ -1,0 +1,144 @@
+namespace = imperia_hundred_days
+
+imperia_hundred_days.1 = {	#The Literary War
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.1.t
+	desc = imperia_hundred_days.1.d
+	flavor = imperia_hundred_days.1.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = { days = never_fire_again_modifier_time }
+	trigger = {
+		has_journal_entry = {}
+			type = je_hundred_days_reform
+	}
+	option = {	#Suppress conservatives 
+		name = imperia_hundred_days.1.a
+		trigger = {
+			OR = {
+				has_law = law_type:law_censorship
+				has_law = law_type:law_outlawed_dissent
+			}
+		}
+		scope:journal_entry = {
+			add_progress = {
+				value = 10
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = aristocrats
+		}
+
+	}
+	option = { #Fund reformist papers
+		name = imperia_hundred_days.1.b
+		scope:journal_entry = {
+			add_progress = {
+				value = 10
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_modifier = {
+			name = modifier_paying_journalist
+			months = 60
+		}
+	}
+	option = { #Ignore them
+		name = imperia_hundred_days.1.c
+		scope:journal_entry = {
+			add_progress = {
+				value = -5
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_radicals = {
+			value = 0.05
+		}
+	}
+}
+
+imperia_hundred_days.2 = {	#Malicious Compliance
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.2.t
+	desc = imperia_hundred_days.2.d
+	flavor = imperia_hundred_days.2.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = { days = never_fire_again_modifier_time }
+	trigger = {
+		has_journal_entry = {}
+			type = je_hundred_days_reform
+	}
+	option = {	#Purge the Bureaucracy
+		name = imperia_hundred_days.2.a
+		scope:journal_entry = {
+			add_progress = {
+				value = 20
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = aristocrats
+		}
+		add_modifier = {
+			name = imperia_purged_bureaucracy #todo
+			months = 60
+		}
+	}
+	option = { #Offer some concessions.
+		name = imperia_hundred_days.1.b
+		scope:journal_entry = {
+			add_progress = {
+				value = -5
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_loyalists = {
+			value = 0.1
+			pop_type = aristocrats
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = academics
+		}
+	}
+	option = { #Create central reform commission to oversee implementation
+		name = imperia_hundred_days.2.c
+		scope:journal_entry = {
+			add_progress = {
+				value = 10
+				name = hundred_days_reform_enthusiasm_progress_bar
+			}
+		}
+		add_radicals = {
+			value = 0.05
+		}
+		add_modifier = {
+			name = imperia_reform_commission #todo
+			months = 60
+		}
+	}
+}
