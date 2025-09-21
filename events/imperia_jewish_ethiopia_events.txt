@@ -128,43 +128,48 @@ jewish_ethiopia.3 = {
 		name = jewish_ethiopia.3.c
 		default_option = yes
 		set_state_religion = rel:jewish
+		add_primary_culture = cu:beta_israel
+		remove_primary_culture = cu:amhara
+		remove_primary_culture = cu:oromo
+		remove_primary_culture = cu:tigray
 		ruler = {
 			change_character_religion = rel:jewish
+			change_character_culture = cu:beta_israel
 		}
 		heir = {
 			change_character_religion = rel:jewish
+			change_character_culture = cu:beta_israel
 		}
-		# All characters have a 75% chance to convert
+		# All characters have a 80% chance to convert
 		custom_tooltip = {
-			text = jewish_ethiopia.3.c.tt			# The emperor has converted to Judaism, and so have many of his courtiers...
+			text = jewish_ethiopia.3.c.tt			# The emperor has converted to Judaism, and so have many of his subjects...
 			every_scope_character = {
 				limit = {
 					religion = rel:oriental_orthodox
 				}
 				random = {
-					chance = 75
+					chance = 80
 					change_character_religion = rel:jewish
+					change_character_culture = cu:beta_israel
 				}
 			}
-		}
-		custom_tooltip = {
-			text = jewish_ethiopia.3.c.tt2  # The population has also started converting...
-			every_scope_pop = {
-				limit = {
-					religion = rel:oriental_orthodox
-				}
-				change_pop_religion = {
+			# First convert 25% of the population to Judaism
+			every_scope_state = {
+				convert_population = {
 					target = rel:jewish
-					value = 0.05
+					value = 0.25
 				}
 			}
-			every_scope_pop = {
-				limit = {
-					religion = rel:animist
-				}
-				change_pop_religion = {
-					target = rel:jewish
-					value = 0.2
+			# THEN convert all those Jewish pops to become Beta Israeli
+			every_scope_state = {
+				every_scope_pop = {
+					limit = {
+						religion = rel:jewish
+					}
+					change_pop_culture = {
+						target = cu:beta_israel
+						value = 1
+					}
 				}
 			}
 		}
