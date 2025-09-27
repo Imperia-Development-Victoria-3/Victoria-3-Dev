@@ -3,6 +3,11 @@
 	
 	group = je_group_france_divided_monarchists
 	
+	is_shown_in_lobby = {
+		has_dlc_feature = voice_of_the_people_content	#France DLC
+		c:FRA = THIS
+	}
+	
 	modifiers_while_active = {
 		fra_republican_unrest
 	}
@@ -23,7 +28,7 @@
 	scripted_progress_bar = divided_monarchists_bonapartist_progress_bar
 	
 	complete = {
-		has_law = law_type:law_monarchy
+		has_law_or_variant = law_type:law_monarchy
 		custom_tooltip = {
 			text = je_divided_monarchists_02_tt
 			has_variable = one_true_french_dynasty	#Can only ever complete upon finishing the Cement the Rightful Dynasty journal entry.
@@ -127,7 +132,7 @@
 		effect = {
 			if = {
 				limit = {
-					has_law = law_type:law_monarchy
+					has_law_or_variant = law_type:law_monarchy
 					scope:journal_entry = {
 						OR = {
 							"scripted_bar_progress(divided_monarchists_orleanist_progress_bar)" >= divided_monarchists_upper_bound
@@ -211,7 +216,10 @@
 	
 	fail = {
 		any_political_movement = {
-			is_political_movement_type = movement_radical
+			OR = {
+				movement_is_liberal = yes
+				movement_is_socialist = yes
+			}
 			is_insurrectionary = yes
 		}
 		OR = {
@@ -219,8 +227,26 @@
 				is_civil_war_type = revolution
 				civil_war_progress >= 0.75
 			}
+<<<<<<< HEAD
 			capital = {
 				turmoil >= 0.25
+=======
+			trigger_if = {
+				limit = {
+					has_journal_entry = je_springtime_of_the_peoples
+				}
+				AND = {
+					has_journal_entry = je_springtime_of_the_peoples
+					capital = {
+						turmoil >= 0.10
+					}
+				}
+			}
+			trigger_else = {
+				capital = {
+					turmoil >= 0.25
+				}
+>>>>>>> 48c617923 (V1.10.2)
 			}
 		}
 	}
@@ -238,7 +264,7 @@
 	
 	invalid = {
 		NOT = {	#Previous "Stamp Out Monarchism" requirement is deprecated - this can now come back from the dead properly upon restoring the monarchy.
-			has_law = law_type:law_monarchy
+			has_law_or_variant = law_type:law_monarchy
 		}
 	}
 	
@@ -372,7 +398,7 @@ je_cement_the_rightful_dynasty = {
 	
 	fail = {
 		OR = {
-			NOT = { has_law = law_type:law_monarchy }
+			NOT = { has_law_or_variant = law_type:law_monarchy }
 			custom_tooltip = {
 				text = je_divided_monarchists_02_fail_tt
 				OR = {

@@ -14,8 +14,6 @@
 		ideology_moderate
 		ideology_market_liberal
 		ideology_protectionist
-		ideology_orleanist
-		ideology_bonapartist
 	}
 	
 	enable = {
@@ -46,6 +44,18 @@
 				set_ig_trait = ig_trait:ig_trait_tax_avoidance
 				set_ig_trait = ig_trait:ig_trait_engines_of_progress
 				set_ig_trait = ig_trait:ig_trait_kommerskollegium
+			}
+			else_if = {
+				limit = {
+					has_dlc_feature = ip3_content
+					OR = {
+						owner = { c:NOR ?= this }
+						owner = { c:GRE ?= this }
+					}
+				}
+				set_ig_trait = ig_trait:ig_trait_tax_avoidance
+				set_ig_trait = ig_trait:ig_shipping_magnates
+				set_ig_trait = ig_trait:ig_trait_job_creators
 			}
 			else_if = {
 				limit = {
@@ -126,6 +136,17 @@
 		}
 		rule = {
 			trigger = {
+				c:ZAN ?= this
+				any_primary_culture = {
+					cu:bedouin = this
+				}
+			}
+			cultures = {
+				bedouin				swahili				north_german				british				gujarati
+			}
+		}
+		rule = {
+			trigger = {
 				c:HAW ?= this
 				NOT = { has_variable = deported_americans }
 			}
@@ -135,7 +156,35 @@
 		}
 	}
 	
-	on_character_ig_membership = {}
+	on_character_ig_membership = {
+		if = {
+			limit = {
+				OR = {
+					culture = cu:british
+					culture = cu:north_german
+				}
+				owner = {
+					c:ZAN ?= this
+					any_primary_culture = {
+						cu:bedouin = this
+					}
+				}
+			}
+			change_character_religion = rel:protestant
+		}
+		if = {
+			limit = {
+				culture = cu:gujarati
+				owner = {
+					c:ZAN ?= this
+					any_primary_culture = {
+						cu:bedouin = this
+					}
+				}
+			}
+			change_character_religion = rel:shiite
+		}
+	}
 	
 	pop_potential = {
 		OR = {
@@ -147,7 +196,7 @@
 				owner ?= c:BIC
 				OR = {
 					culture ?= {
-						has_discrimination_trait = european_heritage
+						has_discrimination_trait_group = heritage_group_european
 					}
 					is_pop_type = bureaucrats
 					is_pop_type = clerks
@@ -203,7 +252,7 @@
 					c:BIC ?= this
 				}
 				culture = {
-					has_discrimination_trait = european_heritage
+					has_discrimination_trait_group = heritage_group_european
 				}
 				OR = {
 					strata = upper
@@ -229,7 +278,7 @@
 				limit = {
 					NOT = {
 						culture = {
-							has_discrimination_trait = european_heritage
+							has_discrimination_trait_group = heritage_group_european
 						}
 					}
 					OR = {
@@ -246,7 +295,7 @@
 				limit = {
 					NOT = {
 						culture = {
-							has_discrimination_trait = european_heritage
+							has_discrimination_trait_group = heritage_group_european
 						}
 					}
 					NOR = {
@@ -354,8 +403,8 @@
 			limit = {
 				owner = {
 					OR = {
-						has_law = law_type:law_oligarchy
-						has_law = law_type:law_wealth_voting
+						has_law_or_variant = law_type:law_oligarchy
+						has_law_or_variant = law_type:law_wealth_voting
 					}
 				}
 			}
@@ -367,7 +416,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_laissez_faire
+					has_law_or_variant = law_type:law_laissez_faire
 				}
 			}
 			multiply = {
@@ -454,7 +503,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 				
 			}
@@ -470,7 +519,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_own_property
+					has_law_or_variant = law_type:law_women_own_property
 				}
 				
 			}
@@ -482,7 +531,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_in_the_workplace
+					has_law_or_variant = law_type:law_women_in_the_workplace
 				}
 				
 			}
@@ -494,7 +543,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 				
 			}

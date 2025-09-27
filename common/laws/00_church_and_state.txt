@@ -5,11 +5,21 @@ law_state_religion = {
 	group = lawgroup_church_and_state
 	icon = "gfx/interface/icons/law_icons/state_religion.dds"
 	progressiveness = -50
+<<<<<<< HEAD
+=======
+	
+	is_visible = {	# Turkey should only unlock this as a possibility if it abolishes the Millet System
+		NOT = {
+			has_law = law_type:law_millet_system
+		}
+	}
+	
+>>>>>>> 48c617923 (V1.10.2)
 	on_enact = {
 		recalculate_pop_ig_support = yes
 		if = {
 			limit = {
-				has_law = law_type:law_state_atheism
+				has_law_or_variant = law_type:law_state_atheism
 			}
 			set_state_religion = root.country_definition.religion
 		}
@@ -34,7 +44,12 @@ law_state_religion = {
 		
 		country_acceptance_state_religion_add = 15
 		country_acceptance_shared_religious_trait_add = 0
+<<<<<<< HEAD
 		country_acceptance_religion_base_add = -10
+=======
+		country_acceptance_shared_religious_trait_group_add = -10
+		country_acceptance_no_shared_religious_trait_add = -25
+>>>>>>> 48c617923 (V1.10.2)
 		
 		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
@@ -90,11 +105,15 @@ law_state_religion = {
 			add = base_impose_law_weight
 			# Very important for religious blocs
 			if = {
+<<<<<<< HEAD
 				limit = {
 					scope:target_country = {
 						has_law = law_type:law_freedom_of_conscience
 					}
 				}
+=======
+				limit = { scope:target_country = { has_law_or_variant = law_type:law_freedom_of_conscience } }
+>>>>>>> 48c617923 (V1.10.2)
 				multiply = 2
 			}
 			else = {
@@ -132,7 +151,7 @@ law_freedom_of_conscience = {
 		recalculate_pop_ig_support = yes
 		if = {
 			limit = {
-				has_law = law_type:law_state_atheism
+				has_law_or_variant = law_type:law_state_atheism
 			}
 			set_state_religion = root.country_definition.religion
 		}
@@ -148,9 +167,16 @@ law_freedom_of_conscience = {
 		interest_group_ig_devout_pol_str_mult = 0.15
 		country_authority_add = 200
 		
+<<<<<<< HEAD
 		country_acceptance_state_religion_add = 15
 		country_acceptance_shared_religious_trait_add = 10
 		country_acceptance_religion_base_add = 0
+=======
+		country_acceptance_state_religion_add = 20
+		country_acceptance_shared_religious_trait_add = 15
+		country_acceptance_shared_religious_trait_group_add = 5
+		country_acceptance_no_shared_religious_trait_add = 0
+>>>>>>> 48c617923 (V1.10.2)
 		
 		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
@@ -183,8 +209,13 @@ law_freedom_of_conscience = {
 		
 		if = {
 			limit = {
+<<<<<<< HEAD
 				has_journal_entry = je_sick_man_liberal_education
 				has_law = law_type:law_state_religion
+=======
+				has_journal_entry = je_sick_man_education
+				has_law_or_variant = law_type:law_state_religion
+>>>>>>> 48c617923 (V1.10.2)
 			}
 			add = 1000
 		}
@@ -215,7 +246,7 @@ law_total_separation = {
 		recalculate_pop_ig_support = yes
 		if = {
 			limit = {
-				has_law = law_type:law_state_atheism
+				has_law_or_variant = law_type:law_state_atheism
 			}
 			set_state_religion = root.country_definition.religion
 		}
@@ -228,6 +259,7 @@ law_total_separation = {
 	}
 	
 	modifier = {
+<<<<<<< HEAD
 		state_radicalism_increases_violent_hostility_mult = 0.05
 		state_radicalism_increases_cultural_erasure_mult = 0.05
 		state_radicalism_increases_open_prejudice_mult = 0.05
@@ -236,6 +268,12 @@ law_total_separation = {
 		country_acceptance_state_religion_add = 10
 		country_acceptance_shared_religious_trait_add = 10
 		country_acceptance_religion_base_add = 10
+=======
+		country_acceptance_state_religion_add = 15
+		country_acceptance_shared_religious_trait_add = 15
+		country_acceptance_shared_religious_trait_group_add = 15
+		country_acceptance_no_shared_religious_trait_add = 15
+>>>>>>> 48c617923 (V1.10.2)
 		
 		country_allow_conversion_violent_hostility_bool = no
 		country_allow_conversion_cultural_erasure_bool = no
@@ -293,7 +331,7 @@ law_state_atheism = {
 		law_inquisition
 	}
 	can_enact = {
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			is_in_government = no
 		}
 		OR = {
@@ -315,7 +353,8 @@ law_state_atheism = {
 		
 		country_acceptance_state_religion_add = 15
 		country_acceptance_shared_religious_trait_add = 0
-		country_acceptance_religion_base_add = -10
+		country_acceptance_shared_religious_trait_group_add = -5
+		country_acceptance_no_shared_religious_trait_add = -10
 		
 		country_allow_conversion_violent_hostility_bool = yes
 		country_allow_conversion_cultural_erasure_bool = yes
@@ -373,19 +412,28 @@ law_state_atheism = {
 		value = 0
 		if = {
 			limit = {
+<<<<<<< HEAD
 				has_law = law_type:law_state_atheism
 				power_bloc ?= {
 					has_identity = identity:identity_ideological_union
 				}
+=======
+				has_law_or_variant = law_type:law_state_atheism
+				power_bloc ?= { has_identity = identity:identity_ideological_union }
+>>>>>>> 48c617923 (V1.10.2)
 			}
 			add = base_impose_law_weight
 			# Atheist leaders of ideological unions want to spread the cult of reason
 			if = {
+<<<<<<< HEAD
 				limit = {
 					scope:target_country = {
 						has_law = law_type:law_total_separation
 					}
 				}
+=======
+				limit = { scope:target_country = { has_law_or_variant = law_type:law_total_separation } }
+>>>>>>> 48c617923 (V1.10.2)
 				multiply = 0.5
 			}
 			else = {
@@ -406,5 +454,131 @@ law_state_atheism = {
 			}
 			multiply = 0
 		}
+	}
+}
+
+law_millet_system = {	# Ottoman Empire
+	group = lawgroup_church_and_state
+	parent = law_state_religion	# Inherits ideological stances from parent
+	
+	icon = "gfx/interface/icons/law_icons/people_of_the_book.dds"
+	
+	progressiveness = -50
+	
+	requires_law_or = {
+		law_theocracy
+		law_monarchy
+	}
+	
+	is_visible = {
+		OR = {
+			c:TUR ?= this	# For the Ottoman Empire and its subjects
+			AND = {
+				exists = c:TUR
+				is_subject_of = c:TUR
+				country_has_state_religion = rel:sunni
+			}
+		}
+	}
+	
+	on_enact = {
+		recalculate_pop_ig_support = yes
+		if = {
+			limit = {
+				has_law_or_variant = law_type:law_state_atheism
+			}
+			set_state_religion = root.country_definition.religion
+		}
+		if = {
+			limit = {
+				has_modifier = antireligious_policies
+			}
+			remove_modifier = antireligious_policies
+		}
+	}
+	
+	on_activate = {
+		if = {
+			limit = {
+				NOR = {
+					c:TUR ?= this
+					country_has_state_religion = rel:sunni
+				}
+			}
+			deactivate_law = law_type:law_millet_system
+			activate_law = law_type:law_state_religion
+		}
+	}
+	
+	modifier = {
+		interest_group_ig_devout_pol_str_mult = 0.3
+		country_authority_add = 200
+		state_conversion_mult = -0.50
+		
+		state_conscription_rate_mult = -0.4
+		
+		country_acceptance_state_religion_add = 25
+		country_acceptance_shared_religious_trait_add = 10
+		country_acceptance_shared_religious_trait_group_add = 10
+		country_acceptance_no_shared_religious_trait_add = -25
+		
+		country_allow_conversion_violent_hostility_bool = yes
+		country_allow_conversion_cultural_erasure_bool = yes
+		country_allow_conversion_open_prejudice_bool = yes
+		country_allow_conversion_second_rate_citizen_bool = yes
+		country_allow_conversion_full_acceptance_bool = yes
+	}
+	
+	tax_modifier_very_low = {
+		tax_heathen_add = 0.4
+	}
+	
+	tax_modifier_low = {
+		tax_heathen_add = 0.45
+	}
+	
+	tax_modifier_medium = {
+		tax_heathen_add = 0.5
+	}
+	
+	tax_modifier_high = {
+		tax_heathen_add = 0.55
+	}
+	
+	tax_modifier_very_high = {
+		tax_heathen_add = 0.6
+	}
+	
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_church_and_state_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+	
+	ai_will_do = {
+		exists = ruler
+		ruler = {
+			has_ideology = ideology:ideology_theocrat
+		}
+	}
+	
+	ai_enact_weight_modifier = {	#Petitions
+		value = 0
+		
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+	}
+	
+	ai_impose_chance = {
+		value = 0	# Will not happen
 	}
 }

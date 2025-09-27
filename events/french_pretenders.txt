@@ -87,7 +87,7 @@ french_pretenders.1 = {
 	cancellation_trigger = {
 		OR = {
 			ruler = {
-				has_modifier = restitutor_orbis
+				has_trait = special_character_restitutor_orbis
 			}
 			any_interest_group = {
 				has_modifier = stalwarts_of_the_restoration
@@ -630,7 +630,7 @@ french_pretenders.10 = {
 	cancellation_trigger = {
 		OR = {
 			ruler = {
-				has_modifier = restitutor_orbis
+				has_trait = special_character_restitutor_orbis
 			}
 			any_interest_group = {
 				has_modifier = stalwarts_of_the_restoration
@@ -1859,7 +1859,7 @@ french_pretenders.3 = {	# A House Divided
 		highlighted_option = yes
 		trigger = {
 			NOT = {
-				has_law = law_type:law_protected_speech
+				has_law_or_variant = law_type:law_protected_speech
 			}
 		}
 		scope:oppoisition_french_monarchist_leader_ig_scope = {
@@ -1907,10 +1907,10 @@ french_pretenders.4 = {	# The Real Country
 			has_variable = legitimist_restoration_var
 			has_variable = bonapartist_restoration_var
 		}
-		ig:ig_rural_folk = {
+		ig:ig_rural_folk ?= {
 			is_marginal = no
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			is_marginal = no
 		}
 	}
@@ -1926,7 +1926,7 @@ french_pretenders.4 = {	# The Real Country
 				add = 5
 			}
 		}
-		ig:ig_rural_folk = {
+		ig:ig_rural_folk ?= {
 			add_modifier = {
 				name = backbone_of_the_real_country_modifier
 				days = normal_modifier_time
@@ -1935,13 +1935,13 @@ french_pretenders.4 = {	# The Real Country
 		if = {
 			limit = {
 				has_variable = orleanist_restoration_var
-				ig:ig_rural_folk = {
+				ig:ig_rural_folk ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_orleanist }
 					}
 				}
 			}
-			ig:ig_rural_folk = {
+			ig:ig_rural_folk ?= {
 				leader = {
 					set_ideology = ideology:ideology_orleanist
 				}
@@ -1950,13 +1950,13 @@ french_pretenders.4 = {	# The Real Country
 		else_if = {
 			limit = {
 				has_variable = legitimist_restoration_var
-				ig:ig_rural_folk = {
+				ig:ig_rural_folk ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_legitimist }
 					}
 				}
 			}
-			ig:ig_rural_folk = {
+			ig:ig_rural_folk ?= {
 				leader = {
 					set_ideology = ideology:ideology_legitimist
 				}
@@ -1965,13 +1965,13 @@ french_pretenders.4 = {	# The Real Country
 		else_if = {
 			limit = {
 				has_variable = bonapartist_restoration_var
-				ig:ig_rural_folk = {
+				ig:ig_rural_folk ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_bonapartist }
 					}
 				}
 			}
-			ig:ig_rural_folk = {
+			ig:ig_rural_folk ?= {
 				leader = {
 					set_ideology = ideology:ideology_bonapartist
 				}
@@ -1988,7 +1988,7 @@ french_pretenders.4 = {	# The Real Country
 				add = 5
 			}
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			add_modifier = {
 				name = backbone_of_the_real_country_modifier
 				days = normal_modifier_time
@@ -1997,13 +1997,13 @@ french_pretenders.4 = {	# The Real Country
 		if = {
 			limit = {
 				has_variable = orleanist_restoration_var
-				ig:ig_devout = {
+				ig:ig_devout ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_orleanist }
 					}
 				}
 			}
-			ig:ig_devout = {
+			ig:ig_devout ?= {
 				leader = {
 					set_ideology = ideology:ideology_orleanist
 				}
@@ -2012,13 +2012,13 @@ french_pretenders.4 = {	# The Real Country
 		else_if = {
 			limit = {
 				has_variable = legitimist_restoration_var
-				ig:ig_devout = {
+				ig:ig_devout ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_legitimist }
 					}
 				}
 			}
-			ig:ig_devout = {
+			ig:ig_devout ?= {
 				leader = {
 					set_ideology = ideology:ideology_legitimist
 				}
@@ -2027,13 +2027,13 @@ french_pretenders.4 = {	# The Real Country
 		else_if = {
 			limit = {
 				has_variable = bonapartist_restoration_var
-				ig:ig_devout = {
+				ig:ig_devout ?= {
 					leader = {
 						NOT = { has_ideology = ideology:ideology_bonapartist }
 					}
 				}
 			}
-			ig:ig_devout = {
+			ig:ig_devout ?= {
 				leader = {
 					set_ideology = ideology:ideology_bonapartist
 				}
@@ -2229,10 +2229,42 @@ french_pretenders.6 = {	# Second Republic
 			save_scope_as = old_ruler_scope
 			exile_character_with_martyrdom = yes
 		}
-		activate_law = law_type:law_presidential_republic
+		springtime_save_conservative_laws = yes
 		if = {
 			limit = {
-				has_law = law_type:law_hereditary_bureaucrats
+				NOT = {
+					has_law = law_type:law_parliamentary_republic
+				}
+			}
+			activate_law = law_type:law_parliamentary_republic
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_universal_suffrage
+				}
+			}
+			activate_law = law_type:law_universal_suffrage
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_right_of_assembly
+				}
+			}
+			activate_law = law_type:law_right_of_assembly
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_national_guard
+				}
+			}
+			activate_law = law_type:law_national_guard
+		}
+		if = {
+			limit = {
+				has_law_or_variant = law_type:law_hereditary_bureaucrats
 			}
 			activate_law = law_type:law_appointed_bureaucrats
 		}
@@ -2269,14 +2301,18 @@ french_pretenders.6 = {	# Second Republic
 				country_has_voting_franchise = yes
 			}
 			call_election = {
-				months = 6
+				months = 3
 			}
 		}
+<<<<<<< HEAD
 		add_modifier = {
 			name = french_republic_stability
 			months = 60
 			is_decaying = yes
 		}
+=======
+		trigger_event = { id = peoples_springtime.10 days = 7 popup = yes }
+>>>>>>> 48c617923 (V1.10.2)
 	}
 }
 

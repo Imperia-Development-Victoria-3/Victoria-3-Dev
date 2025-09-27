@@ -521,13 +521,13 @@ types diplomatic_panel
 						spacing = 2
 						margin_right = 10
 						alpha = "[TransparentIfTrue(IsDataModelEmpty(AccessPlayer.GetUnenforcedTreatiesWith(Country.Self)))]"
-						
+
 						icon = {
 							parentanchor = vcenter
 							size = { 30 30 }
 							texture = "gfx/interface/icons/generic_icons/diplomatic_treaties.dds"
 						}
-						
+
 						textbox = {
 							parentanchor = vcenter
 							autoresize = yes
@@ -1507,8 +1507,6 @@ types diplomatic_panel
 				size = { 45 45 }
 				position = { -15 -15 }
 
-				blockoverride "datacontext " {}
-
 				blockoverride "font_size_under_100_rank" {
 					using = fontsize_medium
 				}
@@ -1855,14 +1853,11 @@ types diplomatic_panel
 
 							rank_badge = {
 								size = { 40 40 }
-								
-								blockoverride "datacontext " { 
-									datacontext = "[Country]"
-								}
 
 								blockoverride "rank_text" {
 									raw_text = "#BOLD [Country.GetCountryScorePositionDesc]"
 								}
+								
 								blockoverride "rank_text_2" {
 									raw_text = "#BOLD [Country.GetCountryScorePositionDesc]"
 									visible = no
@@ -1882,11 +1877,14 @@ types diplomatic_panel
 								using = clean_button
 								layoutpolicy_horizontal = preferred
 								size = { 0 30 }
-								
 								onclick = "[InformationPanelBar.OpenCountryPanel(Country.Self)]"
+
+								tooltipwidget = {
+									FancyTooltip_Country = {}
+								}
 									
 								textbox = {
-									text = "[Country.GetNameNoFlag]"
+									text = "[Country.GetNameNoFormatting]"
 									size = { 100% 100% }
 									elide = right
 									align = nobaseline

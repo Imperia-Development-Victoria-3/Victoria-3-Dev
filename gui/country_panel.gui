@@ -623,8 +623,6 @@ types country_panel_types
 							size = { 50 50 }
 							parentanchor = right|vcenter
 
-							blockoverride "datacontext " {}
-
 							blockoverride "rank_text" {
 								raw_text = "#BOLD [Country.GetCountryScorePositionDesc]"
 							}
@@ -1017,7 +1015,7 @@ types country_panel_types
 						text = "COUNTRY_RELIGIONS_ONE_LINE"
 					}
 					blockoverride "stats_value" {
-						raw_text = "#v [Country.GetStateReligion.GetName]#!"
+						raw_text = "#v [Country.GetStateReligion.GetNameNoIcon]#!"
 					}
 				}
 
@@ -1608,7 +1606,10 @@ types diplomatic
 			rank_badge = {
 				size = { 45 45 }
 				position = { 0 10 }
-				datacontext = "[AccessPlayer.AccessOverlord]"
+
+				block "overlord_datacontext" {
+					datacontext = "[AccessPlayer.AccessOverlord]"
+				}
 
 				blockoverride "font_size_under_100_rank" {
 					using = fontsize_medium

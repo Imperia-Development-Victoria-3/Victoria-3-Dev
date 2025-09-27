@@ -3160,9 +3160,18 @@ default_popup_vbox = {
 				onclick = "[Execute(Proposal.GetTreaty.DeclineTreatyProposal)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
 				enabled = "[IsValid(Proposal.GetTreaty.DeclineTreatyProposal)]"
-				tooltip = "[GetDesc(Proposal.GetTreaty.DeclineTreatyProposal)]"
+				tooltip = "TREATY_PROPOSAL_DECLINE_BUTTON_TOOLTIP"
 				using = tooltip_se
 				shortcut = "close_window"
+
+				icon = {
+					visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+					parentanchor = vcenter
+					size = { 30 30 }
+					position = { 7 0 }
+					texture = "gfx/interface/icons/generic_icons/warning.dds"
+					tooltip = "THEY_CALL_IN_OBLIGATION"
+				}
 			}
 
 			button = {
@@ -3172,7 +3181,7 @@ default_popup_vbox = {
 				enabled = "[Not(Proposal.GetTreaty.IsEnforced)]"
 				onclick = "[InformationPanelBar.OpenTreatyDraftPanel(Proposal.GetTreaty.Self)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
-				tooltip = "TREATY_PROPOSAL_NEGOTIATE_TOOLTIP" #todo PRCAL-38358
+				tooltip = "TREATY_PROPOSAL_NEGOTIATE_TOOLTIP"
 				using = tooltip_se
 
 			}

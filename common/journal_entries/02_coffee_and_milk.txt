@@ -3,6 +3,11 @@
 	
 	group = je_group_brazil
 	
+	is_shown_in_lobby = {
+		has_dlc_feature = rp1_content	#Colossus of the South
+		c:BRZ = THIS
+	}
+	
 	is_shown_when_inactive = {
 		c:BRZ ?= this
 		has_dlc_feature = rp1_content
@@ -30,7 +35,7 @@
 	}
 	
 	immediate = {
-		ig:ig_landowners = {
+		ig:ig_landowners ?= {
 			save_scope_as = landowners_ig
 		}
 		market_capital.market = {
@@ -140,7 +145,7 @@ je_coffee_with_milk = {
 	}
 	
 	possible = {
-		ig:ig_landowners = {
+		ig:ig_landowners ?= {
 			is_powerful = yes
 		}
 		any_scope_state = {
@@ -151,8 +156,8 @@ je_coffee_with_milk = {
 			is_incorporated = yes
 		}
 		OR = {
-			has_law = law_type:law_landed_voting
-			has_law = law_type:law_wealth_voting
+			has_law_or_variant = law_type:law_landed_voting
+			has_law_or_variant = law_type:law_wealth_voting
 		}
 		country_has_building_group_levels = {
 			type = bg_plantations
@@ -161,7 +166,7 @@ je_coffee_with_milk = {
 	}
 	
 	immediate = {
-		ig:ig_landowners = {
+		ig:ig_landowners ?= {
 			save_scope_as = landowners_ig
 		}
 		root = {
@@ -176,10 +181,10 @@ je_coffee_with_milk = {
 			if = {
 				limit = {
 					OR = {
-						has_law = law_type:law_tenant_farmers
-						has_law = law_type:law_serfdom
+						has_law_or_variant = law_type:law_tenant_farmers
+						has_law_or_variant = law_type:law_serfdom
 					}
-					ig:ig_landowners = {
+					ig:ig_landowners ?= {
 						is_powerful = yes
 						is_in_government = yes
 					}
@@ -189,10 +194,10 @@ je_coffee_with_milk = {
 			else_if = {
 				limit = {
 					NOR = {
-						has_law = law_type:law_tenant_farmers
-						has_law = law_type:law_serfdom
+						has_law_or_variant = law_type:law_tenant_farmers
+						has_law_or_variant = law_type:law_serfdom
 					}
-					ig:ig_landowners = {
+					ig:ig_landowners ?= {
 						is_in_government = no
 					}
 				}
@@ -244,7 +249,7 @@ je_coffee_with_milk = {
 	}
 	
 	fail = {
-		has_law = law_type:law_collectivized_agriculture
+		has_law_or_variant = law_type:law_collectivized_agriculture
 	}
 	
 	on_fail = {

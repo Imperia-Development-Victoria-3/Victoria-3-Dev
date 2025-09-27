@@ -108,6 +108,45 @@ law_monarchy = {
 				fra_handle_republic_monarch_assignment = yes
 			}
 		}
+		if = {
+			limit = {
+				country_has_primary_culture = cu:vietnamese
+			}
+			if = {
+				limit = {
+					any_scope_state = {
+						state_region = s:STATE_CAMBODIA
+					}
+				}
+				random_scope_state = {
+					limit = {
+						state_region = s:STATE_CAMBODIA
+					}
+					STATE_CAMBODIA_state_name_assign = yes
+				}
+			}
+			if = {
+				limit = {
+					any_scope_state = {
+						state_region = s:STATE_LAOS
+					}
+				}
+				random_scope_state = {
+					limit = {
+						state_region = s:STATE_LAOS
+					}
+					STATE_LAOS_state_name_assign = yes
+				}
+			}
+		}
+		crown_land_republic_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
+		}
 	}
 	
 	ai_enact_weight_modifier = {	#Petitions
@@ -128,14 +167,14 @@ law_monarchy = {
 				has_strategy = ai_strategy_reactionary_agenda
 				power_bloc ?= { has_identity = identity:identity_ideological_union }
 				scope:target_country = {	# Is their law different enough from what we want to impose?
-					NOT = { has_law = law_type:law_theocracy }
+					NOT = { has_law_or_variant = law_type:law_theocracy }
 				}
 			}
 			
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:law_council_republic }
+					scope:target_country = { has_law_or_variant = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 				multiply = 5
@@ -215,12 +254,39 @@ law_presidential_republic = {
 				add_ideology = ideology_republican
 			}
 		}
+		crown_land_republic_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
+		}
 	}
 	
 	ai_will_do = {
 		exists = ruler
-		ruler = {
-			has_ideology = ideology:ideology_republican_leader
+		OR = {
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_republican_leader
+					has_ideology = ideology:ideology_radical
+					has_ideology = ideology:ideology_positivist
+					has_socialist_ideology = yes
+				}
+			}
+			any_interest_group = {
+				is_in_government = yes
+				is_powerful = yes
+				leader = {
+					OR = {
+						has_ideology = ideology:ideology_republican_leader
+						has_ideology = ideology:ideology_radical
+						has_ideology = ideology:ideology_positivist
+						has_socialist_ideology = yes
+					}
+				}
+			}
 		}
 	}
 	
@@ -247,14 +313,14 @@ law_presidential_republic = {
 				has_strategy = ai_strategy_progressive_agenda
 				power_bloc ?= { has_identity = identity:identity_ideological_union }
 				scope:target_country = {	# Is their law different enough from what we want to impose?
-					NOT = { has_law = law_type:law_parliamentary_republic }
+					NOT = { has_law_or_variant = law_type:law_parliamentary_republic }
 				}
 			}
 			
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:law_council_republic }
+					scope:target_country = { has_law_or_variant = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 				multiply = 5
@@ -341,12 +407,39 @@ law_parliamentary_republic = {
 				add_ideology = ideology_republican
 			}
 		}
+		crown_land_republic_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
+		}
 	}
 	
 	ai_will_do = {
 		exists = ruler
-		ruler = {
-			has_ideology = ideology:ideology_republican_leader
+		OR = {
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_republican_leader
+					has_ideology = ideology:ideology_radical
+					has_ideology = ideology:ideology_positivist
+					has_socialist_ideology = yes
+				}
+			}
+			any_interest_group = {
+				is_in_government = yes
+				is_powerful = yes
+				leader = {
+					OR = {
+						has_ideology = ideology:ideology_republican_leader
+						has_ideology = ideology:ideology_radical
+						has_ideology = ideology:ideology_positivist
+						has_socialist_ideology = yes
+					}
+				}
+			}
 		}
 	}
 	
@@ -368,14 +461,14 @@ law_parliamentary_republic = {
 				has_strategy = ai_strategy_progressive_agenda
 				power_bloc ?= { has_identity = identity:identity_ideological_union }
 				scope:target_country = {	# Is their law different enough from what we want to impose?
-					NOT = { has_law = law_type:law_presidential_republic }
+					NOT = { has_law_or_variant = law_type:law_presidential_republic }
 				}
 			}
 			
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:law_council_republic }
+					scope:target_country = { has_law_or_variant = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 				multiply = 5
@@ -428,6 +521,16 @@ law_theocracy = {
 		}
 	}
 	
+	on_activate = {
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
+		}
+	}
+	
 	modifier = {
 		country_legitimacy_headofstate_add = 20
 		country_legitimacy_govt_total_clout_add = 20
@@ -438,8 +541,17 @@ law_theocracy = {
 	
 	ai_will_do = {
 		exists = ruler
-		ruler = {
-			has_ideology = ideology:ideology_theocrat
+		OR = {
+			ruler = {
+				has_ideology = ideology:ideology_theocrat
+			}
+			any_interest_group = {
+				is_in_government = yes
+				is_powerful = yes
+				leader = {
+					has_ideology = ideology:ideology_theocrat
+				}
+			}
 		}
 	}
 	
@@ -462,14 +574,14 @@ law_theocracy = {
 				power_bloc ?= { has_identity = identity:identity_religious }
 				religion = scope:target_country.religion
 				scope:target_country = {	# Is their law different enough from what we want to impose?
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { has_law_or_variant = law_type:law_monarchy }
 				}
 			}
 			
 			add = base_impose_law_weight
 			if = {
 				limit = {
-					scope:target_country = { has_law = law_type:law_council_republic }
+					scope:target_country = { has_law_or_variant = law_type:law_council_republic }
 					NOT = { has_strategy = ai_strategy_egalitarian_agenda }
 				}
 				multiply = 5
@@ -546,7 +658,7 @@ law_council_republic = {
 						
 						owner = {
 							country_has_primary_culture = cu:russian
-							has_law = law_type:law_council_republic
+							has_law_or_variant = law_type:law_council_republic
 						}
 					}
 					
@@ -556,6 +668,14 @@ law_council_republic = {
 					}
 				}
 			}
+		}
+		crown_land_republic_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
 		}
 	}
 	
@@ -587,11 +707,7 @@ law_council_republic = {
 	ai_will_do = {
 		exists = ruler
 		ruler = {
-			OR = {
-				has_ideology = ideology:ideology_communist
-				has_ideology = ideology:ideology_anarchist
-				has_ideology = ideology:ideology_vanguardist
-			}
+			has_socialist_ideology = yes
 		}
 	}
 	
@@ -677,6 +793,14 @@ law_corporate_state = {
 			}
 			add_modifier = { name = modifier_corporate_state_intelligentsia_bias }
 		}
+		crown_land_republic_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_neo_absolutism
+			}
+			deactivate_law = law_type:law_neo_absolutism
+			activate_law = law_type:law_autocracy
+		}
 	}
 	
 	on_enact = {
@@ -739,16 +863,26 @@ law_corporate_state = {
 		country_legitimacy_ideological_incoherence_mult = -0.25
 		country_authority_add = 400
 		interest_group_ig_petty_bourgeoisie_pol_str_mult = 0.25
-		country_max_companies_add = 1
-		country_free_charters_add = 1
 	}
 	
 	ai_will_do = {
 		exists = ruler
-		ruler = {
-			OR = {
-				has_ideology = ideology:ideology_fascist
-				has_ideology = ideology:ideology_corporatist_leader
+		OR = {
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_fascist
+					has_ideology = ideology:ideology_corporatist_leader
+				}
+			}
+			any_interest_group = {
+				is_in_government = yes
+				is_powerful = yes
+				leader = {
+					OR = {
+						has_ideology = ideology:ideology_fascist
+						has_ideology = ideology:ideology_corporatist_leader
+					}
+				}
 			}
 		}
 	}
