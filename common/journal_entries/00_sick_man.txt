@@ -217,38 +217,42 @@ je_sick_man_army = {
 			has_law_or_variant = law_type:law_mass_conscription
 		}
 		has_technology_researched = napoleonic_warfare
-		NOR = {
-			any_scope_building = {
+		any_scope_building = {
+			filter = {
 				is_building_type = building_barracks
-				OR = {
-					building_has_goods_shortage = yes
-					has_active_production_method = pm_no_organization
-				}
 			}
-			any_military_formation = {
-				filter = {
-					is_army = yes
-				}
-				any_combat_unit = {
-					has_unit_type = unit_type:combat_unit_type_irregular_infantry
-				}
-				percent >= 0.1
+			NOR = {
+				building_has_goods_shortage = yes
+				has_active_production_method = pm_no_organization
 			}
-			any_military_formation = {
-				filter = {
-					is_army = yes
-				}
-				any_combat_unit = {
-					OR = {
-						has_unit_type = unit_type:combat_unit_type_cannon_artillery
-						has_unit_type = unit_type:combat_unit_type_mobile_artillery
-						has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
-						has_unit_type = unit_type:combat_unit_type_siege_artillery
-					}
-					percent <= 0.15
-				}
-			}
+			percent = 1
 		}
+		any_military_formation = {
+			filter = {
+				is_army = yes
+			}
+			any_combat_unit = {
+				has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				percent < 0.1
+			}
+			count = all
+		}
+		any_military_formation = {
+			filter = {
+				is_army = yes
+			}
+			any_combat_unit = {
+				OR = {
+					has_unit_type = unit_type:combat_unit_type_cannon_artillery
+					has_unit_type = unit_type:combat_unit_type_mobile_artillery
+					has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
+					has_unit_type = unit_type:combat_unit_type_siege_artillery
+				}
+				percent > 0.15
+			}
+			count = all
+		}
+		
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -648,6 +652,22 @@ je_sick_man_liberal_separatism = {
 			has_variable = sick_man_complete
 		}
 	}
+	# This on_fail is taken from the VANILLA separatism on_fail
+	on_fail = {
+		set_variable = failed_sick_man_separatism # At a minimum, apply this variable somewhere
+		if = { #failure immediately triggers eastern_crisis
+			limit = {
+				c:TUR ?= this
+				has_dlc_feature = ip3_content
+				NOT = {
+					has_variable = eastern_crisis_happened
+				}
+			}
+			add_journal_entry = {
+				type = je_great_eastern_crisis
+			}
+		}
+	}
 	transferable = no
 	weight = 5005
 	progressbar = yes
@@ -715,6 +735,22 @@ je_sick_man_absolute_separatism = {
 		custom_tooltip = {
 			text = finished_sick_man_tt
 			has_variable = sick_man_complete
+		}
+	}
+	# This on_fail is taken from the VANILLA separatism on_fail
+	on_fail = {
+		set_variable = failed_sick_man_separatism # At a minimum, apply this variable somewhere
+		if = { #failure immediately triggers eastern_crisis
+			limit = {
+				c:TUR ?= this
+				has_dlc_feature = ip3_content
+				NOT = {
+					has_variable = eastern_crisis_happened
+				}
+			}
+			add_journal_entry = {
+				type = je_great_eastern_crisis
+			}
 		}
 	}
 	transferable = no
