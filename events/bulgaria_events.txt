@@ -1,0 +1,525 @@
+﻿namespace = bulgaria_events
+
+bulgaria_events.1 = {
+	type = country_event
+	placement = ROOT
+	
+	title = bulgaria_events.1.t
+	desc = bulgaria_events.1.d
+	flavor = bulgaria_events.1.f
+	
+	event_image = {
+		video = "europenorthamerica_before_the_battle"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	duration = 3
+	
+	cooldown = { days = normal_modifier_time }
+	
+	trigger = {
+		has_dlc_feature = ip3_content
+	}
+	
+	immediate = {}
+	
+	option = {	# Restore the Bulgarian Empire
+		name = bulgaria_events.1.a
+		default_option = yes
+		
+		set_variable = bul_pursued_bulgarian_empire
+		
+		add_modifier = {
+			name = modifier_bul_ultranationalist_rhetoric
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+		
+		every_state = {
+			limit = {
+				is_homeland_of_country_cultures = root
+				NOT = {
+					owner = {
+						this = root
+					}
+				}
+			}
+			state_region = {
+				add_claim = root
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_EASTERN_SERBIA
+					}
+				}
+			}
+			s:STATE_EASTERN_SERBIA = {
+				add_claim = root
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_EASTERN_THRACE
+					}
+				}
+			}
+			s:STATE_EASTERN_THRACE = {
+				add_claim = root
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_MACEDONIA
+					}
+				}
+			}
+			s:STATE_MACEDONIA = {
+				add_claim = root
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_ALBANIA
+					}
+				}
+			}
+			s:STATE_ALBANIA = {
+				add_claim = root
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_KOSOVO
+					}
+				}
+			}
+			s:STATE_KOSOVO = {
+				add_claim = root
+			}
+		}
+		custom_tooltip = bulgarian_empire_homeland_tt
+		if = {	# In case we already own any of the prerequisite states
+			limit = {
+				any_scope_state = {
+					state_region = {
+						OR = {
+							this = s:STATE_EASTERN_THRACE
+							this = s:STATE_MACEDONIA
+							this = s:STATE_EASTERN_SERBIA
+						}
+					}
+				}
+			}
+			every_scope_state = {
+				limit = {
+					state_region = {
+						OR = {
+							this = s:STATE_EASTERN_THRACE
+							this = s:STATE_MACEDONIA
+							this = s:STATE_EASTERN_SERBIA
+						}
+					}
+				}
+				state_region = {
+					add_homeland = cu:bulgarian
+				}
+			}
+		}
+		
+		ai_chance = {
+			base = 60
+		}
+	}
+	
+	option = {	# Embrace Yugoslavism
+		name = bulgaria_events.1.b
+		trigger = {
+			NOT = {
+				exists = c:YUG
+			}
+		}
+		
+		custom_tooltip = bulgaria_unlock_yugoslavia_tt
+		set_variable = bul_pursued_greater_yugoslavism
+		
+		create_political_movement = { type = movement_yugoslav_national }
+		
+		add_modifier = {
+			name = modifier_bul_pursuing_greater_yugoslavism
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = modifier_bul_embraced_yugoslavism
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+		
+		ai_chance = {
+			base = 20
+		}
+	}
+	
+	option = {	# Bulgarian Renaissance
+		name = bulgaria_events.1.c
+		add_modifier = {
+			name = modifier_bulgarian_renaissance
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+		
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+bulgaria_events.2 = {
+	type = country_event
+	placement = ROOT
+	
+	title = bulgaria_events.2.t
+	desc = bulgaria_events.2.d
+	flavor = bulgaria_events.2.f
+	
+	event_image = {
+		video = "votp_monarch_holding_court"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	duration = 3
+	
+	cooldown = { days = normal_modifier_time }
+	
+	trigger = {
+		c:BUL ?= THIS
+		has_dlc_feature = ip3_content
+		NOT = { has_variable = bulgarian_independence }
+	}
+	
+	immediate = {
+		### IMPERIA START
+		remove_primary_culture = cu:turkish
+		set_state_religion = root.country_definition.religion
+		### IMPERIA END
+		set_variable = bulgarian_independence
+		create_character = {
+			template = BUL_alexander_i
+			on_created = {
+				place_character_in_void = 24
+			}
+			save_scope_as = first_opt
+		}
+		create_character = {
+			template = BUL_ferdinand_i
+			on_created = {
+				place_character_in_void = 24
+			}
+			save_scope_as = second_opt
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_scope_character = {
+						has_template = BUL_stefan_stambolov
+					}
+				}
+			}
+			create_character = {
+				template = BUL_stefan_stambolov
+				on_created = {
+					place_character_in_void = 24
+				}
+				save_scope_as = third_opt
+			}
+		}
+		ruler = {
+			save_scope_as = bul_ruler
+		}
+		c:RUS ?= {
+			save_scope_as = russia
+		}
+	}
+	
+	option = {	#Alexander, pro Russia
+		name = bulgaria_events.2.a
+		trigger = {
+			game_date >= 1875.5.5
+			scope:first_opt ?= { is_character_alive = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_law_or_variant = law_type:law_monarchy }
+			}
+			activate_law = law_type:law_monarchy
+		}
+		scope:first_opt = {
+			hidden_effect = {
+				free_character_from_void = yes
+			}
+			set_character_as_ruler = yes
+		}
+		scope:russia = {
+			change_relations = {
+				country = root
+				value = 30
+			}
+		}
+		
+		ai_chance = {
+			base = 50
+		}
+	}
+	
+	option = {	# Ferdinand I
+		name = bulgaria_events.2.b
+		default_option = yes
+		trigger = {
+			game_date >= 1879.5.5
+			scope:second_opt ?= { is_character_alive = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_law_or_variant = law_type:law_monarchy }
+			}
+			activate_law = law_type:law_monarchy
+		}
+		scope:second_opt = {
+			hidden_effect = {
+				free_character_from_void = yes
+			}
+			set_character_as_ruler = yes
+		}
+		if = {
+			limit = {
+				game_date >= 1894.1.30
+			}
+			create_character = {
+				template = BUL_boris_iii
+				heir = yes
+			}
+		}
+		scope:russia = {
+			change_relations = {
+				country = root
+				value = 10
+			}
+		}
+		
+		ai_chance = {
+			base = 300
+		}
+	}
+	
+	option = {	# Republic - Stambolov
+		name = bulgaria_events.2.c
+		trigger = {
+			scope:third_opt ?= { is_character_alive = yes }
+			game_date >= 1880.2.3
+		}
+		if = {
+			limit = {
+				NOT = { has_law_or_variant = law_type:law_presidential_republic }
+			}
+			activate_law = law_type:law_presidential_republic
+		}
+		scope:third_opt = {
+			hidden_effect = {
+				free_character_from_void = yes
+			}
+			set_character_as_ruler = yes
+		}
+		scope:russia = {
+			change_relations = {
+				country = root
+				value = -10
+			}
+		}
+		
+		ai_chance = {
+			base = 25
+		}
+	}
+	
+	option = {	# Republic - Random Leader
+		name = bulgaria_events.2.e
+		if = {
+			limit = {
+				NOT = { has_law_or_variant = law_type:law_presidential_republic }
+			}
+			activate_law = law_type:law_presidential_republic
+		}
+		custom_tooltip = {
+			text = bul_random_leader_tt
+			scope:bul_ruler = {
+				exile_character = yes
+				add_character_role = agitator
+			}
+		}
+		
+		ai_chance = {
+			base = 5
+		}
+	}
+	
+	option = {	# Monarchy - Random Leader
+		name = bulgaria_events.2.g
+		trigger = {
+			game_date < 1875.5.5
+		}
+		if = {
+			limit = {
+				NOT = { has_law_or_variant = law_type:law_monarchy }
+			}
+			activate_law = law_type:law_monarchy
+		}
+		custom_tooltip = {
+			text = bul_random_leader_monarch_tt
+			scope:bul_ruler = {
+				exile_character = yes
+				add_character_role = agitator
+			}
+			create_character = {
+				last_name = "of_Saxe-Coburg-Gotha"
+				culture = cu:bulgarian
+				ruler = yes
+			}
+		}
+		
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+#Bulgarian Horrors Event.
+bulgaria_events.3 = {
+	type = country_event
+	placement = ROOT
+	
+	title = bulgaria_events.3.t
+	desc = bulgaria_events.3.d
+	flavor = bulgaria_events.3.f
+	
+	event_image = {
+		video = "ip3_angry_mob_raiding_minorities"
+	}
+	
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	duration = 4
+	
+	cooldown = { days = long_modifier_time }
+	
+	trigger = {
+		has_dlc_feature = ip3_content
+		has_variable = crushed_secession
+		cultural_acceptance_base = { target = scope:rebel_culture value <= acceptance_status_2 }
+		NOT = {
+			has_variable = bulgaria_events_3
+		}
+	}
+	
+	immediate = {
+		#Uprising primary culture is saved as value of var:uprising_country_culture, which is saved on_actions at the end of a succession in c:TUR.
+		ROOT ?= {
+			save_scope_as = ottoman
+			set_variable = bulgaria_events_3
+		}
+		set_closest_great_power = yes
+		random_scope_character = {
+			limit = {
+				has_role = general
+			}
+			save_scope_as = scapegoat
+		}
+	}
+	
+	option = {	#Infamy
+		name = bulgaria_events.3.a
+		default_option = yes
+		change_infamy = 30
+	}
+	
+	option = {	# Sacrifice General
+		name = bulgaria_events.3.b
+		trigger = {
+			scope:scapegoat = {
+				is_character_alive = yes
+			}
+		}
+		scope:scapegoat = {
+			interest_group = {
+				add_modifier = {
+					name = modifier_bul_scapegoated
+					days = long_modifier_time
+					is_decaying = yes
+				}
+			}
+			kill_character = yes
+		}
+		change_infamy = 15
+	}
+	
+	option = {	# gp vouch for you
+		name = bulgaria_events.3.c
+		trigger = {
+			exists = scope:closest_great_power
+			scope:closest_great_power = {
+				relations:root >= 30
+			}
+		}
+		change_infamy = 10
+		scope:closest_great_power = {
+			change_relations = {
+				country = root
+				value = -30
+			}
+		}
+	}
+	
+	option = {	# embrace the villainy
+		name = bulgaria_events.3.e
+		change_infamy = 50
+		add_modifier = {
+			name = terrified_dissidents
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
+	}
+	
+	after = {
+		scope:former_rebel_capital ?= {	# state_region scope
+			add_devastation = 30
+			random_scope_state = {
+				limit = {
+					owner = root
+				}
+				add_modifier = {
+					name = modifier_rebellion_horrific_reprisals
+					days = long_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
+	}
+}
