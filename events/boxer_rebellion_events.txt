@@ -175,7 +175,7 @@ boxer_rebellion_events.2 = {
 	}
 }
 
-# The Qing and the Han
+# The Qing and the Han - Boxer Rebellion Failure / time-out
 boxer_rebellion_events.3 = {
 	type = country_event
 	placement = ROOT
@@ -199,12 +199,6 @@ boxer_rebellion_events.3 = {
 	trigger = {}
 	
 	immediate = {
-		cu:manchu = {
-			save_scope_as = manchu_culture
-		}
-		cu:han = {
-			save_scope_as = han_culture
-		}
 		# Imperia addition
 		set_variable = je_boxer_rebellion_timed_out
 	}
@@ -212,13 +206,31 @@ boxer_rebellion_events.3 = {
 	option = {
 		name = boxer_rebellion_events.3.a
 		default_option = yes
-		
-		hidden_effect = {
-			post_notification = warlord_china_explosion_point_add
+		remove_modifier ?= qing_reforms_hundred_days_reform_failure
+		add_modifier = {
+			name = qing_boxer_rebellion_dynasty_is_finished
+			years = 20
 		}
-		add_radicals = {
-			value = very_large_radicals
-			culture = cu:han
+		if = {
+			limit = {
+				any_scope_character = {
+					has_template = chi_cixi_template
+				}
+			}
+			random_scope_character = {
+				limit = {
+					has_template = chi_cixi_template
+				}
+				set_ideology = ideology:ideology_modernizer_leader
+				set_as_interest_group_leader = yes
+			}
+		}
+		else = {
+			create_character = {
+				template = chi_cixi_template
+				ideology = ideology_modernizer_leader
+				ig_leader = yes
+			}
 		}
 		ai_chance = {
 			base = 100
@@ -226,145 +238,27 @@ boxer_rebellion_events.3 = {
 	}
 	option = {
 		name = boxer_rebellion_events.3.b
-		custom_tooltip = boxer_rebellion_events.3.tt1
-		set_variable = china_han_empire
-		hidden_effect = {
-			ruler = {
-				kill_character = yes
+		activate_law = law_type:law_presidential_republic
+		if = {
+			limit = {
+				any_scope_character = {
+					has_template = chi_general_yuan_shikai
+				}
 			}
-			if = {
+			random_scope_character = {
 				limit = {
-					any_scope_character = {
-						is_heir = yes
-					}
+					has_template = chi_general_yuan_shikai
 				}
-				heir = {
-					kill_character = yes
-				}
+				set_as_interest_group_leader = yes
+				set_character_as_ruler = yes
 			}
-			post_notification = warlord_china_explosion_point_add
 		}
-		if = {
-			limit = {
-				year < 1862
-			}
+		else = {
 			create_character = {
-				first_name = "Fanhao"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
+				template = chi_general_yuan_shikai
+				ig_leader = yes
 				ruler = yes
-				birth_date = 1806.3.21
-				interest_group = ig_devout
-				traits = {}
 			}
-			create_character = {
-				first_name = "Xiangke"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				heir = yes
-				birth_date = 1848.9.25
-				interest_group = ig_devout
-				traits = {}
-			}
-		}
-		else_if = {
-			limit = {
-				year >= 1848
-				year < 1876
-			}
-			create_character = {
-				first_name = "Xiangke"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				ruler = yes
-				birth_date = 1848.9.25
-				traits = {}
-			}
-			create_character = {
-				first_name = "Lingyi"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				heir = yes
-				birth_date = 1872.11.29
-				interest_group = ig_devout
-				traits = {}
-			}
-		}
-		else_if = {
-			limit = {
-				year >= 1872
-				year < 1920	# Should be 1919, but for the sake of script it is not
-			}
-			create_character = {
-				first_name = "Lingyi"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				ruler = yes
-				birth_date = 1872.11.29
-				interest_group = ig_devout
-				traits = {}
-			}
-			create_character = {
-				first_name = "Teh_Cheng"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				heir = yes
-				birth_date = 1920.8.17
-				interest_group = ig_devout
-				traits = {}
-			}
-		}
-		else_if = {
-			limit = {
-				year >= 1921
-				year < 1936
-			}
-			create_character = {
-				first_name = "Teh_Cheng"
-				last_name = "Kong"
-				historical = yes
-				culture = cu:han
-				ruler = yes
-				birth_date = 1920.8.17
-				interest_group = ig_devout
-				traits = {}
-			}
-		}
-		if = {
-			limit = {
-				has_law = law_type:law_national_supremacy
-			}
-			activate_law = law_type:law_ethnostate
-		}
-		if = {
-			limit = {
-				has_law = law_type:law_racial_segregation
-			}
-			activate_law = law_type:law_national_supremacy
-		}
-		if = {
-			limit = {
-				has_law = law_type:law_cultural_exclusion
-			}
-			activate_law = law_type:law_racial_segregation
-		}
-		if = {
-			limit = {
-				has_law = law_type:law_multicultural
-			}
-			activate_law = law_type:law_cultural_exclusion
-		}
-		remove_primary_culture = cu:manchu
-		add_primary_culture = cu:han
-		add_radicals = {
-			value = 0.75
-			culture = cu:manchu
 		}
 		ai_chance = {
 			base = 0
