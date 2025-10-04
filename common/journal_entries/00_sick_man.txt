@@ -3,6 +3,8 @@
 	
 	group = je_group_tanzimat
 	
+	scripted_button = je_sick_man_main_desperate_defense_button
+	
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -40,7 +42,7 @@
 			owns_entire_state_region = STATE_WESTERN_THRACE
 			owns_entire_state_region = STATE_EASTERN_THRACE
 		}
-		OR = {
+		AND = {
 			has_technology_researched = nationalism
 			has_technology_researched = labor_movement
 		}
@@ -138,7 +140,7 @@ je_sick_man_economy = {
 				occupancy > 0.9
 				level >= 3
 			}
-			percent >= 0.33333
+			percent >= 0.4
 		}
 	}
 	on_complete = {
@@ -192,6 +194,20 @@ je_sick_man_army = {
 				}
 				percent >= 0.1
 			}
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					OR = {
+						has_unit_type = unit_type:combat_unit_type_cannon_artillery
+						has_unit_type = unit_type:combat_unit_type_mobile_artillery
+						has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
+						has_unit_type = unit_type:combat_unit_type_siege_artillery
+					}
+					percent <= 0.15
+				}
+			}
 		}
 	}
 	on_complete = {
@@ -239,6 +255,21 @@ je_sick_man_navy = {
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_naval_theory
+				}
+			}
+		}
+		# 40% of ships in the Ottoman Navy must be heavy ships
+		any_scope_building = {
+			percent >= 0.4
+			filter = {
+				is_building_type = building_naval_base
+			}
+			any_combat_unit = {
+				OR = {
+					has_unit_type = unit_type:combat_unit_type_man_o_war
+					has_unit_type = unit_type:combat_unit_type_ironclad
+					has_unit_type = unit_type:combat_unit_type_dreadnought
+					has_unit_type = unit_type:combat_unit_type_battleship
 				}
 			}
 		}
@@ -658,7 +689,7 @@ je_sick_man_liberal_education = {
 		any_scope_building = {
 			is_building_type = building_university
 			occupancy > 0.9
-			level >= 5
+			level >= 8
 		}
 		OR = {
 			has_law = law_type:law_private_schools
@@ -685,7 +716,7 @@ je_sick_man_liberal_education = {
 		value = root.literacy_rate
 	}
 	goal_add_value = {
-		add = 0.15
+		add = 0.12
 	}
 	invalid = {
 		custom_tooltip = {
@@ -705,7 +736,7 @@ je_sick_man_absolute_education = {
 		any_scope_building = {
 			is_building_type = building_university
 			occupancy > 0.9
-			level >= 5
+			level >= 8
 		}
 		OR = {
 			has_law = law_type:law_patriot_schools
@@ -732,7 +763,7 @@ je_sick_man_absolute_education = {
 		value = root.literacy_rate
 	}
 	goal_add_value = {
-		add = 0.15
+		add = 0.11
 	}
 	invalid = {
 		custom_tooltip = {

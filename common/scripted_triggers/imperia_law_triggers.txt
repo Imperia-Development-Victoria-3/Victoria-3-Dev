@@ -42,3 +42,26 @@ is_enacting_pro_workers_rights = {
 		is_enacting_law = law_type:law_enforced_unions
 	}
 }
+
+can_have_tribal_levies = {
+	country_is_in_africa = yes
+	any_primary_culture = {
+		# Done like this to exclude afro-colonial cultures that may end up in Africa..
+		OR = {
+			has_discrimination_trait = west_african_culture_group
+			has_discrimination_trait = central_african_culture_group
+			has_discrimination_trait = east_african_culture_group
+			has_discrimination_trait = southern_african_culture_group
+		}
+	}
+	# Only for unrecognised countries
+	NOT = {
+		is_country_type = recognized
+	}
+	# As long as they dont have general staff, skirmisher cavalry or percurssion cap
+	NOR = {
+		has_technology_researched = general_staff
+		has_technology_researched = skirmisher_cavalry
+		has_technology_researched = percussion_cap
+	}
+}

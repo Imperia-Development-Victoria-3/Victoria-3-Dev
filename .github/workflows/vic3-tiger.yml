@@ -43,14 +43,19 @@ jobs:
         cargo build --release -p vic3-tiger
         cargo run --release -p vic3-tiger "${{ github.workspace }}" --game "${{ github.workspace }}/vanilla-game" --suppress ${{ github.workspace }}/files/current_errors.json  > ../error.log
 
-    - name: Check if error log is empty
+    - name: Check if error log
       id: check_error_log
       run: |
-          if [ -s ./error.log ]; then
+        if [ ! -s ./error.log ]; then
+          echo "has_errors=false" >> $GITHUB_OUTPUT
+        else
+          line_count=$(wc -l < ./error.log)
+          if [ "$line_count" -gt 1 ]; then
             echo "has_errors=true" >> $GITHUB_OUTPUT
           else
             echo "has_errors=false" >> $GITHUB_OUTPUT
           fi
+        fi
 
     - name: Fail PR if error log is not empty
       if: ${{ steps.check_error_log.outputs.has_errors == 'true' && !contains( github.event.pull_request.labels.*.name, 'override') }}

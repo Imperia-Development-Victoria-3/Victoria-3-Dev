@@ -3,8 +3,6 @@
 }
 
 NMilitary = {
-	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MIN = 0.025	# The minimum percentage of manpower a unit can lose each week due to attrition
-	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MAX = 0.075	# The maximum percentage of manpower a unit can lose each week due to attrition
 	BATTLE_RAW_MANPOWER_INFLICTED_CASUALTY_RATIO = 0.45	#0.5 applied to the number of casualties caused by raw number of troops, ie without considering Offense/Defense - increasing this makes CE less important and battles more lethal
 	BATTLE_COMBAT_EFFICIENCY_INFLICTED_CASUALTY_RATIO = 1.55	#1.5 applied to the number of casualties caused by troops with Offense/Defense also factored in - increasing this makes CE more important and battles more lethal
 	INTERCEPTION_DELAY_BASE_DAYS = 3	# was 5     # atleast this many days between each admiral interception attempt
@@ -13,16 +11,21 @@ NMilitary = {
 	MOBILIZATION_INFRASTRUCTURE_FACTOR = 0.01	# amount of mobilization generated per point of infrastructure. one battalion takes one full point of mobilization to mobilize
 	MIN_MOBILIZATION_PER_DAY = 0.04	# minimum mobilization gained per day by each mobilizing battalion (the last unit to gain mobilization in a state might have to do with whatever is left)
 	MAX_MOBILIZATION_PER_DAY = 0.15	# maximum mobilization gained per day by each mobilizing battalion
-	MOBILIZATION_OPTION_DIFFERENCE_ORGANIZATION_IMPACT = 5	# The penalty to Organization gained for each difference by merging units between Formations with different Mobilization Options
+	MOBILIZATION_OPTION_DIFFERENCE_ORGANIZATION_IMPACT = 2.5	#The penalty to Organization gained for each difference by merging units between Formations with different Mobilization Options
 	MILITARY_FORMATION_WEEKLY_MAX_UNIT_UPGRADES_ARMY = 0.08	# Each week a mobilized army can upgrade this (0.0-1.0) fraction of its total number of units.
 	MILITARY_FORMATION_WEEKLY_MAX_UNIT_UPGRADES_FLEET = 0.04	# Each week a mobilized fleet can upgrade this (0.0-1.0) fraction of its total number of units.
+	MILITARY_FORMATION_ORGANIZATION_EXILE_MULT = -0.05	# Exiled Military Formation has its Target Organization modified: Target = Target * ( 1 + this )
+	ATTRITION_RISK_EXILED_ARMY_ADD = 0.1	# Exiled formation has attrition risk increased by this
+	ATTRITION_RISK_ON_ENEMY_TERRITORY_ADD = 0.2	# Exiled formation on enemy territory has attrition risk additionally increased by this
+	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MIN = 0.015	# The minimum percentage of manpower a unit can lose each week due to attrition
+	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MAX = 0.045	# The maximum percentage of manpower a unit can lose each week due to attrition
 }
 
 NWar = {
 	DEVASTATION_MAX = 100.0
-	DEVASTATION_INCREASE_RATE = 0.1	# Per day, scales with level of occupation
-	DEVASTATION_DECAY_RATE = -0.08	#-0.1 Per day, when there are no occupations
-	DEVASTATION_FROM_BATTLES = 0.15	# For each battle
+	DEVASTATION_INCREASE_RATE = 0.08	# Per day, scales with level of occupation
+	DEVASTATION_DECAY_RATE = -0.07	#-0.1 Per day, when there are no occupations
+	DEVASTATION_FROM_BATTLES = 0.1	# For each battle
 	
 	AUTO_CAPITULATE_WAR_SUPPORT = -100	# When war support is this low, the country will auto capitulate
 	DAYS_BETWEEN_WAR_EXHAUSTION = 7	# Every this many days war support will be reduced by the war exhaustion formula
@@ -86,6 +89,10 @@ NPops = {
 	MIGRATION_MAX_PER_STATE_MASS_EMIGRATION_MULT = 3.0	# Weekly emigration caps are multiplied by this amount by this for mass migrations (after clamping from MIGRATION_MAX_EMIGRATION_AS_POPULATION_FRACTION)
 	MIGRATION_MAX_PER_STATE_MASS_IMMIGRATION_MULT = 5.0	# Weekly immigration caps are multiplied by this amount by this for mass migrations (after clamping from MIGRATION_MAX_EMIGRATION_AS_POPULATION_FRACTION)
 	MASS_MIGRATION_NEIGHBORING_TARGET_STATE_LIMIT_FRACTION = 0.5
+	
+	PRESTIGE_GOOD_SOL_BONUS_SCALING = 0.2	# Added multiplier to SoL, scales with % of pop buy package that is prestige goods
+	PRESTIGE_GOOD_SOL_MAX_BONUS = 0.15	# Added multiplier to SoL from prestige goods cannot be higher than this
+	
 }
 
 NPolitics = {
@@ -117,13 +124,13 @@ NPolitics = {
 }
 
 NEconomy = {
-	COUNTRY_GDP_MODIFIER_MAX_MULTIPLIER = 400000	# The country_gdp modifier multiplier cannot be higher than this
+	COUNTRY_GDP_MODIFIER_MAX_MULTIPLIER = 600000	# The country_gdp modifier multiplier cannot be higher than this
 	PRICE_RANGE = 0.75	# min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]
 	
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.5	# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
-	GOODS_SHORTAGE_PENALTY_INCREASE_SPEED = 0.0075	# .01	Goods shortage penalty increases by this fraction of the target each day
-	GOODS_SHORTAGE_PENALTY_DECREASE_SPEED = 0.0075	# .01	Goods shortage penalty goes down by this fraction of GOODS_SHORTAGE_PENALTY_MAX each day
-	GOODS_SHORTAGE_PENALTY_MIN = 0.05	# Goods shortage penalty can't be lower than this if there is any shortage
+	GOODS_SHORTAGE_PENALTY_INCREASE_SPEED = 0.005	# .01	Goods shortage penalty increases by this fraction of the target each day
+	GOODS_SHORTAGE_PENALTY_DECREASE_SPEED = 0.005	# .01	Goods shortage penalty goes down by this fraction of GOODS_SHORTAGE_PENALTY_MAX each day
+	GOODS_SHORTAGE_PENALTY_MIN = 0.03	# Goods shortage penalty can't be lower than this if there is any shortage
 	GOODS_SHORTAGE_PENALTY_MAX = 0.75	#0.5	# Goods shortage penalty can't be higher than this
 	
 	SLAVE_BASKET_DEFAULT = 6	#8					# Default level of consumer goods that a building will buy for its slaves
@@ -134,6 +141,8 @@ NEconomy = {
 	
 	SLAVE_TRADE_TURMOIL_WEIGHT = 30	#25			# Weight of slave turmoil in slave import marker selection
 	BUILDING_RAISE_WAGES_DISCRIMINATION_FACTOR = 0.5	#0.66 # Profitable buildings only care to raise wages for discriminated pops if their wealth to expected SoL ratio is less than this
+	
+	PRESTIGE_GOODS_INPUT_THROUGHPUT_BONUS = 0.1	# Bonus to throughput, scaled against proportion of input goods base value that is prestige goods
 }
 
 NDiplomacy = {
@@ -146,25 +155,26 @@ NDiplomacy = {
 	
 	WAR_GOAL_INFAMY_RELATIONS_TARGET_IMPACT = -0.75	# -1.00 Each point of infamy generated by an incident also has this impact on relations with the target
 	WAR_GOAL_INFAMY_RELATIONS_INTEREST_IMPACT = -0.3	# -0.50 Each point of infamy generated by an incident also has this impact on relations with countries that have an interest in the target 
-	WAR_GOAL_INFAMY_CONQUER_STATE = 3.0	#Vanilla 5.0
-	WAR_GOAL_INFAMY_RETURN_STATE = 1.25	#Vanilla 2.0
+	WAR_GOAL_INFAMY_CONQUER_STATE = 2.75	#Vanilla 5.0
+	WAR_GOAL_INFAMY_RETURN_STATE = 1.1	#Vanilla 2.0
 	WAR_GOAL_INFAMY_MAKE_PROTECTORATE = 2.0
 	WAR_GOAL_INFAMY_MAKE_TRIBUTARY = 2.0
+	WAR_GOAL_INFAMY_MAKE_DOMINION = 2.0
 	WAR_GOAL_INFAMY_REDUCE_AUTONOMY = 2.0
 	WAR_GOAL_INFAMY_TRANSFER_SUBJECT = 2.0
 	WAR_GOAL_INFAMY_ANNEX_COUNTRY = 3.0	#4
 	WAR_GOAL_INFAMY_REGIME_CHANGE = 0.4	#Vanilla .50
 	WAR_GOAL_INFAMY_FORCE_NATIONALIZATION = 0.2
 	
-	BASE_YEARLY_INFAMY_DECAY_RATE = 5.0	# Decay rate of infamy per year
+	BASE_YEARLY_INFAMY_DECAY_RATE = 5.5	# Decay rate of infamy per year
 	
-	WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER = 0.025	#Vanilla 0.03 For each WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR population in a country/state, multiply infamy by this
-	WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE = 10	#5 Infamy population multiplier can't be higher than this for each state affected
+	WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER = 0.0275	#Vanilla 0.03 For each WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR population in a country/state, multiply infamy by this
+	WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE = 7.5	#5 Infamy population multiplier can't be higher than this for each state affected
 	WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL = 55	#Vanilla 50 Infamy population multiplier can't be higher than this, regardless of number of states affected
 	WAR_GOAL_INFAMY_HOMELAND_FACTOR = -0.5	# Vanilla 0.25 Infamy is adjusted by this if the states taken/puppeted etc are Homelands of the aggressor
 	WAR_GOAL_INFAMY_UNINCORPORATED_FACTOR = -0.75	# Infamy is adjusted by this if the states taken/puppeted etc are unincorporated
 	SWAY_OFFER_WARGOAL_MANEUVERS_COST_RETURN_STATE = 5
-	WAR_GOAL_CONTAIN_THREAT_YEARS_SINCE_CONQUEST = 25
+	WAR_GOAL_CONTAIN_THREAT_YEARS_SINCE_CONQUEST = 20
 	
 	PRESTIGE_FROM_ARMY_POWER_PROJECTION = 0.015	#.03 Per point of power projection from army combat power
 	PRESTIGE_FROM_NAVY_POWER_PROJECTION = 0.025	#.1 Per point of power projection from navy combat power
@@ -173,31 +183,5 @@ NDiplomacy = {
 }
 
 NPowerBlocs = {
-	MAX_PRINCIPLES = 4	# Max number of principles that a Power Bloc can have
-	INITIAL_PRINCIPLE_LEVELS = 1	# Max total levels of principles that a Power Bloc can have during formation
-	FORMATION_COOLDOWN_MONTHS = 24	# Cooldown in months between the attempts to form Power Blocs
-	JOIN_COOLDOWN_MONTHS = 6	# If a Country leaves a Power Bloc they cannot re-join before X months
-	LEAVE_COOLDOWN_MONTHS = 6	# If a Country joins a Power Bloc they cannot leave within X months
-	MIN_MEMBERS = 2	# This is the minimum number of members that the bloc needs to have to be considered active. Members include the leader.
-	LEVERAGE_LOBBY_CLOUT_FACTOR = 500	# Leverage gain is increased or decreased by the Lobby's total Clout * this factor
-	INVITE_ACTION_NAME = "invite_to_power_bloc"
-	JOIN_ACTION_NAME = "join_power_bloc"
-	MAX_MANDATE_PROGRESS = 2000	# When mandate progress reaches this value, the power bloc gains one mandate
-	MAX_MANDATES = 3	# This is the maximum number of mandates that can be accumulated at once
-	PRINCIPLE_SELECTION_COOLDOWN_DAYS = 90	# Once a principle is selected, it cannot be changed for this many days. Upgrading is unaffected by the cooldown, but resets it.
-	POWER_STRUGGLE_PRESTIGE_THRESHOLD_START = 1.2	# If a power bloc member has more prestige than leader's prestige X this - power struggle starts with the member becoming contender
-	POWER_STRUGGLE_PRESTIGE_THRESHOLD_FAIL = 1.15	# If a contender has less prestige than leader's prestige X this - power struggle fails
-	POWER_STRUGGLE_DURATION_SUCCESS_MONTHS = 12	# Power struggle succeeds after this months
-	POWER_STRUGGLE_DURATION_FACTOR_FOR_FOUNDER = 0.75	# Power struggle succeeds after this X POWER_STRUGGLE_DURATION_SUCCESS_MONTHS if the contender is the founder of the power bloc
-	COHESION_WEEKLY_DRIFT_MAX = 1	# At most, Cohesion will drift by +/- this value each week
-	COHESION_TARGET_MAX = 100	# The highest value Cohesion can reach
-	POWER_BLOC_INFLUENCE_COST = 500	# Cost in Influence to form / be the leader of a Power Bloc
-	MAX_LEVERAGE = 1000	# How much "raw" Leverage can be split between parties (the country itself + each Power Bloc)
-	LEVERAGE_WEEKLY_DRIFT_FACTOR = 0.02	# The delta between current Leverage and Target Leverage will be multiplied by this to determine the weekly Leverage drift
-	LEVERAGE_WEEKLY_DRIFT_MIN = 1	# At minimum, Leverage will drift by +/- this value each week, up/down to the target
-	LEVERAGE_INIT_STARTING_POWER_BLOC_UNCLAIMED_LEVERAGE_FACTOR = 0.5	# During initialization, a Power Bloc claims this fraction of a member's unclaimed leverage resulting from Leverage Resistance and 'lost leverage' in other Power Blocs' multipliers below 
-	LEVERAGE_INIT_OTHER_BLOC_MEMBER_FACTOR = 0.3	# During initialization, multiply calculated target leverage by this if country is member of another bloc
-	LEVERAGE_INIT_NO_BLOC_FACTOR = 0.5	# During initialization, multiply calculated target leverage by this if country is not a member of any power bloc
-	COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_DIVISOR = 1000000	# Population divided by this is multiplied by country_leverage_resistance_per_population to give a certain amount of leverage per million people
-	COUNTRY_POPULATION_LEVERAGE_RESISTANCE_MODIFIER_MAX_MULTIPLIER = 100	# Max multiplier given by population. With the value above at 1 000 000, this means the cap for leverage resistance is at 100 000 000.
+	POWER_BLOC_INFLUENCE_COST = 400	# Cost in Influence to form / be the leader of a Power Bloc
 }
