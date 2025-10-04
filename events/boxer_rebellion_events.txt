@@ -175,7 +175,7 @@ boxer_rebellion_events.2 = {
 	}
 }
 
-# The Qing and the Han - Boxer Rebellion Failure / time-out
+# Boxer Rebellion Failure / time-out
 boxer_rebellion_events.3 = {
 	type = country_event
 	placement = ROOT
@@ -199,19 +199,18 @@ boxer_rebellion_events.3 = {
 	trigger = {}
 	
 	immediate = {
-		# Imperia addition
-		set_variable = je_boxer_rebellion_timed_out
+		set_variable = je_boxer_rebellion_timed_out # This adds 20 fragile unity to the Qing, set in the scripted_value imperia_qing_fragile_unity_value
 	}
 	
 	option = {
 		name = boxer_rebellion_events.3.a
 		default_option = yes
-		remove_modifier ?= qing_reforms_hundred_days_reform_failure
-		add_modifier = {
+		remove_modifier ?= qing_reforms_hundred_days_reform_failure # Remove the Hundred Days Reform failure modifier if it exists
+		add_modifier = { # Add the Dynasty is Finished modifier
 			name = qing_boxer_rebellion_dynasty_is_finished
 			years = 20
 		}
-		if = {
+		if = { # If Cixi is alive, make her a modernizer leader
 			limit = {
 				any_scope_character = {
 					has_template = chi_cixi_template
@@ -225,12 +224,22 @@ boxer_rebellion_events.3 = {
 				set_as_interest_group_leader = yes
 			}
 		}
-		else = {
+		else = { # Else just spawn here in, could get weird though depending on the date....
 			create_character = {
 				template = chi_cixi_template
 				ideology = ideology_modernizer_leader
 				ig_leader = yes
 			}
+		}
+		if = { # If there is no radical movement, create one
+			limit = {
+				NOT = {
+					any_political_movement = {
+						is_political_movement_type = movement_radical
+					}
+				}
+			}
+			create_political_movement = { type = movement_radical }
 		}
 		ai_chance = {
 			base = 100
@@ -238,8 +247,8 @@ boxer_rebellion_events.3 = {
 	}
 	option = {
 		name = boxer_rebellion_events.3.b
-		activate_law = law_type:law_presidential_republic
-		if = {
+		activate_law = law_type:law_presidential_republic # Switch to Republic
+		if = { # If Yuan Shikai is alive, make him IG leader and ruler
 			limit = {
 				any_scope_character = {
 					has_template = chi_general_yuan_shikai
@@ -253,7 +262,7 @@ boxer_rebellion_events.3 = {
 				set_character_as_ruler = yes
 			}
 		}
-		else = {
+		else = { # Else just spawn him in
 			create_character = {
 				template = chi_general_yuan_shikai
 				ig_leader = yes
