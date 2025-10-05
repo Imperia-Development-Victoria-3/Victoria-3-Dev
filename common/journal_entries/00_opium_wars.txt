@@ -46,19 +46,22 @@
 	fail = {
 		OR = {
 			has_law = law_type:law_free_trade
-			any_country = {
-				custom_tooltip = {
-					text = opiumwars_fail_tt
-					has_journal_entry = je_opium_wars
-				}
+			c:GBR = {
 				OR = {
-					has_treaty_foreign_investment_rights_with = { TARGET = root }
-					#has_treaty_port_in_market = root.market
+					has_treaty_foreign_investment_rights_with = { TARGET = c:CHI }
 					any_scope_state = {
 						is_treaty_port = yes
 						state_region = {
 							any_scope_state = {
-								owner = root
+								OR = {
+									custom_tooltip = {
+										text = chi_opiumwars_owner_overlord_is_china_tt
+										owner = {
+											is_subject_of = c:CHI
+										}
+									}
+									owner = c:CHI
+								}
 							}
 						}
 					}
@@ -111,21 +114,29 @@ je_opium_wars = {
 
 	complete = {
 		OR = {
-			scope:target ?= {
+			c:CHI ?= {
 				has_law = law_type:law_free_trade
 			}
-			has_treaty_foreign_investment_rights_with = { TARGET = scope:target }
+			has_treaty_foreign_investment_rights_with = { TARGET = c:CHI }
 			any_scope_state = {
 				is_treaty_port = yes
 				state_region = {
 					any_scope_state = {
-						owner = scope:target
+						OR = {
+							custom_tooltip = {
+								text = gbr_opiumwars_owner_overlord_is_china_tt
+								owner = {
+									is_subject_of = c:CHI
+								}
+							}
+							owner = c:CHI
+						}
 					}
 				}
 			}
 		}
 		hidden_trigger = {
-			scope:target = {
+			c:CHI = {
 				has_modifier = opium_wars_lost
 			}
 		}
@@ -141,7 +152,7 @@ je_opium_wars = {
 	fail = {
 		custom_tooltip = {
 			text = opium_wars_fail_tt
-			scope:target = {
+			c:CHI = {
 				NOT = {
 					any_primary_culture = {
 						has_cultural_obsession = opium
@@ -153,7 +164,7 @@ je_opium_wars = {
 
 	invalid = {
 		NOT = {
-			exists = scope:target
+			exists = c:CHI
 		}
 	}
 
