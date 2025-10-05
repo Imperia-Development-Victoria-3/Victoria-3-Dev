@@ -44,9 +44,11 @@ base_values = {
 	state_upper_strata_expected_sol_add = 15
 	state_expected_sol_from_literacy = 5
 	
+	state_machinists_investment_pool_contribution_add = 0.10
 	state_farmers_investment_pool_contribution_add = 0.10
+	state_engineers_investment_pool_contribution_add = 0.15
+	state_bureaucrats_investment_pool_contribution_add = 0.15
 	state_shopkeepers_investment_pool_contribution_add = 0.20
-	state_bureaucrats_investment_pool_contribution_add = 0.20
 	state_clergymen_investment_pool_contribution_add = 0.20
 	state_aristocrats_investment_pool_contribution_add = 0.20
 	state_capitalists_investment_pool_contribution_add = 0.30
@@ -56,8 +58,6 @@ base_values = {
 	building_unincorporated_subsistence_output_mult = -0.20
 	
 	country_construction_add = 10
-	
-	building_mobilization_cost_mult = 0.6
 	
 	building_economy_of_scale_level_cap_add = 20
 	
@@ -83,6 +83,8 @@ base_values = {
 	
 	state_trade_advantage_from_capacity_add = 0.0005
 	state_max_trade_advantage_from_capacity_add = 0.2
+	
+	country_party_whip_impact_add = 0.5
 }
 
 # Scales with a country's global prestige rank, so at 20/100 this is multiplied by 0.8x, 50/100 by 0.5x, etc
@@ -395,13 +397,19 @@ ruler_left_interest_group = {
 	interest_group_approval_add = -5
 }
 
+# Unscaled modifier applied to all insurrectionary countries
+uprising = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	building_training_rate_mult = 2.0
+}
+
+# Scaled modifier for insurrectionary country conscription rate, based on CIVIL_WAR_CONSCRIPTION_RATE defines
 uprising_conscription = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	state_conscription_rate_add = 1.0
-	building_training_rate_mult = 0.20
-	building_training_rate_add = 1000
 }
 
+# Below modifiers generate sell orders of military goods in insurrectionary capitals, based on pre-civil war market conditions
 uprising_arms_cache_small_arms = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	state_sell_orders_small_arms_add = 1
@@ -906,6 +914,6 @@ successfully_met_foreign_imposition_legitimacy = {
 }
 
 movement_suppressed_after_civil_war = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds"
 	political_movement_radicalism_add = -1
 }
