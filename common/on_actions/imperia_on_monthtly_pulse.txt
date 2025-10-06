@@ -557,6 +557,16 @@
 				remove_global_variable ?= every_german_major_has_pan_nationalism
 			}
 		}
+		# Swap trade policy to match overlord if viceroyalty
+		if = {
+			limit = {
+				overlord.active_law:lawgroup_trade_policy.type != root.active_law:lawgroup_trade_policy.type
+				overlord.active_law:lawgroup_trade_policy.type != law_type:law_canton_system
+				is_subject = yes
+				is_subject_type = imperia_subject_type_viceroyalty
+			}
+			activate_law = overlord.active_law:lawgroup_trade_policy.type
+		}
 		# Swap away from tribal levies if conditions are no longer met
 		if = {
 			limit = {
@@ -565,6 +575,91 @@
 			}
 			activate_law = law_type:law_peasant_levies
 		}
+		# Give a mass migration of Jewish pops if the root-country is Jewish and the Jewish pops live in a country that discriminates against them
+		if = {
+			limit = {
+				country_has_state_religion = rel:jewish
+				any_country = {
+					NOT = {
+						country_has_state_religion = rel:jewish
+					}
+					any_scope_pop = {
+						pop_acceptance < 60
+						culture = {
+							has_discrimination_trait = jewish_group
+						}
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					is_incorporated = yes
+				}
+				save_scope_as = migration_state
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						country_has_state_religion = rel:jewish
+					}
+					any_scope_pop = {
+						pop_acceptance < 60
+						culture = {
+							has_discrimination_trait = jewish_group
+						}
+					}
+				}
+				save_scope_as = migration_country
+				random_scope_pop = {
+					limit = {
+						pop_acceptance < 60
+						culture = {
+							has_discrimination_trait = jewish_group
+						}
+					}
+					save_scope_as = migration_pop
+				}
+			}
+			if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_closed_borders
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.025
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_migration_controls
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.05
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_no_migration_controls
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.1
+					}
+				}
+			}
+		}
 	}
 	random_events = {
 		23 = 0
@@ -572,6 +667,8 @@
 	}
 	events = {
 		infamy_rebalance.1	#updates provinces each month
+		imperia_sinosphere.4
+		imperia_sinosphere.5
 	}
 }
 
@@ -749,3 +846,4 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 		}
 	}
 }
+

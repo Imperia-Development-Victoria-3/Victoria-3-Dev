@@ -1,0 +1,29 @@
+﻿je_boxer_rebellion = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	group = je_group_qing
+	
+	immediate = {
+		trigger_event = { id = boxer_rebellion_events.1 }	# The Yihetuan Movement
+	}
+	complete = {
+		custom_tooltip = {
+			text = qing_owns_all_han_states_tt
+			NOT = {
+				any_state = {
+					state_region = { is_homeland = cu:han }
+					NOT = { owner = ROOT }
+				}
+			}
+		}
+	}
+	on_complete = {
+		trigger_event = { id = boxer_rebellion_events.2 }	# The Mandate of Heaven
+	}
+	timeout = 1825
+	on_timeout = {
+		trigger_event = { id = boxer_rebellion_events.3 }	# Failure of the Boxer Rebellion
+	}
+	weight = 1000
+	should_be_pinned_by_default = yes
+}

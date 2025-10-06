@@ -1,0 +1,637 @@
+﻿namespace = imperia_hundred_days
+#The Literary War
+imperia_hundred_days.1 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.1.t
+	desc = imperia_hundred_days.1.d
+	flavor = imperia_hundred_days.1.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	option = {
+		#Suppress conservatives 
+		name = imperia_hundred_days.1.a
+		default_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_censorship
+				has_law = law_type:law_outlawed_dissent
+			}
+		}
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.2
+			pop_type = aristocrats
+		}
+		add_modifier = {
+			name = qing_reforms_censored_conservative_press
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	option = {
+		#Fund reformist papers
+		name = imperia_hundred_days.1.b
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_paying_journalist
+			months = 60
+		}
+		add_modifier = {
+			name = qing_reforms_paying_journalist_02
+			multiplier = money_amount_multiplier_small
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	option = {
+		#Ignore them
+		name = imperia_hundred_days.1.c
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_decrease_5
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = -5
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_radicals = {
+			value = 0.05
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+}
+
+#Malicious Compliance
+imperia_hundred_days.2 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.2.t
+	desc = imperia_hundred_days.2.d
+	flavor = imperia_hundred_days.2.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	immediate = {
+		ig:ig_landowners.leader = {
+			save_scope_as = landowner_leader
+		}
+	}
+	option = {
+		#Purge the Bureaucracy
+		name = imperia_hundred_days.2.a
+		default_option = yes
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_20
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 20
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = 0.25
+			pop_type = aristocrats
+		}
+		add_modifier = {
+			name = qing_reforms_purged_bureaucracy
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+			modifier = {
+				trigger = {
+					ig:ig_landowners.ig_approval < 0
+				}
+				multiply = 0.1
+			}
+		}
+	}
+	option = {
+		#Offer some concessions
+		name = imperia_hundred_days.2.b
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_decrease_5
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = -5
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_reform_concessions
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	option = {
+		#Create central reform commission to oversee implementation
+		name = imperia_hundred_days.2.c
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_radicals = {
+			value = 0.05
+		}
+		add_modifier = {
+			name = qing_reforms_reform_commission
+			months = 60
+		}
+		add_modifier = {
+			name = qing_reforms_reform_commission_02
+			multiplier = money_amount_multiplier_small
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+}
+
+# A Foreign Gaze
+imperia_hundred_days.3 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.3.t
+	desc = imperia_hundred_days.3.d
+	flavor = imperia_hundred_days.3.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/votp_gunboat_diplomacy.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	trigger = {
+		any_scope_treaty = {
+			any_scope_article = {
+				OR = {
+					has_type = foreign_investment_rights
+					has_type = military_assistance
+				}
+				target_country = root
+				# Source country is either a GP or (Japan or Korea if they are recognized)
+				source_country = {
+					OR = {
+						country_rank >= rank_value:great_power
+						AND = {
+							OR = {
+								c:JAP ?= this
+								c:KOR ?= this
+							}
+							is_country_type = recognized
+						}
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		random_country = {
+			limit = {
+				# Limit taken from the progress bar, should work questionmark
+				any_scope_treaty = {
+					any_scope_article = {
+						OR = {
+							has_type = foreign_investment_rights
+							has_type = military_assistance
+						}
+						target_country = root
+						source_country = {
+							OR = {
+								country_rank >= rank_value:great_power
+								AND = {
+									OR = {
+										c:JAP ?= this
+										c:KOR ?= this
+									}
+									is_country_type = recognized
+								}
+							}
+						}
+					}
+				}
+			}
+			save_scope_as = foreign_expertise_country
+		}
+	}
+	option = {
+		#Seek foreign advisors
+		name = imperia_hundred_days.3.a
+		default_option = yes
+		set_owes_obligation = {
+			country = scope:foreign_expertise_country
+			setting = yes
+		}
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_foreign_aid
+			months = 60
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		# Declare these reforms purely internal
+		name = imperia_hundred_days.3.b
+		add_radicals = {
+			value = -0.1
+		}
+		add_modifier = {
+			name = qing_reforms_internal_focus
+			months = 60
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+# Student Reformists
+imperia_hundred_days.4 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.4.t
+	desc = imperia_hundred_days.4.d
+	flavor = imperia_hundred_days.4.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/votp_barricade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	# Task students to help out with reform plans
+	option = {
+		name = imperia_hundred_days.4.a
+		default_option = yes
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_5
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 5
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = academics
+		}
+		add_radicals = {
+			value = 0.1
+			pop_type = bureaucrats
+		}
+		add_modifier = {
+			name = qing_reforms_student_reformists
+			months = 60
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				trigger = {
+					ig:ig_landowners.ig_approval < 0
+				}
+				multiply = 0.1
+			}
+		}
+	}
+	# Disperse students
+	option = {
+		name = imperia_hundred_days.4.b
+		add_modifier = {
+			name = qing_reforms_students_dispersed
+			months = 60
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+# Question of Imperial Examinations
+imperia_hundred_days.5 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.5.t
+	desc = imperia_hundred_days.5.d
+	flavor = imperia_hundred_days.5.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/asia_union_leader.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	# Full steam ahead
+	option = {
+		name = imperia_hundred_days.5.a
+		default_option = yes
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_15
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 15
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_western_examinations
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+			modifier = {
+				trigger = {
+					ig:ig_landowners.ig_approval < 0
+				}
+				multiply = 0.1
+			}
+		}
+	}
+	# 10 year transition period
+	option = {
+		name = imperia_hundred_days.5.b
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_5
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 5
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_transition_period
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	# Back down
+	option = {
+		name = imperia_hundred_days.5.c
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_decrease_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = -10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_traditional_examinations
+			months = 60
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+}
+
+# [intel_leader] affair
+imperia_hundred_days.6 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.6.t
+	desc = imperia_hundred_days.6.d
+	flavor = imperia_hundred_days.6.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_politicians_arguing.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	immediate = {
+		ig:ig_intelligentsia.leader = {
+			save_scope_as = intel_leader
+		}
+	}
+	# Have reform decrees be issued by the emperor
+	option = {
+		name = imperia_hundred_days.6.a
+		default_option = yes
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_decrease_5
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = -5
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+	# Advise intel leader to leave forbidden city
+	option = {
+		name = imperia_hundred_days.6.b
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 10
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_reform_leader_exiled
+			months = 60
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+# Whiff of Weakness
+imperia_hundred_days.7 = {
+	type = country_event
+	placement = root
+	title = imperia_hundred_days.7.t
+	desc = imperia_hundred_days.7.d
+	flavor = imperia_hundred_days.7.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/ep1_clandestine_meeting.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = {
+		days = never_fire_again_modifier_time
+	}
+	trigger = {
+		je:je_hundred_days_reform ?= {
+			"scripted_bar_progress(hundred_days_reform_enthusiasm_progress_bar)" < 40
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				enacting_any_law = yes
+			}
+			currently_enacting_law.type = {
+				save_scope_as = currently_enacting_law
+			}
+		}
+	}
+	# Double down
+	option = {
+		name = imperia_hundred_days.7.a
+		default_option = yes
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_increase_20
+			je:je_hundred_days_reform ?= {
+				add_progress = {
+					value = 20
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+		add_modifier = {
+			name = qing_reforms_strengthen_reforms
+			months = 60
+		}
+		random = {
+			chance = 33
+			custom_tooltip = conservative_coup_tt
+			custom_tooltip = {
+				text = hundred_days_reform_enthusiasm_progress_bar_decrease_100
+				je:je_hundred_days_reform ?= {
+					add_progress = {
+						value = -100
+						name = hundred_days_reform_enthusiasm_progress_bar
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:currently_enacting_law
+			}
+			activate_law = scope:currently_enacting_law
+		}
+		ai_chance = {
+			base = 33
+		}
+	}
+	# Call a grand council
+	option = {
+		name = imperia_hundred_days.7.b
+		add_modifier = {
+			name = qing_reforms_grand_council
+			months = 60
+		}
+		random_list = {
+			50 = {
+				custom_tooltip = {
+					text = hundred_days_reform_enthusiasm_progress_bar_increase_10
+					je:je_hundred_days_reform ?= {
+						add_progress = {
+							value = 10
+							name = hundred_days_reform_enthusiasm_progress_bar
+						}
+					}
+				}
+			}
+			50 = {
+				custom_tooltip = {
+					text = hundred_days_reform_enthusiasm_progress_bar_decrease_10
+					je:je_hundred_days_reform ?= {
+						add_progress = {
+							value = -10
+							name = hundred_days_reform_enthusiasm_progress_bar
+						}
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 66
+		}
+	}
+}

@@ -19,13 +19,7 @@ imperia_qing.1 = {	#Qing set-up event
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 	
 	trigger = {}
-	immediate = {
-		add_modifier = {
-			name = modifier_mandate_of_heaven
-			years = 50
-			is_decaying = yes
-		}
-	}
+	immediate = {}
 	
 	option = {	#Troubling news
 		name = imperia_qing.1.a
@@ -54,6 +48,16 @@ imperia_qing.1 = {	#Qing set-up event
 		add_journal_entry = {
 			type = je_chinese_national_identity
 		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_subject_of = c:CHI
+					capital.state_region = s:STATE_WEST_BORNEO
+				}
+				make_independent = yes
+			}
+		}
+		
 	}
 }
 
@@ -159,7 +163,7 @@ imperia_qing.3 = {	#Substate Set-up Event
 		}
 		if = {
 			limit = {
-				has_modifier = modifier_crumbling_banner_system
+				has_law = law_type:law_banner_system
 			}
 			add_journal_entry = {
 				type = je_establish_local_armies
@@ -228,14 +232,17 @@ imperia_qing.4 = {	#Result of Reforming Banner System
 		add_modifier = modifier_new_army
 		ig:ig_armed_forces = {
 			set_interest_group_name = ig_new_army
+			remove_ideology = ideology_pro_slavery
 		}
+		
+		activate_law = law_type:law_peasant_levies
 		
 		every_subject_or_below = {
 			limit = {
 				overlord = c:CHI
+				has_law = law_type:law_banner_system
 			}
-			remove_modifier = modifier_local_armies
-			remove_modifier = modifier_crumbling_banner_system
+			activate_law = law_type:law_peasant_levies
 		}
 		
 		custom_tooltip = {
@@ -258,14 +265,17 @@ imperia_qing.4 = {	#Result of Reforming Banner System
 		add_modifier = modifier_yong_ying_system
 		ig:ig_armed_forces = {
 			set_interest_group_name = ig_beiyang_army
+			remove_ideology = ideology_pro_slavery
 		}
+		
+		activate_law = law_type:law_peasant_levies
 		
 		every_subject_or_below = {
 			limit = {
 				overlord = c:CHI
+				has_law = law_type:law_banner_system
 			}
-			remove_modifier = modifier_local_armies
-			remove_modifier = modifier_crumbling_banner_system
+			activate_law = law_type:law_peasant_levies
 		}
 		custom_tooltip = {
 			text = fragile_unity_minor_add_tt
@@ -325,19 +335,15 @@ imperia_qing.5 = {	#Tyranny of the Eight Banners
 	trigger = {}
 	
 	immediate = {
-		remove_modifier = modifier_crumbling_banner_system
+		
+		activate_law = law_type:law_peasant_levies
 		
 		every_subject_or_below = {
 			limit = {
 				overlord = c:CHI
-				
-				OR = {
-					country_has_primary_culture = cu:han
-					c:MCH = this
-				}
+				has_law = law_type:law_banner_system
 			}
-			remove_modifier = modifier_local_armies
-			remove_modifier = modifier_crumbling_banner_system
+			activate_law = law_type:law_peasant_levies
 		}
 	}
 	
@@ -411,6 +417,62 @@ imperia_qing.6 = {	#Christian sects in China - Should set up Heavenly Kingdom
 			add_radicals_in_state = {
 				value = 0.25
 			}
+		}
+	}
+}
+
+# 100 days reform start
+imperia_qing.7 = {	#Hundred Days Reform
+	type = country_event
+	placement = root
+	title = imperia_qing.7.t
+	desc = imperia_qing.7.d
+	flavor = imperia_qing.7.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	cooldown = { days = never_fire_again_modifier_time }
+	option = {	#Implement Reforms
+		name = imperia_qing.7.a
+		default_option = yes
+		show_as_tooltip = {
+			add_journal_entry = {
+				type = je_hundred_days_reform
+			}
+		}
+	}
+}
+
+imperia_qing.8 = {	# Invite Boxer Leaders confirmation
+	type = country_event
+	placement = root
+	title = imperia_qing.8.t
+	desc = imperia_qing.8.d
+	flavor = imperia_qing.8.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_ruler_speaking_to_people.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/europenorthamerica/rich_and_poor"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	option = {	# Do it
+		name = imperia_qing.8.a
+		default_option = yes
+		custom_tooltip = boxer_rebellion_warning_tt
+		add_journal_entry = {
+			type = je_boxer_rebellion
+		}
+	}
+	option = {	# Don't
+		name = imperia_qing.8.b
+		custom_tooltip = {
+			text = boxer_rebellion_no_invite_tt
+			remove_variable = invited_boxer_leaders_to_capital
 		}
 	}
 }

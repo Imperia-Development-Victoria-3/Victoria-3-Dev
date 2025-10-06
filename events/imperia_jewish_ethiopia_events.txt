@@ -1,0 +1,196 @@
+﻿namespace = jewish_ethiopia
+# The Emperor is bored, decides to solve the Sabbath-on-Saturdays issue
+jewish_ethiopia.1 = {
+	type = country_event
+	title = jewish_ethiopia.1.t
+	desc = jewish_ethiopia.1.d
+	flavor = jewish_ethiopia.1.f
+	duration = 3
+	event_image = {
+		video = "africa_city_center"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	# Reverse course, leave it to the clergy
+	option = {
+		name = jewish_ethiopia.1.a
+		default_option = yes
+		add_modifier = {
+			name = jewish_ethiopia_sabbath_strict_temporary
+			years = 5
+		}
+		custom_tooltip = jewish_ethiopia.1.a.tt	# The emperor wont entertain himself this way...
+		ai_chance = {
+			base = 1
+		}
+	}
+	# Allow everyone to relax on Saturdays
+	option = {
+		name = jewish_ethiopia.1.b
+		add_modifier = {
+			name = jewish_ethiopia_sabbath_relaxation
+		}
+		add_modifier = {
+			name = jewish_ethiopia_sabbath_relaxation_temporary
+			years = 10
+		}
+		custom_tooltip = {
+			text = jewish_ethiopia.1.b.tt	# Unintended consequences...
+			trigger_event = {
+				id = jewish_ethiopia.2
+				days = 90
+				popup = yes
+			}
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+# The Church is not happy with the new Sabbath rules, accuses emperor of heresy
+jewish_ethiopia.2 = {
+	type = country_event
+	title = jewish_ethiopia.2.t
+	desc = jewish_ethiopia.2.d
+	flavor = jewish_ethiopia.2.f
+	duration = 3
+	event_image = {
+		video = "africa_diplomats_negotiating"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/religion_cross.dds"
+	# The emperor stands firm, keeps the new Sabbath rules, decides to appease the church by performing a pilgrimage to Axum and visit the ark
+	option = {
+		name = jewish_ethiopia.2.a
+		default_option = yes
+		custom_tooltip = {
+			text = jewish_ethiopia.2.a.tt	# The emperor will make a pilgrimage to Axum...
+			trigger_event = {
+				id = jewish_ethiopia.3
+				days = 30
+				popup = yes
+			}
+		}
+		custom_tooltip = jewish_ethiopia.1.b.tt	# Unintended consequences...
+		ai_chance = {
+			base = 1
+		}
+	}
+	# The emperor relents, removes the new Sabbath rules
+	option = {
+		name = jewish_ethiopia.2.b
+		remove_modifier ?= jewish_ethiopia_sabbath_relaxation
+		remove_modifier ?= jewish_ethiopia_sabbath_relaxation_temporary
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+# The emperor visits Axum, prays by the ark, sees a vision
+jewish_ethiopia.3 = {
+	type = country_event
+	title = jewish_ethiopia.3.t
+	desc = jewish_ethiopia.3.d
+	flavor = jewish_ethiopia.3.f
+	duration = 3
+	event_image = {
+		video = "middleeast_islam"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/religion_cross.dds"
+	# The emperor has a vision, reaffirms Orthodoxy
+	option = {
+		name = jewish_ethiopia.3.a
+		remove_modifier ?= jewish_ethiopia_sabbath_relaxation
+		remove_modifier ?= jewish_ethiopia_sabbath_relaxation_temporary
+		ruler = {
+			add_trait = pious
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	# The emperor has a vision, calls for reform
+	option = {
+		name = jewish_ethiopia.3.b
+		add_modifier = {
+			name = jewish_ethiopia_reformist_zeal_temporary
+			years = 20
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+	# The Emperor has a vision, decides to convert to Judaism
+	option = {
+		name = jewish_ethiopia.3.c
+		default_option = yes
+		set_state_religion = rel:jewish
+		add_primary_culture = cu:beta_israel
+		remove_primary_culture = cu:amhara
+		remove_primary_culture = cu:oromo
+		remove_primary_culture = cu:tigray
+		ruler = {
+			change_character_religion = rel:jewish
+			change_character_culture = cu:beta_israel
+		}
+		heir = {
+			change_character_religion = rel:jewish
+			change_character_culture = cu:beta_israel
+		}
+		# All characters have a 80% chance to convert
+		custom_tooltip = {
+			text = jewish_ethiopia.3.c.tt	# The emperor has converted to Judaism, and so have many of his subjects...
+			every_scope_character = {
+				limit = {
+					religion = rel:oriental_orthodox
+				}
+				random = {
+					chance = 80
+					change_character_religion = rel:jewish
+					change_character_culture = cu:beta_israel
+				}
+			}
+			# First convert 25% of the population to Judaism
+			every_scope_state = {
+				convert_population = {
+					target = rel:jewish
+					value = 0.25
+				}
+			}
+			# THEN convert all those Jewish pops to become Beta Israeli
+			every_scope_state = {
+				every_scope_pop = {
+					limit = {
+						religion = rel:jewish
+					}
+					change_pop_culture = {
+						target = cu:beta_israel
+						value = 1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			ig:ig_devout = {
+				# IG name
+				set_interest_group_name = ig_rabbinical_council
+				# Replace traits
+				set_ig_trait = ig_trait:ig_trait_traditsye
+				set_ig_trait = ig_trait:ig_trait_yeshivot
+				set_ig_trait = ig_trait:ig_trait_the_best_revenge
+				# Replace ideologies
+				remove_ideology = ideology_oriental_orthodox_patriarch
+				add_ideology = ideology_patriarchal
+			}
+		}
+		add_modifier = {
+			name = jewish_ethiopia_jewish_conversion
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}

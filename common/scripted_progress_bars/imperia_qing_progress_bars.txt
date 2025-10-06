@@ -1,0 +1,256 @@
+﻿
+hundred_days_reform_enthusiasm_progress_bar = {
+	name = "hundred_days_reform_enthusiasm_progress_bar"
+	desc = "hundred_days_reform_enthusiasm_progress_bar_desc"
+	
+	default = yes
+	
+	weekly_progress = {
+		## Base decay
+		add = {
+			desc = "hundred_days_reform_enthusiasm_progress_bar_weekly_decay"
+			value = -1
+			# Promote Capitalism (Interventionism or Laissez Faire, Protectionism, Commercialized Agriculture)
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_interventionism
+						has_law = law_type:law_laissez_faire
+					}
+					has_law = law_type:law_protectionism
+					has_law = law_type:law_commercialized_agriculture
+				}
+				add = 0.2
+			}
+			# Adopt Modern Military Training (army has repeaters or bolt-actions activated and advanced tactics training)
+			if = {
+				limit = {
+					# Either repeaters or bolt-actions activated for 80% of army
+					OR = {
+						army_mobilization_option_fraction = {
+							target = mobilization_option:mobilization_option_repeaters
+							value >= 0.8
+						}
+						army_mobilization_option_fraction = {
+							target = mobilization_option:mobilization_option_bolt_actions
+							value >= 0.8
+						}
+					}
+					# And advanced tactics training for 80% of army
+					any_scope_building = {
+						filter = {
+							is_building_type = building_barracks
+						}
+						has_active_production_method = pm_advanced_tactics_training
+						percent = 0.8
+					}
+				}
+				add = 0.2
+			}
+			# Establish a constitution (wealth, census or universal suffrage)
+			if = {
+				limit = {
+					OR = {
+						has_law = law_type:law_wealth_voting
+						has_law = law_type:law_census_voting
+						has_law = law_type:law_universal_suffrage
+					}
+				}
+				add = 0.2
+			}
+			# Standardize the Chinese Language (Establish National Language JE completion, either has Prestige Dialect or supported Prestige Dialect modifier.)
+			if = {
+				limit = {
+					OR = {
+						has_modifier = modifier_prestige_dialect
+						has_modifier = modifier_accepted_prestige_dialect
+					}
+				}
+				add = 0.2
+			}
+			# Abolish 'Booi Aha'
+			if = {
+				limit = {
+					NOT = {
+						has_law = law_type:law_booi_aha
+					}
+				}
+				add = 0.2
+			}
+			# Temporary Freeze
+			if = {
+				limit = {
+					has_variable = je_hundred_days_reform_enthusiasm_button_used_temp
+				}
+				multiply = 0
+			}
+			# If the temporary freeze is not in play, check for the button having been used
+			# Done with an else_if to prevent both from being true
+			else_if = {
+				limit = {
+					has_variable = je_hundred_days_reform_enthusiasm_button_used
+				}
+				multiply = 1.25
+			}
+		}
+		## Conditional decays
+		# Landowners powerful
+		if = {
+			limit = {
+				ig:ig_landowners = {
+					is_powerful = yes
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_landowners_powerful"
+				value = -0.2
+			}
+		}
+		# Landowners, devout or armed forces are angry (-5 or less approval)
+		if = {
+			limit = {
+				OR = {
+					ig:ig_landowners = {
+						approval < -5
+					}
+					ig:ig_devout = {
+						approval < -5
+					}
+					ig:ig_armed_forces = {
+						approval < -5
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_conservatives_angry"
+				value = -0.2
+			}
+		}
+		# Cixi is Landowner Leader
+		if = {
+			limit = {
+				ig:ig_landowners.leader = {
+					has_template = chi_cixi_template
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_cixi_landowner_leader"
+				value = -0.2
+			}
+		}
+		# Landowner Leader is traditionalist or moderate.
+		if = {
+			limit = {
+				ig:ig_landowners.leader = {
+					OR = {
+						has_ideology = ideology:ideology_traditionalist
+						has_ideology = ideology:ideology_moderate
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_conservative_landowner_leader"
+				value = -0.2
+			}
+		}
+		## Increases reform enthusiasm
+		# Intelligentsia or Industrialists Powerful
+		if = {
+			limit = {
+				OR = {
+					ig:ig_intelligentsia = {
+						is_powerful = yes
+					}
+					ig:ig_industrialists = {
+						is_powerful = yes
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_reformers_powerful"
+				value = 0.2
+			}
+		}
+		# Has military assistance or investment rights (weapons treaty has been merged with military assistance) with any GP (or Japan/Korea if they are recognized)
+		if = {
+			limit = {
+				any_scope_treaty = {
+					any_scope_article = {
+						OR = {
+							has_type = foreign_investment_rights
+							has_type = military_assistance
+						}
+						target_country = root
+						# Source country is either a GP or (Japan or Korea if they are recognized)
+						source_country = {
+							OR = {
+								country_rank >= rank_value:great_power
+								AND = {
+									OR = {
+										c:JAP ?= this
+										c:KOR ?= this
+									}
+									is_country_type = recognized
+								}
+							}
+						}
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_global_connections"
+				value = 0.2
+			}
+		}
+		# Has intelligentsia agitator
+		if = {
+			limit = {
+				any_scope_character = {
+					has_role = agitator
+					is_interest_group_type = ig_intelligentsia
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_intelligentsia_agitator"
+				value = 0.2
+			}
+		}
+		# Ruler is not Landowner.
+		if = {
+			limit = {
+				ruler = {
+					NOT = {
+						is_interest_group_type = ig_landowners
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_non_landowner_ruler"
+				value = 0.2
+			}
+		}
+		# Any non-landowner or devout IG leader has Modernizer ideology.
+		if = {
+			limit = {
+				any_scope_interest_group = {
+					NOR = {
+						is_interest_group_type = ig_landowners
+						is_interest_group_type = ig_devout
+					}
+					leader = {
+						has_ideology = ideology:ideology_modernizer_leader
+					}
+				}
+			}
+			add = {
+				desc = "hundred_days_reform_enthusiasm_progress_bar_modernizer_leader"
+				value = 0.2
+			}
+		}
+	}
+	
+	start_value = 75
+	min_value = 0
+	max_value = 100
+	
+}

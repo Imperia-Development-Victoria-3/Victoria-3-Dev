@@ -39,3 +39,107 @@
 		value = 50
 	}
 }
+# Single-use button that converts a non landowner, intelligentsia or industrialist IG leader to modernizer.
+je_hundred_days_reform_modernizer_conversion_button = {
+	name = je_hundred_days_reform_modernizer_conversion_button
+	desc = je_hundred_days_reform_modernizer_conversion_button_desc
+	
+	visible = {
+		NOT = {
+			has_variable = je_hundred_days_reform_modernizer_conversion_button_used
+		}
+	}
+	
+	possible = {
+		any_scope_character = {
+			interest_group.leader = this
+			NOR = {
+				is_interest_group_type = ig_landowners
+				is_interest_group_type = ig_intelligentsia
+				is_interest_group_type = ig_industrialists
+			}
+			NOT = {
+				has_ideology = ideology:ideology_modernizer_leader
+			}
+		}
+	}
+	
+	effect = {
+		set_variable = je_hundred_days_reform_modernizer_conversion_button_used
+		random_scope_character = {
+			limit = {
+				interest_group.leader = this
+				NOR = {
+					is_interest_group_type = ig_landowners
+					is_interest_group_type = ig_intelligentsia
+					is_interest_group_type = ig_industrialists
+				}
+				NOT = {
+					has_ideology = ideology:ideology_modernizer_leader
+				}
+			}
+			set_ideology = ideology:ideology_modernizer_leader
+		}
+	}
+}
+
+# Single-use button to stop reform enthusiasm decay for a short period in exchange for making it decay faster once the freeze expires.
+je_hundred_days_reform_enthusiasm_button = {
+	name = je_hundred_days_reform_enthusiasm_button
+	desc = je_hundred_days_reform_enthusiasm_button_desc
+	
+	visible = {
+		NOT = {
+			has_variable = je_hundred_days_reform_enthusiasm_button_used
+		}
+	}
+	
+	possible = {
+		always = yes
+	}
+	
+	effect = {
+		custom_tooltip = je_hundred_days_reform_enthusiasm_button_tt
+		# The decay rate changes are located within the scripted_progress_bar
+		set_variable = {
+			name = je_hundred_days_reform_enthusiasm_button_used_temp
+			months = 3
+		}
+		set_variable = je_hundred_days_reform_enthusiasm_button_used
+	}
+}
+
+# Single-use button to force through a law with 100% enactment chance, but removes a large amount of reform enthusiasm.
+je_hundred_days_reform_force_enactment_button = {
+	name = je_hundred_days_reform_force_enactment_button
+	desc = je_hundred_days_reform_force_enactment_button_desc
+	
+	visible = {
+		NOT = {
+			has_variable = je_hundred_days_reform_force_enactment_button_used
+		}
+	}
+	
+	possible = {
+		enacting_any_law = yes
+	}
+	
+	effect = {
+		set_variable = je_hundred_days_reform_force_enactment_button_used
+		if = {
+			limit = {
+				enacting_any_law = yes
+			}
+			activate_law = currently_enacting_law.type
+		}
+		custom_tooltip = {
+			text = hundred_days_reform_enthusiasm_progress_bar_decrease_50
+			scope:journal_entry = {
+				add_progress = {
+					value = -50
+					name = hundred_days_reform_enthusiasm_progress_bar
+				}
+			}
+		}
+	}
+}
