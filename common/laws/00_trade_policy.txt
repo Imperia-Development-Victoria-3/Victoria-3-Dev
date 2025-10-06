@@ -212,12 +212,24 @@ law_canton_system = {
 	}
 	
 	is_visible = {
-		any_primary_culture = {
-			has_discrimination_trait = heritage_han
+		OR = {
+			country_has_primary_culture = cu:manchu
+			any_primary_culture = {
+				has_discrimination_trait = heritage_han
+			}
 		}
-		any_scope_state = {
-			state_region = s:STATE_GUANGDONG
-			is_largest_state_in_region = yes
+		OR = {
+			c:CHI ?= this
+			AND = {
+				top_overlord = c:CHI
+				any_country = {
+					top_overlord = c:CHI
+					any_scope_state = {
+						state_region = s:STATE_GUANGDONG
+						is_largest_state_in_region = yes
+					}
+				}
+			}
 		}
 	}
 	
