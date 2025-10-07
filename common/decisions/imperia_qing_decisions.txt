@@ -30,6 +30,9 @@
 
 warlord_china_declare_rival_gov = {
 	is_shown = {
+		NOT = {
+			exists = c:CHI
+		}
 		has_global_variable = china_shatters
 		NOR = {
 			has_modifier = modifier_recognized_national_government
@@ -43,6 +46,9 @@ warlord_china_declare_rival_gov = {
 		}
 	}
 	possible = {
+		NOT = {
+			exists = c:CHI
+		}
 		any_scope_state = {
 			state_is_in_china = yes
 			count >= 5
@@ -63,5 +69,36 @@ warlord_china_declare_rival_gov = {
 		add_journal_entry = {
 			type = je_warlord_overthrow_national_gov
 		}
+	}
+}
+
+qing_invite_boxer_leaders_to_forbidden_city = {
+	is_shown = {
+		c:CHI ?= root
+		has_technology_researched = pan-nationalism
+		country_has_primary_culture = cu:manchu
+		NOT = {
+			has_variable = invited_boxer_leaders_to_capital
+		}
+	}
+	possible = {
+		any_country = {
+			has_technology_researched = political_agitation
+		}
+		custom_tooltip = {
+			text = je_hundred_days_reform_failed_tt
+			has_variable = je_hundred_days_reform_failed
+		}
+	}
+	when_taken = {
+		set_variable = invited_boxer_leaders_to_capital	# This will be removed if you press no on the confirmation event, allowing you to press the button again
+		custom_tooltip = boxer_rebellion_warning_tt
+		trigger_event = {	# Invite Boxer Leaders confirmation event
+			id = imperia_qing.8
+			popup = yes
+		}
+	}
+	ai_chance = {
+		value = 15
 	}
 }
