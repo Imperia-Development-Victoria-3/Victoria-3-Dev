@@ -66,21 +66,37 @@ ITA = {
 	
 	ai_will_do = { has_technology_researched = pan-nationalism }
 	
+	potential = {
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+	}
+	
 	possible = {
 		has_technology_researched = pan-nationalism
 		OR = {
 			country_has_primary_culture = cu:north_italian
 			country_has_primary_culture = cu:south_italian
 		}
+		is_country_type = recognized
 		NOR = {
 			c:AUS ?= this
 			c:KUK ?= this
+			c:HRE ?= this
 		}
 	}
 	
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
 		country_rank >= rank_value:minor_power
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+		is_country_type = recognized
 		any_country = {
 			filter = {
 				OR = {
@@ -90,6 +106,17 @@ ITA = {
 			}
 			has_technology_researched = pan-nationalism
 			percent >= 0.5
+		}
+	}
+	
+	can_be_unification_target = {
+		NAND = {	# United States of Greater Austria
+			country_has_primary_culture = cu:north_italian
+			OR = {
+				has_journal_entry = je_danubian_federation
+				c:KUK ?= this
+				c:HRE ?= this
+			}
 		}
 	}
 }
@@ -200,6 +227,10 @@ YUG = {
 	ai_will_do = { always = yes }
 	
 	potential = {
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+		}
 		trigger_if = {
 			limit = {
 				c:BUL ?= this
@@ -212,9 +243,10 @@ YUG = {
 	}
 	
 	possible = {
-		NOR = {	# Not Danubian State
+		NOR = {	# Not Danubian State or HRE
 			c:AUS ?= this
 			c:KUK ?= this
+			c:HRE ?= this
 		}
 		has_technology_researched = pan-nationalism
 		trigger_if = {
@@ -231,6 +263,11 @@ YUG = {
 	max_num_formation_candidates = 3	# For the odd Croatia, Serbia and Bulgaria FFA
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+		NOR = {	# Not Danubian State or HRE
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
 		trigger_if = {
 			limit = {
 				c:BUL ?= this
@@ -243,6 +280,18 @@ YUG = {
 	}
 	
 	can_be_unification_target = {
+		NAND = {	# United States of Greater Austria
+			OR = {
+				country_has_primary_culture = cu:slovene
+				country_has_primary_culture = cu:croat
+				country_has_primary_culture = cu:serb
+			}
+			OR = {	# Not Danubian State or HRE
+				has_journal_entry = je_danubian_federation
+				c:KUK ?= this
+				c:HRE ?= this
+			}
+		}
 		trigger_if = {
 			limit = {
 				c:BUL ?= this
