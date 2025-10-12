@@ -1,0 +1,75 @@
+﻿je_technocracy = {
+	icon = "gfx/interface/icons/invention_icons/central_planning.dds"
+
+	group = je_group_internal_affairs
+
+    is_shown_when_inactive = {
+		has_technology_researched = central_archives
+        NOT = {
+            has_journal_entry = je_technocracy
+        }
+	}
+
+	possible = {
+		has_law_or_variant = law_type:law_technocracy
+	}
+
+	scripted_progress_bar = je_technocracy_progress_bar
+
+	immediate = {
+        ig:ig_intelligentsia ?= {
+            save_scope_as = intelligentsia_ig
+        }
+	}
+
+	on_monthly_pulse = {
+
+	}
+
+	complete = {
+        custom_tooltip = {
+            text = je_technocracy_complete_tt
+            scope:journal_entry ?= {
+                "scripted_bar_progress(je_technocracy_progress_bar)" >= 144
+            }
+        }
+        has_law_or_variant = law_type:law_technocracy
+        has_law_or_variant = law_type:law_appointed_bureaucrats
+		has_law_or_variant = law_type:law_compulsory_primary_school
+		has_law_or_variant = law_type:law_public_schools
+        OR = {
+            has_law_or_variant = law_type:law_interventionism # TODO PRCAL-35135 change to State Capitalism
+            has_law_or_variant = law_type:law_command_economy
+        }
+        custom_tooltip = {
+            text = no_revolution_tt
+            NOT = {
+                any_political_movement = {
+                    is_insurrectionary = yes
+                }
+            }
+        }
+	}
+
+	on_complete = {
+		trigger_event = { id = technocracy.4 }
+	}
+
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_technocracy.4_tt
+			}
+		}
+	}
+
+    fail = {
+        NOT = {
+            has_law_or_variant = law_type:law_technocracy
+        }
+    }
+
+	weight = 100
+
+    should_be_pinned_by_default = yes
+}
