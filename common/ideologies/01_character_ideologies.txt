@@ -642,7 +642,7 @@ ideology_nihilist = {	#
 					has_law_or_variant = law_type:law_combination_acts
 				}
 			}
-			add = 50
+			add = 30
 		}
 		else_if = {
 			limit = {
@@ -654,7 +654,7 @@ ideology_nihilist = {	#
 					}
 				}
 			}
-			add = 50
+			add = 15
 		}
 		else_if = {
 			limit = {
@@ -663,7 +663,7 @@ ideology_nihilist = {	#
 					has_law_or_variant = law_type:law_right_to_associate
 				}
 			}
-			add = -25
+			add = -15
 		}
 		else_if = {
 			limit = {
@@ -672,7 +672,48 @@ ideology_nihilist = {	#
 					has_law_or_variant = law_type:law_corporatized_unions
 				}
 			}
-			add = -50
+			add = -30
+		}
+
+		# Labour Rights Laws
+		if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_labor_exploitation
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_factory_overseers
+						has_law_or_variant = law_type:law_enforced_unions
+					}
+				}
+			}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_regulatory_bodies
+				}
+			}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_worker_protections
+				}
+			}
+			add = -30
 		}
 		
 		if = {
@@ -1111,7 +1152,7 @@ ideology_radical = {
 		law_regulatory_bodies = approve
 		law_no_workers_rights = neutral
 		law_enforced_unions = disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	
@@ -1421,51 +1462,83 @@ ideology_radical = {
 		# Labour Association Laws
 		if = {
 			limit = {
-				NOT = {
-					owner = {
-						has_technology_researched = socialism
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_combination_acts
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_guild_system
+						has_law_or_variant = law_type:law_anti_strike_laws
 					}
 				}
 			}
-			if = {
-				limit = {
-					is_interest_group_type = ig_trade_unions
-					owner = {
-						has_law_or_variant = law_type:law_combination_acts
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_right_to_associate
+				}
+			}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_corporatized_unions
+				}
+			}
+			add = -30
+		}
+
+		# Labour Rights Laws
+		if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_labor_exploitation
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_factory_overseers
+						has_law_or_variant = law_type:law_enforced_unions
 					}
 				}
-				add = 50
 			}
-			else_if = {
-				limit = {
-					is_interest_group_type = ig_trade_unions
-					owner = {
-						OR = {
-							has_law_or_variant = law_type:law_guild_system
-							has_law_or_variant = law_type:law_anti_strike_laws
-						}
-					}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_regulatory_bodies
 				}
-				add = 25
 			}
-			else_if = {
-				limit = {
-					is_interest_group_type = ig_trade_unions
-					owner = {
-						has_law_or_variant = law_type:law_right_to_associate
-					}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_worker_protections
 				}
-				add = -25
 			}
-			else_if = {
-				limit = {
-					is_interest_group_type = ig_trade_unions
-					owner = {
-						has_law_or_variant = law_type:law_corporatized_unions
-					}
-				}
-				add = -50
-			}
+			add = -30
 		}
 		if = {
 			limit = {
@@ -1575,7 +1648,7 @@ ideology_reformer = {
 		law_regulatory_bodies = approve
 		law_no_workers_rights = neutral
 		law_worker_protections = neutral
-		law_banned_unions = disapprove
+		law_factory_overseers = disapprove
 		law_enforced_unions = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
@@ -2166,7 +2239,7 @@ ideology_slaver = {
 	}
 	lawgroup_labor_rights = {
 		law_labor_exploitation = strongly_approve
-		law_banned_unions = approve
+		law_factory_overseers = approve
 		law_no_workers_rights = neutral
 		law_worker_protections = disapprove
 		law_regulatory_bodies = disapprove
@@ -2998,7 +3071,7 @@ ideology_social_democrat = {
 		law_regulatory_bodies = approve
 		law_no_workers_rights = neutral
 		law_enforced_unions = strongly_disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
@@ -3257,7 +3330,7 @@ ideology_communist = {
 		law_worker_protections = approve
 		law_regulatory_bodies = approve
 		law_no_workers_rights = disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	lawgroup_governance_principles = {
@@ -3425,7 +3498,7 @@ ideology_communist = {
 					has_law_or_variant = law_type:law_combination_acts
 				}
 			}
-			add = 50
+			add = 30
 		}
 		else_if = {
 			limit = {
@@ -3437,7 +3510,7 @@ ideology_communist = {
 					}
 				}
 			}
-			add = 25
+			add = 15
 		}
 		else_if = {
 			limit = {
@@ -3446,7 +3519,7 @@ ideology_communist = {
 					has_law_or_variant = law_type:law_right_to_associate
 				}
 			}
-			add = -25
+			add = -15
 		}
 		else_if = {
 			limit = {
@@ -3455,8 +3528,50 @@ ideology_communist = {
 					has_law_or_variant = law_type:law_corporatized_unions
 				}
 			}
-			add = -50
+			add = -30
 		}
+
+		# Labour Rights Laws
+		if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_labor_exploitation
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_factory_overseers
+						has_law_or_variant = law_type:law_enforced_unions
+					}
+				}
+			}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_regulatory_bodies
+				}
+			}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_worker_protections
+				}
+			}
+			add = -30
+		}
+		
 		if = {
 			limit = {
 				owner = { has_variable = election_communist_support }
@@ -3701,7 +3816,7 @@ ideology_vanguardist = {
 		law_worker_protections = neutral
 		law_regulatory_bodies = disapprove
 		law_no_workers_rights = strongly_disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	
@@ -3872,7 +3987,7 @@ ideology_vanguardist = {
 					has_law_or_variant = law_type:law_combination_acts
 				}
 			}
-			add = 50
+			add = 30
 		}
 		else_if = {
 			limit = {
@@ -3884,7 +3999,7 @@ ideology_vanguardist = {
 					}
 				}
 			}
-			add = 25
+			add = 15
 		}
 		else_if = {
 			limit = {
@@ -3893,7 +4008,7 @@ ideology_vanguardist = {
 					has_law_or_variant = law_type:law_right_to_associate
 				}
 			}
-			add = -25
+			add = -15
 		}
 		else_if = {
 			limit = {
@@ -3902,7 +4017,48 @@ ideology_vanguardist = {
 					has_law_or_variant = law_type:law_corporatized_unions
 				}
 			}
-			add = -50
+			add = -30
+		}
+
+		# Labour Rights Laws
+		if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_labor_exploitation
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_factory_overseers
+						has_law_or_variant = law_type:law_enforced_unions
+					}
+				}
+			}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_regulatory_bodies
+				}
+			}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_worker_protections
+				}
+			}
+			add = -30
 		}
 
 		# Variables
@@ -4215,7 +4371,7 @@ ideology_fascist = {
 		law_emergency_relief_services = strongly_disapprove
 	}
 	lawgroup_labor_rights = {
-		law_banned_unions = strongly_approve
+		law_factory_overseers = strongly_approve
 		law_labor_exploitation = approve
 		law_no_workers_rights = approve
 		law_worker_protections = neutral
@@ -4749,7 +4905,7 @@ ideology_anarchist = {
 		law_worker_protections = approve
 		law_regulatory_bodies = neutral
 		law_no_workers_rights = strongly_disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	
@@ -4861,7 +5017,7 @@ ideology_anarchist = {
 					has_law_or_variant = law_type:law_combination_acts
 				}
 			}
-			add = 50
+			add = 30
 		}
 		else_if = {
 			limit = {
@@ -4873,7 +5029,7 @@ ideology_anarchist = {
 					}
 				}
 			}
-			add = 25
+			add = 15
 		}
 		else_if = {
 			limit = {
@@ -4882,7 +5038,7 @@ ideology_anarchist = {
 					has_law_or_variant = law_type:law_right_to_associate
 				}
 			}
-			add = -25
+			add = -15
 		}
 		else_if = {
 			limit = {
@@ -4891,7 +5047,48 @@ ideology_anarchist = {
 					has_law_or_variant = law_type:law_corporatized_unions
 				}
 			}
-			add = -50
+			add = -30
+		}
+
+		# Labour Rights Laws
+		if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_labor_exploitation
+				}
+			}
+			add = 30
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_factory_overseers
+						has_law_or_variant = law_type:law_enforced_unions
+					}
+				}
+			}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_regulatory_bodies
+				}
+			}
+			add = -15
+		}
+		else_if = {
+			limit = {
+				is_interest_group_type = ig_trade_unions
+				owner = {
+					has_law_or_variant = law_type:law_worker_protections
+				}
+			}
+			add = -30
 		}
 		
 		if = {
@@ -5516,7 +5713,7 @@ ideology_market_liberal = {
 	}
 	lawgroup_labor_rights = {
 		law_labor_exploitation = strongly_approve
-		law_banned_unions = approve
+		law_factory_overseers = approve
 		law_regulatory_bodies = disapprove
 		law_worker_protections = strongly_disapprove
 		law_enforced_unions = strongly_disapprove
@@ -5694,7 +5891,7 @@ ideology_market_liberal = {
 					}
 				}
 			}
-			add = 75
+			add = 110
 		}
 		# liberal and/or radical leaders have a higher spawn chance if the Dreyfusards won.
 		if = {
@@ -5898,7 +6095,7 @@ ideology_luddite = {
 		law_worker_protections = approve
 		law_regulatory_bodies = neutral
 		law_no_workers_rights = disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 		law_enforced_unions = strongly_disapprove
 	}
@@ -6400,7 +6597,7 @@ ideology_protectionist = {
 		law_no_home_defence = neutral
 	}
 	lawgroup_labor_rights = {
-		law_banned_unions = approve
+		law_factory_overseers = approve
 		law_no_workers_rights = neutral
 		law_labor_exploitation = neutral
 		law_worker_protections = disapprove
@@ -6688,7 +6885,7 @@ ideology_humanitarian = {
 		law_worker_protections = approve
 		law_regulatory_bodies = approve
 		law_no_workers_rights = disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 		law_enforced_unions = strongly_disapprove
 	}
@@ -7064,7 +7261,7 @@ ideology_positivist = {
 		law_worker_protections = disapprove
 		law_regulatory_bodies = approve
 		law_no_workers_rights = disapprove
-		law_banned_unions = approve
+		law_factory_overseers = approve
 		law_labor_exploitation = disapprove
 		law_enforced_unions = neutral
 	}
@@ -8338,7 +8535,7 @@ ideology_corporatist_leader = {
 		law_no_workers_rights = neutral
 		law_regulatory_bodies = approve
 		law_worker_protections = neutral
-		law_banned_unions = disapprove
+		law_factory_overseers = disapprove
 		law_enforced_unions = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
@@ -8639,7 +8836,7 @@ ideology_humanitarian_royalist = {
 		law_regulatory_bodies = approve
 		law_no_workers_rights = neutral
 		law_enforced_unions = neutral
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	
@@ -9346,7 +9543,7 @@ ideology_utopian = {
 		law_regulatory_bodies = approve
 		law_enforced_unions = neutral
 		law_no_workers_rights = disapprove
-		law_banned_unions = strongly_disapprove
+		law_factory_overseers = strongly_disapprove
 		law_labor_exploitation = strongly_disapprove
 	}
 	
