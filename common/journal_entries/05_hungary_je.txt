@@ -1,0 +1,127 @@
+﻿je_hungarian_revolution = {
+
+	group = je_group_historical_content
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	is_shown_in_lobby = {
+		c:HUN ?= THIS
+		has_dlc_feature = ip3_content
+	}
+
+	modifiers_while_active = {
+		modifier_hungarian_renaissance
+	}
+
+	should_be_pinned_by_default = yes
+	transferable = no
+	weight = 10000
+
+	scripted_button = hungarian_revolution_twelve_points_button
+	scripted_button = hungarian_revolution_annex_transylvania_button
+	scripted_button = hungarian_revolution_establish_honved_button
+
+	immediate = {
+		cu:hungarian = {
+			save_scope_as = hungarian_culture_scope
+		}
+		cu:szekely = {
+			save_scope_as = szekely_culture_scope
+		}
+		cu:romanian = {
+			save_scope_as = romanian_culture_scope
+		}
+		cu:south_german = {
+			save_scope_as = south_german_culture_scope
+		}
+		c:TRS ?= {
+			save_scope_as = transylvania_scope
+		}
+		c:AUS ?= {
+			save_scope_as = austria_scope
+		}
+		c:CRO ?= {
+			save_scope_as = croatia_scope
+		}
+		springtime_save_conservative_laws = yes
+	}
+	on_monthly_pulse = {
+		random_events = {
+		#	1 = 0
+			1 = hungary_events.2 # Serbian Revolt
+			1 = hungary_events.3 # Slovak Revolt
+			1 = hungary_events.8 # Romanian Revolt
+		}
+	}
+
+	complete = {
+		custom_tooltip = {
+			text = owns_all_hungarian_homelands_tt
+			any_scope_state = {
+				state_is_in_hungary = yes
+				count >= 9
+			}
+		}
+		OR = {
+			is_subject = no
+			is_subject_type = subject_type_personal_union
+		}
+		country_has_voting_franchise = yes
+		NOR = {
+			has_law_or_variant = law_type:law_serfdom
+			has_law_or_variant = law_type:law_land_based_taxation
+			has_law_or_variant = law_type:law_traditionalism
+		}
+		root.gdp > 6000000
+		custom_tooltip = {
+			text = has_founded_budapest_tt
+			has_global_variable = budapest_founded_global_var
+		}
+	}
+
+	on_complete = {
+		trigger_event = { id = hungary_events.12 popup = yes }
+	}
+	
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_hungary_events.12_tt
+			}
+		}
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = je_hungarian_revolution_backed_down_fail
+			has_variable = hungary_folded_to_austria_var
+		}
+	}
+
+	on_fail = {
+		add_fervor_target_modifier = { #changes target
+			culture = cu:hungarian
+			days = stupidly_long_modifier_time
+			multiplier = -20
+		}
+		add_radicals = {
+			value = medium_radicals
+		}
+	}
+
+	timeout = 12410
+
+
+	on_timeout = {
+		add_modifier = {
+			name = modifier_hungary_timeout
+			days = long_modifier_time
+		}
+	}
+
+	invalid = {
+
+	}
+
+	on_invalid = {
+	}
+}
