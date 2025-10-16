@@ -19,16 +19,36 @@
 	possible = {
 		OR = {
 			AND = {
-				has_technology_researched = nationalism
-				highest_secession_progress >= 0.50
-			}
-			custom_tooltip = {
-				text = failed_sick_man_main_tt
-				OR = { 
-					has_variable = failed_sick_man_main
-					has_variable = failed_sick_man_separatism
+				c:WAL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:MOL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:BUL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:SER ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:MON ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:GRE ?= {
+					NOT = { is_subject_of = root }
 				}
 			}
+			AND = {
+				has_technology_researched = nationalism
+				highest_secession_progress >= 0.50
+				custom_tooltip = {
+					text = tanzimats_completed_4_tt
+					root.var:sick_man_var >= 4
+				}
+			}
+			in_default = yes
+			has_modifier = declared_bankruptcy
+			gdp_ownership_ratio = { target = root value < 0.5 }
 		}
 	}
 
