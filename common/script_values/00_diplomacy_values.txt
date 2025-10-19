@@ -83,8 +83,42 @@ liberty_desire_weekly_change = {
 		add = {
 			desc = "LIBERTY_DESIRE_WEEKLY_CHANGE_CULTURAL_FERVOUR"
 			value = root.second_country.country_fervor_primary_culture #grabs culture with highest fervor
-			subtract = 25
-			divide = 150
+			subtract = 45
+			divide = 100
+			save_temporary_scope_value_as = current_liberty_desire
+			if = {
+				limit = {
+					root.first_country = {
+						any_primary_culture = {
+							shares_heritage_trait_with_any_primary_culture = root.second_country
+						}
+					}
+					scope:current_liberty_desire > 0
+					multiply = 0.9
+				}
+			}
+			if = {
+				limit = {
+					root.first_country = {
+						any_primary_culture = {
+							shares_language_trait_with_any_primary_culture = root.second_country
+						}
+					}
+					scope:current_liberty_desire > 0
+					multiply = 0.85
+				}
+			}
+			if = {
+				limit = {
+					root.first_country = {
+						any_primary_culture = {
+							shares_tradition_trait_with_any_primary_culture = root.second_country
+						}
+					}
+					scope:current_liberty_desire > 0
+					multiply = 0.9
+				}
+			}
 			min = -0.10
 			max = 0.5
 		}
@@ -107,8 +141,8 @@ liberty_desire_weekly_change = {
 						is_primary_culture_of = root.first_country
 					}	
 					add = culture_current_fervor
-					subtract = 25
-					divide = 150
+					subtract = 45
+					divide = 100
 					divide = root.second_country.num_primary_cultures
 					max = 0
 					min = 0.2
@@ -134,8 +168,8 @@ liberty_desire_weekly_change = {
 							is_primary_culture_of = root.first_country
 						}
 						add = culture_current_fervor
-						subtract = 25
-						divide = 150
+						subtract = 45
+						divide = 100
 						divide = root.second_country.num_primary_cultures
 						max = 0
 						min = 0.25
@@ -154,8 +188,8 @@ liberty_desire_weekly_change = {
 								}
 							}
 							add = culture_current_fervor
-							subtract = 25
-							divide = 150
+							subtract = 45
+							divide = 100
 							divide = root.second_country.num_primary_cultures
 							min = 0
 							max = 0.50
