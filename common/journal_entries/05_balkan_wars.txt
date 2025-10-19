@@ -1,8 +1,8 @@
 ﻿je_the_balkan_league = {
-
-	icon = "gfx/interface/icons/event_icons/event_military.dds"	
+	
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
 	scripted_progress_bar = balkan_league_timeout_bar
-
+	
 	scripted_button = je_the_balkan_league_research_mil_tech_start_button
 	scripted_button = je_the_balkan_league_research_mil_tech_stop_button
 	scripted_button = je_the_balkan_league_invite_vassals_button
@@ -11,67 +11,67 @@
 	scripted_button = je_the_balkan_league_muster_button
 	scripted_button = je_the_balkan_league_resign_button
 	scripted_button = je_the_balkan_league_start_war
-
+	
 	group = je_group_historical_content
 	should_be_pinned_by_default = yes
-
+	
 	weight = 200
-
+	
 	on_monthly_pulse = {
 		random_events = {
 			200 = 0
-			20 = balkan_wars.8  #A Student of Strategy
-			20 = balkan_wars.9  #Caught in the Middle
-			20 = balkan_wars.10 #Surplus Management
+			20 = balkan_wars.8	#A Student of Strategy
+			20 = balkan_wars.9	#Caught in the Middle
+			20 = balkan_wars.10	#Surplus Management
 		}
 	}
-
+	
 	on_weekly_pulse = {
-		effect = { #checks allies
+		effect = {	#checks allies
 			generate_balkan_league_side_list = yes
 			generate_ottoman_side_list = yes
 		}
 	}
-
+	
 	is_shown_in_lobby = {
 		is_balkan_league_candidate = yes
 		NOT = {
 			c:MON ?= THIS
 		}
 	}
-
+	
 	is_shown_when_inactive = {
 		has_dlc_feature = ip3_content
 		is_balkan_league_candidate = yes
 	}
-
+	
 	possible = {
 		custom_tooltip = {
 			text = je_the_balkan_league_possible_tt
 			has_global_variable = balkan_league_formed
 		}
 	}
-
+	
 	immediate = {
-        trigger_event = {
-            id = balkan_wars.1
-            days = 3
-            popup = yes
-        }
+		trigger_event = {
+			id = balkan_wars.1
+			days = 3
+			popup = yes
+		}
 		sr:region_balkans = {
 			save_scope_as = balkans_scope
 		}
 		c:TUR ?= {
 			save_scope_as = ottoman_empire_scope
 		}
-		set_global_variable = { #what if no one joins
+		set_global_variable = {	#what if no one joins
 			name = je_the_balkan_league_started
 			days = 90
 		}
 		generate_balkan_league_side_list = yes
 		generate_ottoman_side_list = yes
 	}
-
+	
 	complete = {
 		OR = {
 			NOT = {
@@ -79,29 +79,29 @@
 			}
 			sr:region_balkans = {
 				any_scope_state = {
-		 			owner = c:TUR
-		 			count = 0
+					owner = c:TUR
+					count = 0
 				}
 			}
 		}
 	}
-
+	
 	on_complete = {
 		trigger_event = {
-           id = balkan_wars.2
-        }
-        set_variable = first_balkan_war_successful
+			id = balkan_wars.2
+		}
+		set_variable = first_balkan_war_successful
 		spoils_of_war_initiation_gre = yes
 		spoils_of_war_initiation_mon = yes
 		spoils_of_war_initiation_bul = yes
 		spoils_of_war_initiation_ser = yes
 		spoils_of_war_initiation_wal = yes
 		the_balkan_league_activated_modifier_cleanser = yes
-
+		
 		custom_tooltip = je_the_balkan_league_complete_header_tt
-			every_state_region = {
-				limit = {
-					any_scope_state = {
+		every_state_region = {
+			limit = {
+				any_scope_state = {
 					owner = c:TUR
 					region = sr:region_balkans
 				}
@@ -109,7 +109,7 @@
 			custom_tooltip = je_the_balkan_league_complete_tt
 		}
 	}
-
+	
 	event_outcome_completed_effect_desc = {
 		effect = {
 			add_modifier = {
@@ -130,7 +130,7 @@
 			}
 		}
 	}
-
+	
 	fail = {
 		OR = {
 			custom_tooltip = {
@@ -156,46 +156,46 @@
 			}
 		}
 	}
-
+	
 	on_fail = {
 		if = {
-			limit = { # Resigned before the war started.
+			limit = {	# Resigned before the war started.
 				has_modifier = balkan_wars_traitor_mod
 			}
-		    trigger_event = {
-            	id = balkan_wars.5
-           		days = 0
-            	popup = yes
-        	}
+			trigger_event = {
+				id = balkan_wars.5
+				days = 0
+				popup = yes
+			}
 		}
 		if = {
-			limit = { # Lost the war, but still not a subject.
+			limit = {	# Lost the war, but still not a subject.
 				has_variable = lost_balkan_wars
 				is_subject = no
 			}
-		    trigger_event = {
-	            id = balkan_wars.6
-	            days = 0
-	            popup = yes
-        	}
+			trigger_event = {
+				id = balkan_wars.6
+				days = 0
+				popup = yes
+			}
 		}
 		if = {
-			limit = { # Became a subject before the war began OR as a result of losing the war
+			limit = {	# Became a subject before the war began OR as a result of losing the war
 				is_subject = yes
 				is_diplomatic_play_committed_participant = no
 			}
-		    trigger_event = {
-	            id = balkan_wars.3
-	            days = 0
-	            popup = yes
-        	}
+			trigger_event = {
+				id = balkan_wars.3
+				days = 0
+				popup = yes
+			}
 		}
 		the_balkan_league_activated_modifier_cleanser = yes
 		remove_variable = bp_member_backs_down
 		generate_balkan_league_side_list = yes
 		generate_ottoman_side_list = yes
 	}
-
+	
 	event_outcome_failed_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -224,12 +224,12 @@
 			}
 		}
 	}
-
+	
 	invalid = {
 		hidden_trigger = {
-    		NOT = {
+			NOT = {
 				has_global_variable = je_the_balkan_league_started
-    		}
+			}
 		}
 		NOT = {
 			any_diplomatically_relevant_country = {
@@ -246,55 +246,54 @@
 			}
 		}
 	}
-
+	
 	on_invalid = {
 		trigger_event = {
-            id = balkan_wars.4
-        }
-        the_balkan_league_activated_modifier_cleanser = yes
+			id = balkan_wars.4
+		}
+		the_balkan_league_activated_modifier_cleanser = yes
 	}
 }
 
 je_spoils_of_war = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
-
+	
 	group = je_group_historical_content
 	should_be_pinned_by_default = yes
-
+	
 	weight = 200
-
+	
 	on_monthly_pulse = {
 		random_events = {
 			200 = 0
-			20 = balkan_wars.9 #Caught in the Middle
+			20 = balkan_wars.9	#Caught in the Middle
 		}
 	}
-
-	immediate = {
-	}
-
-	complete = { # if we own designated state regions that are our culture homelands in the balkans region
+	
+	immediate = {}
+	
+	complete = {	# if we own designated state regions that are our culture homelands in the balkans region
 		trigger_if = {
 			limit = {
 				c:GRE ?= this
 			}
 			spoils_of_war_complete_gre = yes
 		}
-
+		
 		trigger_if = {
 			limit = {
 				c:MON ?= this
 			}
 			spoils_of_war_complete_mon = yes
 		}
-
+		
 		trigger_if = {
 			limit = {
 				c:BUL ?= this
 			}
 			spoils_of_war_complete_bul = yes
 		}
-
+		
 		trigger_if = {
 			limit = {
 				OR = {
@@ -304,14 +303,14 @@ je_spoils_of_war = {
 			}
 			spoils_of_war_complete_ser = yes
 		}
-
+		
 		trigger_if = {
 			limit = {
 				c:ALB ?= THIS
 			}
 			spoils_of_war_complete_alb = yes
 		}
-
+		
 		trigger_if = {
 			limit = {
 				OR = {
@@ -322,12 +321,12 @@ je_spoils_of_war = {
 			}
 			spoils_of_war_complete_rom = yes
 		}
-		custom_tooltip = { # Can only time out
+		custom_tooltip = {	# Can only time out
 			text = je_spoils_of_war_timed_out_tt
 			always = no
 		}
 	}
-
+	
 	on_complete = {
 		show_as_tooltip = {
 			random_primary_culture = {
@@ -369,9 +368,9 @@ je_spoils_of_war = {
 			set_variable = achievement_teamkiller_var
 		}
 	}
-
+	
 	timeout = 3650
-
+	
 	on_timeout = {
 		hidden_effect = {
 			if = {

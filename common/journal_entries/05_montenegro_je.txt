@@ -1,18 +1,18 @@
 ﻿je_montenegrin_raiding = {
 	icon = "gfx/interface/icons/event_icons/event_raiding.dds"
-
+	
 	group = je_group_historical_content
-
+	
 	scripted_progress_bar = montenegrin_raiding_progress_bar
-
+	
 	is_shown_in_lobby = {
-		has_dlc_feature = ip3_content #National Awakening
+		has_dlc_feature = ip3_content	#National Awakening
 		c:MON ?= this
 	}
-
+	
 	immediate = {
-		every_scope_state = { #adjusted weekly below
-			add_modifier = { #undoes unemployment popgrowth modifier
+		every_scope_state = {	#adjusted weekly below
+			add_modifier = {	#undoes unemployment popgrowth modifier
 				name = unemployement_birth_rate_countermodifier
 				multiplier = 0.54
 				days = normal_modifier_time
@@ -28,13 +28,13 @@
 		c:TUR ?= {
 			save_scope_as = ottoman
 		}
-		create_diplomatic_pact = {#help player not forget
+		create_diplomatic_pact = {	#help player not forget
 			country = c:RUS
 			type = increase_relations
 		}
 		set_variable = {
 			name = last_week_raiding_income
-			value = 1500 #raiding_income script value doesn't work during initialization. 
+			value = 1500	#raiding_income script value doesn't work during initialization. 
 		}
 		create_diplomatic_pact = {
 			country = c:TUR
@@ -46,11 +46,11 @@
 		}
 		add_modifier = {
 			name = modifier_montenegrin_raiding
-			multiplier = 1500 #raiding_income script value doesn't work during initialization. 
+			multiplier = 1500	#raiding_income script value doesn't work during initialization. 
 		}
 		add_modifier = {
-				name = modifier_montenegrin_disobedience
-				multiplier = var:raiding_intensity
+			name = modifier_montenegrin_disobedience
+			multiplier = var:raiding_intensity
 		}
 		random_neighbouring_state = {
 			limit = {
@@ -78,14 +78,13 @@
 			}
 		}
 	}
-
+	
 	scripted_button = je_montenegrin_raiding_decrease_button
 	scripted_button = je_montenegrin_raiding_increase_button
-
-
+	
 	on_weekly_pulse = {
 		effect = {
-			if = { #AI sucks at playing Montenegro, help them
+			if = {	#AI sucks at playing Montenegro, help them
 				limit = {
 					is_ai = yes
 					NOT = {
@@ -98,7 +97,7 @@
 					multiplier = 0.8
 				}
 			}
-			else_if = { #stop tricky players from swapping to country
+			else_if = {	#stop tricky players from swapping to country
 				limit = {
 					is_player = yes
 					has_modifier = modifier_montenegrin_aid_plus
@@ -159,7 +158,7 @@
 			#If Raiding_income has changed, remove and reapply the modifiers with the new values. This is necessary because we do not have support for dynamic modifiers.
 			if = {
 				limit = {
-				var:last_week_raiding_income != raiding_income
+					var:last_week_raiding_income != raiding_income
 				}
 				remove_modifier = modifier_montenegrin_raiding
 				add_modifier = {
@@ -173,8 +172,8 @@
 				}
 				scope:journal_entry = {
 					set_bar_progress = {
-					value = root.var:raiding_intensity
-					name = montenegrin_raiding_progress_bar
+						value = root.var:raiding_intensity
+						name = montenegrin_raiding_progress_bar
 					}
 				}
 				set_variable = {
@@ -191,10 +190,10 @@
 			}
 			#Higher odds of ottoman Retribution Depending on Raiding Income.
 			#Note that montenegrin_raiding.1 can only fire once, after which montenegrin_raiding.2 fires from then on. 
-			if = { #playing Russian Roulette each week
+			if = {	#playing Russian Roulette each week
 				limit = {
-					raiding_level > 2 #must be raiding more than 1000
-					NAND = { #If TUR is a player and MON isn't, this is handled by a special button rather than chance. 
+					raiding_level > 2	#must be raiding more than 1000
+					NAND = {	#If TUR is a player and MON isn't, this is handled by a special button rather than chance. 
 						c:TUR ?= {
 							is_player = yes
 						}
@@ -214,10 +213,10 @@
 							add = 2
 							multiply = raiding_level
 							subtract = 3
-							multiply = 0.15 #more likely
+							multiply = 0.15	#more likely
 						}
-						trigger_event = { 
-							id = montenegrin_raiding.1 
+						trigger_event = {
+							id = montenegrin_raiding.1
 							popup = yes
 						}
 					}
@@ -230,8 +229,8 @@
 							subtract = 3
 							multiply = 0.1
 						}
-						trigger_event = { 
-							id = montenegrin_raiding.2 
+						trigger_event = {
+							id = montenegrin_raiding.2
 							popup = yes
 						}
 					}
@@ -239,11 +238,11 @@
 			}
 		}
 	}
-
+	
 	status_desc = {
-	desc = je_montenegrin_raiding_amount
+		desc = je_montenegrin_raiding_amount
 	}
-
+	
 	complete = {
 		OR = {
 			NOT = {
@@ -260,7 +259,7 @@
 			}
 		}
 	}
-
+	
 	on_complete = {
 		#This is unlikely to happen, more like a stretch goal for youtubers.
 		add_modifier = {
@@ -269,17 +268,17 @@
 		set_variable = je_montenegrin_raiding_won
 		end_raiding_cleanup = yes
 	}
-
-	invalid = { #This is normally ended by deal with Russia, but there is also an odd edgecase where c:TUR no longer borders c:MON
+	
+	invalid = {	#This is normally ended by deal with Russia, but there is also an odd edgecase where c:TUR no longer borders c:MON
 		OR = {
-			has_variable = mon_stop_raiding_deal #normal way to end JE
+			has_variable = mon_stop_raiding_deal	#normal way to end JE
 			NOR = {
 				exists = c:TUR
 				exists = c:MON
-				c:MON = this #can't become Yugoslavia or Serbia
+				c:MON = this	#can't become Yugoslavia or Serbia
 			}
 			NOT = {
-				any_neighbouring_state = { # Turkey must be neighbor, unless it's fighting a civil war. 
+				any_neighbouring_state = {	# Turkey must be neighbor, unless it's fighting a civil war. 
 					OR = {
 						c:TUR ?= owner
 						AND = {
@@ -291,7 +290,7 @@
 			}
 		}
 	}
-
+	
 	on_invalid = {
 		end_raiding_cleanup = yes
 		if = {
@@ -303,9 +302,9 @@
 			post_notification = je_montenegrin_raiding_fail
 		}
 	}
-
+	
 	fail = {
-		trigger_if = { #putting this in to avoid errors
+		trigger_if = {	#putting this in to avoid errors
 			limit = {
 				exists = c:TUR
 			}
@@ -314,7 +313,7 @@
 			}
 		}
 	}
-
+	
 	on_fail = {
 		#Should have an event here.
 		add_modifier = {
@@ -322,33 +321,33 @@
 			days = stupidly_long_modifier_time
 		}
 		end_raiding_cleanup = yes
-		if = { #trigger subjugated event if other JEs aren't already
+		if = {	#trigger subjugated event if other JEs aren't already
 			limit = {
-				NOR = { 
+				NOR = {
 					has_journal_entry = je_mon_state_formation
 					has_journal_entry = je_mon_austria_alliance
 				}
 			}
-			trigger_event = { 
-				ID = mon_state_formation.17 
+			trigger_event = {
+				ID = mon_state_formation.17
 			}
 		}
 	}
-
+	
 	event_outcome_failed_desc = {
-        first_valid = {
-            triggered_desc = {
+		first_valid = {
+			triggered_desc = {
 				trigger = {
-					NOR = { 
+					NOR = {
 						has_journal_entry = je_mon_state_formation
 						has_journal_entry = je_mon_austria_alliance
 					}
 				}
-                desc = event_effects_mon_state_formation.17_tt
-            }
-        }
-    }
-
+				desc = event_effects_mon_state_formation.17_tt
+			}
+		}
+	}
+	
 	weight = 100
 	can_revolution_inherit = yes
 	transferable = no
@@ -357,14 +356,14 @@
 
 je_mon_state_formation = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
+	
 	group = je_group_historical_content
-
+	
 	is_shown_in_lobby = {
-		has_dlc_feature = ip3_content #National Awakening
+		has_dlc_feature = ip3_content	#National Awakening
 		c:MON ?= this
 	}
-
+	
 	immediate = {
 		set_variable = {
 			name = rus_relations
@@ -381,10 +380,10 @@ je_mon_state_formation = {
 			save_scope_as = ottoman
 		}
 	}
-
+	
 	scripted_button = je_montenegrin_visit_moscow
 	scripted_button = je_montenegrin_make_saint
-
+	
 	on_weekly_pulse = {
 		effect = {
 			if = {
@@ -403,11 +402,11 @@ je_mon_state_formation = {
 			}
 		}
 	}
-
+	
 	status_desc = {
-	desc = je_montenegrin_russian_aid_income
+		desc = je_montenegrin_russian_aid_income
 	}
-
+	
 	complete = {
 		custom_tooltip = {
 			text = has_taxation_law_tt
@@ -428,13 +427,13 @@ je_mon_state_formation = {
 			has_variable = biljarda_built
 		}
 	}
-
+	
 	invalid = {
 		NOT = {
 			exists = c:TUR
 		}
 	}
-
+	
 	on_complete = {
 		add_modifier = {
 			name = modifier_montenegrin_recognition
@@ -451,7 +450,7 @@ je_mon_state_formation = {
 			add_journal_entry = { type = je_mon_austria_alliance }
 		}
 	}
-
+	
 	fail = {
 		OR = {
 			is_subject_of = c:TUR
@@ -463,7 +462,7 @@ je_mon_state_formation = {
 			}
 		}
 	}
-
+	
 	on_fail = {
 		russia_breaks_independence_pact = yes
 		custom_tooltip = {
@@ -472,23 +471,21 @@ je_mon_state_formation = {
 		}
 		mon_failure_events = yes
 	}
-
-
+	
 	weight = 100
 	can_revolution_inherit = yes
 	transferable = no
 	should_be_pinned_by_default = yes
 }
 
-
 je_mon_austria_alliance = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
-
+	
 	group = je_group_historical_content
 
 	#scripted_button = je_mon_state_formation_visit_russia
 	#scripted_button = je_mon_state_formation_make_saint
-
+	
 	immediate = {
 		c:RUS ?= {
 			save_scope_as = russia
@@ -500,15 +497,14 @@ je_mon_austria_alliance = {
 			save_scope_as = austria
 		}
 	}
-
-	on_weekly_pulse = {
-	}
-
+	
+	on_weekly_pulse = {}
+	
 	status_desc = {
 		desc = je_mon_austria_status_desc
 	}
-
-	invalid = { #p:x90A0E0.state.owner might work better
+	
+	invalid = {	#p:x90A0E0.state.owner might work better
 		exists = c:AUS
 		NOT = {
 			s:STATE_MONTENEGRO = {
@@ -518,7 +514,7 @@ je_mon_austria_alliance = {
 			}
 		}
 	}
-
+	
 	complete = {
 		government_legitimacy > 50
 		c:RUS ?= {
@@ -537,7 +533,7 @@ je_mon_austria_alliance = {
 			}
 		}
 	}
-
+	
 	on_complete = {
 		s:STATE_MONTENEGRO = {
 			every_scope_state = {
@@ -547,20 +543,20 @@ je_mon_austria_alliance = {
 				set_state_owner = c:MON
 			}
 		}
-		trigger_event = { 
-			ID = mon_state_formation.4 
+		trigger_event = {
+			ID = mon_state_formation.4
 			popup = yes
 		}
 	}
-
+	
 	event_outcome_completed_desc = {
-        first_valid = {
-            triggered_desc = {
-                desc = event_effects_mon_state_formation.4_tt
-            }
-        }
-    }
-
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_mon_state_formation.4_tt
+			}
+		}
+	}
+	
 	fail = {
 		OR = {
 			is_in_same_power_bloc = c:RUS
@@ -572,8 +568,8 @@ je_mon_austria_alliance = {
 			}
 		}
 	}
-
-	on_fail = { #use same barbarian event. 
+	
+	on_fail = {	#use same barbarian event. 
 		mon_failure_events = yes
 		c:AUS = {
 			change_relations = {
@@ -586,27 +582,26 @@ je_mon_austria_alliance = {
 			}
 		}
 	}
-
+	
 	weight = 100
 	can_revolution_inherit = yes
 	transferable = no
 	should_be_pinned_by_default = yes
 }
 
-
 je_mon_serb_unity = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
+	
 	group = je_group_historical_content
-
+	
 	is_shown_in_lobby = {
-		has_dlc_feature = ip3_content #National Awakening
+		has_dlc_feature = ip3_content	#National Awakening
 		OR = {
 			c:MON ?= this
 			c:SER ?= this
 		}
 	}
-
+	
 	immediate = {
 		c:RUS ?= {
 			save_scope_as = russia
@@ -621,8 +616,7 @@ je_mon_serb_unity = {
 			save_scope_as = serbia
 		}
 	}
-
-
+	
 	invalid = {
 		OR = {
 			c:MON ?= {
@@ -631,27 +625,27 @@ je_mon_serb_unity = {
 			c:SER ?= {
 				is_country_alive = no
 			}
-			AND = { # only SER will have this JE if MON is AI
-					c:MON ?= ROOT
-					is_player = no
+			AND = {	# only SER will have this JE if MON is AI
+				c:MON ?= ROOT
+				is_player = no
 			}
-			AND = { # only MON will have this if they are a player
-					c:SER ?= ROOT
-					c:MON ?= {
-						is_player = yes
-					}
+			AND = {	# only MON will have this if they are a player
+				c:SER ?= ROOT
+				c:MON ?= {
+					is_player = yes
+				}
 			}
-			AND = { # no one will have this if both players
-					c:MON ?= {
-						is_player = yes
-					}
-					c:SER ?= {
-						is_player = yes
-					}
+			AND = {	# no one will have this if both players
+				c:MON ?= {
+					is_player = yes
+				}
+				c:SER ?= {
+					is_player = yes
+				}
 			}
 		}
 	}
-
+	
 	complete = {
 		c:MON ?= {
 			any_neighbouring_state = { owner = c:SER }
@@ -661,21 +655,21 @@ je_mon_serb_unity = {
 			is_subject = no
 		}
 	}
-
+	
 	on_complete = {
 		custom_tooltip = {
 			text = mon_serb_unite_tt
-			trigger_event = { ID = mon_state_formation.5 popup = yes}
+			trigger_event = { ID = mon_state_formation.5 popup = yes }
 		}
 	}
-
+	
 	fail = {
 		c:SER ?= {
 			is_subject = no
 			has_war_with = c:MON
 		}
 	}
-
+	
 	on_fail = {
 		c:MON ?= {
 			create_diplomatic_catalyst = {
@@ -690,26 +684,25 @@ je_mon_serb_unity = {
 			}
 		}
 	}
-
+	
 	weight = 100
 	can_revolution_inherit = yes
 	transferable = no
 	should_be_pinned_by_default = no
 }
 
-
 je_tur_raided = {
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
-
+	
 	group = je_group_historical_content
-
+	
 	is_shown_in_lobby = {
-		has_dlc_feature = ip3_content #National Awakening
+		has_dlc_feature = ip3_content	#National Awakening
 		c:TUR ?= this
 	}
-
+	
 	scripted_button = je_montenegrin_tur_raid_back
-
+	
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -718,7 +711,7 @@ je_tur_raided = {
 					c:MON ?= {
 						is_country_alive = yes
 					}
-					raiding_level >= 2 #corrospond to above
+					raiding_level >= 2	#corrospond to above
 					any_scope_state = {
 						has_modifier = raid_target
 					}
@@ -741,8 +734,7 @@ je_tur_raided = {
 			}
 		}
 	}
-
-
+	
 	immediate = {
 		c:RUS ?= {
 			save_scope_as = russia
@@ -760,10 +752,9 @@ je_tur_raided = {
 			save_scope_as = serbian
 		}
 	}
-
-	invalid = {
-	}
-
+	
+	invalid = {}
+	
 	complete = {
 		OR = {
 			NOT = {
@@ -773,11 +764,11 @@ je_tur_raided = {
 				OR = {
 					is_country_alive = no
 					is_subject_of = ROOT
-				 }
+				}
 			}
 		}
 	}
-
+	
 	on_complete = {
 		add_modifier = {
 			name = put_down_rebels_modifier
@@ -793,7 +784,7 @@ je_tur_raided = {
 			ID = mon_state_formation.14
 			popup = yes
 		}
-		hidden_effect = { # Clear Montenegrin raiding if that hasn't happened already
+		hidden_effect = {	# Clear Montenegrin raiding if that hasn't happened already
 			if = {
 				limit = {
 					NOT = {
@@ -812,21 +803,19 @@ je_tur_raided = {
 			}
 		}
 	}
-
+	
 	event_outcome_completed_desc = {
-        first_valid = {
-            triggered_desc = {
-                desc = event_effects_mon_state_formation.14_tt
-            }
-        }
-    }
-
-	fail = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_mon_state_formation.14_tt
+			}
+		}
 	}
-
-	on_fail = {
-	}
-
+	
+	fail = {}
+	
+	on_fail = {}
+	
 	weight = 100
 	can_revolution_inherit = yes
 	transferable = no
