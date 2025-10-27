@@ -1323,3 +1323,195 @@ end_congress_scripted_effect = {
 		}
 	}
 }
+
+#################
+### VERSION 2 ###
+#################
+
+congress_grant_regional_autonomy = {
+	# DEBUG VARIABLE SETUP #
+	every_scope_state = {
+		limit = {
+			any_scope_pop = {
+				culture = {
+					NOT = {
+						is_primary_culture_of = prev.owner
+					}
+				}
+				prev.state_region = {
+					is_homeland = prev.culture
+				}
+			}
+		}
+		add_to_global_variable_list = {
+			name = imperia_congress_regional_autonomy_states
+			target = this
+		}
+	}
+	add_to_global_variable_list = {
+		name = imperia_congress_regional_autonomy_target_countries
+		target = this
+	}
+	### Beginning of state ceding process ###
+	# First mark the culture of each state to be ceded
+	every_state = {
+		limit = {
+			is_target_in_global_variable_list = {
+				name = imperia_congress_regional_autonomy_states
+				target = this
+			}
+		}
+		owner = {
+			save_temporary_scope_as = owner_country
+		}
+		set_variable = { # Sets a variable of the original owner in the state, referenced later
+			name = ceding_country_var
+			value = scope:owner_country
+		}
+		save_temporary_scope_value_as = { # Saves the biggest cultures dominance-percentage in the state as a scope value
+			name = largest_culture_percentage
+			value = biggest_culture_percentage_in_state
+		}
+
+		random_scope_pop = {
+			limit = {
+				# Finds a culture in the state
+				prev.state_region = {
+					# That has a homeland in the state
+					is_homeland = prev.culture
+				}
+				NOT = {
+					# That is NOT the primary culture of the original owner
+					culture = {
+						is_primary_culture_of = scope:owner_country # scope is used instead of the variable because we cant use prevprev
+					}
+				}
+				prev = {
+					# And which is the largest culture in the state
+					culture_percent_state = {
+						target = prev.culture
+						value >= scope:largest_culture_percentage
+					}
+				}
+			}
+			culture = {
+				# And saves it, first as a scope
+				save_scope_as = largest_culture
+			}
+		}
+		set_variable = {
+			# Then as a variable in the state for later reference
+			name = largest_culture_var
+			value = scope:largest_culture
+		}
+	}
+	# Then cede them according to the found culture
+	every_state = {
+		# We want every state
+		limit = {
+			has_variable = largest_culture_var # That has this variable set, which means it is to be ceded
+		}
+		set_global_variable = {
+			name = tmp_largest_culture # Set a global variable for easier access in the create_dynamic_country block
+			value = var:largest_culture_var
+		}
+		create_dynamic_country = {
+			origin = var:ceding_country_var # We are in the state scope
+			tier = principality
+			culture = var:largest_culture_var # Uses the stored culture from the previous every_state
+			cede_state_trigger = {
+				# Append states to this new country
+				is_target_in_global_variable_list = { # If they are to be ceded
+					name = imperia_congress_regional_autonomy_states
+					target = this
+				}
+				owner = { # And if their owner is a ceding country
+					is_target_in_global_variable_list = {
+						name = imperia_congress_regional_autonomy_target_countries
+						target = this
+					}
+					this = prev.var:ceding_country_var # And importantly, that the owner is the same as the ceding country variable stored in the state
+					# Wouldnt want different countries ceding states at the same time to combine their states!
+				}
+				var:largest_culture_var = global_var:tmp_largest_culture
+			}
+			on_created = {
+				# Once the country has been created
+				every_scope_state = { # Remove this variable, so it doesnt interfere with next state ceding
+					remove_variable ?= largest_culture_var
+				}
+				# Then begin a convuluted process to set the new country's religion based on its culture
+				random_primary_culture = { # Save the new country's primary culture
+					save_temporary_scope_as = new_country_primary_culture
+				}
+				random_scope_pop = { # Fetch the (random) primary religion of the new country
+					limit = {
+						culture = scope:new_country_primary_culture
+					}
+					# Since you cannot append.religion directly to a given culture, but we can with pops
+					religion = {
+						save_temporary_scope_as = new_country_primary_religion
+					}
+				}
+				# Set the new country's state religion
+				set_state_religion = scope:new_country_primary_religion
+			}
+		}
+
+		hidden_effect = {
+			# Hidden effect here just to clean up tooltips..
+			# Anyways, we want the new country to be a subject of the original owner
+			var:ceding_country_var = {
+				# First try a dominion subject type
+				if = {
+					limit = {
+						can_create_diplomatic_pact = {
+							country = prev.owner
+							type = dominion
+						}
+					}
+					create_diplomatic_pact = {
+						country = prev.owner
+						type = dominion
+					}
+				}
+				# Then protectorate
+				else_if = {
+					limit = {
+						can_create_diplomatic_pact = {
+							country = prev.owner
+							type = protectorate
+						}
+					}
+					create_diplomatic_pact = {
+						country = prev
+						type = protectorate
+					}
+				}
+				# Then tributary (for unrecognized countries)
+				else_if = {
+					limit = {
+						can_create_diplomatic_pact = {
+							country = prev.owner
+							type = tributary
+						}
+					}
+					create_diplomatic_pact = {
+						country = prev.owner
+						type = tributary
+					}
+				}
+				# Finally personal union, which is always possible
+				else = {
+					create_diplomatic_pact = {
+						country = prev.owner
+						type = personal_union
+					}
+				}
+			}
+		}
+	}
+	# Cleanup
+	clear_global_variable_list = imperia_congress_regional_autonomy_states
+	clear_global_variable_list = imperia_congress_regional_autonomy_target_countries
+}
