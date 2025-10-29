@@ -1368,41 +1368,70 @@ congress_grant_regional_autonomy = {
 			name = ceding_country_var
 			value = scope:owner_country
 		}
-		save_temporary_scope_value_as = { # Saves the biggest cultures dominance-percentage in the state as a scope value
-			name = largest_culture_percentage
-			value = biggest_culture_percentage_in_state
-		}
-
-		random_scope_pop = {
+		# save_temporary_scope_value_as = { # Saves the biggest cultures dominance-percentage in the state as a scope value
+		# 	name = largest_culture_percentage
+		# 	value = biggest_culture_percentage_in_state
+		# }
+		ordered_scope_culture = {
 			limit = {
-				# Finds a culture in the state
+				NOT = {
+					is_primary_culture_of = scope:owner_country
+				}
 				prev.state_region = {
 					# That has a homeland in the state
-					is_homeland = prev.culture
-				}
-				NOT = {
-					# That is NOT the primary culture of the original owner
-					culture = {
-						is_primary_culture_of = scope:owner_country # scope is used instead of the variable because we cant use prevprev
-					}
-				}
-				prev = {
-					# And which is the largest culture in the state
-					culture_percent_state = {
-						target = prev.culture
-						value >= scope:largest_culture_percentage
-					}
+					is_homeland = prev
 				}
 			}
-			culture = {
-				# And saves it, first as a scope
-				save_scope_as = largest_culture
+			order_by = "prev.culture_percent_state(this)"
+			position = 0
+			save_scope_as = largest_culture
+			prev = {
+				add_radicals = {  
+					value = 0.1
+					culture = scope:largest_culture
+				}
 			}
 		}
-		set_variable = {
-			# Then as a variable in the state for later reference
-			name = largest_culture_var
-			value = scope:largest_culture
+		# random_scope_pop = {
+		# 	limit = {
+		# 		# Finds a culture in the state
+		# 		prev.state_region = {
+		# 			# That has a homeland in the state
+		# 			is_homeland = prev.culture
+		# 		}
+		# 		# That is NOT the primary culture of the original owner
+		# 		culture = {
+		# 			NOT = {
+		# 				is_primary_culture_of = scope:owner_country # scope is used instead of the variable because we cant use prevprev
+		# 			}
+		# 		}
+		# 		prev = {
+		# 			# And which is the largest culture in the state
+		# 			culture_percent_state = {
+		# 				target = prev.culture
+		# 				value >= scope:largest_culture_percentage
+		# 			}
+		# 		}
+		# 	}
+		# 	culture = {
+		# 		# And saves it, first as a scope
+		# 		save_scope_as = largest_culture
+		# 	}
+		# }
+		if = {
+			# Extra check to make sure the culture is not the primary culture of the original owner
+			limit = {
+				scope:largest_culture = {
+					NOT = {
+						is_primary_culture_of = scope:owner_country
+					}
+				}
+			}
+			set_variable = {
+				# Set a variable in the state for later reference
+				name = largest_culture_var
+				value = scope:largest_culture
+			}
 		}
 	}
 	# Then cede them according to the found culture
@@ -1433,7 +1462,10 @@ congress_grant_regional_autonomy = {
 					this = prev.var:ceding_country_var # And importantly, that the owner is the same as the ceding country variable stored in the state
 					# Wouldnt want different countries ceding states at the same time to combine their states!
 				}
-				var:largest_culture_var = global_var:tmp_largest_culture
+				state_region = {
+					is_homeland = global_var:tmp_largest_culture
+				}
+				var:largest_culture_var ?= global_var:tmp_largest_culture
 			}
 			on_created = {
 				# Once the country has been created
