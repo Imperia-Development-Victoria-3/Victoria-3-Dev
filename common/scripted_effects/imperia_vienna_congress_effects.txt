@@ -1374,16 +1374,16 @@ congress_grant_regional_autonomy = {
 	every_state = {
 		# We want every state
 		limit = {
-			has_variable = largest_culture_var # That has this variable set, which means it is to be ceded
+			has_variable = largest_culture # That has this variable set, which means it is to be ceded
 		}
 		set_global_variable = {
 			name = tmp_largest_culture # Set a global variable for easier access in the create_dynamic_country block
-			value = var:largest_culture_var
+			value = var:largest_culture
 		}
 		create_dynamic_country = {
 			origin = var:ceding_country_var # We are in the state scope
 			tier = principality
-			culture = var:largest_culture_var # Uses the stored culture from the previous every_state
+			culture = var:largest_culture # Uses the stored culture from the previous every_state
 			cede_state_trigger = {
 				# Append states to this new country
 				is_target_in_global_variable_list = { # If they are to be ceded
@@ -1398,12 +1398,12 @@ congress_grant_regional_autonomy = {
 					this = prev.var:ceding_country_var # And importantly, that the owner is the same as the ceding country variable stored in the state
 					# Wouldnt want different countries ceding states at the same time to combine their states!
 				}
-				var:largest_culture_var ?= global_var:tmp_largest_culture
+				var:largest_culture ?= global_var:tmp_largest_culture
 			}
 			on_created = {
 				# Once the country has been created
 				every_scope_state = { # Remove this variable, so it doesnt interfere with next state ceding
-					remove_variable ?= largest_culture_var
+					remove_variable ?= largest_culture
 				}
 				# Then begin a convuluted process to set the new country's religion based on its culture
 				random_primary_culture = { # Save the new country's primary culture
@@ -1420,20 +1420,30 @@ congress_grant_regional_autonomy = {
 				}
 				# Set the new country's state religion
 				set_state_religion = scope:new_country_primary_religion
-				save_scope_as = new_country # Save the new country scope for use in assigning subject status
+				# Same for ruler & heir
+				ruler = {
+					change_character_religion = scope:new_country_primary_religion
+				}
+				heir = {
+					change_character_religion = scope:new_country_primary_religion
+				}
 			}
 		}
-
-		hidden_effect = {
-			# Hidden effect here just to clean up tooltips..
-			# Anyways, we want the new country to be a subject of the original owner
+		if = {
+			# Should only trigger once per new country created
+			limit = {
+				owner = {
+					is_subject = no
+				}
+			}
+			# We want the new country to be a subject of the original owner
 			var:ceding_country_var = {
 				# First try a dominion subject type
 				if = {
 					limit = {
-						can_create_diplomatic_pact = {
-							target = prev.owner
-							type = dominion
+						can_have_as_subject = {
+							who = prev.owner
+							type = subject_type_dominion
 						}
 					}
 					create_diplomatic_pact = {
@@ -1441,12 +1451,38 @@ congress_grant_regional_autonomy = {
 						type = dominion
 					}
 				}
+				# Then a Puppet
+				else_if = {
+					limit = {
+						can_have_as_subject = {
+							who = prev.owner
+							type = subject_type_puppet
+						}
+					}
+					create_diplomatic_pact = {
+						country = prev.owner
+						type = puppet
+					}
+				}
+				# Vassal
+				else_if = {
+					limit = {
+						can_have_as_subject = {
+							who = prev.owner
+							type = subject_type_vassal
+						}
+					}
+					create_diplomatic_pact = {
+						country = prev.owner
+						type = vassal
+					}
+				}
 				# Then protectorate
 				else_if = {
 					limit = {
-						can_create_diplomatic_pact = {
-							target = prev.owner
-							type = protectorate
+						can_have_as_subject = {
+							who = prev.owner
+							type = subject_type_protectorate
 						}
 					}
 					create_diplomatic_pact = {
@@ -1457,9 +1493,9 @@ congress_grant_regional_autonomy = {
 				# Then tributary (for unrecognized countries)
 				else_if = {
 					limit = {
-						can_create_diplomatic_pact = {
-							target = prev.owner
-							type = tributary
+						can_have_as_subject = {
+							who = prev.owner
+							type = subject_type_tributary
 						}
 					}
 					create_diplomatic_pact = {
@@ -1480,6 +1516,7 @@ congress_grant_regional_autonomy = {
 	# Cleanup
 	clear_global_variable_list = imperia_congress_regional_autonomy_states
 	clear_global_variable_list = imperia_congress_regional_autonomy_target_countries
+	remove_global_variable = tmp_largest_culture
 }
 
 # scope = state
@@ -1495,11 +1532,11 @@ largest_culture_finder = {
 		save_temporary_scope_as = largest_culture_candidate
 		prev = {
 			set_variable = {
-				name = largest_culture_var
+				name = largest_culture
 				value = scope:largest_culture_candidate
 			}
 			set_variable = {
-				name = largest_culture_percentage_var
+				name = largest_culture_pop_amount
 				value = "population_by_culture(scope:largest_culture_candidate)"
 			}
 		}
@@ -1516,14 +1553,14 @@ largest_culture_finder = {
 		prev = {
 			if = {
 				limit = {
-					"population_by_culture(scope:largest_culture_candidate)" > var:largest_culture_percentage_var
+					"population_by_culture(scope:largest_culture_candidate)" > var:largest_culture_pop_amount
 				}
 				set_variable = {
-					name = largest_culture_var
+					name = largest_culture
 					value = scope:largest_culture_candidate
 				}
 				set_variable = {
-					name = largest_culture_percentage_var
+					name = largest_culture_pop_amount
 					value = "population_by_culture(scope:largest_culture_candidate)"
 				}
 			}
