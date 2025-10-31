@@ -1362,77 +1362,13 @@ congress_grant_regional_autonomy = {
 			}
 		}
 		owner = {
-			save_temporary_scope_as = owner_country
+			save_scope_as = owner_country
 		}
 		set_variable = { # Sets a variable of the original owner in the state, referenced later
 			name = ceding_country_var
 			value = scope:owner_country
 		}
-		# save_temporary_scope_value_as = { # Saves the biggest cultures dominance-percentage in the state as a scope value
-		# 	name = largest_culture_percentage
-		# 	value = biggest_culture_percentage_in_state
-		# }
-		ordered_scope_culture = {
-			limit = {
-				NOT = {
-					is_primary_culture_of = scope:owner_country
-				}
-				prev.state_region = {
-					# That has a homeland in the state
-					is_homeland = prev
-				}
-			}
-			order_by = "prev.culture_percent_state(this)"
-			position = 0
-			save_scope_as = largest_culture
-			prev = {
-				add_radicals = {  
-					value = 0.1
-					culture = scope:largest_culture
-				}
-			}
-		}
-		# random_scope_pop = {
-		# 	limit = {
-		# 		# Finds a culture in the state
-		# 		prev.state_region = {
-		# 			# That has a homeland in the state
-		# 			is_homeland = prev.culture
-		# 		}
-		# 		# That is NOT the primary culture of the original owner
-		# 		culture = {
-		# 			NOT = {
-		# 				is_primary_culture_of = scope:owner_country # scope is used instead of the variable because we cant use prevprev
-		# 			}
-		# 		}
-		# 		prev = {
-		# 			# And which is the largest culture in the state
-		# 			culture_percent_state = {
-		# 				target = prev.culture
-		# 				value >= scope:largest_culture_percentage
-		# 			}
-		# 		}
-		# 	}
-		# 	culture = {
-		# 		# And saves it, first as a scope
-		# 		save_scope_as = largest_culture
-		# 	}
-		# }
-		if = {
-			# Extra check to make sure the culture is not the primary culture of the original owner
-			limit = {
-				scope:largest_culture = {
-					NOT = {
-						is_primary_culture_of = scope:owner_country
-					}
-				}
-			}
-			set_variable = {
-				# Set a variable in the state for later reference
-				name = largest_culture_var
-				value = scope:largest_culture
-			}
-		}
+		largest_culture_finder = yes
 	}
 	# Then cede them according to the found culture
 	every_state = {
@@ -1462,9 +1398,6 @@ congress_grant_regional_autonomy = {
 					this = prev.var:ceding_country_var # And importantly, that the owner is the same as the ceding country variable stored in the state
 					# Wouldnt want different countries ceding states at the same time to combine their states!
 				}
-				state_region = {
-					is_homeland = global_var:tmp_largest_culture
-				}
 				var:largest_culture_var ?= global_var:tmp_largest_culture
 			}
 			on_created = {
@@ -1487,6 +1420,7 @@ congress_grant_regional_autonomy = {
 				}
 				# Set the new country's state religion
 				set_state_religion = scope:new_country_primary_religion
+				save_scope_as = new_country # Save the new country scope for use in assigning subject status
 			}
 		}
 
@@ -1498,7 +1432,7 @@ congress_grant_regional_autonomy = {
 				if = {
 					limit = {
 						can_create_diplomatic_pact = {
-							country = prev.owner
+							target = prev.owner
 							type = dominion
 						}
 					}
@@ -1511,12 +1445,12 @@ congress_grant_regional_autonomy = {
 				else_if = {
 					limit = {
 						can_create_diplomatic_pact = {
-							country = prev.owner
+							target = prev.owner
 							type = protectorate
 						}
 					}
 					create_diplomatic_pact = {
-						country = prev
+						country = prev.owner
 						type = protectorate
 					}
 				}
@@ -1524,7 +1458,7 @@ congress_grant_regional_autonomy = {
 				else_if = {
 					limit = {
 						can_create_diplomatic_pact = {
-							country = prev.owner
+							target = prev.owner
 							type = tributary
 						}
 					}
@@ -1546,4 +1480,53 @@ congress_grant_regional_autonomy = {
 	# Cleanup
 	clear_global_variable_list = imperia_congress_regional_autonomy_states
 	clear_global_variable_list = imperia_congress_regional_autonomy_target_countries
+}
+
+# scope = state
+largest_culture_finder = {
+	# Set a random valid culture as initial largest culture
+	random_scope_culture = {
+		limit = {
+			NOT = {
+				is_primary_culture_of = root
+			}
+			has_homeland = prev
+		}
+		save_temporary_scope_as = largest_culture_candidate
+		prev = {
+			set_variable = {
+				name = largest_culture_var
+				value = scope:largest_culture_candidate
+			}
+			set_variable = {
+				name = largest_culture_percentage_var
+				value = "population_by_culture(scope:largest_culture_candidate)"
+			}
+		}
+	}
+	# Then iterate through all other valid cultures to find the largest one
+	every_scope_culture = {
+		limit = {
+			NOT = {
+				is_primary_culture_of = root
+			}
+			has_homeland = prev
+		}
+		save_temporary_scope_as = largest_culture_candidate
+		prev = {
+			if = {
+				limit = {
+					"population_by_culture(scope:largest_culture_candidate)" > var:largest_culture_percentage_var
+				}
+				set_variable = {
+					name = largest_culture_var
+					value = scope:largest_culture_candidate
+				}
+				set_variable = {
+					name = largest_culture_percentage_var
+					value = "population_by_culture(scope:largest_culture_candidate)"
+				}
+			}
+		}
+	}
 }
