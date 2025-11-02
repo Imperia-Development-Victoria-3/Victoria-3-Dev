@@ -623,8 +623,6 @@ types country_panel_types
 							size = { 50 50 }
 							parentanchor = right|vcenter
 
-							blockoverride "datacontext " {}
-
 							blockoverride "rank_text" {
 								raw_text = "#BOLD [Country.GetCountryScorePositionDesc]"
 							}
@@ -909,12 +907,34 @@ types country_panel_types
 						text = "COUNTRY_GDP_ONE_LINE"
 					}
 					blockoverride "stats_value" {
-						raw_text = "@money![Country.GetGDP|Dv]"
+						raw_text = "DOMESTIC_COUNTRY_GDP"
 					}
 
 					blockoverride "stats_rank" {
 						text = "[Country.GetGDPRanking]"
 					}
+				}
+
+				#GDP Ownership
+				country_stats_entry = {
+					onmousehierarchyenter = "[SetTempMapModeByKey('mm_gdp_ownership_ratio')]"
+					onmousehierarchyleave = "[RemoveTempMapMode]"
+					alwaystransparent = no
+
+					blockoverride "stats_tooltip" {
+						tooltip = "COUNTRY_GDP_OWNERSHIP_TOOLTIP"
+					}
+					blockoverride "information_icon" {
+						texture = "gfx/interface/buttons/button_icons/foreign_invest.dds"
+					}
+					blockoverride "stats_label" {
+						text = "[concept_gdp_ownership]"
+					}
+					blockoverride "stats_value" {
+						raw_text = "COUNTRY_ALL_OWNERSHIP"
+					}
+
+					blockoverride "stats_rank" {}
 				}
 
 				##POPULATION
@@ -1017,7 +1037,7 @@ types country_panel_types
 						text = "COUNTRY_RELIGIONS_ONE_LINE"
 					}
 					blockoverride "stats_value" {
-						raw_text = "#v [Country.GetStateReligion.GetName]#!"
+						raw_text = "#v [Country.GetStateReligion.GetNameNoIcon]#!"
 					}
 				}
 
@@ -1608,7 +1628,10 @@ types diplomatic
 			rank_badge = {
 				size = { 45 45 }
 				position = { 0 10 }
-				datacontext = "[AccessPlayer.AccessOverlord]"
+
+				block "overlord_datacontext" {
+					datacontext = "[AccessPlayer.AccessOverlord]"
+				}
 
 				blockoverride "font_size_under_100_rank" {
 					using = fontsize_medium

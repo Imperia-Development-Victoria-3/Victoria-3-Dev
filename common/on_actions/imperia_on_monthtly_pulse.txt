@@ -13,7 +13,7 @@
 			# If theres infamy present...
 			if = {
 				limit = {
-					has_law = law_type:law_command_economy
+					has_law_or_variant = law_type:law_command_economy
 				}
 				# Give command economies their own modifiers
 				add_modifier = {
@@ -141,29 +141,29 @@
 		remove_modifier ?= modifier_state_religion_health_discount
 		if = {
 			limit = {
-				has_law = law_type:law_state_religion
+				has_law_or_variant = law_type:law_state_religion
 			}
 			if = {
 				limit = {
-					has_law = law_type:law_faith_orders
+					has_law_or_variant = law_type:law_faith_orders
 				}
 				add_modifier = modifier_state_religion_home_defence_discount
 			}
 			if = {
 				limit = {
-					has_law = law_type:law_inquisition
+					has_law_or_variant = law_type:law_inquisition
 				}
 				add_modifier = modifier_state_religion_home_affairs_discount
 			}
 			if = {
 				limit = {
-					has_law = law_type:law_religious_schools
+					has_law_or_variant = law_type:law_religious_schools
 				}
 				add_modifier = modifier_state_religion_education_discount
 			}
 			if = {
 				limit = {
-					has_law = law_type:law_charitable_health_system
+					has_law_or_variant = law_type:law_charitable_health_system
 				}
 				add_modifier = modifier_state_religion_health_discount
 			}
@@ -364,37 +364,38 @@
 		if = {
 			limit = {
 				NOT = {
-					has_variable = imperia_arms_deal_active
+					any_scope_treaty = {
+						any_scope_article = {
+							has_type = military_assistance
+							target_country ?= root
+						}
+					}
+				}
+				# Check if the country has the penalty, just so it doesnt start stacking
+				NOT = {
+					has_modifier = imperia_invalid_mobilization_option_penalty
 				}
 				OR = {
 					AND = {
-						NOT = {
-							has_technology_researched = gunsmithing
-						}
+						can_use_mobilization_option_flintlocks = no
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
 						}
 					}
 					AND = {
-						NOT = {
-							has_technology_researched = rifling
-						}
+						can_use_mobilization_option_caplocks = no
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_caplocks
 						}
 					}
 					AND = {
-						NOT = {
-							has_technology_researched = repeaters
-						}
+						can_use_mobilization_option_repeaters = no
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_repeaters
 						}
 					}
 					AND = {
-						NOT = {
-							has_technology_researched = bolt_action_rifles
-						}
+						can_use_mobilization_option_bolt_action_rifles = no
 						any_military_formation = {
 							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
 						}
@@ -516,6 +517,109 @@
 				remove_global_variable ?= every_german_major_has_pan_nationalism
 			}
 		}
+		# Swap trade policy to match overlord if viceroyalty
+		if = {
+			limit = {
+				overlord.active_law:lawgroup_trade_policy.type != root.active_law:lawgroup_trade_policy.type
+				overlord.active_law:lawgroup_trade_policy.type != law_type:law_canton_system
+				is_subject = yes
+				is_subject_type = imperia_subject_type_viceroyalty
+			}
+			activate_law = overlord.active_law:lawgroup_trade_policy.type
+		}
+		# Swap away from tribal levies if conditions are no longer met
+		if = {
+			limit = {
+				has_law = law_type:law_tribal_levies
+				can_have_tribal_levies = no
+			}
+			activate_law = law_type:law_peasant_levies
+		}
+		# Give a mass migration of Jewish pops if the root-country is Jewish and the Jewish pops live in a country that discriminates against them
+		if = {
+			limit = {
+				country_has_state_religion = rel:jewish
+				any_country = {
+					NOT = {
+						country_has_state_religion = rel:jewish
+					}
+					any_scope_pop = {
+						pop_acceptance < 60
+						culture = {
+							has_discrimination_trait = tradition_israelite
+						}
+					}
+				}
+			}
+			random_scope_state = {
+				limit = {
+					is_incorporated = yes
+				}
+				save_scope_as = migration_state
+			}
+			random_country = {
+				limit = {
+					NOT = {
+						country_has_state_religion = rel:jewish
+					}
+					any_scope_pop = {
+						pop_acceptance <= 60
+						culture = {
+							has_discrimination_trait = tradition_israelite
+						}
+					}
+				}
+				save_scope_as = migration_country
+				random_scope_pop = {
+					limit = {
+						pop_acceptance <= 60
+						culture = {
+							has_discrimination_trait = tradition_israelite
+						}
+					}
+					save_scope_as = migration_pop
+				}
+			}
+			if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_closed_borders
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.05
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_migration_controls
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					scope:migration_country = {
+						has_law = law_type:law_no_migration_controls
+					}
+				}
+				scope:migration_pop = {
+					move_partial_pop = {
+						state = scope:migration_state
+						population_ratio = 0.2
+					}
+				}
+			}
+		}
 	}
 	random_events = {
 		23 = 0
@@ -523,6 +627,8 @@
 	}
 	events = {
 		infamy_rebalance.1	#updates provinces each month
+		imperia_sinosphere.4
+		imperia_sinosphere.5
 	}
 }
 
@@ -700,3 +806,4 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 		}
 	}
 }
+

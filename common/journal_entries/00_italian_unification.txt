@@ -1,6 +1,18 @@
 ﻿je_risorgimento = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_historical_content
+	
+	is_shown_in_lobby = {
+		OR = {
+			country_has_primary_culture = cu:north_italian
+			country_has_primary_culture = cu:south_italian
+		}
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+		}
+	}
+	
 	is_shown_when_inactive = {
 		OR = {
 			country_has_primary_culture = cu:north_italian
@@ -9,6 +21,10 @@
 		NOR = {
 			is_revolutionary = yes
 			is_secessionist = yes
+		}
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
 		}
 	}
 	
@@ -40,10 +56,13 @@
 		cu:south_italian = {
 			save_scope_as = south_italian_scope
 		}
-		trigger_event = {
-			id = italian_unification.10
-			popup = yes
+		random_political_movement = {
+			limit = {
+				is_political_movement_type = movement_italian_national
+			}
+			save_scope_as = italian_national_movement
 		}
+		trigger_event = { id = italian_unification.10 popup = yes }
 	}
 	possible = {
 		has_technology_researched = nationalism

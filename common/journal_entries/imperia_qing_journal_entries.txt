@@ -14,7 +14,7 @@ je_chinese_national_identity = {
 			percent >= 0.75
 		}
 		NOT = {
-			has_law = law_type:law_no_schools
+			has_law_or_variant = law_type:law_no_schools
 		}
 		institution_investment_level = {
 			institution = institution_schools
@@ -36,11 +36,15 @@ je_chinese_national_identity = {
 je_end_han_discrimination = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 	group = je_group_historical_content
+	modifiers_while_active = {
+		modifier_han_second_class
+	}
 	complete = {
-		has_law = law_type:law_cultural_exclusion
+		has_law_or_variant = law_type:law_cultural_exclusion
 	}
 	on_complete = {
 		remove_modifier = modifier_anti_manchu_sentiment
+		add_primary_culture = cu:han
 		add_loyalists = {
 			value = 0.1
 			culture = cu:han
@@ -62,6 +66,11 @@ je_end_han_discrimination = {
 			text = fragile_unity_major_add_tt
 			set_variable = je_end_han_discrimination_failed
 		}
+		add_primary_culture = cu:han
+		add_radicals = {
+			value = 0.2
+			culture = cu:han
+		}
 	}
 	on_monthly_pulse = {
 		random_events = {
@@ -81,7 +90,7 @@ je_qing_administrative_reform = {
 				institution = institution_police
 				value >= 3
 			}
-			has_law = law_type:law_dedicated_police
+			has_law_or_variant = law_type:law_dedicated_police
 			bureaucracy >= 0
 			approaching_bureaucracy_shortage = no
 			has_technology_researched = central_archives
@@ -115,8 +124,8 @@ je_end_female_infanticide = {
 	group = je_group_historical_content
 	complete = {
 		OR = {
-			has_law = law_type:law_women_in_the_workplace
-			has_law = law_type:law_womens_suffrage
+			has_law_or_variant = law_type:law_women_in_the_workplace
+			has_law_or_variant = law_type:law_womens_suffrage
 		}
 	}
 	on_complete = {
@@ -133,18 +142,18 @@ je_rural_poverty_qing = {
 			AND = {
 				average_sol >= 10
 				OR = {
-					has_law = law_type:law_tenant_farmers
-					has_law = law_type:law_commercialized_agriculture
+					has_law_or_variant = law_type:law_tenant_farmers
+					has_law_or_variant = law_type:law_commercialized_agriculture
 				}
 			}
 			OR = {
-				has_law = law_type:law_homesteading
-				has_law = law_type:law_collectivized_agriculture
+				has_law_or_variant = law_type:law_homesteading
+				has_law_or_variant = law_type:law_collectivized_agriculture
 			}
 		}
 		NOR = {
-			has_law = law_type:law_consumption_based_taxation
-			has_law = law_type:law_land_based_taxation
+			has_law_or_variant = law_type:law_consumption_based_taxation
+			has_law_or_variant = law_type:law_land_based_taxation
 		}
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -197,8 +206,9 @@ je_investigate_military_reform = {
 	}
 	complete = {
 		has_technology_researched = line_infantry
-		NOT = {
-			has_law = law_type:law_peasant_levies
+		ig:ig_armed_forces ?= {
+			ig_approval >= 10
+			is_powerful = no
 		}
 	}
 	on_complete = {
@@ -249,9 +259,9 @@ je_reform_the_banner_system_local = {
 			army_size >= 50
 			has_technology_researched = napoleonic_warfare
 			OR = {
-				has_law = law_type:law_national_guard
-				has_law = law_type:law_localized_garrisons
-				has_law = law_type:law_faith_orders
+				has_law_or_variant = law_type:law_national_guard
+				has_law_or_variant = law_type:law_localized_garrisons
+				has_law_or_variant = law_type:law_faith_orders
 			}
 			any_military_formation = {
 				filter = {
@@ -271,12 +281,12 @@ je_reform_the_banner_system_local = {
 		trigger_event = {
 			id = imperia_qing.4
 		}
-		remove_modifier = modifier_crumbling_banner_system
+		
 		set_variable = chose_yong_ying
 	}
 	invalid = {
 		NOT = {
-			has_modifier = modifier_crumbling_banner_system
+			has_law = law_type:law_banner_system
 		}
 	}
 	current_value = {
@@ -328,15 +338,196 @@ je_reform_the_banner_system_modern = {
 		trigger_event = {
 			id = imperia_qing.4
 		}
-		remove_modifier = modifier_crumbling_banner_system
 		set_variable = chose_new_army
 	}
 	invalid = {
 		NOT = {
-			has_modifier = modifier_crumbling_banner_system
+			has_law = law_type:law_banner_system
 		}
 	}
 	weight = 1000
+}
+
+je_hundred_days_reform = {
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	group = je_group_historical_content
+	scripted_button = je_hundred_days_reform_modernizer_conversion_button
+	scripted_button = je_hundred_days_reform_enthusiasm_button
+	scripted_button = je_hundred_days_reform_force_enactment_button
+	# Progress Bar
+	scripted_progress_bar = hundred_days_reform_enthusiasm_progress_bar
+	modifiers_while_active = {
+		qing_reforms_hundred_days_reform_momentum
+	}
+	is_shown_when_inactive = {
+		root ?= c:CHI
+		# Done this way to show it a bit earlier and more dynamically depending on conditions, requirements are still the same
+		calc_true_if = {
+			amount >= 4
+			year >= 1880
+			ruler = {
+				age >= define:NCharacters|ADULT_AGE
+			}
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_modernizer_leader
+					# Will rapidly spit errors if this is used directly on a character while the JE is not triggered... 
+					# Looks a bit uggo, but better than 1000 errors a second
+					interest_group = {
+						NOT = {
+							is_interest_group_type = ig_landowners
+						}
+					}
+				}
+			}
+			has_law = law_type:law_monarchy
+			has_journal_entry = je_warlord_china
+		}
+	}
+	possible = {
+		year >= 1880
+		ruler = {
+			age >= define:NCharacters|ADULT_AGE
+			OR = {
+				has_ideology = ideology:ideology_modernizer_leader
+				interest_group = {
+					NOT = {
+						is_interest_group_type = ig_landowners
+					}
+				}
+			}
+		}
+		has_law = law_type:law_monarchy
+		has_journal_entry = je_warlord_china
+	}
+	complete = {
+		# Promote Capitalism (Interventionism or Laissez Faire, Protectionism, Commercialized Agriculture)
+		custom_tooltip = {
+			text = concept_qing_reform_promote_capitalism_tt
+			AND = {
+				OR = {
+					has_law = law_type:law_interventionism
+					has_law = law_type:law_laissez_faire
+				}
+				has_law = law_type:law_protectionism
+				has_law = law_type:law_commercialized_agriculture
+			}
+		}
+		# Adopt Modern Military Training (army has repeaters or bolt-actions activated and advanced tactics training)
+		custom_tooltip = {
+			text = concept_qing_reform_adopt_modern_military_tt
+			AND = {
+				OR = {
+					army_mobilization_option_fraction = {
+						target = mobilization_option:mobilization_option_repeaters
+						value >= 0.8
+					}
+					army_mobilization_option_fraction = {
+						target = mobilization_option:mobilization_option_bolt_actions
+						value >= 0.8
+					}
+				}
+				# And advanced tactics training for 80% of army
+				any_scope_building = {
+					filter = {
+						is_building_type = building_barracks
+					}
+					has_active_production_method = pm_advanced_tactics_training
+					percent = 0.8
+				}
+			}
+		}
+		# Establish a constitution (wealth, census or universal suffrage)
+		custom_tooltip = {
+			text = concept_qing_reform_adopt_constitution_tt
+			OR = {
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_universal_suffrage
+			}
+		}
+		# Standardize the Chinese Language (Establish National Language JE completion, either has Prestige Dialect or supported Prestige Dialect modifier.)
+		custom_tooltip = {
+			text = concept_qing_reform_standardize_language_tt
+			OR = {
+				has_modifier = modifier_prestige_dialect
+				has_modifier = modifier_accepted_prestige_dialect
+			}
+		}
+		# Abolish 'Booi Aha'
+		custom_tooltip = {
+			text = concept_qing_reform_abolish_boii_aha_tt
+			NOT = {
+				has_law = law_type:law_booi_aha
+			}
+		}
+		custom_tooltip = {
+			text = je_hundred_days_reform_100_enthusiasm_tt
+			scope:journal_entry ?= {
+				"scripted_bar_progress(hundred_days_reform_enthusiasm_progress_bar)" >= 100
+			}
+		}
+	}
+	on_complete = {
+		custom_tooltip = {
+			text = fragile_unity_significant_remove_tt
+			set_variable = je_hundred_days_reform_completed
+		}
+		if = {
+			limit = {
+				has_journal_entry = je_earn_recognition
+			}
+			je:je_earn_recognition ?= {
+				add_progress = {
+					value = 100
+					name = earn_recognition_progress_bar
+				}
+			}
+		}
+		else = {
+			custom_tooltip = 100_progress_on_recognition_if_je_active_tt
+		}
+	}
+	fail = {
+		custom_tooltip = {
+			text = je_hundred_days_reform_0_enthusiasm_tt
+			scope:journal_entry ?= {
+				"scripted_bar_progress(hundred_days_reform_enthusiasm_progress_bar)" <= 0
+			}
+		}
+	}
+	on_fail = {
+		custom_tooltip = {
+			text = fragile_unity_significant_add_tt
+			set_variable = je_hundred_days_reform_failed
+		}
+		add_modifier = {
+			name = qing_reforms_hundred_days_reform_momentum
+			years = 20
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_law = law_type:law_autocracy
+				}
+			}
+			activate_law = law_type:law_autocracy
+		}
+	}
+	on_monthly_pulse = {
+		random_events = {
+			chance_of_no_event = 75
+			1 = imperia_hundred_days.1	# Literary War
+			1 = imperia_hundred_days.2	# Malicious Compliance
+			1 = imperia_hundred_days.3	# Foreign Gaze
+			1 = imperia_hundred_days.4	# Student Reformists
+			1 = imperia_hundred_days.5	# Question of the Imperial Examination
+			1 = imperia_hundred_days.6	# The [intel_leader] Affair
+			1 = imperia_hundred_days.7	# A Whiff of Weakness
+		}
+	}
+	weight = 1000
+	should_be_pinned_by_default = yes
 }
 
 ##Local Entries
@@ -348,9 +539,9 @@ je_establish_local_armies = {
 		army_size >= 50
 		has_technology_researched = napoleonic_warfare
 		OR = {
-			has_law = law_type:law_national_guard
-			has_law = law_type:law_localized_garrisons
-			has_law = law_type:law_faith_orders
+			has_law_or_variant = law_type:law_national_guard
+			has_law_or_variant = law_type:law_localized_garrisons
+			has_law_or_variant = law_type:law_faith_orders
 		}
 		NOT = {
 			any_scope_building = {
@@ -368,19 +559,6 @@ je_establish_local_armies = {
 				exists = c:CHI
 				is_subject_of = c:CHI
 			}
-			c:CHI = {
-				change_variable = {
-					name = yong_ying_var
-					add = 1
-				}
-			}
-			add_modifier = {
-				name = modifier_local_armies
-				months = 240
-			}
-		}
-		else = {
-			remove_modifier = modifier_crumbling_banner_system
 			c:CHI ?= {
 				change_variable = {
 					name = yong_ying_var
@@ -388,6 +566,7 @@ je_establish_local_armies = {
 				}
 			}
 		}
+		activate_law = law_type:law_peasant_levies
 	}
 	fail = {
 		NOT = {
@@ -395,10 +574,16 @@ je_establish_local_armies = {
 		}
 	}
 	on_fail = {
-		remove_modifier = modifier_crumbling_banner_system
+		activate_law = law_type:law_peasant_levies
 	}
 	invalid = {
-		has_global_variable = china_shatters
+		OR = {
+			has_global_variable = china_shatters
+			NOT = {
+				has_law = law_type:law_banner_system
+			}
+		}
+		
 	}
 	weight = 1000
 }
@@ -408,11 +593,11 @@ je_rural_poverty_substate = {
 	group = je_group_historical_content
 	complete = {
 		NOT = {
-			has_law = law_type:law_serfdom
+			has_law_or_variant = law_type:law_serfdom
 		}
 		NOR = {
-			has_law = law_type:law_consumption_based_taxation
-			has_law = law_type:law_land_based_taxation
+			has_law_or_variant = law_type:law_consumption_based_taxation
+			has_law_or_variant = law_type:law_land_based_taxation
 		}
 	}
 	on_complete = {
@@ -460,8 +645,7 @@ je_industrialize_china = {
 	on_complete = {
 		add_modifier = {
 			name = modifier_great_leap_forward
-			months = 240
-			is_decaying = yes
+			months = 120
 		}
 	}
 	weight = 1000
@@ -478,7 +662,7 @@ je_promote_western_learning = {
 			level >= 5
 		}
 		NOT = {
-			has_law = law_type:law_no_schools
+			has_law_or_variant = law_type:law_no_schools
 		}
 		institution_investment_level = {
 			institution = institution_schools
@@ -488,8 +672,7 @@ je_promote_western_learning = {
 	on_complete = {
 		add_modifier = {
 			name = modifier_self_strengthening_movement
-			months = 240
-			is_decaying = yes
+			months = 120
 		}
 	}
 	weight = 1000
@@ -509,10 +692,10 @@ je_pacify_highland_tribes = {
 				institution = institution_police
 				value >= 2
 			}
-			has_law = law_type:law_dedicated_police
+			has_law_or_variant = law_type:law_dedicated_police
 			NOR = {
-				has_law = law_type:law_traditionalism
-				has_law = law_type:law_localized_garrisons
+				has_law_or_variant = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_localized_garrisons
 			}
 			bureaucracy >= 0
 			approaching_bureaucracy_shortage = no
@@ -556,10 +739,10 @@ je_gateway_to_the_west = {
 				is_building_type = building_port
 				level >= 10
 			}
-			has_law = law_type:law_free_trade
+			has_law_or_variant = law_type:law_free_trade
 			NOR = {
-				has_law = law_type:law_traditionalism
-				has_law = law_type:law_agrarianism
+				has_law_or_variant = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_agrarianism
 			}
 		}
 	}
@@ -591,8 +774,8 @@ je_breadbasket_of_the_south = {
 			percent < 0.6
 		}
 		OR = {
-			has_law = law_type:law_interventionism
-			has_law = law_type:law_laissez_faire
+			has_law_or_variant = law_type:law_interventionism
+			has_law_or_variant = law_type:law_laissez_faire
 		}
 	}
 	on_complete = {
@@ -626,7 +809,7 @@ je_settle_the_steppe = {
 	}
 	complete = {
 		total_population > 12000000
-		has_law = law_type:law_cultural_exclusion
+		has_law_or_variant = law_type:law_cultural_exclusion
 		s:STATE_SHENGJING.region_state:MCH ?= {
 			any_scope_building = {
 				is_building_type = building_urban_center
@@ -714,26 +897,37 @@ je_silk_march = {
 	}
 	complete = {
 		AND = {
-			institution_investment_level = {
-				institution = institution_home_defence
-				value >= 3
-			}
 			OR = {
-				has_law = law_type:law_national_guard
-				has_law = law_type:law_localized_garrisons
+				has_law_or_variant = law_type:law_national_guard
+				has_law_or_variant = law_type:law_localized_garrisons
 			}
-			any_scope_state = {
-				count = all
-				custom_tooltip = {
-					text = tax_capacity_greater_than
-					tax_capacity >= tax_capacity_usage
+			AND = {
+				has_company = company_type:company_gansu_military_farms
+				any_company = {
+					AND = {
+						is_company_type = company_type:company_gansu_military_farms
+						company_is_prosperous = yes
+					}
+					
 				}
 			}
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
 		}
 	}
 	on_complete = {
-		add_modifier = {
-			name = modifier_silk_march
+		every_state = {
+			limit = {
+				OR = {
+					state_region = s:STATE_GANSU
+					state_region = s:STATE_NINGXIA
+				}
+			}
+			add_modifier = modifier_silk_march
+		}
+		remove_company = company_type:company_gansu_military_farms
+		custom_tooltip = {
+			text = shaan_gan_dev_company_tt
 		}
 		c:CHI ?= {
 			custom_tooltip = {

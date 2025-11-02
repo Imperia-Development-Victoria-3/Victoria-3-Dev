@@ -7,10 +7,10 @@
 	possible = {
 		has_technology_researched = empiricism
 		OR = {
-			ig:ig_landowners = {
+			ig:ig_landowners ?= {
 				is_powerful = yes
 			}
-			ig:ig_devout = {
+			ig:ig_devout ?= {
 				is_powerful = yes
 			}
 		}
@@ -80,8 +80,8 @@
 	
 	fail = {
 		OR = {
-			NOT = { has_law = law_type:law_state_religion }
-			NOT = { has_law = law_type:law_autocracy }
+			NOT = { has_law_or_variant = law_type:law_state_religion }
+			NOT = { has_law_or_variant = law_type:law_autocracy }
 		}
 	}
 	current_value = {
@@ -100,5 +100,100 @@
 		add = 300
 	}
 	progressbar = yes
+	weight = 100
+}
+
+je_king_in_parliament = {
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	
+	group = je_group_internal_affairs
+	
+	immediate = {
+		set_variable = {
+			name = parliamentarianism_var
+			value = 0
+		}
+	}
+	
+	on_monthly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_civil_war = {
+							civil_war_progress >= 0.75
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_law_or_variant = law_type:law_monarchy
+						country_has_voting_franchise = yes
+					}
+					change_variable = {
+						name = parliamentarianism_var
+						add = 1
+					}
+				}
+			}
+		}
+	}
+	
+	complete = {
+		scope:journal_entry = {
+			is_goal_complete = yes
+		}
+		has_law_or_variant = law_type:law_monarchy
+		country_has_voting_franchise = yes
+		NOT = {
+			any_civil_war = {
+				civil_war_progress >= 0.75
+			}
+		}
+	}
+	
+	on_complete = {
+		remove_variable = king_in_parliament_possible
+		trigger_event = {
+			id = autocracy.4
+		}
+	}
+	
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_autocracy.4_tt
+			}
+		}
+	}
+	
+	current_value = {
+		value = root.var:parliamentarianism_var
+	}
+	
+	goal_add_value = {
+		add = 120
+	}
+	
+	invalid = {
+		OR = {
+			NOT = {
+				has_law_or_variant = law_type:law_monarchy
+			}
+			NOR = {
+				is_enacting_law = law_type:law_landed_voting
+				is_enacting_law = law_type:law_wealth_voting
+				is_enacting_law = law_type:law_census_voting
+				is_enacting_law = law_type:law_universal_suffrage
+				is_enacting_law = law_type:law_single_party_state
+				country_has_voting_franchise = yes
+			}
+		}
+	}
+	
+	progressbar = yes
+	
+	should_be_pinned_by_default = yes
+	
 	weight = 100
 }

@@ -17,21 +17,7 @@
 				market_goods_sell_orders > 0
 			}
 		}
-		OR = {
-			has_technology_researched = gunsmithing
-			any_scope_treaty = {
-				any_scope_article = {
-					has_type = military_assistance
-					target_country ?= root
-					custom_tooltip = {
-						text = MILITARY_ASSISTANCE_SOURCE_MUST_HAVE_RESEARCHED_GUNSMITHING
-						source_country ?= {
-							has_technology_researched = gunsmithing
-						}
-					}
-				}
-			}
-		}
+		can_use_mobilization_option_flintlocks = yes
 	}
 	on_activate_while_mobilized = {
 		custom_tooltip = {
@@ -61,7 +47,33 @@
 		unit_morale_damage_mult = 0.05
 	}
 	ai_weight = {
-		value = 1
+		value = 0	# Dont use, unless...
+		if = {	# You can use flintlocks or caplocks (so the AI doesnt hop off mid-war if new arnament becomes available)
+			limit = {
+				OR = {
+					can_use_mobilization_option_flintlocks = yes
+					can_use_mobilization_option_caplocks = yes
+				}
+				can_use_mobilization_option_repeaters = no	# But not repeaters, dont want to use flintlocks that late..
+			}
+			# It's important to note that (according to documentation) the ai_weight will consider the cost of the option and the modifiers given, when calculating the final weight
+			# Therefore the AI weight is more here to make sure it upgrades under the right conditions...
+			add = 1
+		}
+		if = {	# If you can use caplocks, are not mobilized and have access to ammo, switch off so the AI will consider caplocks
+			limit = {
+				scope:military_formation = {
+					is_mobilized = no
+				}
+				can_use_mobilization_option_caplocks = yes
+				market = {
+					mg:ammunition = {
+						market_goods_sell_orders > 0
+					}
+				}
+			}
+			value = 0	# (reset to 0)
+		}
 	}
 	group = armaments
 }
@@ -88,21 +100,7 @@ mobilization_option_caplocks = {
 				market_goods_sell_orders > 0
 			}
 		}
-		OR = {
-			has_technology_researched = rifling
-			any_scope_treaty = {
-				any_scope_article = {
-					has_type = military_assistance
-					target_country ?= root
-					custom_tooltip = {
-						text = MILITARY_ASSISTANCE_SOURCE_MUST_HAVE_RESEARCHED_RIFLING
-						source_country ?= {
-							has_technology_researched = rifling
-						}
-					}
-				}
-			}
-		}
+		can_use_mobilization_option_caplocks = yes
 	}
 	on_activate_while_mobilized = {
 		custom_tooltip = {
@@ -123,8 +121,8 @@ mobilization_option_caplocks = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_small_arms_add = 1.6
-		goods_input_ammunition_add = 0.9
+		goods_input_small_arms_add = 1.5
+		goods_input_ammunition_add = 0.75
 	}
 	unit_modifier = {
 		unit_offense_add = 15
@@ -133,7 +131,26 @@ mobilization_option_caplocks = {
 		unit_morale_damage_mult = 0.1
 	}
 	ai_weight = {
-		value = 1
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					can_use_mobilization_option_caplocks = yes
+					can_use_mobilization_option_repeaters = yes
+				}
+				can_use_mobilization_option_bolt_action_rifles = no
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				scope:military_formation = {
+					is_mobilized = no
+				}
+				can_use_mobilization_option_repeaters = yes
+			}
+			value = 0
+		}
 	}
 	group = armaments
 }
@@ -160,21 +177,7 @@ mobilization_option_repeaters = {
 				market_goods_sell_orders > 0
 			}
 		}
-		OR = {
-			has_technology_researched = repeaters
-			any_scope_treaty = {
-				any_scope_article = {
-					has_type = military_assistance
-					target_country ?= root
-					custom_tooltip = {
-						text = MILITARY_ASSISTANCE_SOURCE_MUST_HAVE_RESEARCHED_REPEATERS
-						source_country ?= {
-							has_technology_researched = repeaters
-						}
-					}
-				}
-			}
-		}
+		can_use_mobilization_option_repeaters = yes
 	}
 	on_activate_while_mobilized = {
 		custom_tooltip = {
@@ -195,8 +198,8 @@ mobilization_option_repeaters = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_small_arms_add = 2.25	#2.5
-		goods_input_ammunition_add = 2.5
+		goods_input_small_arms_add = 2	#2.5
+		goods_input_ammunition_add = 1.75
 	}
 	unit_modifier = {
 		unit_offense_add = 30
@@ -206,7 +209,25 @@ mobilization_option_repeaters = {
 		unit_occupation_mult = 0.05
 	}
 	ai_weight = {
-		value = 1
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					can_use_mobilization_option_repeaters = yes
+					can_use_mobilization_option_bolt_action_rifles = yes
+				}
+			}
+			add = 1
+		}
+		if = {
+			limit = {
+				scope:military_formation = {
+					is_mobilized = no
+				}
+				can_use_mobilization_option_bolt_action_rifles = yes
+			}
+			value = 0
+		}
 	}
 	group = armaments
 }
@@ -233,21 +254,7 @@ mobilization_option_bolt_actions = {
 				market_goods_sell_orders > 0
 			}
 		}
-		OR = {
-			has_technology_researched = bolt_action_rifles
-			any_scope_treaty = {
-				any_scope_article = {
-					has_type = military_assistance
-					target_country ?= root
-					custom_tooltip = {
-						text = MILITARY_ASSISTANCE_SOURCE_MUST_HAVE_RESEARCHED_BOLT_ACTION
-						source_country ?= {
-							has_technology_researched = bolt_action_rifles
-						}
-					}
-				}
-			}
-		}
+		can_use_mobilization_option_bolt_action_rifles = yes
 	}
 	on_activate_while_mobilized = {
 		custom_tooltip = {
@@ -269,7 +276,7 @@ mobilization_option_bolt_actions = {
 	}
 	upkeep_modifier = {
 		goods_input_small_arms_add = 3
-		goods_input_ammunition_add = 5
+		goods_input_ammunition_add = 4.5
 	}
 	unit_modifier = {
 		unit_offense_add = 50
@@ -280,7 +287,13 @@ mobilization_option_bolt_actions = {
 	}
 	
 	ai_weight = {
-		value = 1
+		value = 0
+		if = {
+			limit = {
+				can_use_mobilization_option_bolt_action_rifles = yes
+			}
+			add = 1
+		}
 	}
 	group = armaments
 }
@@ -505,10 +518,14 @@ mobilization_option_basic_uniforms = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_clothes_add = 0.5
+		goods_input_fabric_add = 0.5
+		goods_input_clothes_add = 0.25
 	}
 	unit_modifier = {
 		unit_recovery_rate_add = 0.05
+		military_formation_movement_speed_mult = 0.05
+		military_formation_mobilization_speed_mult = 0.1
+		unit_morale_loss_mult = 0.05
 	}
 	ai_weight = {
 		value = 1
@@ -558,10 +575,11 @@ mobilization_option_dress_uniforms = {
 		goods_input_luxury_clothes_add = 0.5
 	}
 	unit_modifier = {
-		character_battle_condition_blunder_mult = -0.05
-		character_battle_condition_camouflaged_mult = -0.1
-		unit_morale_damage_mult = 0.1
+		character_battle_condition_blunder_mult = -0.1
+		character_battle_condition_camouflaged_mult = -0.15
+		unit_morale_damage_mult = 0.15
 		unit_morale_loss_mult = -0.05
+		military_formation_movement_speed_mult = 0.1
 		unit_recovery_rate_add = -0.1
 	}
 	ai_weight = {
@@ -614,9 +632,11 @@ mobilization_option_camouflaged_uniforms = {
 	}
 	unit_modifier = {
 		character_battle_condition_blunder_mult = 0.05
-		character_battle_condition_camouflaged_mult = 0.15
-		unit_morale_damage_mult = 0.15
-		unit_recovery_rate_add = -0.05
+		character_battle_condition_camouflaged_mult = 0.25
+		battle_offense_owned_province_mult = 0.1
+		battle_defense_owned_province_mult = 0.1
+		unit_occupation_mult = -0.25
+		military_formation_movement_speed_mult = -0.1
 	}
 	ai_weight = {
 		value = 1
@@ -666,13 +686,15 @@ mobilization_option_drab_uniforms = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_clothes_add = 0.5
+		goods_input_clothes_add = 0.6
 		goods_input_steel_add = 0.1
 	}
 	unit_modifier = {
 		unit_defense_add = 10
+		military_formation_movement_speed_mult = 0.2
+		unit_recovery_rate_add = 0.15
+		unit_morale_recovery_mult = 0.1
 		unit_morale_loss_mult = 0.1
-		unit_recovery_rate_add = 0.1
 	}
 	ai_weight = {
 		value = 1

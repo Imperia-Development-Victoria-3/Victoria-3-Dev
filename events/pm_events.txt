@@ -23,7 +23,7 @@ pm_events.1 = {
 	trigger = {
 		OR = {
 			has_law_anti_workers_rights = yes
-			has_law = law_type:law_serfdom
+			has_law_or_variant = law_type:law_serfdom
 		}
 		any_scope_state = {
 			has_industrialized_pm = yes
@@ -105,7 +105,7 @@ pm_events.2 = {
 	cooldown = { days = stupidly_long_modifier_time }
 	
 	trigger = {
-		has_law = law_type:law_child_labor_allowed
+		has_law_or_variant = law_type:law_child_labor_allowed
 		any_scope_state = {
 			has_industrialized_pm = yes
 		}
@@ -191,7 +191,7 @@ pm_events.3 = {
 				has_modifier = liquor_production_restrictions
 			}
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			NOR = {
 				has_modifier = permitted_limited_liquor_production
 				has_modifier = permitted_unrestricted_liquor_production
@@ -249,7 +249,7 @@ pm_events.3 = {
 				days = normal_modifier_time
 			}
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			add_modifier = {
 				name = permitted_limited_liquor_production
 				days = normal_modifier_time
@@ -269,7 +269,7 @@ pm_events.3 = {
 	
 	option = {
 		name = pm_events.3.c
-		ig:ig_devout = {
+		ig:ig_devout ?= {
 			add_modifier = {
 				name = permitted_unrestricted_liquor_production
 				days = normal_modifier_time
@@ -446,7 +446,8 @@ pm_events.5 = {
 		scope:vinyard_state = {
 			add_modifier = {
 				name = popular_wine
-				days = normal_modifier_time
+				days = long_modifier_time
+				is_decaying = yes
 			}
 		}
 		default_option = yes

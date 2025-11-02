@@ -15,16 +15,21 @@
 	
 	possible = {
 		has_technology_researched = political_agitation
-		ig:ig_landowners = {
+		ig:ig_landowners ?= {
 			is_in_government = yes
-			is_strongest_ig_in_government = yes
+			trigger_if = {
+				limit = {
+					is_in_government = yes
+				}
+				is_strongest_ig_in_government = yes
+			}
 		}
-		ig:ig_petty_bourgeoisie = {
+		ig:ig_petty_bourgeoisie ?= {
 			is_marginal = no
 		}
 		OR = {
 			AND = {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				custom_tooltip = {
 					text = completed_coffee_and_milk_je_tt
 					OR = {
@@ -33,22 +38,22 @@
 					}
 				}
 			}
-			has_law = law_type:law_presidential_republic
-			has_law = law_type:law_parliamentary_republic
+			has_law_or_variant = law_type:law_presidential_republic
+			has_law_or_variant = law_type:law_parliamentary_republic
 		}
 		OR = {
-			has_law = law_type:law_wealth_voting
-			has_law = law_type:law_landed_voting
+			has_law_or_variant = law_type:law_wealth_voting
+			has_law_or_variant = law_type:law_landed_voting
 		}
 	}
 	
 	scripted_progress_bar = populist_unrest_progress_bar
 	
 	immediate = {
-		ig:ig_landowners = {
+		ig:ig_landowners ?= {
 			save_scope_as = landowners_ig
 		}
-		ig:ig_petty_bourgeoisie = {
+		ig:ig_petty_bourgeoisie ?= {
 			save_scope_as = pb_ig
 		}
 		set_populism_vars = yes
@@ -104,7 +109,7 @@
 			if = {
 				limit = {
 					NOT = {
-						has_law = law_type:law_presidential_republic
+						has_law_or_variant = law_type:law_presidential_republic
 					}
 				}
 				activate_law = law_type:law_presidential_republic
@@ -196,11 +201,11 @@ je_new_republic = {
 			}
 		}
 		has_law_pro_workers_rights = yes
-		has_law = law_type:law_compulsory_primary_school
-		has_law = law_type:law_censorship
-		has_law = law_type:law_autocracy
-		has_law = law_type:law_interventionism
-		has_law = law_type:law_presidential_republic
+		has_law_or_variant = law_type:law_compulsory_primary_school
+		has_law_or_variant = law_type:law_censorship
+		has_law_or_variant = law_type:law_autocracy
+		has_law_or_variant = law_type:law_interventionism
+		has_law_or_variant = law_type:law_presidential_republic
 	}
 	
 	on_complete = {
