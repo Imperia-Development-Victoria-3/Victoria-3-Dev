@@ -4,7 +4,7 @@
 
 NMilitary = {
 	BATTLE_RAW_MANPOWER_INFLICTED_CASUALTY_RATIO = 0.45	#0.5 applied to the number of casualties caused by raw number of troops, ie without considering Offense/Defense - increasing this makes CE less important and battles more lethal
-	BATTLE_COMBAT_EFFICIENCY_INFLICTED_CASUALTY_RATIO = 1.55	#1.5 applied to the number of casualties caused by troops with Offense/Defense also factored in - increasing this makes CE more important and battles more lethal
+	BATTLE_COMBAT_EFFICIENCY_INFLICTED_CASUALTY_RATIO = 1.6	#1.5 applied to the number of casualties caused by troops with Offense/Defense also factored in - increasing this makes CE more important and battles more lethal
 	INTERCEPTION_DELAY_BASE_DAYS = 3	# was 5     # atleast this many days between each admiral interception attempt
 	INTERCEPTION_DELAY_MAX_RANDOM_DAYS_FACTOR = 7	# was 10    # up to this many extra days between each admiral interception attempt
 	INTERCEPTION_BASE_CHANCE = 0.4	# was 0.1   # base chance when trying to intercept enemy admirals
@@ -16,9 +16,9 @@ NMilitary = {
 	MILITARY_FORMATION_WEEKLY_MAX_UNIT_UPGRADES_FLEET = 0.04	# Each week a mobilized fleet can upgrade this (0.0-1.0) fraction of its total number of units.
 	MILITARY_FORMATION_ORGANIZATION_EXILE_MULT = -0.01	# Exiled Military Formation has its Target Organization modified: Target = Target * ( 1 + this )
 	ATTRITION_RISK_EXILED_ARMY_ADD = 0.1	# Exiled formation has attrition risk increased by this
-	ATTRITION_RISK_ON_ENEMY_TERRITORY_ADD = 0.2	# Exiled formation on enemy territory has attrition risk additionally increased by this
-	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MIN = 0.015	# The minimum percentage of manpower a unit can lose each week due to attrition
-	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MAX = 0.045	# The maximum percentage of manpower a unit can lose each week due to attrition
+	ATTRITION_RISK_ON_ENEMY_TERRITORY_ADD = 0.1	# Exiled formation on enemy territory has attrition risk additionally increased by this
+	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MIN = 0.02	# The minimum percentage of manpower a unit can lose each week due to attrition
+	MANPOWER_LOST_DUE_TO_ATTRITION_PER_WEEK_MAX = 0.05	# The maximum percentage of manpower a unit can lose each week due to attrition
 }
 
 NWar = {
@@ -32,7 +32,7 @@ NWar = {
 	WAR_EXHAUSTION_BASE = 0.05	#0.25
 	WAR_EXHAUSTION_KIA_FACTOR = 5.0	#20 # Scaled by casualties compared to total manpower
 	WAR_EXHAUSTION_KIA_BASE_MULTIPLIER = 0.04	#0.1	# War Exhaustion from casualties is always multiplied by at least this
-	WAR_EXHAUSTION_KIA_BATTLES_LOST_MULTIPLIER = 0.6	#0.25	# At 100% of battles lost by our side, War Exhaustion from casualties is further multiplied by this 
+	WAR_EXHAUSTION_KIA_BATTLES_LOST_MULTIPLIER = 0.8	#0.25	# At 100% of battles lost by our side, War Exhaustion from casualties is further multiplied by this 
 	WAR_EXHAUSTION_TURMOIL_FACTOR = 3	#2 At 100% turmoil
 	WAR_EXHAUSTION_CONTESTED_ENEMY_WARGOALS = 3.5	#2.5, 1
 	OCCUPATION_STATE_BASE_WEIGHT = 1
@@ -42,7 +42,7 @@ NWar = {
 	STATE_CONQUEST_HOMELAND_AND_CLAIM_DEMILITARIZATION = 0.25
 	STATE_CONQUEST_HOMELAND_OR_CLAIM_RADICALIZATION = 0.2
 	STATE_CONQUEST_HOMELAND_OR_CLAIM_DEMILITARIZATION = 0.5
-	STATE_CONQUEST_DEFAULT_RADICALIZATION = 0.4
+	STATE_CONQUEST_DEFAULT_RADICALIZATION = 0.35
 	STATE_CONQUEST_DEFAULT_DEMILITARIZATION = 0.75
 	NUM_PROVINCES_FOR_ADVANCEMENT_SELECTION = 5	# After having computed weights for possible advancement provinces using front_battle_province_weight, filter out all but the X top weighted provinces
 	OCCUPATION_STATE_DEFENSIVE_BATTLE_VICTORY_SCORE = 66	#100 How many occupation "points" each country receives after winning a defensive battle
@@ -113,19 +113,25 @@ NPolitics = {
 	IG_IN_OPPOSITION_APPROVAL = 0	# Added if IG is in opposition (and not powerful)
 	IG_POWERFUL_IN_OPPOSITION_APPROVAL = -1	# Added if powerful IG in opposition
 	STARTUP_MIN_LEGITIMACY_IG_BARRIER = 40	# Min legitimacy when on startup we allow to remove IGs from goverment that decrease legitimacy
+	
 	APPROVAL_THRESHOLD_ANGRY = -12	# -10 At this or below approval, IG is considered angry
 	APPROVAL_THRESHOLD_UNHAPPY = -5	# At this or below approval, IG is considered unhappy
 	APPROVAL_THRESHOLD_HAPPY = 5	# At this or above approval, IG is considered happy
 	APPROVAL_THRESHOLD_LOYAL = 12	# 10 At this or above approval, IG is considered loyal
 	CHANGED_LAW_APPROVAL_MONTHS = 60	# How many months does the approval/disapproval for a law change linger after said law chain
+	
 	IG_SUPPRESSION_COST = 250	# The amount of AUT it costs to Suppress an IG
 	IG_BOLSTER_COST = 250	# The amount of AUT it costs to Bolster an IG
 	INCOHERENCE_FACTOR = 4.5	# The amount to multiply the approval value with to get an incoherence score for legitimacy
+	
+	POWERFUL_IG_TRAIT_BONUS = 1.25	# The effects of all trait modifiers from influential IGs are increased by this, 1 = +100%
+	MARGINAL_IG_THRESHOLD = 0.01	# Interest Groups with Clout above this value are considered relevant while those below are marginal (if not also In Government)
+	MARGINAL_IG_CUTOFF = 0.008	# Interest Groups who are already relevant will only become marginal again if they drop below this value.
 }
 
 NEconomy = {
 	COUNTRY_GDP_MODIFIER_MAX_MULTIPLIER = 600000	# The country_gdp modifier multiplier cannot be higher than this
-	PRICE_RANGE = 0.75	# min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]
+	PRICE_RANGE = 0.8	# min price of a good is base * (1 - PRICE_RANGE), Max price is base * (1 + PRICE_RANGE), PRICE_RANGE is locked to [0-1]
 	
 	GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.5	# If supply / demand is lower than this, start applying output penalties, by default this should be ( 1 / BUY_SELL_DIFF_AT_MAX_FACTOR )
 	GOODS_SHORTAGE_PENALTY_INCREASE_SPEED = 0.005	# .01	Goods shortage penalty increases by this fraction of the target each day
@@ -161,7 +167,7 @@ NDiplomacy = {
 	WAR_GOAL_INFAMY_MAKE_DOMINION = 2.0
 	WAR_GOAL_INFAMY_REDUCE_AUTONOMY = 2.0
 	WAR_GOAL_INFAMY_TRANSFER_SUBJECT = 2.0
-	WAR_GOAL_INFAMY_ANNEX_COUNTRY = 3.0	#4
+	WAR_GOAL_INFAMY_ANNEX_COUNTRY = 3.5	#4
 	WAR_GOAL_INFAMY_REGIME_CHANGE = 0.4	#Vanilla .50
 	WAR_GOAL_INFAMY_FORCE_NATIONALIZATION = 0.2
 	
@@ -176,9 +182,9 @@ NDiplomacy = {
 	WAR_GOAL_CONTAIN_THREAT_YEARS_SINCE_CONQUEST = 20
 	
 	PRESTIGE_FROM_ARMY_POWER_PROJECTION = 0.015	#.03 Per point of power projection from army combat power
-	PRESTIGE_FROM_NAVY_POWER_PROJECTION = 0.025	#.1 Per point of power projection from navy combat power
-	PRESTIGE_FROM_SUBJECT_ARMY_POWER_PROJECTION = 0.00025	#.0005 Per point of power projection from army combat power in subjects
-	PRESTIGE_FROM_SUBJECT_NAVY_POWER_PROJECTION = 0.003	#.01 Per point of power projection from navy combat power in subjects
+	PRESTIGE_FROM_NAVY_POWER_PROJECTION = 0.028	#.1 Per point of power projection from navy combat power
+	PRESTIGE_FROM_SUBJECT_ARMY_POWER_PROJECTION = 0.0004	#.0005 Per point of power projection from army combat power in subjects
+	PRESTIGE_FROM_SUBJECT_NAVY_POWER_PROJECTION = 0.008	#.01 Per point of power projection from navy combat power in subjects
 }
 
 NPowerBlocs = {

@@ -433,6 +433,7 @@ principle_defensive_cooperation_1 = {
 	member_modifier = {
 		unit_morale_loss_mult = -0.05
 		unit_recovery_rate_add = 0.05
+		interest_group_ig_armed_forces_pol_str_mult = 0.10
 	}
 	ai_weight = {
 		value = 100
@@ -485,6 +486,7 @@ principle_defensive_cooperation_2 = {
 		military_formation_attrition_risk_mult = -0.2
 		unit_morale_loss_mult = -0.05
 		unit_recovery_rate_add = 0.05
+		interest_group_ig_armed_forces_pol_str_mult = 0.15
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -512,6 +514,7 @@ principle_defensive_cooperation_3 = {
 		military_formation_movement_speed_mult = 0.2
 		unit_morale_loss_mult = -0.05
 		unit_recovery_rate_add = 0.05
+		interest_group_ig_armed_forces_pol_str_mult = 0.25
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -590,7 +593,7 @@ principle_aggressive_coordination_3 = {
 		power_bloc_cohesion_add = -5
 	}
 	leader_modifier = {
-		interest_group_ig_armed_forces_pol_str_mult = 0.15
+		interest_group_ig_armed_forces_pol_str_mult = 0.25
 	}
 	member_modifier = {
 		country_initiator_war_goal_maneuver_cost_mult = -0.3
@@ -599,7 +602,7 @@ principle_aggressive_coordination_3 = {
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.1
 		building_training_rate_mult = 0.1
-		interest_group_ig_armed_forces_pol_str_mult = 0.25
+		interest_group_ig_armed_forces_pol_str_mult = 0.33
 		military_formation_organization_gain_mult = 0.25
 		interest_group_ig_armed_forces_approval_add = 3
 		military_formation_mobilization_speed_mult = 0.2
@@ -677,7 +680,7 @@ principle_external_trade_2 = {
 		# Modifiers from previous level(s)
 		state_trade_capacity_mult = 0.25
 		state_trade_advantage_mult = 0.1
-
+		building_trade_center_throughput_add = 0.05
 		# Also unlocks a PM that grants Trade Centers Influence, checked with trigger on PM
 	}
 	ai_weight = {
@@ -693,6 +696,9 @@ principle_external_trade_3 = {
 		country_bureaucracy_mult = 0.05
 		state_trade_advantage_mult = 0.25
 	}
+	power_bloc_modifier = {
+		power_bloc_cohesion_add = 8
+	}
 	non_leader_modifier = {
 		country_bureaucracy_mult = -0.05	#0
 	}
@@ -700,9 +706,8 @@ principle_external_trade_3 = {
 		# Modifiers from previous level(s)
 		state_trade_capacity_mult = 0.30
 		state_trade_advantage_mult = 0.1
-
+		building_trade_center_throughput_add = 0.1
 		# Also unlocks a PM that grants Trade Centers Influence, checked with trigger on PM (from level 2)
-
 		# Members no longer get a penalty to Trade Advantage due to lack of interests
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
 	}
@@ -784,9 +789,9 @@ principle_food_standardization_3 = {
 		country_authority_mult = -0.05
 	}
 	member_modifier = {
-		state_colony_growth_creation_factor = 0.1
-		building_group_bg_agriculture_throughput_add = 0.1
-		building_group_bg_ranching_throughput_add = 0.1
+		state_colony_growth_creation_factor = 0.15
+		building_group_bg_agriculture_throughput_add = 0.15
+		building_group_bg_ranching_throughput_add = 0.15
 		state_mortality_mult = -0.05
 		unit_supply_consumption_mult = -0.15
 		state_standard_of_living_add = 0.5
@@ -886,12 +891,6 @@ principle_police_coordination_3 = {
 	power_bloc_modifier = {
 		power_bloc_cohesion_add = 10
 	}
-	member_modifier = {
-		# Cheaper and faster police institution
-		country_institution_size_change_speed_institution_police_mult = 0.5
-		country_institution_cost_institution_police_mult = -0.5
-		country_disallow_law_no_police_bool = yes
-	}
 	
 	leader_modifier = {
 		country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
@@ -902,6 +901,12 @@ principle_police_coordination_3 = {
 		country_authority_mult = -0.05
 		country_institution_cost_institution_police_mult = -0.1
 		country_legitimacy_base_add = 5
+	}
+	member_modifier = {
+		# Cheaper and faster police institution
+		country_institution_size_change_speed_institution_police_mult = 0.5
+		country_institution_cost_institution_police_mult = -0.5
+		country_disallow_law_no_police_bool = yes
 	}
 	institution = institution_police
 	institution_modifier = {
@@ -1213,15 +1218,20 @@ principle_colonial_offices_3 = {
 	}
 	leader_modifier = {
 		country_can_impose_same_lawgroup_colonization_in_power_bloc_bool = yes
-		building_group_bg_plantations_unincorporated_throughput_add = 0.05
-		building_group_bg_rubber_unincorporated_throughput_add = 0.05
-		building_group_bg_logging_unincorporated_throughput_add = 0.05
-		building_group_bg_mining_unincorporated_throughput_add = 0.05
+		building_group_bg_plantations_unincorporated_throughput_add = 0.2
+		building_group_bg_rubber_unincorporated_throughput_add = 0.2
+		building_group_bg_logging_unincorporated_throughput_add = 0.2
+		building_group_bg_mining_unincorporated_throughput_add = 0.2
 	}
 	non_leader_modifier = {
 		state_radicalism_increases_violent_hostility_mult = 0.1
 		state_radicalism_increases_cultural_erasure_mult = 0.1
 		state_radicalism_increases_open_prejudice_mult = 0.1
+		building_unincorporated_subsistence_output_mult = -0.05
+		building_group_bg_plantations_unincorporated_throughput_add = 0.1
+		building_group_bg_rubber_unincorporated_throughput_add = 0.1
+		building_group_bg_logging_unincorporated_throughput_add = 0.1
+		building_group_bg_mining_unincorporated_throughput_add = 0.1
 	}
 	institution = institution_colonial_affairs
 	institution_modifier = {
@@ -1229,12 +1239,7 @@ principle_colonial_offices_3 = {
 		state_colony_growth_creation_factor = 0.03
 		country_infamy_generation_against_unrecognized_mult = -0.07
 		country_secession_progress_mult = -0.05
-		country_liberty_desire_of_subjects_add = -0.01
-		building_unincorporated_subsistence_output_mult = -0.01
-		building_group_bg_plantations_unincorporated_throughput_add = 0.02
-		building_group_bg_rubber_unincorporated_throughput_add = 0.02
-		building_group_bg_logging_unincorporated_throughput_add = 0.02
-		building_group_bg_mining_unincorporated_throughput_add = 0.02
+		country_liberty_desire_of_subjects_add = -0.02
 	}
 	
 	ai_weight = {
@@ -1932,6 +1937,7 @@ principle_companies_1 = {
 		country_company_throughput_bonus_add = 0.05
 		# Adds one free company charter
 		country_free_charters_add = 1
+		country_capitalists_pol_str_mult = 0.10
 	}
 	
 	ai_weight = {
@@ -1960,7 +1966,7 @@ principle_companies_2 = {
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_company_throughput_bonus_add = 0.1
-
+		country_capitalists_pol_str_mult = 0.15
 		# Adds one free company charter
 		country_free_charters_add = 2
 	}
@@ -1974,15 +1980,18 @@ principle_companies_3 = {
 	icon = "gfx/interface/icons/principles_icons/companies.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 	power_bloc_modifier = {
-		power_bloc_cohesion_add = -8
+		power_bloc_cohesion_add = -9
+	}
+	leader_modifier = {
+		country_max_companies_add = 1
+		country_free_charters_add = 1
 	}
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_company_throughput_bonus_add = 0.15
-		country_free_charters_add = 4
-
+		country_free_charters_add = 3
+		country_capitalists_pol_str_mult = 0.25
 		# Adds one company slot
-		country_max_companies_add = 1
 	}
 	
 	ai_weight = {
