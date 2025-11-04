@@ -620,6 +620,96 @@
 				}
 			}
 		}
+		# Swap from Chinese viceroyalty if non-Chinese overlord
+		if = {
+			limit = {
+				# If you are a Subject of the type (Chinese) Imperial Viceroyalty
+				is_subject = yes
+				is_subject_type = imperia_subject_type_viceroyalty
+				# And your overlord is NOT China / Taiping Heavenly Kingdom
+				overlord = {
+					NOR = {
+						c:CHI ?= this # China / Qing
+						c:TPG ?= this # Taiping Heavenly Kingdom
+					}
+				}
+			}
+			# Try a dominion first
+			# Valid for the times when China have become recognised (which sets them at colonial, afaik)
+			if = {
+				limit = {
+					overlord = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+					}
+					is_country_type = colonial
+				}
+				change_subject_type = subject_type_dominion
+			}
+			# Then a Puppet
+			# Valid for Western overlords and unrecognized Viceroyalties
+			else_if = {
+				limit = {
+					overlord = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+					}
+					OR = {
+						is_country_type = recognized
+						is_country_type = unrecognized
+					}
+			
+				}
+				change_subject_type = subject_type_puppet
+			}
+			# Vassal
+			# In case some barbarian takes over I guess?
+			else_if = {
+				limit = {
+					overlord = {
+						is_country_type = unrecognized
+					}
+				}
+				change_subject_type = subject_type_vassal
+			}
+		
+		}
+		# Swap TO Chinese viceroyalty if Chinese overlord, and nation is (presumably) some sort of Chinese
+		else_if = {
+			limit = {
+				# If you are NOT a Subject of the type (Chinese) Imperial Viceroyalty
+				is_subject = yes
+				NOT = {
+					is_subject_type = imperia_subject_type_viceroyalty
+				}
+				overlord = {
+					# And your overlord is either China/Qing or the Taiping Heavenly Kingdom
+					OR = {
+						c:CHI ?= this # China / Qing
+						c:TPG ?= this # Taiping Heavenly Kingdom
+					}
+					# ... And is Theocratic or Monarchical
+					# Whats a Viceroy without his Roy?
+					OR = {
+						has_law_or_variant = law_type:law_monarchy
+						has_law_or_variant = law_type:law_theocracy
+					}
+				}
+				# And your capital is in traditional Chinese regions
+				capital.state_region = {
+					OR = {
+						is_homeland = cu:han
+						is_homeland = cu:manchu
+					}
+				}
+			}
+			# Assume you're eligible; change to viceroyalty
+			change_subject_type = imperia_subject_type_viceroyalty
+		}
 	}
 	random_events = {
 		23 = 0
