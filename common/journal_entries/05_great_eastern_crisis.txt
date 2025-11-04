@@ -1,0 +1,396 @@
+﻿je_great_eastern_crisis = {
+	
+	group = je_group_historical_content
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	
+	scripted_progress_bar = control_eastern_crisis_bar
+	
+	is_shown_in_lobby = {
+		has_dlc_feature = ip3_content	#National Awakening
+		c:TUR ?= this
+	}
+	
+	is_shown_when_inactive = {	#Now failure effect of sick man, and separatism tanzimat, so should be visible at game start.
+		has_dlc_feature = ip3_content
+		c:TUR ?= this
+		NOT = { has_variable = eastern_crisis_happened }
+	}
+	
+	possible = {
+		OR = {
+			AND = {
+				c:WAL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:MOL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:ROM ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:BUL ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:SER ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:MON ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:BOS ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:YUG ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:GRE ?= {
+					NOT = { is_subject_of = root }
+				}
+				c:ALB ?= {
+					NOT = { is_subject_of = root }
+				}
+			}
+			AND = {
+				has_technology_researched = nationalism
+				highest_secession_progress >= 0.50
+				custom_tooltip = {
+					text = tanzimats_completed_4_tt
+					root.var:sick_man_var >= 4
+				}
+			}
+			in_default = yes
+			has_modifier = declared_bankruptcy
+			gdp_ownership_ratio = { target = root value < 0.5 }
+		}
+	}
+	
+	modifiers_while_active = {
+		negative_crisis_influence
+	}
+	
+	immediate = {
+		set_variable = eastern_crisis_happened
+		trigger_event = { id = eastern_crisis.1 popup = yes }
+		c:TUR ?= {
+			save_scope_as = ottoman_scope
+		}
+		custom_tooltip = {
+			text = crisis_modifier_if_activated_tt
+			if = {
+				limit = {
+					any_political_movement = {
+						OR = {
+							is_political_movement_type = movement_religious_majority
+							is_political_movement_type = movement_religious_minority
+							is_political_movement_type = movement_cultural_majority
+							is_political_movement_type = movement_cultural_minority
+						}
+					}
+				}
+				every_political_movement = {
+					limit = {
+						OR = {
+							is_political_movement_type = movement_religious_majority
+							is_political_movement_type = movement_religious_minority
+							is_political_movement_type = movement_cultural_majority
+							is_political_movement_type = movement_cultural_minority
+						}
+					}
+					set_variable = political_movement_has_modifiers_var
+					add_modifier = {
+						name = eastern_crisis_movement_attraction
+					}
+				}
+			}
+		}
+	}
+	
+	on_monthly_pulse = {
+		effect = {
+			if = {	#add modifier to any new movements.
+				limit = {
+					any_political_movement = {
+						OR = {
+							is_political_movement_type = movement_religious_majority
+							is_political_movement_type = movement_religious_minority
+							is_political_movement_type = movement_cultural_majority
+							is_political_movement_type = movement_cultural_minority
+						}
+						NOR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+				}
+				every_political_movement = {
+					limit = {
+						OR = {
+							is_political_movement_type = movement_religious_majority
+							is_political_movement_type = movement_religious_minority
+							is_political_movement_type = movement_cultural_majority
+							is_political_movement_type = movement_cultural_minority
+						}
+						NOR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+					set_variable = political_movement_has_modifiers_var
+					add_modifier = {
+						name = eastern_crisis_movement_attraction
+					}
+				}
+			}
+		}
+	}
+	
+	complete = {
+		custom_tooltip = {
+			text = eastern_crisis_complete_tt
+			scope:journal_entry = {
+				"scripted_bar_progress(control_eastern_crisis_bar)" >= control_eastern_crisis_upper_bound
+			}
+		}
+		has_any_secessionists_broken_out = no
+		has_any_secessionists_growing = no
+		is_at_war = no
+	}
+	
+	on_complete = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_journal_entry = je_eastern_question_austria
+						has_journal_entry = je_eastern_question_russia
+						has_journal_entry = je_eastern_crisis_tracker
+					}
+				}
+				trigger_event = { id = eastern_crisis.2 popup = yes }
+			}
+		}
+		trigger_event = { id = eastern_crisis.2 popup = yes }
+		custom_tooltip = {
+			text = crisis_modifier_when_done_tt
+			if = {
+				limit = {
+					any_political_movement = {
+						OR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+				}
+				every_political_movement = {
+					limit = {
+						OR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+					if = {
+						limit = {
+							has_variable = political_movement_has_modifiers_var
+						}
+						remove_variable = political_movement_has_modifiers_var
+					}
+					if = {
+						limit = {
+							has_modifier = eastern_crisis_movement_attraction
+						}
+						remove_modifier = eastern_crisis_movement_attraction
+					}
+				}
+			}
+		}
+	}
+	
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_eastern_crisis.2_tt
+			}
+		}
+	}
+	
+	invalid = {
+		NOT = {
+			exists = c:TUR
+		}
+	}
+	
+	on_invalid = {
+		custom_tooltip = {
+			text = crisis_modifier_when_done_tt
+			if = {
+				limit = {
+					any_political_movement = {
+						OR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+				}
+				every_political_movement = {
+					limit = {
+						OR = {
+							has_variable = political_movement_has_modifiers_var
+							has_modifier = eastern_crisis_movement_attraction
+						}
+					}
+					if = {
+						limit = {
+							has_variable = political_movement_has_modifiers_var
+						}
+						remove_variable = political_movement_has_modifiers_var
+					}
+					if = {
+						limit = {
+							has_modifier = eastern_crisis_movement_attraction
+						}
+						remove_modifier = eastern_crisis_movement_attraction
+					}
+				}
+			}
+		}
+	}
+	
+	timeout = 3650	# 10 years
+	
+	on_timeout = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_journal_entry = je_eastern_question_austria
+						has_journal_entry = je_eastern_question_russia
+						has_journal_entry = je_eastern_crisis_tracker
+					}
+				}
+				trigger_event = { id = eastern_crisis.3 popup = yes }
+			}
+		}
+		trigger_event = { id = eastern_crisis.3 popup = yes }
+		hidden_effect = {
+			custom_tooltip = {
+				text = crisis_modifier_when_done_tt
+				if = {
+					limit = {
+						any_political_movement = {
+							OR = {
+								has_variable = political_movement_has_modifiers_var
+								has_modifier = eastern_crisis_movement_attraction
+							}
+						}
+					}
+					every_political_movement = {
+						limit = {
+							OR = {
+								has_variable = political_movement_has_modifiers_var
+								has_modifier = eastern_crisis_movement_attraction
+							}
+						}
+						if = {
+							limit = {
+								has_variable = political_movement_has_modifiers_var
+							}
+							remove_variable = political_movement_has_modifiers_var
+						}
+						if = {
+							limit = {
+								has_modifier = eastern_crisis_movement_attraction
+							}
+							remove_modifier = eastern_crisis_movement_attraction
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	event_outcome_timeout_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_eastern_crisis.3_tt
+			}
+		}
+	}
+	
+	should_be_pinned_by_default = yes
+	weight = 1000
+	transferable = no
+}
+
+# For Balkan Nations
+je_eastern_crisis_tracker = {
+	
+	group = je_group_crises
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	
+	scripted_progress_bar = control_eastern_crisis_bar
+	
+	is_shown_when_inactive = {
+		has_dlc_feature = ip3_content
+		exists = c:TUR
+		NOT = { c:TUR ?= this }
+		OR = {
+			capital = {
+				region = sr:region_balkans
+			}
+			has_subject_relation_with = c:TUR
+		}
+	}
+	
+	possible = {
+		c:TUR ?= {
+			has_journal_entry = je_great_eastern_crisis
+		}
+	}
+	
+	immediate = {
+		trigger_event = eastern_crisis.1
+		c:TUR ?= {
+			save_scope_as = ottoman_scope
+		}
+		ROOT = {
+			save_scope_as = root_scope
+		}
+		if = {
+			limit = {
+				has_subject_relation_with = c:TUR
+			}
+			scope:journal_entry = {	# Croatia should not get this
+				add_modifier = eastern_crisis_balkan_nations
+			}
+		}
+	}
+	
+	complete = {
+		c:TUR ?= {
+			NOT = {
+				has_journal_entry = je_great_eastern_crisis
+			}
+		}
+	}
+	
+	event_outcome_completed_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = event_effects_eastern_crisis_all_possible_tt
+			}
+		}
+	}
+	
+	on_complete = {}
+	
+	invalid = {
+		NOT = {
+			exists = c:TUR
+		}
+	}
+	
+	should_be_pinned_by_default = yes
+	weight = 100
+	transferable = no
+	
+}

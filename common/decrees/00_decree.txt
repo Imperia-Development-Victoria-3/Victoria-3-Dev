@@ -109,7 +109,7 @@ decree_violent_suppression = {
 		standing_army
 	}
 	country_trigger = {
-		NOT = { has_law = law_type:law_guaranteed_liberties }
+		NOT = { has_law_or_variant = law_type:law_guaranteed_liberties }
 	}
 	state_trigger = {
 		turmoil >= 0.25
@@ -219,8 +219,8 @@ decree_promote_social_mobility = {
 			AND = {
 				owner ?= {
 					OR = {
-						has_law = law_type:law_hindu_caste_enforced
-						has_law = law_type:law_hindu_caste_codified
+						has_law_or_variant = law_type:law_hindu_caste_enforced
+						has_law_or_variant = law_type:law_hindu_caste_codified
 					}
 				}
 				religion_percent_state = {
@@ -236,7 +236,7 @@ decree_promote_social_mobility = {
 		building_group_bg_technology_throughput_add = 0.15
 		building_group_bg_arts_throughput_add = 0.2
 	}
-	cost = 125	# was 100, before was 80
+	cost = 115	# was 125, 100, 80
 	ai_weight = {
 		value = 0
 		if = {
@@ -298,7 +298,7 @@ decree_worker_exploitation = {
 		owner = {
 			is_player = yes
 			NOT = {
-				has_law = law_type:law_guaranteed_liberties
+				has_law_or_variant = law_type:law_guaranteed_liberties
 			}
 		}
 	}
@@ -316,55 +316,186 @@ decree_worker_exploitation = {
 	cost = 75	# was 55,40
 }
 
+#	Prepare to change for National Awakening
 decree_promote_national_values = {
 	texture = "gfx/interface/icons/decree/decree_promote_national_values.dds"
 	unlocking_technologies = {
-		centralization
+		nationalism
 	}
-	state_trigger = {
-		OR = {
-			has_assimilating_pops = yes
-			has_converting_pops = yes
-		}
+	
+	country_trigger = {
+		NOT = { has_law_or_variant = law_type:law_multicultural }
 	}
+	
 	modifier = {
-		state_assimilation_mult = 1.50	# Was 1.25
-		state_conversion_mult = 1.50	# Was 1.25
-		# state_loyalists_from_sol_change_mult = 0.15 (Replaced to only accepted cultures)
-		state_loyalism_increases_full_acceptance_mult = 0.25
+		state_assimilation_mult = 0.5
+		state_conversion_mult = 0.5
+		state_allow_assimilation_in_homeland_bool = yes
+		state_radicalism_increases_violent_hostility_mult = 0.5
+		state_radicalism_increases_cultural_erasure_mult = 0.4
+		state_radicalism_increases_open_prejudice_mult = 0.3
 	}
 	cost = 50	# was 75
 	ai_weight = {
 		value = 0
-		if = {
-			limit = {
-				scope:country = {
-					OR = {
-						has_strategy = ai_strategy_reactionary_agenda
-						has_strategy = ai_strategy_conservative_agenda
-					}
-				}
-			}
-			add = 100
-		}
-		else_if = {
-			limit = {
-				scope:country = {
-					has_strategy = ai_strategy_nationalist_agenda
-				}
-			}
-			add = 200
-		}
 		
 		if = {
 			limit = {
 				scope:country = {
-					OR = {
-						has_law = law_type:law_ethnostate
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_theocracy
+					NOR = {
+						has_law_or_variant = law_type:law_multicultural
+						has_law_or_variant = law_type:law_subjecthood
 					}
 				}
+				primary_cultures_percent_state <= 0.9
+			}
+			
+			if = {	# Colonies
+				limit = {
+					scope:country = {
+						country_is_in_europe = no
+						any_primary_culture = {
+							has_discrimination_trait_group = heritage_group_european
+						}
+						NOR = {
+							has_government_type = gov_chartered_company
+							c:BIC ?= this
+							c:DEI ?= this
+						}
+					}
+				}
+				add = 300
+			}
+			else_if = {
+				limit = {
+					scope:country = {
+						OR = {
+							has_strategy = ai_strategy_reactionary_agenda
+							has_strategy = ai_strategy_conservative_agenda
+							has_strategy = ai_strategy_maintain_mandate_of_heaven
+						}
+					}
+				}
+				add = 100
+			}
+			else_if = {
+				limit = {
+					scope:country = {
+						has_strategy = ai_strategy_nationalist_agenda
+					}
+				}
+				add = 200
+			}
+			
+			if = {
+				limit = {
+					primary_cultures_percent_state <= 0.1
+				}
+				multiply = 5.0
+			}
+			else_if = {
+				limit = {
+					primary_cultures_percent_state <= 0.3
+				}
+				multiply = 3.0
+			}
+			else_if = {
+				limit = {
+					primary_cultures_percent_state <= 0.5
+				}
+				multiply = 2.0
+			}
+			
+			if = {
+				limit = {
+					is_homeland_of_country_cultures = scope:country
+				}
+				multiply = 5.0
+			}
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					NOT = { scope:country = { has_law_or_variant = law_type:law_total_separation } }
+					AND = {
+						scope:country = { country_is_in_africa = no }
+						state_is_in_africa = yes
+					}
+				}
+				religion_percent_state = {
+					target = scope:country.religion
+					value <= 0.9
+				}
+			}
+			
+			if = {
+				limit = {
+					scope:country = {
+						has_strategy = ai_strategy_conservative_agenda
+					}
+				}
+				add = 50
+			}
+			else_if = {
+				limit = {
+					scope:country = {
+						has_strategy = ai_strategy_reactionary_agenda
+					}
+				}
+				add = 100
+			}
+			
+			if = {
+				limit = {
+					scope:country = {
+						OR = {
+							has_law_or_variant = law_type:law_state_religion
+							has_law_or_variant = law_type:law_state_atheism
+						}
+					}
+				}
+				add = 50
+			}
+			
+			if = {
+				limit = {
+					religion_percent_state = {
+						target = scope:country.religion
+						value <= 0.1
+					}
+				}
+				multiply = 5.0
+			}
+			else_if = {
+				limit = {
+					religion_percent_state = {
+						target = scope:country.religion
+						value <= 0.3
+					}
+				}
+				multiply = 3.0
+			}
+			else_if = {
+				limit = {
+					religion_percent_state = {
+						target = scope:country.religion
+						value <= 0.5
+					}
+				}
+				multiply = 2.0
+			}
+		}
+		
+		if = {
+			limit = {
+				state_population < 100000
+			}
+			multiply = 0
+		}
+		else_if = {
+			limit = {
+				state_population < 300000
 			}
 			multiply = 2.0
 		}
@@ -372,8 +503,8 @@ decree_promote_national_values = {
 			limit = {
 				scope:country = {
 					OR = {
-						has_law = law_type:law_cultural_exclusion
-						has_law = law_type:law_freedom_of_conscience
+						has_law_or_variant = law_type:law_cultural_exclusion
+						has_law_or_variant = law_type:law_freedom_of_conscience
 					}
 				}
 			}
@@ -383,8 +514,8 @@ decree_promote_national_values = {
 			limit = {
 				scope:country = {
 					OR = {
-						has_law = law_type:law_multicultural
-						has_law = law_type:law_total_separation
+						has_law_or_variant = law_type:law_multicultural
+						has_law_or_variant = law_type:law_total_separation
 					}
 				}
 			}
@@ -429,12 +560,12 @@ decree_encourage_urban_services = {
 		urban_planning
 	}
 	modifier = {
-		building_group_bg_service_throughput_add = 0.2
-		building_port_throughput_add = 0.2
-		building_railway_throughput_add = 0.2
-		building_group_bg_monuments_throughput_add = 0.2
-		building_group_bg_canals_throughput_add = 0.2
-		building_group_bg_power_throughput_add = 0.2
+		building_group_bg_service_throughput_add = 0.15
+		building_port_throughput_add = 0.1
+		building_railway_throughput_add = 0.15
+		building_group_bg_monuments_throughput_add = 0.25
+		building_group_bg_canals_throughput_add = 0.1
+		building_group_bg_power_throughput_add = 0.15
 	}
 	cost = 35	# was 75
 	ai_weight = {
@@ -488,9 +619,9 @@ decree_encourage_manufacturing_industry = {
 	# 	}
 	# }
 	modifier = {
-		building_group_bg_manufacturing_throughput_add = 0.2
+		building_group_bg_manufacturing_throughput_add = 0.15
 	}
-	cost = 50	# was 75
+	cost = 60	# was 50, 75
 	ai_weight = {
 		value = 0
 		if = {
@@ -613,14 +744,14 @@ decree_encourage_resource_industry = {
 	# 	}
 	# }
 	modifier = {
-		building_group_bg_mining_throughput_add = 0.2
+		building_group_bg_mining_throughput_add = 0.15
 		building_group_bg_logging_throughput_add = 0.2
 		building_group_bg_fishing_throughput_add = 0.2
 		building_group_bg_whaling_throughput_add = 0.2
-		building_group_bg_oil_extraction_throughput_add = 0.2
-		building_group_bg_rubber_throughput_add = 0.2
+		building_group_bg_oil_extraction_throughput_add = 0.15
+		building_group_bg_rubber_throughput_add = 0.15
 	}
-	cost = 50	# was 75
+	cost = 55	# was 50, 75
 	ai_weight = {
 		value = 0
 		if = {
@@ -759,11 +890,7 @@ decree_greener_grass_campaign = {
 		if = {
 			limit = {
 				is_incorporated = no
-				scope:country = {
-					NOT = {
-						has_law = law_type:law_colonial_resettlement
-					}
-				}	# Already gives a hefty migration bonus
+				scope:country = { NOT = { has_law_or_variant = law_type:law_colonial_resettlement } }	# Already gives a hefty migration bonus
 			}
 			multiply = 2
 		}
@@ -776,33 +903,8 @@ decree_greener_grass_campaign = {
 	}
 }
 
-decree_penal_colony = {
-	texture = "gfx/interface/icons/decree/penal.dds"
-	state_trigger = {
-		owner = {
-			is_player = yes
-			NOT = {
-				has_law = law_type:law_no_colonial_affairs
-			}
-		}
-		is_isolated_from_market = no
-	}
-	modifier = {
-		state_non_homeland_colony_growth_speed_mult = 0.03
-		state_migration_pull_mult = 0.5
-		state_turmoil_effects_mult = 0.15
-		state_radicalism_increases_violent_hostility_mult = 0.25
-		state_radicalism_increases_cultural_erasure_mult = 0.25
-		state_radicalism_increases_open_prejudice_mult = 0.25
-		state_radicals_from_political_movements_mult = 0.10
-	}
-	unlocking_technologies = {
-		colonization
-	}
-	cost = 50	# was 75
-}
-
-decree_military_training = {
+# Renamed this back to enlistment efforts from military training to avoid confusion with vanilla files calling the enlistment efforts decree... - D
+decree_enlistment_efforts = {
 	texture = "gfx/interface/icons/decree/decree_enlistment_efforts.dds"
 	modifier = {
 		state_conscription_rate_add = 0.05
@@ -885,8 +987,8 @@ decree_promote_health = {
 		pharmaceuticals
 	}
 	modifier = {
-		state_mortality_mult = -0.04	#0.075
-		state_birth_rate_mult = 0.04	#0.075
+		state_mortality_mult = -0.025	#0.075
+		state_birth_rate_mult = 0.06	#0.075
 	}
 	cost = 60	# was 50, 75
 	ai_weight = {

@@ -74,6 +74,7 @@ law_interventionism = {
 	disallowing_laws = {
 		law_serfdom
 		law_anarchy
+		law_women_in_the_fields
 	}
 	on_activate = {}
 	unlocking_technologies = {
@@ -101,6 +102,20 @@ law_interventionism = {
 			}
 			add = 750
 		}
+
+		# Once the AI gets to a certain society tech level they should try to ditch Traditionalism for either Agrarianism or Interventionism
+		if = {
+			limit = {
+				OR = {
+					has_technology_researched = civilizing_mission
+					has_technology_researched = human_rights
+					has_technology_researched = pan-nationalism
+				}
+				has_law_or_variant = law_type:law_traditionalism
+			}
+			
+			add = 1000
+		}
 		
 		if = {
 			limit = {
@@ -111,7 +126,7 @@ law_interventionism = {
 					has_journal_entry = je_great_reforms_serfdom
 					has_journal_entry = je_hawaii
 				}
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 			}
 			add = 10000	# Top priority for Tanzimat/Meiji AI is to get out of Traditionalism
 		}
@@ -119,7 +134,7 @@ law_interventionism = {
 		# AI should really try to get out of Traditionalism under the right circumstances
 		if = {
 			limit = {
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 				NOT = { has_strategy = ai_strategy_reactionary_agenda }
 				OR = {
 					NOT = { has_strategy = ai_strategy_conservative_agenda }
@@ -166,6 +181,7 @@ law_agrarianism = {
 	}
 	disallowing_laws = {
 		law_anarchy
+		law_women_in_the_fields
 	}
 	unlocking_technologies = {
 		romanticism
@@ -187,7 +203,7 @@ law_agrarianism = {
 	
 	ai_will_do = {
 		OR = {
-			has_law = law_type:law_traditionalism
+			has_law_or_variant = law_type:law_traditionalism
 			literacy_rate < 0.4
 		}
 	}
@@ -200,11 +216,25 @@ law_agrarianism = {
 			}
 			add = 750
 		}
+
+		# Once the AI gets to a certain society tech level they should try to ditch Traditionalism for either Agrarianism or Interventionism
+		if = {
+			limit = {
+				OR = {
+					has_technology_researched = civilizing_mission
+					has_technology_researched = human_rights
+					has_technology_researched = pan-nationalism
+				}
+				has_law_or_variant = law_type:law_traditionalism
+			}
+			
+			add = 1000
+		}
 		
 		if = {
 			limit = {
 				has_journal_entry = je_sick_man_bureaucracy
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 			}
 			add = 10000	# Top priority for Tanzimat AI is to get out of Traditionalism
 		}
@@ -219,7 +249,7 @@ law_agrarianism = {
 		# AI should really try to get out of Traditionalism under the right circumstances
 		if = {
 			limit = {
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 				NOT = { has_strategy = ai_strategy_reactionary_agenda }
 				OR = {
 					NOT = { has_strategy = ai_strategy_conservative_agenda }
@@ -336,7 +366,7 @@ law_industry_banned = {
 	
 	ai_will_do = {
 		OR = {
-			has_law = law_type:law_traditionalism
+			has_law_or_variant = law_type:law_traditionalism
 			literacy_rate < 0.4
 		}
 	}
@@ -364,18 +394,12 @@ law_extraction_economy = {
 		law_regulatory_bodies
 		law_worker_protections
 		law_enforced_unions
+		law_anarchy
+		law_women_in_the_fields
 	}
 	
 	can_enact = {
-		trigger_if = {
-			limit = {
-				game_date > 1836.1.1
-			}
-			is_subject = yes	# Subject relationships load after laws' validities are checked
-		}
-		trigger_else = {
-			always = yes
-		}
+		is_subject = yes
 	}
 	
 	on_activate = {
@@ -434,6 +458,7 @@ law_extraction_economy = {
 		building_group_bg_plantations_throughput_add = 0.2
 		building_group_bg_extraction_throughput_add = 0.2
 		state_shopkeepers_investment_pool_efficiency_mult = -0.5
+		state_bureaucrats_investment_pool_efficiency_mult = -0.5
 		state_capitalists_investment_pool_efficiency_mult = -0.25
 		state_farmers_investment_pool_efficiency_mult = -0.75
 		state_clergymen_investment_pool_efficiency_mult = -0.75
@@ -441,6 +466,9 @@ law_extraction_economy = {
 		building_nationalization_investment_return_add = 0.5
 		country_disable_nationalization_without_compensation_bool = yes
 		country_economic_dependence_on_overlord_add = 0.5
+		country_leverage_resistance_mult = -0.15
+		country_max_companies_add = 1
+		country_free_charters_add = 2
 	}
 	
 	ai_will_do = {
@@ -479,6 +507,8 @@ law_laissez_faire = {
 		law_isolationism
 		law_anarchy
 		law_enforced_unions
+		law_guild_system
+		law_women_in_the_fields
 	}
 	unlocking_technologies = {
 		international_trade
@@ -486,15 +516,14 @@ law_laissez_faire = {
 	on_activate = {}
 	modifier = {
 		country_loan_interest_rate_mult = -0.15
-		state_shopkeepers_investment_pool_efficiency_mult = 0.25
-		state_capitalists_investment_pool_efficiency_mult = 0.15
+		state_shopkeepers_investment_pool_efficiency_mult = 0.33
+		state_capitalists_investment_pool_efficiency_mult = 0.2
 		country_capitalists_pol_str_mult = 0.25
 		country_government_dividends_reinvestment_add = 0.9
-		country_max_companies_add = 1
 		country_leverage_resistance_mult = -0.15
 		country_leverage_generation_mult = 0.2
 		country_bureaucracy_investment_cost_factor_mult = -0.1
-		country_free_charters_add = 2
+		country_free_charters_add = 3
 		country_disable_nationalization_bool = yes
 		country_force_privatization_bool = yes
 		country_forbid_monopoly_bool = yes
@@ -517,7 +546,7 @@ law_laissez_faire = {
 					has_journal_entry = je_great_reforms_serfdom
 					has_journal_entry = je_hawaii
 				}
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 			}
 			add = 10000	# Top priority for Tanzimat/Meiji AI is to get out of Traditionalism
 		}
@@ -525,7 +554,7 @@ law_laissez_faire = {
 		# AI should really try to get out of Traditionalism under the right circumstances
 		if = {
 			limit = {
-				has_law = law_type:law_traditionalism
+				has_law_or_variant = law_type:law_traditionalism
 				NOT = { has_strategy = ai_strategy_reactionary_agenda }
 				OR = {
 					NOT = { has_strategy = ai_strategy_conservative_agenda }
@@ -572,6 +601,7 @@ law_cooperative_ownership = {
 	}
 	disallowing_laws = {
 		law_serfdom
+		law_women_in_the_fields
 	}
 	unlocking_laws = {
 		law_council_republic
@@ -591,6 +621,7 @@ law_cooperative_ownership = {
 		state_trade_advantage_mult = -0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		country_government_dividends_reinvestment_add = 0.9
+		building_company_worker_dividends_add = 0.75
 		country_leverage_resistance_mult = 0.35
 		country_free_charters_add = 1
 		
@@ -614,16 +645,9 @@ law_cooperative_ownership = {
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_council_republic
+				has_law_or_variant = law_type:law_council_republic
 			}
-			add = 250
-		}
-		
-		if = {
-			limit = {
-				has_law = law_type:law_council_republic
-			}
-			add = 100
+			add = 400
 		}
 	}
 	ai_impose_chance = {
@@ -671,13 +695,16 @@ law_command_economy = {
 	disallowing_laws = {
 		law_serfdom
 		law_anarchy
+		law_women_in_the_fields
 	}
 	unlocking_technologies = {
 		central_planning
 	}
 	unlocking_laws = {
 		law_autocracy
+		law_neo_absolutism
 		law_oligarchy
+		law_organic_regulation
 		law_single_party_state
 		law_technocracy
 	}
@@ -700,15 +727,16 @@ law_command_economy = {
 		building_nationalization_radicals_mult = -0.75
 		country_government_dividends_efficiency_add = 0.85
 		country_leverage_resistance_mult = 0.80
-		country_free_charters_add = 2
-		country_disable_privatization_bool = yes
+		country_free_charters_add = 3
+		country_disable_non_company_privatization_bool = yes
+		building_company_government_dividends_add = 0.75
 	}
 	
 	ai_will_do = {
 		OR = {
-			has_law = law_type:law_technocracy
+			has_law_or_variant = law_type:law_technocracy
 			AND = {
-				has_law = law_type:law_council_republic
+				has_law_or_variant = law_type:law_council_republic
 				ruler ?= {
 					OR = {
 						has_ideology = ideology:ideology_vanguardist
@@ -729,13 +757,13 @@ law_command_economy = {
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_council_republic
+				has_law_or_variant = law_type:law_council_republic
 			}
 			add = 250
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_technocracy
+				has_law_or_variant = law_type:law_technocracy
 			}
 			add = 100
 		}

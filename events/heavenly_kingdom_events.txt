@@ -36,7 +36,7 @@ heavenly.1 = {
 					is_treaty_port = yes
 					owner = {
 						religion = {
-							has_discrimination_trait = christian
+							has_discrimination_trait = heritage_christian
 						}
 					}
 				}
@@ -47,7 +47,7 @@ heavenly.1 = {
 					is_treaty_port = yes
 					owner = {
 						religion = {
-							has_discrimination_trait = christian
+							has_discrimination_trait = heritage_christian
 						}
 					}
 				}
@@ -381,7 +381,7 @@ heavenly.4 = {
 			origin = this
 			state = scope:heavenly_kingdom_spawn
 			on_created = {
-				ig:ig_devout = {
+				ig:ig_devout ?= {
 					set_interest_group_name = ig_taiping_god_worshippers
 					remove_ideology = ideology_moralist
 					add_ideology = ideology_heavenly_kingdom_theocratic
@@ -397,7 +397,7 @@ heavenly.4 = {
 							has_ruling_interest_group = ig_devout
 						}
 					}
-					ig:ig_devout = {
+					ig:ig_devout ?= {
 						leader = {
 							set_ideology = ideology:ideology_theocrat
 						}
@@ -697,7 +697,7 @@ heavenly.5 = {
 			limit = {
 				country_rank >= rank_value:great_power
 				religion = {
-					has_discrimination_trait = christian
+					has_discrimination_trait = heritage_christian
 				}
 			}
 			order_by = country_rank
@@ -711,7 +711,7 @@ heavenly.5 = {
 			limit = {
 				country_rank >= rank_value:great_power
 				religion = {
-					has_discrimination_trait = christian
+					has_discrimination_trait = heritage_christian
 				}
 			}
 			change_relations = {
@@ -779,7 +779,7 @@ heavenly.6 = {
 		}
 		if = {
 			limit = {
-				ig:ig_intelligentsia = {
+				ig:ig_intelligentsia ?= {
 					leader = {
 						OR = {
 							has_ideology = ideology:ideology_reformer
@@ -788,7 +788,7 @@ heavenly.6 = {
 					}
 				}
 			}
-			ig:ig_intelligentsia = {
+			ig:ig_intelligentsia ?= {
 				leader = {
 					save_scope_as = hong_rengan_scope
 				}
@@ -811,7 +811,7 @@ heavenly.6 = {
 		name = heavenly.6.b
 		trigger = {
 			NOT = {
-				ig:ig_intelligentsia = {
+				ig:ig_intelligentsia ?= {
 					leader = {
 						OR = {
 							has_ideology = ideology:ideology_reformer
@@ -821,7 +821,7 @@ heavenly.6 = {
 				}
 			}
 		}
-		ig:ig_intelligentsia = {
+		ig:ig_intelligentsia ?= {
 			add_modifier = {
 				name = modifier_accepted_new_treatise
 				days = normal_modifier_time
@@ -835,7 +835,7 @@ heavenly.6 = {
 	option = {
 		name = heavenly.6.b1
 		trigger = {
-			ig:ig_intelligentsia = {
+			ig:ig_intelligentsia ?= {
 				leader = {
 					OR = {
 						has_ideology = ideology:ideology_reformer
@@ -844,7 +844,7 @@ heavenly.6 = {
 				}
 			}
 		}
-		ig:ig_intelligentsia = {
+		ig:ig_intelligentsia ?= {
 			add_modifier = {
 				name = modifier_accepted_new_treatise
 				days = normal_modifier_time
@@ -860,7 +860,7 @@ heavenly.6 = {
 		trigger = {
 			exists = c:CHI
 		}
-		ig:ig_armed_forces = {
+		ig:ig_armed_forces ?= {
 			leader = {
 				set_ideology = ideology:ideology_jingoist
 			}
@@ -880,7 +880,7 @@ heavenly.6 = {
 			limit = {
 				country_rank >= rank_value:great_power
 				religion = {
-					has_discrimination_trait = christian
+					has_discrimination_trait = heritage_christian
 				}
 			}
 			change_relations = {
@@ -991,7 +991,7 @@ CHI_missionaries.2 = {
 	
 	trigger = {
 		NOT = {
-			has_law = law_type:law_closed_borders
+			has_law_or_variant = law_type:law_closed_borders
 		}
 		any_scope_state = {
 			any_neighbouring_state = {

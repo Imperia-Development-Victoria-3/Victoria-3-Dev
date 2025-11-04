@@ -151,6 +151,7 @@ centralization = {
 		state_tax_capacity_add = 25
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_home_defence_max_investment_add = 1
+		state_incorporation_speed_mult = 0.05
 	}
 	unlocking_technologies = {
 		tech_bureaucracy
@@ -315,6 +316,7 @@ mass_communication = {
 	modifier = {
 		country_authority_mult = 0.1
 		country_tech_spread_mult = 0.05
+		country_voting_power_mult = 0.1
 	}
 	unlocking_technologies = {
 		democracy
@@ -464,8 +466,9 @@ organized_sports = {
 	category = society
 	modifier = {
 		country_prestige_mult = 0.1
-		country_influence_mult = 0.05
+		country_influence_mult = 0.1
 		country_infamy_decay_mult = 0.05
+		country_institution_social_security_max_investment_add = 1
 	}
 	unlocking_technologies = {
 		nationalism
@@ -485,6 +488,7 @@ central_archives = {
 		state_tax_capacity_add = 25
 		country_institution_home_affairs_max_investment_add = 1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
+		state_incorporation_speed_mult = 0.05
 	}
 	unlocking_technologies = {
 		centralization
@@ -510,13 +514,13 @@ central_archives = {
 					is_country_type = unrecognized
 				}
 				NAND = {
-					has_law = law_type:law_protectionism
+					has_law_or_variant = law_type:law_protectionism
 					OR = {
-						has_law = law_type:law_interventionism
-						has_law = law_type:law_command_economy
-						has_law = law_type:law_laissez_faire
+						has_law_or_variant = law_type:law_interventionism
+						has_law_or_variant = law_type:law_command_economy
+						has_law_or_variant = law_type:law_laissez_faire
 					}
-					has_law = law_type:law_compulsory_primary_school
+					has_law_or_variant = law_type:law_compulsory_primary_school
 				}
 			}
 			create_political_movement = { type = movement_modernizer }
@@ -589,7 +593,7 @@ psychiatry = {
 	texture = "gfx/interface/icons/invention_icons/psychiatry.dds"
 	category = society
 	modifier = {
-		country_influence_mult = 0.1
+		country_influence_mult = 0.15
 		country_diplomatic_play_maneuvers_add = 5
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
 	}
@@ -634,23 +638,12 @@ nationalism = {
 		country_radicalism_increases_violent_hostility_mult = 0.05
 		country_radicalism_increases_cultural_erasure_mult = 0.05
 		country_radicalism_increases_open_prejudice_mult = 0.05
+		country_voting_power_mult = 0.1
 	}
 	
 	unlocking_technologies = {
 		mass_communication
 		international_relations
-	}
-	
-	on_researched = {
-		if = {
-			limit = {
-				NOT = { has_variable = nationalism_researched }
-			}
-			custom_tooltip = {
-				text = unlock_national_agitation_tt
-				set_variable = nationalism_researched
-			}
-		}
 	}
 	
 	ai_weight = {
@@ -674,6 +667,19 @@ nationalism = {
 				}
 				any_country = {
 					has_journal_entry = je_risorgimento
+				}
+			}
+			multiply = 4
+		}
+		
+		if = {	# Important for Hungary and the Balkan states
+			limit = {
+				OR = {
+					country_has_primary_culture = cu:croat
+					country_has_primary_culture = cu:serb
+					country_has_primary_culture = cu:slovene
+					country_has_primary_culture = cu:bosniak
+					country_has_primary_culture = cu:hungarian
 				}
 			}
 			multiply = 4
@@ -732,6 +738,9 @@ postal_savings = {
 	modifier = {
 		state_farmers_investment_pool_efficiency_mult = 0.15
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
+		state_bureaucrats_investment_pool_efficiency_mult = 0.1
+		state_engineers_investment_pool_efficiency_mult = 0.1
+		state_machinists_investment_pool_efficiency_mult = 0.15
 		building_cash_reserves_mult = 0.1
 		state_lower_strata_standard_of_living_add = 0.5
 	}
@@ -818,6 +827,10 @@ feminism = {
 				}
 			}
 		}
+	}
+	
+	modifier = {
+		country_institution_social_security_max_investment_add = 1
 	}
 	
 	unlocking_technologies = {
@@ -954,7 +967,7 @@ socialism = {
 				NOT = { has_variable = socialism_researched }
 			}
 			set_variable = socialism_researched
-			ig:ig_trade_unions = {
+			ig:ig_trade_unions ?= {
 				add_ideology = ideology_socialist
 			}
 		}
@@ -995,7 +1008,7 @@ corporatism = {
 				NOT = { has_variable = corporatism_researched }
 			}
 			set_variable = corporatism_researched
-			ig:ig_devout = {
+			ig:ig_devout ?= {
 				remove_ideology = ideology_pious
 				add_ideology = ideology_corporatist
 			}
@@ -1053,6 +1066,9 @@ pan-nationalism = {
 		country_radicalism_increases_violent_hostility_mult = 0.05
 		country_radicalism_increases_cultural_erasure_mult = 0.05
 		country_political_strength_full_acceptance_mult = 0.05
+		
+		country_support_separatism_strength_mult = 0.25
+		country_voting_power_mult = 0.1
 	}
 	unlocking_technologies = {
 		nationalism
@@ -1067,6 +1083,10 @@ pan-nationalism = {
 					country_has_primary_culture = cu:south_german
 					country_has_primary_culture = cu:north_italian
 					country_has_primary_culture = cu:south_italian
+					country_has_primary_culture = cu:croat
+					country_has_primary_culture = cu:serb
+					country_has_primary_culture = cu:slovene
+					country_has_primary_culture = cu:bosniak
 				}
 			}
 			add = 5
@@ -1142,7 +1162,7 @@ philosophical_pragmatism = {
 	texture = "gfx/interface/icons/invention_icons/philosophical_pragmatism.dds"
 	category = society
 	modifier = {
-		country_influence_mult = 0.1
+		country_influence_mult = 0.2
 		country_diplomatic_play_maneuvers_add = 5
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
 		country_tech_spread_mult = 0.05
@@ -1167,6 +1187,7 @@ identification_documents = {
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
+		state_incorporation_speed_mult = 0.05
 	}
 	unlocking_technologies = {
 		central_archives
@@ -1222,6 +1243,7 @@ malaria_prevention = {
 	category = society
 	modifier = {
 		country_institution_colonial_affairs_max_investment_add = 1
+		country_institution_health_system_max_investment_add = 1
 	}
 	unlocking_technologies = {
 		civilizing_mission
@@ -1256,6 +1278,8 @@ central_planning = {
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 		country_authority_add = 50
 		country_government_dividends_efficiency_add = 0.05
+		country_institution_home_affairs_max_investment_add = 1
+		state_incorporation_speed_mult = 0.05
 	}
 	unlocking_technologies = {
 		identification_documents
@@ -1275,6 +1299,7 @@ political_agitation = {
 	modifier = {
 		state_expected_sol_from_literacy = 2
 		country_authority_mult = 0.1
+		country_voting_power_mult = 0.1
 		country_agitator_slots_add = 1
 		country_institution_home_defence_max_investment_add = 1
 		country_institution_workplace_safety_max_investment_add = 1
@@ -1331,6 +1356,7 @@ corporate_management = {
 	
 	modifier = {
 		country_max_companies_add = 1
+		country_free_charters_add = 1
 		state_urbanization_per_level_mult = -0.25
 		country_company_throughput_bonus_add = 0.05
 		country_institution_workplace_exploitation_max_investment_add = 1
@@ -1351,7 +1377,7 @@ psychoanalysis = {
 	texture = "gfx/interface/icons/invention_icons/psychoanalysis.dds"
 	category = society
 	modifier = {
-		country_influence_mult = 0.1
+		country_influence_mult = 0.25
 		country_diplomatic_play_maneuvers_add = 5
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
 		country_institution_health_system_max_investment_add = 1
@@ -1415,11 +1441,13 @@ mass_surveillance = {
 	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
 	category = society
 	modifier = {
-		state_tax_capacity_add = 25
+		state_tax_capacity_add = 50
 		state_turmoil_effects_mult = -0.05
-		state_radicals_from_political_movements_mult = -0.03
+		state_radicals_from_political_movements_mult = -0.05
 		country_institution_home_affairs_max_investment_add = 1
 		country_max_declared_interests_add = 1
+		country_support_separatism_resistance_mult = 0.25
+		state_incorporation_speed_mult = 0.05
 	}
 	unlocking_technologies = {
 		central_planning
@@ -1468,11 +1496,14 @@ mass_propaganda = {
 	category = society
 	modifier = {
 		country_authority_mult = 0.1
+		country_voting_power_mult = 0.1
 		state_expected_sol_from_literacy = 1
 		country_war_exhaustion_casualties_mult = -0.15
 		country_agitator_slots_add = 1
 		country_infamy_generation_mult = -0.05
 		country_infamy_decay_mult = 0.15
+		
+		country_support_separatism_strength_mult = 0.25
 	}
 	unlocking_technologies = {
 		political_agitation
@@ -1513,6 +1544,7 @@ macroeconomics = {
 		state_shopkeepers_investment_pool_efficiency_mult = 0.2
 		state_farmers_investment_pool_efficiency_mult = 0.1
 		country_max_companies_add = 1
+		country_free_charters_add = 2
 		state_market_access_price_impact = 0.05
 	}
 	unlocking_technologies = {
@@ -1529,10 +1561,10 @@ behaviorism = {
 	texture = "gfx/interface/icons/invention_icons/behaviorism.dds"
 	category = society
 	modifier = {
-		country_influence_mult = 0.1
+		country_influence_mult = 0.35
 		country_diplomatic_play_maneuvers_add = 5
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
-		state_radicals_from_political_movements_mult = -0.05
+		state_radicals_from_political_movements_mult = -0.1
 	}
 	unlocking_technologies = {
 		psychoanalysis

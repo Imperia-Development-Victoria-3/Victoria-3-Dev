@@ -15,10 +15,8 @@
 		ideology_traditionalist
 		ideology_jingoist_leader
 		ideology_protectionist
-		ideology_orleanist
-		ideology_bonapartist
-		ideology_legitimist
 		ideology_sovereignist_leader
+		ideology_despotic_utopian
 	}
 	
 	enable = {
@@ -33,7 +31,7 @@
 	}
 	
 	on_enable = {
-		ig:ig_petty_bourgeoisie = {
+		ig:ig_petty_bourgeoisie ?= {
 			if = {
 				limit = {
 					owner = { c:SWE ?= this }
@@ -81,7 +79,7 @@
 						OR = {
 							c:BIC ?= this
 							any_primary_culture = {
-								has_discrimination_trait = south_asian_heritage
+								has_discrimination_trait_group = heritage_group_south_asian
 							}
 						}
 					}
@@ -112,6 +110,21 @@
 					set_ig_trait = ig_trait:ig_trait_treasury_bonds
 				}
 			}
+			# Kleinbürger
+			else_if = {
+				limit = {
+					has_dlc_feature = ip3_content
+					owner = {
+						any_primary_culture = {
+							has_discrimination_trait = language_germanophone
+						}
+					}
+				}
+				set_interest_group_name = ig_kleinburger
+				set_ig_trait = ig_trait:ig_trait_xenophobia
+				set_ig_trait = ig_trait:ig_trait_middle_managers
+				set_ig_trait = ig_trait:ig_trait_biedermanner
+			}
 			else = {
 				set_ig_trait = ig_trait:ig_trait_xenophobia
 				set_ig_trait = ig_trait:ig_trait_middle_managers
@@ -133,8 +146,32 @@
 				assamese				avadhi				baluchi				bengali				bihari				gujarati				kannada				malayalam				marathi				oriya				panjabi				pathan				rajput				sindi				tamil				telegu				hindustani				bundeli				pahari				gondi				bageli				chhattisgarhi				deccani
 			}
 		}
+		rule = {
+			trigger = {
+				c:ZAN ?= this
+				any_primary_culture = {
+					cu:bedouin = this
+				}
+			}
+			cultures = {
+				swahili				gujarati
+			}
+		}
 	}
-	on_character_ig_membership = {}
+	on_character_ig_membership = {
+		if = {
+			limit = {
+				culture = cu:gujarati
+				owner = {
+					c:ZAN ?= this
+					any_primary_culture = {
+						cu:bedouin = this
+					}
+				}
+			}
+			change_character_religion = rel:shiite
+		}
+	}
 	
 	pop_potential = {
 		custom_tooltip = {
@@ -142,12 +179,22 @@
 			this.culture = {
 				OR = {
 					AND = {
-						shares_heritage_trait_with_any_primary_culture = prev.owner
-						shares_non_heritage_trait_with_any_primary_culture = prev.owner
+						shares_heritage_trait_group_with_any_primary_culture = prev.owner
+						shares_language_trait_group_with_any_primary_culture = prev.owner
 					}
 					AND = {
 						c:BIC ?= prev.owner
-						has_discrimination_trait = south_asian_heritage
+						has_discrimination_trait_group = heritage_group_south_asian
+					}
+					AND = {
+						c:ZAN ?= prev.owner
+						c:ZAN = {
+							any_primary_culture = { cu:bedouin = this }
+						}
+						OR = {
+							cu:swahili = this
+							cu:gujarati = this
+						}
 					}
 				}
 			}
@@ -180,8 +227,8 @@
 					text = owner_has_homesteading_tt
 					owner = {
 						OR = {
-							has_law = law_type:law_homesteading
-							has_law = law_type:law_commercialized_agriculture
+							has_law_or_variant = law_type:law_homesteading
+							has_law_or_variant = law_type:law_commercialized_agriculture
 						}
 					}
 				}
@@ -199,10 +246,12 @@
 		if = {
 			limit = {
 				strata = lower
+				standard_of_living > 10
 			}
 			add = {
 				desc = "POP_BASE_ATTRACTION"
-				value = 15
+				value = standard_of_living
+				multiply = 1.25
 			}
 		}
 		else_if = {
@@ -211,7 +260,8 @@
 			}
 			add = {
 				desc = "POP_BASE_ATTRACTION"
-				value = 30
+				value = standard_of_living
+				multiply = 2
 			}
 		}
 		
@@ -221,7 +271,7 @@
 				limit = {
 					is_pop_type = shopkeepers
 				}
-				value = 150
+				value = 125
 			}
 		}
 		
@@ -231,7 +281,8 @@
 				limit = {
 					is_pop_type = clerks
 				}
-				value = 100
+				value = 60
+				add = standard_of_living
 			}
 		}
 		
@@ -241,14 +292,14 @@
 				limit = {
 					is_pop_type = engineers
 				}
-				value = 50
+				value = 40
 			}
 		}
 		
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_elected_bureaucrats
+					has_law_or_variant = law_type:law_elected_bureaucrats
 				}
 			}
 			add = {
@@ -257,7 +308,7 @@
 					limit = {
 						is_pop_type = bureaucrats
 					}
-					value = 50
+					value = 40
 				}
 			}
 		}
@@ -268,7 +319,7 @@
 				limit = {
 					is_pop_type = farmers
 					owner = {
-						has_law = law_type:law_homesteading
+						has_law_or_variant = law_type:law_homesteading
 					}
 				}
 				value = 25
@@ -284,18 +335,19 @@
 			}
 		}
 		
-		add = {
-			desc = "URBAN_POP"
-			if = {
-				limit = {
-					NOR = {
-						pop_employment_building_group = bg_agriculture
-						pop_employment_building_group = bg_ranching
-						pop_employment_building_group = bg_plantations
-					}
+		if = {
+			limit = {
+				standard_of_living >= 10
+				NOR = {
+					pop_employment_building_group = bg_agriculture
+					pop_employment_building_group = bg_ranching
+					pop_employment_building_group = bg_plantations
 				}
-				value = 25
-				add = this.standard_of_living
+			}
+			add = {
+				desc = "URBAN_POP"
+				value = standard_of_living
+				multiply = 1.25
 			}
 		}
 		
@@ -303,7 +355,7 @@
 			limit = {
 				c:BIC ?= owner
 				culture = {
-					has_discrimination_trait = european_heritage
+					has_discrimination_trait_group = heritage_group_european
 				}
 			}
 			multiply = {
@@ -316,7 +368,7 @@
 			limit = {
 				c:BIC ?= owner
 				culture = {
-					has_discrimination_trait = south_asian_heritage
+					has_discrimination_trait_group = heritage_group_south_asian
 				}
 				OR = {
 					is_pop_type = capitalists
@@ -421,7 +473,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_elected_bureaucrats
+					has_law_or_variant = law_type:law_elected_bureaucrats
 				}
 			}
 			multiply = {
@@ -432,7 +484,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_ethnostate
+					has_law_or_variant = law_type:law_ethnostate
 				}
 			}
 			multiply = {
@@ -447,7 +499,7 @@
 		# Agitators will never be part of a marginalized IG
 		if = {
 			limit = {
-				owner.ig:ig_petty_bourgeoisie = {
+				owner.ig:ig_petty_bourgeoisie ?= {
 					is_marginal = yes
 				}
 			}
@@ -512,9 +564,12 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
-				
+				law_stance = {
+					law = law_type:law_womens_suffrage
+					value >= approve
+				}
 			}
 			add = {
 				value = 0.025
@@ -528,7 +583,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_own_property
+					has_law_or_variant = law_type:law_women_own_property
 				}
 				
 			}
@@ -540,7 +595,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_women_in_the_workplace
+					has_law_or_variant = law_type:law_women_in_the_workplace
 				}
 				
 			}
@@ -552,7 +607,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_womens_suffrage
+					has_law_or_variant = law_type:law_womens_suffrage
 				}
 				
 			}

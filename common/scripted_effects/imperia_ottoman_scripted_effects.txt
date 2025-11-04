@@ -701,27 +701,34 @@ imperia_balkan_disintegrate = {
 								}
 							}
 						}
-						# Romanians to Wallachia
+						# Romanians to Romania, else Wallachia
 						if = {
 							limit = {
 								has_pop_culture = romanian
 							}
 							if = {
 								limit = {
-									NOT = {
-										exists = c:WAL
-									}
+									exists = c:ROM
 								}
+								prev = {
+									set_state_owner = c:ROM
+									set_state_type = incorporated
+								}
+							}
+							else_if = {
+								limit = {
+									exists = c:WAL
+								}
+								prev = {
+									set_state_owner = c:WAL
+									set_state_type = incorporated
+								}
+							}
+							else = {
 								create_country = {
 									tag = WAL
 									origin = C:TUR
 									state = prev
-								}
-							}
-							else = {
-								prev = {
-									set_state_owner = c:WAL
-									set_state_type = incorporated
 								}
 							}
 						}
@@ -773,11 +780,37 @@ imperia_balkan_disintegrate = {
 								}
 							}
 						}
-						# Serbians to Serbia
+						# Serbians to Montenegro in Montenegro, else Serbia
 						if = {
 							limit = {
 								has_pop_culture = serb
 							}
+							if = {
+								limit = {
+									prev = s:STATE_MONTENEGRO.region_state:TUR
+								}
+								if = {
+									limit = {
+										NOT = {
+											exists = c:MON
+										}
+									}
+									create_country = {
+										tag = MON
+										origin = C:TUR
+										state = prev
+									}
+								}
+								else = {
+									prev = {
+										set_state_owner = c:MON
+										set_state_type = incorporated
+									}
+								}
+							}
+						}
+						else = {
+							# Continue with Serbia if not Montenegro
 							if = {
 								limit = {
 									NOT = {
@@ -1021,27 +1054,34 @@ imperia_balkan_disintegrate_partial = {
 								}
 							}
 						}
-						# Romanians to Wallachia
+						# Romanians to Romania, else Wallachia
 						if = {
 							limit = {
 								has_pop_culture = romanian
 							}
 							if = {
 								limit = {
-									NOT = {
-										exists = c:WAL
-									}
+									exists = c:ROM
 								}
+								prev = {
+									set_state_owner = c:ROM
+									set_state_type = incorporated
+								}
+							}
+							else_if = {
+								limit = {
+									exists = c:WAL
+								}
+								prev = {
+									set_state_owner = c:WAL
+									set_state_type = incorporated
+								}
+							}
+							else = {
 								create_country = {
 									tag = WAL
 									origin = C:TUR
 									state = prev
-								}
-							}
-							else = {
-								prev = {
-									set_state_owner = c:WAL
-									set_state_type = incorporated
 								}
 							}
 						}
@@ -1093,27 +1133,32 @@ imperia_balkan_disintegrate_partial = {
 								}
 							}
 						}
-						# Serbians to Serbia
+						# Serbians to Montenegro in Montenegro, else Serbia
 						if = {
 							limit = {
 								has_pop_culture = serb
 							}
 							if = {
 								limit = {
-									NOT = {
-										exists = c:SER
+									prev = s:STATE_MONTENEGRO.region_state:TUR
+								}
+								if = {
+									limit = {
+										NOT = {
+											exists = c:MON
+										}
+									}
+									create_country = {
+										tag = MON
+										origin = C:TUR
+										state = prev
 									}
 								}
-								create_country = {
-									tag = SER
-									origin = C:TUR
-									state = prev
-								}
-							}
-							else = {
-								prev = {
-									set_state_owner = c:SER
-									set_state_type = incorporated
+								else = {
+									prev = {
+										set_state_owner = c:MON
+										set_state_type = incorporated
+									}
 								}
 							}
 						}
@@ -1190,6 +1235,43 @@ imperia_balkan_disintegrate_partial = {
 							}
 						}
 					}
+				}
+			}
+		}
+	}
+}
+
+### BALKAN LEAGUE FORMATION ###
+form_balkan_league = {
+	# Can be used anywhere, will scope to the right countries anyways
+	if = {
+		# Only works with the National Awakening DLC
+		limit = {
+			has_dlc_feature = ip3_content
+		}
+		custom_tooltip = {
+			text = form_balkan_league_tt
+			set_global_variable = balkan_league_formed
+			every_country = {
+				limit = {
+					is_balkan_league_candidate = yes
+					is_subject = no
+				}
+				add_journal_entry = {
+					type = je_the_balkan_league
+				}
+				if = {
+					limit = {
+						c:TUR = {
+							has_modifier = dead_man_balkan_disintegrate_rejected
+						}
+					}
+					# If Turkey broke their promise
+					post_notification = balkan_league_formed_betrayal
+				}
+				else = {
+					# If Turkey turned away from the Balkan demands
+					post_notification = balkan_league_formed_rejection
 				}
 			}
 		}

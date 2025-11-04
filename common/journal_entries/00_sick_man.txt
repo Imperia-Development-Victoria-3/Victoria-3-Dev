@@ -3,11 +3,18 @@
 	
 	group = je_group_tanzimat
 	
+	scripted_button = je_sick_man_main_desperate_defense_button
+	
+	is_shown_in_lobby = {
+		c:TUR = THIS
+	}
+	
 	complete = {
 		scope:journal_entry = {
 			is_goal_complete = yes
 		}
 	}
+	
 	on_complete = {
 		remove_modifier ?= sick_man_of_europe
 		if = {
@@ -30,6 +37,11 @@
 	timeout = 17900
 	on_timeout = {
 		remove_modifier ?= sick_man_of_europe
+		add_modifier = {
+			name = dead_man_of_europe
+			days = very_long_modifier_time
+			is_decaying = yes
+		}
 		trigger_event = {
 			id = sick_man.3
 		}
@@ -40,7 +52,7 @@
 			owns_entire_state_region = STATE_WESTERN_THRACE
 			owns_entire_state_region = STATE_EASTERN_THRACE
 		}
-		OR = {
+		AND = {
 			has_technology_researched = nationalism
 			has_technology_researched = labor_movement
 		}
@@ -63,6 +75,24 @@
 				name = failed_tanzimat
 				years = 20
 			}
+		}
+		if = {
+			limit = {
+				has_dlc_feature = ip3_content
+			}
+			custom_tooltip = {
+				text = eastern_crisis_consequence_tt
+				set_variable = failed_sick_man_main
+			}
+		}
+		cu:albanian = {
+			remove_tradition_trait = tradition_rumelian
+		}
+		cu:bosniak = {
+			remove_tradition_trait = tradition_rumelian
+		}
+		cu:sephardic = {
+			remove_tradition_trait = tradition_rumelian
 		}
 	}
 	current_value = {
@@ -87,9 +117,9 @@ je_sick_man_bureaucracy = {
 	group = je_group_tanzimat
 	complete = {
 		NOR = {
-			has_law = law_type:law_hereditary_bureaucrats
-			has_law = law_type:law_land_based_taxation
-			has_law = law_type:law_consumption_based_taxation
+			has_law_or_variant = law_type:law_hereditary_bureaucrats
+			has_law_or_variant = law_type:law_land_based_taxation
+			has_law_or_variant = law_type:law_consumption_based_taxation
 		}
 		bureaucracy >= 0
 		approaching_bureaucracy_shortage = no
@@ -138,7 +168,7 @@ je_sick_man_economy = {
 				occupancy > 0.9
 				level >= 3
 			}
-			percent >= 0.33333
+			percent >= 0.4
 		}
 	}
 	on_complete = {
@@ -171,28 +201,46 @@ je_sick_man_army = {
 	complete = {
 		army_size >= 135
 		OR = {
-			has_law = law_type:law_professional_army
-			has_law = law_type:law_mass_conscription
+			has_law_or_variant = law_type:law_professional_army
+			has_law_or_variant = law_type:law_mass_conscription
 		}
 		has_technology_researched = napoleonic_warfare
-		NOR = {
-			any_scope_building = {
+		any_scope_building = {
+			filter = {
 				is_building_type = building_barracks
-				OR = {
-					building_has_goods_shortage = yes
-					has_active_production_method = pm_no_organization
-				}
 			}
-			any_military_formation = {
-				filter = {
-					is_army = yes
-				}
-				any_combat_unit = {
-					has_unit_type = unit_type:combat_unit_type_irregular_infantry
-				}
-				percent >= 0.1
+			NOR = {
+				building_has_goods_shortage = yes
+				has_active_production_method = pm_no_organization
 			}
+			percent = 1
 		}
+		any_military_formation = {
+			filter = {
+				is_army = yes
+			}
+			any_combat_unit = {
+				has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				percent < 0.1
+			}
+			count = all
+		}
+		any_military_formation = {
+			filter = {
+				is_army = yes
+			}
+			any_combat_unit = {
+				OR = {
+					has_unit_type = unit_type:combat_unit_type_cannon_artillery
+					has_unit_type = unit_type:combat_unit_type_mobile_artillery
+					has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
+					has_unit_type = unit_type:combat_unit_type_siege_artillery
+				}
+				percent > 0.15
+			}
+			count = all
+		}
+		
 	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
@@ -229,8 +277,8 @@ je_sick_man_navy = {
 	complete = {
 		navy_size >= 40
 		OR = {
-			has_law = law_type:law_professional_army
-			has_law = law_type:law_mass_conscription
+			has_law_or_variant = law_type:law_professional_army
+			has_law_or_variant = law_type:law_mass_conscription
 		}
 		has_technology_researched = power_of_the_purse
 		NOR = {
@@ -239,6 +287,21 @@ je_sick_man_navy = {
 				OR = {
 					building_has_goods_shortage = yes
 					has_active_production_method = pm_no_naval_theory
+				}
+			}
+		}
+		# 40% of ships in the Ottoman Navy must be heavy ships
+		any_scope_building = {
+			percent >= 0.4
+			filter = {
+				is_building_type = building_naval_base
+			}
+			any_combat_unit = {
+				OR = {
+					has_unit_type = unit_type:combat_unit_type_man_o_war
+					has_unit_type = unit_type:combat_unit_type_ironclad
+					has_unit_type = unit_type:combat_unit_type_dreadnought
+					has_unit_type = unit_type:combat_unit_type_battleship
 				}
 			}
 		}
@@ -450,82 +513,25 @@ je_sick_man_liberal_separatism = {
 		any_scope_state = {
 			turmoil <= 0.6
 		}
-		has_law = law_type:law_no_migration_controls
+		has_law_or_variant = law_type:law_no_migration_controls
 		OR = {
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
-			has_law = law_type:law_true_multicultural
-		}
-	}
-	immediate = {
-		rel:catholic = {
-			save_scope_as = christian_religion
-		}
-		rel:jewish = {
-			save_scope_as = jewish_religion
-		}
-		rel:sunni = {
-			save_scope_as = sunni_religion
+			has_law_or_variant = law_type:law_cultural_exclusion
+			has_law_or_variant = law_type:law_multicultural
+			has_law_or_variant = law_type:law_true_multicultural
 		}
 	}
 	on_complete = {
-		custom_tooltip = {
-			text = christian_and_jews_5_percent_more_loyal_tt
-			add_loyalists = {
-				value = 0.05
-				culture = cu:greek
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:bulgarian
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:serb
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:armenian
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:croat
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:sephardic
-			}
-			add_loyalists = {
-				value = 0.05
-				culture = cu:georgian
-			}
+		add_loyalists = {
+			value = 0.05
+			religion = rel:orthodox
 		}
-		custom_tooltip = {
-			text = sunnis_5_percent_more_radical_tt
-			add_radicals = {
-				value = 0.05
-				culture = cu:turkish
-			}
-			add_radicals = {
-				value = 0.05
-				culture = cu:albanian
-			}
-			add_radicals = {
-				value = 0.05
-				culture = cu:kurdish
-			}
-			add_radicals = {
-				value = 0.05
-				culture = cu:bosniak
-			}
-			add_radicals = {
-				value = 0.05
-				culture = cu:bedouin
-			}
-			add_radicals = {
-				culture = cu:mashriqi
-				value = 0.05
-			}
+		add_loyalists = {
+			value = 0.05
+			religion = rel:jewish
+		}
+		add_radicals = {
+			value = 0.05
+			religion = rel:sunni
 		}
 		add_modifier = {
 			name = balkan_liberal_peace
@@ -547,11 +553,11 @@ je_sick_man_liberal_separatism = {
 					any_scope_state = {
 						turmoil <= 0.6
 					}
-					has_law = law_type:law_no_migration_controls
+					has_law_or_variant = law_type:law_no_migration_controls
 					OR = {
-						has_law = law_type:law_cultural_exclusion
-						has_law = law_type:law_multicultural
-						has_law = law_type:law_true_multicultural
+						has_law_or_variant = law_type:law_cultural_exclusion
+						has_law_or_variant = law_type:law_multicultural
+						has_law_or_variant = law_type:law_true_multicultural
 					}
 				}
 				change_variable = {
@@ -586,9 +592,9 @@ je_sick_man_absolute_separatism = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 	group = je_group_tanzimat
 	complete = {
-		has_law = law_type:law_faith_orders
+		has_law_or_variant = law_type:law_faith_orders
 		NOT = {
-			has_law = law_type:law_no_migration_controls
+			has_law_or_variant = law_type:law_no_migration_controls
 		}
 		institution_investment_level = {
 			institution = institution_police
@@ -658,11 +664,11 @@ je_sick_man_liberal_education = {
 		any_scope_building = {
 			is_building_type = building_university
 			occupancy > 0.9
-			level >= 5
+			level >= 8
 		}
 		OR = {
-			has_law = law_type:law_private_schools
-			has_law = law_type:law_public_schools
+			has_law_or_variant = law_type:law_private_schools
+			has_law_or_variant = law_type:law_public_schools
 		}
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -685,7 +691,7 @@ je_sick_man_liberal_education = {
 		value = root.literacy_rate
 	}
 	goal_add_value = {
-		add = 0.15
+		add = 0.12
 	}
 	invalid = {
 		custom_tooltip = {
@@ -705,11 +711,11 @@ je_sick_man_absolute_education = {
 		any_scope_building = {
 			is_building_type = building_university
 			occupancy > 0.9
-			level >= 5
+			level >= 8
 		}
 		OR = {
-			has_law = law_type:law_patriot_schools
-			has_law = law_type:law_religious_schools
+			has_law_or_variant = law_type:law_patriot_schools
+			has_law_or_variant = law_type:law_religious_schools
 		}
 		scope:journal_entry = {
 			is_goal_complete = yes
@@ -732,7 +738,7 @@ je_sick_man_absolute_education = {
 		value = root.literacy_rate
 	}
 	goal_add_value = {
-		add = 0.15
+		add = 0.11
 	}
 	invalid = {
 		custom_tooltip = {
@@ -760,13 +766,13 @@ je_sick_man_liberal_voting = {
 			is_goal_complete = yes
 		}
 		OR = {
-			has_law = law_type:law_right_of_assembly
-			has_law = law_type:law_protected_speech
+			has_law_or_variant = law_type:law_right_of_assembly
+			has_law_or_variant = law_type:law_protected_speech
 		}
 		OR = {
-			has_law = law_type:law_wealth_voting
-			has_law = law_type:law_census_voting
-			has_law = law_type:law_universal_suffrage
+			has_law_or_variant = law_type:law_wealth_voting
+			has_law_or_variant = law_type:law_census_voting
+			has_law_or_variant = law_type:law_universal_suffrage
 		}
 	}
 	on_complete = {
@@ -806,13 +812,13 @@ je_sick_man_liberal_voting = {
 			if = {
 				limit = {
 					OR = {
-						has_law = law_type:law_right_of_assembly
-						has_law = law_type:law_protected_speech
+						has_law_or_variant = law_type:law_right_of_assembly
+						has_law_or_variant = law_type:law_protected_speech
 					}
 					OR = {
-						has_law = law_type:law_wealth_voting
-						has_law = law_type:law_census_voting
-						has_law = law_type:law_universal_suffrage
+						has_law_or_variant = law_type:law_wealth_voting
+						has_law_or_variant = law_type:law_census_voting
+						has_law_or_variant = law_type:law_universal_suffrage
 					}
 				}
 				change_variable = {
@@ -835,12 +841,12 @@ je_sick_man_liberal_secularism = {
 		scope:journal_entry = {
 			is_goal_complete = yes
 		}
-		has_law = law_type:law_guaranteed_liberties
-		has_law = law_type:law_total_separation
+		has_law_or_variant = law_type:law_guaranteed_liberties
+		has_law_or_variant = law_type:law_total_separation
 		NOR = {
-			has_law = law_type:law_faith_orders
-			has_law = law_type:law_inquisition
-			has_law = law_type:law_religious_schools
+			has_law_or_variant = law_type:law_faith_orders
+			has_law_or_variant = law_type:law_inquisition
+			has_law_or_variant = law_type:law_religious_schools
 		}
 		calc_true_if = {
 			amount >= 8
@@ -848,9 +854,9 @@ je_sick_man_liberal_secularism = {
 			country_or_subject_owns_entire_state_region = STATE_ALBANIA
 			country_or_subject_owns_entire_state_region = STATE_THESSALIA
 			country_or_subject_owns_entire_state_region = STATE_SKOPIA
-			country_or_subject_owns_entire_state_region = STATE_SOUTHERN_SERBIA
+			country_or_subject_owns_entire_state_region = STATE_WESTERN_SERBIA
 			country_or_subject_owns_entire_state_region = STATE_MACEDONIA
-			country_or_subject_owns_entire_state_region = STATE_NORTHERN_SERBIA
+			country_or_subject_owns_entire_state_region = STATE_EASTERN_SERBIA
 			country_or_subject_owns_entire_state_region = STATE_WALLACHIA
 			country_or_subject_owns_entire_state_region = STATE_BULGARIA
 			any_scope_state = {
@@ -877,80 +883,23 @@ je_sick_man_liberal_secularism = {
 			}
 		}
 	}
-	immediate = {
-		rel:catholic = {
-			save_scope_as = christian_religion
-		}
-		rel:jewish = {
-			save_scope_as = jewish_religion
-		}
-		rel:sunni = {
-			save_scope_as = sunni_religion
-		}
-	}
 	on_complete = {
 		custom_tooltip = je_sick_man_advance
 		change_variable = {
 			name = sick_man_var
 			add = 1
 		}
-		custom_tooltip = {
-			text = christian_and_jews_15_percent_more_loyal_tt
-			add_loyalists = {
-				culture = cu:greek
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:bulgarian
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:serb
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:armenian
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:croat
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:sephardic
-				value = 0.15
-			}
-			add_loyalists = {
-				culture = cu:georgian
-				value = 0.15
-			}
+		add_loyalists = {
+			value = 0.15
+			religion = rel:orthodox
 		}
-		custom_tooltip = {
-			text = sunnis_15_percent_more_radical_tt
-			add_radicals = {
-				culture = cu:turkish
-				value = 0.15
-			}
-			add_radicals = {
-				culture = cu:albanian
-				value = 0.15
-			}
-			add_radicals = {
-				culture = cu:mashriqi
-				value = 0.15
-			}
-			add_radicals = {
-				culture = cu:kurdish
-				value = 0.15
-			}
-			add_radicals = {
-				culture = cu:bosniak
-				value = 0.15
-			}
-			add_radicals = {
-				culture = cu:bedouin
-				value = 0.15
-			}
+		add_loyalists = {
+			value = 0.15
+			religion = rel:jewish
+		}
+		add_radicals = {
+			value = 0.15
+			religion = rel:sunni
 		}
 		add_modifier = {
 			name = sick_man_liberal_secularism
@@ -978,14 +927,14 @@ je_sick_man_liberal_labor = {
 			is_goal_complete = yes
 		}
 		NOR = {
-			has_law = law_type:law_serfdom
-			has_law = law_type:law_tenant_farmers
+			has_law_or_variant = law_type:law_serfdom
+			has_law_or_variant = law_type:law_tenant_farmers
 		}
 		OR = {
-			has_law = law_type:law_interventionism
-			has_law = law_type:law_laissez_faire
+			has_law_or_variant = law_type:law_interventionism
+			has_law_or_variant = law_type:law_laissez_faire
 		}
-		has_law = law_type:law_slavery_banned
+		has_law_or_variant = law_type:law_slavery_banned
 	}
 	on_complete = {
 		set_variable = completed_sick_man_bureaucracy_je
@@ -1024,8 +973,8 @@ je_sick_man_syria = {
 		owns_entire_state_region = STATE_TRANSJORDAN
 		owns_entire_state_region = STATE_ADANA
 		OR = {
-			has_law = law_type:law_agrarianism
-			has_law = law_type:law_interventionism
+			has_law_or_variant = law_type:law_agrarianism
+			has_law_or_variant = law_type:law_interventionism
 		}
 		any_scope_state = {
 			count = all
@@ -1069,6 +1018,10 @@ je_sick_man_syria = {
 						owns_entire_state_region = STATE_LOWER_EGYPT
 					}
 				}
+			}
+			change_variable = {
+				name = sick_man_var
+				add = 1
 			}
 		}
 		add_modifier = {
@@ -1156,16 +1109,16 @@ je_sick_man_absolute_islam = {
 			is_goal_complete = yes
 		}
 		AND = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_inquisition
-			has_law = law_type:law_no_womens_rights
-			has_law = law_type:law_tenant_farmers
+			has_law_or_variant = law_type:law_state_religion
+			has_law_or_variant = law_type:law_inquisition
+			has_law_or_variant = law_type:law_no_womens_rights
+			has_law_or_variant = law_type:law_tenant_farmers
 		}
 		OR = {
-			has_law = law_type:law_autocracy
-			has_law = law_type:law_technocracy
-			has_law = law_type:law_oligarchy
-			has_law = law_type:law_landed_voting
+			has_law_or_variant = law_type:law_autocracy
+			has_law_or_variant = law_type:law_technocracy
+			has_law_or_variant = law_type:law_oligarchy
+			has_law_or_variant = law_type:law_landed_voting
 		}
 	}
 	on_complete = {
@@ -1201,16 +1154,16 @@ je_sick_man_absolute_islam = {
 			if = {
 				limit = {
 					AND = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_inquisition
-						has_law = law_type:law_no_womens_rights
-						has_law = law_type:law_tenant_farmers
+						has_law_or_variant = law_type:law_state_religion
+						has_law_or_variant = law_type:law_inquisition
+						has_law_or_variant = law_type:law_no_womens_rights
+						has_law_or_variant = law_type:law_tenant_farmers
 					}
 					OR = {
-						has_law = law_type:law_autocracy
-						has_law = law_type:law_technocracy
-						has_law = law_type:law_oligarchy
-						has_law = law_type:law_landed_voting
+						has_law_or_variant = law_type:law_autocracy
+						has_law_or_variant = law_type:law_technocracy
+						has_law_or_variant = law_type:law_oligarchy
+						has_law_or_variant = law_type:law_landed_voting
 					}
 				}
 				change_variable = {

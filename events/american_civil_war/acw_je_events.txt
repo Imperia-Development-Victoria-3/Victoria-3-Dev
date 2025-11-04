@@ -124,6 +124,18 @@ acw_je_events.1 = {
 			c:CSA = {
 				set_variable = acw_slave_nation_var
 			}
+
+			# historical Confederates move to CSA
+			every_scope_character = {
+				limit = {
+					has_variable = historical_csa
+					NOR = {
+						is_ruler = yes
+						is_heir = yes
+					}
+				}
+				transfer_character = c:CSA
+			}
 		}
 		else_if = {
 			limit = { exists = c:FSA }
@@ -246,7 +258,7 @@ acw_je_events.2 = {
 		add_journal_entry = { type = je_acw_reincorporate }
 		if = {
 			limit = {
-				has_law = law_type:law_slavery_banned
+				has_law_or_variant = law_type:law_slavery_banned
 			}
 			add_journal_entry = {
 				type = je_acw_equality
@@ -298,6 +310,9 @@ acw_je_events.3 = {
 			}
 			add_modifier = {
 				name = afro_american_acceptance
+			}
+			cu:afro_american = {
+				add_tradition_trait = tradition_anglo_american
 			}
 		}
 		# revise this if we split the JE's

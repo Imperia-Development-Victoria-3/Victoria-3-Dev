@@ -7,6 +7,9 @@ lignite.1 = {
 	desc = lignite.1.d
 	flavor = lignite.1.f
 	duration = 3
+	
+	cooldown = { days = long_modifier_time }	#State Cooldown
+	
 	event_image = {
 		video = "europenorthamerica_gold_prospectors"
 	}
@@ -23,6 +26,11 @@ lignite.1 = {
 		NOT = {
 			has_modifier = state_lignite_rush
 		}
+		owner = {
+			NOT = {
+				has_variable = ignore_lignite_events
+			}
+		}
 	}
 	option = {
 		#wooh lignite
@@ -31,7 +39,7 @@ lignite.1 = {
 		trigger = {
 			owner = {
 				NOT = {
-					has_law = law_type:law_child_labor_allowed
+					has_law_or_variant = law_type:law_child_labor_allowed
 				}
 			}
 		}
@@ -45,9 +53,54 @@ lignite.1 = {
 		name = lignite.1.b
 		trigger = {
 			owner = {
-				has_law = law_type:law_child_labor_allowed
+				has_law_or_variant = law_type:law_child_labor_allowed
 			}
 		}
+		add_modifier = {
+			name = state_lignite_rush
+			days = short_modifier_time
+		}
+	}
+	option = {
+		# never notify me about lignite
+		name = lignite.1.c
+		add_modifier = {
+			name = state_lignite_rush
+			days = short_modifier_time
+		}
+		custom_tooltip = {
+			text = ignore_lignite_events_tt
+			owner = {
+				set_variable = ignore_lignite_events
+			}
+		}
+	}
+}
+
+# Discovery event for lignite when you've asked not to be notified
+lignite.2 = {
+	type = state_event
+	hidden = yes
+	
+	cooldown = { days = long_modifier_time }	#State Cooldown
+	
+	trigger = {
+		has_potential_resource = bg_lignite_mining
+		state_region = {
+			remaining_undepleted = {
+				type = bg_lignite_mining
+				amount > 1
+			}
+		}
+		NOT = {
+			has_modifier = state_lignite_rush
+		}
+		owner = {
+			has_variable = ignore_lignite_events
+		}
+	}
+	
+	immediate = {
 		add_modifier = {
 			name = state_lignite_rush
 			days = short_modifier_time
