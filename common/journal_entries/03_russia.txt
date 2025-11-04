@@ -717,6 +717,11 @@ je_pacify_the_steppes = {
 	
 	group = je_group_russia_expansion
 	
+	is_shown_in_lobby = {
+		has_dlc_feature = ep1_content	#Spheres of Influence
+		c:RUS ?= THIS
+	}
+	
 	possible = {
 		#Enabled at start
 	}
@@ -739,7 +744,7 @@ je_pacify_the_steppes = {
 			filter = {
 				country_has_primary_culture = cu:kazak
 			}
-			is_subject_type = subject_type_dominion
+			is_subject_type = subject_type_puppet
 			liberty_desire <= 25
 			percent = 1
 		}
@@ -972,6 +977,11 @@ je_conquest_of_central_asia = {
 	
 	group = je_group_russia_expansion
 	
+	is_shown_in_lobby = {
+		has_dlc_feature = ep1_content	#Spheres of Influence
+		c:RUS ?= THIS
+	}
+	
 	scripted_button = je_conquest_of_central_asia_turkmen_button
 	
 	is_shown_when_inactive = {
@@ -1065,6 +1075,10 @@ je_great_reformer = {	# Note - Alexander II certainly would not have called thes
 	
 	group = je_group_russia_great_reformer
 	
+	is_shown_in_lobby = {
+		c:RUS ?= THIS
+	}
+	
 	immediate = {
 		set_variable = { name = great_reforms_var value = 0 }
 		ruler = {
@@ -1139,11 +1153,11 @@ je_great_reforms_serfdom = {
 	}
 	complete = {
 		OR = {
-			has_law = law_type:law_tenant_farmers
-			has_law = law_type:law_commercialized_agriculture
+			has_law_or_variant = law_type:law_tenant_farmers
+			has_law_or_variant = law_type:law_commercialized_agriculture
 		}
 		NOT = {
-			has_law = law_type:law_traditionalism
+			has_law_or_variant = law_type:law_traditionalism
 		}
 	}
 	
@@ -1182,7 +1196,7 @@ je_great_reforms_military = {
 	}
 	complete = {
 		has_technology_researched = rifling
-		has_law = law_type:law_mass_conscription
+		has_law_or_variant = law_type:law_mass_conscription
 		OR = {
 			country_army_unit_type_fraction = {
 				target = unit_type:combat_unit_type_skirmish_infantry
@@ -1266,11 +1280,14 @@ je_great_reforms_bureaucratic = {
 		}
 	}
 	complete = {
-		has_law = law_type:law_appointed_bureaucrats
 		OR = {
-			has_law = law_type:law_per_capita_based_taxation
-			has_law = law_type:law_proportional_taxation
-			has_law = law_type:law_graduated_taxation
+			has_law_or_variant = law_type:law_appointed_bureaucrats
+			has_law_or_variant = law_type:law_meritocratic_bureaucracy
+		}
+		OR = {
+			has_law_or_variant = law_type:law_per_capita_based_taxation
+			has_law_or_variant = law_type:law_proportional_taxation
+			has_law_or_variant = law_type:law_graduated_taxation
 		}
 		bureaucracy >= 0
 		approaching_bureaucracy_shortage = no

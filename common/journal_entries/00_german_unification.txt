@@ -3,6 +3,16 @@
 	
 	group = je_group_german_unification
 	
+	is_shown_in_lobby = {
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:south_german
+		}
+		NOT = {
+			c:AUS = THIS
+		}
+	}
+	
 	is_shown_when_inactive = {
 		hidden_trigger = {
 			NOT = {
@@ -112,6 +122,19 @@ je_german_unification_idea = {
 	
 	group = je_group_german_unification
 	
+	is_shown_in_lobby = {
+		AND = {
+			OR = {
+				country_has_primary_culture = cu:north_german
+				country_has_primary_culture = cu:south_german
+			}
+			NOR = {
+				c:PRU = THIS
+				c:AUS = THIS
+			}
+		}
+	}
+	
 	is_shown_when_inactive = {
 		OR = {
 			country_has_primary_culture = cu:north_german
@@ -134,15 +157,11 @@ je_german_unification_idea = {
 		}
 	}
 	complete = {
-		any_country = {
-			filter = {
-				OR = {
-					country_has_primary_culture = cu:north_german
-					country_has_primary_culture = cu:south_german
-				}
-			}
-			has_technology_researched = nationalism
-			percent >= 0.85	# From 0.75; should not happen while the Parliament is happening
+		cu:north_german ?= {
+			culture_current_fervor >= 40
+		}
+		cu:south_german ?= {
+			culture_current_fervor >= 30
 		}
 		je:je_german_unification_idea = {
 			# Here so it doesnt disappear immediately upon the Frankfurt ending...
@@ -322,10 +341,14 @@ je_north_german_unification = {
 			}
 		}
 	}
-	on_monthly_pulse = {
-		events = {
-			german_unification.3	# Bismarck
+	
+	fail = {
+		NOT = {
+			is_unification_candidate = GER
 		}
+	}
+	
+	on_monthly_pulse = {
 		effect = {
 			if = {
 				limit = {
@@ -382,6 +405,13 @@ je_south_german_unification = {
 			}
 		}
 	}
+	
+	fail = {
+		NOT = {
+			is_unification_candidate = GER
+		}
+	}
+	
 	on_monthly_pulse = {
 		effect = {
 			if = {
@@ -419,6 +449,10 @@ je_german_unification = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	
 	group = je_group_german_unification
+	
+	is_shown_in_lobby = {
+		c:PRU = THIS
+	}
 	
 	is_shown_when_inactive = {
 		has_variable = je_german_confederate_unifier

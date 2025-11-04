@@ -935,6 +935,9 @@ imperia_qing_substates.13 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	duration = 3
+	trigger = {
+		# triggered by event
+	}
 	option = {
 		name = imperia_qing_substates.13.a
 		default_option = yes
@@ -946,10 +949,6 @@ imperia_qing_substates.13 = {
 		}
 		s:STATE_SOUTHERN_MANCHURIA = {
 			add_homeland = cu:han
-		}
-		s:STATE_GANDO = {
-			add_homeland = cu:han
-			remove_homeland = cu:manchu
 		}
 		add_loyalists = {
 			value = 0.1
@@ -968,6 +967,34 @@ imperia_qing_substates.13 = {
 		}
 		add_modifier = {
 			name = modifier_never_fade_away
+		}
+	}
+}
+
+imperia_qing_substates.14 = {	#Disbanding of the Cohong if Qing loses the Opium War
+	type = country_event
+	placement = root
+	title = imperia_qing_substates.14.t
+	desc = imperia_qing_substates.14.d
+	flavor = imperia_qing_substates.14.f
+	event_image = {
+		video = "gfx/event_pictures/asia_farmers_market.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	duration = 3
+	trigger = {
+		# triggered by event
+	}
+	option = {
+		name = imperia_qing_substates.14.a
+		default_option = yes
+		
+		if = {
+			limit = {
+				has_company = company_type:company_canton_cohong
+			}
+			remove_company = company_type:company_canton_cohong
 		}
 	}
 }

@@ -452,7 +452,12 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				var:civil_war_type_var ?= movement_type:movement_cultural_majority
+				OR = {
+					var:civil_war_type_var ?= movement_type:movement_cultural_majority
+					var:civil_war_type_var ?= movement_type:movement_italian_national
+					var:civil_war_type_var ?= movement_type:movement_german_national
+					var:civil_war_type_var ?= movement_type:movement_yugoslav_national
+				}
 			}
 		}
 	}
@@ -483,7 +488,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_rural_folk = {
+				ig:ig_rural_folk ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -502,7 +507,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_landowners = {
+				ig:ig_landowners ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -575,7 +580,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_armed_forces = {
+				ig:ig_armed_forces ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -593,7 +598,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_devout = {
+				ig:ig_devout ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -611,7 +616,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_petty_bourgeoisie = {
+				ig:ig_petty_bourgeoisie ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -629,7 +634,7 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_trade_unions = {
+				ig:ig_trade_unions ?= {
 					is_in_government = yes
 					is_strongest_ig_in_government = yes
 				}
@@ -802,6 +807,16 @@ DEFAULT = {
 			}
 		}
 	}
+	
+	dynamic_country_name = {	# Israel pretender
+		name = dyn_c_israel_pretender
+		adjective = dyn_c_israel_pretender_adj
+		is_revolutionary = no
+		priority = 100
+		trigger = {
+			coa_def_pretender_israel_flag_trigger = yes
+		}
+	}
 }
 
 SWE = {
@@ -836,21 +851,6 @@ ACE = {	# Sumatra
 				owns_entire_state_region = STATE_NORTH_SUMATRA
 				owns_entire_state_region = STATE_SOUTH_SUMATRA
 			}
-		}
-	}
-}
-
-AUS = {	# Austria
-	dynamic_country_name = {
-		name = dyn_c_austria-hungary
-		adjective = dyn_c_austria-hungary_adj
-		
-		is_main_tag_only = yes
-		priority = 0
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= { country_has_primary_culture = cu:hungarian }
 		}
 	}
 }
@@ -946,7 +946,7 @@ AZB = {	# Azerbaijan
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
+			scope:actor ?= {
 				is_country_type = unrecognized
 				NOT = {
 					has_technology_researched = nationalism
@@ -1042,8 +1042,8 @@ BIC = {	# East India Company
 		priority = 10
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				has_government_type = gov_chartered_company
 			}
 		}
@@ -1057,8 +1057,8 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				NOT = {
 					has_government_type = gov_chartered_company
 				}
@@ -1074,8 +1074,8 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				capital ?= {
 					region = sr:region_madras
 				}
@@ -1099,8 +1099,8 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				capital ?= {
 					region = sr:region_bombay
 				}
@@ -1124,8 +1124,8 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				capital ?= {
 					region = sr:region_bengal
 				}
@@ -1149,7 +1149,7 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				has_variable = bengal_free_state
 				capital ?= {
 					region = sr:region_bengal
@@ -1169,11 +1169,31 @@ BIC = {	# East India Company
 		priority = 25
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				has_variable = selected_federal_solution_var
 				any_subject_or_below = {
 					has_variable = indian_federation_member
 				}
+			}
+		}
+	}
+}
+
+BNT = {	# Banat
+	dynamic_country_name = {
+		name = dyn_c_serbian_voivodeship
+		adjective = dyn_c_serbian_voivodeship_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				any_primary_culture = {
+					cu:serb ?= this
+				}
+				has_variable = serbian_voivoideship_var
 			}
 		}
 	}
@@ -1189,7 +1209,9 @@ DEI = {	# East Indies
 		priority = 0
 		
 		trigger = {
-			coa_def_subject_trigger = yes
+			scope:actor ?= {
+				is_subject = yes
+			}
 		}
 	}
 }
@@ -1258,6 +1280,27 @@ CAM = {	# Cambodia
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor ?= {
 				NOT = { is_country_type = unrecognized }
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = dyn_c_tran_tay_thanh
+		adjective = CAM_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			scope:actor ?= {
+				any_overlord_or_above = {
+					c:DAI ?= this
+					coa_monarchy_trigger = yes
+					has_diplomatic_pact = {
+						who = scope:actor
+						type = vassal
+						is_initiator = yes
+					}
+				}
 			}
 		}
 	}
@@ -1348,7 +1391,7 @@ CHI = {	# China
 		trigger = {
 			scope:actor ?= {
 				NOT = { country_has_primary_culture = cu:manchu }
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 			}
 		}
 	}
@@ -1379,8 +1422,8 @@ CLM = {	# Colombia
 					coa_def_republic_flag_trigger = yes
 					scope:actor ?= {
 						OR = {
-							has_law = law_type:law_legacy_slavery
-							has_law = law_type:law_slave_trade
+							has_law_or_variant = law_type:law_legacy_slavery
+							has_law_or_variant = law_type:law_slave_trade
 						}
 					}
 				}
@@ -1476,6 +1519,54 @@ RSM = {	# Republic of San Marco
 		
 		trigger = {
 			coa_def_republic_flag_trigger = yes
+		}
+	}
+}
+
+LOM = {	# Lombardy-Venetia
+	dynamic_country_name = {
+		name = dyn_c_lombardy_venetia
+		adjective = dyn_c_lombardy_venetia_adj
+		
+		is_main_tag_only = yes
+		priority = 5
+		
+		trigger = {
+			scope:actor ?= {
+				owns_entire_state_region = STATE_VENETIA
+			}
+		}
+	}
+}
+
+VEN = {	# Venetia-Lombardy
+	dynamic_country_name = {
+		name = dyn_c_venetia_lombardy
+		adjective = dyn_c_venetia_lombardy_adj
+		
+		is_main_tag_only = yes
+		priority = 5
+		
+		trigger = {
+			scope:actor ?= {
+				owns_entire_state_region = STATE_LOMBARDY
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = dyn_c_venice_republic
+		adjective = VEN_ADJ
+		
+		is_main_tag_only = yes
+		priority = 10
+		
+		trigger = {
+			scope:actor ?= {
+				OR = {
+					has_law_or_variant = law_type:law_parliamentary_republic
+					has_law_or_variant = law_type:law_presidential_republic
+				}
+			}
 		}
 	}
 }
@@ -1577,7 +1668,7 @@ GBR = {	# Great Britain of United Kingdom
 			exists = scope:actor
 			NOT = { has_game_rule = plausible_formable_nations }
 			scope:actor ?= {
-				NOT = { has_law = law_type:law_council_republic }
+				NOT = { has_law_or_variant = law_type:law_council_republic }
 				exists = capital
 				capital = { state_region = s:STATE_LANCASHIRE }
 			}
@@ -1634,10 +1725,23 @@ HAI = {	# Haiti
 		adjective = dyn_c_saint-domingue_adj
 		
 		is_main_tag_only = yes
-		priority = 0
+		priority = 20
 		
 		trigger = {
 			coa_def_french_ensign_trigger = yes
+		}
+	}
+	dynamic_country_name = {
+		name = dyn_c_empire_of_haiti
+		adjective = HAI_ADJ
+		
+		is_main_tag_only = yes
+		priority = 10
+		
+		trigger = {
+			scope:actor ?= {
+				coa_def_absolute_monarchy_flag_trigger = yes
+			}
 		}
 	}
 }
@@ -1722,7 +1826,7 @@ IDN = {	# Majapahit
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				ruler = {
 					has_culture = cu:javan
 				}
@@ -1740,7 +1844,7 @@ IDN = {	# Majapahit
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				ruler = {
 					OR = {
 						has_culture = cu:malay
@@ -1763,7 +1867,7 @@ ITA = {	# Italy
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_theocracy
+				has_law_or_variant = law_type:law_theocracy
 				was_formed_from = PAP
 			}
 		}
@@ -1781,7 +1885,7 @@ JAP = {	# Japan
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				NOT = { has_variable = meiji_var }
 			}
 		}
@@ -1796,7 +1900,7 @@ JAP = {	# Japan
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				has_variable = meiji_var
 			}
 		}
@@ -1851,7 +1955,7 @@ KOR = {	# Korea
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor ?= { has_law = law_type:law_monarchy }
+			scope:actor ?= { has_law_or_variant = law_type:law_monarchy }
 		}
 	}
 	dynamic_country_name = {	# Korean Empire
@@ -1865,7 +1969,7 @@ KOR = {	# Korea
 			exists = scope:actor
 			scope:actor ?= {
 				has_variable = KOR_korean_empire_declared
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 			}
 		}
 	}
@@ -2165,8 +2269,8 @@ PAN = {	# Punjab
 			scope:actor ?= {
 				country_has_state_religion = rel:sikh
 				OR = {
-					has_law = law_type:law_state_religion
-					has_law = law_type:law_freedom_of_conscience
+					has_law_or_variant = law_type:law_state_religion
+					has_law_or_variant = law_type:law_freedom_of_conscience
 				}
 			}
 		}
@@ -2305,7 +2409,7 @@ RUS = {	# Russia
 		
 		trigger = {
 			coa_def_communist_flag_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
 				any_scope_state = {
 					state_region = {
 						NOT = {
@@ -2596,8 +2700,8 @@ UKR = {	# Ukraine
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_council_republic
-				has_law = law_type:law_anarchy
+				has_law_or_variant = law_type:law_council_republic
+				has_law_or_variant = law_type:law_anarchy
 			}
 		}
 	}
@@ -2616,7 +2720,7 @@ USA = {	# United States of America
 			NOT = { coa_def_communist_flag_trigger = yes }
 			NOT = {
 				scope:actor ?= {
-					has_law = law_type:law_technocracy
+					has_law_or_variant = law_type:law_technocracy
 				}
 			}
 		}
@@ -2706,7 +2810,7 @@ USA = {	# United States of America
 		trigger = {
 			coa_def_republic_flag_trigger = yes
 			scope:actor ?= {
-				has_law = law_type:law_technocracy
+				has_law_or_variant = law_type:law_technocracy
 			}
 		}
 	}
@@ -2722,7 +2826,7 @@ SUD = {
 		
 		trigger = {
 			scope:actor ?= {
-				has_law = law_type:law_theocracy
+				has_law_or_variant = law_type:law_theocracy
 			}
 		}
 	}
@@ -2736,7 +2840,7 @@ SUD = {
 		
 		trigger = {
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 			}
 		}
 	}
@@ -2768,7 +2872,7 @@ SCA = {	# Scandinavia
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				was_formed_from = DEN
 			}
 		}
@@ -2784,7 +2888,7 @@ SCA = {	# Scandinavia
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				ruler = {
 					has_culture = cu:finnish
 				}
@@ -2822,8 +2926,8 @@ ZAI = {	# Azal (Zaidi State)
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
-					has_law = law_type:law_theocracy
+					has_law_or_variant = law_type:law_monarchy
+					has_law_or_variant = law_type:law_theocracy
 				}
 			}
 		}
@@ -2924,7 +3028,7 @@ KAZ = {
 			exists = scope:actor
 			scope:actor ?= {
 				NOT = {
-					has_law = law_type:law_monarchy
+					has_law_or_variant = law_type:law_monarchy
 				}
 			}
 			coa_def_independent_trigger = yes
@@ -2940,7 +3044,7 @@ KAZ = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 			}
 			coa_def_independent_trigger = yes
 		}
@@ -2957,7 +3061,7 @@ KAZ = {
 			AND = {
 				exists = c:RUS
 				c:RUS = {
-					has_law = law_type:law_monarchy
+					has_law_or_variant = law_type:law_monarchy
 					OR = {
 						has_diplomatic_pact = {
 							who = scope:actor
@@ -2992,8 +3096,8 @@ KAZ = {
 				exists = c:RUS
 				c:RUS = {
 					NOR = {
-						has_law = law_type:law_monarchy
-						has_law = law_type:law_council_republic
+						has_law_or_variant = law_type:law_monarchy
+						has_law_or_variant = law_type:law_council_republic
 					}
 					OR = {
 						has_diplomatic_pact = {
@@ -3062,7 +3166,7 @@ ALD = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				has_variable = algeria_deylik_restored
 			}
 		}
@@ -3108,7 +3212,7 @@ FRA = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				has_variable = bonapartist_restoration_var
 				has_variable = one_true_french_dynasty
 			}
@@ -3125,8 +3229,8 @@ FRA = {
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_parliamentary_republic
-					has_law = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_parliamentary_republic
+					has_law_or_variant = law_type:law_presidential_republic
 				}
 			}
 		}
@@ -3141,7 +3245,7 @@ FRA = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				has_law_or_variant = law_type:law_monarchy
 				OR = {
 					has_variable = orleanist_restoration_var
 					has_variable = legitimist_restoration_var
@@ -3160,7 +3264,7 @@ FRA = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_council_republic
+				has_law_or_variant = law_type:law_council_republic
 			}
 		}
 	}
@@ -3178,8 +3282,8 @@ HRE = {
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
-					has_law = law_type:law_theocracy
+					has_law_or_variant = law_type:law_monarchy
+					has_law_or_variant = law_type:law_theocracy
 				}
 			}
 		}
@@ -3195,8 +3299,8 @@ HRE = {
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_parliamentary_republic
-					has_law = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_parliamentary_republic
+					has_law_or_variant = law_type:law_presidential_republic
 				}
 			}
 		}
@@ -3211,7 +3315,7 @@ HRE = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_council_republic
+				has_law_or_variant = law_type:law_council_republic
 			}
 		}
 	}
@@ -3226,10 +3330,11 @@ HRE = {
 		trigger = {
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_parliamentary_republic
-					has_law = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_parliamentary_republic
+					has_law_or_variant = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_corporate_state
 				}
-				has_law = law_type:law_technocracy
+				has_law_or_variant = law_type:law_technocracy
 			}
 		}
 	}
@@ -3245,7 +3350,7 @@ HRE = {
 			scope:actor ?= {
 				coa_fascist_trigger = yes
 				NOT = {
-					has_law = law_type:law_council_republic
+					has_law_or_variant = law_type:law_council_republic
 				}
 			}
 		}
@@ -3465,7 +3570,7 @@ ARG = {	# Argentina
 			scope:actor ?= {
 				coa_fascist_trigger = yes
 				NOT = {
-					has_law = law_type:law_council_republic
+					has_law_or_variant = law_type:law_council_republic
 				}
 			}
 		}
@@ -3574,7 +3679,7 @@ BOL = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_multicultural
+				has_law_or_variant = law_type:law_multicultural
 			}
 			coa_def_republic_flag_trigger = yes
 			NOT = { coa_def_communist_flag_trigger = yes }
@@ -3644,7 +3749,7 @@ PLT = {
 				was_formed_from = ARG
 				coa_fascist_trigger = yes
 				NOT = {
-					has_law = law_type:law_council_republic
+					has_law_or_variant = law_type:law_council_republic
 				}
 			}
 		}
@@ -3689,7 +3794,7 @@ PER = {
 		priority = 1
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				NOT = { is_country_type = unrecognized }
 			}
 		}
@@ -3706,8 +3811,8 @@ AFG = {
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
-				has_law = law_type:law_monarchy
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_monarchy
 				was_formed_from = HER
 			}
 		}
@@ -3721,7 +3826,7 @@ AFG = {
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
+			scope:actor ?= {
 				country_has_state_religion = rel:hindu
 				was_formed_from = KAF
 			}
@@ -3739,7 +3844,7 @@ GEO = {
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
+			scope:actor ?= {
 				is_country_type = unrecognized
 				NOT = {
 					has_technology_researched = nationalism
@@ -3759,7 +3864,7 @@ LUR = {
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
+			scope:actor ?= {
 				is_country_type = unrecognized
 				NOT = {
 					has_technology_researched = nationalism
@@ -3974,7 +4079,7 @@ BEI = {
 		priority = 15
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				has_global_variable = china_shatters
 				global_var:chinese_central_government ?= THIS
 				capital = {
@@ -3997,7 +4102,7 @@ KAF = {
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor = {
+			scope:actor ?= {
 				OR = {
 					country_has_state_religion = rel:sunni
 					country_has_state_religion = rel:shiite
@@ -4165,8 +4270,8 @@ BHT = {
 		priority = 1
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				NOT = {
 					has_government_type = gov_chartered_company
 				}
@@ -4185,7 +4290,7 @@ ALK = {
 		priority = 5
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				is_subject = yes
 				is_subject_type = subject_type_chartered_company
 			}
@@ -4199,7 +4304,7 @@ ALK = {
 		priority = 0
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				any_primary_culture = {
 					cu:russian ?= this
 				}
@@ -4217,8 +4322,8 @@ IDS = {
 		priority = 1
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				has_variable = indian_federation_member
 				any_overlord_or_above = {
 					has_variable = selected_federal_solution_var
@@ -4237,11 +4342,175 @@ BGL = {
 		priority = 1
 		
 		trigger = {
-			coa_def_subject_trigger = yes
-			scope:actor = {
+			scope:actor ?= {
+				is_subject = yes
 				has_variable = indian_federation_member
 				any_overlord_or_above = {
 					has_variable = selected_federal_solution_var
+				}
+			}
+		}
+	}
+}
+
+CRO = {
+	dynamic_country_name = {
+		name = dyn_c_croatia_slavonia
+		adjective = CRO_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			OR = {
+				AND = {
+					c:AUS ?= {
+						has_law_or_variant = law_type:law_monarchy
+					}
+					scope:actor ?= {
+						is_subject_of = c:AUS
+					}
+				}
+				scope:actor ?= {
+					has_law_or_variant = law_type:law_monarchy
+				}
+			}
+			scope:actor ?= {
+				is_subject = yes
+				any_scope_state = {
+					state_region = s:STATE_CROATIA
+				}
+				any_scope_state = {
+					state_region = s:STATE_SLAVONIA
+				}
+				NOT = {
+					any_scope_state = {
+						state_region = s:STATE_DALMATIA
+					}
+				}
+			}
+		}
+	}
+}
+
+MPH = {
+	dynamic_country_name = {
+		name = dyn_c_tran_ninh
+		adjective = MPH_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			scope:actor ?= {
+				any_overlord_or_above = {
+					c:DAI ?= this
+					coa_monarchy_trigger = yes
+				}
+			}
+		}
+	}
+}
+
+# Danubian Federation
+
+KUK = {
+	dynamic_country_name = {
+		name = dyn_c_usga
+		adjective = AUS_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_monarchy
+				was_formed_from = AUS
+			}
+		}
+	}
+	dynamic_country_name = {
+		name = dyn_c_kuk_communist
+		adjective = KUK_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_council_republic
+			}
+		}
+	}
+}
+
+AUS = {
+	dynamic_country_name = {
+		name = dyn_c_federal_state_of_austria
+		adjective = AUS_ADJ
+		
+		is_main_tag_only = yes
+		priority = 1
+		
+		trigger = {
+			exists = scope:actor
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_corporate_state
+			}
+		}
+	}
+}
+
+MON = {	# serbian_montenegro
+	dynamic_country_name = {
+		name = dyn_c_serbian_montenegro
+		adjective = dyn_c_serbian_montenegro_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			exists = c:MON
+			scope:actor ?= {
+				has_variable = serbian_montenegro
+			}
+		}
+	}
+}
+
+SER = {	# serbian_montenegro
+	dynamic_country_name = {
+		name = dyn_c_serbian_montenegro
+		adjective = dyn_c_serbian_montenegro_adj
+		
+		is_main_tag_only = yes
+		priority = 0
+		
+		trigger = {
+			exists = c:SER
+			scope:actor ?= {
+				has_variable = serbian_montenegro
+			}
+		}
+	}
+}
+
+YUG = {	# Illyria
+	dynamic_country_name = {
+		name = dyn_c_illyria
+		adjective = dyn_c_illyria_adj
+		
+		is_main_tag_only = yes
+		priority = 10
+		
+		trigger = {
+			scope:actor ?= {
+				OR = {
+					country_has_state_religion = rel:catholic
+					was_formed_from = CRO
+					was_formed_from = SLO
 				}
 			}
 		}
@@ -4257,7 +4526,7 @@ SIB = {
 		priority = 1
 		
 		trigger = {
-			scope:actor = {
+			scope:actor ?= {
 				has_government_type = gov_cybernetic_state
 			}
 		}

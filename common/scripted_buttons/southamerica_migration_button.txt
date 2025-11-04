@@ -68,12 +68,12 @@
 			state_is_eligible_as_mass_migration_target = yes
 		}
 		OR = {
-			has_law = law_type:law_racial_segregation
-			has_law = law_type:law_cultural_exclusion
-			has_law = law_type:law_multicultural
+			has_law_or_variant = law_type:law_racial_segregation
+			has_law_or_variant = law_type:law_cultural_exclusion
+			has_law_or_variant = law_type:law_multicultural
 		}
 		NOR = {
-			has_law = law_type:law_closed_borders
+			has_law_or_variant = law_type:law_closed_borders
 			has_law_or_variant = law_type:law_isolationism
 		}
 	}
@@ -103,8 +103,9 @@ patagonia_button = {
 	visible = { always = yes }
 	
 	possible = {
-		has_technology_researched = civilizing_mission
-		ig:ig_armed_forces = {
+		has_technology_researched = logistics
+		army_size >= 10
+		ig:ig_armed_forces ?= {
 			is_marginal = no
 		}
 		any_scope_state = {
@@ -119,6 +120,7 @@ patagonia_button = {
 	}
 	
 	effect = {
+		change_infamy = 15
 		add_modifier = {
 			name = patagonia_campaign
 			days = long_modifier_time

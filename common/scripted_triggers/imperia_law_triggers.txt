@@ -1,37 +1,37 @@
 ﻿is_autocratic = {
 	OR = {
-		has_law = law_type:law_monarchy
-		has_law = law_type:law_theocracy
+		has_law_or_variant = law_type:law_monarchy
+		has_law_or_variant = law_type:law_theocracy
 	}
 	OR = {
-		has_law = law_type:law_autocracy
-		has_law = law_type:law_oligarchy
+		has_law_or_variant = law_type:law_autocracy
+		has_law_or_variant = law_type:law_oligarchy
 	}
-	has_law = law_type:law_state_religion
+	has_law_or_variant = law_type:law_state_religion
 	#   The above two come from VFM, can be commented out at anyones convenience
 }
 
 has_law_anti_workers_rights = {
 	OR = {
-		has_law = law_type:law_no_workers_rights
-		has_law = law_type:law_banned_unions
-		has_law = law_type:law_labor_exploitation
+		has_law_or_variant = law_type:law_no_workers_rights
+		has_law_or_variant = law_type:law_factory_overseers
+		has_law_or_variant = law_type:law_labor_exploitation
 	}
 }
 
 is_enacting_anti_workers_rights = {
 	OR = {
 		is_enacting_law = law_type:law_no_workers_rights
-		is_enacting_law = law_type:law_banned_unions
+		is_enacting_law = law_type:law_factory_overseers
 		is_enacting_law = law_type:law_labor_exploitation
 	}
 }
 
 has_law_pro_workers_rights = {
 	OR = {
-		has_law = law_type:law_regulatory_bodies
-		has_law = law_type:law_worker_protections
-		has_law = law_type:law_enforced_unions
+		has_law_or_variant = law_type:law_regulatory_bodies
+		has_law_or_variant = law_type:law_worker_protections
+		has_law_or_variant = law_type:law_enforced_unions
 	}
 }
 
@@ -40,5 +40,26 @@ is_enacting_pro_workers_rights = {
 		is_enacting_law = law_type:law_regulatory_bodies
 		is_enacting_law = law_type:law_worker_protections
 		is_enacting_law = law_type:law_enforced_unions
+	}
+}
+
+can_have_tribal_levies = {
+	country_is_in_africa = yes
+	any_primary_culture = {
+		# Done like this to exclude afro-colonial cultures that may end up in Africa..
+		has_discrimination_trait_group = heritage_group_african
+		NOT = {
+			has_discrimination_trait = heritage_african_diaspora
+		}
+	}
+	# Only for unrecognised countries
+	NOT = {
+		is_country_type = recognized
+	}
+	# As long as they dont have general staff, skirmisher cavalry or percurssion cap
+	NOR = {
+		has_technology_researched = general_staff
+		has_technology_researched = skirmisher_cavalry
+		has_technology_researched = percussion_cap
 	}
 }

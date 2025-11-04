@@ -6,7 +6,7 @@
 	unification_play = dp_unify_germany
 	leadership_play = dp_leadership_germany
 	
-	required_states_fraction = 0.75
+	required_states_fraction = 0.73
 	
 	ai_will_do = { has_technology_researched = pan-nationalism }
 	
@@ -29,11 +29,28 @@
 			}
 		}
 		imperia_frankfurt_parliament_is_in_session = no
+		custom_tooltip = {
+			text = no_dual_or_triple_monarchy_tt
+			NOR = {
+				has_government_type = gov_dual_monarchy
+				has_government_type = gov_triple_monarchy
+			}
+		}
+		NOT = {
+			c:KUK ?= this
+		}
 	}
 	
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+	}
+	
+	can_be_unification_target = {
+		NOR = {
+			has_government_type = gov_dual_monarchy
+			has_government_type = gov_triple_monarchy
+		}
 	}
 }
 
@@ -49,17 +66,37 @@ ITA = {
 	
 	ai_will_do = { has_technology_researched = pan-nationalism }
 	
+	potential = {
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+	}
+	
 	possible = {
 		has_technology_researched = pan-nationalism
 		OR = {
 			country_has_primary_culture = cu:north_italian
 			country_has_primary_culture = cu:south_italian
 		}
+		is_country_type = recognized
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
 	}
 	
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
 		country_rank >= rank_value:minor_power
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+		is_country_type = recognized
 		any_country = {
 			filter = {
 				OR = {
@@ -69,6 +106,17 @@ ITA = {
 			}
 			has_technology_researched = pan-nationalism
 			percent >= 0.5
+		}
+	}
+	
+	can_be_unification_target = {
+		NAND = {	# United States of Greater Austria
+			country_has_primary_culture = cu:north_italian
+			OR = {
+				has_journal_entry = je_danubian_federation
+				c:KUK ?= this
+				c:HRE ?= this
+			}
 		}
 	}
 }
@@ -89,7 +137,7 @@ SCA = {
 		}
 	}
 	
-	max_num_formation_candidates = 3
+	max_num_formation_candidates = 1
 	can_be_formation_candidate = {
 		country_rank >= rank_value:minor_power
 		any_country = {
@@ -150,5 +198,111 @@ FND = {
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+	}
+}
+
+YUG = {
+	states = {
+		STATE_WESTERN_SERBIA
+		STATE_EASTERN_SERBIA
+		STATE_KOSOVO
+		STATE_SKOPIA
+		STATE_DELVIDEK
+		STATE_MONTENEGRO
+		STATE_BOSNIA
+		STATE_SLAVONIA
+		STATE_DALMATIA
+		STATE_CROATIA
+		STATE_SLOVENIA
+		STATE_ISTRIA
+	}
+	
+	is_major_formation = yes
+	
+	unification_play = dp_unify_yugoslavia
+	leadership_play = dp_leadership_yugoslavia
+	
+	required_states_fraction = 0.75
+	
+	ai_will_do = { always = yes }
+	
+	potential = {
+		NOR = {
+			c:AUS ?= this
+			c:KUK ?= this
+		}
+		trigger_if = {
+			limit = {
+				c:BUL ?= this
+			}
+			has_variable = bul_pursued_greater_yugoslavism
+		}
+		trigger_else = {
+			always = yes
+		}
+	}
+	
+	possible = {
+		NOR = {	# Not Danubian State or HRE
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+		has_technology_researched = pan-nationalism
+		trigger_if = {
+			limit = {
+				c:BUL ?= this
+			}
+			custom_tooltip = {
+				text = bulgaria_pursued_greater_yugoslavism_tt
+				has_variable = bul_pursued_greater_yugoslavism
+			}
+		}
+	}
+	
+	max_num_formation_candidates = 3	# For the odd Croatia, Serbia and Bulgaria FFA
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+		NOR = {	# Not Danubian State or HRE
+			c:AUS ?= this
+			c:KUK ?= this
+			c:HRE ?= this
+		}
+		trigger_if = {
+			limit = {
+				c:BUL ?= this
+			}
+			custom_tooltip = {
+				text = bulgaria_pursued_greater_yugoslavism_tt
+				has_variable = bul_pursued_greater_yugoslavism
+			}
+		}
+	}
+	
+	can_be_unification_target = {
+		NAND = {	# United States of Greater Austria
+			OR = {
+				country_has_primary_culture = cu:slovene
+				country_has_primary_culture = cu:croat
+				country_has_primary_culture = cu:serb
+			}
+			OR = {	# Not Danubian State or HRE
+				has_journal_entry = je_danubian_federation
+				c:KUK ?= this
+				c:HRE ?= this
+			}
+		}
+		trigger_if = {
+			limit = {
+				c:BUL ?= this
+			}
+			custom_tooltip = {
+				text = bulgaria_pursued_greater_yugoslavism_tt
+				has_variable = bul_pursued_greater_yugoslavism
+			}
+		}
+		trigger_else = {
+			always = yes
+		}
 	}
 }

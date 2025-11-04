@@ -1579,12 +1579,22 @@ default_popup =  {
 				}
 			}
 
+			textbox = {
+				text = RELEASE_COUNTRY_OPTIONS
+				autoresize = yes
+				margin_left = 10
+				default_format = "#header"
+				widgetanchor = left|vcenter
+				parentanchor = left|vcenter
+			}
+
 			# Checkbox + textbox: Play as released country
 			flowcontainer = {
 				direction = horizontal
 				margin_top = 10
 				margin_bottom = 10
 				tooltip = "[ReleaseCountryWindow.GetPlayAsReleasedTooltip]"
+				using = tooltip_ne
 
 				checkbutton = {
 					parentanchor = vcenter
@@ -1598,6 +1608,33 @@ default_popup =  {
 				textbox = {
 					datacontext = "[ReleaseCountryWindow.GetCountryCreation]"
 					text = RELEASE_COUNTRY_PLAY_AS
+					autoresize = yes
+					margin_left = 10
+					widgetanchor = left|vcenter
+					parentanchor = left|vcenter
+				}
+			}
+
+			# Checkbox + textbox: Keep Homeland States
+			flowcontainer = {
+				direction = horizontal
+				margin_top = 10
+				margin_bottom = 10
+				tooltip = "[ReleaseCountryWindow.GetKeepHomelandStatesTooltip]"
+				using = tooltip_se
+
+				checkbutton = {
+					parentanchor = vcenter
+					enabled = "[ReleaseCountryWindow.CanReleaseWithKeepHomelandStates]"
+					onclick = "[ReleaseCountryWindow.ToggleKeepHomelandStates]"
+					checked = "[ReleaseCountryWindow.WillKeepHomelandStates]"
+					using = check_button
+					size = { 25 25 }
+				}
+
+				textbox = {
+					datacontext = "[ReleaseCountryWindow.GetCountryCreation]"
+					text = KEEP_HOMELAND_STATES
 					autoresize = yes
 					margin_left = 10
 					widgetanchor = left|vcenter
@@ -3160,9 +3197,18 @@ default_popup_vbox = {
 				onclick = "[Execute(Proposal.GetTreaty.DeclineTreatyProposal)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
 				enabled = "[IsValid(Proposal.GetTreaty.DeclineTreatyProposal)]"
-				tooltip = "[GetDesc(Proposal.GetTreaty.DeclineTreatyProposal)]"
+				tooltip = "TREATY_PROPOSAL_DECLINE_BUTTON_TOOLTIP"
 				using = tooltip_se
 				shortcut = "close_window"
+
+				icon = {
+					visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+					parentanchor = vcenter
+					size = { 30 30 }
+					position = { 7 0 }
+					texture = "gfx/interface/icons/generic_icons/warning.dds"
+					tooltip = "THEY_CALL_IN_OBLIGATION"
+				}
 			}
 
 			button = {
@@ -3172,7 +3218,7 @@ default_popup_vbox = {
 				enabled = "[Not(Proposal.GetTreaty.IsEnforced)]"
 				onclick = "[InformationPanelBar.OpenTreatyDraftPanel(Proposal.GetTreaty.Self)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
-				tooltip = "TREATY_PROPOSAL_NEGOTIATE_TOOLTIP" #todo PRCAL-38358
+				tooltip = "TREATY_PROPOSAL_NEGOTIATE_TOOLTIP"
 				using = tooltip_se
 
 			}
