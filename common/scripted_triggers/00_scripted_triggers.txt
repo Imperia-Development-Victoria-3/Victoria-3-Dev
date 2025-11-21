@@ -54,7 +54,10 @@ country_can_form_power_bloc = {
 			is_revolutionary = no
 		}
 		country_rank >= rank_value:unrecognized_major_power
-		NOT = { has_law_or_variant = law_type:law_isolationism }
+		OR = {
+			NOT = { has_law_or_variant = law_type:law_isolationism }
+			has_law = law_type:law_canton_system	# So that China can make a power bloc, if the Mandate stops existing
+		}
 	}
 }
 
@@ -1721,15 +1724,9 @@ wants_to_solve_schleswig_holstein = {
 is_oppressor_of_schleswig_holstein = {
 	OR = {
 		top_overlord ?= {
-			NOR = {
-				country_has_primary_culture = cu:north_german
-				country_has_primary_culture = cu:south_german
-			}
+			is_actual_german = no
 		}
-		NOR = {
-			country_has_primary_culture = cu:north_german
-			country_has_primary_culture = cu:south_german
-		}
+		is_actual_german = no
 	}
 	OR = {
 		any_scope_state = { state_region = s:STATE_SCHLESWIG_HOLSTEIN }

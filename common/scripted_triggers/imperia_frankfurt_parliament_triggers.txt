@@ -341,10 +341,7 @@ gutter_crown_political_integration_state_event_trigger = {
 
 gutter_crown_political_integration_country_event_trigger = {
 	any_country = {
-		OR = {
-			country_has_primary_culture = cu:north_german
-			country_has_primary_culture = cu:south_german
-		}
+		is_actual_german = yes
 		is_in_same_power_bloc = c:GER
 		power_bloc.power_bloc_leader = c:GER
 		is_subject = no
@@ -355,5 +352,20 @@ gutter_crown_political_integration_country_event_trigger = {
 	}
 	NOT = {
 		has_variable = gutter_crown_political_integration_event_cooldown
+	}
+}
+
+is_actual_german = {
+	# Right now its mostly to exclude Transylvania, since they start with South German culture
+	# But will also naturally exclude German colonies and extraterritorial holdings
+	OR = {
+		country_has_primary_culture = cu:north_german
+		country_has_primary_culture = cu:south_german
+	}
+	capital.state_region = {
+		OR = {
+			is_homeland = cu:north_german
+			is_homeland = cu:south_german
+		}
 	}
 }
