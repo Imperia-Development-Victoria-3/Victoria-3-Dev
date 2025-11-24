@@ -2,25 +2,29 @@
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_internal_affairs
 
-	# Scratch this part since it prevents the event from triggering the JE properly.
-	# Yes, I know it sucks that Finland and Russia cant "see" the JE before it pops...
-	# is_shown_when_inactive = {
-	# 	OR = {
-  	# 		c:FIN ?= root
-  	# 		c:RUS ?= root
-	# 	}
-	# }
-	# possible = {
-	# 	custom_tooltip = {
-	# 		text = triggered_through_event # Looks a bit nicer than a generic "needs a variable" tooltip
-	# 		has_global_variable = russification_taken
-	# 	}
-	# }
-
+	is_shown_when_inactive = {
+		OR = {
+  			c:FIN ?= root
+  			c:RUS ?= root
+		}
+	}
+	possible = {
+		has_global_variable = russification_taken
+	}
 	progressbar = yes
 
-	# Put any events that should happen when the JE is created here. For now its empty.
 	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = russificating_finland
+				}
+			}
+			set_global_variable = {
+				name = russificating_finland
+				value = 50
+			}
+		}
 	}
 
 	current_value = {
@@ -28,20 +32,13 @@
 	}
 
 	goal_add_value = {
-		value = 100
+		value = 50
 	}
 
 	invalid = {
-		# ROOT = {
-		# 	is_at_war = yes
-		# }
-		# Unless you've already ventured into another scope, you're in the top-scope, AKA root. So no reason to do a "ROOT =" block here.
-		# is_at_war = yes
-		# Also, I guess you might want invalidation if Russia is at war with Finland? Is that what you intended?
-		c:RUS = {
-			has_war_with = c:FIN
+		ROOT = {
+			is_at_war = yes
 		}
-		# Done that^ way so it works for both sides of the JE.
 	}
 
 	on_invalid = {
@@ -52,8 +49,6 @@
 	complete = {
 		custom_tooltip = {
 			text = russification_complete
-			# The global variable isnt set at all when you check the JE in potentials, so we need to check if it exists.
-			has_global_variable = russificating_finland 
 			global_var:russificating_finland >= 100
 		}
 	}
@@ -65,49 +60,16 @@
 	fail = {
 		custom_tooltip = {
 			text = russification_failed
-			# The global variable isnt set at all when you check the JE in potentials, so we need to check if it exists.
-			has_global_variable = russificating_finland
-			global_var:russificating_finland < 0 # Since the bottom is 0, it'll default to fail at the beginning... Change the operator so you have to dip below 0 to fail.
+			global_var:russificating_finland <= 0
 		}
 	}
 
 	on_fail = {
-		# c:FIN = { make_independent = ROOT}
-		# A bool means yes/no, which is what make_independent uses
-		c:FIN = { make_independent = yes }
+		c:FIN = { make_independent = ROOT}
 		remove_global_variable = russification_taken
 	}
 
-	# A monthly pulse, on which we can put stuff that changes the variable :)
-	on_monthly_pulse = {
-		effect = { # Changing the variable is an effect
-			if = {
-				limit = {
-					root = c:RUS # We only want the Russian side to change the variable, else we'll get 2x the changes
-				}
-				change_global_variable = {
-					name = russificating_finland
-					add = { # Add to the variable per default
-						value = 1 # Base increase per month
-						add = { # And change that further....
-							value = c:FIN.relations:root # Based on relations between Russia and Finland
-							divide = 25 # Divided by 25, so max +4 from relations (100/25=4) (and min -4 from relations (-100/25=-4))
-						}
-					}
-				}
-			}
-		}
-		random_events = { # A section for random events that can influence the variable positively or negatively
-			chance_of_no_event = 75 # 75% chance of no event happening. Tune as needed.
-			# russification.3 = 1 # russification.3 is the event, with weight 1
-			# russification.4 = 2 # Has twice the weight of russification.3 and .5, meaning when an event pops its 25% chance for .3, 50% chance for .4 and 25% chance for .5
-			# russification.5 = 1
-			# These are not actually implemented yet, so commenting them out for now.
-			# Remember, even if the random event triggers, the trigger section in the events will need to be true for it to fire. Use that to specify if Finland or Russia should get the event.
-		}
-	}
 
 	should_be_pinned_by_default = yes
-	# can_deactivate = yes
-	# can_deactivate is used for JEs that should be reused, and probably never solved. We only use this for our disable AI JE. So far.
+	can_deactivate = yes
 }
