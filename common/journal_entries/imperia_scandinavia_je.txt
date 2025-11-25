@@ -29,6 +29,10 @@
 				name = scandinavian_nationalism_progress_change_since_last_week
 				value = 0
 			}
+			set_global_variable = {
+				name = scandinavian_nationalism_failure_timer
+				value = 0
+			}
 		}
 	}
 	is_shown_when_inactive = {
@@ -89,6 +93,55 @@
 			text = scandinavian_nationalism_progress_at_100p_tt
 			has_global_variable = scandinavian_nationalism_progress
 			global_var:scandinavian_nationalism_progress >= 1000
+		}
+	}
+	fail = {
+		# 5 years of negative progress
+		custom_tooltip = {
+			text = scandinavian_nationalism_failure_tt
+			has_global_variable = scandinavian_nationalism_failure_timer
+			global_var:scandinavian_nationalism_failure_timer >= 260	#5*52 weeks
+		}
+	}
+	on_fail = {
+		if = {
+			limit = {
+				has_modifier = scandinavian_currency_union
+			}
+			remove_modifier = scandinavian_currency_union
+		}
+		if = {
+			limit = {
+				has_modifier = scandinavian_freedom_of_movement_act
+			}
+			remove_modifier = scandinavian_freedom_of_movement_act
+		}
+	}
+	on_monthly_pulse = {
+		effect = {
+			# Add missing modifiers for latecomers
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_modifier = scandinavian_currency_union
+					}
+				}
+				add_modifier = {
+					name = scandinavian_currency_union
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_modifier = scandinavian_freedom_of_movement_act
+					}
+				}
+				add_modifier = {
+					name = scandinavian_freedom_of_movement_act
+				}
+			}
 		}
 	}
 	on_weekly_pulse = {
@@ -198,11 +251,10 @@
 						has_journal_entry = je_scandinavian_nationalism
 						is_diplomatic_play_ally_of = root
 					}
-					NOT = {
-						any_country = {
-							has_journal_entry = je_scandinavian_nationalism
-							is_diplomatic_play_enemy_of = root
-						}
+					any_country = {
+						count = 0
+						has_journal_entry = je_scandinavian_nationalism
+						is_diplomatic_play_enemy_of = root
 					}
 				}
 				# This is a bit wonky.. If there's a diplo play against a non-Scandi featuring 2 Scandis, and an inter-Scandi war going on it'll cancel each other out
@@ -222,85 +274,150 @@
 			clamp_global_variable = {
 				name = scandinavian_nationalism_progress
 				min = 0
-				max = 1000
+				max = {
+					value = 250
+					# Any country completing the Currency Union JE increases the max by 250
+					if = {
+						limit = {
+							any_country = {
+								has_journal_entry = je_scandinavian_nationalism
+								has_modifier = scandinavian_currency_union
+							}
+						}
+						add = 250
+					}
+					# Any country completing the Freedom of Movement Act JE increases the max by 250
+					if = {
+						limit = {
+							any_country = {
+								has_journal_entry = je_scandinavian_nationalism
+								has_modifier = scandinavian_freedom_of_movement_act
+							}
+						}
+						add = 250
+					}
+				}
 			}
 			# For the tooltip, find the difference between current progress and previous weeks progress
-			set_global_variable = {
-				name = scandinavian_nationalism_progress_change_since_last_week
-				value = {
-					value = global_var:scandinavian_nationalism_progress
-					subtract = scope:old_scandinavian_nationalism_progress
+			# Only done once per week to save on performance and to avoid a certain stutter that appears otherwise
+			if = {
+				limit = {
+					any_country = {
+						count = 0
+						has_journal_entry = je_scandinavian_nationalism
+						country_rank > root.country_rank
+					}
+				}
+				set_global_variable = {
+					name = scandinavian_nationalism_progress_change_since_last_week
+					value = {
+						value = global_var:scandinavian_nationalism_progress
+						subtract = scope:old_scandinavian_nationalism_progress
+					}
+				}
+				# If the progress is going back, increase the failure timer
+				if = {
+					limit = {
+						global_var:scandinavian_nationalism_progress_change_since_last_week < 0
+					}
+					change_global_variable = {
+						name = scandinavian_nationalism_failure_timer
+						add = 1 # Add one week
+					}
+				}
+				else = {
+					# Otherwise, reset the failure timer
+					set_global_variable = {
+						name = scandinavian_nationalism_failure_timer
+						value = 0
+					}
 				}
 			}
 		}
 	}
-	# A special status description for the Scandinavian Nationalism progress bar
 	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = status_scandinavian_nationalism
-				trigger = {
-					has_global_variable = scandinavian_nationalism_progress
+		# Special status description for when the Scandinavian Nationalism JE is in danger of failing
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_danger_of_failure
+			trigger = {
+				has_global_variable = scandinavian_nationalism_failure_timer
+				global_var:scandinavian_nationalism_failure_timer > 0
+			}
+		}
+		# A special status description for the Scandinavian Nationalism progress bar, telling how much it progressed last week
+		triggered_desc = {
+			desc = status_scandinavian_nationalism
+			trigger = {
+				has_global_variable = scandinavian_nationalism_progress
+			}
+		}
+		# Tells you if its increasing from positive relations
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_positive_relations
+			trigger = {
+				any_country = {
+					has_journal_entry = je_scandinavian_nationalism
+					relations:root >= relations_threshold:cordial
 				}
 			}
 		}
-	}
-	status_desc = {
+		# Tells you if its increasing from negative relations
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_negative_relations
+			trigger = {
+				any_country = {
+					has_journal_entry = je_scandinavian_nationalism
+					relations:root <= relations_threshold:poor
+				}
+			}
+		}
+		# Tells you if its decreasing from infighting
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_infighting
+			trigger = {
+				any_country = {
+					has_journal_entry = je_scandinavian_nationalism
+					has_war_with = root
+				}
+			}
+		}
+		# Tells you if its increasing from fighting outsiders
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_fighting_against_outsiders
+			trigger = {
+				any_country = {
+					has_journal_entry = je_scandinavian_nationalism
+					is_diplomatic_play_ally_of = root
+				}
+				any_country = {
+					count = 0
+					has_journal_entry = je_scandinavian_nationalism
+					is_diplomatic_play_enemy_of = root
+				}
+			}
+		}
+		# Tells you the current capacity bonus based on completed JEs
+		desc = je_scandinavian_nationalism_current_cap_is
 		first_valid = {
 			triggered_desc = {
-				desc = je_scandinavian_nationalism_positive_relations
+				desc = seventyfive_percent
 				trigger = {
 					any_country = {
 						has_journal_entry = je_scandinavian_nationalism
-						relations:root >= relations_threshold:cordial
+						has_modifier = scandinavian_freedom_of_movement_act
 					}
 				}
 			}
-		}
-	}
-	status_desc = {
-		first_valid = {
 			triggered_desc = {
-				desc = je_scandinavian_nationalism_negative_relations
+				desc = fifty_percent
 				trigger = {
 					any_country = {
 						has_journal_entry = je_scandinavian_nationalism
-						relations:root <= relations_threshold:poor
+						has_modifier = scandinavian_currency_union
 					}
 				}
 			}
-		}
-	}
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_scandinavian_nationalism_infighting
-				trigger = {
-					any_country = {
-						has_journal_entry = je_scandinavian_nationalism
-						has_war_with = root
-					}
-				}
-			}
-		}
-	}
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_scandinavian_nationalism_fighting_against_outsiders
-				trigger = {
-					any_country = {
-						has_journal_entry = je_scandinavian_nationalism
-						is_diplomatic_play_ally_of = root
-					}
-					NOT = {
-						any_country = {
-							has_journal_entry = je_scandinavian_nationalism
-							is_diplomatic_play_enemy_of = root
-						}
-					}
-				}
-			}
+			desc = twentyfive_percent
 		}
 	}
 	weight = 100
@@ -346,6 +463,10 @@ je_scandinavian_currency_union = {
 			has_technology_researched = central_banking
 			has_technology_researched = pan-nationalism
 		}
+		# This part must be active for 5 years before it can conclude
+		je:je_scandinavian_currency_union = {
+			journal_entry_age >= 1825	#5*365
+		}
 	}
 	on_complete = {
 		add_modifier = {
@@ -377,7 +498,10 @@ je_scandinavian_freedom_of_movement_act = {
 			}
 		}
 		has_journal_entry = je_scandinavian_nationalism
-		has_modifier = scandinavian_currency_union
+		any_country = {
+			has_journal_entry = je_scandinavian_nationalism
+			has_modifier = scandinavian_currency_union
+		}
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_50p_tt
 			# Remember this is out of 1000
@@ -388,31 +512,24 @@ je_scandinavian_freedom_of_movement_act = {
 	complete = {
 		has_technology_researched = pan-nationalism
 		OR = {
-			has_journal_entry = je_scandinavian_freedom_of_movement_act
-		}
-		OR = {
 			any_country = {
-				count = 1
-				any_primary_culture = {
-					has_discrimination_trait = heritage_nordic
+				filter = {
+					has_journal_entry = je_scandinavian_freedom_of_movement_act
 				}
-				is_subject = no
-				any_subject_or_below = {
-					any_primary_culture = {
-						has_discrimination_trait = heritage_nordic
-					}
-				}
+				count = all
+				this.market = root.market
 			}
 			any_country = {
 				filter = {
 					has_journal_entry = je_scandinavian_freedom_of_movement_act
 				}
 				count = all
-				OR = {
-					has_law = law_type:law_no_migration_controls
-					this.market = ROOT.market
-				}
+				has_law_or_variant = law_type:law_no_migration_controls
 			}
+		}
+		# This part must be active for 5 years before it can conclude
+		je:je_scandinavian_freedom_of_movement_act = {
+			journal_entry_age >= 1825	#5*365
 		}
 	}
 	on_complete = {
