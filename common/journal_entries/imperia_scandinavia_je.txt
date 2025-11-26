@@ -126,6 +126,9 @@
 						has_journal_entry = je_scandinavian_nationalism
 						has_modifier = scandinavian_currency_union
 					}
+					NOT = {
+						has_modifier = scandinavian_currency_union
+					}
 				}
 				add_modifier = {
 					name = scandinavian_currency_union
@@ -137,9 +140,54 @@
 						has_journal_entry = je_scandinavian_nationalism
 						has_modifier = scandinavian_freedom_of_movement_act
 					}
+					NOT = {
+						has_modifier = scandinavian_freedom_of_movement_act
+					}
 				}
 				add_modifier = {
 					name = scandinavian_freedom_of_movement_act
+				}
+			}
+			# Create mutual defense pacts for latecomers (and newly freed Scandis)
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_variable = scandinavian_mutual_defense_act_completed
+					}
+					NOT = {
+						has_variable = scandinavian_mutual_defense_act_completed
+					}
+					is_subject = no
+				}
+				set_variable = scandinavian_mutual_defense_act_completed
+				every_country = { # Create defensive pacts between all relevant Scandinavian countries
+					limit = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_subject = no
+						this != root
+						NOT = { # Avoid double treaties
+							any_scope_treaty = {
+								binds = root
+								any_scope_article = {
+									has_type = defensive_pact
+								}
+							}
+						}
+					}
+					save_scope_as = second_country_scope
+					create_treaty = {
+						name = treaty_name_scandinavian_mutual_defense_act
+						first_country = root
+						second_country = scope:second_country_scope
+						is_draft = no
+						binding_period = { years = 100 }
+						articles_to_create = {
+							{
+								article = defensive_pact
+							}
+						}
+					}
 				}
 			}
 		}
@@ -266,6 +314,45 @@
 					change_global_variable = {
 						name = scandinavian_nationalism_progress
 						add = scandinavian_nationalism_progress_tick_medium
+					}
+				}
+			}
+			# If the mutual defense act is broken (independent country leaving the defensive pact)
+			if = {
+				limit = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_variable = scandinavian_mutual_defense_act_completed
+						is_subject = no
+						this != root
+						NOT = {
+							any_scope_treaty = {
+								binds = root
+								any_scope_article = {
+									has_type = defensive_pact
+								}
+							}
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_variable = scandinavian_mutual_defense_act_completed
+						is_subject = no
+						this != root
+						NOT = {
+							any_scope_treaty = {
+								binds = root
+								any_scope_article = {
+									has_type = defensive_pact
+								}
+							}
+						}
+					}
+					change_global_variable = {
+						name = scandinavian_nationalism_progress
+						subtract = scandinavian_nationalism_progress_tick_large
 					}
 				}
 			}
@@ -396,9 +483,38 @@
 				}
 			}
 		}
+		# Tells you if its decreasing from broken mutual defense act
+		triggered_desc = {
+			desc = je_scandinavian_nationalism_broken_mutual_defense_act
+			trigger = {
+				any_country = {
+					has_journal_entry = je_scandinavian_nationalism
+					has_variable = scandinavian_mutual_defense_act_completed
+					is_subject = no
+					this != root
+					NOT = {
+						any_scope_treaty = {
+							binds = root
+							any_scope_article = {
+								has_type = defensive_pact
+							}
+						}
+					}
+				}
+			}
+		}
 		# Tells you the current capacity bonus based on completed JEs
 		desc = je_scandinavian_nationalism_current_cap_is
 		first_valid = {
+			triggered_desc = {
+				desc = onehundred_percent
+				trigger = {
+					any_country = {
+						has_journal_entry = je_scandinavian_nationalism
+						has_variable = scandinavian_mutual_defense_act_completed
+					}
+				}
+			}
 			triggered_desc = {
 				desc = seventyfive_percent
 				trigger = {
@@ -510,7 +626,6 @@ je_scandinavian_freedom_of_movement_act = {
 		}
 	}
 	complete = {
-		has_technology_researched = pan-nationalism
 		OR = {
 			any_country = {
 				filter = {
@@ -552,8 +667,10 @@ je_scandinavian_mutual_defense_act = {
 			}
 		}
 		has_journal_entry = je_scandinavian_nationalism
-		has_modifier = scandinavian_currency_union
-		has_modifier = scandinavian_freedom_of_movement_act
+		any_country = {
+			has_journal_entry = je_scandinavian_nationalism
+			has_modifier = scandinavian_freedom_of_movement_act
+		}
 		custom_tooltip = {
 			text = scandinavian_nationalism_progress_at_75p_tt
 			# Remember this is out of 1000
@@ -562,32 +679,69 @@ je_scandinavian_mutual_defense_act = {
 		}
 	}
 	complete = {
-		has_technology_researched = pan-nationalism
-		has_technology_researched = multilateral_alliances
 		OR = {
-			has_journal_entry = je_scandinavian_freedom_of_movement_act
-		}
-		OR = {
-			any_country = {
-				count = 1
-				any_primary_culture = {
-					has_discrimination_trait = heritage_nordic
+			AND = {
+				any_country = { # 1 (one) relevant Scandi country must be independent
+					filter = {
+						has_journal_entry = je_scandinavian_nationalism
+					}
+					count = 1
+					is_subject = no
 				}
-				is_subject = no
-				any_subject_or_below = {
-					any_primary_culture = {
-						has_discrimination_trait = heritage_nordic
+				any_country = { # And ALL relevant Scandi SUBJECTS must have a Scandi overlord 
+					filter = {
+						has_journal_entry = je_scandinavian_nationalism
+						is_subject = yes
+					}
+					count = all
+					overlord = {
+						any_primary_culture = {
+							has_discrimination_trait = heritage_nordic
+						}
 					}
 				}
 			}
-			any_country = {
+			any_country = { # Or all relevant Scandi countries have multilateral alliances researched
 				filter = {
-					has_journal_entry = je_scandinavian_mutual_defense_act
+					has_journal_entry = je_scandinavian_nationalism
 				}
 				count = all
-				OR = {
-					has_law = law_type:law_no_migration_controls
-					this.market = ROOT.market
+				has_technology_researched = multilateral_alliances
+			}
+		}
+	}
+	on_complete = {
+		if = { # Only for independent countries
+			limit = {
+				is_subject = no
+			}
+			set_variable = scandinavian_mutual_defense_act_completed
+			every_country = { # Create defensive pacts between all relevant Scandinavian countries
+				limit = {
+					has_journal_entry = je_scandinavian_nationalism
+					is_subject = no
+					this != root
+					NOT = { # Avoid double treaties
+						any_scope_treaty = {
+							binds = root
+							any_scope_article = {
+								has_type = defensive_pact
+							}
+						}
+					}
+				}
+				save_scope_as = second_country_scope
+				create_treaty = {
+					name = treaty_name_scandinavian_mutual_defense_act
+					first_country = root
+					second_country = scope:second_country_scope
+					is_draft = no
+					binding_period = { years = 100 }
+					articles_to_create = {
+						{
+							article = defensive_pact
+						}
+					}
 				}
 			}
 		}
