@@ -164,8 +164,8 @@
 				every_country = { # Create defensive pacts between all relevant Scandinavian countries
 					limit = {
 						has_journal_entry = je_scandinavian_nationalism
-						is_subject = no
-						this != root
+						is_subject = no # Independent countries only
+						this != root # Avoid self-treaties
 						NOT = { # Avoid double treaties
 							any_scope_treaty = {
 								binds = root
@@ -419,6 +419,16 @@
 						value = 0
 					}
 				}
+				# Tick up the SMDA completion timer, if it exists
+				if = {
+					limit = {
+						has_global_variable = scandinavian_mutual_defense_act_completion_timer
+					}
+					change_global_variable = {
+						name = scandinavian_mutual_defense_act_completion_timer
+						add = 1 # Add one week
+					}
+				}
 			}
 		}
 	}
@@ -552,6 +562,7 @@ je_scandinavian_currency_union = {
 				has_discrimination_trait = heritage_nordic
 			}
 		}
+		has_journal_entry = je_scandinavian_nationalism
 	}
 	possible = {
 		any_primary_culture = {
@@ -568,6 +579,14 @@ je_scandinavian_currency_union = {
 			# Remember this is out of 1000
 			has_global_variable = scandinavian_nationalism_progress
 			global_var:scandinavian_nationalism_progress >= 250
+		}
+	}
+	fail = {
+		# 5 years of negative progress
+		custom_tooltip = {
+			text = scandinavian_nationalism_failure_tt
+			has_global_variable = scandinavian_nationalism_failure_timer
+			global_var:scandinavian_nationalism_failure_timer >= 260	#5*52 weeks
 		}
 	}
 	complete = {
@@ -603,6 +622,7 @@ je_scandinavian_freedom_of_movement_act = {
 				has_discrimination_trait = heritage_nordic
 			}
 		}
+		has_journal_entry = je_scandinavian_nationalism
 	}
 	possible = {
 		any_primary_culture = {
@@ -623,6 +643,14 @@ je_scandinavian_freedom_of_movement_act = {
 			# Remember this is out of 1000
 			has_global_variable = scandinavian_nationalism_progress
 			global_var:scandinavian_nationalism_progress >= 500
+		}
+	}
+	fail = {
+		# 5 years of negative progress
+		custom_tooltip = {
+			text = scandinavian_nationalism_failure_tt
+			has_global_variable = scandinavian_nationalism_failure_timer
+			global_var:scandinavian_nationalism_failure_timer >= 260	#5*52 weeks
 		}
 	}
 	complete = {
@@ -657,6 +685,17 @@ je_scandinavian_freedom_of_movement_act = {
 je_scandinavian_mutual_defense_act = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
+	is_shown_when_inactive = {
+		any_primary_culture = {
+			has_discrimination_trait = heritage_nordic
+		}
+		overlord ?= {
+			any_primary_culture = {
+				has_discrimination_trait = heritage_nordic
+			}
+		}
+		has_journal_entry = je_scandinavian_nationalism
+	}
 	possible = {
 		any_primary_culture = {
 			has_discrimination_trait = heritage_nordic
@@ -676,6 +715,14 @@ je_scandinavian_mutual_defense_act = {
 			# Remember this is out of 1000
 			has_global_variable = scandinavian_nationalism_progress
 			global_var:scandinavian_nationalism_progress >= 750
+		}
+	}
+	fail = {
+		# 5 years of negative progress
+		custom_tooltip = {
+			text = scandinavian_nationalism_failure_tt
+			has_global_variable = scandinavian_nationalism_failure_timer
+			global_var:scandinavian_nationalism_failure_timer >= 260	#5*52 weeks
 		}
 	}
 	complete = {
@@ -743,6 +790,190 @@ je_scandinavian_mutual_defense_act = {
 						}
 					}
 				}
+			}
+		}
+		set_global_variable = {
+			name = scandinavian_mutual_defense_act_completion_timer
+			value = 0
+		}
+	}
+}
+
+je_scandinavian_union = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	group = je_group_scandinavian_unification
+
+	scripted_button = je_scandinavian_union_vote_decentralization_button
+	scripted_button = je_scandinavian_union_vote_no_stance_button
+	scripted_button = je_scandinavian_union_vote_centralization_button
+
+	is_shown_when_inactive = {
+		any_primary_culture = {
+			has_discrimination_trait = heritage_nordic
+		}
+		overlord ?= {
+			any_primary_culture = {
+				has_discrimination_trait = heritage_nordic
+			}
+		}
+		has_journal_entry = je_scandinavian_nationalism
+	}
+	possible = {
+		any_primary_culture = {
+			has_discrimination_trait = heritage_nordic
+		}
+		overlord ?= {
+			any_primary_culture = {
+				has_discrimination_trait = heritage_nordic
+			}
+		}
+		has_journal_entry = je_scandinavian_nationalism
+		custom_tooltip = {
+			text = scandinavian_nationalism_progress_at_100p_tt
+			# Remember this is out of 1000
+			has_global_variable = scandinavian_nationalism_progress
+			global_var:scandinavian_nationalism_progress >= 1000
+		}
+	}
+	immediate = {
+		set_variable = je_scandinavian_union_voting_nothing
+	}
+	complete = {
+		custom_tooltip = {
+			text = scandiavian_mutual_defense_act_completed_10_years_tt
+			has_global_variable = scandinavian_mutual_defense_act_completion_timer
+			# 10 years of completed mutual defense act
+			global_var:scandinavian_mutual_defense_act_completion_timer >= 520
+		}
+		# Every country has voted the same way
+		OR = {
+			any_country = {
+				filter = {
+					has_journal_entry = je_scandinavian_union
+				}
+				count = all
+				has_variable = je_scandinavian_union_voting_decentralization
+			}
+			any_country = {
+				filter = {
+					has_journal_entry = je_scandinavian_union
+				}
+				count = all
+				has_variable = je_scandinavian_union_voting_centralization
+			}
+		}
+	}
+	# TODO : Make sure the Scandinavia tag goes to a player... 
+	on_complete = {
+		effect = {
+			custom_tooltip = {
+				text = scandinavia_unifies_tt
+				# Only pop this for the highest ranked country
+				if = {
+					limit = {
+						any_country = {
+							count = 0
+							has_journal_entry = je_scandinavian_nationalism
+							country_rank > root.country_rank
+						}
+					}
+					# Decentralization chosen
+					if = {
+						limit = {
+							has_variable = je_scandinavian_union_voting_decentralization
+						}
+						every_country = {
+							limit = {
+								has_variable = je_scandinavian_union_voting_decentralization
+								is_subject = no
+							}
+							# Make a subject for every other independent country that voted decentralization
+							root = {
+								create_diplomatic_pact = {
+									country = prev
+									type = puppet
+								}	
+							}
+						}
+						change_tag = SCA
+					}
+					# Centralization chosen
+					if = {
+						limit = {
+							has_variable = je_scandinavian_union_voting_centralization
+						}
+						# Straight up annex every country that voted centralization, as long as they're AI and have an AI overlord if subject
+						every_country = {
+							limit = {
+								has_variable = je_scandinavian_union_voting_centralization
+								is_ai = yes
+								this != root
+								overlord ?= {
+									is_ai = yes
+								}
+							}
+							# If they have subjects that didn't vote, make them puppets first
+							every_subject_or_below = {
+								limit = {
+									NOT = {
+										has_variable = je_scandinavian_union_voting_centralization
+									}
+								}
+								root = {
+									create_diplomatic_pact = {
+										country = prev
+										type = puppet
+									}	
+								}
+							}
+							root = {
+								annex_with_incorporation = prev
+							}
+						}
+						change_tag = SCA
+						every_country = {
+							limit = {
+								has_variable = je_scandinavian_union_voting_centralization
+								is_ai = no
+								this != root
+							}
+							# For player countries, just give them an event asking for permission to annex
+							trigger_event = {
+								id = imperia_scandinavia.1
+								popup = yes
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = scandinavia_chose_decentralization_header
+		effect = {
+			# This one looks a bit different because its a hypothetical outcome tooltip
+			random_country = {
+				limit = {
+					any_country = {
+						count = 0
+						has_journal_entry = je_scandinavian_nationalism
+						country_rank > prev.country_rank
+					}
+				}
+				every_country = {
+					limit = {
+						has_journal_entry = je_scandinavian_union
+						is_subject = no
+					}
+					# Make a subject for every other independent country that voted decentralization
+					prev = {
+						create_diplomatic_pact = {
+							country = prev
+							type = puppet
+						}	
+					}
+				}
+				change_tag = SCA
 			}
 		}
 	}

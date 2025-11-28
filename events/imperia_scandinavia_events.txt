@@ -1,0 +1,57 @@
+﻿namespace = imperia_scandinavia
+
+# Ask for permission to annex in a centralized Scandinavian Union
+imperia_scandinavia.1 = {
+	type = country_event
+	placement = root
+	title = imperia_scandinavia.1.t
+	desc = imperia_scandinavia.1.d
+	flavor = imperia_scandinavia.1.f
+	duration = 3
+	event_image = {
+		video = "gfx/event_pictures/unspecific_military_parade.bk2"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_opened_soundeffect = "event:/SFX/Events/unspecific/military_parade"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+    # Yes! Get annexed
+	option = {
+		name = imperia_scandinavia.1.a
+		default_option = yes
+        custom_tooltip = game_will_end_for_you_tt
+        every_subject_or_below = {
+            if = {
+                limit = {
+                    has_variable = je_scandinavian_union_voting_centralization
+                }
+                c:SCA = {
+                    annex_with_incorporation = prev
+                }
+            }
+            else = {
+                c:SCA = {
+                    create_diplomatic_pact = {
+                        country = prev
+                        type = puppet
+                    }
+                }
+            }
+        }
+        c:SCA = {
+            annex_with_incorporation = root
+        }
+        ai_chance = { # In case AI gets this event, because of DCs. They will accept it, citing "skill issue"
+            base = 100
+        }
+	}
+    # No! Regret the whole thing
+    option = {
+        name = imperia_scandinavia.1.b
+        add_radicals = {
+            value = 0.35
+        }
+        ai_chance = {
+            base = 0
+        }
+    }
+}
