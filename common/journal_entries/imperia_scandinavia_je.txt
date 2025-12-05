@@ -50,7 +50,7 @@
 		}
 	}
 	possible = {
-		# Check that every country with a Scandinavian primary culture have nationalism researched
+		# Check that every independent Scandinavian country has nationalism researched
 		any_country = {
 			filter = {
 				any_primary_culture = {
@@ -89,11 +89,7 @@
 		}
 	}
 	complete = {
-		custom_tooltip = {
-			text = scandinavian_nationalism_progress_at_100p_tt
-			has_global_variable = scandinavian_nationalism_progress
-			global_var:scandinavian_nationalism_progress >= 1000
-		}
+		exists = c:SCA
 	}
 	fail = {
 		# 5 years of negative progress
@@ -153,14 +149,14 @@
 				limit = {
 					any_country = {
 						has_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_act_completed
+						has_variable = scandinavian_mutual_defense_pact_completed
 					}
 					NOT = {
-						has_variable = scandinavian_mutual_defense_act_completed
+						has_variable = scandinavian_mutual_defense_pact_completed
 					}
 					is_subject = no
 				}
-				set_variable = scandinavian_mutual_defense_act_completed
+				set_variable = scandinavian_mutual_defense_pact_completed
 				every_country = { # Create defensive pacts between all relevant Scandinavian countries
 					limit = {
 						has_journal_entry = je_scandinavian_nationalism
@@ -177,7 +173,7 @@
 					}
 					save_scope_as = second_country_scope
 					create_treaty = {
-						name = treaty_name_scandinavian_mutual_defense_act
+						name = treaty_name_scandinavian_mutual_defense_pact
 						first_country = root
 						second_country = scope:second_country_scope
 						is_draft = no
@@ -322,7 +318,7 @@
 				limit = {
 					any_country = {
 						has_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_act_completed
+						has_variable = scandinavian_mutual_defense_pact_completed
 						is_subject = no
 						this != root
 						NOT = {
@@ -338,7 +334,7 @@
 				every_country = {
 					limit = {
 						has_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_act_completed
+						has_variable = scandinavian_mutual_defense_pact_completed
 						is_subject = no
 						this != root
 						NOT = {
@@ -422,10 +418,10 @@
 				# Tick up the SMDA completion timer, if it exists
 				if = {
 					limit = {
-						has_global_variable = scandinavian_mutual_defense_act_completion_timer
+						has_global_variable = scandinavian_mutual_defense_pact_completion_timer
 					}
 					change_global_variable = {
-						name = scandinavian_mutual_defense_act_completion_timer
+						name = scandinavian_mutual_defense_pact_completion_timer
 						add = 1 # Add one week
 					}
 				}
@@ -495,11 +491,11 @@
 		}
 		# Tells you if its decreasing from broken mutual defense act
 		triggered_desc = {
-			desc = je_scandinavian_nationalism_broken_mutual_defense_act
+			desc = je_scandinavian_nationalism_broken_mutual_defense_pact
 			trigger = {
 				any_country = {
 					has_journal_entry = je_scandinavian_nationalism
-					has_variable = scandinavian_mutual_defense_act_completed
+					has_variable = scandinavian_mutual_defense_pact_completed
 					is_subject = no
 					this != root
 					NOT = {
@@ -521,7 +517,7 @@
 				trigger = {
 					any_country = {
 						has_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_act_completed
+						has_variable = scandinavian_mutual_defense_pact_completed
 					}
 				}
 			}
@@ -682,7 +678,7 @@ je_scandinavian_freedom_of_movement_act = {
 	}
 }
 
-je_scandinavian_mutual_defense_act = {
+je_scandinavian_mutual_defense_pact = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
 	is_shown_when_inactive = {
@@ -762,7 +758,7 @@ je_scandinavian_mutual_defense_act = {
 			limit = {
 				is_subject = no
 			}
-			set_variable = scandinavian_mutual_defense_act_completed
+			set_variable = scandinavian_mutual_defense_pact_completed
 			every_country = { # Create defensive pacts between all relevant Scandinavian countries
 				limit = {
 					has_journal_entry = je_scandinavian_nationalism
@@ -779,7 +775,7 @@ je_scandinavian_mutual_defense_act = {
 				}
 				save_scope_as = second_country_scope
 				create_treaty = {
-					name = treaty_name_scandinavian_mutual_defense_act
+					name = treaty_name_scandinavian_mutual_defense_pact
 					first_country = root
 					second_country = scope:second_country_scope
 					is_draft = no
@@ -793,7 +789,7 @@ je_scandinavian_mutual_defense_act = {
 			}
 		}
 		set_global_variable = {
-			name = scandinavian_mutual_defense_act_completion_timer
+			name = scandinavian_mutual_defense_pact_completion_timer
 			value = 0
 		}
 	}
@@ -840,10 +836,16 @@ je_scandinavian_union = {
 	}
 	complete = {
 		custom_tooltip = {
-			text = scandiavian_mutual_defense_act_completed_10_years_tt
-			has_global_variable = scandinavian_mutual_defense_act_completion_timer
+			text = scandiavian_mutual_defense_pact_completed_10_years_tt
+			has_global_variable = scandinavian_mutual_defense_pact_completion_timer
 			# 10 years of completed mutual defense act
-			global_var:scandinavian_mutual_defense_act_completion_timer >= 520
+			global_var:scandinavian_mutual_defense_pact_completion_timer >= 520
+		}
+		custom_tooltip = {
+			text = scandinavian_nationalism_progress_at_100p_tt
+			# Remember this is out of 1000
+			has_global_variable = scandinavian_nationalism_progress
+			global_var:scandinavian_nationalism_progress >= 1000
 		}
 		# Every country has voted the same way
 		OR = {
@@ -863,18 +865,37 @@ je_scandinavian_union = {
 			}
 		}
 	}
-	# TODO : Make sure the Scandinavia tag goes to a player... 
 	on_complete = {
 		effect = {
 			custom_tooltip = {
 				text = scandinavia_unifies_tt
-				# Only pop this for the highest ranked country
+				# Only pop this for the highest ranked country (and check for players!)
 				if = {
 					limit = {
-						any_country = {
-							count = 0
-							has_journal_entry = je_scandinavian_nationalism
-							country_rank > root.country_rank
+						trigger_if = {
+							limit = {
+								any_country = {
+									has_journal_entry = je_scandinavian_nationalism
+									is_player = yes
+									is_subject = no
+								}
+							}
+							any_country = {
+								count = 0
+								has_journal_entry = je_scandinavian_nationalism
+								country_rank > root.country_rank
+								is_player = yes
+								is_subject = no
+							}
+							is_player = yes
+							is_subject = no
+						}
+						trigger_else = {
+							any_country = {
+								count = 0
+								has_journal_entry = je_scandinavian_nationalism
+								country_rank > root.country_rank
+							}
 						}
 					}
 					# Decentralization chosen
@@ -954,10 +975,30 @@ je_scandinavian_union = {
 			# This one looks a bit different because its a hypothetical outcome tooltip
 			random_country = {
 				limit = {
-					any_country = {
-						count = 0
-						has_journal_entry = je_scandinavian_nationalism
-						country_rank > prev.country_rank
+					trigger_if = {
+						limit = {
+							any_country = {
+								has_journal_entry = je_scandinavian_nationalism
+								is_player = yes
+								is_subject = no
+							}
+						}
+						any_country = {
+							count = 0
+							has_journal_entry = je_scandinavian_nationalism
+							country_rank > root.country_rank
+							is_player = yes
+							is_subject = no
+						}
+						is_player = yes
+						is_subject = no
+					}
+					trigger_else = {
+						any_country = {
+							count = 0
+							has_journal_entry = je_scandinavian_nationalism
+							country_rank > root.country_rank
+						}
 					}
 				}
 				every_country = {
@@ -974,6 +1015,82 @@ je_scandinavian_union = {
 					}
 				}
 				change_tag = SCA
+			}
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = scandinavia_chose_centralization_header
+		effect = {
+			# This one looks a bit different because its a hypothetical outcome tooltip
+			# Also, probably wouldnt work due to ordering... But thats okay, its just a tooltip.
+			random_country = {
+				limit = {
+					trigger_if = {
+						limit = {
+							any_country = {
+								has_journal_entry = je_scandinavian_nationalism
+								is_player = yes
+								is_subject = no
+							}
+						}
+						any_country = {
+							count = 0
+							has_journal_entry = je_scandinavian_nationalism
+							country_rank > prev.country_rank
+							is_player = yes
+							is_subject = no
+						}
+						is_player = yes
+						is_subject = no
+					}
+					trigger_else = {
+						any_country = {
+							count = 0
+							has_journal_entry = je_scandinavian_nationalism
+							country_rank > prev.country_rank
+						}
+					}
+				}
+				change_tag = SCA
+				every_country = {
+					limit = {
+						has_variable = je_scandinavian_union_voting_centralization
+						is_ai = yes
+						this != prev
+						overlord ?= {
+							is_ai = yes
+						}
+					}
+					# If they have subjects that didn't vote, make them puppets first
+					every_subject_or_below = {
+						limit = {
+							NOT = {
+								has_variable = je_scandinavian_union_voting_centralization
+							}
+						}
+						c:SCA = {
+							create_diplomatic_pact = {
+								country = prev
+								type = puppet
+							}	
+						}
+					}
+					c:SCA = {
+						annex_with_incorporation = prev
+					}
+				}
+				every_country = {
+					limit = {
+						has_variable = je_scandinavian_union_voting_centralization
+						is_ai = no
+						this != prev
+					}
+					# For player countries, just give them an event asking for permission to annex
+					trigger_event = {
+						id = imperia_scandinavia.1
+						popup = yes
+					}
+				}
 			}
 		}
 	}
