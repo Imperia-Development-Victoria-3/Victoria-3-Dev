@@ -9,7 +9,7 @@
 	
 	is_shown_when_inactive = {
 		exists = c:RUS
-		THIS = c:RUS
+		c:RUS ?= THIS
 		is_subject = no
 	}
 	possible = {
@@ -22,7 +22,7 @@
 		}
 	}
 	immediate = {
-		c:CHI = {
+		c:CHI ?= {
 			save_scope_as = china_scope
 		}
 		s:STATE_AMUR = {
@@ -83,13 +83,13 @@ je_caucasian_war = {
 	
 	immediate = {
 		set_global_variable = caucasian_war_happened
-		c:CIR = {
+		c:CIR ?= {
 			save_scope_as = circassia_scope
 		}
-		c:CHC = {
+		c:CHC ?= {
 			save_scope_as = imamate_scope
 		}
-		c:RUS = {
+		c:RUS ?= {
 			save_scope_as = russia_scope
 		}
 		every_scope_state = {
@@ -286,6 +286,27 @@ je_caucasian_war = {
 			caucasuswar_end.1
 			caucasuswar_end.3
 		}
+	}
+	
+	invalid = {
+		OR = {
+			c:CIR ?= {
+				is_subject = yes
+				NOT = {
+					is_subject_of = ROOT
+				}
+			}
+			c:CHC ?= {
+				is_subject = yes
+				NOT = {
+					is_subject_of = ROOT
+				}
+			}
+		}
+	}
+	
+	on_invalid = {
+		set_global_variable = caucasus_failure_var
 	}
 	
 	on_yearly_pulse = {
@@ -515,7 +536,7 @@ je_caucasian_war_circassia = {
 	}
 	
 	immediate = {
-		c:RUS = {
+		c:RUS ?= {
 			save_scope_as = russia_scope
 		}
 		s:STATE_KUBAN = {
@@ -528,7 +549,7 @@ je_caucasian_war_circassia = {
 			triggered_desc = {
 				desc = caucasian_war_milyutin_loc
 				trigger = {
-					c:RUS = {
+					c:RUS ?= {
 						has_variable = milyutin_memorandum_accepted
 					}
 				}
@@ -537,7 +558,7 @@ je_caucasian_war_circassia = {
 				desc = caucasian_war_escalated_loc
 				trigger = {
 					OR = {
-						c:RUS = {
+						c:RUS ?= {
 							has_variable = escalated_caucasian_war
 						}
 						NAND = {
@@ -617,7 +638,7 @@ je_caucasian_war_imamate = {
 	}
 	
 	immediate = {
-		c:RUS = {
+		c:RUS ?= {
 			save_scope_as = russia_scope
 		}
 		s:STATE_NORTH_CAUCASUS = {
@@ -635,7 +656,7 @@ je_caucasian_war_imamate = {
 			triggered_desc = {
 				desc = caucasian_war_milyutin_loc
 				trigger = {
-					c:RUS = {
+					c:RUS ?= {
 						has_variable = milyutin_memorandum_accepted
 					}
 				}
@@ -644,7 +665,7 @@ je_caucasian_war_imamate = {
 				desc = caucasian_war_escalated_loc
 				trigger = {
 					OR = {
-						c:RUS = {
+						c:RUS ?= {
 							has_variable = escalated_caucasian_war
 						}
 						NAND = {
@@ -727,7 +748,7 @@ je_pacify_the_steppes = {
 	}
 	
 	immediate = {
-		c:RUS = {
+		c:RUS ?= {
 			save_scope_as = russia_scope
 		}
 		random_character_in_void = {
@@ -745,7 +766,7 @@ je_pacify_the_steppes = {
 				country_has_primary_culture = cu:kazak
 			}
 			is_subject_type = subject_type_puppet
-			liberty_desire <= 25
+			liberty_desire < define:NDiplomacy|WAR_GOAL_INFAMY_LOW_LIBERTY_DESIRE_THRESHOLD
 			percent = 1
 		}
 	}
@@ -914,10 +935,10 @@ je_the_last_kazakh_khan = {
 	group = je_group_russia_expansion
 	
 	immediate = {
-		c:RUS = {
+		c:RUS ?= {
 			save_scope_as = russia_scope
 		}
-		c:KAZ = {
+		c:KAZ ?= {
 			save_scope_as = khanate_scope
 			ruler = {
 				save_scope_as = kenesary_scope
@@ -933,7 +954,7 @@ je_the_last_kazakh_khan = {
 					exists = c:KAZ
 				}
 			}
-			c:KAZ = {
+			c:KAZ ?= {
 				is_subject_of = c:RUS
 			}
 		}
@@ -955,7 +976,7 @@ je_the_last_kazakh_khan = {
 	fail = {
 		AND = {
 			has_truce_with = c:KAZ
-			c:KAZ = {
+			c:KAZ ?= {
 				NOT = {
 					is_subject_of = ROOT
 				}
@@ -987,7 +1008,7 @@ je_conquest_of_central_asia = {
 	is_shown_when_inactive = {
 		has_dlc_feature = ep1_content
 		exists = c:RUS
-		THIS = c:RUS
+		c:RUS ?= THIS
 		is_subject = no
 		any_scope_state = {
 			state_region = s:STATE_URALSK
@@ -1018,7 +1039,7 @@ je_conquest_of_central_asia = {
 			limit = {
 				exists = c:TRM
 			}
-			c:TRM = {
+			c:TRM ?= {
 				save_scope_as = turkmenia_scope
 			}
 		}
@@ -1232,7 +1253,7 @@ je_great_reforms_military = {
 		}
 		any_scope_building = {
 			filter = {
-				is_building_type = building_barracks
+				is_building_type = building_barrack
 			}
 			NOR = {
 				building_has_goods_shortage = yes
@@ -1241,7 +1262,7 @@ je_great_reforms_military = {
 			percent = 1
 		}
 		any_scope_building = {
-			is_building_type = building_munition_plants
+			is_building_type = building_munition_plant
 			level >= 3
 		}
 	}

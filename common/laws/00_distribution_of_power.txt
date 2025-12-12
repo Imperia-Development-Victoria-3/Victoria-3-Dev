@@ -138,7 +138,6 @@ law_neo_absolutism = {	# Reward for completing the neo-absolutist content
 	
 	on_activate = {
 		scripted_effect_parties_disappearence = yes
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	is_visible = {
@@ -191,7 +190,6 @@ law_technocracy = {
 			remove_modifier = missouri_compromise
 		}
 		add_journal_entry = { type = je_technocracy }
-		clear_geheime_staatskonferenz = yes
 	}
 	modifier = {
 		country_legitimacy_headofstate_add = 10
@@ -302,13 +300,13 @@ law_oligarchy = {
 	
 	on_activate = {
 		scripted_effect_parties_disappearence = yes
+		handle_possible_absent_caciquismo_variables = yes
 		if = {
 			limit = {
 				has_modifier = missouri_compromise
 			}
 			remove_modifier = missouri_compromise
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	modifier = {
 		country_legitimacy_headofstate_add = 15
@@ -513,7 +511,7 @@ law_elder_council = {
 		if = {
 			limit = {
 				has_law = law_type:law_elected_bureaucrats
-				has_law_or_variant = law_type:law_monarchy
+				has_law = law_type:law_monarchy
 			}
 			deactivate_law = law_type:law_elected_bureaucrats
 			activate_law = law_type:law_hereditary_bureaucrats
@@ -522,7 +520,7 @@ law_elder_council = {
 			limit = {
 				has_law = law_type:law_elected_bureaucrats
 				NOT = {
-					has_law_or_variant = law_type:law_monarchy
+					has_law = law_type:law_monarchy
 				}
 			}
 			deactivate_law = law_type:law_elected_bureaucrats
@@ -535,7 +533,6 @@ law_elder_council = {
 			}
 			remove_modifier = missouri_compromise
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	modifier = {
 		country_legitimacy_base_add = 20
@@ -577,8 +574,13 @@ law_landed_voting = {
 		country_officers_voting_power_add = 50
 		country_clergymen_voting_power_add = 50
 		country_capitalists_voting_power_add = 50
+<<<<<<< HEAD
 		country_authority_add = 200
 		country_leverage_resistance_mult = -0.05
+=======
+		country_authority_add = 100
+		country_electoral_confidence_impact_mult = -0.3
+>>>>>>> b5e6ae759 (V1.12.1)
 	}
 	
 	can_enact = {
@@ -595,10 +597,25 @@ law_landed_voting = {
 		}
 	}
 	on_activate = {
-		scripted_effect_parties_emergence = yes
 		if = {
 			limit = {
-				has_law_or_variant = law_type:law_monarchy
+				game_date > 1836.1.1
+			}
+			initialize_electoral_confidence = yes
+		}
+		random_law = {
+			limit = {
+				type = law_type:law_landed_voting
+			}
+			save_scope_as = relevant_voting_law
+		}
+		handle_possible_absent_caciquismo_variables = yes
+		scripted_effect_parties_emergence = yes
+		inherit_caciquismo_effect = yes
+		inherit_free_elections_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_monarchy
 				has_variable = king_in_parliament_possible
 				NOT = {
 					has_journal_entry = je_king_in_parliament
@@ -609,7 +626,6 @@ law_landed_voting = {
 				add_journal_entry = { type = je_king_in_parliament }
 			}
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	can_impose = {
@@ -705,8 +721,13 @@ law_wealth_voting = {
 		country_legitimacy_ideological_incoherence_mult = 0.2
 		country_voting_power_base_add = 50
 		country_voting_power_wealth_threshold_add = 20
+<<<<<<< HEAD
 		country_authority_add = 150
 		country_leverage_resistance_mult = -0.05
+=======
+		country_authority_add = 100
+		country_electoral_confidence_impact_mult = -0.2
+>>>>>>> b5e6ae759 (V1.12.1)
 	}
 	
 	can_enact = {
@@ -723,10 +744,25 @@ law_wealth_voting = {
 		}
 	}
 	on_activate = {
-		scripted_effect_parties_emergence = yes
 		if = {
 			limit = {
-				has_law_or_variant = law_type:law_monarchy
+				game_date > 1836.1.1
+			}
+			initialize_electoral_confidence = yes
+		}
+		random_law = {
+			limit = {
+				type = law_type:law_wealth_voting
+			}
+			save_scope_as = relevant_voting_law
+		}
+		handle_possible_absent_caciquismo_variables = yes
+		scripted_effect_parties_emergence = yes
+		inherit_caciquismo_effect = yes
+		inherit_free_elections_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_monarchy
 				has_variable = king_in_parliament_possible
 				NOT = {
 					has_journal_entry = je_king_in_parliament
@@ -737,7 +773,6 @@ law_wealth_voting = {
 				add_journal_entry = { type = je_king_in_parliament }
 			}
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	can_impose = {
@@ -828,8 +863,13 @@ law_census_voting = {
 		country_legitimacy_ideological_incoherence_mult = 0.1
 		country_voting_power_wealth_threshold_add = 10
 		country_voting_power_from_literacy_add = 50
+<<<<<<< HEAD
 		country_authority_add = 100
 		country_leverage_resistance_mult = -0.05
+=======
+		country_authority_add = 50
+		country_electoral_confidence_impact_mult = -0.1
+>>>>>>> b5e6ae759 (V1.12.1)
 	}
 	
 	can_enact = {
@@ -846,10 +886,25 @@ law_census_voting = {
 		}
 	}
 	on_activate = {
-		scripted_effect_parties_emergence = yes
 		if = {
 			limit = {
-				has_law_or_variant = law_type:law_monarchy
+				game_date > 1836.1.1
+			}
+			initialize_electoral_confidence = yes
+		}
+		random_law = {
+			limit = {
+				type = law_type:law_census_voting
+			}
+			save_scope_as = relevant_voting_law
+		}
+		handle_possible_absent_caciquismo_variables = yes
+		scripted_effect_parties_emergence = yes
+		inherit_caciquismo_effect = yes
+		inherit_free_elections_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_monarchy
 				has_variable = king_in_parliament_possible
 				NOT = {
 					has_journal_entry = je_king_in_parliament
@@ -860,7 +915,6 @@ law_census_voting = {
 				add_journal_entry = { type = je_king_in_parliament }
 			}
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	can_impose = {
@@ -968,10 +1022,25 @@ law_universal_suffrage = {
 		}
 	}
 	on_activate = {
-		scripted_effect_parties_emergence = yes
 		if = {
 			limit = {
-				has_law_or_variant = law_type:law_monarchy
+				game_date > 1836.1.1
+			}
+			initialize_electoral_confidence = yes
+		}
+		random_law = {
+			limit = {
+				type = law_type:law_universal_suffrage
+			}
+			save_scope_as = relevant_voting_law
+		}
+		handle_possible_absent_caciquismo_variables = yes
+		scripted_effect_parties_emergence = yes
+		inherit_caciquismo_effect = yes
+		inherit_free_elections_effect = yes
+		if = {
+			limit = {
+				has_law = law_type:law_monarchy
 				has_variable = king_in_parliament_possible
 				NOT = {
 					has_journal_entry = je_king_in_parliament
@@ -982,7 +1051,6 @@ law_universal_suffrage = {
 				add_journal_entry = { type = je_king_in_parliament }
 			}
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	can_impose = {
@@ -1096,7 +1164,6 @@ law_anarchy = {
 			}
 			remove_modifier = missouri_compromise
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	ai_will_do = {
 		exists = ruler
@@ -1163,7 +1230,13 @@ law_anarchy = {
 law_single_party_state = {
 	group = lawgroup_distribution_of_power
 	icon = "gfx/interface/icons/law_icons/single_party_state.dds"
+<<<<<<< HEAD
 	progressiveness = 0
+=======
+	
+	progressiveness = 50
+	
+>>>>>>> b5e6ae759 (V1.12.1)
 	can_enact = {
 		OR = {
 			custom_tooltip = {
@@ -1202,12 +1275,15 @@ law_single_party_state = {
 		country_authority_add = 500
 		country_voting_power_base_add = 50
 		interest_group_in_government_attraction_mult = 0.20
+<<<<<<< HEAD
 		country_leverage_resistance_mult = 0.5
+=======
+		country_electoral_confidence_impact_mult = -1.0
+>>>>>>> b5e6ae759 (V1.12.1)
 	}
 	
 	on_activate = {
 		set_only_legal_party_from_ig = ruler.interest_group
-		
 		custom_tooltip = {
 			text = sps_government_reshuffle_tt
 			every_interest_group = {
@@ -1232,7 +1308,7 @@ law_single_party_state = {
 		
 		if = {
 			limit = {
-				has_law_or_variant = law_type:law_monarchy
+				has_law = law_type:law_monarchy
 				has_variable = king_in_parliament_possible
 				NOT = {
 					has_journal_entry = je_king_in_parliament
@@ -1243,7 +1319,6 @@ law_single_party_state = {
 				add_journal_entry = { type = je_king_in_parliament }
 			}
 		}
-		clear_geheime_staatskonferenz = yes
 	}
 	
 	on_deactivate = {

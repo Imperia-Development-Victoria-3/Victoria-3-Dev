@@ -85,6 +85,19 @@
 				set_variable = failed_sick_man_main
 			}
 		}
+<<<<<<< HEAD
+=======
+		if = {	#failure immediately triggers eastern_crisis
+			limit = {
+				c:TUR ?= this
+				has_dlc_feature = ip3_content
+				NOT = {
+					has_global_variable = eastern_crisis_happened
+				}
+			}
+			add_contextless_journal_entry = je_great_eastern_crisis
+		}
+>>>>>>> b5e6ae759 (V1.12.1)
 		cu:albanian = {
 			remove_tradition_trait = tradition_rumelian
 		}
@@ -1007,7 +1020,7 @@ je_sick_man_syria = {
 				OR = {
 					AND = {
 						exists = c:EGY
-						c:EGY = {
+						c:EGY ?= {
 							is_subject_of = ROOT
 						}
 					}
@@ -1055,7 +1068,7 @@ je_sick_man_egypt = {
 		OR = {
 			AND = {
 				exists = c:EGY
-				c:EGY = {
+				c:EGY ?= {
 					is_subject_of = ROOT
 				}
 			}
@@ -1173,7 +1186,157 @@ je_sick_man_absolute_islam = {
 			}
 		}
 	}
+<<<<<<< HEAD
+=======
+	
+	fail = {
+		highest_secession_progress > 0.5
+	}
+	
+	on_fail = {
+		set_variable = failed_sick_man_separatism
+		if = {	#failure immediately triggers eastern_crisis
+			limit = {
+				c:TUR ?= this
+				has_dlc_feature = ip3_content
+				NOT = {
+					has_global_variable = eastern_crisis_happened
+				}
+			}
+			add_contextless_journal_entry = je_great_eastern_crisis
+		}
+	}
+	
+	current_value = {
+		value = var:sick_man_separatist_var
+	}
+	
+	goal_add_value = {
+		add = 180
+	}
+	
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	
+>>>>>>> b5e6ae759 (V1.12.1)
 	transferable = no
 	weight = 5009
 	progressbar = yes
 }
+<<<<<<< HEAD
+=======
+
+# Army Reform
+je_sick_man_army = {
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+	
+	group = je_group_tanzimat
+	
+	complete = {
+		army_size >= 100
+		has_technology_researched = napoleonic_warfare
+		any_scope_building = {
+			filter = {
+				is_building_type = building_barrack
+			}
+			NOR = {
+				building_has_goods_shortage = yes
+				has_active_production_method = pm_no_organization
+			}
+			percent = 1
+		}
+		NOT = {
+			any_military_formation = {
+				filter = {
+					is_army = yes
+				}
+				any_combat_unit = {
+					has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				}
+				percent >= 0.25
+			}
+		}
+	}
+	
+	on_complete = {
+		set_variable = completed_sick_man_army_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+	}
+	
+	on_monthly_pulse = {
+		events = {
+			tanzimat_events.10	# Tanzimat Draft Question
+		}
+	}
+	
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	
+	transferable = no
+	
+	should_be_pinned_by_default = yes
+	
+	weight = 5000
+}
+
+
+# Bureaucractic Reform
+je_sick_man_bureaucracy = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	
+	group = je_group_tanzimat
+	
+	complete = {
+		NOR = {
+			has_law_or_variant = law_type:law_hereditary_bureaucrats
+			has_law_or_variant = law_type:law_land_based_taxation
+			has_law_or_variant = law_type:law_consumption_based_taxation
+		}
+		bureaucracy >= 0
+		approaching_bureaucracy_shortage = no
+	}
+	
+	on_complete = {
+		set_variable = completed_sick_man_bureaucracy_je
+		custom_tooltip = je_sick_man_advance
+		change_variable = {
+			name = sick_man_var
+			add = 1
+		}
+		remove_modifier = outmoded_bureaucracy
+	}
+	
+	on_monthly_pulse = {
+		random_events = {
+			100 = 0
+			10 = tanzimat_events.9	# Land registration resisted
+		}
+	}
+	
+	invalid = {
+		custom_tooltip = {
+			text = finished_sick_man_tt
+			has_variable = sick_man_complete
+		}
+	}
+	
+	transferable = no
+	
+	weight = 5000
+	
+	should_be_pinned_by_default = yes
+}
+
+>>>>>>> b5e6ae759 (V1.12.1)

@@ -121,7 +121,7 @@ labor_rights.2 = {
 			is_enacting_law = law_type:law_collectivized_agriculture
 		}
 		any_interest_group = {
-			is_marginal = no
+			ig_counts_as_marginal = no
 			law_stance = {
 				law = law_type:law_serfdom
 				value < neutral
@@ -135,7 +135,7 @@ labor_rights.2 = {
 	immediate = {
 		random_interest_group = {
 			limit = {
-				is_marginal = no
+				ig_counts_as_marginal = no
 				law_stance = {
 					law = law_type:law_serfdom
 					value < neutral
@@ -213,7 +213,7 @@ labor_rights.3 = {
 	
 	duration = 3
 	
-	cooldown = { days = normal_modifier_time }
+	cooldown = { days = long_modifier_time }
 	
 	trigger = {
 		has_law = law_type:law_serfdom
@@ -221,14 +221,24 @@ labor_rights.3 = {
 			is_enacting_law = law_type:law_tenant_farmers
 			is_enacting_law = law_type:law_commercialized_agriculture
 			is_enacting_law = law_type:law_homesteading
-			is_enacting_law = law_type:law_collectivized_agriculture
 		}
 		ig:ig_landowners ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
 		}
-		NOT = { has_modifier = government_buying_serfs }
-		NOT = { has_modifier = serfs_buying_serfs }
-		NOT = { has_modifier = no_buying_serfs }
+		currently_enacting_law = {
+			NOR = {
+				has_amendment = amendment_redemption_payments
+				has_amendment = amendment_individual_redemption_payments
+			}
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_redemption_payments
+					has_amendment = amendment_individual_redemption_payments
+				}
+			}
+		}
 	}
 	
 	immediate = {
@@ -246,18 +256,32 @@ labor_rights.3 = {
 	
 	option = {	# pay them off
 		name = labor_rights.3.a
-		# small success chance but big bureaucracy hit
-		add_enactment_modifier = {
-			name = government_buying_serfs
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_redemption_payments
+				sponsor = scope:serf_owners
+				cooldown = 120
+				timeout = 600
+			}
+		}
+		scope:serf_owners ?= {
+			improve_law_stance = yes
 		}
 	}
 	
 	option = {	# serfs should buy their emancipation
 		name = labor_rights.3.b
 		default_option = yes
-		# small success chance but low SoL
-		add_enactment_modifier = {
-			name = serfs_buying_serfs
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_individual_redemption_payments
+				sponsor = scope:serf_owners
+				cooldown = 120
+				timeout = 600
+			}
+		}
+		scope:serf_owners ?= {
+			improve_law_stance = yes
 		}
 	}
 	option = {	# no deal
@@ -310,7 +334,7 @@ labor_rights.4 = {
 			is_enacting_law = law_type:law_worker_protections
 		}
 		ig:ig_trade_unions ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
 		}
 		NOT = { has_modifier = enactment_strikes_modifier }
 		NOT = { has_modifier = enactment_strikes_deterred_modifier }
@@ -379,10 +403,10 @@ labor_rights.5 = {
 			is_enacting_law = law_type:law_worker_protections
 		}
 		ig:ig_trade_unions ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
 		}
-		ig:ig_industrialists = {
-			is_marginal = no
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
 		}
 		NOT = { has_modifier = worker_protection_negotiations }
 	}
@@ -394,7 +418,7 @@ labor_rights.5 = {
 		ig:ig_trade_unions ?= {
 			save_scope_as = unions_scope
 		}
-		ig:ig_industrialists = {
+		ig:ig_industrialists ?= {
 			save_scope_as = capitalists_scope
 		}
 	}
@@ -463,10 +487,10 @@ labor_rights.6 = {
 			is_enacting_law = law_type:law_worker_protections
 		}
 		ig:ig_trade_unions ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
 		}
-		ig:ig_industrialists = {
-			is_marginal = no
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
 		}
 		NOT = { has_modifier = strikbreakers_enactment }
 	}
@@ -478,7 +502,7 @@ labor_rights.6 = {
 		ig:ig_trade_unions ?= {
 			save_scope_as = unions_scope
 		}
-		ig:ig_industrialists = {
+		ig:ig_industrialists ?= {
 			save_scope_as = capitalists_scope
 		}
 	}

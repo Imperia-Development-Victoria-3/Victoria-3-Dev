@@ -4,10 +4,31 @@
 	group = je_group_historical_content
 	
 	complete = {
-		custom_tooltip = {
-			text = billy_died
-			ruler = {
-				NOT = { has_variable = is_billy }
+		trigger_if = {
+			limit = {
+				c:GBR ?= {
+					NOT = {
+						has_variable = ruler_selector_var
+					}
+				}
+				c:HAN ?= {
+					NOT = {
+						has_variable = ruler_selector_var
+					}
+				}
+			}
+			custom_tooltip = {
+				text = billy_died
+				ruler = {
+					NOT = {
+						has_variable = is_billy
+					}
+				}
+			}
+		}
+		trigger_else = {
+			hidden_trigger = {
+				always = no
 			}
 		}
 	}
@@ -29,12 +50,26 @@
 				limit = {
 					exists = c:GBR
 					c:GBR = ROOT
+<<<<<<< HEAD
 					ruler = { has_variable = is_billy }
 					year >= 1837
 				}
 				random = {
 					chance = 10
 					ruler = { kill_character = yes }
+=======
+					ruler = {
+						has_variable = is_billy
+					}
+				}
+				random_list = {
+					11 = {}
+					1 = {
+						ruler = {
+							kill_character = yes
+						}
+					}
+>>>>>>> b5e6ae759 (V1.12.1)
 				}
 			}
 		}
@@ -48,12 +83,15 @@
 			NOT = {
 				exists = c:HAN
 			}
-			c:HAN = {
+			c:HAN ?= {
 				NOT = {
 					is_subject_of = c:GBR
 				}
 			}
-			c:GBR = {
+			c:GBR ?= {
+				has_variable = ruler_selector_var
+			}
+			c:GBR ?= {
 				custom_tooltip = {
 					text = "DEBUG_NO_CHARACTER_IN_GBR_IS_VICTORIA"
 					NOT = {

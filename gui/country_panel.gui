@@ -3289,7 +3289,40 @@ types country_panel_treaties_types
 
 		### ARTICLE WITH NO INPUT
 		article_icon_item = {
-			visible = "[And(And(And(Not(Article.HasType('goods_transfer')), Not(Article.HasType('money_transfer'))), Not(Article.HasType('acquire_monopoly_for_company'))), Not(Article.HasType('law_commitment')))]"
+			visible = "[Not(Or6(Article.HasType('goods_transfer'), Article.HasType('money_transfer'), Article.HasType('acquire_monopoly_for_company'), Article.HasType('law_commitment'), Article.HasType('transfer_subject'), Article.RequiresInput('country')))]"
+		}
+
+		### COUNTRY INPUT
+		article_icon_item = {
+			visible = "[And(Article.RequiresInput('country'), Not(Article.HasType('transfer_subject')))]"
+
+			blockoverride "article_icon" {
+				tiny_flag_no_interact = {
+					parentanchor = center
+					datacontext = "[Article.GetCountry]"
+
+					blockoverride "tooltip" {}
+				}
+			}
+		}
+
+		### TRANSFER SUBJECT
+		article_icon_item = {
+			visible = "[Article.HasType('transfer_subject')]"
+
+			blockoverride "article_icon" {
+				icon = {
+					size = { 100% 100% }
+					texture = "[Article.GetIcon]"
+				}
+
+				tiny_flag_no_interact = {
+					parentanchor = bottom
+					datacontext = "[Article.GetCountry]"
+
+					blockoverride "tooltip" {}
+				}
+			}
 		}
 
 		### GOODS TRANSFER
