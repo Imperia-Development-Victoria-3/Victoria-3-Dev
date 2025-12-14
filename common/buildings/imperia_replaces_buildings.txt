@@ -21,67 +21,67 @@ INJECT:building_university = {
 # Since we replace always = yes in can_build_government with is_capital = yes, we need to
 # replace the entire building definition to avoid conflicts. Cant use inject, unfortunately.
 REPLACE:building_power_bloc_statue = {
-
+	
 	building_group = bg_monuments
-
+	
 	city_type = city
-
+	
 	levels_per_mesh = 1
-
+	
 	expandable = no
-
+	
 	statue = yes
-
+	
 	production_method_groups = {
 		pmg_base_building_power_bloc_statue
 	}
-
+	
 	icon = "gfx/interface/icons/building_icons/building_powerblock_statue.dds"
-
+	
 	required_construction = construction_cost_monument
-
+	
 	can_build_government = {
-		is_capital = yes # always = yes
+		is_capital = yes	# always = yes
 	}
-
+	
 	can_build_private = {
 		always = no
 	}
-
+	
 	potential = {
 		owner ?= {
 			is_in_power_bloc = yes
 		}
 		has_dlc_feature = power_bloc_features
 	}
-
+	
 	ai_value = {
 		value = 0
-
+		
 		if = {
 			limit = {
 				is_incorporated = yes
 				state_population >= 500000
 			}
-
+			
 			add = {
 				value = state_population
 				divide = 2500
 				max = 5000
 			}
 		}
-
+		
 		if = {
 			limit = { is_capital = yes }
 			add = 2500
 		}
-
+		
 		owner = {
 			if = {
 				limit = { is_power_bloc_leader = yes }
 				multiply = 2.0
 			}
-
+			
 			if = {
 				limit = { country_rank < rank_value:major_power }
 				multiply = 0.0
@@ -92,6 +92,6 @@ REPLACE:building_power_bloc_statue = {
 			}
 		}
 	}
-
+	
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
