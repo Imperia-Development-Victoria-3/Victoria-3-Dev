@@ -140,8 +140,17 @@ french_pretenders.1 = {
 			}
 		}
 		ruler = {
-			exile_character_with_martyrdom = yes
 			save_scope_as = old_ruler_scope
+		}
+		if = {
+			limit = {
+				exists = heir
+			}
+			heir = {
+				retire_character = {
+					hidden = yes
+				}
+			}
 		}
 		generate_french_monarch = yes
 		if = {
@@ -152,6 +161,9 @@ french_pretenders.1 = {
 				name = french_dynastic_primary_progress_var
 				multiply = 0
 			}
+		}
+		scope:old_ruler_scope ?= {
+			exile_character_with_martyrdom = yes
 		}
 	}
 	option = {
@@ -2227,7 +2239,6 @@ french_pretenders.6 = {	# Second Republic
 	immediate = {
 		ruler = {
 			save_scope_as = old_ruler_scope
-			exile_character_with_martyrdom = yes
 		}
 		springtime_save_conservative_laws = yes
 		if = {
@@ -2276,6 +2287,10 @@ french_pretenders.6 = {	# Second Republic
 			}
 			activate_law = law_type:law_census_voting
 		}
+		set_variable = had_springtime_revolution
+		scope:old_ruler_scope ?= {
+			exile_character_with_martyrdom = yes
+		}
 	}
 	option = {
 		name = french_pretenders.6.a
@@ -2284,7 +2299,6 @@ french_pretenders.6 = {	# Second Republic
 			text = exile_old_ruler_tt
 		}
 		set_variable = france_had_revolution
-		set_variable = had_springtime_revolution
 		random_interest_group = {
 			limit = {
 				ig_counts_as_marginal = no
