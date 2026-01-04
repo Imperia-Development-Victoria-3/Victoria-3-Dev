@@ -361,6 +361,21 @@ egalitarianism = {
 	unlocking_technologies = {
 		democracy
 	}
+	
+	on_researched = {
+		if = {
+			limit = {
+				has_journal_entry = je_springtime_of_the_peoples
+				NOT = {
+					is_involved_in_journal_entry = je_springtime_of_the_peoples
+				}
+			}
+			je:je_springtime_of_the_peoples ?= {
+				add_involved_country = ROOT
+			}
+		}
+	}
+	
 	ai_weight = {
 		value = 1
 		if = {
@@ -451,7 +466,7 @@ quinine = {
 			if = {
 				limit = {
 					any_scope_state = {
-						state_is_in_africa = yes
+						is_in_geographic_region = geographic_region_africa
 					}
 				}
 				add = 3
@@ -505,8 +520,8 @@ central_archives = {
 				OR = {
 					AND = {
 						OR = {
-							country_is_in_south_america = yes
-							country_is_in_central_america = yes
+							is_in_geographic_region = geographic_region_south_america
+							is_in_geographic_region = geographic_region_central_america
 						}
 						country_rank <= rank_value:major_power
 					}
@@ -644,6 +659,25 @@ nationalism = {
 	unlocking_technologies = {
 		mass_communication
 		international_relations
+	}
+	
+	on_researched = {
+		if = {
+			limit = {
+				is_actual_german = yes
+				NOT = {
+					has_global_variable = ready_for_frankfurt
+				}
+				any_country = {
+					filter = {
+						is_actual_german = yes
+					}
+					has_technology_researched = nationalism
+					percent >= 0.65
+				}
+			}
+			set_global_variable = ready_for_frankfurt
+		}
 	}
 	
 	ai_weight = {

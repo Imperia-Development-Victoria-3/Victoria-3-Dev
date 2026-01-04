@@ -86,7 +86,7 @@ acw_je_events.1 = {
 				# Re-enslave pops if the ACW happens after slavery has been abolished
 				if = {
 					limit = {
-						c:USA = {
+						c:USA ?= {
 							has_variable = slavery_recently_abolished
 						}
 					}
@@ -121,7 +121,7 @@ acw_je_events.1 = {
 				target = c:CSA
 			}
 			remove_modifier = missouri_compromise
-			c:CSA = {
+			c:CSA ?= {
 				set_variable = acw_slave_nation_var
 			}
 
@@ -353,8 +353,8 @@ acw_je_events.4 = {
 		NOT = { has_law = law_type:law_slavery_banned }
 		any_diplomatic_play = {
 			AND = {
-				any_scope_play_involved = { this = c:CSA }
-				any_scope_play_involved = { this = c:USA }
+				any_scope_play_involved = { c:CSA ?= THIS }
+				any_scope_play_involved = { c:USA ?= THIS }
 			}
 		}
 		NOT = { exists = c:FSA }	# fringe sanity check

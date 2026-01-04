@@ -57,14 +57,12 @@ base_values = {
 	state_unincorporated_starting_wages_mult = -0.20
 	building_unincorporated_subsistence_output_mult = -0.20
 	
-	country_construction_add = 10
-	
 	building_economy_of_scale_level_cap_add = 20
 	
 	state_market_access_price_impact = 0.65	# 0.75
 	
-	country_company_throughput_bonus_add = 0.2
-	country_company_construction_efficiency_bonus_add = 0.5
+	country_company_throughput_bonus_add = 0.1
+	country_company_construction_efficiency_bonus_add = 0.3
 	
 	country_max_weekly_construction_progress_add = 10
 	
@@ -85,6 +83,8 @@ base_values = {
 	state_max_trade_advantage_from_capacity_add = 0.2
 	
 	country_party_whip_impact_add = 0.5
+	
+	state_blockade_resistance_add = 100
 }
 
 # Scales with a country's global prestige rank, so at 20/100 this is multiplied by 0.8x, 50/100 by 0.5x, etc
@@ -117,6 +117,12 @@ working_conditions = {
 	building_group_bg_mining_machinists_mortality_mult = 0.05
 	building_group_bg_mining_engineers_mortality_mult = 0.02
 	building_group_bg_mining_slaves_mortality_mult = 0.2
+
+	##Plantations and rubber
+	building_group_bg_plantations_laborers_mortality_mult = 0.05
+	building_group_bg_plantations_slaves_mortality_mult = 0.1
+	building_group_bg_rubber_laborers_mortality_mult = 0.05
+	building_group_bg_rubber_slaves_mortality_mult = 0.1
 	
 	building_group_bg_logging_laborers_mortality_mult = 0.1
 	building_group_bg_logging_machinists_mortality_mult = 0.05
@@ -133,6 +139,10 @@ working_conditions = {
 	building_group_bg_heavy_industry_laborers_mortality_mult = 0.1
 	building_group_bg_heavy_industry_machinists_mortality_mult = 0.05
 	building_group_bg_heavy_industry_engineers_mortality_mult = 0.02
+	
+	building_group_bg_military_industry_laborers_mortality_mult = 0.1
+	building_group_bg_military_industry_machinists_mortality_mult = 0.05
+	building_group_bg_military_industry_engineers_mortality_mult = 0.02
 	
 	building_group_bg_infrastructure_laborers_mortality_mult = 0.1
 	building_group_bg_infrastructure_machinists_mortality_mult = 0.05
@@ -218,6 +228,7 @@ unincorporated_state = {
 	building_group_bg_infrastructure_construction_efficiency_add = -0.2
 	building_group_bg_extraction_construction_efficiency_add = -0.2
 	building_group_bg_heavy_industry_construction_efficiency_add = -0.5
+	building_group_bg_military_industry_construction_efficiency_add = -0.5
 	building_group_bg_light_industry_construction_efficiency_add = -0.3
 	building_group_bg_government_construction_efficiency_add = -0.3
 }
@@ -245,7 +256,7 @@ recently_liberated_state = {
 market_capital_state = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_infrastructure_mult = 0.25
-	state_trade_advantage_mult = 0.25
+	state_trade_advantage_mult = 0.05
 }
 
 capital_state = {
@@ -639,6 +650,7 @@ state_region_devastation = {
 	building_group_bg_plantations_throughput_add = -0.8
 	building_group_bg_manufacturing_throughput_add = -0.8
 	building_group_bg_oil_extraction_throughput_add = -0.8
+	state_devastation_decay_mult = 3.0
 }
 
 # Scales with pollution impact, reduced by state_pollution_reduction_health_mult
@@ -716,6 +728,13 @@ government_owned_debt = {
 country_gdp = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_minting_add = 1
+}
+
+# Scales with country GDP / COUNTRY_GDP_CONSTRUCTION_MODIFIER_DIVISOR / COUNTRY_GDP_CONSTRUCTION_MODIFIER_SCALED_MULTIPLIER
+# COUNTRY_GDP_CONSTRUCTION_MODIFIER_BASE_MULTIPLIER is added to this before the scaling effect
+# Clamped by COUNTRY_GDP_CONSTRUCTION_MODIFIER_MAX_MULTIPLIER
+country_gdp_construction = {
+	country_construction_add = 10
 }
 
 # Scales with total army power projection of a country
@@ -865,6 +884,14 @@ forced_regime_change = {
 	interest_group_in_government_approval_add = 5
 	country_legitimacy_base_add = 25
 	country_prestige_mult = -0.25
+}
+
+# The effects of this is scaled by both the amount of 'missing' electoral confidence and the country_electoral_confidence_impact_mult modifier
+low_electoral_confidence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_legitimacy_base_add = -50
+	country_voting_power_mult = -0.5
+	state_political_strength_from_wealth_mult = 0.5
 }
 
 weak_power_bloc = {

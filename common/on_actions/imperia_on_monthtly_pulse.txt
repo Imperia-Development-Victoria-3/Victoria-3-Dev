@@ -1,4 +1,36 @@
-﻿on_imperia_monthly_pulse_country = {
+﻿# Country scope on_actions START
+on_imperia_monthly_pulse_country = {
+	effect = {
+		# Save overlord for colonial India should they collapse
+		# Is this needed anymore? - D
+		if = {
+			limit = {
+				this ?= c:BIC
+				is_subject = yes
+				NOT = {
+					has_variable = bic_collapse_var
+				}
+			}
+			# Colonial India, who is a subject and haven't collapsed yet
+			# Should save their overlord so the surrounding vassals gains independence at the same time..
+			set_variable = {
+				name = india_overlord
+				value = overlord
+			}
+		}
+	}
+	random_events = {
+		23 = 0
+		1 = dead_man.3
+	}
+	events = {
+		infamy_rebalance.1	#updates provinces each month
+		imperia_sinosphere.4
+		imperia_sinosphere.5
+	}
+}
+
+on_imperia_monthly_pulse_infamy_modifiers = {
 	effect = {
 		# Remove / reset imperia infamy modifiers
 		remove_modifier ?= imperia_country_infamy_workers
@@ -36,6 +68,11 @@
 				}
 			}
 		}
+	}
+}
+
+on_imperia_monthly_pulse_player_construction_bonus = {
+	effect = {
 		# Give players more construction if they deserve it
 		if = {
 			limit = {
@@ -61,691 +98,40 @@
 			}
 			remove_modifier = player_construction_bonus
 		}
-		# Zollverein member construction nerf to prevent them from funding Prussia to the moon
-		# Kleinstaaterei is the term for these countries, localised as Kleinstaat
-		remove_modifier ?= zollverein_member_construction_penalty
-		if = {
-			limit = {
-				exists = c:PRU
-				power_bloc.power_bloc_leader ?= c:PRU
-				this != c:PRU
-			}
-			add_modifier = {
-				name = zollverein_member_construction_penalty
-			}
-		}
-		# Random events while congress is in session
-		if = {
-			limit = {
-				has_global_variable = imperia_vienna_congress_in_session
-			}
-			random = {
-				chance = imperia_vienna_congress_monthly_chance_for_random_event
-				congress_random_events = yes
-			}
-		}
-		# Give infamy decay malus to China owners
-		remove_modifier ?= imperia_china_ownership_infamy
-		set_local_variable = {
-			name = tmp_imperia_china_infamy_penalty_value
-			value = imperia_china_infamy_penalty_value
-		}
-		if = {
-			limit = {
-				local_var:tmp_imperia_china_infamy_penalty_value != 0
-			}
-			add_modifier = {
-				name = imperia_china_ownership_infamy
-				multiplier = local_var:tmp_imperia_china_infamy_penalty_value
-			}
-		}
-		# Frankfurt Parliament variable cleanup
-		# Done here to maintain stability in inter-JE functions
-		if = {
-			limit = {
-				imperia_frankfurt_parliament_is_in_session = no
-				# And has at least one of the following variables; meaning they participated in the Parliament
-				OR = {
-					has_variable = frankfurt_parliament_voted_republic
-					has_variable = frankfurt_parliament_voted_monarchy
-					has_variable = frankfurt_parliament_voted_wealth_suffrage
-					has_variable = frankfurt_parliament_voted_universal_suffrage
-					has_variable = frankfurt_parliament_voted_presidential
-					has_variable = frankfurt_parliament_voted_parliamentary
-				}
-				# And the German Revolt is not happening
-				any_diplomatic_play = {
-					count = 0
-					is_diplomatic_play_type = dp_imperia_gutter_german_revolt
-				}
-			}
-			# Assume the thing is over, and variables havent been cleaned up
-			# So clean them up
-			imperia_frankfurt_parliament_clean_variables = yes
-		}
-		# Add money transfer variables to countries that doesnt have them yet
-		if = {
-			limit = {
-				NOT = {
-					has_variable = imperia_money_transfer_amount
-				}
-			}
-			set_variable = {
-				name = imperia_money_transfer_amount
-				value = 0
-			}
-		}
-		remove_modifier ?= modifier_state_religion_home_defence_discount
-		remove_modifier ?= modifier_state_religion_home_affairs_discount
-		remove_modifier ?= modifier_state_religion_education_discount
-		remove_modifier ?= modifier_state_religion_health_discount
-		if = {
-			limit = {
-				has_law_or_variant = law_type:law_state_religion
-			}
-			if = {
-				limit = {
-					has_law_or_variant = law_type:law_faith_orders
-				}
-				add_modifier = modifier_state_religion_home_defence_discount
-			}
-			if = {
-				limit = {
-					has_law_or_variant = law_type:law_inquisition
-				}
-				add_modifier = modifier_state_religion_home_affairs_discount
-			}
-			if = {
-				limit = {
-					has_law_or_variant = law_type:law_religious_schools
-				}
-				add_modifier = modifier_state_religion_education_discount
-			}
-			if = {
-				limit = {
-					has_law_or_variant = law_type:law_charitable_health_system
-				}
-				add_modifier = modifier_state_religion_health_discount
-			}
-		}
-		# Force-removing IGs from lobbies after a certain amount of time
-		every_interest_group = {
-			# First subtract from the membership timer (if it exists)
-			if = {
-				limit = {
-					is_member_of_any_lobby = yes
-					has_variable = imperia_ig_lobby_membership_timer
-				}
-				change_variable = {
-					name = imperia_ig_lobby_membership_timer
-					subtract = 1
-				}
-			}
-			# If the IG is part of a lobby, but doesnt have the timer; create new membership timers
-			if = {
-				limit = {
-					is_member_of_any_lobby = yes
-					NOT = {
-						has_variable = imperia_ig_lobby_membership_timer
-					}
-				}
-				set_variable = {
-					name = imperia_ig_lobby_membership_timer
-					# Months in lobby; 10 years so far
-					value = 120
-				}
-			}
-			# If the timer hits zero (or below, just in case); remove the IG from every lobby they're a part of
-			if = {
-				limit = {
-					has_variable = imperia_ig_lobby_membership_timer
-					var:imperia_ig_lobby_membership_timer <= 0
-				}
-				# This can be used in both country and in IGs. Is used in IG scope here to scope to lobbies the IG is a part of
-				every_political_lobby = {
-					remove_lobby_member = prev
-				}
-			}
-			# If the IG is not a member of a lobby, but has the timer-variable; remove the variable
-			if = {
-				limit = {
-					is_member_of_any_lobby = no
-					has_variable = imperia_ig_lobby_membership_timer
-				}
-				remove_variable = imperia_ig_lobby_membership_timer
-			}
-		}
-		## AI Disabling
-		# Sets the is_player variable for new/reconnecting players
-		if = {
-			limit = {
-				is_player = yes
-				NOT = {
-					has_variable = detected_player
-				}
-			}
-			# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
-			remove_variable ?= ai_disabled_timer
-			set_variable = detected_player
-		}
-		# Demolish non-capital statues
-		if = {
-			limit = {
-				any_scope_building = {
-					is_building_type = building_power_bloc_statue
-					state = {
-						is_capital = no
-					}
-				}
-			}
-			every_scope_state = {
-				limit = {
-					has_building = building_power_bloc_statue
-					is_capital = no
-				}
-				remove_building = building_power_bloc_statue
-			}
-		}
-		## Global multicultural levelup cooldowns
-		# To prevent back-to-back leveling
-		if = {
-			limit = {
-				# If country has the burgeoning multiculturalism institution
-				has_institution = institution_multiculturalism
-			}
-			if = {
-				# First time cooldown here
-				limit = {
-					NOT = {
-						has_global_variable = current_max_multiculturalism_level
-					}
-				}
-				set_global_variable = {
-					name = current_max_multiculturalism_level
-					value = 1
-				}
-				set_global_variable = {
-					name = multiculturalism_upgrade_cooldown
-					years = 10
-				}
-			}
-			if = {
-				limit = {
-					# If country is currently at the max (or above, I guess) allowed by the global var
-					institution_investment_level = {
-						institution = institution_multiculturalism
-						value >= global_var:current_max_multiculturalism_level
-					}
-				}
-				if = {
-					limit = {
-						# The cooldown is done
-						NOT = {
-							has_global_variable = multiculturalism_upgrade_cooldown
-						}
-					}
-					# Increase allowed max, and reset the cooldown
-					change_global_variable = {
-						name = current_max_multiculturalism_level
-						add = 1
-					}
-					set_global_variable = {
-						name = multiculturalism_upgrade_cooldown
-						years = 10
-					}
-				}
-				else_if = {
-					limit = {
-						# If country is expanding the institution rapidly, and has the cooldown active (since its an else_if)
-						# Or the institution is above its current max, just to calm my nerves
-						OR = {
-							expanding_institution = institution_multiculturalism
-							institution_investment_level = {
-								institution = institution_multiculturalism
-								value > global_var:current_max_multiculturalism_level
-							}
-						}
-					}
-					# Reset the institution to the max; SHOULD remove the expansion
-					# Cant do set_institution_investment_level dynamically, hence this "solution"
-					switch = {
-						trigger = global_var:current_max_multiculturalism_level
-						1 = {
-							set_institution_investment_level = {
-								institution = institution_multiculturalism
-								level = 1
-							}
-						}
-						2 = {
-							set_institution_investment_level = {
-								institution = institution_multiculturalism
-								level = 2
-							}
-						}
-						3 = {
-							set_institution_investment_level = {
-								institution = institution_multiculturalism
-								level = 3
-							}
-						}
-						4 = {
-							set_institution_investment_level = {
-								institution = institution_multiculturalism
-								level = 4
-							}
-						}
-						5 = {
-							set_institution_investment_level = {
-								institution = institution_multiculturalism
-								level = 5
-							}
-						}
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				this ?= c:BIC
-				is_subject = yes
-				NOT = {
-					has_variable = bic_collapse_var
-				}
-			}
-			# Colonial India, who is a subject and haven't collapsed yet
-			# Should save their overlord so the surrounding vassals gains independence at the same time..
-			set_variable = {
-				name = india_overlord
-				value = overlord
-			}
-		}
-		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
-		# after cancelling a arms deal treaty
-		if = {
-			limit = {
-				NOT = {
-					any_scope_treaty = {
-						any_scope_article = {
-							has_type = military_assistance
-							target_country ?= root
-						}
-					}
-				}
-				# Check if the country has the penalty, just so it doesnt start stacking
-				NOT = {
-					has_modifier = imperia_invalid_mobilization_option_penalty
-				}
-				OR = {
-					AND = {
-						can_use_mobilization_option_flintlocks = no
-						any_military_formation = {
-							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
-						}
-					}
-					AND = {
-						can_use_mobilization_option_caplocks = no
-						any_military_formation = {
-							has_mobilization_option = mobilization_option:mobilization_option_caplocks
-						}
-					}
-					AND = {
-						can_use_mobilization_option_repeaters = no
-						any_military_formation = {
-							has_mobilization_option = mobilization_option:mobilization_option_repeaters
-						}
-					}
-					AND = {
-						can_use_mobilization_option_bolt_action_rifles = no
-						any_military_formation = {
-							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
-						}
-					}
-				}
-			}
-			add_modifier = imperia_invalid_mobilization_option_penalty
-		}
-		else = {
-			remove_modifier ?= imperia_invalid_mobilization_option_penalty
-		}
-		
-		if = {
-			limit = {
-				is_player = no
-			}
-			imperia_auto_apply_private_allocation = yes
-		}
-
-		# Change AI foreign policy if applicable
-		ai_update_foreign_policy = yes
-		# Change to/from true neutrality
-		if = {
-			limit = {
-				has_modifier = imperia_true_neutral
-				NOT = {
-					has_law = law_type:law_true_neutrality
-				}
-			}
-			activate_law = law_type:law_true_neutrality
-		}
-		else_if = {
-			limit = {
-				NOT = {
-					has_modifier = imperia_true_neutral
-				}
-				has_law = law_type:law_true_neutrality
-			}
-			activate_law = law_type:law_neutral
-		}
-		## German Pan-Nationalism tech spread
-		# Set the imperia_german_pan_nationalism_spread global variable to the number of Germans having pan-nationalism
-		# Only once per month, to prevent spamming
-		if = {
-			limit = {
-				has_global_highest_gdp = yes
-				any_country = {
-					is_actual_german = yes
-					has_technology_researched = pan-nationalism
-				}
-			}
-			set_global_variable = {
-				name = imperia_german_pan_nationalism_spread
-				value = num_of_german_pan_nationalist_countries
-			}
-		}
-		# Gives 200 points per country having pan-nationalism
-		if = {
-			limit = {
-				is_actual_german = yes
-				has_global_variable = imperia_german_pan_nationalism_spread
-			}
-			remove_modifier ?= imperia_german_pan_nationalism_spread
-			if = {
-				limit = {
-					NOT = {
-						has_technology_researched = pan-nationalism
-					}
-					# Will complain if the prerequisites are not met
-					has_technology_researched = nationalism
-				}
-				add_modifier = {
-					name = imperia_german_pan_nationalism_spread
-					multiplier = global_var:imperia_german_pan_nationalism_spread
-				}
-				while = {
-					count = global_var:imperia_german_pan_nationalism_spread
-					# Add 200 points per country; if 200 changes, change the 200 in the add_technology_progress and in the imperia_german_pan_nationalism_spread modifier
-					# A bit of a hack.
-					add_technology_progress = {
-						technology = pan-nationalism
-						progress = 200
-					}
-				}
-			}
-		}
-		## Check that every german major has pan-nationalism
-		# Checked once in the world (per month)
-		if = {
-			limit = {
-				has_global_highest_gdp = yes
-			}
-			# If the condition is true, set the variable
-			if = {
-				limit = {
-					any_country = {
-						filter = {
-							is_actual_german = yes
-							country_rank >= rank_value:major_power
-						}
-						has_technology_researched = pan-nationalism
-						percent >= 1
-					}
-				}
-				set_global_variable = every_german_major_has_pan_nationalism
-			}
-			# If it's not true, remove the variable (if it exists)
-			# Included in case the majors change
-			else = {
-				remove_global_variable ?= every_german_major_has_pan_nationalism
-			}
-		}
-		# Swap trade policy to match overlord if viceroyalty
-		if = {
-			limit = {
-				overlord.active_law:lawgroup_trade_policy.type != root.active_law:lawgroup_trade_policy.type
-				overlord.active_law:lawgroup_trade_policy.type != law_type:law_canton_system
-				is_subject = yes
-				is_subject_type = imperia_subject_type_viceroyalty
-			}
-			activate_law = overlord.active_law:lawgroup_trade_policy.type
-		}
-		# Swap away from tribal levies if conditions are no longer met
-		if = {
-			limit = {
-				has_law = law_type:law_tribal_levies
-				can_have_tribal_levies = no
-			}
-			activate_law = law_type:law_peasant_levies
-		}
-		# Give a mass migration of Jewish pops if the root-country is Jewish and the Jewish pops live in a country that discriminates against them
-		if = {
-			limit = {
-				country_has_state_religion = rel:jewish
-				any_country = {
-					NOT = {
-						country_has_state_religion = rel:jewish
-					}
-					any_scope_pop = {
-						pop_acceptance < 60
-						culture = {
-							has_discrimination_trait = tradition_israelite
-						}
-					}
-				}
-			}
-			random_scope_state = {
-				limit = {
-					is_incorporated = yes
-				}
-				save_scope_as = migration_state
-			}
-			random_country = {
-				limit = {
-					NOT = {
-						country_has_state_religion = rel:jewish
-					}
-					any_scope_pop = {
-						pop_acceptance <= 60
-						culture = {
-							has_discrimination_trait = tradition_israelite
-						}
-					}
-				}
-				save_scope_as = migration_country
-				random_scope_pop = {
-					limit = {
-						pop_acceptance <= 60
-						culture = {
-							has_discrimination_trait = tradition_israelite
-						}
-					}
-					save_scope_as = migration_pop
-				}
-			}
-			if = {
-				limit = {
-					scope:migration_country = {
-						has_law = law_type:law_closed_borders
-					}
-				}
-				scope:migration_pop = {
-					move_partial_pop = {
-						state = scope:migration_state
-						population_ratio = 0.05
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					scope:migration_country = {
-						has_law = law_type:law_migration_controls
-					}
-				}
-				scope:migration_pop = {
-					move_partial_pop = {
-						state = scope:migration_state
-						population_ratio = 0.1
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					scope:migration_country = {
-						has_law = law_type:law_no_migration_controls
-					}
-				}
-				scope:migration_pop = {
-					move_partial_pop = {
-						state = scope:migration_state
-						population_ratio = 0.2
-					}
-				}
-			}
-		}
-		# Swap from Chinese viceroyalty if non-Chinese overlord
-		if = {
-			limit = {
-				# If you are a Subject of the type (Chinese) Imperial Viceroyalty
-				is_subject = yes
-				is_subject_type = imperia_subject_type_viceroyalty
-				# And your overlord is NOT China / Taiping Heavenly Kingdom
-				overlord = {
-					NOR = {
-						c:CHI ?= this	# China / Qing
-						c:TPG ?= this	# Taiping Heavenly Kingdom
-					}
-				}
-			}
-			# Try a dominion first
-			# Valid for the times when China have become recognised (which sets them at colonial, afaik)
-			if = {
-				limit = {
-					overlord = {
-						OR = {
-							is_country_type = recognized
-							is_country_type = colonial
-						}
-					}
-					is_country_type = colonial
-				}
-				change_subject_type = subject_type_dominion
-			}
-			# Then a Puppet
-			# Valid for Western overlords and unrecognized Viceroyalties
-			else_if = {
-				limit = {
-					overlord = {
-						OR = {
-							is_country_type = recognized
-							is_country_type = colonial
-						}
-					}
-					OR = {
-						is_country_type = recognized
-						is_country_type = unrecognized
-					}
-					
-				}
-				change_subject_type = subject_type_puppet
-			}
-			# Vassal
-			# In case some barbarian takes over I guess?
-			else_if = {
-				limit = {
-					overlord = {
-						is_country_type = unrecognized
-					}
-				}
-				change_subject_type = subject_type_vassal
-			}
-			
-		}
-		# Swap TO Chinese viceroyalty if Chinese overlord, and nation is (presumably) some sort of Chinese
-		else_if = {
-			limit = {
-				# If you are NOT a Subject of the type (Chinese) Imperial Viceroyalty
-				is_subject = yes
-				NOT = {
-					is_subject_type = imperia_subject_type_viceroyalty
-				}
-				overlord = {
-					# And your overlord is either China/Qing or the Taiping Heavenly Kingdom
-					OR = {
-						c:CHI ?= this	# China / Qing
-						c:TPG ?= this	# Taiping Heavenly Kingdom
-					}
-					# ... And is Theocratic or Monarchical
-					# Whats a Viceroy without his Roy?
-					OR = {
-						has_law_or_variant = law_type:law_monarchy
-						has_law_or_variant = law_type:law_theocracy
-					}
-				}
-				# And your capital is in traditional Chinese regions
-				capital.state_region = {
-					OR = {
-						is_homeland = cu:han
-						is_homeland = cu:manchu
-					}
-				}
-			}
-			# Assume you're eligible; change to viceroyalty
-			change_subject_type = imperia_subject_type_viceroyalty
-		}
-		# Convert institution_authority_add to country_authority_add
-		remove_modifier ?= imperia_institution_authority_add_conversion_modifier
-		if = {
-			limit = {
-				modifier:institution_authority_add != 0
-			}
-			add_modifier = {
-				name = imperia_institution_authority_add_conversion_modifier
-				multiplier = modifier:institution_authority_add
-			}
-		}
-	}
-	random_events = {
-		23 = 0
-		1 = dead_man.3
-	}
-	events = {
-		infamy_rebalance.1	#updates provinces each month
-		imperia_sinosphere.4
-		imperia_sinosphere.5
 	}
 }
 
-#scope = country
+on_imperia_monthly_pulse_congress_random_events = {
+	trigger = {
+		has_global_variable = imperia_vienna_congress_in_session
+	}
+	effect = {
+		# Calls a number of different events randomly
+		# The events themselves contains the triggers for checking congress membership/attendance
+		random = {
+			chance = 20
+			congress_random_events = yes
+		}
+	}
+}
+
 on_imperia_monthly_pulse_store_infamy = {
 	effect = {
 		set_variable = {
 			name = infamy_on_month_start
 			value = infamy
 		}
-		if = {
-			limit = {
-				# This should only pop for a singular country each month. Most likely a united China
-				has_global_highest_gdp = yes
-			}
-			imperia_vienna_congress_compile_lists = yes
-		}
 	}
 }
 
-on_imperia_monthly_pulse_ai_congress_voting = {
+on_imperia_monthly_pulse_ai_button_clicking = {
+	trigger = {
+		is_player = no
+	}
 	effect = {
+		# Congress bench AI voting
 		if = {
 			limit = {
-				is_player = no
 				has_variable = voting_conference_member
 			}
 			if = {
@@ -896,6 +282,688 @@ on_imperia_monthly_pulse_ai_congress_voting = {
 				remove_global_variable = congress_random_events_enabled
 			}
 		}
+		# Auto-apply private allocation for AI countries
+		imperia_auto_apply_private_allocation = yes
+		# Change AI foreign policy if applicable
+		ai_update_foreign_policy = yes
 	}
 }
 
+on_imperia_monthly_pulse_china_ownership_infamy = {
+	effect = {
+		# Give infamy decay malus to China owners
+		remove_modifier ?= imperia_china_ownership_infamy
+		set_local_variable = {
+			name = tmp_imperia_china_infamy_penalty_value
+			value = imperia_china_infamy_penalty_value
+		}
+		if = {
+			limit = {
+				local_var:tmp_imperia_china_infamy_penalty_value != 0
+			}
+			add_modifier = {
+				name = imperia_china_ownership_infamy
+				multiplier = local_var:tmp_imperia_china_infamy_penalty_value
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_lump_sum_transfer = {
+	trigger = {
+		NOT = {
+			has_variable = imperia_money_transfer_amount
+		}
+	}
+	effect = {
+		# Add money transfer variables to countries that doesnt have them yet
+		set_variable = {
+			name = imperia_money_transfer_amount
+			value = 0
+		}
+	}
+}
+
+on_imperia_monthly_pulse_religious_laws_discounts = {
+	effect = {
+		remove_modifier ?= modifier_state_religion_home_defence_discount
+		remove_modifier ?= modifier_state_religion_home_affairs_discount
+		remove_modifier ?= modifier_state_religion_education_discount
+		remove_modifier ?= modifier_state_religion_health_discount
+		if = {
+			limit = {
+				has_law_or_variant = law_type:law_state_religion
+			}
+			if = {
+				limit = {
+					has_law_or_variant = law_type:law_faith_orders
+				}
+				add_modifier = modifier_state_religion_home_defence_discount
+			}
+			if = {
+				limit = {
+					has_law_or_variant = law_type:law_inquisition
+				}
+				add_modifier = modifier_state_religion_home_affairs_discount
+			}
+			if = {
+				limit = {
+					has_law_or_variant = law_type:law_religious_schools
+				}
+				add_modifier = modifier_state_religion_education_discount
+			}
+			if = {
+				limit = {
+					has_law_or_variant = law_type:law_charitable_health_system
+				}
+				add_modifier = modifier_state_religion_health_discount
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_ig_lobby_cleanup = {
+	effect = {
+		# Force-removing IGs from lobbies after a certain amount of time
+		every_interest_group = {
+			# First subtract from the membership timer (if it exists)
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				change_variable = {
+					name = imperia_ig_lobby_membership_timer
+					subtract = 1
+				}
+			}
+			# If the IG is part of a lobby, but doesnt have the timer; create new membership timers
+			if = {
+				limit = {
+					is_member_of_any_lobby = yes
+					NOT = {
+						has_variable = imperia_ig_lobby_membership_timer
+					}
+				}
+				set_variable = {
+					name = imperia_ig_lobby_membership_timer
+					# Months in lobby; 10 years so far
+					value = 120
+				}
+			}
+			# If the timer hits zero (or below, just in case); remove the IG from every lobby they're a part of
+			if = {
+				limit = {
+					has_variable = imperia_ig_lobby_membership_timer
+					var:imperia_ig_lobby_membership_timer <= 0
+				}
+				# This can be used in both country and in IGs. Is used in IG scope here to scope to lobbies the IG is a part of
+				every_political_lobby = {
+					remove_lobby_member = prev
+				}
+			}
+			# If the IG is not a member of a lobby, but has the timer-variable; remove the variable
+			if = {
+				limit = {
+					is_member_of_any_lobby = no
+					has_variable = imperia_ig_lobby_membership_timer
+				}
+				remove_variable = imperia_ig_lobby_membership_timer
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_ai_disabling = {
+	trigger = {
+		is_player = yes
+		NOT = {
+			has_variable = detected_player
+		}
+	}
+	effect = {
+		## AI Disabling
+		# Sets the is_player variable for new/reconnecting players
+		# Removes the AI disabling timer (if its there) in case the player is hotjoining in again.
+		remove_variable ?= ai_disabled_timer
+		set_variable = detected_player	# Used for the je_disable_ai journal entry
+	}
+}
+
+on_imperia_monthly_pulse_statue_demolishing = {
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_power_bloc_statue
+			state = {
+				is_capital = no
+			}
+		}
+	}
+	effect = {
+		# Demolish non-capital statues
+		every_scope_state = {
+			limit = {
+				has_building = building_power_bloc_statue
+				is_capital = no
+			}
+			remove_building = building_power_bloc_statue
+		}
+	}
+}
+
+on_imperia_monthly_pulse_multiculturalism_cooldown = {
+	trigger = {
+		# If country has the burgeoning multiculturalism institution
+		has_institution = institution_multiculturalism
+	}
+	effect = {
+		## Global multicultural levelup cooldowns
+		# To prevent back-to-back leveling
+		if = {
+			# First time cooldown here
+			limit = {
+				NOT = {
+					has_global_variable = current_max_multiculturalism_level
+				}
+			}
+			set_global_variable = {
+				name = current_max_multiculturalism_level
+				value = 1
+			}
+			set_global_variable = {
+				name = multiculturalism_upgrade_cooldown
+				years = 10
+			}
+		}
+		if = {
+			limit = {
+				# If country is currently at the max (or above, I guess) allowed by the global var
+				institution_investment_level = {
+					institution = institution_multiculturalism
+					value >= global_var:current_max_multiculturalism_level
+				}
+			}
+			if = {
+				limit = {
+					# The cooldown is done
+					NOT = {
+						has_global_variable = multiculturalism_upgrade_cooldown
+					}
+				}
+				# Increase allowed max, and reset the cooldown
+				change_global_variable = {
+					name = current_max_multiculturalism_level
+					add = 1
+				}
+				set_global_variable = {
+					name = multiculturalism_upgrade_cooldown
+					years = 10
+				}
+			}
+			else_if = {
+				limit = {
+					# If country is expanding the institution rapidly, and has the cooldown active (since its an else_if)
+					# Or the institution is above its current max, just to calm my nerves
+					OR = {
+						expanding_institution = institution_multiculturalism
+						institution_investment_level = {
+							institution = institution_multiculturalism
+							value > global_var:current_max_multiculturalism_level
+						}
+					}
+				}
+				# Reset the institution to the max; SHOULD remove the expansion
+				# Cant do set_institution_investment_level dynamically, hence this "solution"
+				switch = {
+					trigger = global_var:current_max_multiculturalism_level
+					1 = {
+						set_institution_investment_level = {
+							institution = institution_multiculturalism
+							level = 1
+						}
+					}
+					2 = {
+						set_institution_investment_level = {
+							institution = institution_multiculturalism
+							level = 2
+						}
+					}
+					3 = {
+						set_institution_investment_level = {
+							institution = institution_multiculturalism
+							level = 3
+						}
+					}
+					4 = {
+						set_institution_investment_level = {
+							institution = institution_multiculturalism
+							level = 4
+						}
+					}
+					5 = {
+						set_institution_investment_level = {
+							institution = institution_multiculturalism
+							level = 5
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}
+
+on_imperia_monthly_pulse_invalid_mobilization_option_penalty = {
+	effect = {
+		# Add a debilitating modifier when a nation keeps mobilization options when they don't have the tech
+		# after cancelling a arms deal treaty
+		if = {
+			limit = {
+				NOT = {
+					any_scope_treaty = {
+						any_scope_article = {
+							has_type = military_assistance
+							target_country ?= root
+						}
+					}
+				}
+				# Check if the country has the penalty, just so it doesnt start stacking
+				NOT = {
+					has_modifier = imperia_invalid_mobilization_option_penalty
+				}
+				OR = {
+					AND = {
+						can_use_mobilization_option_flintlocks = no
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_flintlocks
+						}
+					}
+					AND = {
+						can_use_mobilization_option_caplocks = no
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_caplocks
+						}
+					}
+					AND = {
+						can_use_mobilization_option_repeaters = no
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_repeaters
+						}
+					}
+					AND = {
+						can_use_mobilization_option_bolt_action_rifles = no
+						any_military_formation = {
+							has_mobilization_option = mobilization_option:mobilization_option_bolt_actions
+						}
+					}
+				}
+			}
+			add_modifier = imperia_invalid_mobilization_option_penalty
+		}
+		else = {
+			remove_modifier ?= imperia_invalid_mobilization_option_penalty
+		}
+	}
+}
+
+on_imperia_monthly_pulse_true_neutral = {
+	effect = {
+		# Change to/from true neutrality
+		if = {
+			limit = {
+				has_modifier = imperia_true_neutral
+				NOT = {
+					has_law = law_type:law_true_neutrality
+				}
+			}
+			activate_law = law_type:law_true_neutrality
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_modifier = imperia_true_neutral
+				}
+				has_law = law_type:law_true_neutrality
+			}
+			activate_law = law_type:law_neutral
+		}
+	}
+}
+
+on_imperia_monthly_pulse_german_pan_nationalist_spread_country = {
+	trigger = {
+		is_actual_german = yes
+		has_global_variable = imperia_german_pan_nationalism_spread
+	}
+	effect = {
+		# Gives 200 points per country having pan-nationalism
+		remove_modifier ?= imperia_german_pan_nationalism_spread
+		if = {
+			limit = {
+				NOT = {
+					has_technology_researched = pan-nationalism
+				}
+				# Will complain if the prerequisites are not met
+				has_technology_researched = nationalism
+			}
+			add_modifier = {
+				name = imperia_german_pan_nationalism_spread
+				multiplier = global_var:imperia_german_pan_nationalism_spread
+			}
+			while = {
+				count = global_var:imperia_german_pan_nationalism_spread
+				# Add 200 points per country; if 200 changes, change the 200 in the add_technology_progress and in the imperia_german_pan_nationalism_spread modifier
+				# A bit of a hack.
+				add_technology_progress = {
+					technology = pan-nationalism
+					progress = 200
+				}
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_viceroyalty_trade_policy = {
+	trigger = {
+		overlord.active_law:lawgroup_trade_policy.type != root.active_law:lawgroup_trade_policy.type
+		overlord.active_law:lawgroup_trade_policy.type != law_type:law_canton_system
+		is_subject = yes
+		is_subject_type = imperia_subject_type_viceroyalty
+	}
+	effect = {
+		# Swap trade policy to match overlord if viceroyalty
+		activate_law = overlord.active_law:lawgroup_trade_policy.type
+	}
+}
+
+on_imperia_monthly_pulse_tribal_levies_swap = {
+	trigger = {
+		has_law = law_type:law_tribal_levies
+		can_have_tribal_levies = no
+	}
+	effect = {
+		# Swap away from tribal levies if conditions are no longer met
+		activate_law = law_type:law_peasant_levies
+	}
+}
+
+on_imperia_monthly_pulse_jewish_migration = {
+	trigger = {
+		country_has_state_religion = rel:jewish
+		any_country = {
+			NOT = {
+				country_has_state_religion = rel:jewish
+			}
+			any_scope_pop = {
+				pop_acceptance < 60
+				culture = {
+					has_discrimination_trait = tradition_israelite
+				}
+			}
+		}
+	}
+	effect = {
+		# Give a mass migration of Jewish pops if the root-country is Jewish and the Jewish pops live in a country that discriminates against them
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+			}
+			save_scope_as = migration_state
+		}
+		random_country = {
+			limit = {
+				NOT = {
+					country_has_state_religion = rel:jewish
+				}
+				any_scope_pop = {
+					pop_acceptance <= 60
+					culture = {
+						has_discrimination_trait = tradition_israelite
+					}
+				}
+			}
+			save_scope_as = migration_country
+			random_scope_pop = {
+				limit = {
+					pop_acceptance <= 60
+					culture = {
+						has_discrimination_trait = tradition_israelite
+					}
+				}
+				save_scope_as = migration_pop
+			}
+		}
+		if = {
+			limit = {
+				scope:migration_country = {
+					has_law = law_type:law_closed_borders
+				}
+			}
+			scope:migration_pop = {
+				move_partial_pop = {
+					state = scope:migration_state
+					population_ratio = 0.05
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				scope:migration_country = {
+					has_law = law_type:law_migration_controls
+				}
+			}
+			scope:migration_pop = {
+				move_partial_pop = {
+					state = scope:migration_state
+					population_ratio = 0.1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				scope:migration_country = {
+					has_law = law_type:law_no_migration_controls
+				}
+			}
+			scope:migration_pop = {
+				move_partial_pop = {
+					state = scope:migration_state
+					population_ratio = 0.2
+				}
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_chinese_viceroyalty_swap = {
+	effect = {
+		# Swap from Chinese viceroyalty if non-Chinese overlord
+		if = {
+			limit = {
+				# If you are a Subject of the type (Chinese) Imperial Viceroyalty
+				is_subject = yes
+				is_subject_type = imperia_subject_type_viceroyalty
+				# And your overlord is NOT China / Taiping Heavenly Kingdom
+				overlord = {
+					NOR = {
+						c:CHI ?= this	# China / Qing
+						c:TPG ?= this	# Taiping Heavenly Kingdom
+					}
+				}
+			}
+			# Try a dominion first
+			# Valid for the times when China have become recognised (which sets them at colonial, afaik)
+			if = {
+				limit = {
+					overlord = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+					}
+					is_country_type = colonial
+				}
+				change_subject_type = subject_type_dominion
+			}
+			# Then a Puppet
+			# Valid for Western overlords and unrecognized Viceroyalties
+			else_if = {
+				limit = {
+					overlord = {
+						OR = {
+							is_country_type = recognized
+							is_country_type = colonial
+						}
+					}
+					OR = {
+						is_country_type = recognized
+						is_country_type = unrecognized
+					}
+					
+				}
+				change_subject_type = subject_type_puppet
+			}
+			# Vassal
+			# In case some barbarian takes over I guess?
+			else_if = {
+				limit = {
+					overlord = {
+						is_country_type = unrecognized
+					}
+				}
+				change_subject_type = subject_type_vassal
+			}
+			
+		}
+		# Swap TO Chinese viceroyalty if Chinese overlord, and nation is (presumably) some sort of Chinese
+		else_if = {
+			limit = {
+				# If you are NOT a Subject of the type (Chinese) Imperial Viceroyalty
+				is_subject = yes
+				NOT = {
+					is_subject_type = imperia_subject_type_viceroyalty
+				}
+				overlord = {
+					# And your overlord is either China/Qing or the Taiping Heavenly Kingdom
+					OR = {
+						c:CHI ?= this	# China / Qing
+						c:TPG ?= this	# Taiping Heavenly Kingdom
+					}
+					# ... And is Theocratic or Monarchical
+					# Whats a Viceroy without his Roy?
+					OR = {
+						has_law_or_variant = law_type:law_monarchy
+						has_law_or_variant = law_type:law_theocracy
+					}
+				}
+				# And your capital is in traditional Chinese regions
+				capital.state_region = {
+					OR = {
+						is_homeland = cu:han
+						is_homeland = cu:manchu
+					}
+				}
+			}
+			# Assume you're eligible; change to viceroyalty
+			change_subject_type = imperia_subject_type_viceroyalty
+		}
+	}
+}
+
+on_imperia_monthly_pulse_institution_authority_add_conversion = {
+	effect = {
+		# Convert institution_authority_add to country_authority_add
+		remove_modifier ?= imperia_institution_authority_add_conversion_modifier
+		if = {
+			limit = {
+				modifier:institution_authority_add != 0
+			}
+			add_modifier = {
+				name = imperia_institution_authority_add_conversion_modifier
+				multiplier = modifier:institution_authority_add
+			}
+		}
+	}
+}
+
+# Country scope on_actions END
+# Global "scope" on-actions START
+on_imperia_monthly_pulse_congress_compile_lists = {
+	effect = {
+		imperia_vienna_congress_compile_lists = yes
+	}
+}
+
+on_imperia_monthly_pulse_german_pan_nationalist_spread_global = {
+	effect = {
+		if = {
+			limit = {
+				any_country = {
+					is_actual_german = yes
+					has_technology_researched = pan-nationalism
+				}
+			}
+			set_global_variable = {
+				name = imperia_german_pan_nationalism_spread
+				value = num_of_german_pan_nationalist_countries
+			}
+		}
+	}
+}
+
+on_imperia_monthly_pulse_every_german_major_has_pan_nationalism = {
+	effect = {
+		## Check that every german major has pan-nationalism
+		# If the condition is true, set the variable
+		if = {
+			limit = {
+				any_country = {
+					filter = {
+						is_actual_german = yes
+						country_rank >= rank_value:major_power
+					}
+					has_technology_researched = pan-nationalism
+					percent >= 1
+				}
+			}
+			set_global_variable = every_german_major_has_pan_nationalism
+		}
+		# If it's not true, remove the variable (if it exists)
+		# Included in case the majors change
+		else = {
+			remove_global_variable ?= every_german_major_has_pan_nationalism
+		}
+	}
+}
+
+on_imperia_monthly_pulse_frankfurt_parliament_cleanup = {
+	trigger = {
+		imperia_frankfurt_parliament_is_in_session = no
+		# Somebody has at least one of the following variables; meaning parliament happened
+		any_country = {
+			count > 0
+			OR = {
+				has_variable = frankfurt_parliament_voted_republic
+				has_variable = frankfurt_parliament_voted_monarchy
+				has_variable = frankfurt_parliament_voted_wealth_suffrage
+				has_variable = frankfurt_parliament_voted_universal_suffrage
+				has_variable = frankfurt_parliament_voted_presidential
+				has_variable = frankfurt_parliament_voted_parliamentary
+			}
+		}
+		# And the German Revolt is not happening
+		any_diplomatic_play = {
+			count = 0
+			is_diplomatic_play_type = dp_imperia_gutter_german_revolt
+		}
+	}
+	effect = {
+		# Assume the thing is over, and variables havent been cleaned up
+		# So clean them up
+		every_country = {
+			imperia_frankfurt_parliament_clean_variables = yes
+		}
+	}
+}
+
+# Global "scope" on-actions END

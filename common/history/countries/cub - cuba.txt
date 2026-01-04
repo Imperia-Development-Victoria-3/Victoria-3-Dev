@@ -4,23 +4,59 @@
 		
 		effect_starting_technology_tier_3_tech = yes
 		effect_starting_politics_conservative = yes
+		
+		add_technology_researched = atmospheric_engine
+		add_technology_researched = mechanical_tools
+		add_technology_researched = lathe
+		add_technology_researched = railways	# Construction of railway had been approved in 1834, with Compañía de Caminos de Hierro de la Habana opening a line in Havana in 1837
+		# Also giving them the required tech pre-railways to not break gamerules.
 
 		# Estatuto Real de 1834 was in effect; the Constitution of 1812 was not restored until August of 1836
-		activate_law = law_type:law_presidential_republic
-		activate_law = law_type:law_landed_voting
+		activate_law = law_type:law_colonial_administration
+		activate_law = law_type:law_autocracy
 		activate_law = law_type:law_state_religion
 		activate_law = law_type:law_slave_trade
 		activate_law = law_type:law_mercantilism
-		activate_law = law_type:law_interventionism
+		activate_law = law_type:law_agrarianism
 		activate_law = law_type:law_per_capita_based_taxation
 		activate_law = law_type:law_no_police
+		activate_law = law_type:law_subjecthood
 		
+		active_law:lawgroup_citizenship ?= {	# Subjecthood
+			add_amendment = {
+				type = amendment_racialized_subjecthood
+				sponsor = PREV.ig:ig_armed_forces
+			}
+		}
+		
+		ig:ig_landowners ?= {
+			add_ruling_interest_group = yes
+		}
 		ig:ig_armed_forces ?= {
 			add_ruling_interest_group = yes
 		}
-		
 		ig:ig_devout ?= {
 			set_interest_group_name = ig_catholic_church
+		}
+		
+		initialise_caciquismo_effect = yes
+		
+		if = {	#IP4 features
+			limit = {
+				has_dlc_feature = ip4_content
+			}
+			add_journal_entry = {
+				type = je_cuba_espanol
+			}
+			add_journal_entry = {
+				type = je_cuba_la_vida_dulce
+			}
+			add_journal_entry = {
+				type = je_cuba_independencia
+			}
+			trigger_event = {
+				id = cuba_independencia.1
+			}
 		}
 	}
 }
