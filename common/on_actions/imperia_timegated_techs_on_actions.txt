@@ -6,6 +6,8 @@
         mechanized_infantry_timegate_check
         shrapnel_artillery_timegate_check
         siege_artillery_timegate_check
+        heavy_tank_timegate_check
+        light_tank_timegate_check
         # Navy
         monitors_timegate_check
         destroyers_timegate_check
@@ -21,7 +23,10 @@
 
 trench_infantry_timegate_check = {
 	trigger = {
-		year >= trench_infantry_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+	    	year >= trench_infantry_year
+        }
 		has_technology_researched = trench_works
 		NOT = {
 			has_technology_researched = trench_infantry_timegate_technology
@@ -34,8 +39,13 @@ trench_infantry_timegate_check = {
 
 squad_infantry_timegate_check = {
     trigger = {
-        year >= squad_infantry_year
-        great_war_happened = yes
+        OR = {
+            AND = {
+                great_war_happened = yes
+                year >= squad_infantry_year
+            }
+            has_game_rule = disable_timegated_technologies
+        }
         has_technology_researched = nco_training
         NOT = {
             has_technology_researched = squad_infantry_timegate_technology
@@ -48,7 +58,10 @@ squad_infantry_timegate_check = {
 
 mechanized_infantry_timegate_check = {
     trigger = {
-        year >= mechanized_infantry_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= mechanized_infantry_year
+        }
         has_technology_researched = mobile_armor
         NOT = {
             has_technology_researched = mechanized_infantry_timegate_technology
@@ -61,7 +74,10 @@ mechanized_infantry_timegate_check = {
 
 shrapnel_artillery_timegate_check = {
     trigger = {
-        year >= shrapnel_artillery_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= shrapnel_artillery_year
+        }
         has_technology_researched = breech_loading_artillery
         NOT = {
             has_technology_researched = shrapnel_artillery_timegate_technology
@@ -74,8 +90,13 @@ shrapnel_artillery_timegate_check = {
 
 siege_artillery_timegate_check = {
     trigger = {
-        year >= siege_artillery_year
-        great_war_happened = yes
+        OR = {
+            AND = {
+                great_war_happened = yes
+                year >= siege_artillery_year
+            }
+            has_game_rule = disable_timegated_technologies
+        }
         has_technology_researched = defense_in_depth
         NOT = {
             has_technology_researched = siege_artillery_timegate_technology
@@ -86,9 +107,50 @@ siege_artillery_timegate_check = {
     }
 }
 
+heavy_tank_timegate_check = {
+    trigger = {
+        OR = {
+            AND = {
+                great_war_over = yes
+                year >= heavy_tank_year
+            }
+            has_game_rule = disable_timegated_technologies
+        }
+        has_technology_researched = mobile_armor
+        NOT = {
+            has_technology_researched = heavy_tank_timegate_technology
+        }
+    }
+    effect = {
+        add_technology_researched = heavy_tank_timegate_technology
+    }
+}
+
+light_tank_timegate_check = {
+    trigger = {
+        OR = {
+            AND = {
+                great_war_happened = yes
+                year >= light_tank_year
+            }
+            has_game_rule = disable_timegated_technologies
+        }
+        has_technology_researched = mobile_armor
+        NOT = {
+            has_technology_researched = light_tank_timegate_technology
+        }
+    }
+    effect = {
+        add_technology_researched = light_tank_timegate_technology
+    }
+}
+
 monitors_timegate_check = {
     trigger = {
-        year >= monitors_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= monitors_year
+        }
         has_technology_researched = monitor_tech
         NOT = {
             has_technology_researched = monitors_timegate_technology
@@ -101,7 +163,10 @@ monitors_timegate_check = {
 
 destroyers_timegate_check = {
     trigger = {
-        year >= destroyers_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= destroyers_year
+        }
         has_technology_researched = destroyer
         NOT = {
             has_technology_researched = destroyers_timegate_technology
@@ -114,7 +179,10 @@ destroyers_timegate_check = {
 
 scout_cruisers_timegate_check = {
     trigger = {
-        year >= scout_cruisers_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= scout_cruisers_year
+        }
         has_technology_researched = dreadnought
         NOT = {
             has_technology_researched = scout_cruisers_timegate_technology
@@ -127,7 +195,10 @@ scout_cruisers_timegate_check = {
 
 ironclads_timegate_check = {
     trigger = {
-        year >= ironclads_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= ironclads_year
+        }
         has_technology_researched = ironclad_tech
         NOT = {
             has_technology_researched = ironclads_timegate_technology
@@ -140,7 +211,10 @@ ironclads_timegate_check = {
 
 dreadnoughts_timegate_check = {
     trigger = {
-        year >= dreadnoughts_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= dreadnoughts_year
+        }
         has_technology_researched = dreadnought
         NOT = {
             has_technology_researched = dreadnoughts_timegate_technology
@@ -153,7 +227,10 @@ dreadnoughts_timegate_check = {
 
 battleships_timegate_check = {
     trigger = {
-        year >= battleships_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= battleships_year
+        }
         has_technology_researched = battleship_tech
         NOT = {
             has_technology_researched = battleships_timegate_technology
@@ -166,7 +243,10 @@ battleships_timegate_check = {
 
 torpedo_boats_timegate_check = {
     trigger = {
-        year >= torpedo_boats_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= torpedo_boats_year
+        }
         has_technology_researched = self_propelled_torpedoes
         NOT = {
             has_technology_researched = torpedo_boats_timegate_technology
@@ -179,7 +259,10 @@ torpedo_boats_timegate_check = {
 
 submarines_timegate_check = {
     trigger = {
-        year >= submarines_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= submarines_year
+        }
         has_technology_researched = submarine
         NOT = {
             has_technology_researched = submarines_timegate_technology
@@ -192,7 +275,10 @@ submarines_timegate_check = {
 
 carriers_timegate_check = {
     trigger = {
-        year >= carriers_year
+        OR = {
+            has_game_rule = disable_timegated_technologies
+            year >= carriers_year
+        }
         has_technology_researched = carrier_tech
         NOT = {
             has_technology_researched = carriers_timegate_technology
