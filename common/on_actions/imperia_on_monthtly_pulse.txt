@@ -71,36 +71,6 @@ on_imperia_monthly_pulse_infamy_modifiers = {
 	}
 }
 
-on_imperia_monthly_pulse_player_construction_bonus = {
-	effect = {
-		# Give players more construction if they deserve it
-		if = {
-			limit = {
-				is_player = yes
-			}
-			# Remove the bonus and resets it (if it exists); here in case a players rank is adjusted
-			remove_modifier ?= player_construction_bonus
-			if = {
-				# Only re-add the modifier if the contents (multiplier) are non-zero
-				limit = {
-					imperia_player_construction_bonus_multiplier != 0
-				}
-				add_modifier = {
-					name = player_construction_bonus
-					multiplier = imperia_player_construction_bonus_multiplier
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				is_player = no
-				has_modifier = player_construction_bonus
-			}
-			remove_modifier = player_construction_bonus
-		}
-	}
-}
-
 on_imperia_monthly_pulse_congress_random_events = {
 	trigger = {
 		has_global_variable = imperia_vienna_congress_in_session
