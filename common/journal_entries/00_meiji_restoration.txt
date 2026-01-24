@@ -39,18 +39,18 @@ je_meiji_restoration = {
 		exists = c:JAP
 		c:JAP = ROOT
 		NOT = { has_variable = meiji_restoration_complete }
-		has_law_or_variant = law_type:law_monarchy
+		has_law = law_type:law_monarchy
 	}
 	
 	possible = {
-		has_law_or_variant = law_type:law_monarchy
+		has_law = law_type:law_monarchy
 		NOT = { has_modifier = declared_bankruptcy }
 		ig:ig_landowners ?= {
 			is_in_government = no
 		}
 		OR = {
 			government_legitimacy >= 50
-			ig:ig_landowners ?= { is_marginal = yes }
+			ig:ig_landowners ?= { ig_counts_as_marginal = yes }
 			has_revolution = yes
 		}
 	}
@@ -128,7 +128,7 @@ je_meiji_restoration = {
 			remove_modifier = shogun_ig_forced_to_open_market
 		}
 		if = {
-			limit = { has_law_or_variant = law_type:law_monarchy }
+			limit = { has_law = law_type:law_monarchy }
 			add_modifier = {
 				name = honorable_restoration_failed
 				days = very_long_modifier_time
@@ -143,7 +143,7 @@ je_meiji_restoration = {
 			ig:ig_landowners ?= {
 				is_in_government = yes
 			}
-			NOT = { has_law_or_variant = law_type:law_monarchy }
+			NOT = { has_law = law_type:law_monarchy }
 		}
 	}
 	
@@ -273,7 +273,7 @@ je_meiji_army = {
 		has_technology_researched = napoleonic_warfare
 		NOR = {
 			any_scope_building = {
-				is_building_type = building_barracks
+				is_building_type = building_barrack
 				has_active_production_method = pm_no_organization
 			}
 			any_military_formation = {

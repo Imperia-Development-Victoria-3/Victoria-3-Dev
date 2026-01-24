@@ -13,9 +13,25 @@
 		is_country_type = unrecognized
 		has_technology_researched = nationalism	# Is colonization in base game
 		OR = {
-			country_rank >= rank_value:unrecognized_major_power
-			any_overlord_or_above = {
-				country_rank >= rank_value:great_power
+			AND = {
+				OR = {
+					custom_tooltip = {
+						text = is_subject_of_great_power_tt
+						any_overlord_or_above = {
+							country_rank >= rank_value:great_power
+						}
+					}
+					country_rank >= rank_value:unrecognized_major_power
+				}
+				has_technology_researched = colonization
+			}
+			AND = {
+				country_rank >= rank_value:unrecognized_regional_power
+				has_technology_researched = civilizing_mission
+			}
+			AND = {
+				country_rank >= rank_value:unrecognized_power
+				has_technology_researched = international_exchange_standards
 			}
 		}
 	}

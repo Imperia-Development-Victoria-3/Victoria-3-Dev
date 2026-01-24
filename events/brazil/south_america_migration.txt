@@ -30,7 +30,7 @@ sa_migration.1 = {
 			limit = {
 				custom_tooltip = {
 					text = is_in_europe_tt
-					country_is_in_europe = yes
+					is_in_geographic_region = geographic_region_europe
 				}
 				custom_tooltip = {
 					text = same_state_religion
@@ -44,7 +44,7 @@ sa_migration.1 = {
 					is_incorporated = yes
 					custom_tooltip = {
 						text = is_in_europe_tt
-						state_is_in_europe = yes
+						is_in_geographic_region = geographic_region_europe
 					}
 					count >= 3
 				}
@@ -53,7 +53,7 @@ sa_migration.1 = {
 			random_scope_state = {
 				limit = {
 					is_incorporated = yes
-					state_is_in_europe = yes
+					is_in_geographic_region = geographic_region_europe
 					any_scope_culture = {
 						has_homeland = PREV
 						culture_can_have_mass_migration_to_country = ROOT
@@ -88,7 +88,7 @@ sa_migration.1 = {
 							has_journal_entry = je_south_america_migration
 						}
 					}
-					state_is_in_south_america = yes
+					is_in_geographic_region = geographic_region_south_america
 				}
 				trigger_else_if = {
 					limit = {
@@ -104,6 +104,8 @@ sa_migration.1 = {
 				state_is_eligible_as_mass_migration_target = yes
 			}
 			order_by = migration_pull
+			position = 0
+			check_range_bounds = no
 			save_scope_as = migration_target_state
 		}
 		scope:migration_target_state = {
@@ -171,7 +173,7 @@ sa_migration.2 = {
 					limit = {
 						NOT = { has_modifier = sa_migration_attraction }
 						is_incorporated = yes
-						state_is_in_south_america = yes
+						is_in_geographic_region = geographic_region_south_america
 					}
 					add_modifier = {
 						name = sa_migration_attraction
@@ -298,7 +300,7 @@ sa_migration.5 = {
 	
 	immediate = {
 		set_variable = canada_migration_var
-		c:GBR = {
+		c:GBR ?= {
 			save_scope_as = migration_country
 		}
 		cu:british = {

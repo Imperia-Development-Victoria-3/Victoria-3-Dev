@@ -34,7 +34,7 @@
 		}
 		set_variable = {
 			name = last_week_raiding_income
-			value = 1500	#raiding_income script value doesn't work during initialization. 
+			value = 1500	#raiding_income script value doesn't work during initialization.
 		}
 		create_diplomatic_pact = {
 			country = c:TUR
@@ -46,7 +46,7 @@
 		}
 		add_modifier = {
 			name = modifier_montenegrin_raiding
-			multiplier = 1500	#raiding_income script value doesn't work during initialization. 
+			multiplier = 1500	#raiding_income script value doesn't work during initialization.
 		}
 		add_modifier = {
 			name = modifier_montenegrin_disobedience
@@ -59,7 +59,8 @@
 			save_scope_as = raid_target
 			add_modifier = {
 				name = raid_target
-				multiplier = 1
+				multiplier = 2
+				days = short_modifier_time
 			}
 		}
 		set_global_variable = {
@@ -71,16 +72,16 @@
 				type = je_tur_raided
 			}
 		}
-		#Way of getting rid of errors, cause this variable is only used in Loc
-		if = {
-			limit = {
-				exists = var:mon_raid_state
-			}
-		}
 	}
 	
 	scripted_button = je_montenegrin_raiding_decrease_button
 	scripted_button = je_montenegrin_raiding_increase_button
+	
+	on_yearly_pulse = {	#potentially change raiding target each year 
+		effect = {
+			reapply_raiding_state_modifier = yes
+		}
+	}
 	
 	on_weekly_pulse = {
 		effect = {
@@ -118,43 +119,20 @@
 				add_modifier = {
 					name = unemployement_birth_rate_countermodifier
 					multiplier = mon_unemployment_estimate
-					days = normal_modifier_time
+					days = short_modifier_time
 				}
 			}
-			scope:raid_target = {
-				if = {
-					limit = {
-						NOT = {
-							owner ?= c:TUR
-						}
-					}
-					remove_modifier = raid_target
-					random_neighbouring_state = {
-						limit = {
-							owner ?= c:TUR
-						}
-						save_scope_as = raid_target
-						if = {
-							limit = {
-								raiding_level >= 2
-							}
-							add_modifier = {
-								name = raid_target
-								multiplier = raiding_level
-							}
-						}
+			###remove raid target modifier if state raid_target is no longer owned by c:TUR, and find a different target instead. 
+			if = {
+				limit = {
+					any_neighbouring_state = {
+						has_modifier = raid_target
+						owner != c:TUR
 					}
 				}
-				#still state scope. add some radicals
-				if = {
-					limit = {
-						raiding_level > 2
-					}
-					add_radicals_in_state = {
-						value = 0.005
-					}
-				}
+				reapply_raiding_state_modifier = yes
 			}
+
 			#If Raiding_income has changed, remove and reapply the modifiers with the new values. This is necessary because we do not have support for dynamic modifiers.
 			if = {
 				limit = {
@@ -180,20 +158,14 @@
 					name = last_week_raiding_income
 					value = raiding_income
 				}
-				scope:raid_target ?= {
-					remove_modifier = raid_target
-					add_modifier = {
-						name = raid_target
-						multiplier = raiding_level
-					}
-				}
+				#Raiding state modifier will increase on yearly pulse
 			}
 			#Higher odds of ottoman Retribution Depending on Raiding Income.
-			#Note that montenegrin_raiding.1 can only fire once, after which montenegrin_raiding.2 fires from then on. 
+			#Note that montenegrin_raiding.1 can only fire once, after which montenegrin_raiding.2 fires from then on.
 			if = {	#playing Russian Roulette each week
 				limit = {
 					raiding_level > 2	#must be raiding more than 1000
-					NAND = {	#If TUR is a player and MON isn't, this is handled by a special button rather than chance. 
+					NAND = {	#If TUR is a player and MON isn't, this is handled by a special button rather than chance.
 						c:TUR ?= {
 							is_player = yes
 						}
@@ -278,12 +250,14 @@
 				c:MON = this	#can't become Yugoslavia or Serbia
 			}
 			NOT = {
-				any_neighbouring_state = {	# Turkey must be neighbor, unless it's fighting a civil war. 
-					OR = {
-						c:TUR ?= owner
-						AND = {
-							exists = owner.civil_war_origin_country
-							c:TUR ?= owner.civil_war_origin_country
+				hidden_trigger = {	#kills errors
+					any_neighbouring_state = {	# Turkey must be neighbor, unless it's fighting a civil war.
+						OR = {
+							c:TUR ?= owner
+							AND = {
+								exists = owner.civil_war_origin_country
+								c:TUR ?= owner.civil_war_origin_country
+							}
 						}
 					}
 				}
@@ -420,7 +394,7 @@ je_mon_state_formation = {
 				has_law_or_variant = law_type:law_no_police
 			}
 		}
-		has_law_or_variant = law_type:law_monarchy
+		has_law = law_type:law_monarchy
 		government_legitimacy > 50
 		custom_tooltip = {
 			text = biljarda_built_tt
@@ -493,7 +467,7 @@ je_mon_austria_alliance = {
 		c:TUR ?= {
 			save_scope_as = ottoman
 		}
-		c:AUS = {
+		c:AUS ?= {
 			save_scope_as = austria
 		}
 	}
@@ -520,7 +494,7 @@ je_mon_austria_alliance = {
 		c:RUS ?= {
 			relations:root <= relations_threshold:poor
 		}
-		c:AUS = {
+		c:AUS ?= {
 			relations:root >= relations_threshold:amicable
 		}
 		trigger_if = {
@@ -569,9 +543,9 @@ je_mon_austria_alliance = {
 		}
 	}
 	
-	on_fail = {	#use same barbarian event. 
+	on_fail = {	#use same barbarian event.
 		mon_failure_events = yes
-		c:AUS = {
+		c:AUS ?= {
 			change_relations = {
 				country = root
 				value = -30
@@ -711,7 +685,7 @@ je_tur_raided = {
 					c:MON ?= {
 						is_country_alive = yes
 					}
-					raiding_level >= 2	#corrospond to above
+					raiding_level >= 2	#correspond to above
 					any_scope_state = {
 						has_modifier = raid_target
 					}
@@ -791,13 +765,14 @@ je_tur_raided = {
 						has_global_variable = montenegro_defeat_var
 					}
 				}
-				sr:region_balkans = {
+				c:TUR ?= {
 					every_scope_state = {
 						limit = {
 							has_modifier = raid_target
 						}
 						remove_modifier = raid_target
 					}
+					remove_global_variable = mon_raid_state
 				}
 				set_global_variable = montenegro_defeat_var
 			}

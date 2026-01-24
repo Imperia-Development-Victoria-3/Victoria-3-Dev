@@ -31,10 +31,10 @@ oil_rush.1 = {	#Oil discovery is handled by Toast notification. This is an Oil R
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	
 	trigger = {
-		has_potential_resource = bg_oil_extraction
+		has_potential_resource = building_oil_rig
 		state_region = {
 			remaining_undepleted = {
-				type = bg_oil_extraction
+				type = building_oil_rig
 				amount > 1
 			}
 		}
@@ -127,6 +127,12 @@ oil_rush.1 = {	#Oil discovery is handled by Toast notification. This is an Oil R
 			}
 		}
 	}
+	
+	cancellation_trigger = {
+		NOT = {
+			exists = scope:oil_state
+		}
+	}
 }
 
 # End of Oil Rush.
@@ -142,7 +148,10 @@ oil_rush.2 = {
 	cooldown = { days = long_modifier_time }	#country event. Oil has not actually run out in this case, it's just the momentum.
 	
 	trigger = {	#triggered 10 years after Oil Rush, and then won't be seen for 10 more years due to cooldown.
+		any_scope_state = {
+			has_variable = oil_rush_state
 		}
+	}
 	
 	immediate = {
 		random_scope_state = {
@@ -185,6 +194,12 @@ oil_rush.2 = {
 			}
 		}
 		remove_variable = oil_rush_state
+	}
+	
+	cancellation_trigger = {
+		NOT = {
+			exists = scope:oil_state
+		}
 	}
 }
 
@@ -244,7 +259,7 @@ oil_rush.3 = {
 			years = 4
 		}
 		owner = {
-			ig:ig_industrialists = {
+			ig:ig_industrialists ?= {
 				add_modifier = {
 					name = permitted_oil_dangerous_work
 					days = short_modifier_time
@@ -273,7 +288,7 @@ oil_rush.3 = {
 					days = short_modifier_time
 				}
 			}
-			ig:ig_industrialists = {
+			ig:ig_industrialists ?= {
 				add_modifier = {
 					name = prevented_oil_dangerous_work
 					multiplier = -1
@@ -339,8 +354,9 @@ oil_rush.4 = {
 			add_modifier = {
 				name = funding_oil_pipeline
 				multiplier = money_amount_multiplier_small
+				days = short_modifier_time
 			}
-			ig:ig_industrialists = {
+			ig:ig_industrialists ?= {
 				add_modifier = {
 					name = pipeline_funded
 					days = short_modifier_time
@@ -353,7 +369,7 @@ oil_rush.4 = {
 		name = oil_rush.4.b
 		default_option = yes
 		owner = {
-			ig:ig_industrialists = {
+			ig:ig_industrialists ?= {
 				add_modifier = {
 					name = no_pipeline_funding
 					days = short_modifier_time
@@ -442,7 +458,7 @@ oil_rush.5 = {
 			}
 		}
 		custom_tooltip = oil_rush.5.tt
-		ig:ig_industrialists = {
+		ig:ig_industrialists ?= {
 			add_modifier = {
 				name = jailed_oil_barons
 				days = short_modifier_time
@@ -470,7 +486,7 @@ oil_rush.5 = {
 	# Jail the oilmen
 	option = {
 		name = oil_rush.5.c
-		ig:ig_industrialists = {
+		ig:ig_industrialists ?= {
 			add_modifier = {
 				name = jailed_oil_barons
 				days = short_modifier_time
@@ -497,6 +513,12 @@ oil_rush.5 = {
 			days = short_modifier_time
 		}
 	}
+	
+	cancellation_trigger = {
+		NOT = {
+			exists = scope:oil_state
+		}
+	}
 }
 
 oil_rush.6 = {	#hidden event that does the effects if the player choose C or D on oil rush
@@ -506,7 +528,7 @@ oil_rush.6 = {	#hidden event that does the effects if the player choose C or D o
 	cooldown = { days = stupidly_long_modifier_time }	#state cooldown
 	
 	trigger = {
-		has_potential_resource = bg_oil_extraction
+		has_potential_resource = building_oil_rig
 		owner = {
 			OR = {
 				has_variable = always_oil_rush
@@ -561,6 +583,12 @@ oil_rush.6 = {	#hidden event that does the effects if the player choose C or D o
 					}
 				}
 			}
+		}
+	}
+	
+	cancellation_trigger = {
+		NOT = {
+			exists = scope:oil_state
 		}
 	}
 }

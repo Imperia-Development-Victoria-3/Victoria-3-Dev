@@ -36,7 +36,7 @@ children_rights_events.1 = {	#families hide their children so they won't have to
 			}
 		}
 		any_interest_group = {
-			is_marginal = no
+			ig_counts_as_marginal = no
 			law_stance = {
 				law = owner.currently_enacting_law.type
 				value < neutral
@@ -51,7 +51,7 @@ children_rights_events.1 = {	#families hide their children so they won't have to
 		}
 		random_interest_group = {
 			limit = {
-				is_marginal = no
+				ig_counts_as_marginal = no
 				law_stance = {
 					law = owner.currently_enacting_law.type
 					value < neutral
@@ -132,14 +132,14 @@ children_rights_events.2 = {	#families send their children to work anyway becaus
 			standard_of_living <= 10
 		}
 		any_interest_group = {
-			is_marginal = no
+			ig_counts_as_marginal = no
 			law_stance = {
 				law = owner.currently_enacting_law.type
 				value > neutral
 			}
 		}
 		any_interest_group = {
-			is_marginal = no
+			ig_counts_as_marginal = no
 			law_stance = {
 				law = owner.currently_enacting_law.type
 				value <= neutral
@@ -157,7 +157,7 @@ children_rights_events.2 = {	#families send their children to work anyway becaus
 		}
 		random_interest_group = {
 			limit = {
-				is_marginal = no
+				ig_counts_as_marginal = no
 				law_stance = {
 					law = owner.currently_enacting_law.type
 					value > neutral
@@ -167,7 +167,7 @@ children_rights_events.2 = {	#families send their children to work anyway becaus
 		}
 		random_interest_group = {
 			limit = {
-				is_marginal = no
+				ig_counts_as_marginal = no
 				law_stance = {
 					law = owner.currently_enacting_law.type
 					value <= neutral
@@ -351,12 +351,17 @@ children_rights_events.4 = {	#ragged schools / advancement
 			has_law = law_type:law_restricted_child_labor
 		}
 		NOT = { has_modifier = ragged_schools_devout }
-		NOT = { has_modifier = ragged_schools_no_devout }
+		NOT = { has_modifier = modifier_no_ragged_schools }
 		ig:ig_devout ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
 		}
 		ig:ig_intelligentsia ?= {
-			is_marginal = no
+			ig_counts_as_marginal = no
+		}
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_ragged_schools
+			}
 		}
 	}
 	
@@ -388,6 +393,13 @@ children_rights_events.4 = {	#ragged schools / advancement
 		add_enactment_modifier = {
 			name = ragged_schools_modifier
 		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_ragged_schools
+				sponsor = scope:devout_scope
+				cooldown = 120
+			}
+		}
 		ig:ig_devout ?= {
 			add_modifier = {
 				name = ragged_schools_devout
@@ -396,41 +408,17 @@ children_rights_events.4 = {	#ragged schools / advancement
 		}
 	}
 	
-	option = {	#build them but dont give them to the church
-		name = children_rights_events.4.b
-		add_enactment_modifier = {
-			name = ragged_schools_modifier
-		}
-		ig:ig_devout ?= {
-			add_modifier = {
-				name = ragged_schools_no_devout
-				days = normal_modifier_time
-			}
-		}
-		ig:ig_intelligentsia ?= {
-			add_modifier = {
-				name = ragged_schools_no_devout
-				days = normal_modifier_time
-				multiplier = -1
-			}
-		}
-	}
-	
 	option = {	#dont build them
-		name = children_rights_events.4.c
-		add_enactment_modifier = {
-			name = ragged_schools_modifier
-			multiplier = 1.5
-		}
+		name = children_rights_events.4.b
 		ig:ig_devout ?= {
 			add_modifier = {
-				name = ragged_schools_no_devout
+				name = modifier_no_ragged_schools
 				days = normal_modifier_time
 			}
 		}
 		ig:ig_intelligentsia ?= {
 			add_modifier = {
-				name = ragged_schools_no_devout
+				name = modifier_no_ragged_schools
 				days = normal_modifier_time
 			}
 		}
@@ -471,6 +459,14 @@ children_rights_events.5 = {	#pay for your school supplies / stall
 		}
 		NOT = { has_modifier = school_supplies_modifier }
 		NOT = { has_modifier = no_school_supplies_modifier }
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_provided_school_supplies
+					has_amendment = amendment_type:amendment_unfunded_school_supplies
+				}
+			}
+		}
 	}
 	
 	immediate = {
@@ -483,6 +479,12 @@ children_rights_events.5 = {	#pay for your school supplies / stall
 			}
 			save_scope_as = child_labor_state
 		}
+		random_interest_group = {
+			limit = {
+				is_in_government = yes
+			}
+			save_scope_as = school_supplies_ig
+		}
 	}
 	
 	cancellation_trigger = {
@@ -494,6 +496,13 @@ children_rights_events.5 = {	#pay for your school supplies / stall
 		add_enactment_modifier = {
 			name = school_supplies_modifier
 		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_provided_school_supplies
+				sponsor = scope:school_supplies_ig
+				cooldown = 60
+			}
+		}
 	}
 	
 	option = {	#theyll need to pay
@@ -501,6 +510,13 @@ children_rights_events.5 = {	#pay for your school supplies / stall
 		default_option = yes
 		add_enactment_modifier = {
 			name = no_school_supplies_modifier
+		}
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_unfunded_school_supplies
+				sponsor = scope:school_supplies_ig
+				cooldown = 60
+			}
 		}
 	}
 }
@@ -539,7 +555,7 @@ children_rights_events.6 = {	#gatekeeping education / debate
 		}
 		NOT = { has_modifier = no_gatekeeping }
 		any_interest_group = {
-			is_marginal = no
+			ig_counts_as_marginal = no
 			OR = {
 				has_ideology = ideology:ideology_egalitarian
 				has_ideology = ideology:ideology_egalitarian_modern
@@ -587,11 +603,11 @@ children_rights_events.6 = {	#gatekeeping education / debate
 		}
 		else_if = {
 			limit = {
-				ig:ig_industrialists = {
+				ig:ig_industrialists ?= {
 					is_powerful = yes
 				}
 			}
-			ig:ig_industrialists = {
+			ig:ig_industrialists ?= {
 				save_scope_as = gatekeeper_ig
 			}
 		}
@@ -602,7 +618,7 @@ children_rights_events.6 = {	#gatekeeping education / debate
 		}
 		random_interest_group = {
 			limit = {
-				is_marginal = no
+				ig_counts_as_marginal = no
 				OR = {
 					has_ideology = ideology:ideology_egalitarian
 					has_ideology = ideology:ideology_egalitarian_modern

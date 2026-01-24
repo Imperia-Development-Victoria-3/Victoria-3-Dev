@@ -266,7 +266,7 @@ bulgaria_events.2 = {
 		}
 		if = {
 			limit = {
-				NOT = { has_law_or_variant = law_type:law_monarchy }
+				NOT = { has_law = law_type:law_monarchy }
 			}
 			activate_law = law_type:law_monarchy
 		}
@@ -297,7 +297,7 @@ bulgaria_events.2 = {
 		}
 		if = {
 			limit = {
-				NOT = { has_law_or_variant = law_type:law_monarchy }
+				NOT = { has_law = law_type:law_monarchy }
 			}
 			activate_law = law_type:law_monarchy
 		}
@@ -386,7 +386,7 @@ bulgaria_events.2 = {
 		}
 		if = {
 			limit = {
-				NOT = { has_law_or_variant = law_type:law_monarchy }
+				NOT = { has_law = law_type:law_monarchy }
 			}
 			activate_law = law_type:law_monarchy
 		}
@@ -433,7 +433,7 @@ bulgaria_events.3 = {
 	trigger = {
 		has_dlc_feature = ip3_content
 		has_variable = crushed_secession
-		cultural_acceptance_base = { target = scope:rebel_culture value <= acceptance_status_2 }
+		country_average_culture_pop_acceptance = { culture = scope:rebel_culture value <= acceptance_status_2 }
 		NOT = {
 			has_variable = bulgaria_events_3
 		}
@@ -457,7 +457,18 @@ bulgaria_events.3 = {
 	option = {	#Infamy
 		name = bulgaria_events.3.a
 		default_option = yes
-		change_infamy = 30
+		change_infamy = 20
+		
+		ai_chance = {
+			base = 1
+			
+			modifier = {
+				trigger = {
+					infamy <= infamy_threshold:infamous
+				}
+				add = 4
+			}
+		}
 	}
 	
 	option = {	# Sacrifice General
@@ -467,6 +478,7 @@ bulgaria_events.3 = {
 				is_character_alive = yes
 			}
 		}
+		change_infamy = 10
 		scope:scapegoat = {
 			interest_group = {
 				add_modifier = {
@@ -477,7 +489,10 @@ bulgaria_events.3 = {
 			}
 			kill_character = yes
 		}
-		change_infamy = 15
+		
+		ai_chance = {
+			base = 5
+		}
 	}
 	
 	option = {	# gp vouch for you
@@ -485,7 +500,7 @@ bulgaria_events.3 = {
 		trigger = {
 			exists = scope:closest_great_power
 			scope:closest_great_power = {
-				relations:root >= 30
+				relations:root >= relations_threshold:cordial
 			}
 		}
 		change_infamy = 10
@@ -495,21 +510,92 @@ bulgaria_events.3 = {
 				value = -30
 			}
 		}
+		
+		ai_chance = {
+			base = 5
+		}
 	}
 	
 	option = {	# embrace the villainy
 		name = bulgaria_events.3.e
-		change_infamy = 50
+		change_infamy = 30
 		add_modifier = {
 			name = terrified_dissidents
-			days = very_long_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
+		}
+		
+		ai_chance = {
+			base = 0
+			
+			modifier = {
+				trigger = {
+					infamy <= infamy_threshold:infamous
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					ruler ?= {
+						OR = {
+							has_trait = cruel
+							has_trait = wrathful
+							has_trait = bigoted
+							has_trait = war_criminal
+							has_trait = ruthless
+						}
+					}
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					ruler ?= {
+						OR = {
+							has_ideology = ideology:ideology_ethno_nationalist
+							has_ideology = ideology:ideology_integralist
+							has_ideology = ideology:ideology_fascist
+						}
+					}
+				}
+				add = 1
+			}
+			modifier = {
+				trigger = {
+					infamy >= infamy_threshold:notorious
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					ruler ?= {
+						OR = {
+							has_trait = tactful
+							has_trait = cautious
+							has_trait = honorable
+						}
+					}
+				}
+				add = -1
+			}
+			modifier = {
+				trigger = {
+					ruler ?= {
+						OR = {
+							has_ideology = ideology:ideology_humanitarian
+							has_ideology = ideology:ideology_humanitarian_royalist
+							has_ideology = ideology:ideology_pacifist
+						}
+					}
+				}
+				add = -1
+			}
 		}
 	}
 	
 	after = {
 		scope:former_rebel_capital ?= {	# state_region scope
-			add_devastation = 30
+			add_devastation = 20
 			random_scope_state = {
 				limit = {
 					owner = root
@@ -518,6 +604,10 @@ bulgaria_events.3 = {
 					name = modifier_rebellion_horrific_reprisals
 					days = long_modifier_time
 					is_decaying = yes
+				}
+				kill_population_percent_in_state = {
+					percent = 0.1
+					culture = scope:rebel_culture
 				}
 			}
 		}

@@ -1308,12 +1308,6 @@ imperia_vienna_congress_session_target_region_culture_fraction = {
 	}
 }
 
-imperia_vienna_congress_monthly_chance_for_random_event = {
-	value = imperia_num_of_congress_attendees
-	divide = 100	# For each x amount of people
-	multiply = 5	# x events will pop each month
-}
-
 whist_opinion_value = {
 	if = {
 		# Team 1
@@ -1505,11 +1499,6 @@ congress_fraction_of_prestige_who_accepted_language = {
 		}
 	}
 	divide = congress_total_prestige_of_attendees
-}
-
-weekly_net_income = {
-	value = income
-	subtract = expenses
 }
 
 masked_ball_max_afford = {
@@ -2182,3 +2171,29 @@ scandinavian_nationalism_progress_percentage = {
 scandinavian_nationalism_progress_tick_small = 0.025
 scandinavian_nationalism_progress_tick_medium = 0.05
 scandinavian_nationalism_progress_tick_large = 0.1
+
+# GDP Per Capita mod.
+get_state_gdp_per = {
+	value = gdp
+	divide = state_population
+}
+
+get_country_gdp_per = {
+	value = gdp
+	divide = total_population
+}
+
+get_global_gdp_per = {
+	value = global_gdp
+	divide = global_population
+}
+
+get_country_state_relative_value = {
+	value = get_state_gdp_per
+	subtract = owner.get_country_gdp_per
+}
+
+get_global_state_relative_value = {
+	value = get_state_gdp_per
+	subtract = get_global_gdp_per
+}

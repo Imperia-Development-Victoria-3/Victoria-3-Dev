@@ -4,10 +4,31 @@
 	group = je_group_historical_content
 	
 	complete = {
-		custom_tooltip = {
-			text = billy_died
-			ruler = {
-				NOT = { has_variable = is_billy }
+		trigger_if = {
+			limit = {
+				c:GBR ?= {
+					NOT = {
+						has_variable = ruler_selector_var
+					}
+				}
+				c:HAN ?= {
+					NOT = {
+						has_variable = ruler_selector_var
+					}
+				}
+			}
+			custom_tooltip = {
+				text = billy_died
+				ruler = {
+					NOT = {
+						has_variable = is_billy
+					}
+				}
+			}
+		}
+		trigger_else = {
+			hidden_trigger = {
+				always = no
 			}
 		}
 	}
@@ -48,12 +69,15 @@
 			NOT = {
 				exists = c:HAN
 			}
-			c:HAN = {
+			c:HAN ?= {
 				NOT = {
 					is_subject_of = c:GBR
 				}
 			}
-			c:GBR = {
+			c:GBR ?= {
+				has_variable = ruler_selector_var
+			}
+			c:GBR ?= {
 				custom_tooltip = {
 					text = "DEBUG_NO_CHARACTER_IN_GBR_IS_VICTORIA"
 					NOT = {
