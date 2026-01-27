@@ -171,8 +171,8 @@
 								# Create defensive pacts between all relevant Scandinavian countries
 								limit = {
 									is_involved_in_journal_entry = je_scandinavian_nationalism
-									is_subject = no						# Independent countries only
-									this != scope:first_country_scope	# Avoid self-treaties
+									is_subject = no									# Independent countries only
+									this != scope:first_country_scope									# Avoid self-treaties
 									NOT = {
 										# Avoid double treaties
 										any_scope_treaty = {
@@ -214,158 +214,163 @@
 			}
 			## WEEKLY CALCULATIONS FOR SCANDINAVIAN NATIONALISM PROGRESS BAR ##
 			# If the current country has okay relations with another Scandi country...
-			if = {
-				limit = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						relations:root >= relations_threshold:cordial
-					}
-				}
-				change_global_variable = {
-					name = scandinavian_nationalism_progress
-					add = {
-						# Add to the progress bar, depending on how positive the relations are
-						every_country = {
-							limit = {
+			scope:journal_entry = {
+				every_scope_je_involved = {
+					save_scope_as = scandinavian_country_scope
+					if = {
+						limit = {
+							any_country = {
 								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root >= relations_threshold:cordial
+								"relations(scope:scandinavian_country_scope)" >= relations_threshold:cordial
 							}
-							add = scandinavian_nationalism_progress_tick_small
 						}
-						every_country = {
-							limit = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root >= relations_threshold:amicable
-							}
-							add = scandinavian_nationalism_progress_tick_small
-						}
-						every_country = {
-							limit = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root >= relations_threshold:friendly
-							}
-							add = scandinavian_nationalism_progress_tick_small
-						}
-					}
-				}
-			}
-			# And if the current country has poor relations with another Scandi country...
-			if = {
-				limit = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						relations:root <= relations_threshold:poor
-					}
-				}
-				change_global_variable = {
-					name = scandinavian_nationalism_progress
-					add = {
-						# This is gonna be a negative given the below conditions, so its fine to use add here
-						# Subtract from the progress bar, depending on how negative the relations are
-						every_country = {
-							limit = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root <= relations_threshold:poor
-							}
-							subtract = scandinavian_nationalism_progress_tick_small
-						}
-						every_country = {
-							limit = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root <= relations_threshold:cold
-							}
-							subtract = scandinavian_nationalism_progress_tick_small
-						}
-						every_country = {
-							limit = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								relations:root <= relations_threshold:hostile
-							}
-							subtract = scandinavian_nationalism_progress_tick_small
-						}
-					}
-				}
-			}
-			# If at war with fellow Scandinavian
-			if = {
-				limit = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_war_with = root
-					}
-				}
-				every_country = {
-					limit = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_war_with = root
-					}
-					change_global_variable = {
-						name = scandinavian_nationalism_progress
-						subtract = scandinavian_nationalism_progress_tick_large
-					}
-				}
-			}
-			# If in a war against non-Scandi country, with an independent Scandi as your ally
-			if = {
-				limit = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						is_diplomatic_play_ally_of = root
-					}
-					any_country = {
-						count = 0
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						is_diplomatic_play_enemy_of = root
-					}
-				}
-				# This is a bit wonky.. If there's a diplo play against a non-Scandi featuring 2 Scandis, and an inter-Scandi war going on it'll cancel each other out
-				every_country = {
-					limit = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						is_diplomatic_play_ally_of = root
-					}
-					change_global_variable = {
-						name = scandinavian_nationalism_progress
-						add = scandinavian_nationalism_progress_tick_medium
-					}
-				}
-			}
-			# If the mutual defense act is broken (independent country leaving the defensive pact)
-			if = {
-				limit = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_pact_completed
-						is_subject = no
-						this != root
-						NOT = {
-							any_scope_treaty = {
-								binds = root
-								any_scope_article = {
-									has_type = defensive_pact
+						change_global_variable = {
+							name = scandinavian_nationalism_progress
+							add = {
+								# Add to the progress bar, depending on how positive the relations are
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" >= relations_threshold:cordial
+									}
+									add = scandinavian_nationalism_progress_tick_small
+								}
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" >= relations_threshold:amicable
+									}
+									add = scandinavian_nationalism_progress_tick_small
+								}
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" >= relations_threshold:friendly
+									}
+									add = scandinavian_nationalism_progress_tick_small
 								}
 							}
 						}
 					}
-				}
-				every_country = {
-					limit = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_pact_completed
-						is_subject = no
-						this != root
-						NOT = {
-							any_scope_treaty = {
-								binds = root
-								any_scope_article = {
-									has_type = defensive_pact
+					# And if the current country has poor relations with another Scandi country...
+					if = {
+						limit = {
+							any_country = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								"relations(scope:scandinavian_country_scope)" <= relations_threshold:poor
+							}
+						}
+						change_global_variable = {
+							name = scandinavian_nationalism_progress
+							add = {
+								# This is gonna be a negative given the below conditions, so its fine to use add here
+								# Subtract from the progress bar, depending on how negative the relations are
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" <= relations_threshold:poor
+									}
+									subtract = scandinavian_nationalism_progress_tick_small
+								}
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" <= relations_threshold:cold
+									}
+									subtract = scandinavian_nationalism_progress_tick_small
+								}
+								every_country = {
+									limit = {
+										is_involved_in_journal_entry = je_scandinavian_nationalism
+										"relations(scope:scandinavian_country_scope)" <= relations_threshold:hostile
+									}
+									subtract = scandinavian_nationalism_progress_tick_small
 								}
 							}
 						}
 					}
-					change_global_variable = {
-						name = scandinavian_nationalism_progress
-						subtract = scandinavian_nationalism_progress_tick_large
+					# If at war with fellow Scandinavian
+					if = {
+						limit = {
+							any_country = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								has_war_with = scope:scandinavian_country_scope
+							}
+						}
+						every_country = {
+							limit = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								has_war_with = scope:scandinavian_country_scope
+							}
+							change_global_variable = {
+								name = scandinavian_nationalism_progress
+								subtract = scandinavian_nationalism_progress_tick_large
+							}
+						}
+					}
+					# If in a war against non-Scandi country, with an independent Scandi as your ally
+					if = {
+						limit = {
+							any_country = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								is_diplomatic_play_ally_of = scope:scandinavian_country_scope
+							}
+							any_country = {
+								count = 0
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								is_diplomatic_play_enemy_of = scope:scandinavian_country_scope
+							}
+						}
+						# This is a bit wonky.. If there's a diplo play against a non-Scandi featuring 2 Scandis, and an inter-Scandi war going on it'll cancel each other out
+						every_country = {
+							limit = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								is_diplomatic_play_ally_of = scope:scandinavian_country_scope
+							}
+							change_global_variable = {
+								name = scandinavian_nationalism_progress
+								add = scandinavian_nationalism_progress_tick_medium
+							}
+						}
+					}
+					# If the mutual defense act is broken (independent country leaving the defensive pact)
+					if = {
+						limit = {
+							any_country = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								has_variable = scandinavian_mutual_defense_pact_completed
+								is_subject = no
+								this != scope:scandinavian_country_scope
+								NOT = {
+									any_scope_treaty = {
+										binds = scope:scandinavian_country_scope
+										any_scope_article = {
+											has_type = defensive_pact
+										}
+									}
+								}
+							}
+						}
+						every_country = {
+							limit = {
+								is_involved_in_journal_entry = je_scandinavian_nationalism
+								has_variable = scandinavian_mutual_defense_pact_completed
+								is_subject = no
+								this != prev
+								NOT = {
+									any_scope_treaty = {
+										binds = prev
+										any_scope_article = {
+											has_type = defensive_pact
+										}
+									}
+								}
+							}
+							change_global_variable = {
+								name = scandinavian_nationalism_progress
+								subtract = scandinavian_nationalism_progress_tick_large
+							}
+						}
 					}
 				}
 			}
@@ -376,71 +381,67 @@
 				min = 0
 				max = {
 					value = 250
-					# Any country completing the Currency Union JE increases the max by 250
-					if = {
-						limit = {
-							any_country = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								has_modifier = scandinavian_currency_union
+					scope:journal_entry = {
+						any_scope_je_involved = {
+							# Any country completing the Currency Union JE increases the max by 250
+							if = {
+								limit = {
+									has_modifier = scandinavian_currency_union
+								}
+								add = 250
+							}
+							# Any country completing the Freedom of Movement Act JE increases the max by 250
+							if = {
+								limit = {
+									has_modifier = scandinavian_freedom_of_movement_act
+								}
+								add = 250
+							}
+							# Any country completing the Mutual Defense Pact JE increases the max by 250
+							if = {
+								limit = {
+									has_variable = scandinavian_mutual_defense_pact_completed
+								}
+								add = 250
 							}
 						}
-						add = 250
-					}
-					# Any country completing the Freedom of Movement Act JE increases the max by 250
-					if = {
-						limit = {
-							any_country = {
-								is_involved_in_journal_entry = je_scandinavian_nationalism
-								has_modifier = scandinavian_freedom_of_movement_act
-							}
-						}
-						add = 250
 					}
 				}
 			}
 			# For the tooltip, find the difference between current progress and previous weeks progress
 			# Only done once per week to save on performance and to avoid a certain stutter that appears otherwise
+			set_global_variable = {
+				name = scandinavian_nationalism_progress_change_since_last_week
+				value = {
+					value = global_var:scandinavian_nationalism_progress
+					subtract = scope:old_scandinavian_nationalism_progress
+				}
+			}
+			# If the progress is going back, increase the failure timer
 			if = {
 				limit = {
-					any_country = {
-						count = 0
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						country_rank > root.country_rank # FIX the root scope here
-					}
+					global_var:scandinavian_nationalism_progress_change_since_last_week < 0
 				}
+				change_global_variable = {
+					name = scandinavian_nationalism_failure_timer
+					add = 1					# Add one week
+				}
+			}
+			else = {
+				# Otherwise, reset the failure timer
 				set_global_variable = {
-					name = scandinavian_nationalism_progress_change_since_last_week
-					value = {
-						value = global_var:scandinavian_nationalism_progress
-						subtract = scope:old_scandinavian_nationalism_progress
-					}
+					name = scandinavian_nationalism_failure_timer
+					value = 0
 				}
-				# If the progress is going back, increase the failure timer
-				if = {
-					limit = {
-						global_var:scandinavian_nationalism_progress_change_since_last_week < 0
-					}
-					change_global_variable = {
-						name = scandinavian_nationalism_failure_timer
-						add = 1						# Add one week
-					}
+			}
+			# Tick up the SMDA completion timer, if it exists
+			if = {
+				limit = {
+					has_global_variable = scandinavian_mutual_defense_pact_completion_timer
 				}
-				else = {
-					# Otherwise, reset the failure timer
-					set_global_variable = {
-						name = scandinavian_nationalism_failure_timer
-						value = 0
-					}
-				}
-				# Tick up the SMDA completion timer, if it exists
-				if = {
-					limit = {
-						has_global_variable = scandinavian_mutual_defense_pact_completion_timer
-					}
-					change_global_variable = {
-						name = scandinavian_mutual_defense_pact_completion_timer
-						add = 1						# Add one week
-					}
+				change_global_variable = {
+					name = scandinavian_mutual_defense_pact_completion_timer
+					add = 1					# Add one week
 				}
 			}
 		}
@@ -465,9 +466,13 @@
 		triggered_desc = {
 			desc = je_scandinavian_nationalism_positive_relations
 			trigger = {
-				any_country = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					relations:root >= relations_threshold:cordial
+				scope:journal_entry = {
+					any_scope_je_involved = {
+						any_country = {
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							relations:prev >= relations_threshold:cordial
+						}
+					}
 				}
 			}
 		}
@@ -475,9 +480,13 @@
 		triggered_desc = {
 			desc = je_scandinavian_nationalism_negative_relations
 			trigger = {
-				any_country = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					relations:root <= relations_threshold:poor
+				scope:journal_entry = {
+					any_scope_je_involved = {
+						any_country = {
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							relations:prev >= relations_threshold:poor
+						}
+					}
 				}
 			}
 		}
@@ -485,9 +494,13 @@
 		triggered_desc = {
 			desc = je_scandinavian_nationalism_infighting
 			trigger = {
-				any_country = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					has_war_with = root
+				scope:journal_entry = {
+					any_scope_je_involved = {
+						any_country = {
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							has_war_with = prev
+						}
+					}
 				}
 			}
 		}
@@ -495,14 +508,18 @@
 		triggered_desc = {
 			desc = je_scandinavian_nationalism_fighting_against_outsiders
 			trigger = {
-				any_country = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					is_diplomatic_play_ally_of = root
-				}
-				any_country = {
-					count = 0
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					is_diplomatic_play_enemy_of = root
+				scope:journal_entry = {
+					any_scope_je_involved = {
+						any_country = {
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							is_diplomatic_play_ally_of = prev
+						}
+						any_country = {
+							count = 0
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							is_diplomatic_play_enemy_of = prev
+						}
+					}
 				}
 			}
 		}
@@ -510,16 +527,21 @@
 		triggered_desc = {
 			desc = je_scandinavian_nationalism_broken_mutual_defense_pact
 			trigger = {
-				any_country = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
-					has_variable = scandinavian_mutual_defense_pact_completed
-					is_subject = no
-					this != root
-					NOT = {
-						any_scope_treaty = {
-							binds = root
-							any_scope_article = {
-								has_type = defensive_pact
+				scope:journal_entry = {
+					any_scope_je_involved = {
+						save_scope_as = scandinavian_country_scope
+						any_country = {
+							is_involved_in_journal_entry = je_scandinavian_nationalism
+							has_variable = scandinavian_mutual_defense_pact_completed
+							is_subject = no
+							this != scope:scandinavian_country_scope
+							NOT = {
+								any_scope_treaty = {
+									binds = scope:scandinavian_country_scope
+									any_scope_article = {
+										has_type = defensive_pact
+									}
+								}
 							}
 						}
 					}
@@ -532,27 +554,30 @@
 			triggered_desc = {
 				desc = onehundred_percent
 				trigger = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_variable = scandinavian_mutual_defense_pact_completed
+					scope:journal_entry = {
+						any_scope_je_involved = {
+							has_variable = scandinavian_mutual_defense_pact_completed
+						}
 					}
 				}
 			}
 			triggered_desc = {
 				desc = seventyfive_percent
 				trigger = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_modifier = scandinavian_freedom_of_movement_act
+					scope:journal_entry = {
+						any_scope_je_involved = {
+							has_modifier = scandinavian_freedom_of_movement_act
+						}
 					}
 				}
 			}
 			triggered_desc = {
 				desc = fifty_percent
 				trigger = {
-					any_country = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						has_modifier = scandinavian_currency_union
+					scope:journal_entry = {
+						any_scope_je_involved = {
+							has_modifier = scandinavian_currency_union
+						}
 					}
 				}
 			}
