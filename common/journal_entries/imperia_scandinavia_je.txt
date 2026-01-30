@@ -32,9 +32,7 @@
 		}
 	}
 	should_show_when_not_involved = {
-		any_diplomatically_relevant_country = {
-			is_involved_in_journal_entry = je_scandinavian_nationalism
-		}
+		has_interest_marker_in_region = region_baltic # Actually Scandinavia ingame
 	}
 	immediate = {
 		# This section pops immediately when the JE starts
@@ -591,6 +589,13 @@
 je_scandinavian_currency_union = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
+	
+	should_be_involved = {
+		is_involved_in_journal_entry = je_scandinavian_nationalism
+	}
+	should_show_when_not_involved = {
+		has_interest_marker_in_region = region_baltic # Actually Scandinavia ingame
+	}
 	is_shown_when_inactive = {
 		any_country = {
 			is_involved_in_journal_entry = je_scandinavian_nationalism
@@ -634,7 +639,7 @@ je_scandinavian_currency_union = {
 			journal_entry_age >= 1825			#5*365
 		}
 	}
-	on_complete = {
+	on_complete_all_involved = {
 		add_modifier = {
 			name = scandinavian_currency_union
 		}
@@ -643,17 +648,15 @@ je_scandinavian_currency_union = {
 
 je_scandinavian_freedom_of_movement_act = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_scandinavian_unification
+	group = je_group_scandinavian_unification	
+	should_be_involved = {
+		is_involved_in_journal_entry = je_scandinavian_nationalism
+	}
+	should_show_when_not_involved = {
+		has_interest_marker_in_region = region_baltic # Actually Scandinavia ingame
+	}
 	is_shown_when_inactive = {
 		any_country = {
-			any_primary_culture = {
-				has_discrimination_trait = heritage_nordic
-			}
-			overlord ?= {
-				any_primary_culture = {
-					has_discrimination_trait = heritage_nordic
-				}
-			}
 			is_involved_in_journal_entry = je_scandinavian_nationalism
 		}
 	}
@@ -722,7 +725,7 @@ je_scandinavian_freedom_of_movement_act = {
 			journal_entry_age >= 1825			#5*365
 		}
 	}
-	on_complete = {
+	on_complete_all_involved = {
 		add_modifier = {
 			name = scandinavian_freedom_of_movement_act
 		}
@@ -731,19 +734,16 @@ je_scandinavian_freedom_of_movement_act = {
 
 je_scandinavian_mutual_defense_pact = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_scandinavian_unification
+	group = je_group_scandinavian_unification	
+	should_be_involved = {
+		is_involved_in_journal_entry = je_scandinavian_nationalism
+	}
+	should_show_when_not_involved = {
+		has_interest_marker_in_region = region_baltic # Actually Scandinavia ingame
+	}
 	is_shown_when_inactive = {
 		any_country = {
-			any_primary_culture = {
-				has_discrimination_trait = heritage_nordic
-			}
-			overlord ?= {
-				any_primary_culture = {
-					has_discrimination_trait = heritage_nordic
-				}
-			}
 			is_involved_in_journal_entry = je_scandinavian_nationalism
-			has_modifier = scandinavian_currency_union
 		}
 	}
 	possible = {
@@ -853,19 +853,18 @@ je_scandinavian_mutual_defense_pact = {
 je_scandinavian_union = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_scandinavian_unification
+
 	scripted_button = je_scandinavian_union_vote_decentralization_button
 	scripted_button = je_scandinavian_union_vote_no_stance_button
-	scripted_button = je_scandinavian_union_vote_centralization_button
+	scripted_button = je_scandinavian_union_vote_centralization_button	
+	should_be_involved = {
+		is_involved_in_journal_entry = je_scandinavian_nationalism
+	}
+	should_show_when_not_involved = {
+		has_interest_marker_in_region = region_baltic # Actually Scandinavia ingame
+	}
 	is_shown_when_inactive = {
 		any_country = {
-			any_primary_culture = {
-				has_discrimination_trait = heritage_nordic
-			}
-			overlord ?= {
-				any_primary_culture = {
-					has_discrimination_trait = heritage_nordic
-				}
-			}
 			is_involved_in_journal_entry = je_scandinavian_nationalism
 		}
 	}
@@ -889,7 +888,10 @@ je_scandinavian_union = {
 		}
 	}
 	immediate_all_involved = {
-		set_variable = je_scandinavian_union_voting_nothing
+		custom_tooltip = {
+			text = je_scandinavian_union_voting_begins_tt
+			set_variable = je_scandinavian_union_voting_nothing
+		}
 	}
 	complete = {
 		custom_tooltip = {
@@ -905,16 +907,15 @@ je_scandinavian_union = {
 			global_var:scandinavian_nationalism_progress >= 1000
 		}
 		# Every country has voted the same way
-			scope:journal_entry = {
-				OR = {
-					any_scope_je_involved = {
-						count = all
-						has_variable = je_scandinavian_union_voting_decentralization
-					}
-					any_scope_je_involved = {
-						count = all
-						has_variable = je_scandinavian_union_voting_centralization
-					}
+		scope:journal_entry = {
+			OR = {
+				any_scope_je_involved = {
+					count = all
+					has_variable = je_scandinavian_union_voting_decentralization
+				}
+				any_scope_je_involved = {
+					count = all
+					has_variable = je_scandinavian_union_voting_centralization
 				}
 			}
 		}
