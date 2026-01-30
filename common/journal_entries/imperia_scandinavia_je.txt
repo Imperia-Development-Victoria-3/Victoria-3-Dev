@@ -624,16 +624,13 @@ je_scandinavian_currency_union = {
 		}
 	}
 	complete = {
-		any_country = {
-			filter = {
-				has_journal_entry = je_scandinavian_currency_union
+		scope:journal_entry = {
+			any_scope_je_involved = {
+				count = all
+				has_technology_researched = central_banking
+				has_technology_researched = pan-nationalism
 			}
-			count = all
-			has_technology_researched = central_banking
-			has_technology_researched = pan-nationalism
-		}
-		# This part must be active for 5 years before it can conclude
-		je:je_scandinavian_currency_union = {
+			# This part must be active for 5 years before it can conclude
 			journal_entry_age >= 1825			#5*365
 		}
 	}
@@ -688,21 +685,36 @@ je_scandinavian_freedom_of_movement_act = {
 			global_var:scandinavian_nationalism_failure_timer >= 260			#5*52 weeks
 		}
 	}
+	immediate = {
+		scope:journal_entry = {
+			random_scope_je_involved = {
+				save_scope_as = random_scandi_scope
+			}
+		}
+	}
+	on_weekly_pulse = {
+		effect = {
+			# Ensure that the scope always points to a member of the JE
+			scope:journal_entry = {
+				random_scope_je_involved = {
+					save_scope_as = random_scandi_scope
+				}
+			}
+		}
+	}
 	complete = {
 		OR = {
-			any_country = {
-				filter = {
-					has_journal_entry = je_scandinavian_freedom_of_movement_act
+			scope:journal_entry = {
+				any_scope_je_involved = {
+					count = all
+					has_law_or_variant = law_type:law_no_migration_controls
 				}
-				count = all
-				this.market = root.market
 			}
-			any_country = {
-				filter = {
-					has_journal_entry = je_scandinavian_freedom_of_movement_act
+			scope:journal_entry = {
+				any_scope_je_involved = {
+					count = all
+					this.market = scope:random_scandi_scope.market
 				}
-				count = all
-				has_law_or_variant = law_type:law_no_migration_controls
 			}
 		}
 		# This part must be active for 5 years before it can conclude
@@ -764,22 +776,16 @@ je_scandinavian_mutual_defense_pact = {
 	}
 	complete = {
 		OR = {
-			AND = {
-				any_country = {
-					# 1 (one) relevant Scandi country must be independent
-					filter = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-					}
+			je:je_scandinavian_nationalism = {
+				# 1 (one) relevant Scandi country must be independent
+				any_scope_je_involved = {
 					count = 1
 					is_subject = no
 				}
-				any_country = {
-					# And ALL relevant Scandi SUBJECTS must have a Scandi overlord 
-					filter = {
-						is_involved_in_journal_entry = je_scandinavian_nationalism
-						is_subject = yes
-					}
+				# And ALL relevant Scandi SUBJECTS must have a Scandi overlord 
+				any_scope_je_involved = {
 					count = all
+					is_subject = yes
 					overlord = {
 						any_primary_culture = {
 							has_discrimination_trait = heritage_nordic
@@ -787,33 +793,33 @@ je_scandinavian_mutual_defense_pact = {
 					}
 				}
 			}
-			any_country = {
+			je:je_scandinavian_nationalism = {
 				# Or all relevant Scandi countries have multilateral alliances researched
-				filter = {
-					is_involved_in_journal_entry = je_scandinavian_nationalism
+				any_scope_je_involved = {
+					count = all
+					has_technology_researched = multilateral_alliances
 				}
-				count = all
-				has_technology_researched = multilateral_alliances
 			}
 		}
 	}
-	on_complete = {
+	on_complete_all_involved = {
 		if = {
 			# Only for independent countries
 			limit = {
 				is_subject = no
 			}
 			set_variable = scandinavian_mutual_defense_pact_completed
+			save_scope_as = first_country_scope
 			every_country = {
 				# Create defensive pacts between all relevant Scandinavian countries
 				limit = {
 					is_involved_in_journal_entry = je_scandinavian_nationalism
 					is_subject = no
-					this != root
+					this != scope:first_country_scope				# Avoid self-treaties
 					NOT = {
 						# Avoid double treaties
 						any_scope_treaty = {
-							binds = root
+							binds = scope:first_country_scope
 							any_scope_article = {
 								has_type = defensive_pact
 							}
@@ -823,7 +829,7 @@ je_scandinavian_mutual_defense_pact = {
 				save_scope_as = second_country_scope
 				create_treaty = {
 					name = treaty_name_scandinavian_mutual_defense_pact
-					first_country = root
+					first_country = scope:first_country_scope
 					second_country = scope:second_country_scope
 					is_draft = no
 					binding_period = {
@@ -882,7 +888,7 @@ je_scandinavian_union = {
 			global_var:scandinavian_nationalism_progress >= 1000
 		}
 	}
-	immediate = {
+	immediate_all_involved = {
 		set_variable = je_scandinavian_union_voting_nothing
 	}
 	complete = {
@@ -899,24 +905,21 @@ je_scandinavian_union = {
 			global_var:scandinavian_nationalism_progress >= 1000
 		}
 		# Every country has voted the same way
-		OR = {
-			any_country = {
-				filter = {
-					has_journal_entry = je_scandinavian_union
+			scope:journal_entry = {
+				OR = {
+					any_scope_je_involved = {
+						count = all
+						has_variable = je_scandinavian_union_voting_decentralization
+					}
+					any_scope_je_involved = {
+						count = all
+						has_variable = je_scandinavian_union_voting_centralization
+					}
 				}
-				count = all
-				has_variable = je_scandinavian_union_voting_decentralization
-			}
-			any_country = {
-				filter = {
-					has_journal_entry = je_scandinavian_union
-				}
-				count = all
-				has_variable = je_scandinavian_union_voting_centralization
 			}
 		}
 	}
-	on_complete = {
+	on_complete_all_involved = {
 		effect = {
 			custom_tooltip = {
 				text = scandinavia_unifies_tt
@@ -934,7 +937,7 @@ je_scandinavian_union = {
 							any_country = {
 								count = 0
 								is_involved_in_journal_entry = je_scandinavian_nationalism
-								country_rank > root.country_rank
+								country_rank > prev.country_rank
 								is_player = yes
 								is_subject = no
 							}
@@ -945,7 +948,7 @@ je_scandinavian_union = {
 							any_country = {
 								count = 0
 								is_involved_in_journal_entry = je_scandinavian_nationalism
-								country_rank > root.country_rank
+								country_rank > prev.country_rank
 							}
 						}
 					}
@@ -960,7 +963,7 @@ je_scandinavian_union = {
 								is_subject = no
 							}
 							# Make a subject for every other independent country that voted decentralization
-							root = {
+							prev = {
 								create_diplomatic_pact = {
 									country = prev
 									type = puppet
@@ -979,7 +982,7 @@ je_scandinavian_union = {
 							limit = {
 								has_variable = je_scandinavian_union_voting_centralization
 								is_ai = yes
-								this != root
+								this != prev
 								overlord ?= {
 									is_ai = yes
 								}
@@ -998,7 +1001,7 @@ je_scandinavian_union = {
 									}
 								}
 							}
-							root = {
+							prev = {
 								annex_with_incorporation = prev
 							}
 						}
@@ -1007,7 +1010,7 @@ je_scandinavian_union = {
 							limit = {
 								has_variable = je_scandinavian_union_voting_centralization
 								is_ai = no
-								this != root
+								this != prev
 							}
 							# For player countries, just give them an event asking for permission to annex
 							trigger_event = {
@@ -1037,7 +1040,7 @@ je_scandinavian_union = {
 						any_country = {
 							count = 0
 							is_involved_in_journal_entry = je_scandinavian_nationalism
-							country_rank > root.country_rank
+							country_rank > prev.country_rank
 							is_player = yes
 							is_subject = no
 						}
@@ -1048,7 +1051,7 @@ je_scandinavian_union = {
 						any_country = {
 							count = 0
 							is_involved_in_journal_entry = je_scandinavian_nationalism
-							country_rank > root.country_rank
+							country_rank > prev.country_rank
 						}
 					}
 				}
