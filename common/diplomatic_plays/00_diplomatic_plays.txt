@@ -1318,3 +1318,55 @@ dp_hungarian_revolution = {
 	
 	on_war_end = {}
 }
+
+dp_restore_union = {
+	war_goal = restore_union
+	
+	texture = "gfx/interface/icons/war_goals/enforce_treaty_article.dds"
+	
+	selectable_in_lens = {
+		has_law = law_type:law_monarchy
+		has_variable = por_seeking_restore_union_var
+	}
+	
+	possible = {
+		aggressive_diplomatic_plays_permitted = yes
+	}
+	
+	ai_acceptance_max = 90
+	
+	on_weekly_pulse = {}
+	
+	on_war_begins = {
+		if = {
+			limit = {
+				any_scope_play_involved = {
+					has_variable = por_seeking_restore_union_var
+				}
+			}
+			random_scope_play_involved = {	# This is typically a temp variable. Starting this war makes it permanent for the duration of the war.
+				limit = {
+					has_variable = por_seeking_restore_union_var
+				}
+				remove_variable = por_seeking_restore_union_var
+				set_variable = por_seeking_restore_union_var
+			}
+		}
+	}
+	
+	on_war_end = {
+		if = {
+			limit = {
+				any_scope_play_involved = {
+					has_variable = por_seeking_restore_union_var
+				}
+			}
+			random_scope_play_involved = {	# Removes variable upon war conclusion, regardless of outcome
+				limit = {
+					has_variable = por_seeking_restore_union_var
+				}
+				remove_variable = por_seeking_restore_union_var
+			}
+		}
+	}
+}
