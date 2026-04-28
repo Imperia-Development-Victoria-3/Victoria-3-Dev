@@ -41,15 +41,29 @@ raj.1 = {
 		name = raj.1.a
 		default_option = yes
 		custom_tooltip = activate_british_raj
-		if = {
-			limit = {
-				has_diplomatic_pact = {
-					who = c:BIC
-					type = chartered_company
+		hidden_effect = {
+			# Remove the East India Company's ownership of the BIC country and then disband the company
+			scope:company_country ?= {
+				owning_company ?= {
+					if = {
+						limit = {
+							is_company_type = company_type:company_east_india_company
+						}
+						remove_owned_country = scope:company_country
+						owner ?= {
+							remove_company = prev.type
+						}
+					}
 				}
-			}
-			c:BIC ?= {
+				set_country_type = colonial
 				decrease_autonomy = yes
+			}
+		}
+		show_as_tooltip = {
+			remove_company = company_type:company_east_india_company
+			create_diplomatic_pact = {
+				country = c:BIC
+				type = colony
 			}
 		}
 		c:BIC ?= {
@@ -107,6 +121,7 @@ raj.1 = {
 				create_character = {
 					template = BIC_charles_canning
 					on_created = {
+						set_variable = { name = colonial_governor_term value = 0 }
 						set_as_interest_group_leader = yes
 						set_character_as_ruler = yes
 					}
@@ -123,6 +138,7 @@ raj.1 = {
 				create_character = {
 					template = BIC_john_lawrence
 					on_created = {
+						set_variable = { name = colonial_governor_term value = 0 }
 						set_as_interest_group_leader = yes
 						set_character_as_ruler = yes
 					}
@@ -133,6 +149,7 @@ raj.1 = {
 					culture = cu:british
 					interest_group = ig:ig_industrialists
 					on_created = {
+						set_variable = { name = colonial_governor_term value = 0 }
 						set_as_interest_group_leader = yes
 						set_character_as_ruler = yes
 					}
@@ -662,23 +679,6 @@ raj.7 = {
 		default_option = yes
 		custom_tooltip = activate_british_raj
 		custom_tooltip = doctrine_of_lapse_disabled
-		
-		hidden_effect = {
-			# Remove the East India Company's ownership of the BIC country and then disband the company
-			scope:company_country = {
-				owning_company ?= {
-					if = {
-						limit = {
-							is_company_type = company_type:company_east_india_company
-						}
-						remove_owned_country = scope:company_country
-						owner ?= {
-							remove_company = prev.type
-						}
-					}
-				}
-			}
-		}
 		
 		show_as_tooltip = {
 			c:GBR ?= {

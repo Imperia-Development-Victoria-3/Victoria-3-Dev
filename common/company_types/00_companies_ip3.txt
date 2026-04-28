@@ -20,7 +20,7 @@ company_united_tobacco_factories = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 		has_dlc_feature = ip3_content
 	}
 	
@@ -45,6 +45,27 @@ company_united_tobacco_factories = {
 		building_trade_center_throughput_add = 0.05
 		interest_group_ig_industrialists_pop_attraction_mult = 0.2
 		interest_group_ig_industrialists_approval_add = 3
+	}
+	
+	ai_will_do = {
+		has_technology_researched = corporate_charters
+		any_scope_state = {
+			state_region = {
+				is_homeland = cu:bulgarian
+			}
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tobacco_plantation = {
+			level = 5
+			state_trigger = {
+				state_region = {
+					is_homeland = cu:bulgarian
+				}
+				is_incorporated = yes
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -74,10 +95,18 @@ company_mate_gavrilovic = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_CROATIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -96,6 +125,22 @@ company_mate_gavrilovic = {
 		interest_group_ig_petty_bourgeoisie_approval_add = 2
 	}
 	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_CROATIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_food_industry = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_CROATIA
+			}
+		}
+	}
+	
 	ai_weight = {
 		value = 3	# Higher base value for flavored companies
 	}
@@ -109,20 +154,28 @@ company_stabilimento_tecnico_di_fiume = {
 	flavored_company = yes
 	
 	building_types = {
-		building_motor_industry
-		building_military_shipyard
+		building_shipyard
+		building_explosives_factory
 	}
 	
 	extension_building_types = {
-		building_shipyard
+		building_steel_mill
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_DALMATIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		has_technology_researched = self_propelled_torpedoes
@@ -130,14 +183,34 @@ company_stabilimento_tecnico_di_fiume = {
 			state_region = s:STATE_DALMATIA
 			is_incorporated = yes
 			any_scope_building = {
-				is_building_type = building_motor_industry
+				OR = {
+					is_building_type = building_shipyard
+					is_building_type = building_explosives_factory
+				}
 				level >= 5
 			}
 		}
 	}
 	
 	prosperity_modifier = {
-		unit_navy_offense_mult = 0.15	# Whitehead torpedoes
+		ship_hull_damage_mult = 0.075	# Whitehead torpedoes
+	}
+	
+	ai_will_do = {
+		has_technology_researched = self_propelled_torpedoes
+		any_scope_state = {
+			state_region = s:STATE_DALMATIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_shipyard = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_DALMATIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -167,11 +240,19 @@ company_klanicko_drustvo = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_WESTERN_SERBIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -190,6 +271,28 @@ company_klanicko_drustvo = {
 	prosperity_modifier = {
 		building_livestock_ranch_throughput_add = 0.1
 		building_synthetics_plant_throughput_add = 0.05
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_WESTERN_SERBIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_livestock_ranch = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_WESTERN_SERBIA
+			}
+		}
+		building_food_industry = {
+			level = 1
+			state_trigger = {
+				state_region = s:STATE_WESTERN_SERBIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -214,10 +317,18 @@ company_jakub_klein = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_SLOVAKIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -236,6 +347,28 @@ company_jakub_klein = {
 	prosperity_modifier = {
 		building_paper_mill_throughput_add = 0.1
 		building_group_bg_agriculture_throughput_add = 0.05
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_SLOVAKIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_logging_camp = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_SLOVAKIA
+			}
+		}
+		building_paper_mill = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_SLOVAKIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -264,11 +397,19 @@ company_elso_budapesti_gozmalom = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_balkans
+		has_interest_marker_in_region = sr:region_balkans
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_CENTRAL_HUNGARY = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -292,6 +433,29 @@ company_elso_budapesti_gozmalom = {
 	prosperity_modifier = {
 		building_wheat_farm_throughput_add = 0.15
 		state_trade_advantage_mult = 0.05
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_CENTRAL_HUNGARY
+			has_state_trait = state_trait_pannonian_plain
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_wheat_farm = {
+			level = 5
+			state_trigger = {
+				has_state_trait = state_trait_pannonian_plain
+			}
+		}
+		building_food_industry = {
+			level = 1
+			state_trigger = {
+				state_region = s:STATE_CENTRAL_HUNGARY
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -318,11 +482,20 @@ company_witkowitzer_bergbau_und_huttengewerkschaft = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		has_interest_marker_in_region = sr:region_central_europe
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			any_scope_state = {
+				OR = {
+					state_region = s:STATE_MORAVIA
+					state_region = s:STATE_UPPER_SILESIA
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -344,6 +517,37 @@ company_witkowitzer_bergbau_und_huttengewerkschaft = {
 	prosperity_modifier = {
 		building_construction_sector_throughput_add = 0.05
 		building_power_plant_throughput_add = 0.1
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			OR = {
+				state_region = s:STATE_MORAVIA
+				state_region = s:STATE_UPPER_SILESIA
+			}
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_coal_mine = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MORAVIA
+					state_region = s:STATE_UPPER_SILESIA
+				}
+			}
+		}
+		building_iron_mine = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MORAVIA
+					state_region = s:STATE_UPPER_SILESIA
+				}
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -368,10 +572,18 @@ company_oesterreichisch_alpine_montangesellschaft = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		has_interest_marker_in_region = sr:region_central_europe
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_STYRIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -390,6 +602,28 @@ company_oesterreichisch_alpine_montangesellschaft = {
 	prosperity_modifier = {
 		building_coal_mine_throughput_add = 0.1
 		building_railway_throughput_add = 0.05
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_STYRIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_steel_mill = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_STYRIA
+			}
+		}
+		building_iron_mine = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_STYRIA
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -418,11 +652,19 @@ company_getzner_mutter = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		has_interest_marker_in_region = sr:region_central_europe
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_TYROL = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -441,6 +683,28 @@ company_getzner_mutter = {
 	prosperity_modifier = {
 		building_synthetics_plant_throughput_add = 0.1
 		interest_group_ig_petty_bourgeoisie_approval_add = 2
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_TYROL
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_textile_mill = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_TYROL
+			}
+		}
+		building_power_plant = {
+			level = 1
+			state_trigger = {
+				state_region = s:STATE_TYROL
+			}
+		}
 	}
 	
 	ai_weight = {
@@ -469,11 +733,19 @@ company_erste_brunner = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_south_germany
+		has_interest_marker_in_region = sr:region_central_europe
 		has_dlc_feature = ip3_content
 	}
 	
-	attainable = {}
+	attainable = {
+		hidden_trigger = {	# Hide attainable if it's always fulfilled by possible
+			s:STATE_MORAVIA = {
+				any_scope_state = {
+					owner = root
+				}
+			}
+		}
+	}
 	
 	possible = {
 		any_scope_state = {
@@ -492,6 +764,28 @@ company_erste_brunner = {
 	prosperity_modifier = {
 		building_textile_mill_throughput_add = 0.1
 		building_power_plant_throughput_add = 0.1
+	}
+	
+	ai_will_do = {
+		any_scope_state = {
+			state_region = s:STATE_MORAVIA
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_tooling_workshop = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_MORAVIA
+			}
+		}
+		building_motor_industry = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_MORAVIA
+			}
+		}
 	}
 	
 	ai_weight = {

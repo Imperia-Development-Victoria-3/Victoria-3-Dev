@@ -27,13 +27,13 @@ industrial_accident_events.1 = {
 		}
 		any_scope_character = {
 			AND = {	# can be a politician but can't be, like, Queen Victoria
-				has_role = politician
-				is_ruler = no
+				has_role_of_type = politician
+				is_ruler_of_own_country = no
+				character_is_valid_for_events = yes
 				is_busy = no
 				is_immortal = no
-				age >= 18	# must be an adult
 			}
-			interest_group = {
+			interest_group ?= {
 				is_insurrectionary = no
 				ig_counts_as_marginal = no
 				OR = {
@@ -63,12 +63,13 @@ industrial_accident_events.1 = {
 		random_scope_character = {
 			limit = {
 				AND = {	# can be a politician but can't be, like, Queen Victoria
-					has_role = politician
-					is_ruler = no
+					has_role_of_type = politician
+					is_ruler_of_own_country = no
+					character_is_valid_for_events = yes
 					is_busy = no
 					is_immortal = no
 				}
-				interest_group = {
+				interest_group ?= {
 					is_insurrectionary = no
 					ig_counts_as_marginal = no
 					OR = {
@@ -82,7 +83,7 @@ industrial_accident_events.1 = {
 			save_scope_as = guilty_factory_owner
 		}
 		scope:guilty_factory_owner = {
-			interest_group = {
+			interest_group ?= {
 				save_scope_as = guilty_factory_owner_ig
 			}
 		}
@@ -125,7 +126,7 @@ industrial_accident_events.1 = {
 		custom_tooltip = industrial_accident_events.1.b.tt
 		hidden_effect = {
 			scope:guilty_factory_owner = {
-				kill_character = yes
+				retire_character = yes
 			}
 		}
 		scope:guilty_factory_owner_ig = {

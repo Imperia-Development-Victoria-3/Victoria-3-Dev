@@ -17,7 +17,7 @@ company_bengal_coal_company = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bengal
+		has_interest_marker_in_region = sr:region_north_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -95,7 +95,7 @@ company_bombay_dyeing_company = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		has_interest_marker_in_region = sr:region_south_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -175,7 +175,7 @@ company_david_sassoon = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		has_interest_marker_in_region = sr:region_south_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -197,13 +197,7 @@ company_david_sassoon = {
 			}
 		}
 		any_scope_state = {
-			OR = {
-				region = sr:region_bombay
-				region = sr:region_madras
-				region = sr:region_bengal
-				region = sr:region_punjab
-				region = sr:region_central_india
-			}
+			is_in_geographic_region = geographic_region_india
 			any_scope_building = {
 				is_building_type = building_opium_plantation
 				level >= 5
@@ -267,7 +261,12 @@ company_bombay_burmah_trading_corporation = {
 	}
 	
 	potential = {
+<<<<<<< HEAD
 		has_interest_marker_in_region = region_indochina
+=======
+		has_interest_marker_in_region = sr:region_south_india
+		has_interest_marker_in_region = sr:region_indochina
+>>>>>>> 81bbf203d (V1.13.0)
 	}
 	
 	attainable = {
@@ -279,6 +278,37 @@ company_bombay_burmah_trading_corporation = {
 	}
 	
 	possible = {
+<<<<<<< HEAD
+=======
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_BOMBAY
+				is_incorporated = yes
+			}
+			s:STATE_BOMBAY ?= {
+				any_scope_state = {
+					owner = {
+						OR = {
+							any_scope_treaty = {
+								binds = ROOT
+								any_scope_article = {
+									has_type = trade_privilege
+								}
+							}
+							top_overlord ?= {
+								any_scope_treaty = {
+									binds = ROOT
+									any_scope_article = {
+										has_type = trade_privilege
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+>>>>>>> 81bbf203d (V1.13.0)
 		any_scope_state = {
 			has_state_trait = state_trait_burmese_teak
 			any_scope_building = {
@@ -295,9 +325,29 @@ company_bombay_burmah_trading_corporation = {
 	}
 	
 	ai_will_do = {
+<<<<<<< HEAD
 		any_scope_state = {
 			has_state_trait = state_trait_burmese_teak
 			is_incorporated = yes
+=======
+		OR = {
+			any_scope_state = {
+				state_region = s:STATE_BOMBAY
+				is_incorporated = yes
+			}
+			s:STATE_BOMBAY ?= {
+				any_scope_state = {
+					owner = {
+						any_scope_treaty = {
+							binds = root
+							any_scope_article = {
+								has_type = trade_privilege
+							}
+						}
+					}
+				}
+			}
+>>>>>>> 81bbf203d (V1.13.0)
 		}
 	}
 	
@@ -345,7 +395,7 @@ company_madura_mills = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_madras
+		has_interest_marker_in_region = sr:region_south_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -418,7 +468,7 @@ company_assam_company = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bengal
+		has_interest_marker_in_region = sr:region_north_india
 	}
 	
 	attainable = {
@@ -477,15 +527,16 @@ company_wadia_shipbuilders = {
 	
 	building_types = {
 		building_shipyard
-		building_military_shipyard
+		building_artillery_foundry
 	}
 	
 	extension_building_types = {
+		building_explosives_factory
 		building_motor_industry
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		has_interest_marker_in_region = sr:region_south_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -502,10 +553,7 @@ company_wadia_shipbuilders = {
 			state_region = s:STATE_BOMBAY
 			is_incorporated = yes
 			any_scope_building = {
-				OR = {
-					is_building_type = building_shipyard
-					is_building_type = building_military_shipyard
-				}
+				is_building_type = building_shipyard
 				level >= 5
 			}
 		}
@@ -514,7 +562,7 @@ company_wadia_shipbuilders = {
 	
 	prosperity_modifier = {
 		interest_group_ig_petty_bourgeoisie_pop_attraction_mult = 0.1
-		country_convoys_capacity_mult = 0.1
+		country_ship_group_supply_ships_construction_efficiency_add = 0.1
 		state_radicalism_increases_violent_hostility_mult = -0.05
 		state_radicalism_increases_cultural_erasure_mult = -0.05
 		state_radicalism_increases_open_prejudice_mult = -0.05
@@ -530,12 +578,6 @@ company_wadia_shipbuilders = {
 	
 	ai_construction_targets = {
 		building_shipyard = {
-			level = 5
-			state_trigger = {
-				state_region = s:STATE_BOMBAY
-			}
-		}
-		building_military_shipyard = {
 			level = 5
 			state_trigger = {
 				state_region = s:STATE_BOMBAY
@@ -576,7 +618,7 @@ company_steel_brothers = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_indochina
+		has_interest_marker_in_region = sr:region_indochina
 		has_dlc_feature = ip2_content
 	}
 	
@@ -669,7 +711,7 @@ company_ralli_brothers = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bombay
+		has_interest_marker_in_region = sr:region_south_india
 		has_dlc_feature = ip2_content
 	}
 	
@@ -698,13 +740,7 @@ company_ralli_brothers = {
 			}
 		}
 		any_scope_state = {
-			OR = {
-				region = sr:region_bombay
-				region = sr:region_madras
-				region = sr:region_bengal
-				region = sr:region_punjab
-				region = sr:region_central_india
-			}
+			is_in_geographic_region = geographic_region_india
 			OR = {
 				any_scope_building = {
 					is_building_type = building_rice_farm
@@ -737,13 +773,7 @@ company_ralli_brothers = {
 			}
 		}
 		any_scope_state = {
-			OR = {
-				region = sr:region_bombay
-				region = sr:region_madras
-				region = sr:region_bengal
-				region = sr:region_punjab
-				region = sr:region_central_india
-			}
+			is_in_geographic_region = geographic_region_india
 			count >= 4
 		}
 	}
@@ -752,25 +782,13 @@ company_ralli_brothers = {
 		building_rice_farm = {
 			level = 5
 			state_trigger = {
-				OR = {
-					region = sr:region_bombay
-					region = sr:region_madras
-					region = sr:region_bengal
-					region = sr:region_punjab
-					region = sr:region_central_india
-				}
+				is_in_geographic_region = geographic_region_india
 			}
 		}
 		building_wheat_farm = {
 			level = 5
 			state_trigger = {
-				OR = {
-					region = sr:region_bombay
-					region = sr:region_madras
-					region = sr:region_bengal
-					region = sr:region_punjab
-					region = sr:region_central_india
-				}
+				is_in_geographic_region = geographic_region_india
 			}
 		}
 	}
@@ -799,7 +817,7 @@ company_calcutta_electric = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_bengal
+		has_interest_marker_in_region = sr:region_north_india
 	}
 	
 	attainable = {

@@ -5,11 +5,15 @@
 	relations_progress_per_day = 0.5
 	relations_improvement_max = 20
 	
+	max_target_involvement = 1000
+	target_involvement_applies_to = source_country
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/trade_agreement_treaties.dds"
 	
 	flags = {
 		is_trade_privilege
 		can_be_enforced
+		ai_consider_threaten_naval_hostilities
 		can_be_renegotiated
 		giftable
 		friendly
@@ -31,9 +35,9 @@
 	}
 	
 	possible = {
-		NOT = { has_law = law_type:law_isolationism }
+		country_has_isolationism = no
 		scope:other_country = {
-			NOT = { has_law = law_type:law_isolationism }
+			country_has_isolationism = no
 		}
 	}
 	
@@ -46,7 +50,7 @@
 					source_country = {
 						OR = {
 							is_junior_in_customs_union = yes
-							has_law = law_type:law_isolationism
+							country_has_isolationism = yes
 						}
 					}
 				}
@@ -216,6 +220,19 @@
 							}
 						}
 						value = -50
+					}
+				}
+				
+				if = {
+					limit = {
+						c:JAP ?= scope:source_country
+						scope:source_country ?= {
+							has_journal_entry = je_meiji_imperial_marriage
+						}
+					}
+					add = {
+						desc = "je_meiji_imperial_marriage"
+						value = -500
 					}
 				}
 			}

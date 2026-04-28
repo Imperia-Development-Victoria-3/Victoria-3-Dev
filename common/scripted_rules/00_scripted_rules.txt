@@ -60,6 +60,13 @@ can_start_diplomatic_plays_against = {
 			is_indirect_subject_of = root
 		}
 	}
+	
+	OR = {
+		highest_overlapping_interest_tier = { target = scope:target_country value >= interest_tier_effect_can_start_diplomatic_plays_min_tier }
+		is_direct_subject_of = scope:target_country
+		scope:target_country = { is_direct_subject_of = root }
+	}
+	
 	NOT = {
 		scope:target_country = {
 			has_journal_entry = je_the_first_carlist_war
@@ -93,6 +100,14 @@ can_join_side_in_diplomatic_play = {
 		scope:enemy_country = {
 			is_indirect_subject_of = root
 		}
+	}
+	
+	OR = {
+		highest_overlapping_interest_tier = { target = scope:target_country value >= interest_tier_effect_can_join_diplomatic_plays_min_tier }
+		is_direct_subject_of = scope:enemy_country
+		scope:enemy_country = { is_direct_subject_of = root }
+		is_direct_subject_of = scope:target_country
+		scope:target_country = { is_direct_subject_of = root }
 	}
 }
 
@@ -169,10 +184,55 @@ unlock_power_bloc_formation_principle_slot_4 = {
 can_sign_treaty_with = {
 	scope:other_country = {
 		NOT = { is_country_type = decentralized }
-		is_revolutionary = no
 	}
 	root = {
 		NOT = { is_diplomatic_play_enemy_of = scope:other_country }
 	}
-	has_diplomatic_relevance = scope:other_country
+
+	# TODO PRCAL-41248: Add a new and properly localized trigger
+	#has_diplomatic_relevance = scope:other_country
+	OR = {
+		has_strategic_adjacency = scope:other_country
+		AND = {
+			has_port_country = yes
+			scope:other_country = { has_port_country = yes }
+		}
+		is_in_same_power_bloc = scope:other_country
+	}
+}
+
+# Evaluated when checking if a country can threaten naval hostilities in a treaty
+# root = threatening country
+# scope:other_country = threatened country
+can_threaten_naval_hostilities = {
+	navy_size >= 10
+	
+	custom_tooltip = {
+		text = "THREATEN_NAVAL_HOSTILITIES_NAVY_MUST_BE_STRONGER"
+		naval_combat_power > scope:other_country.naval_combat_power
+	}
+	
+	custom_tooltip = {
+		text = "THREATEN_NAVAL_HOSTILITIES_NOT_LANDLOCKED"
+		scope:other_country = {
+			any_scope_state = {
+				is_coastal = yes
+			}
+		}
+	}
+	
+	"relations(scope:other_country)" < relations_threshold:cordial
+	NOR = {
+		is_diplomatic_play_ally_of = scope:other_country
+		any_scope_treaty = {
+			binds = scope:other_country
+			any_scope_article = {
+				OR = {
+					has_type = alliance
+					has_type = defensive_pact
+					has_type = guarantee_independence
+				}
+			}
+		}
+	}
 }

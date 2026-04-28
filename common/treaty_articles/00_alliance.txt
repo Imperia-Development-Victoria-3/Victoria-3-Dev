@@ -5,6 +5,9 @@
 	relations_progress_per_day = 1.5
 	relations_improvement_max = 80
 	
+	max_target_involvement = 3000
+	target_involvement_applies_to = mutual
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/alliance_treaties.dds"
 	
 	flags = {
@@ -32,7 +35,16 @@
 	
 	visible = {}
 	
-	possible = {}
+	possible = {
+		scope:other_country = {
+			save_temporary_scope_as = target_country
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_AMICABLE_OR_GREATER
+			scope:target_country.relations:root >= relations_threshold:amicable
+		}
+		highest_overlapping_interest_tier = { target = scope:target_country value >= interest_tier_effect_can_sign_alliance_min_tier }
+	}
 	
 	requirement_to_maintain = {
 		trigger = {
@@ -348,7 +360,7 @@
 				limit = {
 					OR = {
 						is_country_type = recognized
-						is_country_type = colonial
+						country_is_colonial_or_company = yes
 					}
 					scope:other_country = {
 						is_country_type = unrecognized
@@ -520,6 +532,17 @@
 						desc = "DIPLOMATIC_ACCEPTANCE_DIFFERENT_POWER_BLOC"
 						value = -25
 					}
+				}
+			}
+
+			# Special anti-Opium Wars cheese - block any alliance/defensive pact/guarantee deals before the JE fires
+			if = {
+				limit = {
+					ai_opium_dealer_no_alliance_trigger = yes
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_OPIUM_DEALER"
+					add = -1000
 				}
 			}
 			

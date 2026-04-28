@@ -21,7 +21,7 @@ bic_breakup.1 = {
 		}
 	}
 	immediate = {
-		cu:british = {
+		random_primary_culture = {
 			save_scope_as = british_culture
 		}
 		cu:scottish = {
@@ -64,7 +64,18 @@ bic_breakup.1 = {
 			activate_law = law_type:law_oligarchy
 		}
 		hidden_effect = {
-			remove_primary_culture = cu:british
+			every_primary_culture = {
+				save_temporary_scope_as = primary_culture_to_remove
+				PREV ?= {	# scope:target
+					remove_primary_culture = scope:primary_culture_to_remove
+					every_scope_character = {
+						limit = {
+							scope:primary_culture_to_remove ?= culture
+						}
+						retire_character = yes
+					}
+				}
+			}
 			add_primary_culture = cu:bengali
 			set_state_religion = rel:sunni
 			india_independence_ig_effects = yes
@@ -93,16 +104,6 @@ bic_breakup.1 = {
 				remove_modifier = modifier_indian_imperial_police
 			}
 			recalculate_pop_ig_support = yes
-			every_scope_character = {
-				limit = {
-					OR = {
-						culture = cu:british
-						culture = cu:scottish
-						culture = cu:irish
-					}
-				}
-				kill_character = yes
-			}
 		}
 	}
 	option = {
@@ -117,7 +118,18 @@ bic_breakup.1 = {
 		change_tag = BHT
 		activate_law = law_type:law_presidential_republic
 		hidden_effect = {
-			remove_primary_culture = cu:british
+			every_primary_culture = {
+				save_temporary_scope_as = primary_culture_to_remove
+				PREV ?= {	# scope:target
+					remove_primary_culture = scope:primary_culture_to_remove
+					every_scope_character = {
+						limit = {
+							scope:primary_culture_to_remove ?= culture
+						}
+						retire_character = yes
+					}
+				}
+			}
 			add_primary_culture = cu:bengali
 			add_primary_culture = cu:assamese
 			add_primary_culture = cu:avadhi
@@ -186,17 +198,6 @@ bic_breakup.1 = {
 				remove_modifier = modifier_indian_imperial_police
 			}
 			recalculate_pop_ig_support = yes
-			every_scope_character = {
-				limit = {
-					OR = {
-						culture = cu:british
-						culture = cu:scottish
-						culture = cu:irish
-					}
-					is_immortal = no
-				}
-				kill_character = yes
-			}
 		}
 	}
 	option = {

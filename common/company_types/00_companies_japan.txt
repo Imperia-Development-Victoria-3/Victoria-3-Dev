@@ -5,19 +5,19 @@ company_mitsui = {
 	
 	flavored_company = yes
 	
-	preferred_headquarters = { STATE_KANSAI }
+	preferred_headquarters = { STATE_KANTO }
 	
 	building_types = {
 		building_textile_mill
 		building_silk_plantation
-		building_lead_mine
+		building_dye_plantation
 	}
 	
 	extension_building_types = {
-		building_shipyard
-		building_port
-		building_chemical_plant
-		building_iron_mine
+		building_tea_plantation
+		building_food_industry
+		building_glassworks
+		building_coal_mine
 	}
 	
 	possible_prestige_goods = {
@@ -25,7 +25,7 @@ company_mitsui = {
 	}
 	
 	potential = {
-		has_interest_marker_in_region = region_japan
+		has_interest_marker_in_region = sr:region_northeast_asia
 	}
 	
 	attainable = {
@@ -38,10 +38,6 @@ company_mitsui = {
 	
 	possible = {
 		has_technology_researched = cotton_gin
-		custom_tooltip = {
-			text = is_meiji_japan
-			has_variable = meiji_restoration_complete
-		}
 		any_scope_state = {
 			state_region = s:STATE_KANSAI
 			is_incorporated = yes
@@ -53,15 +49,16 @@ company_mitsui = {
 	}
 	
 	prosperity_modifier = {
-		interest_group_ig_industrialists_pol_str_mult = 0.2
-		building_iron_mine_throughput_add = 0.1
+		interest_group_ig_industrialists_pol_str_mult = 0.1
+		country_production_tech_research_speed_mult = 0.05
+		state_trade_advantage_mult = 0.05
 	}
 	
 	ai_will_do = {
 		has_technology_researched = cotton_gin
 		custom_tooltip = {
 			text = is_meiji_japan
-			has_variable = meiji_restoration_complete
+			has_variable = japan_restoration_complete
 		}
 		any_scope_state = {
 			state_region = s:STATE_KANSAI
@@ -74,6 +71,84 @@ company_mitsui = {
 			level = 5
 			state_trigger = {
 				state_region = s:STATE_KANSAI
+			}
+		}
+	}
+	
+	ai_weight = {
+		value = 3	# Higher base value for flavored companies
+	}
+}
+
+
+# Mitsubishi
+company_mitsubishi = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_mitsubishi.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	
+	flavored_company = yes
+	
+	preferred_headquarters = { STATE_KANTO }
+	
+	building_types = {
+		building_shipyard
+		building_iron_mine
+		building_paper_mill
+	}
+	
+	extension_building_types = {
+		building_coal_mine
+		building_steel_mill
+		building_motor_industry
+		building_artillery_foundry
+	}
+	
+	possible_prestige_goods = {
+		prestige_good_washi_paper
+	}
+	
+	potential = {
+		has_interest_marker_in_region = sr:region_northeast_asia
+	}
+	
+	possible = {
+		has_technology_researched = ironclad_tech
+		custom_tooltip = {
+			text = is_meiji_japan
+			has_variable = japan_restoration_complete
+		}
+		any_scope_state = {
+			state_region = s:STATE_KYUSHU
+			is_incorporated = yes
+			any_scope_building = {
+				is_building_type = building_shipyard
+				level >= 5
+			}
+		}
+	}
+	
+	prosperity_modifier = {
+		interest_group_ig_industrialists_pol_str_mult = 0.1
+		building_automotive_industry_throughput_add = 0.1
+	}
+	
+	ai_will_do = {
+		has_technology_researched = ironclad_tech
+		custom_tooltip = {
+			text = is_meiji_japan
+			has_variable = japan_restoration_complete
+		}
+		any_scope_state = {
+			state_region = s:STATE_KYUSHU
+			is_incorporated = yes
+		}
+	}
+	
+	ai_construction_targets = {
+		building_shipyard = {
+			level = 5
+			state_trigger = {
+				state_region = s:STATE_KYUSHU
 			}
 		}
 	}
@@ -115,11 +190,11 @@ company_mantetsu = {
 		has_technology_researched = railways
 		custom_tooltip = {
 			text = is_meiji_japan
-			has_variable = meiji_restoration_complete
+			has_variable = japan_restoration_complete
 		}
 		any_scope_state = {
 			OR = {
-				region = sr:region_manchuria
+				region = sr:region_northeast_asia
 				region = sr:region_north_china
 			}
 			any_scope_building = {
@@ -140,11 +215,11 @@ company_mantetsu = {
 		has_technology_researched = railways
 		custom_tooltip = {
 			text = is_meiji_japan
-			has_variable = meiji_restoration_complete
+			has_variable = japan_restoration_complete
 		}
 		any_scope_state = {
 			OR = {
-				region = sr:region_manchuria
+				region = sr:region_northeast_asia
 				region = sr:region_north_china
 			}
 		}
@@ -155,7 +230,7 @@ company_mantetsu = {
 			level = 5
 			state_trigger = {
 				OR = {
-					region = sr:region_manchuria
+					region = sr:region_northeast_asia
 					region = sr:region_north_china
 				}
 			}
@@ -164,6 +239,7 @@ company_mantetsu = {
 	
 	ai_weight = {
 		value = 3	# Higher base value for flavored companies
+<<<<<<< HEAD
 	}
 }
 
@@ -211,45 +287,18 @@ company_mitsubishi = {
 				OR = {
 					is_building_type = building_paper_mill
 					is_building_type = building_military_shipyard
+=======
+		if = {
+			limit = {
+				has_journal_entry = je_colonize_korea
+				NOT = {
+					any_company = {
+						is_company_type = company_type:company_oriental_development_company	# Only one needed
+					}
+>>>>>>> 81bbf203d (V1.13.0)
 				}
-				level >= 5
 			}
+			add = 6
 		}
-	}
-	
-	prosperity_modifier = {
-		building_automotive_industry_throughput_add = 0.1
-		interest_group_ig_industrialists_approval_add = 2
-	}
-	
-	ai_will_do = {
-		has_technology_researched = ironclad_tech
-		custom_tooltip = {
-			text = is_meiji_japan
-			has_variable = meiji_restoration_complete
-		}
-		any_scope_state = {
-			state_region = s:STATE_CHUGOKU
-			is_incorporated = yes
-		}
-	}
-	
-	ai_construction_targets = {
-		building_paper_mill = {
-			level = 5
-			state_trigger = {
-				state_region = s:STATE_CHUGOKU
-			}
-		}
-		building_military_shipyard = {
-			level = 5
-			state_trigger = {
-				state_region = s:STATE_CHUGOKU
-			}
-		}
-	}
-	
-	ai_weight = {
-		value = 3	# Higher base value for flavored companies
 	}
 }

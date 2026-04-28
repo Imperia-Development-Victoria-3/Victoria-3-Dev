@@ -1,7 +1,12 @@
 ﻿law_no_home_affairs = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/no_home_affairs.dds"
+<<<<<<< HEAD
 	progressiveness = 0
+=======
+	
+	progressiveness = -25
+>>>>>>> 81bbf203d (V1.13.0)
 
 	# AI shouldn't try to abolish institutions
 	ai_will_do = {
@@ -153,6 +158,7 @@ law_inquisition = {
 law_secret_police = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/secret_police.dds"
+<<<<<<< HEAD
 	progressiveness = 25
 	can_impose = {
 		OR = {
@@ -166,6 +172,11 @@ law_secret_police = {
 			can_impose_law_default = yes
 		}
 	}
+=======
+	
+	progressiveness = 0
+	
+>>>>>>> 81bbf203d (V1.13.0)
 	unlocking_technologies = {
 		central_archives
 	}
@@ -276,9 +287,63 @@ law_empowered_gendarmerie = {
 	}
 }
 
+law_shinsengumi = {
+	group = lawgroup_internal_security
+	parent = law_secret_police
+	icon = "gfx/interface/icons/law_icons/shinsengumi.dds"
+	
+	progressiveness = -5
+	
+	unlocking_technologies = {
+		law_enforcement
+	}
+	
+	modifier = {
+		country_officers_pol_str_mult = 0.10
+		country_shopkeepers_pol_str_mult = 0.10
+		country_suppression_attraction_factor = -0.10
+		political_movement_radicalism_add = -0.05
+		country_amenability_add = 3
+		country_coup_resistance_add = 0.75
+	}
+	
+	is_visible = {
+		country_has_primary_culture = cu:japanese
+	}
+	
+	on_enact = {
+		custom_tooltip = unlock_arrange_accident_tt
+	}
+	
+	ai_enact_weight_modifier = {	#Petitions
+		value = 0
+		
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+		
+		if = {
+			limit = {
+				has_journal_entry = je_tenpo_crisis
+				has_variable = ai_tenpo_hardline_agenda
+			}
+			add = 5000
+		}
+		
+		if = {
+			limit = {
+				has_journal_entry = je_meiji_restoration
+			}
+			add = 2500
+		}
+	}
+}
+
 law_guaranteed_liberties = {
 	group = lawgroup_internal_security
 	icon = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+<<<<<<< HEAD
 	progressiveness = 100
 	can_impose = {
 		OR = {
@@ -295,6 +360,11 @@ law_guaranteed_liberties = {
 	unlocking_technologies = {
 		human_rights
 	}
+=======
+	
+	progressiveness = 75
+	
+>>>>>>> 81bbf203d (V1.13.0)
 	unlocking_laws = {
 		law_right_of_assembly
 		law_protected_speech

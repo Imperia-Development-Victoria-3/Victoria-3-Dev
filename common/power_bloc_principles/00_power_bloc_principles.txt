@@ -90,7 +90,14 @@ principle_internal_trade_1 = {
 		# Members get a bonus to Company throughput
 		country_company_throughput_bonus_add = 0.05
 		# More convoy going to the market owner, effect scaling upwards with principle levels
+<<<<<<< HEAD
 		country_convoy_contribution_to_market_owner_add = 0.1
+=======
+		building_port_throughput_add = 0.05
+
+		# Members get a bonus to infrastructure
+		state_infrastructure_mult = 0.1
+>>>>>>> 81bbf203d (V1.13.0)
 	}
 	ai_weight = {
 		value = 200	# Good for trade leagues to have
@@ -118,11 +125,20 @@ principle_internal_trade_2 = {
 	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 	member_modifier = {
+<<<<<<< HEAD
 		country_company_throughput_bonus_add = 0.1
 		country_convoy_contribution_to_market_owner_add = 0.3
 		state_trade_advantage_mult = -0.05
 		# Members get increased tariffs from countries outside the Power Bloc and infrastructure
 		state_infrastructure_mult = 0.05
+=======
+		# Modifiers from previous level(s)
+		state_infrastructure_mult = 0.1
+		building_port_throughput_add = 0.1
+
+		# Company building throughput bonus
+		country_company_throughput_bonus_add = 0.05
+>>>>>>> 81bbf203d (V1.13.0)
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -139,7 +155,13 @@ principle_internal_trade_3 = {
 		country_company_throughput_bonus_add = 0.15
 		country_convoy_contribution_to_market_owner_add = 0.5
 		state_infrastructure_mult = 0.1
+<<<<<<< HEAD
 		state_trade_advantage_mult = -0.1
+=======
+		building_port_throughput_add = 0.1
+		country_company_throughput_bonus_add = 0.05
+
+>>>>>>> 81bbf203d (V1.13.0)
 		# Cheaper port connections
 		country_port_connection_cost_mult = -0.25
 	}
@@ -204,10 +226,16 @@ principle_market_unification_3 = {
 	member_modifier = {
 		country_company_throughput_bonus_add = 0.1
 		state_infrastructure_mult = 0.1
+<<<<<<< HEAD
 		state_trade_capacity_mult = 0.25
 		country_convoy_contribution_to_market_owner_add = 0.35
 		country_port_connection_cost_mult = -0.1
 		state_trade_advantage_mult = -0.1
+=======
+
+		# More convoy going to the market owner
+		country_ship_group_supply_ships_construction_efficiency_add = 0.1
+>>>>>>> 81bbf203d (V1.13.0)
 	}
 	power_bloc_modifier = {
 		# Modifiers from previous level(s)
@@ -1034,7 +1062,7 @@ principle_military_industry_1 = {
 		building_arms_industry_throughput_add = 0.1
 		building_munition_plant_throughput_add = 0.1
 		building_artillery_foundry_throughput_add = 0.1
-		building_military_shipyard_throughput_add = 0.1
+		building_shipyard_throughput_add = 0.1
 	}
 	ai_weight = {
 		value = 100
@@ -1088,8 +1116,15 @@ principle_military_industry_2 = {
 		building_arms_industry_throughput_add = 0.1
 		building_munition_plant_throughput_add = 0.1
 		building_artillery_foundry_throughput_add = 0.1
+<<<<<<< HEAD
 		building_military_shipyard_throughput_add = 0.1
 		country_construction_add = 2.5
+=======
+		building_shipyard_throughput_add = 0.1
+
+		# Members get reduced military goods cost
+		country_military_goods_cost_mult = -0.15
+>>>>>>> 81bbf203d (V1.13.0)
 	}
 	ai_weight = {
 		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
@@ -1099,6 +1134,7 @@ principle_military_industry_2 = {
 principle_military_industry_3 = {
 	icon = "gfx/interface/icons/principles_icons/military_industry.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+<<<<<<< HEAD
 	power_bloc_modifier = {
 		power_bloc_cohesion_add = -10
 	}
@@ -1120,6 +1156,16 @@ principle_military_industry_3 = {
 		building_military_shipyard_throughput_add = 0.15
 		country_construction_add = 5
 		character_supply_route_cost_mult = -0.2
+=======
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		building_automotive_industry_throughput_add = 0.1
+		building_arms_industry_throughput_add = 0.1
+		building_artillery_foundry_throughput_add = 0.1
+		building_shipyard_throughput_add = 0.1
+		country_military_goods_cost_mult = -0.15
+>>>>>>> 81bbf203d (V1.13.0)
 
 		# Members get an unique mobilization option mechanic
 	}
@@ -1464,7 +1510,7 @@ principle_freedom_of_movement_1 = {
 			limit = {
 				OR = {
 					is_in_geographic_region = geographic_region_north_america
-					is_in_geographic_region = geographic_region_central_america
+					is_in_geographic_region = geographic_region_central_america_old
 					is_in_geographic_region = geographic_region_south_america
 				}
 			}
@@ -2053,6 +2099,81 @@ principle_shared_canon_3 = {
 
 		# Adds full acceptance radicalism decrease
 		country_radicalism_increases_full_acceptance_mult = -0.10
+	}
+	
+	ai_weight = {
+		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+### Navy
+
+principle_navy_1 = {
+	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+	
+	visible = {
+		has_dlc_feature = ep2_content
+	}
+	
+	member_modifier = {
+		# Increase interest gain from fleets
+		ship_interest_gain_mult = 0.1
+		country_flagship_interest_gain_mult = 0.1
+	}
+	
+	ai_weight = {
+		value = 100
+		
+		if = {
+			limit = {
+				ig:ig_armed_forces ?= { is_in_government = yes }
+			}
+			add = 100
+		}
+		
+		if = {
+			limit = { has_strategy = ai_strategy_colonial_expansion }
+			multiply = 1.5
+		}
+	}
+}
+
+principle_navy_2 = {
+	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		ship_interest_gain_mult = 0.1
+		country_flagship_interest_gain_mult = 0.1
+
+		# Adds max bonus to ship construction
+		country_ship_construction_progress_max_add = 5
+	}
+	
+	ai_weight = {
+		value = 1000	# AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_navy_3 = {
+	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	
+	member_modifier = {
+		# Modifiers from previous level(s)
+		ship_interest_gain_mult = 0.1
+		country_flagship_interest_gain_mult = 0.1
+		country_ship_construction_progress_max_add = 5
+
+		# Adds a reduction to navy goods cost
+		country_navy_goods_cost_mult = -0.1
+	}
+	
+	power_bloc_modifier = {
+		# Allows all power bloc members to count other power bloc members' ports as friendly
+		power_bloc_allow_port_access_bool = yes
 	}
 	
 	ai_weight = {

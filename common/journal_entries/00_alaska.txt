@@ -35,7 +35,7 @@
 		}
 		custom_tooltip = {
 			text = unfriendly_nation_with_interest_in_alaska_tt
-			any_country = {
+			any_diplomatically_relevant_country = {
 				country_rank >= root.country_rank
 				has_interest_marker_in_region = sr:region_pacific_coast
 				relations:root < 0
@@ -58,19 +58,20 @@
 	}
 	
 	immediate = {
-		random_state = {
-			limit = {
-				state_region = s:STATE_ALASKA
-				OR = {
-					owner = ROOT
-					owner = {
-						is_subject_of = ROOT
+		s:STATE_ALASKA ?= {
+			random_scope_state = {
+				limit = {
+					OR = {
+						owner = ROOT
+						owner = {
+							is_subject_of = ROOT
+						}
 					}
 				}
-			}
-			save_scope_as = alaska_scope
-			owner = {
-				save_scope_as = alaska_owner_scope
+				save_scope_as = alaska_scope
+				owner = {
+					save_scope_as = alaska_owner_scope
+				}
 			}
 		}
 		ruler = {
@@ -110,7 +111,7 @@
 	
 	transferable = no
 	
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 }
 
 je_alaska = {
@@ -119,7 +120,7 @@ je_alaska = {
 	group = je_group_foreign_affairs
 	
 	is_shown_when_inactive = {
-		has_interest_marker_in_region = region_pacific_coast
+		has_interest_marker_in_region = sr:region_pacific_coast
 		has_technology_researched = nationalism
 		hidden_trigger = {
 			NOT = { has_global_variable = alaska_sold }
@@ -159,16 +160,17 @@ je_alaska = {
 	}
 	
 	immediate = {
-		random_state = {
-			limit = {
-				state_region = s:STATE_ALASKA
-				owner = {
-					NOT = {
-						is_country_type = decentralized
+		s:STATE_ALASKA ?= {
+			random_scope_state = {
+				limit = {
+					owner = {
+						NOT = {
+							is_country_type = decentralized
+						}
 					}
 				}
+				save_scope_as = alaska_state
 			}
-			save_scope_as = alaska_state
 		}
 	}
 	
@@ -221,5 +223,5 @@ je_alaska = {
 	
 	transferable = no
 	
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 }

@@ -523,168 +523,55 @@ DEFAULT = {
 			}
 		}
 	}
-	# Powerful interest groups
 	dynamic_country_name = {
-		name = generic_revolt_peasant
-		adjective = generic_revolt_peasant_adj
+		name = generic_revolt_meiji_restorationist
+		adjective = generic_revolt_meiji_restorationist_adj
 		
 		is_revolutionary = yes
-		priority = 0
+		priority = 100
 		
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_rural_folk ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
+				var:civil_war_type_var ?= movement_type:movement_meiji_restorationist
 			}
 		}
 	}
 	dynamic_country_name = {
-		name = generic_revolt_landowner
-		adjective = generic_revolt_landowner_adj
+		name = generic_revolt_meiji_restorationist_satcho
+		adjective = generic_revolt_meiji_restorationist_satcho_adj
 		
 		is_revolutionary = yes
-		priority = 0
-		
-		trigger = {
-			
-			exists = scope:actor
-			scope:actor ?= {
-				is_secessionist = no
-				ig:ig_landowners ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
-			}
-			NOT = {
-				AND = {
-					exists = c:CSA
-					exists = c:USA
-					scope:actor ?= {
-						c:CSA ?= THIS
-					}
-					c:USA ?= {
-						has_journal_entry = je_acw_war
-					}
-				}
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = generic_revolt_intelligentsia
-		adjective = generic_revolt_intelligentsia_adj
-		
-		is_revolutionary = yes
-		priority = 0
+		priority = 110
 		
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				any_interest_group = {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
+				var:civil_war_type_var ?= movement_type:movement_meiji_restorationist
+				any_scope_state = {
 					OR = {
-						has_ideology = ideology:ideology_liberal
-						leader = {
-							has_liberal_ideology = yes
-							has_progressive_ideology = yes
-						}
+						state_region = s:STATE_KYUSHU
+						state_region = s:STATE_CHUGOKU
 					}
+					count >= 2
 				}
 			}
 		}
 	}
 	dynamic_country_name = {
-		name = generic_revolt_industrialists
-		adjective = generic_revolt_industrialists_adj
+		name = generic_revolt_tokugawa_loyalist
+		adjective = generic_revolt_tokugawa_loyalist_adj
 		
 		is_revolutionary = yes
-		priority = 0
+		priority = 100
 		
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
 				is_secessionist = no
-				ig:ig_industrialists ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = generic_revolt_military
-		adjective = generic_revolt_military_adj
-		
-		is_revolutionary = yes
-		priority = 0
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				is_secessionist = no
-				ig:ig_armed_forces ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = generic_revolt_religious
-		adjective = generic_revolt_religious_adj
-		
-		is_revolutionary = yes
-		priority = 0
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				is_secessionist = no
-				ig:ig_devout ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = generic_revolt_bourgeoisie
-		adjective = generic_revolt_bourgeoisie_adj
-		
-		is_revolutionary = yes
-		priority = 0
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				is_secessionist = no
-				ig:ig_petty_bourgeoisie ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = generic_revolt_unions
-		adjective = generic_revolt_unions_adj
-		
-		is_revolutionary = yes
-		priority = 0
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				is_secessionist = no
-				ig:ig_trade_unions ?= {
-					is_in_government = yes
-					is_strongest_ig_in_government = yes
-				}
+				var:civil_war_type_var ?= movement_type:movement_tokugawa_loyalist
 			}
 		}
 	}
@@ -746,20 +633,6 @@ DEFAULT = {
 		}
 	}
 	dynamic_country_name = {
-		name = colonial_admin_ethiopia
-		adjective = colonial_admin_ethiopia_adj
-		use_overlord_prefix = yes
-		
-		priority = 100
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				has_variable = ethiopia_subject_var
-			}
-		}
-	}
-	dynamic_country_name = {
 		name = colonial_admin_southern_africa
 		adjective = colonial_admin_southern_africa_adj
 		use_overlord_prefix = yes
@@ -790,20 +663,6 @@ DEFAULT = {
 			exists = scope:actor
 			scope:actor ?= {
 				has_variable = congo_subject_var
-			}
-		}
-	}
-	dynamic_country_name = {
-		name = colonial_admin_niger
-		adjective = colonial_admin_niger_adj
-		use_overlord_prefix = yes
-		
-		priority = 100
-		
-		trigger = {
-			exists = scope:actor
-			scope:actor ?= {
-				has_variable = niger_subject_var
 			}
 		}
 	}
@@ -910,7 +769,7 @@ AFS = {	#African Free State
 		
 		trigger = {
 			scope:actor ?= {
-				capital = { region = sr:region_congo }
+				capital = { region = sr:region_equatorial_africa }
 			}
 		}
 	}
@@ -934,7 +793,7 @@ AFS = {	#African Free State
 		
 		trigger = {
 			scope:actor ?= {
-				capital = { region = sr:region_zanj }
+				capital = { region = sr:region_east_africa }
 			}
 		}
 	}
@@ -959,8 +818,8 @@ AFS = {	#African Free State
 		trigger = {
 			scope:actor ?= {
 				OR = {
-					capital = { region = sr:region_niger }
-					capital = { region = sr:region_senegal }
+					capital = { is_in_geographic_region = geographic_region_niger_old }
+					capital = { is_in_geographic_region = geographic_region_senegal_old }
 				}
 			}
 		}
@@ -973,7 +832,7 @@ AFS = {	#African Free State
 		
 		trigger = {
 			scope:actor ?= {
-				capital = { region = sr:region_nile_basin }
+				capital = { region = sr:region_north_africa }
 				any_scope_state = {
 					region = sr:region_north_africa
 				}
@@ -1124,14 +983,14 @@ BIC = {	# East India Company
 			scope:actor ?= {
 				is_subject = yes
 				capital ?= {
-					region = sr:region_madras
+					is_in_geographic_region = geographic_region_madras_old
 				}
 				NOR = {
 					any_scope_state = {
-						region = sr:region_bengal
+						is_in_geographic_region = geographic_region_bengal_old
 					}
 					any_scope_state = {
-						region = sr:region_bombay
+						is_in_geographic_region = geographic_region_bombay_old
 					}
 				}
 			}
@@ -1149,14 +1008,14 @@ BIC = {	# East India Company
 			scope:actor ?= {
 				is_subject = yes
 				capital ?= {
-					region = sr:region_bombay
+					is_in_geographic_region = geographic_region_bombay_old
 				}
 				NOR = {
 					any_scope_state = {
-						region = sr:region_bengal
+						is_in_geographic_region = geographic_region_madras_old
 					}
 					any_scope_state = {
-						region = sr:region_madras
+						is_in_geographic_region = geographic_region_bengal_old
 					}
 				}
 			}
@@ -1174,14 +1033,14 @@ BIC = {	# East India Company
 			scope:actor ?= {
 				is_subject = yes
 				capital ?= {
-					region = sr:region_bengal
+					is_in_geographic_region = geographic_region_bengal_old
 				}
 				NOR = {
 					any_scope_state = {
-						region = sr:region_bombay
+						is_in_geographic_region = geographic_region_madras_old
 					}
 					any_scope_state = {
-						region = sr:region_madras
+						is_in_geographic_region = geographic_region_bombay_old
 					}
 				}
 			}
@@ -1199,7 +1058,7 @@ BIC = {	# East India Company
 			scope:actor ?= {
 				has_variable = bengal_free_state
 				capital ?= {
-					region = sr:region_bengal
+					is_in_geographic_region = geographic_region_bengal_old
 				}
 				any_primary_culture = {
 					cu:british = this
@@ -1438,7 +1297,7 @@ CHI = {	# China
 		trigger = {
 			scope:actor ?= {
 				NOT = { country_has_primary_culture = cu:manchu }
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 			}
 		}
 	}
@@ -1873,7 +1732,7 @@ IDN = {	# Majapahit
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				ruler = {
 					has_culture = cu:javan
 				}
@@ -1891,7 +1750,7 @@ IDN = {	# Majapahit
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				ruler = {
 					OR = {
 						has_culture = cu:malay
@@ -1922,24 +1781,50 @@ ITA = {	# Italy
 }
 
 JAP = {	# Japan
-	dynamic_country_name = {
-		name = dyn_c_japan_shogunate
-		adjective = dyn_c_japan_shogunate_adj
+	dynamic_country_name = {	# Tokugawa Shogunate
+		name = dyn_c_tokugawa_shogunate
+		adjective = JAP_ADJ
 		
 		is_main_tag_only = yes
 		priority = 10
 		
 		trigger = {
-			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
-				NOT = { has_variable = meiji_var }
+				country_has_monarchy_law = yes
+				OR = {
+					game_date < 1836.1.2	# Needed to get around initialization
+					ruler ?= {
+						has_variable = house_tokugawa
+					}
+					AND = {
+						has_gov_regency = yes
+						heir ?= {
+							has_variable = house_tokugawa
+						}
+					}
+				}
+				has_law = law_type:law_bakufu
+			}
+		}
+	}
+	dynamic_country_name = {	# Japanese Taikunate
+		name = dyn_c_japanese_taikunate
+		adjective = JAP_ADJ
+		
+		is_main_tag_only = yes
+		priority = 25
+		
+		trigger = {
+			scope:actor ?= {
+				any_active_law = {
+					has_amendment = amendment_type:amendment_taikunate
+				}
 			}
 		}
 	}
 	dynamic_country_name = {
 		name = dyn_c_empire_of_japan
-		adjective = dyn_c_empire_of_japan_adj
+		adjective = JAP_ADJ
 		
 		is_main_tag_only = yes
 		priority = 20
@@ -1947,9 +1832,23 @@ JAP = {	# Japan
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
-				has_variable = meiji_var
+				country_has_monarchy_law = yes
+				NOT = {
+					has_law = law_type:law_bakufu
+				}
 			}
+		}
+	}
+	dynamic_country_name = {	# Republic of Japan
+		name = dyn_c_republic_of_japan
+		adjective = JAP_ADJ
+		
+		is_main_tag_only = yes
+		priority = 30
+		
+		trigger = {
+			exists = scope:actor
+			coa_def_republic_flag_trigger = yes
 		}
 	}
 }
@@ -2002,7 +1901,7 @@ KOR = {	# Korea
 		
 		trigger = {
 			exists = scope:actor
-			scope:actor ?= { has_law = law_type:law_monarchy }
+			scope:actor ?= { country_has_monarchy_law = yes }
 		}
 	}
 	dynamic_country_name = {	# Korean Empire
@@ -2016,7 +1915,7 @@ KOR = {	# Korea
 			exists = scope:actor
 			scope:actor ?= {
 				has_variable = KOR_korean_empire_declared
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 			}
 		}
 	}
@@ -3055,7 +2954,7 @@ SUD = {
 		
 		trigger = {
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 			}
 		}
 	}
@@ -3087,7 +2986,7 @@ SCA = {	# Scandinavia
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				was_formed_from = DEN
 			}
 		}
@@ -3103,7 +3002,7 @@ SCA = {	# Scandinavia
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				ruler = {
 					has_culture = cu:finnish
 				}
@@ -3141,7 +3040,7 @@ ZAI = {	# Azal (Zaidi State)
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					has_law_or_variant = law_type:law_theocracy
 				}
 			}
@@ -3243,7 +3142,7 @@ KAZ = {
 			exists = scope:actor
 			scope:actor ?= {
 				NOT = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 				}
 			}
 			coa_def_independent_trigger = yes
@@ -3259,7 +3158,7 @@ KAZ = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 			}
 			coa_def_independent_trigger = yes
 		}
@@ -3276,7 +3175,7 @@ KAZ = {
 			AND = {
 				exists = c:RUS
 				c:RUS ?= {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					OR = {
 						has_diplomatic_pact = {
 							who = scope:actor
@@ -3311,7 +3210,7 @@ KAZ = {
 				exists = c:RUS
 				c:RUS ?= {
 					NOR = {
-						has_law = law_type:law_monarchy
+						country_has_monarchy_law = yes
 						has_law_or_variant = law_type:law_council_republic
 					}
 					OR = {
@@ -3381,7 +3280,7 @@ ALD = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				has_variable = algeria_deylik_restored
 			}
 		}
@@ -3427,7 +3326,7 @@ FRA = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				has_variable = bonapartist_restoration_var
 				has_variable = one_true_french_dynasty
 			}
@@ -3460,7 +3359,7 @@ FRA = {
 		trigger = {
 			exists = scope:actor
 			scope:actor ?= {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				OR = {
 					has_variable = orleanist_restoration_var
 					has_variable = legitimist_restoration_var
@@ -3497,7 +3396,7 @@ HRE = {
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					has_law_or_variant = law_type:law_theocracy
 				}
 			}
@@ -3514,7 +3413,7 @@ HRE = {
 			exists = scope:actor
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					has_law_or_variant = law_type:law_theocracy
 				}
 				has_law_or_variant = law_type:law_state_atheism
@@ -3670,7 +3569,7 @@ FND = {	# Federation
 					is_incorporated = yes
 					OR = {
 						is_in_geographic_region = geographic_region_north_america
-						is_in_geographic_region = geographic_region_central_america
+						is_in_geographic_region = geographic_region_central_america_old
 					}
 					count > 1
 				}
@@ -3757,7 +3656,7 @@ ARG = {	# Argentina
 			
 			scope:actor ?= {
 				any_scope_character = {
-					is_ruler = yes
+					is_ruler_of_own_country = yes
 					has_template = ARG_Juan_Manuel_de_Rosas
 				}
 			}
@@ -4032,7 +3931,7 @@ AFG = {
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				was_formed_from = HER
 			}
 		}
@@ -4585,14 +4484,14 @@ CRO = {
 			OR = {
 				AND = {
 					c:AUS ?= {
-						has_law = law_type:law_monarchy
+						country_has_monarchy_law = yes
 					}
 					scope:actor ?= {
 						is_subject_of = c:AUS
 					}
 				}
 				scope:actor = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 				}
 			}
 			scope:actor ?= {
@@ -4645,7 +4544,7 @@ KUK = {
 		trigger = {
 			exists = scope:actor
 			scope:actor = {
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 				was_formed_from = AUS
 			}
 		}
@@ -4807,7 +4706,7 @@ BUL = {
 		trigger = {
 			scope:actor ?= {
 				has_variable = bul_proclaimed_bulgarian_empire
-				has_law = law_type:law_monarchy
+				country_has_monarchy_law = yes
 			}
 		}
 	}
@@ -4951,7 +4850,7 @@ IBE = {	# Iberia
 		trigger = {
 			scope:actor ?= {
 				OR = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					has_law_or_variant = law_type:law_corporate_state
 				}
 			}

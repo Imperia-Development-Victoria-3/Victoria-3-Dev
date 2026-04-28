@@ -357,9 +357,9 @@ countries_are_valid_rivals = {
 in_volcanic_zone = {
 	OR = {
 		region = sr:region_indonesia
-		region = sr:region_japan
+		is_in_geographic_region = geographic_region_japan_old
 		region = sr:region_central_america
-		region = sr:region_zanj
+		region = sr:region_east_africa
 		state_region = s:STATE_SANTIAGO
 		state_region = s:STATE_LOS_RIOS
 		state_region = s:STATE_ARAUCANIA
@@ -450,7 +450,7 @@ has_government_building = {
 has_military_building = {
 	OR = {
 		has_building = building_barrack
-		has_building = building_naval_base
+		has_building = building_naval_administration
 	}
 }
 
@@ -997,8 +997,8 @@ has_addiction = {
 
 is_commander = {
 	OR = {
-		has_role = general
-		has_role = admiral
+		has_role_of_type = general
+		has_role_of_type = admiral
 	}
 }
 
@@ -1022,11 +1022,18 @@ default_auto_expand_rule = {
 is_in_civil_war = {
 	custom_tooltip = {
 		text = is_in_civil_war_tt
-		any_diplomatic_play = {
-			any_scope_play_involved = {
-				this = root
-			}
-			initiator = {
+		any_enemy_in_diplo_play = {
+			NOT = { this = ROOT }
+			country_definition = root.country_definition
+		}
+	}
+}
+
+is_not_in_civil_war = {
+	custom_tooltip = {
+		text = is_not_in_civil_war_tt
+		NOT = {
+			any_enemy_in_diplo_play = {
 				NOT = { this = ROOT }
 				country_definition = root.country_definition
 			}
@@ -1044,6 +1051,15 @@ has_paternalist_ideology = {
 		has_ideology = ideology:ideology_scholar_paternalistic
 		has_ideology = ideology:ideology_junker_paternalistic
 		has_ideology = ideology:ideology_papal_paternalistic
+		has_ideology = ideology:ideology_japan_paternalistic
+	}
+}
+
+has_hierarchic_ideology = {
+	OR = {
+		has_ideology = ideology:ideology_hierarchic
+		has_ideology = ideology:ideology_japan_hierarchic
+		has_ideology = ideology:ideology_japan_hierarchic_2
 	}
 }
 
@@ -1052,9 +1068,9 @@ can_reach_target_country = {
 	OR = {
 		has_strategic_adjacency = scope:target_country
 		AND = {
-			has_port = yes
+			has_port_country = yes
 			navy_size >= 10
-			scope:target_country = { has_port = yes }
+			scope:target_country = { has_port_country = yes }
 		}
 	}
 }
@@ -1064,8 +1080,8 @@ can_be_reached_by_target_country = {
 	OR = {
 		has_strategic_adjacency = scope:target_country
 		AND = {
-			has_port = yes
-			scope:target_country = { has_port = yes }
+			has_port_country = yes
+			scope:target_country = { has_port_country = yes }
 			scope:target_country = { navy_size >= 10 }
 		}
 	}
@@ -1077,7 +1093,7 @@ can_reach_target_state = {
 		has_strategic_adjacency = scope:target_state
 		AND = {
 			navy_size >= 10
-			has_port = yes
+			has_port_country = yes
 			scope:target_state = { is_coastal = yes }
 		}
 	}
@@ -1314,7 +1330,7 @@ movement_supports_enaction = {
 agitator_supports_enaction = {
 	exists = currently_enacting_law
 	any_scope_character = {
-		has_role = agitator
+		has_role_of_type = agitator
 		law_enactment_stance = {
 			law = owner.currently_enacting_law.type
 			value > neutral
@@ -1345,7 +1361,7 @@ movement_opposes_enaction = {
 
 agitator_opposes_enaction = {
 	any_scope_character = {
-		has_role = agitator
+		has_role_of_type = agitator
 		law_enactment_stance = {
 			law = owner.currently_enacting_law.type
 			value < neutral
@@ -2282,7 +2298,7 @@ spoils_of_war_complete_alb = {
 }
 
 spoils_of_war_complete_rom = {
-	sr:region_danubia = {
+	sr:region_balkans = {
 		any_scope_state = {
 			state_region = {
 				is_homeland = cu:romanian
@@ -2333,6 +2349,7 @@ movement_is_nationalist = {
 		is_political_movement_type = movement_cultural_majority
 		is_political_movement_type = movement_fascist
 		is_political_movement_type = movement_modernizer
+		is_political_movement_type = movement_meiji_restorationist
 	}
 }
 
@@ -2351,6 +2368,7 @@ movement_is_conservative = {
 		is_political_movement_type = movement_pro_slavery
 		is_political_movement_type = movement_religious_majority
 		is_political_movement_type = movement_cultural_majority
+		is_political_movement_type = movement_tokugawa_loyalist
 	}
 }
 
@@ -2369,4 +2387,16 @@ serbia_throne_campaign_state_check = {
 		has_modifier = serbia_high_fund_campaigned_state_c_mod
 		has_modifier = serbia_high_fund_campaigned_state_e_mod
 	}
+}
+
+ryukyu_has_declared_neutrality = {
+	has_modifier = modifier_ryukyu_rivalry_secured_neutrality
+}
+
+character_is_emperor_of_japan = {
+	has_trait = special_character_japanese_emperor
+}
+
+country_meiji_reform_emperor_restored = {
+	has_variable = japan_emperor_restored
 }
