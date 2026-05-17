@@ -34,14 +34,13 @@
 	}
 	
 	possible = {
-		
 		is_junior_in_customs_union = no
-		NOT = { has_law = law_type:law_isolationism }
+		country_has_isolationism_or_sakoku = no
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
 			is_revolutionary = no
 			is_junior_in_customs_union = no
-			NOT = { has_law = law_type:law_isolationism }
+			country_has_isolationism_or_sakoku = no
 		}
 	}
 	
@@ -49,7 +48,7 @@
 		scope:source_country = {
 			NOR = {
 				has_law_or_variant = law_type:law_free_trade
-				has_law = law_type:law_isolationism	# Canton System should permit tariffs
+				country_has_isolationism_or_sakoku = yes	# Canton System should permit tariffs
 			}
 		}
 		custom_tooltip = {
@@ -212,6 +211,21 @@
 					
 					min = 2
 					max = 10
+				}
+				
+				if = {
+					limit = {
+						scope:source_country ?= {
+							c:JAP ?= this
+							has_journal_entry = je_iwakura_mission
+							has_variable = current_expedition_location_var
+							var:current_expedition_location_var ?= ROOT
+						}
+					}
+					add = {
+						desc = "HOSTING_DIPLOMATIC_MISSION"
+						value = -50
+					}
 				}
 			}
 			else_if = {

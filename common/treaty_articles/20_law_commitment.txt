@@ -7,6 +7,7 @@
 	flags = {
 		is_law_commitment
 		can_be_enforced
+		ai_consider_threaten_naval_hostilities
 	}
 	
 	usage_limit = once_per_side
@@ -24,7 +25,6 @@
 	visible = {}
 	
 	possible = {
-		
 		NOT = { is_subject_of = scope:other_country }
 		save_temporary_scope_as = target_country
 		scope:other_country = {
@@ -451,6 +451,18 @@
 						value = 25
 					}
 				}
+				if = {
+					limit = {
+						c:JAP ?= scope:source_country
+						scope:source_country ?= {
+							has_journal_entry = je_meiji_imperial_marriage
+						}
+					}
+					add = {
+						desc = "je_meiji_imperial_marriage"
+						value = -500
+					}
+				}
 			}
 			else_if = {
 				limit = {
@@ -570,6 +582,21 @@
 					add = {
 						desc = "from_republic"
 						value = 15
+					}
+				}
+				
+				if = {
+					limit = {
+						scope:source_country ?= {
+							c:JAP ?= this
+							has_journal_entry = je_iwakura_mission
+							has_variable = current_expedition_location_var
+							var:current_expedition_location_var ?= ROOT
+						}
+					}
+					add = {
+						desc = "HOSTING_DIPLOMATIC_MISSION"
+						value = -50
 					}
 				}
 				

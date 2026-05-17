@@ -108,14 +108,26 @@
 			activate_law = law_type:law_autocracy
 			if = {
 				limit = {
-					NOT = {
-						has_law_or_variant = law_type:law_presidential_republic
+					has_law = law_type:law_monarchy
+				}
+				activate_law = law_type:law_social_monarchy
+			}
+			else_if = {
+				limit = {
+					NOR = {
+						has_law = law_type:law_monarchy
+						has_law = law_type:law_social_monarchy
+						has_law = law_type:law_presidential_republic
+						has_law = law_type:law_corporate_state
 					}
 				}
 				activate_law = law_type:law_presidential_republic
 			}
-			add_journal_entry = {
-				type = je_new_republic
+			custom_tooltip = {
+				text = add_je_new_republic_tt
+				add_journal_entry = {
+					type = je_new_republic
+				}
 			}
 		}
 	}
@@ -136,7 +148,7 @@
 	
 	weight = 100
 	
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 }
 
 je_new_republic = {
@@ -145,11 +157,28 @@ je_new_republic = {
 	group = je_group_brazil
 	
 	immediate = {
-		ruler = {
-			save_scope_as = vargas_scope
-			set_character_immortal = yes
-			interest_group = {
+		if = {
+			limit = {
+				NOR = {
+					has_law_or_variant = law_type:law_social_monarchy
+					has_law_or_variant = law_type:law_monarchy
+				}
+			}
+			ruler = {
+				save_scope_as = vargas_scope
+				set_character_immortal = yes
+				interest_group ?= {
+					save_scope_as = pb_scope
+				}
+			}
+		}
+		else = {
+			ig:ig_petty_bourgeoisie ?= {
 				save_scope_as = pb_scope
+				leader = {
+					save_scope_as = vargas_scope
+					set_character_immortal = yes
+				}
 			}
 		}
 		root = {
@@ -169,13 +198,32 @@ je_new_republic = {
 	}
 	
 	fail = {
-		custom_tooltip = {
-			text = vargas_out_tt
-			has_variable = new_republic_start
-			NOT = {
-				ruler = {
-					interest_group = {
-						is_interest_group_type = ig_petty_bourgeoisie
+		trigger_if = {
+			limit = {
+				OR = {
+					has_law_or_variant = law_type:law_social_monarchy
+					has_law_or_variant = law_type:law_monarchy
+				}
+			}
+			custom_tooltip = {
+				text = vargas_not_pm_tt
+				has_variable = new_republic_start
+				NOT = {
+					ig:ig_petty_bourgeoisie ?= {
+						is_in_government = yes
+					}
+				}
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = vargas_out_tt
+				has_variable = new_republic_start
+				NOT = {
+					ruler = {
+						interest_group ?= {
+							is_interest_group_type = ig_petty_bourgeoisie
+						}
 					}
 				}
 			}
@@ -192,11 +240,16 @@ je_new_republic = {
 	}
 	
 	complete = {
-		NOT = {
-			any_interest_group = {
-				ig_counts_as_marginal = no
-				leader = {
-					has_socialist_ideology = yes
+		custom_tooltip = {
+			text = all_socialists_marginalized_tt
+			NOT = {
+				any_interest_group = {
+					AND = {
+						ig_counts_as_marginal = no
+						leader = {
+							has_socialist_ideology = yes
+						}
+					}
 				}
 			}
 		}
@@ -205,7 +258,25 @@ je_new_republic = {
 		has_law_or_variant = law_type:law_censorship
 		has_law_or_variant = law_type:law_autocracy
 		has_law_or_variant = law_type:law_interventionism
-		has_law_or_variant = law_type:law_presidential_republic
+		has_law_or_variant = law_type:law_corporatized_unions
+		trigger_if = {
+			limit = {
+				OR = {
+					has_law_or_variant = law_type:law_monarchy
+					has_law_or_variant = law_type:law_social_monarchy
+				}
+			}
+			has_law_or_variant = law_type:law_social_monarchy
+		}
+		trigger_if = {
+			limit = {
+				NOR = {
+					has_law_or_variant = law_type:law_monarchy
+					has_law_or_variant = law_type:law_social_monarchy
+				}
+			}
+			has_law_or_variant = law_type:law_corporate_state
+		}
 	}
 	
 	on_complete = {
@@ -220,5 +291,5 @@ je_new_republic = {
 	
 	weight = 100
 	
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 }

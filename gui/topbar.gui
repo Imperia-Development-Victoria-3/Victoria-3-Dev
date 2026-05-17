@@ -630,20 +630,19 @@ types topbar_components
 								}
 							}
 
-							block "convoys_info" {
+							block "supply_ships_info" {
 								button = {
-									name = "tutorial_highlight_convoys"
+									name = "tutorial_highlight_supply_ships"
 									using = glow_button
 									size = { 100 40 }
-									tooltip = "CONVOY_TOPBAR_TOOLTIP"
+									tooltip = "SUPPLY_SHIPS_TOPBAR_TOOLTIP"
 									using = tooltip_below
 									onclick = "[InformationPanelBar.OpenMarketPanel(AccessPlayer.AccessFirstMarket.Self)]"
 									enabled = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"
-									alpha = "[TransparentIfZero(GetPlayer.GetSupplyNetworkStrength)]"
 
 									widget = {
 										size = { 32 32 }
-										name = convoys_icon
+										name = merchant_marine_icon
 										parentanchor = vcenter
 										position = { 0 2 }
 
@@ -652,12 +651,12 @@ types topbar_components
 											size = { 28 28 }
 											texture = "gfx/interface/icons/topbar/convoys.dds"
 										}
-
 									}
+									
 									textbox = {
 										position = { 35 -3 }
 										name = capital_value
-										raw_text = "#bold [GetPlayer.GetNumAvailableConvoys|=+D]#!"
+										raw_text = "#bold [GetPlayer.GetNumAvailableSupplyShips|+D]#!"
 										align = left|nobaseline
 										using = fontsize_large
 										autoresize = yes
@@ -670,10 +669,10 @@ types topbar_components
 										parentanchor = bottom
 
 										blockoverride "value_left" {
-											value = "[Negate_float(FixedPointToFloat(GetPlayer.GetDeficitConvoyRatioForProgressBar))]"
+											value = "[Negate_float(FixedPointToFloat(GetPlayer.GetDeficitSupplyShipRatioForProgressBar))]"
 										}
 										blockoverride "value_right" {
-											value = "[FixedPointToFloat(GetPlayer.GetExcessConvoyRatioForProgressBar)]"
+											value = "[FixedPointToFloat(GetPlayer.GetExcessSupplyShipRatioForProgressBar)]"
 										}
 									}
 								}

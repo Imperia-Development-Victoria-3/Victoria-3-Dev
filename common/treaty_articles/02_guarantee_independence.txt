@@ -5,6 +5,9 @@
 	relations_progress_per_day = 1
 	relations_improvement_max = 80
 	
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
+	
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/guarantee_independence_treaties.dds"
 	
 	flags = {
@@ -69,6 +72,7 @@
 	}
 	
 	can_ratify = {
+		scope:source_country = { highest_overlapping_interest_tier = { target = scope:target_country value >= interest_tier_effect_can_sign_guarantee_independence_min_tier } }
 		scope:source_country = {
 			NOR = {
 				custom_tooltip = {
@@ -314,6 +318,17 @@
 						desc = "DIPLOMATIC_ACCEPTANCE_POWERFUL_PROTECTORS_THEM"
 						value = -25
 					}
+				}
+			}
+
+			# Special anti-Opium Wars cheese - block any alliance/defensive pact/guarantee deals before the JE fires
+			if = {
+				limit = {
+					ai_opium_dealer_no_alliance_trigger = yes
+				}
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_OPIUM_DEALER"
+					add = -1000
 				}
 			}
 			

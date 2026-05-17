@@ -29,6 +29,7 @@ labor_rights.1 = {
 			is_enacting_law = law_type:law_tenant_farmers
 			is_enacting_law = law_type:law_commercialized_agriculture
 			is_enacting_law = law_type:law_homesteading
+			is_enacting_law = law_type:law_peasant_proprietorship
 			is_enacting_law = law_type:law_collectivized_agriculture
 		}
 		any_scope_state = {
@@ -118,6 +119,7 @@ labor_rights.2 = {
 			is_enacting_law = law_type:law_tenant_farmers
 			is_enacting_law = law_type:law_commercialized_agriculture
 			is_enacting_law = law_type:law_homesteading
+			is_enacting_law = law_type:law_peasant_proprietorship
 			is_enacting_law = law_type:law_collectivized_agriculture
 		}
 		any_interest_group = {
@@ -221,6 +223,7 @@ labor_rights.3 = {
 			is_enacting_law = law_type:law_tenant_farmers
 			is_enacting_law = law_type:law_commercialized_agriculture
 			is_enacting_law = law_type:law_homesteading
+			is_enacting_law = law_type:law_peasant_proprietorship
 		}
 		ig:ig_landowners ?= {
 			ig_counts_as_marginal = no
@@ -231,12 +234,10 @@ labor_rights.3 = {
 				has_amendment = amendment_type:amendment_individual_redemption_payments
 			}
 		}
-		NOT = {
-			currently_enacting_law = {
-				OR = {
-					has_amendment = amendment_type:amendment_redemption_payments
-					has_amendment = amendment_type:amendment_individual_redemption_payments
-				}
+		NAND = {	# Japan should have trouble getting rid of Serfdom before Restoration is complete
+			c:JAP ?= this
+			NOT = {
+				has_variable = japan_restoration_complete
 			}
 		}
 	}

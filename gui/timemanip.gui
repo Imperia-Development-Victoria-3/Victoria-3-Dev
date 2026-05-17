@@ -344,13 +344,16 @@ types timekeeper
 					blend_mode = overlay
 					alpha = 0.5
 				}
+
 				modify_texture = {
 					using = texture_velvet
 				}
+
 				modify_texture = {
 					using = fancy_pattern
 				}
 			}
+
 			icon = {
 				size = { 100% 100% }
 				texture = "gfx/interface/main_hud/topbar_side_dec_simple.dds"
@@ -360,12 +363,11 @@ types timekeeper
 				spriteborder_bottom = 94
 				spriteborder_right = 110
 				texture_density = 2
-
 				using = hud_shiny_effect
 			}
 
 			flowcontainer = {
-				position = { 25 -2 }
+				position = { 15 -2 }
 				parentanchor = vcenter
 				datacontext = "[AccessMetaPlayer.AccessPlayedOrObservedCountry]"
 				spacing = 10
@@ -387,67 +389,118 @@ types timekeeper
 					input_action = "toggle_construction_queue_pause"
 				}
 
-				button = {
-					parentanchor = vcenter
-					size = { 100 58 }
-					using = default_button
-					onclick = "[InformationPanelBar.OpenConstructionPanel( GetPlayer.Self )]"
-					enabled = "[Country.IsValid]"
-					widget = {
-						visible = "[Country.IsValid]"
-						tooltip = "CONSTRUCTION_QUEUE_TOOLTIP"
-						size = { 100% 100% }
-						input_action = "construction_queue" #must add it in here for the shortcut text to appear in the tooltip
-					}
-					input_action = "construction_queue"
-
-					flowcontainer = {
-						direction = vertical
-
-						widget = {
-							parentanchor = hcenter
-							size = { 32 32 }
-
-							icon = {
-								visible = "[Not(Country.IsConstructionPaused)]"
-								parentanchor = hcenter
-								size = { 32 32 }
-								position = { 0 -3 }
-								#onclick = "[Execute( Country.PauseConstruction )]"
-								#enabled = "[And(IsValid( Country.PauseConstruction ), Country.HasConstructionQueued)]"
-								texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
-							}
-
-							icon = {
-								parentanchor = hcenter
-								#onclick = "[Execute( Country.ResumeConstruction )]"
-								#enabled = "[IsValid( Country.ResumeConstruction )]"
-								position = { 0 -3 }
-								size = { 32 32 }
-								visible = "[Country.IsConstructionPaused]"
-								texture = "gfx/interface/icons/state_status_icons/has_construction_paused.dds"
-							}
-						}
-
-
-						textbox = {
-							parentanchor = hcenter
-							align = hcenter|nobaseline
-							text = "CONSTRUCTION_VALUE"
-							autoresize = yes
-							fontsize_min = 12
-							maximumsize = { 100 -1 }
-							minimumsize = { 100 -1 }
-							margin_left = 5
-							margin_top = -2
-						}
-					}
-				}
+				### New construction buttons ###
 
 
 				flowcontainer = {
 					direction = vertical
 					parentanchor = vcenter
+
+					button = {
+						parentanchor = hcenter
+						size = { 155 28 }
+						using = default_button
+						onclick = "[InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'default' )]"
+						enabled = "[Country.IsValid]"
+						input_action = "construction_queue"
+
+						widget = {
+							visible = "[Country.IsValid]"
+							size = { 100% 100% }
+							tooltip = "CONSTRUCTION_QUEUE_TOOLTIP"
+							input_action = "construction_queue" #must add it in here for the shortcut text to appear in the tooltip
+						}
+
+						flowcontainer = {
+							widget = {
+								size = { 29 29 }
+							
+								icon = {
+									visible = "[Not(Country.IsConstructionPaused)]"
+									size = { 29 29 }
+									position = { -3 0 }
+									texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+								}
+
+								icon = {
+									parentanchor = hcenter
+									position = { -3 0 }
+									size = { 29 29 }
+									visible = "[Country.IsConstructionPaused]"
+									texture = "gfx/interface/icons/state_status_icons/has_construction_paused.dds"
+								}
+							}
+
+							textbox = {
+								align = hcenter|nobaseline
+								text = "CONSTRUCTION_VALUE"
+								autoresize = yes
+								fontsize_min = 12
+								maximumsize = { 100 -1 }
+								minimumsize = { 100 -1 }
+								margin_left = 5
+								margin_top = 4
+							}
+						}
+					}
+
+					button = {
+						parentanchor = hcenter
+						size = { 155 28 }
+						using = default_button
+						onclick = "[InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'ships' )]"  # TODO PRCAL-44097
+						enabled = "[Country.IsValid]"
+						input_action = "ship_construction_queue"
+
+						widget = {
+							visible = "[Country.IsValid]"
+							size = { 100% 100% }
+							tooltip = "SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP"
+							input_action = "ship_construction_queue" #must add it in here for the shortcut text to appear in the tooltip
+						}
+
+						flowcontainer = {
+							widget = {
+								size = { 29 29 }
+
+								icon = {
+									visible = "[Not(Country.IsShipConstructionPaused)]"
+									size = { 29 29 }
+									position = { -3 0 }
+									#onclick = "[Execute( Country.PauseConstruction )]"
+									#enabled = "[And(IsValid( Country.PauseConstruction ), Country.HasConstructionQueued)]"
+									texture = "gfx/interface/icons/state_status_icons/ship_construction.dds"
+								}
+
+								icon = {
+									parentanchor = hcenter
+									#onclick = "[Execute( Country.ResumeConstruction )]"
+									#enabled = "[IsValid( Country.ResumeConstruction )]"
+									position = { -3 0 }
+									size = { 29 29 }
+									visible = "[Country.IsShipConstructionPaused]"
+									texture = "gfx/interface/icons/state_status_icons/ship_construction_paused.dds"
+								}
+							}
+
+							textbox = {
+								align = hcenter|nobaseline
+								text = "SHIP_CONSTRUCTION_VALUE"
+								autoresize = yes
+								fontsize_min = 12
+								maximumsize = { 100 -1 }
+								minimumsize = { 100 -1 }
+								margin_left = 5
+								margin_top = 3
+							}
+						}
+					}
+				}		
+
+				flowcontainer = {
+					direction = vertical
+					parentanchor = vcenter
+
 					mini_construction_queue = {
 						visible = "[Country.HasConstructionQueued]"
 
@@ -515,17 +568,19 @@ types timekeeper
 					}
 				}
 
-
 				textbox = {
-					autoresize = yes
 					visible = "[Not(GetPlayer.HasConstructionQueued)]"
+					autoresize = yes
 					parentanchor = vcenter
-					align = left|nobaseline
+					align = nobaseline
+					minimumsize = { 200 -1 }
+					maximumsize = { 200 -1 }
+					using = elide_fontsize_min
 					text = "NOTHING_CONSTRUCTING"
-					minimumsize = { 215 -1 }
-					maximumsize = { 215 -1 }
 				}
 			}
+
+
 		}
 
 		### TOP RIGHT STUFF
@@ -1162,7 +1217,7 @@ types timekeeper
 			flowcontainer = {
 				direction = vertical
 				parentanchor = right
-				position = { -5 3 }
+				position = { -3 7 }
 				spacing = 2
 
 				### menu
@@ -1217,7 +1272,7 @@ types timekeeper
 types construction_in_outliner
 {
 	type mini_construction_queue = widget {
-		size = { 265 32 }
+		size = { 215 32 }
 
 		block "alpha" {}
 
@@ -1253,7 +1308,7 @@ types construction_in_outliner
 		overlappingitembox = {
 			parentanchor = vcenter
 			position = { 33 0 }
-			size = { 172 30 }
+			size = { 122 30 }
 
 			block "buildings_datamodel" {}
 

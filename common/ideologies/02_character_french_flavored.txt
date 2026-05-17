@@ -1,4 +1,4 @@
-﻿ideology_orleanist = {
+﻿ideology_orleanist = {	# Average Progressiveness - 12.5
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_orleanist.dds"
 	
 	character_ideology = yes
@@ -8,6 +8,7 @@
 		law_presidential_republic = neutral
 		law_parliamentary_republic = disapprove
 		law_corporate_state = neutral
+		law_social_monarchy = neutral
 		law_theocracy = disapprove
 		law_council_republic = strongly_disapprove
 	}
@@ -86,12 +87,15 @@
 	}
 	
 	non_interest_group_leader_trigger = {
-		NOT = { has_role = agitator }
+		NOT = { has_role_of_type = agitator }
 		ideology_orleanist_valid_trigger = yes
 	}
 	
 	interest_group_leader_weight = {
-		value = 200
+		value = {
+			add = 200
+			desc = "base_value"
+		}
 		# less likely in a theocracy
 		if = {
 			limit = {
@@ -99,17 +103,23 @@
 					has_law_or_variant = law_type:law_theocracy
 				}
 			}
-			add = -75
+			add = {
+				value = -75
+				desc = "THEOCRACY_LAW"
+			}
 		}
 		# less likely if IG is happy in a republic
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
 				ig_approval > 0
 			}
-			add = -100
+			add = {
+				value = -100
+				desc = "HAPPY_IN_REPUBLIC"
+			}
 		}
 
 		# more likely for intelligentsia, industrialists, and PB with traditional economic laws
@@ -129,37 +139,49 @@
 					}
 				}
 			}
-			add = 75
+			add = {
+				value = 75
+				desc = "TRADITIONAL_ECONOMY"
+			}
 		}
 		# more likely if the IG is unhappy with the monarchy, and that monarchy is not Orleanist
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = orleanist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 75
+			add = {
+				value = 75
+				desc = "UNHAPPY_WITH_NON_ORLEANIST_MONARCHY"
+			}
 		}
 
 		# reduced unhappy modifier if it's not a monarchy
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = orleanist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 25
+			add = {
+				value = 25
+				desc = "APPROVAL_BELOW_ZERO"
+			}
 		}
 		# conservative and/or reactionary leaders have a higher spawn chance if the Anti-Dreyfusards won.
 		if = {
 			limit = {
 				has_variable = anti_dreyfusard_victory
 			}
-			add = 50
+			add = {
+				value = 50
+				desc = "ANTI_DREYFUSARD_VICTORY"
+			}
 		}
 		if = {
 			limit = {
@@ -173,7 +195,10 @@
 					has_variable = chose_fascism
 				}
 			}
-			multiply = 0.1
+			multiply = {
+				multiply = 0.1
+				desc = "CHOSE_A_DIFFERENT_PATH"
+			}
 		}
 	}
 	
@@ -192,7 +217,7 @@
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
 				interest_group.ig_approval > 0
 			}
@@ -223,7 +248,7 @@
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = orleanist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -235,7 +260,7 @@
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = orleanist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -245,7 +270,7 @@
 		
 		if = {	# Orleanist agitators rare in Orleanist kingdoms
 			limit = {
-				has_role = agitator
+				has_role_of_type = agitator
 				owner = {
 					has_variable = orleanist_restoration_var
 				}
@@ -255,7 +280,7 @@
 		
 		if = {
 			limit = {
-				interest_group = {
+				interest_group ?= {
 					OR = {
 						has_variable = communist_ig_var
 						has_variable = chose_vanguardism
@@ -272,7 +297,7 @@
 	}
 }
 
-ideology_legitimist = {
+ideology_legitimist = {	# Average Progressiveness - -50
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_legitimist.dds"
 	
 	character_ideology = yes
@@ -282,6 +307,7 @@ ideology_legitimist = {
 		law_presidential_republic = disapprove
 		law_parliamentary_republic = disapprove
 		law_corporate_state = neutral
+		law_social_monarchy = approve
 		law_theocracy = disapprove
 		law_council_republic = strongly_disapprove
 	}
@@ -356,12 +382,15 @@ ideology_legitimist = {
 	}
 	
 	non_interest_group_leader_trigger = {
-		NOT = { has_role = agitator }
+		NOT = { has_role_of_type = agitator }
 		ideology_legitimist_valid_trigger = yes
 	}
 	
 	interest_group_leader_weight = {
-		value = 200
+		value = {
+			add = 200
+			desc = "base_value"
+		}
 		# less likely in a theocracy
 		if = {
 			limit = {
@@ -369,17 +398,23 @@ ideology_legitimist = {
 					has_law_or_variant = law_type:law_theocracy
 				}
 			}
-			add = -75
+			add = {
+				value = -75
+				desc = "THEOCRACY_LAW"
+			}
 		}
 		# less likely if IG is happy in a republic
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
 				ig_approval > 0
 			}
-			add = -100
+			add = {
+				value = -100
+				desc = "HAPPY_IN_REPUBLIC"
+			}
 		}
 
 		# more likely for LO and Devout
@@ -390,31 +425,40 @@ ideology_legitimist = {
 					is_interest_group_type = ig_devout
 				}
 			}
-			add = 50
+			add = {
+				value = 50
+				desc = "DEVOUT_OR_LANDOWNERS"
+			}
 		}
 
 		# more likely if the IG is unhappy with the monarchy, and that monarchy is not Legitimist
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = legitimist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 75
+			add = {
+				value = 75
+				desc = "UNHAPPY_WITH_NON_LEGITIMIST_MONARCHY"
+			}
 		}
 
 		# reduced unhappy modifier if it's not a monarchy
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = legitimist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 25
+			add = {
+				value = 25
+				desc = "APPROVAL_BELOW_ZERO"
+			}
 		}
 
 		# conservative and/or reactionary leaders have a higher spawn chance if the Anti-Dreyfusards won.
@@ -422,7 +466,10 @@ ideology_legitimist = {
 			limit = {
 				has_variable = anti_dreyfusard_victory
 			}
-			add = 50
+			add = {
+				value = 50
+				desc = "ANTI_DREYFUSARD_VICTORY"
+			}
 		}
 		if = {
 			limit = {
@@ -436,7 +483,10 @@ ideology_legitimist = {
 					has_variable = chose_fascism
 				}
 			}
-			multiply = 0.1
+			multiply = {
+				multiply = 0.1
+				desc = "CHOSE_A_DIFFERENT_PATH"
+			}
 		}
 	}
 	
@@ -455,7 +505,7 @@ ideology_legitimist = {
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
 				interest_group.ig_approval > 0
 			}
@@ -477,7 +527,7 @@ ideology_legitimist = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = legitimist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -489,7 +539,7 @@ ideology_legitimist = {
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = legitimist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -499,7 +549,7 @@ ideology_legitimist = {
 		
 		if = {	# Legitimist agitators rare in Orleanist kingdoms
 			limit = {
-				has_role = agitator
+				has_role_of_type = agitator
 				owner = {
 					has_variable = legitimist_restoration_var
 				}
@@ -509,7 +559,7 @@ ideology_legitimist = {
 		
 		if = {
 			limit = {
-				interest_group = {
+				interest_group ?= {
 					OR = {
 						has_variable = communist_ig_var
 						has_variable = chose_vanguardism
@@ -526,7 +576,7 @@ ideology_legitimist = {
 	}
 }
 
-ideology_bonapartist = {
+ideology_bonapartist = {	# Average Progressiveness - 29
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_bonapartist.dds"
 
 	# J'AIME L'OIGNON FRIT À L'HUILE,
@@ -541,6 +591,7 @@ ideology_bonapartist = {
 		law_presidential_republic = neutral
 		law_parliamentary_republic = disapprove
 		law_corporate_state = neutral
+		law_social_monarchy = strongly_approve
 		law_theocracy = disapprove
 		law_council_republic = strongly_disapprove
 	}
@@ -562,6 +613,13 @@ ideology_bonapartist = {
 		law_professional_army = approve
 		law_national_militia = disapprove
 		law_peasant_levies = disapprove
+	}
+	
+	lawgroup_navy_model = {
+		law_merchant_navy = strongly_disapprove
+		law_jeune_ecole = neutral
+		law_professional_navy = approve
+		law_diplomatic_navy = approve
 	}
 	
 	lawgroup_economic_system = {
@@ -619,12 +677,15 @@ ideology_bonapartist = {
 	}
 	
 	non_interest_group_leader_trigger = {
-		NOT = { has_role = agitator }
+		NOT = { has_role_of_type = agitator }
 		ideology_bonapartist_valid_trigger = yes
 	}
 	
 	interest_group_leader_weight = {
-		value = 200
+		value = {
+			add = 200
+			desc = "base_value"
+		}
 		# less likely in a theocracy
 		if = {
 			limit = {
@@ -632,17 +693,23 @@ ideology_bonapartist = {
 					has_law_or_variant = law_type:law_theocracy
 				}
 			}
-			add = -75
+			add = {
+				value = -75
+				desc = "THEOCRACY_LAW"
+			}
 		}
 		# less likely if IG is happy in a republic
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
 				ig_approval > 0
 			}
-			add = -100
+			add = {
+				value = -100
+				desc = "HAPPY_IN_REPUBLIC"
+			}
 		}
 
 		# more likely for PB and AF
@@ -653,31 +720,40 @@ ideology_bonapartist = {
 					is_interest_group_type = ig_armed_forces
 				}
 			}
-			add = 50
+			add = {
+				value = 50
+				desc = "PB_OR_ARMED_FORCES"
+			}
 		}
 
 		# more likely if the IG is unhappy with the monarchy, and that monarchy is not Bonapartist
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = bonapartist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 75
+			add = {
+				value = 75
+				desc = "UNHAPPY_WITH_NON_BONAPARTIST_MONARCHY"
+			}
 		}
 
 		# reduced unhappy modifier if it's not a monarchy
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = bonapartist_restoration_var }
 				}
 				ig_approval < 0
 			}
-			add = 25
+			add = {
+				value = 25
+				desc = "APPROVAL_BELOW_ZERO"
+			}
 		}
 
 		# conservative and/or reactionary leaders have a higher spawn chance if the Anti-Dreyfusards won.
@@ -685,7 +761,10 @@ ideology_bonapartist = {
 			limit = {
 				has_variable = anti_dreyfusard_victory
 			}
-			add = 50
+			add = {
+				value = 50
+				desc = "ANTI_DREYFUSARD_VICTORY"
+			}
 		}
 		
 		if = {
@@ -700,7 +779,10 @@ ideology_bonapartist = {
 					has_variable = chose_fascism
 				}
 			}
-			multiply = 0.1
+			multiply = {
+				multiply = 0.1
+				desc = "CHOSE_A_DIFFERENT_PATH"
+			}
 		}
 	}
 	
@@ -719,11 +801,14 @@ ideology_bonapartist = {
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 				}
-				interest_group.ig_approval > 0
+				ig_approval > 0
 			}
-			add = -100
+			add = {
+				value = -100
+				desc = "HAPPY_IN_REPUBLIC"
+			}
 		}
 
 		# more likely for PB and AF
@@ -740,8 +825,8 @@ ideology_bonapartist = {
 		if = {
 			limit = {
 				OR = {
-					has_role = general
-					has_role = admiral
+					has_role_of_type = general
+					has_role_of_type = admiral
 				}
 			}
 			add = 50
@@ -750,7 +835,7 @@ ideology_bonapartist = {
 		if = {
 			limit = {
 				owner = {
-					has_law = law_type:law_monarchy
+					country_has_monarchy_law = yes
 					NOT = { has_variable = bonapartist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -762,7 +847,7 @@ ideology_bonapartist = {
 		if = {
 			limit = {
 				owner = {
-					NOT = { has_law = law_type:law_monarchy }
+					NOT = { country_has_monarchy_law = yes }
 					NOT = { has_variable = bonapartist_restoration_var }
 				}
 				interest_group.ig_approval < 0
@@ -772,7 +857,7 @@ ideology_bonapartist = {
 		
 		if = {	# Legitimist agitators rare in Orleanist kingdoms
 			limit = {
-				has_role = agitator
+				has_role_of_type = agitator
 				owner = {
 					has_variable = bonapartist_restoration_var
 				}
@@ -782,7 +867,7 @@ ideology_bonapartist = {
 		
 		if = {
 			limit = {
-				interest_group = {
+				interest_group ?= {
 					OR = {
 						has_variable = communist_ig_var
 						has_variable = chose_vanguardism

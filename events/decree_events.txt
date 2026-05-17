@@ -287,13 +287,9 @@ decree_events.3 = {
 				c:GBR = ROOT
 			}
 			create_character = {
-				first_name = David
-				last_name = Copperfield
-				female = no
-				#role = politician # Remove this line
-				interest_group = ig_intelligentsia
-				ig_leader = yes
+				template = GBR_david_copperfield
 				on_created = {
+					set_as_interest_group_leader = yes
 					add_modifier = {
 						name = david_copperfield_modifier
 						days = normal_modifier_time
@@ -303,7 +299,6 @@ decree_events.3 = {
 		}
 		else = {
 			create_character = {
-				#role = politician # Remove this line
 				female = no
 				interest_group = ig_intelligentsia
 				ig_leader = yes
@@ -331,12 +326,9 @@ decree_events.3 = {
 				c:GBR = ROOT
 			}
 			create_character = {
-				first_name = David
-				last_name = Copperfield
-				female = no
-				interest_group = ig_intelligentsia
-				is_agitator = yes
+				template = GBR_david_copperfield
 				on_created = {
+					replace_character_roles = { add = { agitator } remove_all = yes }
 					add_modifier = {
 						name = david_copperfield_modifier
 						days = normal_modifier_time
@@ -392,12 +384,13 @@ decree_events.4 = {
 		}
 		NOT = { has_variable = social_mobility_var }
 		any_scope_character = {
-			is_ruler = no
+			is_ruler_of_own_country = no
+			character_is_valid_for_events = yes
 			age >= 35
 			OR = {
-				has_role = general
-				has_role = admiral
-				interest_group = {
+				has_role_of_type = general
+				has_role_of_type = admiral
+				interest_group ?= {
 					OR = {
 						is_interest_group_type = ig_petty_bourgeoisie
 						is_interest_group_type = ig_landowners
@@ -429,12 +422,13 @@ decree_events.4 = {
 		}
 		random_scope_character = {
 			limit = {
-				is_ruler = no
+				is_ruler_of_own_country = no
+				character_is_valid_for_events = yes
 				age >= 35
 				OR = {
-					has_role = general
-					has_role = admiral
-					interest_group = {
+					has_role_of_type = general
+					has_role_of_type = admiral
+					interest_group ?= {
 						OR = {
 							is_interest_group_type = ig_petty_bourgeoisie
 							is_interest_group_type = ig_landowners

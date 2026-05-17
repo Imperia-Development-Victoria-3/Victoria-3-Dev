@@ -27,9 +27,8 @@
 	}
 	
 	visible = {
-		
 		has_dlc_feature = mp1_treaties
-		NOT = { has_law = law_type:law_isolationism }
+		country_has_isolationism_or_sakoku = no
 		is_junior_in_customs_union = no
 	}
 	
@@ -202,6 +201,21 @@
 					
 					min = 5
 					max = 25
+				}
+				
+				if = {
+					limit = {
+						scope:source_country ?= {
+							c:JAP ?= this
+							has_journal_entry = je_iwakura_mission
+							has_variable = current_expedition_location_var
+							var:current_expedition_location_var ?= ROOT
+						}
+					}
+					add = {
+						desc = "HOSTING_DIPLOMATIC_MISSION"
+						value = -50
+					}
 				}
 			}
 			else_if = {

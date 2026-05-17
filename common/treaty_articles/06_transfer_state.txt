@@ -7,6 +7,8 @@
 	flags = {
 		causes_state_transfer
 		giftable
+		exclude_from_make_this_work
+		ai_consider_threaten_naval_hostilities
 	}
 	
 	usage_limit = once_per_side_with_same_inputs
@@ -15,6 +17,10 @@
 	
 	required_inputs = {
 		state
+	}
+	
+	visible = {
+		is_revolutionary = no
 	}
 	
 	can_ratify = {
@@ -35,6 +41,15 @@
 				}
 			}
 		}
+		
+		custom_tooltip = {
+			text = STATE_TRANSFER_NOT_OWNER
+			scope:article ?= {
+				input_state = {
+					owner = scope:source_country
+				}
+			}
+		}
 	}
 	
 	state_valid_trigger = {
@@ -46,7 +61,7 @@
 				scope:other_country = { is_adjacent_to_state = prev }
 				AND = {
 					is_coastal = yes
-					scope:other_country = { has_port = yes }
+					scope:other_country = { has_port_country = yes }
 				}
 			}
 		}

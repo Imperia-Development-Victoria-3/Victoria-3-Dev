@@ -3150,36 +3150,73 @@ default_popup_vbox = {
 
 	blockoverride "scrollarea_content_vbox"
 	{
-		treaty = {
-			name = "content_container"
+		vbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
 
-			background = {
-				using = paper_bg_light
-			}
+			treaty = {
+				name = "content_container"
 
-			blockoverride "unsigned_seal_visibility" {
-				visible = yes
-			}
-
-			blockoverride "binding_period_textboxes" {
-				### BINDING PERIOD
-				treaty_textbox = {
-					visible = "[NotZero(Treaty.GetBindingDays)]"
-					align = nobaseline
-					autoresize = yes
-					max_width = 230
-					using = elide_fontsize_min
-					text = "TREATY_BINDING_PERIOD"
+				background = {
+					using = paper_bg_light
 				}
 
-				### NO BINDING PERIOD SET TO BEGIN WITH
-				treaty_textbox = {
-					visible = "[IsZero(Treaty.GetBindingDays)]"
+				blockoverride "unsigned_seal_visibility" {
+					visible = yes
+				}
+
+				blockoverride "binding_period_textboxes" {
+					### BINDING PERIOD
+					treaty_textbox = {
+						visible = "[NotZero(Treaty.GetBindingDays)]"
+						align = nobaseline
+						autoresize = yes
+						max_width = 230
+						using = elide_fontsize_min
+						text = "TREATY_BINDING_PERIOD"
+					}
+
+					### NO BINDING PERIOD SET TO BEGIN WITH
+					treaty_textbox = {
+						visible = "[IsZero(Treaty.GetBindingDays)]"
+						align = nobaseline
+						autoresize = yes
+						max_width = 230
+						using = elide_fontsize_min
+						text = "TREATY_NO_BINDING_PERIOD_NO_CONCEPT"
+					}
+				}
+			}
+
+			### NAVAL HOSTILITIES THREAT WARNING
+			hbox = {
+				visible = "[Treaty.IsThreateningHostilities]"
+				layoutpolicy_horizontal = expanding
+				spacing = 10
+				margin = { 10 5 }
+
+				background = {
+					using = entry_bg_simple
+				}
+
+				icon = {
+					size = { 40 40 }
+					texture = "gfx/interface/backgrounds/round_button_bg.dds"
+
+					icon = {
+						size = { 100% 100% }
+						parentanchor = center
+						texture = "gfx/interface/icons/alert_icons/naval_hostilities.dds"
+					}
+				}
+
+				textbox = {
+					layoutpolicy_horizontal = expanding
+					size = { 0 44 }
 					align = nobaseline
-					autoresize = yes
-					max_width = 230
+					multiline = yes
 					using = elide_fontsize_min
-					text = "TREATY_NO_BINDING_PERIOD_NO_CONCEPT"
+					text = "[Treaty.GetThreatenedHostilityTypeDesc]"
 				}
 			}
 		}
@@ -3195,7 +3232,7 @@ default_popup_vbox = {
 				using = close_button_sound
 				size = { 180 42 }
 				text = "DECLINE"
-				onclick = "[Execute(Proposal.GetTreaty.DeclineTreatyProposal)]"
+				onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(Proposal.GetTreaty.DeclineTreatyProposal)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
 				enabled = "[IsValid(Proposal.GetTreaty.DeclineTreatyProposal)]"
 				tooltip = "TREATY_PROPOSAL_DECLINE_BUTTON_TOOLTIP"
@@ -3203,10 +3240,24 @@ default_popup_vbox = {
 				shortcut = "close_window"
 
 				icon = {
-					visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+					visible = "[Treaty.IsThreateningHostilities]"
 					parentanchor = vcenter
 					size = { 30 30 }
 					position = { 7 0 }
+					texture = "gfx/interface/backgrounds/round_button_bg.dds"
+
+					icon = {
+						size = { 100% 100% }
+						parentanchor = center
+						texture = "gfx/interface/icons/alert_icons/naval_hostilities.dds"
+					}
+				}
+
+				icon = {
+					visible = "[Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)]"
+					parentanchor = vcenter
+					size = { 26 26 }
+					position = { 145 0 }
 					texture = "gfx/interface/icons/generic_icons/warning.dds"
 					tooltip = "THEY_CALL_IN_OBLIGATION"
 				}
@@ -3216,7 +3267,7 @@ default_popup_vbox = {
 				using = default_button
 				size = { 180 42 }
 				text = "NEGOTIATE"
-				enabled = "[Not(Proposal.GetTreaty.IsEnforced)]"
+				enabled = "[And(And(Not(Proposal.GetTreaty.IsEnforced), Not(Proposal.GetTreaty.IsThreateningHostilities)), Not(Treaty.DoesCallInObligation(Treaty.GetRightCountry.Self)))]"
 				onclick = "[InformationPanelBar.OpenTreatyDraftPanel(Proposal.GetTreaty.Self)]"
 				onclick = "[PopupManager.CloseProposal(Proposal.AccessSelf)]"
 				tooltip = "TREATY_PROPOSAL_NEGOTIATE_TOOLTIP"
@@ -3242,6 +3293,14 @@ default_popup_vbox = {
 
 default_confirmation_window = {
 	name = "confirmation_window"
+}
+
+default_confirmation_window = {
+	name = "ship_decommission_confirmation_window"
+	blockoverride "answer_yes_handler" {
+		onclick = "[InformationPanelBar.ClosePanel]"
+		onclick = "[PopupManager.AnswerYes(ConfirmationWindow.Self)]"
+	}
 }
 
 default_confirmation_window = {
@@ -4296,45 +4355,307 @@ notification_popup = {
 		flowcontainer = {
 			direction = vertical
 			resizeparent = yes
+			minimumsize = { 800 -1 }
 			margin = { 10 10 }
+			spacing = 10
 
+			### OUTCOME
+			textbox = {
+				text = "PEACE_POPUP_OUTCOME_VICTORY"
+				autoresize = yes
+				align = center|nobaseline
+				parentanchor = hcenter
+				using = fontsize_large
+			}
+
+			### SIGNED DATE AND DURATION
+			textbox = {
+				text = "PEACE_SIGNED_DATE"
+				autoresize = yes
+				align = center|nobaseline
+				parentanchor = hcenter
+			}
+
+			### CASUALTIES AND COSTS
 			container = {
 				parentanchor = hcenter
-				minimumsize = { 480 -1 }
+				minimumsize = { 600 -1 }
 
-				### CENTER DIVIDER
-				vertical_divider = {
+				container = {
+					minimumsize = { 650 -1 }
+
+					### ATTACKER SIDE STATS
+					flowcontainer = {
+						parentanchor = left
+						direction = vertical
+						minimumsize = { 265 -1 }
+						spacing = 2
+
+						textbox = {
+							text = "WAR_PANEL_INITIATOR_HEADER"
+							default_format = "#title"
+							autoresize = yes
+							align = center|nobaseline
+							parentanchor = hcenter
+						}
+
+						widget = {
+							size = { 265 20 }
+							tooltip = "[DiplomaticPlay.GetInitiatorSideDeadDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									raw_text = "[concept_dead]:"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable [DiplomaticPlay.GetInitiatorSideDead|-D]#!"
+								}
+							}
+						}
+
+						widget = {
+							size = { 265 20 }
+							tooltip = "[DiplomaticPlay.GetInitiatorSideWoundedDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									raw_text = "[concept_wounded]:"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable [DiplomaticPlay.GetInitiatorSideWounded|-D]#!"
+								}
+							}
+						}
+						widget = {
+							size = { 265 20 }
+							tooltip = "[DiplomaticPlay.GetInitiatorSideCostOfWarDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									text = "COST_OF_WAR"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable @money![DiplomaticPlay.GetInitiatorSideCostOfWar|-D]#!"
+								}
+							}
+						}
+
+						widget = { size = { 0 5 } }
+
+						fixedgridbox = {
+							datamodel = "[DiplomaticPlay.AccessInitiatorSideCountries]"
+							datamodel_wrap = 8
+							addcolumn = 32
+							addrow = 23
+							flipdirection = yes
+
+							item = {
+								tiny_flag = {
+									blockoverride "mobilized_visibility" {
+										visible = no
+									}
+								}
+							}
+						}
+					}
+
+					vertical_divider = {
+						parentanchor = hcenter
+					}
+
+					### DEFENDER SIDE STATS
+					flowcontainer = {
+						parentanchor = right
+						direction = vertical
+						minimumsize = { 285 -1 }
+						spacing = 2
+
+						textbox = {
+							text = "WAR_PANEL_TARGET_HEADER"
+							default_format = "#title"
+							autoresize = yes
+							align = center|nobaseline
+							parentanchor = hcenter
+						}
+
+						widget = {
+							size = { 285 20 }
+							tooltip = "[DiplomaticPlay.GetTargetSideDeadDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									raw_text = "[concept_dead]:"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable [DiplomaticPlay.GetTargetSideDead|-D]#!"
+								}
+							}
+						}
+						widget = {
+							size = { 285 20 }
+							tooltip = "[DiplomaticPlay.GetTargetSideWoundedDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									raw_text = "[concept_wounded]:"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable [DiplomaticPlay.GetTargetSideWounded|-D]#!"
+								}
+							}
+						}
+						widget = {
+							size = { 285 20 }
+							tooltip = "[DiplomaticPlay.GetTargetSideCostOfWarDesc]"
+							background = {
+								margin = { 5 3 }
+								using = fade_right_simple
+							}
+							hbox = {
+								spacing = 5
+								textbox = {
+									align = left|nobaseline
+									autoresize = yes
+									text = "COST_OF_WAR"
+								}
+								widget = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+								textbox = {
+									align = right|nobaseline
+									autoresize = yes
+									raw_text = "#variable @money![DiplomaticPlay.GetTargetSideCostOfWar|-D]#!"
+								}
+							}
+						}
+
+						widget = { size = { 0 5 } }
+
+						fixedgridbox = {
+							datamodel = "[DiplomaticPlay.AccessTargetSideCountries]"
+							datamodel_wrap = 8
+							addcolumn = 32
+							addrow = 23
+							flipdirection = yes
+
+							item = {
+								tiny_flag = {
+									blockoverride "mobilized_visibility" {
+										visible = no
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			### CAPITULATION SECTION
+			flowcontainer = {
+				visible = "[DiplomaticPlay.HasExecutedWarGoalsByCapitulation]"
+				direction = vertical
+				parentanchor = hcenter
+
+				textbox = {
+					text = "PEACE_POPUP_CAPITULATION_HEADER"
+					autoresize = yes
+					align = center|nobaseline
 					parentanchor = hcenter
+					using = fontsize_large
 				}
 
-				flowcontainer = {
-					parentanchor = hcenter
-					direction = vertical
-					spacing = 20
+				widget = {
+					size = { 15 10 }
+				}
 
-					### PRESSED WARGOALS
+				container = {
+					parentanchor = hcenter
+					minimumsize = { 600 -1 }
+
+					vertical_divider = {
+						parentanchor = hcenter
+					}
+
 					container = {
-						minimumsize = { 460 -1 }
+						minimumsize = { 575 -1 }
 
 						### ATTACKERS
 						flowcontainer = {
 							position = { 0 5 }
 							parentanchor = left
 							direction = vertical
-							minimumsize = { 228 -1 }
+							minimumsize = { 285 -1 }
 
-							textbox = {
-								text = WAR_PANEL_INITIATOR_WARGOALS
-								autoresize = yes
-								align = center|nobaseline
-								parentanchor = hcenter
-							}
 							dynamicgridbox = {
 								using = default_list_position
-								datamodel = "[DiplomaticPlay.GetAllWarGoalsOfInitiatorSide]"
+								datamodel = "[DiplomaticPlay.GetExecutedWarGoalsOfInitiatorSide]"
 
 								item = {
-									small_wargoal_item_with_checkmark = {}
+									container = {
+										visible = "[WarGoal.IsExecutedByCapitulation]"
+										small_wargoal_item_with_executed_checkmark = {}
+									}
 								}
 							}
 						}
@@ -4344,20 +4665,94 @@ notification_popup = {
 							position = { 0 5 }
 							parentanchor = right
 							direction = vertical
-							minimumsize = { 228 -1 }
+							minimumsize = { 285 -1 }
 
-							textbox = {
-								text = WAR_PANEL_TARGET_WARGOALS
-								autoresize = yes
-								align = center|nobaseline
-								parentanchor = hcenter
+							dynamicgridbox = {
+								using = default_list_position
+								datamodel = "[DiplomaticPlay.GetExecutedWarGoalsOfTargetSide]"
+
+								item = {
+									container = {
+										visible = "[WarGoal.IsExecutedByCapitulation]"
+										small_wargoal_item_with_executed_checkmark = {}
+									}
+								}
 							}
+						}
+					}
+				}
+
+				widget = {
+					size = { 15 15 }
+				}
+			}
+
+			### PEACE DEAL SECTION
+			flowcontainer = {
+				visible = "[DiplomaticPlay.HasExecutedWarGoalsByPeaceDeal]"
+				direction = vertical
+				parentanchor = hcenter
+
+				textbox = {
+					text = "PEACE_POPUP_PEACE_DEAL_HEADER"
+					autoresize = yes
+					align = center|nobaseline
+					parentanchor = hcenter
+					using = fontsize_large
+				}
+
+				widget = {
+					size = { 15 10 }
+				}
+
+				container = {
+					parentanchor = hcenter
+					minimumsize = { 600 -1 }
+
+					### CENTER DIVIDER
+					vertical_divider = {
+						parentanchor = hcenter
+					}
+
+					container = {
+						minimumsize = { 575 -1 }
+
+						### ATTACKERS
+						flowcontainer = {
+							position = { 0 5 }
+							parentanchor = left
+							direction = vertical
+							minimumsize = { 285 -1 }
+
+							dynamicgridbox = {
+								using = default_list_position
+								datamodel = "[DiplomaticPlay.GetAllWarGoalsOfInitiatorSide]"
+
+								item = {
+									container = {
+										visible = "[WarGoal.IsExecutedByPeaceDeal]"
+										small_wargoal_item_with_executed_checkmark = {}
+									}
+								}
+							}
+						}
+
+						### DEFENDERS
+						flowcontainer = {
+							position = { 0 5 }
+							parentanchor = right
+							direction = vertical
+							minimumsize = { 285 -1 }
+
 							dynamicgridbox = {
 								using = default_list_position
 								datamodel = "[DiplomaticPlay.GetAllWarGoalsOfTargetSide]"
 
 								item = {
-									small_wargoal_item_with_checkmark = {}
+									container = {
+										visible = "[WarGoal.IsExecutedByPeaceDeal]"
+										small_wargoal_item_with_executed_checkmark = {}
+									}
 								}
 							}
 						}
@@ -4365,17 +4760,79 @@ notification_popup = {
 				}
 			}
 
-			widget = {
-				size = { 15 15 }
+			### DROPPED WARGOALS SECTION
+			flowcontainer = {
+				visible = "[DiplomaticPlay.HasNonExecutedWarGoals]"
+				direction = vertical
+				parentanchor = hcenter
+
+				textbox = {
+					text = "PEACE_POPUP_DROPPED_HEADER"
+					autoresize = yes
+					align = center|nobaseline
+					parentanchor = hcenter
+					using = fontsize_large
+				}
+
+				widget = {
+					size = { 15 10 }
+				}
+
+				container = {
+					parentanchor = hcenter
+					minimumsize = { 600 -1 }
+
+					### CENTER DIVIDER
+					vertical_divider = {
+						parentanchor = hcenter
+					}
+
+					container = {
+						minimumsize = { 575 -1 }
+
+						### ATTACKERS
+						flowcontainer = {
+							position = { 0 5 }
+							parentanchor = left
+							direction = vertical
+							minimumsize = { 285 -1 }
+
+							dynamicgridbox = {
+								using = default_list_position
+								datamodel = "[DiplomaticPlay.GetAllWarGoalsOfInitiatorSide]"
+
+								item = {
+									container = {
+										visible = "[Not(WarGoal.IsExecuted)]"
+										small_wargoal_item = {}
+									}
+								}
+							}
+						}
+
+						### DEFENDERS
+						flowcontainer = {
+							position = { 0 5 }
+							parentanchor = right
+							direction = vertical
+							minimumsize = { 285 -1 }
+
+							dynamicgridbox = {
+								using = default_list_position
+								datamodel = "[DiplomaticPlay.GetAllWarGoalsOfTargetSide]"
+
+								item = {
+									container = {
+										visible = "[Not(WarGoal.IsExecuted)]"
+										small_wargoal_item = {}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 
-			textbox = {
-				text = "PEACE_SIGNED_DATE"
-				autoresize = yes
-				align = center|nobaseline
-				parentanchor = hcenter
-				using = fontsize_large
-			}
 		}
 	}
 
@@ -4385,7 +4842,7 @@ notification_popup = {
 			using = default_button
 			text = "OK"
 			onclick = "[PopupManager.CloseMessage(PlayerMessageItem.AccessSelf)]"
-			size = { 610 40 }
+			size = { 762 40 }
 			
 			tooltip = "CONFIRM"
 			input_action = "confirm"
@@ -4584,9 +5041,9 @@ types start_diplo_play {
 					}
 
 					textbox = {
-						raw_text = "@flotillas! [Country.GetWarships|0v]"
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_FLOTILLAS_TOOLTIP"
-						alpha = "[TransparentIfZero_int32(Country.GetWarships)]"
+						raw_text = "@ships! [Country.GetNumShips|0v]"
+						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+						alpha = "[TransparentIfZero_int32(Country.GetNumShips)]"
 						size = { 100 30 }
 						elide = right
 						align = left|nobaseline
